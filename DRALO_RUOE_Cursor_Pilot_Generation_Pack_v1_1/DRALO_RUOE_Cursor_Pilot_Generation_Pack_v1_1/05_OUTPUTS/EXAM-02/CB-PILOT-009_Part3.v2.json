@@ -1,0 +1,112 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:47:48.696Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-009",
+  "brief_version": "1.0",
+  "style_card_id": "SC-04",
+  "style_card_version": "v1.0",
+  "working_title": "The first song I played for someone else",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3197,
+    "completion_tokens": 938,
+    "total_tokens": 4135
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 213 outside 150–180"
+    ],
+    "warnings": [],
+    "word_count": 213
+  },
+  "exercise": {
+    "part_title": "Part 3: Word Formation",
+    "instructions": "For questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line. There is an example at the beginning (0). Write your answers IN CAPITAL LETTERS on the separate answer sheet.",
+    "text_title": "The first song I played for someone else",
+    "passage_with_gaps": "It was a small community gathering when I was unexpectedly asked to play a simple accompaniment. I had been learning the guitar privately for months, but my (0) **CONFIDENCE** was still low. CONFIDENT\n\nInitially, I had started playing for my own (17) ________ and expected to become quite good quickly. However, the slow progress and repetitive practice sessions made me consider giving up. ENJOY\n\nWhen I was asked to play, I almost declined, feeling it was too soon. But the request was for a simple piece, not a (18) ________ performance, so I agreed. SOLO\n\nDuring the event, I made a small mistake, but I noticed that nobody seemed to mind. In fact, the music added to the (19) ________ atmosphere of the gathering. FRIEND\n\nThis experience changed my perspective. I realised that music could be a shared joy rather than a personal (20) ________. PERFECT\n\nAfterwards, I continued to practice, but with a new goal in mind. Instead of aiming for (21) ________ skill, I focused on how my playing could contribute to group events. IMPRESS\n\nThe guitar, once an awkward (22) ________ in my hands, became more familiar and comfortable. OBJECT\n\nNow, I look forward to each practice session, knowing that even my modest skills can bring (23) ________ to others. HAPPY\n\nThis has given me a sense of (24) ________ and a practical reason to continue. ACHIEVE",
+    "example": {
+      "number": 0,
+      "stem": "CONFIDENT",
+      "answer": "CONFIDENCE",
+      "explanation": "The noun form 'confidence' is the correct derivation from the adjective 'confident'."
+    },
+    "questions": [
+      {
+        "number": 17,
+        "stem": "ENJOY",
+        "answer": "ENJOYMENT",
+        "transformation_type": "noun formation",
+        "rationale": "The correct noun form 'enjoyment' is derived from the verb 'enjoy'."
+      },
+      {
+        "number": 18,
+        "stem": "SOLO",
+        "answer": "SOLO",
+        "transformation_type": "noun formation",
+        "rationale": "The word 'solo' is both a noun and an adjective, fitting the context as a noun here."
+      },
+      {
+        "number": 19,
+        "stem": "FRIEND",
+        "answer": "FRIENDLY",
+        "transformation_type": "adjective formation",
+        "rationale": "The adjective 'friendly' is the correct derivation from the noun 'friend'."
+      },
+      {
+        "number": 20,
+        "stem": "PERFECT",
+        "answer": "PERFECTION",
+        "transformation_type": "noun formation",
+        "rationale": "The noun 'perfection' is the correct derivation from the adjective 'perfect'."
+      },
+      {
+        "number": 21,
+        "stem": "IMPRESS",
+        "answer": "IMPRESSIVE",
+        "transformation_type": "adjective formation",
+        "rationale": "The adjective 'impressive' is the correct derivation from the verb 'impress'."
+      },
+      {
+        "number": 22,
+        "stem": "OBJECT",
+        "answer": "OBJECT",
+        "transformation_type": "noun formation",
+        "rationale": "The noun 'object' is the correct form and fits the context naturally."
+      },
+      {
+        "number": 23,
+        "stem": "HAPPY",
+        "answer": "HAPPINESS",
+        "transformation_type": "noun formation",
+        "rationale": "The noun 'happiness' is the correct derivation from the adjective 'happy'."
+      },
+      {
+        "number": 24,
+        "stem": "ACHIEVE",
+        "answer": "ACHIEVEMENT",
+        "transformation_type": "noun formation",
+        "rationale": "The noun 'achievement' is the correct derivation from the verb 'achieve'."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The narrative follows the brief's structure, focusing on an adult beginner's journey with music, aligning with the main topic of entertainment and subtopics of music and creativity.",
+      "style_card_notes": "The text adheres to the narrative story style card, with a first-person perspective and a focus on character motivation and change.",
+      "british_english_notes": "The text is written in British English, using appropriate vocabulary and spelling.",
+      "factuality_notes": "The narrative is plausible and does not invent facts or statistics.",
+      "answer_validity_notes": "Each gap has a single valid answer that fits grammatically and contextually.",
+      "self_check_flags": []
+    },
+    "_word_count": 213
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

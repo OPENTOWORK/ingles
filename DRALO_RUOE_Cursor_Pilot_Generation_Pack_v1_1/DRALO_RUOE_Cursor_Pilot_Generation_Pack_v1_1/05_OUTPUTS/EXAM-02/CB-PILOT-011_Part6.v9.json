@@ -1,0 +1,96 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 9,
+  "generated_at": "2026-08-12T17:11:17.017Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-011",
+  "brief_version": "1.0",
+  "style_card_id": "SC-03",
+  "style_card_version": "v1.0",
+  "working_title": "The evening routine that was really a work problem",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 5317,
+    "completion_tokens": 1089,
+    "total_tokens": 6406
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 448 outside 500–600"
+    ],
+    "warnings": [],
+    "word_count": 448
+  },
+  "exercise": {
+    "part_title": "Part 6",
+    "instructions": "You are going to read an article about someone who tried to improve their evenings. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (37–42). There is one extra sentence which you do not need to use.",
+    "text_title": "The evening routine that was really a work problem",
+    "passage_with_gaps": "I used to think that the secret to feeling refreshed in the morning was a perfectly planned evening routine. I would meticulously arrange my evenings, ensuring every activity was designed to help me unwind. Yet, even after all that effort, I still felt tired most mornings. (37) I had to admit that my evenings were still dominated by work thoughts, despite my best efforts to relax.\n\nInitially, I tried changing small habits, like reducing screen time or drinking herbal tea before bed. These changes seemed promising at first, but they didn’t address the real problem. (38) Even after all those changes, my mind would wander back to the tasks I hadn’t completed. I realised that I was still mentally checking unfinished work, which kept my mind active long after I had left the office.\n\nOne evening, just as I was about to relax, I received an urgent email from work. That was when I realised that my mind was still occupied with unfinished tasks. (39) The interruption made me see that I had no clear stopping point. It was clear that my initial attempts were missing the mark, and I needed a different approach to truly unwind.\n\nDetermined to make a change, I decided to introduce a clear end-of-work ritual. I started writing down the first task for the next day and physically putting away my work materials. (40) It felt like a simple yet effective way to signal the end of my workday. This small change made a significant difference, allowing me to mentally close the door on work each day.\n\nAt first, it was tempting to break this new rule and check my emails late at night. However, I resisted the urge, reminding myself of the importance of this boundary. (41) I kept reminding myself of the benefits of sticking to this routine. This new habit was surprisingly difficult to maintain at first, but I persevered.\n\nGradually, I noticed a shift. My evenings began to feel genuinely relaxing, and I could focus on non-work activities without distraction. (42) I found myself engaging more with hobbies and spending quality time with family. I was finally able to enjoy my evenings without the shadow of work looming over me.\n\nIn the end, I realised that the key was not a perfect evening routine, but creating a clear separation between work and personal time. This discovery was more valuable than any sleep tip I had tried before. It taught me that sometimes, the solution lies in addressing the root cause rather than the symptoms. This change in perspective was a revelation, showing me that the boundary between work and personal time was the real issue, not the activities I chose to fill my evenings with.",
+    "sentence_pool": {
+      "A": "I realised that I was still mentally checking unfinished work.",
+      "B": "This small change made a significant difference.",
+      "C": "I had to admit that my evenings were still dominated by work thoughts.",
+      "D": "I was determined to find a solution that worked for me.",
+      "E": "It was clear that my initial attempts were missing the mark.",
+      "F": "This new habit was surprisingly difficult to maintain at first.",
+      "G": "I was finally able to enjoy my evenings without the shadow of work."
+    },
+    "questions": [
+      {
+        "number": 37,
+        "answer": "C",
+        "cohesion_focus": "contrast",
+        "rationale": "The sentence contrasts the narrator's efforts with the continued tiredness, highlighting the failure of initial attempts."
+      },
+      {
+        "number": 38,
+        "answer": "A",
+        "cohesion_focus": "reference",
+        "rationale": "This sentence refers back to the mental checking of work, explaining why the initial changes were ineffective."
+      },
+      {
+        "number": 39,
+        "answer": "E",
+        "cohesion_focus": "discovery",
+        "rationale": "This sentence reveals the narrator's realisation about the ongoing mental presence of work, which is a discovery moment."
+      },
+      {
+        "number": 40,
+        "answer": "B",
+        "cohesion_focus": "introduction",
+        "rationale": "This sentence introduces the narrator's determination to implement a new solution, which is the work-closing ritual."
+      },
+      {
+        "number": 41,
+        "answer": "F",
+        "cohesion_focus": "challenge",
+        "rationale": "The sentence describes the difficulty of maintaining the new habit, which aligns with the temptation to break the rule."
+      },
+      {
+        "number": 42,
+        "answer": "G",
+        "cohesion_focus": "result",
+        "rationale": "This sentence describes the positive outcome of the changes, showing a shift in the narrator's evenings."
+      }
+    ],
+    "unused_sentence": "D",
+    "validation_notes": {
+      "brief_fidelity_notes": "The generated content follows the brief's focus on discovering the real issue behind tired evenings, rather than a perfect sleep routine.",
+      "style_card_notes": "The style aligns with the Personal Reflective Experience, using a first-person narrative and a reflective tone.",
+      "british_english_notes": "British English conventions are consistently applied throughout the text.",
+      "factuality_notes": "The text avoids making medical claims and focuses on personal experience and reflection.",
+      "answer_validity_notes": "Each gap has a single defendable answer based on logical progression and cohesive links.",
+      "self_check_flags": []
+    },
+    "_word_count": 448
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

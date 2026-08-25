@@ -1,0 +1,135 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:48:29.671Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-010",
+  "brief_version": "1.0",
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.0",
+  "working_title": "What happens when rooftops become shared spaces",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3293,
+    "completion_tokens": 1282,
+    "total_tokens": 4575
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 337 outside 550–650",
+      "Part 5 answers use fewer than 3 different letters"
+    ],
+    "warnings": [],
+    "word_count": 337
+  },
+  "exercise": {
+    "part_title": "Part 5",
+    "instructions": "Read the text and answer questions 31–36. For each question, choose the correct answer A, B, C or D.",
+    "text_title": "What happens when rooftops become shared spaces",
+    "article": "In the heart of a bustling city, a previously neglected rooftop has been transformed into a vibrant communal space. Once just a flat expanse of concrete, it now hosts a variety of plants, seating areas, and even a small vegetable garden. This transformation has not only changed the skyline but also the lives of the building's residents.\n\nThe idea was simple: utilise the unused space to create a green area where residents could relax, garden, and socialise. However, as with any community project, expectations varied. Some residents envisioned a quiet retreat where they could enjoy gardening in peace, while others saw it as a lively social hub.\n\nInitially, the project faced challenges typical of shared spaces. Watering the plants became a point of contention, with some residents feeling the responsibility was unfairly distributed. Access times also caused friction, as early risers and night owls clashed over when the space should be open.\n\nTo address these issues, the building's committee introduced a schedule for watering duties and set specific access hours. These adjustments helped to alleviate tensions, allowing the space to function more smoothly.\n\nInterestingly, one resident, who was initially sceptical about the project, found unexpected benefits. Although uninterested at first, they began to appreciate the opportunity to meet neighbours and enjoy fresh produce from the garden. This shift in attitude highlights how practical and social benefits can outweigh initial doubts.\n\nHowever, it's important to acknowledge that not every building or resident group can replicate this model. Factors such as building design, resident interest, and available resources all play a role in the success of such projects. Ultimately, the effectiveness of shared green spaces depends on their integration into the everyday lives of residents, rather than just being an attractive concept.\n\nIn conclusion, while the idea of turning rooftops into green spaces is appealing, its success hinges on practical social arrangements. Projects like these thrive when they address real needs and fit into the routines of those who use them, rather than relying solely on their aesthetic appeal.",
+    "questions": [
+      {
+        "number": 31,
+        "question_type": "main_idea",
+        "prompt": "What is the main idea of the article?",
+        "options": {
+          "A": "Rooftop gardens can solve urban environmental issues.",
+          "B": "Shared rooftop spaces succeed with practical arrangements.",
+          "C": "All residents appreciate the benefits of green rooftops.",
+          "D": "Rooftop projects are primarily about aesthetics."
+        },
+        "answer": "B",
+        "evidence": "Ultimately, the effectiveness of shared green spaces depends on their integration into the everyday lives of residents, rather than just being an attractive concept.",
+        "rationale": "The article emphasises that the success of rooftop projects depends on practical social arrangements rather than just aesthetics."
+      },
+      {
+        "number": 32,
+        "question_type": "detail",
+        "prompt": "What was one of the initial challenges faced by the rooftop project?",
+        "options": {
+          "A": "Lack of funding for the project.",
+          "B": "Disagreements over plant selection.",
+          "C": "Issues with watering the plants.",
+          "D": "Insufficient interest from residents."
+        },
+        "answer": "C",
+        "evidence": "Watering the plants became a point of contention, with some residents feeling the responsibility was unfairly distributed.",
+        "rationale": "The article specifically mentions watering as a point of contention, indicating it was a challenge."
+      },
+      {
+        "number": 33,
+        "question_type": "inference",
+        "prompt": "What can be inferred about the resident who was initially sceptical?",
+        "options": {
+          "A": "They never participated in the project.",
+          "B": "They became a key organiser of the project.",
+          "C": "They found social benefits in the project.",
+          "D": "They preferred the rooftop to remain unused."
+        },
+        "answer": "C",
+        "evidence": "Although uninterested at first, they began to appreciate the opportunity to meet neighbours and enjoy fresh produce from the garden.",
+        "rationale": "The resident found unexpected social benefits, which changed their initial scepticism."
+      },
+      {
+        "number": 34,
+        "question_type": "purpose",
+        "prompt": "Why did the building's committee introduce a schedule for watering duties?",
+        "options": {
+          "A": "To reduce water usage.",
+          "B": "To ensure fairness among residents.",
+          "C": "To increase plant variety.",
+          "D": "To limit access to the rooftop."
+        },
+        "answer": "B",
+        "evidence": "To address these issues, the building's committee introduced a schedule for watering duties and set specific access hours.",
+        "rationale": "The schedule was intended to alleviate tensions by ensuring fairness in watering duties."
+      },
+      {
+        "number": 35,
+        "question_type": "attitude",
+        "prompt": "How does the article view the potential for all buildings to adopt rooftop projects?",
+        "options": {
+          "A": "Enthusiastically, as a universal solution.",
+          "B": "Sceptically, due to high costs.",
+          "C": "Realistically, acknowledging limitations.",
+          "D": "Negatively, as impractical for most."
+        },
+        "answer": "C",
+        "evidence": "It's important to acknowledge that not every building or resident group can replicate this model.",
+        "rationale": "The article recognises that while the concept is appealing, not all buildings can adopt it due to various limitations."
+      },
+      {
+        "number": 36,
+        "question_type": "reference",
+        "prompt": "What does 'integration into the everyday lives of residents' refer to in the article?",
+        "options": {
+          "A": "The aesthetic appeal of the rooftop.",
+          "B": "The practical use of the rooftop by residents.",
+          "C": "The environmental impact of the rooftop.",
+          "D": "The financial cost of maintaining the rooftop."
+        },
+        "answer": "B",
+        "evidence": "Ultimately, the effectiveness of shared green spaces depends on their integration into the everyday lives of residents, rather than just being an attractive concept.",
+        "rationale": "The phrase refers to how well the rooftop space fits into the daily routines and practical needs of the residents."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The article follows the brief by focusing on the practical changes and social dynamics of shared rooftop spaces.",
+      "style_card_notes": "The article uses a balanced, current-feeling magazine/reporting voice, as specified by the style card.",
+      "british_english_notes": "The text uses British English consistently.",
+      "factuality_notes": "The article avoids unverified claims and focuses on plausible scenarios.",
+      "answer_validity_notes": "Each question has one defendable answer based on the text.",
+      "self_check_flags": []
+    },
+    "_word_count": 337
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

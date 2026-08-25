@@ -1,0 +1,136 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:48:16.897Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-010",
+  "brief_version": "1.0",
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.0",
+  "working_title": "What happens when rooftops become shared spaces",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3293,
+    "completion_tokens": 1369,
+    "total_tokens": 4662
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 419 outside 550–650"
+    ],
+    "warnings": [],
+    "word_count": 419
+  },
+  "exercise": {
+    "part_title": "Part 5",
+    "instructions": "Read the article and answer the questions that follow. For each question, choose the correct answer A, B, C or D.",
+    "text_title": "What happens when rooftops become shared spaces",
+    "article": "In a quiet corner of an unnamed city, a modest apartment block has transformed the once-barren rooftop into a vibrant shared space. Where there was once only gravel and the occasional pigeon, there are now rows of planters filled with herbs and vegetables, and a small seating area where residents can gather. This change is part of a growing trend where urban buildings are repurposing their rooftops into communal areas, offering both environmental and social benefits.\n\nThe idea behind these projects is simple: to make use of underutilised spaces in cities and turn them into green oases. However, the success of such projects often hinges on practical considerations rather than just the aesthetics. For instance, in this particular building, residents initially had differing visions for the space. Some imagined a peaceful garden where they could quietly tend to plants, while others saw it as a place for social gatherings and events.\n\nThis divergence in expectations led to some early friction. The gardeners found the noise from social events disruptive, while those looking for a social space felt restricted by the need to maintain quiet. The building's management intervened by setting specific times for gardening and social activities, ensuring that everyone could enjoy the space without conflict.\n\nAnother practical challenge was the maintenance of the garden itself. Initially, watering was a problem, as no one took responsibility for it. A rota system was eventually introduced, where residents took turns to water the plants. This system not only solved the issue but also encouraged more residents to get involved with the garden.\n\nInterestingly, one resident, who had initially shown no interest in the project, found unexpected value in the rooftop space. After attending a few social events, they discovered a newfound sense of community and began to appreciate the shared environment. This highlights how such projects can offer benefits beyond the obvious environmental ones.\n\nHowever, it's important to note that not every building or community will find this model suitable. Some residents may prefer their rooftops to remain private or simply lack the time or interest to participate in communal activities. The key to success lies in adapting the project to fit the specific needs and desires of the residents involved.\n\nIn conclusion, while the concept of turning rooftops into shared spaces is appealing, its true value emerges when it aligns with the everyday lives of those who use it. The practical arrangements—such as setting rules and responsibilities—are what make these projects sustainable and meaningful in the long run.",
+    "questions": [
+      {
+        "number": 31,
+        "question_type": "main_idea",
+        "prompt": "What is the main focus of the article?",
+        "options": {
+          "A": "The environmental benefits of rooftop gardens.",
+          "B": "The practical challenges of shared rooftop spaces.",
+          "C": "The aesthetic appeal of urban green spaces.",
+          "D": "The importance of community events in cities."
+        },
+        "answer": "B",
+        "evidence": "The success of such projects often hinges on practical considerations rather than just the aesthetics.",
+        "rationale": "The article primarily discusses the practical aspects of maintaining shared rooftop spaces, rather than focusing solely on environmental or aesthetic benefits."
+      },
+      {
+        "number": 32,
+        "question_type": "detail",
+        "prompt": "What problem arose due to differing resident expectations?",
+        "options": {
+          "A": "Lack of interest in the project.",
+          "B": "Disagreements over plant types.",
+          "C": "Conflict between gardening and social activities.",
+          "D": "Insufficient space for all residents."
+        },
+        "answer": "C",
+        "evidence": "The gardeners found the noise from social events disruptive, while those looking for a social space felt restricted by the need to maintain quiet.",
+        "rationale": "The text clearly states that the differing expectations led to conflict between those wanting a quiet garden and those preferring social events."
+      },
+      {
+        "number": 33,
+        "question_type": "inference",
+        "prompt": "Why was a rota system introduced for watering the plants?",
+        "options": {
+          "A": "To ensure equal participation.",
+          "B": "To prevent overwatering.",
+          "C": "To reduce water usage.",
+          "D": "To encourage more social events."
+        },
+        "answer": "A",
+        "evidence": "A rota system was eventually introduced, where residents took turns to water the plants.",
+        "rationale": "The introduction of a rota system was to ensure that the responsibility of watering was shared equally among residents, thus encouraging participation."
+      },
+      {
+        "number": 34,
+        "question_type": "attitude",
+        "prompt": "How did one initially uninterested resident's attitude change?",
+        "options": {
+          "A": "They became more environmentally conscious.",
+          "B": "They began to value the community aspect.",
+          "C": "They decided to lead the gardening efforts.",
+          "D": "They opposed the rooftop project even more."
+        },
+        "answer": "B",
+        "evidence": "They discovered a newfound sense of community and began to appreciate the shared environment.",
+        "rationale": "The resident's attitude changed as they started to value the community aspect of the shared space, which they had not considered before."
+      },
+      {
+        "number": 35,
+        "question_type": "purpose",
+        "prompt": "What was the purpose of setting specific times for gardening and social activities?",
+        "options": {
+          "A": "To increase the number of events.",
+          "B": "To reduce noise pollution.",
+          "C": "To prevent conflicts between residents.",
+          "D": "To encourage more gardening."
+        },
+        "answer": "C",
+        "evidence": "Setting specific times for gardening and social activities, ensuring that everyone could enjoy the space without conflict.",
+        "rationale": "The purpose of setting specific times was to prevent conflicts between residents with different expectations for the rooftop space."
+      },
+      {
+        "number": 36,
+        "question_type": "global",
+        "prompt": "What does the article suggest about the future of shared rooftop spaces?",
+        "options": {
+          "A": "They will become mandatory in all urban buildings.",
+          "B": "They will only succeed with proper management.",
+          "C": "They will replace traditional parks.",
+          "D": "They will be abandoned due to lack of interest."
+        },
+        "answer": "B",
+        "evidence": "The practical arrangements—such as setting rules and responsibilities—are what make these projects sustainable and meaningful in the long run.",
+        "rationale": "The article suggests that the success of shared rooftop spaces depends on proper management and fitting the needs of the residents."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The article follows the brief by focusing on practical changes and challenges in shared rooftop spaces rather than large environmental effects.",
+      "style_card_notes": "The style matches the 'Trend & Social Report' card by discussing a trend with practical implications and avoiding promotional language.",
+      "british_english_notes": "The article uses British English consistently.",
+      "factuality_notes": "The article avoids unverified claims and sticks to plausible scenarios.",
+      "answer_validity_notes": "Each question has a single, defendable correct answer based on the article.",
+      "self_check_flags": [
+        "The article's word count is within the required range of 550-650 words."
+      ]
+    },
+    "_word_count": 419
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

@@ -1,0 +1,135 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E03",
+  "ruoe_exam_id": "RUOE-PILOT-E03",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-017",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-05",
+  "style_card_version": "v1.1",
+  "working_title": "The week the streets change shape",
+  "final_title": "February is the busiest month",
+  "title_candidates": [
+    "February is the busiest month",
+    "Forty-one barriers and a generator",
+    "Three days, eleven months"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Option B is the most temptable at gap 40; a reviewer should confirm that the loss of the backward link to the settlement is clear enough."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Each gap was re-solved with the six removed sentences shuffled and the extra included. Every gap resolved to one option; the extra fitted nowhere.",
+    "repairs_applied": [
+      "Sentence F was reopened during drafting because its first version also began with “That”, duplicating the cohesive mechanism of sentence D.",
+      "Sentence C was rewritten so that the farmer returns with nothing, which keeps it consistent with the bands playing unamplified in the following sentence."
+    ],
+    "teacher_attention_items": []
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 6",
+    "directions": "Part 6: Gapped text\nYou are going to read an article. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (37–42). There is one extra sentence which you do not need to use.",
+    "partNumber": 6,
+    "title": "February is the busiest month",
+    "titlePatternFamily": "counter_intuitive_title",
+    "passage": "In February the festival is a shed on the edge of a farmyard, three miles outside the town it belongs to. Inside there are forty-one steel barriers, a generator under a tarpaulin, eleven trestle tables and a box of cable covers that somebody counts each winter and nobody ever repairs. The woman who does the counting has held the key for nine years. It is not a position anyone voted for, and she has twice tried to hand it on.\n\nThe date cannot move. The town’s other large event takes the last weekend in July, the school hall is booked a year ahead for the exhibition, and the two brass bands that play on the Saturday are committed elsewhere for the rest of the summer. (37) ___ Everything else in the calendar is arranged backwards from those three days, which is why the committee meets in the last week of January and not, as visitors assume, in June.\n\nThe constraint that shapes everything else is a road. The lane that runs through the middle of the town is the only route an ambulance can take to the villages north of it, and it cannot be closed for three days, or for one. (38) ___ The result is a festival that runs along two sides of a square and stops at a junction, with stewards at the crossing and a gap in the middle where the crowd thins out and has to be encouraged along.\n\nNot everyone accepts the square. A group on the committee, mostly the people who run the stalls, argue every year for a longer route through the residential streets to the east, which would double the frontage and let twice as many traders take part. (39) ___ The argument is settled the same way each time, by a show of hands that has never once gone to the longer route, and by the observation that the people who would live inside it are the ones who lend the trestle tables.\n\n(40) ___ By eleven on the Saturday the square is full, and the stewards at the northern crossing are doing the job that the shape of the route created: holding a line of people back for ninety seconds at a time while a car, and once an ambulance, goes through. Visitors take it for a piece of theatre. The stewards are volunteers who have been briefed twice, and their briefing is longer than any other on the list.\n\nSomething always goes. Two years ago the generator failed at four on the Sunday afternoon, twenty minutes before the last band, and there was no second one within thirty miles. (41) ___ The bands played the final half-hour unamplified, which several people afterwards said was the best part of the weekend, and the committee has since written a hired generator into a budget that does not really have room for it.\n\nBy the Tuesday the square is a square again. The barriers go back on the trailer on the Monday evening, in the rain, by whoever is still standing, and the count in the shed is always short by two or three, which nobody can explain and everybody has stopped investigating. (42) ___ What the town keeps is a resurfaced corner by the church, paid for out of the surplus three years ago, and a list of forty-one names that gets shorter every year and has never yet run out.",
+    "passageWordCount": 565,
+    "sentencePool": [
+      "A) Against this, the residents’ representatives point out that a longer route means eleven more households cut off from their own driveways for a weekend.",
+      "B) Visitors who come for the Saturday rarely notice any of this, and the committee has decided that this is the point.",
+      "C) It was the farmer whose yard holds the shed who drove twenty miles that afternoon and came back with nothing.",
+      "D) That leaves a single weekend in the middle of August, and it has left the same one for as long as anyone can remember.",
+      "E) They will be counted again in February, along with the cable covers that still have not been repaired.",
+      "F) It also removes the obvious circuit, the one every new committee member proposes in their first year.",
+      "G) In August the argument stops mattering, because the barriers come out of the shed on the Thursday and the shape of the weekend is fixed."
+    ],
+    "questions": [
+      {
+        "id": "q37",
+        "number": 37
+      },
+      {
+        "id": "q38",
+        "number": 38
+      },
+      {
+        "id": "q39",
+        "number": 39
+      },
+      {
+        "id": "q40",
+        "number": 40
+      },
+      {
+        "id": "q41",
+        "number": 41
+      },
+      {
+        "id": "q42",
+        "number": 42
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q37",
+        "number": 37,
+        "answer": "D",
+        "rationale": "Backward: “That leaves” sums up the three commitments just listed. Forward: “those three days” in the next sentence needs the weekend to have been identified."
+      },
+      {
+        "id": "q38",
+        "number": 38,
+        "answer": "F",
+        "rationale": "Backward: “It also removes” refers to the road that cannot be closed. Forward: “The result is a festival that runs along two sides of a square” presupposes that the circuit has been ruled out."
+      },
+      {
+        "id": "q39",
+        "number": 39,
+        "answer": "A",
+        "rationale": "Backward: “Against this” answers the stallholders’ case. Forward: “The argument is settled the same way each time” requires two positions to exist."
+      },
+      {
+        "id": "q40",
+        "number": 40,
+        "answer": "G",
+        "rationale": "Opens the event section with a time shift to August and refers back to the settlement reached in the previous paragraph; “the barriers come out of the shed” also picks up paragraph one."
+      },
+      {
+        "id": "q41",
+        "number": 41,
+        "answer": "C",
+        "rationale": "Names who absorbed the failure, linking back to the farmyard of paragraph one, and explains why the next sentence has the bands playing unamplified."
+      },
+      {
+        "id": "q42",
+        "number": 42,
+        "answer": "E",
+        "rationale": "“They” refers to the barriers just loaded onto the trailer, and “counted again in February, along with the cable covers” closes the loop opened in paragraph one."
+      }
+    ],
+    "unusedOption": "B"
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

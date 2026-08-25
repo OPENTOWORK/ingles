@@ -1,0 +1,170 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:16:25.291Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-003",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-02",
+  "working_title": "Games that make practice feel different",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 3 transformation variety is low (detected tags: noun, adjective) — soft check.",
+      "Part 3 has no -ly adverb — include at least one when natural (soft check).",
+      "Part 3 has no prefix/negative formation — variety target; include when natural (not forced).",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 4
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 3: Word formation",
+    "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "stem": "PRACTICE",
+      "answer": "practice",
+      "transformationFamily": "no_transform"
+    },
+    "title": "Games that make practice feel different",
+    "passage": "In an informal learning club, a group gathers to play a cooperative game designed to encourage skill (0) ___ (PRACTICE)_ (PRACTICE). Instead of focusing on winning, players must explain a strategy clearly to their teammates, which demands real (17) ___ (COMMUNICATE)_ (COMMUNICATE) and planning. When one learner suggests a flawed move, the group experiences the (18) ___ (FRUSTRATE)_ (FRUSTRATE) of failing quickly, leading them to adjust their approach immediately. This instant feedback creates a chance for rapid (19) ___ (LEARN)_ (LEARN), which keeps participants engaged. Interestingly, the teacher’s role is largely (20) ___ (OBSERVE)_ (OBSERVE), stepping back to let players explore solutions. However, it is important to remember that the game’s value depends on matching the activity with the specific skill being practised. Without such careful (21) ___ (MATCH)_ (MATCH), the game could be (22) ___ (USE)_ (USE) or distracting. Rather than replacing traditional lessons, this method offers a (23) ___ (DIFFER)_ (DIFFER) way to repeat practice exercises, making repetition less monotonous and more appealing. Ultimately, enjoyment and purposeful skill development must be (24) ___ (BALANCE)_ (BALANCE) to make the best use of games in learning.",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "COMMUNICATE",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "type": "word-formation",
+        "stem": "FRUSTRATE",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "type": "word-formation",
+        "stem": "LEARN",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "type": "word-formation",
+        "stem": "OBSERVE",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "type": "word-formation",
+        "stem": "MATCH",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "USE",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "type": "word-formation",
+        "stem": "DIFFER",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "type": "word-formation",
+        "stem": "BALANCE",
+        "transformationFamily": "adjective"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 17,
+        "answer": "communication",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "answer": "frustration",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "answer": "learning",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "answer": "observant",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "answer": "matching",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "answer": "useless",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "answer": "different",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "answer": "balanced",
+        "transformationFamily": "adjective"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 3,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Example:\n(0) ___ (PRACTICE)\nAnswer: 0 → practice\nText\nGames that make practice feel different\nIn an informal learning club, a group gathers to play a cooperative game designed to encourage skill (0) ___ (PRACTICE). Instead of focusing on winning, players must explain a strategy clearly to their teammates, which demands real (17) ___ (COMMUNICATE) and planning. When one learner suggests a flawed move, the group experiences the (18) ___ (FRUSTRATE) of failing quickly, leading them to adjust their approach immediately. This instant feedback creates a chance for rapid (19) ___ (LEARN), which keeps participants engaged. Interestingly, the teacher’s role is largely (20) ___ (OBSERVE), stepping back to let players explore solutions. However, it is important to remember that the game’s value depends on matching the activity with the specific skill being practised. Without such careful (21) ___ (MATCH), the game could be (22) ___ (USE) or distracting. Rather than replacing traditional lessons, this method offers a (23) ___ (DIFFER) way to repeat practice exercises, making repetition less monotonous and more appealing. Ultimately, enjoyment and purposeful skill development must be (24) ___ (BALANCE) to make the best use of games in learning.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

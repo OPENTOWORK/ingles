@@ -1,0 +1,160 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:41:59.646Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-001",
+  "brief_version": "1.0",
+  "style_card_id": "SC-01",
+  "style_card_version": "v1.0",
+  "working_title": "When animals solve a new problem",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3500,
+    "completion_tokens": 937,
+    "total_tokens": 4437
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 201 outside 150–180",
+      "missing gap marker (6)",
+      "missing gap marker (7)",
+      "missing gap marker (8)"
+    ],
+    "warnings": [],
+    "word_count": 201
+  },
+  "exercise": {
+    "part_title": "Part 1",
+    "instructions": "For questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap.",
+    "text_title": "When animals solve a new problem",
+    "passage_with_gaps": "Imagine a bird trying to reach a piece of food that is placed just out of its reach. The bird might try to (0) ___ the food with its beak, but when that fails, it might use a stick to bring the food closer. This behaviour is not just a simple instinctive action but a demonstration of problem-solving. \n\nAnimals often face challenges that require them to adjust their behaviour. Unlike a fixed response, a flexible approach involves trying different methods until one (1) ___. For example, a monkey might encounter a new type of fruit. Instead of giving up if it cannot open it immediately, it might try various techniques until it (2) ___ the fruit. \n\nThis ability to adapt is not just about trial-and-error. It also involves memory and observation. An animal might remember what worked in a similar situation or (3) ___ the actions of others to find a solution. This combination of skills is what makes animal behaviour fascinating to researchers.\n\nWhen observing animals, scientists look for signs of flexible problem-solving. They are interested in how an animal's behaviour changes in response to new situations, showing that success can (4) ___ from a blend of simple abilities. This approach helps researchers understand the (5) ___ between instinctive and adaptive behaviours.",
+    "example": {
+      "number": 0,
+      "options": {
+        "A": "grab",
+        "B": "catch",
+        "C": "hold",
+        "D": "take"
+      },
+      "answer": "A",
+      "explanation": "'Grab' is the most appropriate verb for trying to reach and take hold of something."
+    },
+    "questions": [
+      {
+        "number": 1,
+        "options": {
+          "A": "succeeds",
+          "B": "wins",
+          "C": "achieves",
+          "D": "gains"
+        },
+        "answer": "A",
+        "lexical_focus": "succeeds",
+        "rationale": "'Succeeds' is the correct choice as it fits the context of trying different methods until one works."
+      },
+      {
+        "number": 2,
+        "options": {
+          "A": "breaks",
+          "B": "opens",
+          "C": "splits",
+          "D": "cracks"
+        },
+        "answer": "B",
+        "lexical_focus": "opens",
+        "rationale": "'Opens' is the most appropriate verb for accessing the inside of a fruit."
+      },
+      {
+        "number": 3,
+        "options": {
+          "A": "imitate",
+          "B": "copy",
+          "C": "reflect",
+          "D": "mirror"
+        },
+        "answer": "B",
+        "lexical_focus": "copy",
+        "rationale": "'Copy' fits the context of observing and repeating the actions of others."
+      },
+      {
+        "number": 4,
+        "options": {
+          "A": "emerge",
+          "B": "arise",
+          "C": "appear",
+          "D": "occur"
+        },
+        "answer": "A",
+        "lexical_focus": "emerge",
+        "rationale": "'Emerge' is the best choice for describing how success can come from a combination of abilities."
+      },
+      {
+        "number": 5,
+        "options": {
+          "A": "difference",
+          "B": "gap",
+          "C": "contrast",
+          "D": "distinction"
+        },
+        "answer": "D",
+        "lexical_focus": "distinction",
+        "rationale": "'Distinction' is the most suitable word for highlighting the difference between instinctive and adaptive behaviours."
+      },
+      {
+        "number": 6,
+        "options": {
+          "A": "approach",
+          "B": "method",
+          "C": "strategy",
+          "D": "plan"
+        },
+        "answer": "C",
+        "lexical_focus": "strategy",
+        "rationale": "'Strategy' is the most appropriate term in the context of trying different techniques."
+      },
+      {
+        "number": 7,
+        "options": {
+          "A": "observe",
+          "B": "notice",
+          "C": "watch",
+          "D": "view"
+        },
+        "answer": "C",
+        "lexical_focus": "watch",
+        "rationale": "'Watch' is the correct verb for closely observing the actions of others."
+      },
+      {
+        "number": 8,
+        "options": {
+          "A": "results",
+          "B": "outcomes",
+          "C": "consequences",
+          "D": "effects"
+        },
+        "answer": "A",
+        "lexical_focus": "results",
+        "rationale": "'Results' is the best choice for describing what researchers look for in animal behaviour studies."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise adheres to the brief by focusing on animal problem-solving and the mechanisms involved.",
+      "style_card_notes": "The text follows the Style Card, with a curiosity-driven opening and a clear explanatory arc.",
+      "british_english_notes": "British English is consistently used throughout the text.",
+      "factuality_notes": "The text avoids making specific claims about studies or species, maintaining general factual accuracy.",
+      "answer_validity_notes": "Each question has one clear, defendable answer based on lexical context.",
+      "self_check_flags": []
+    },
+    "_word_count": 201
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

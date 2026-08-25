@@ -1,29 +1,52 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import {
+  ANNUAL_BILLING_DISCOUNT_PERCENT,
+  COMING_SOON,
   DRALO_SUBSCRIPTION_PLANS,
+  formatEuroAmount,
+  formatPlanAnnualTotal,
+  formatPlanPriceAmount,
+  formatPlanPriceLabel,
+  getPlanListDiscountPercent,
+  getPlanListPrice,
   PLAN_COMPARISON_ROWS,
 } from '@/data/financialPlanConfig';
 import { examsLimitLabel } from '@/lib/subscriptionPlans';
+import { startCheckout } from '@/lib/stripe/client';
 import styles from './SubscriptionPlansSection.module.css';
 
-function comparisonCellValue(row, planSlug) {
-  if (row.id === 'exams') return examsLimitLabel(planSlug);
+function comparisonCellValue(row, planSlug, billingCycle) {
+  if (row.id === 'exams') {
+    if (planSlug === 'pro') return true;
+    return examsLimitLabel(planSlug);
+  }
+  if (row.id === 'price') {
+    const plan = DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === planSlug);
+    if (!plan) return row.values[planSlug];
+    const list = getPlanListPrice(plan, billingCycle);
+    const discount = getPlanListDiscountPercent(plan, billingCycle);
+    return {
+      kind: 'price',
+      list: list ? formatEuroAmount(list) : null,
+      current: formatPlanPriceLabel(plan, billingCycle),
+      discount,
+    };
+  }
   return row.values[planSlug];
 }
 
-function formatPrice(plan) {
-  if (!plan.precio || plan.precio <= 0) return '0€';
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
-  }).format(plan.precio);
-}
-
 function CellValue({ value, type }) {
-  if (type === 'bool') {
+  if (value === COMING_SOON) {
+    return (
+      <span className={styles.cellSoon} aria-label="Próximamente">
+        Coming soon
+      </span>
+    );
+  }
+  if (type === 'bool' || value === true || value === false) {
     return value ? (
       <span className={styles.cellYes} aria-label="Incluido">
         ✅
@@ -34,21 +57,64 @@ function CellValue({ value, type }) {
       </span>
     );
   }
+  if (value && typeof value === 'object' && value.kind === 'price') {
+    return (
+      <span className={styles.cellPrice}>
+        {value.list ? (
+          <span className={styles.cellPriceWas} aria-label="Precio futuro">
+            {value.list}
+          </span>
+        ) : null}
+        <span className={styles.cellPriceCurrent}>{value.current}</span>
+        {value.discount ? (
+          <span className={styles.cellPriceDiscount}>-{value.discount}%</span>
+        ) : null}
+      </span>
+    );
+  }
   return <span className={styles.cellText}>{value}</span>;
 }
 
 /**
  * Tarjetas de planes + tabla comparativa (página pública o admin).
- * @param {{ showCta?: boolean, selectedSlug?: string, onSelectPlan?: (slug: string) => void, title?: string, subtitle?: string }} props
+ * @param {{
+ *   showCta?: boolean,
+ *   enableCheckout?: boolean,
+ *   selectedSlug?: string,
+ *   onSelectPlan?: (slug: string) => void,
+ *   title?: string,
+ *   subtitle?: string,
+ * }} props
  */
 export default function SubscriptionPlansSection({
   showCta = true,
+  enableCheckout = false,
   selectedSlug = '',
   onSelectPlan,
   title = 'Elige tu plan',
   subtitle = 'Compara características y encuentra el plan que mejor encaja con tu preparación.',
 }) {
   const interactive = typeof onSelectPlan === 'function';
+  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [checkoutPlan, setCheckoutPlan] = useState('');
+  const [checkoutError, setCheckoutError] = useState('');
+  const isAnnual = billingCycle === 'annual';
+
+  async function handleCheckout(planSlug) {
+    setCheckoutError('');
+    setCheckoutPlan(planSlug);
+    try {
+      // Redirige a Stripe si todo va bien, así que no hace falta limpiar el estado.
+      await startCheckout({ planSlug, billingCycle });
+    } catch (err) {
+      if (err?.code === 'no_session') {
+        window.location.assign('/login/');
+        return;
+      }
+      setCheckoutError(err?.message || 'No se pudo iniciar el pago.');
+      setCheckoutPlan('');
+    }
+  }
 
   return (
     <section className={styles.section} aria-labelledby="subscription-plans-heading">
@@ -59,10 +125,45 @@ export default function SubscriptionPlansSection({
         {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
       </header>
 
+      <div className={styles.billingToggleWrap}>
+        <p className={styles.billingToggleLabel}>Facturación</p>
+        <div
+          className={styles.billingToggle}
+          role="group"
+          aria-label="Periodo de facturación"
+        >
+          <button
+            type="button"
+            className={`${styles.billingToggleBtn}${!isAnnual ? ` ${styles.billingToggleBtnActive}` : ''}`}
+            aria-pressed={!isAnnual}
+            onClick={() => setBillingCycle('monthly')}
+          >
+            Mensual
+          </button>
+          <button
+            type="button"
+            className={`${styles.billingToggleBtn}${isAnnual ? ` ${styles.billingToggleBtnActive}` : ''}`}
+            aria-pressed={isAnnual}
+            onClick={() => setBillingCycle('annual')}
+          >
+            Anual
+            <span className={styles.billingToggleBadge}>-{ANNUAL_BILLING_DISCOUNT_PERCENT}%</span>
+          </button>
+        </div>
+        {isAnnual ? (
+          <p className={styles.billingToggleHint}>
+            Ahorra un {ANNUAL_BILLING_DISCOUNT_PERCENT}% pagando el año completo de una vez.
+          </p>
+        ) : null}
+      </div>
+
       <div className={styles.cards}>
         {DRALO_SUBSCRIPTION_PLANS.map((plan) => {
           const isSelected = selectedSlug === plan.slug;
           const isPremium = plan.recommended;
+          const hasPaidPlan = plan.precio > 0;
+          const listPrice = getPlanListPrice(plan, billingCycle);
+          const listDiscount = getPlanListDiscountPercent(plan, billingCycle);
           return (
             <article
               key={plan.slug}
@@ -82,11 +183,31 @@ export default function SubscriptionPlansSection({
 
               <h3 className={styles.cardName}>{plan.nombre}</h3>
               <p className={styles.cardPrice}>
-                {plan.precio > 0 ? (
+                {hasPaidPlan ? (
                   <>
-                    <span className={styles.cardPriceAmount}>{formatPrice(plan)}</span>
-                    <span className={styles.cardPricePeriod}>/mes</span>
-                    <span className={styles.cardTrial}>7 días de prueba gratuita</span>
+                    <span className={styles.cardPriceRow}>
+                      {listPrice ? (
+                        <span className={styles.cardPriceWas} aria-label="Precio futuro">
+                          {formatEuroAmount(listPrice)}
+                        </span>
+                      ) : isAnnual ? (
+                        <span className={styles.cardPriceWas} aria-hidden>
+                          {formatPlanPriceAmount(plan, 'monthly')}
+                        </span>
+                      ) : null}
+                      <span className={styles.cardPriceAmount}>
+                        {formatPlanPriceAmount(plan, billingCycle)}
+                      </span>
+                      <span className={styles.cardPricePeriod}>/mes</span>
+                      {listDiscount ? (
+                        <span className={styles.cardPriceDiscount}>-{listDiscount}%</span>
+                      ) : null}
+                    </span>
+                    {isAnnual ? (
+                      <span className={styles.cardPriceAnnual}>
+                        {formatPlanAnnualTotal(plan)} facturados al año
+                      </span>
+                    ) : null}
                   </>
                 ) : (
                   <span className={styles.cardPriceAmount}>Gratis</span>
@@ -95,9 +216,17 @@ export default function SubscriptionPlansSection({
               <p className={styles.cardTagline}>{plan.descripcionCorta}</p>
 
               <ul className={styles.cardFeatures}>
-                {plan.highlights.map((line) => (
-                  <li key={line}>{line}</li>
-                ))}
+                {plan.highlights.map((line) => {
+                  const isSoon = /próximamente|coming soon/i.test(line);
+                  return (
+                    <li
+                      key={line}
+                      className={isSoon ? styles.cardFeatureSoon : styles.cardFeatureYes}
+                    >
+                      {line}
+                    </li>
+                  );
+                })}
               </ul>
 
               {interactive ? (
@@ -108,6 +237,15 @@ export default function SubscriptionPlansSection({
                   aria-pressed={isSelected}
                 >
                   {isSelected ? 'Plan seleccionado' : plan.precio > 0 ? 'Elegir plan' : 'Empezar gratis'}
+                </button>
+              ) : enableCheckout && hasPaidPlan ? (
+                <button
+                  type="button"
+                  className={`${styles.cardBtn}${isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
+                  onClick={() => handleCheckout(plan.slug)}
+                  disabled={Boolean(checkoutPlan)}
+                >
+                  {checkoutPlan === plan.slug ? 'Redirigiendo a Stripe…' : 'Suscribirme'}
                 </button>
               ) : showCta ? (
                 <Link
@@ -121,6 +259,12 @@ export default function SubscriptionPlansSection({
           );
         })}
       </div>
+
+      {checkoutError ? (
+        <p className={styles.checkoutError} role="alert">
+          {checkoutError}
+        </p>
+      ) : null}
 
       <div className={styles.compareWrap}>
         <h3 className={styles.compareTitle}>Comparativa de planes</h3>
@@ -154,7 +298,10 @@ export default function SubscriptionPlansSection({
                       key={p.slug}
                       className={p.recommended ? styles.tdPopular : undefined}
                     >
-                      <CellValue value={comparisonCellValue(row, p.slug)} type={row.type} />
+                      <CellValue
+                        value={comparisonCellValue(row, p.slug, billingCycle)}
+                        type={row.type}
+                      />
                     </td>
                   ))}
                 </tr>

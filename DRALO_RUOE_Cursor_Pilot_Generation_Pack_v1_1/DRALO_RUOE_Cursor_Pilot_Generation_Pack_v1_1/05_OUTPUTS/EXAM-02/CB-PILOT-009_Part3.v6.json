@@ -1,0 +1,112 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 6,
+  "generated_at": "2026-08-12T17:08:29.373Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-009",
+  "brief_version": "1.0",
+  "style_card_id": "SC-04",
+  "style_card_version": "v1.0",
+  "working_title": "The first song I played for someone else",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 4394,
+    "completion_tokens": 887,
+    "total_tokens": 5281
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 188 outside 150–180"
+    ],
+    "warnings": [],
+    "word_count": 188
+  },
+  "exercise": {
+    "part_title": "Part 3",
+    "instructions": "For questions 17–24, read the text below. Use the word given in capitals at the end of some lines to form a word that fits in the gap in the same line. There is an example at the beginning (0). Write your answers IN CAPITAL LETTERS.",
+    "text_title": "The first song I played for someone else",
+    "passage_with_gaps": "It was a small community event, and I was asked to play a simple (0) **accompaniment** for a local choir. I had been learning the guitar for a few months, but my (17) **CONFIDENT** was still shaky. I had started playing out of personal interest, expecting to see (18) **IMPROVE** quickly. However, the reality was different. The (19) **REPEAT** practice sessions were becoming tedious, and I was close to giving up.\n\nThe request to play came as a surprise. Initially, I hesitated, worried about making a mistake in front of others. But the idea of contributing to the event was (20) **APPEAL**, so I accepted. During the performance, I did make a small mistake, but it turned out to be (21) **SIGNIFY**. The music still supported the choir, and the audience seemed to enjoy it.\n\nThis experience changed my perspective. I realised that the (22) **PERFORM** was not about being perfect but about sharing music. After the event, my practice sessions felt more (23) **PURPOSE**. I now had a new goal: to play music that brought people together, rather than just aiming to become \"good\". This shift in focus made my musical journey much more (24) **ENJOY**.",
+    "example": {
+      "number": 0,
+      "stem": "ACCOMPANY",
+      "answer": "ACCOMPANIMENT",
+      "explanation": "The word 'accompaniment' is the noun form derived from the verb 'accompany', suitable for the context of playing music alongside a choir."
+    },
+    "questions": [
+      {
+        "number": 17,
+        "stem": "CONFIDENT",
+        "answer": "CONFIDENCE",
+        "transformation_type": "adjective→noun",
+        "rationale": "The noun 'confidence' is needed to describe the learner's state of mind."
+      },
+      {
+        "number": 18,
+        "stem": "IMPROVE",
+        "answer": "IMPROVEMENTS",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'improvements' is appropriate to describe the learner's expected progress."
+      },
+      {
+        "number": 19,
+        "stem": "REPEAT",
+        "answer": "REPETITIVE",
+        "transformation_type": "noun→adjective",
+        "rationale": "The adjective 'repetitive' describes the nature of the practice sessions."
+      },
+      {
+        "number": 20,
+        "stem": "APPEAL",
+        "answer": "APPEALING",
+        "transformation_type": "noun→adjective",
+        "rationale": "The adjective 'appealing' describes the attractiveness of contributing to the event."
+      },
+      {
+        "number": 21,
+        "stem": "SIGNIFY",
+        "answer": "INSIGNIFICANT",
+        "transformation_type": "verb→adjective (negative)",
+        "rationale": "The adjective 'insignificant' describes the small mistake's lack of impact."
+      },
+      {
+        "number": 22,
+        "stem": "PERFORM",
+        "answer": "PERFORMANCE",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'performance' is used to refer to the act of playing music."
+      },
+      {
+        "number": 23,
+        "stem": "PURPOSE",
+        "answer": "PURPOSEFUL",
+        "transformation_type": "noun→adjective",
+        "rationale": "The adjective 'purposeful' describes the new meaningfulness of the practice sessions."
+      },
+      {
+        "number": 24,
+        "stem": "ENJOY",
+        "answer": "ENJOYABLE",
+        "transformation_type": "verb→adjective",
+        "rationale": "The adjective 'enjoyable' describes the learner's new experience of the musical journey."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The narrative aligns with the brief, focusing on the learner's journey and turning point.",
+      "style_card_notes": "The style is narrative and character-centred, with a focus on motivation and change.",
+      "british_english_notes": "British English is used throughout, with appropriate vocabulary and spelling.",
+      "factuality_notes": "The narrative is fictional but plausible, fitting the biographical style.",
+      "answer_validity_notes": "Each gap has a single, correct derivation that fits grammatically and semantically.",
+      "self_check_flags": []
+    },
+    "_word_count": 188
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

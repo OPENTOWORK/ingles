@@ -1,0 +1,103 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:47:17.854Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-008",
+  "brief_version": "1.0",
+  "style_card_id": "SC-01",
+  "style_card_version": "v1.0",
+  "working_title": "Exploring a place you cannot see clearly",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3163,
+    "completion_tokens": 766,
+    "total_tokens": 3929
+  },
+  "self_check": {
+    "status": "pass_with_warnings",
+    "errors": [],
+    "warnings": [
+      "word_count 175 outside target 160–170"
+    ],
+    "word_count": 175
+  },
+  "exercise": {
+    "part_title": "Part 2: Open Cloze",
+    "instructions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only one word in each gap.",
+    "text_title": "Exploring a Place You Cannot See Clearly",
+    "passage_with_gaps": "Exploring underwater environments presents unique challenges, particularly when it comes to visibility. Light does not travel (0) **as** well underwater as it does through air, which means that explorers often have to rely (9) **on** other methods to understand their surroundings. \n\nOne of the most effective techniques (10) **is** the use of sound. Sound waves can travel long distances through water, and by measuring how long it takes for these waves to return, explorers can determine the distance (11) **and** shape of objects. This method, however, does not provide a perfect image. The data collected must (12) **be** interpreted carefully to build a useful map or display.\n\nFor instance, when trying to locate a particular feature on the seafloor, explorers might (13) **use** sound waves to detect a slope or an object. Despite the lack of direct sight, they (14) **are** able to gather enough information to form a picture of the area. \n\nUltimately, exploration in such conditions requires combining various signals (15) **into** a coherent understanding. This process shows that seeing is not always (16) **about** using one's eyes but interpreting indirect evidence.",
+    "example": {
+      "number": 0,
+      "answer": "as",
+      "explanation": "The word 'as' is used to compare the travel of light through water and air."
+    },
+    "questions": [
+      {
+        "number": 9,
+        "answer": "on",
+        "grammar_focus": "preposition",
+        "rationale": "The phrase 'rely on' is a fixed expression meaning to depend on something."
+      },
+      {
+        "number": 10,
+        "answer": "is",
+        "grammar_focus": "verb (to be)",
+        "rationale": "The verb 'is' is needed to complete the sentence structure 'One of the most effective techniques is...'"
+      },
+      {
+        "number": 11,
+        "answer": "and",
+        "grammar_focus": "conjunction",
+        "rationale": "The conjunction 'and' is used to connect the two related ideas of distance and shape."
+      },
+      {
+        "number": 12,
+        "answer": "be",
+        "grammar_focus": "verb (to be)",
+        "rationale": "The verb 'be' is needed in the passive voice construction 'must be interpreted'."
+      },
+      {
+        "number": 13,
+        "answer": "use",
+        "grammar_focus": "verb",
+        "rationale": "The verb 'use' fits the context of explorers using sound waves as a tool."
+      },
+      {
+        "number": 14,
+        "answer": "are",
+        "grammar_focus": "verb (to be)",
+        "rationale": "The verb 'are' is needed for the present simple passive construction 'they are able to gather'."
+      },
+      {
+        "number": 15,
+        "answer": "into",
+        "grammar_focus": "preposition",
+        "rationale": "The preposition 'into' is used to indicate transformation or change, as in 'combining various signals into a coherent understanding'."
+      },
+      {
+        "number": 16,
+        "answer": "about",
+        "grammar_focus": "preposition",
+        "rationale": "The preposition 'about' is used in the phrase 'seeing is not always about using one's eyes', indicating the topic or focus."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise follows the brief by focusing on underwater exploration and indirect sensing methods.",
+      "style_card_notes": "The text maintains a curious and explanatory tone as specified by the style card.",
+      "british_english_notes": "British English conventions are followed throughout the text.",
+      "factuality_notes": "The content avoids specific technical claims and remains general and plausible.",
+      "answer_validity_notes": "Each gap has a single, defendable answer that fits the context.",
+      "self_check_flags": []
+    },
+    "_word_count": 175
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

@@ -11,8 +11,14 @@ import {
 /** When true, Training paths show COMING SOON for students only. */
 export const STUDENT_TRAINING_COMING_SOON = true;
 
+/** When true, Exam Strategies hub and routes show COMING SOON for students only. */
+export const STUDENT_EXAM_STRATEGIES_COMING_SOON = true;
+
 /** CEFR levels on /niveles that show COMING SOON for students (B2 stays open). */
 export const STUDENT_NIVELES_COMING_SOON_LEVELS = new Set(['A2', 'B1', 'C1', 'C2']);
+
+/** Exam-mode sections unavailable for students/coordinators (skill practice uses the same rule). */
+export const STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS = new Set(['listening', 'speaking']);
 
 export function isStudentRole(userRole = '') {
   const role = normalizeRoleName(userRole);
@@ -50,6 +56,12 @@ export function isTrainingLockedForUser(userRole = '') {
   return usesStudentContentRestrictions(userRole);
 }
 
+/** Exam Strategies: coming soon for logged-in students only (staff/coordinators keep access). */
+export function isExamStrategiesLockedForUser(userRole = '') {
+  if (!STUDENT_EXAM_STRATEGIES_COMING_SOON) return false;
+  return isStudentRole(userRole);
+}
+
 export function isNivelesLevelComingSoonForUser(userRole = '', level = '', email = '') {
   if (hasFullNivelesLevelAccess(userRole, email)) return false;
   if (!usesStudentContentRestrictions(userRole)) return false;
@@ -57,4 +69,11 @@ export function isNivelesLevelComingSoonForUser(userRole = '', level = '', email
     .trim()
     .toUpperCase();
   return STUDENT_NIVELES_COMING_SOON_LEVELS.has(normalized);
+}
+
+/** Listening and Speaking are blocked in exam mode for the same roles as skill practice. */
+export function isExamModeSectionKeyBlockedForStudent(userRole = '', sectionKey = '') {
+  if (!usesStudentContentRestrictions(userRole)) return false;
+  const key = String(sectionKey || '').toLowerCase();
+  return STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS.has(key);
 }

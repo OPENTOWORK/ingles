@@ -1,0 +1,201 @@
+{
+  "pack_version": "1.1.3-e02-regenerated",
+  "generation_version": "pilot-regen-e02-v1.1.3",
+  "generated_at": "2026-08-19T12:04:16.505Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-007",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-05",
+  "working_title": "The place you reach after the road ends",
+  "repairs_applied": [],
+  "validation": {
+    "ok": false,
+    "errors": [
+      "Part 1 passage is 261 words; maximum is 200 (target 150–180)."
+    ],
+    "qualityFails": [],
+    "warnings": [
+      "Part 1 should include at least 1 item decided by a dependent preposition or fixed expression (soft check)."
+    ],
+    "hard_fail_count": 1,
+    "blocking_hard_count": 1,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 1",
+    "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+    "title": "The place you reach after the road ends",
+    "passage": "At the very end of the road (0) ___ the village, travellers have to switch from car to ferry, or continue on foot. This change in transport signals more than just the end of easy access – it also affects the way people move and notice their surroundings. Visitors waiting for the small ferry soon realise that they cannot (1) ___ to arrive exactly when they want; they must rely on the limited timetable. This planning (2) ___ a slower rhythm to the day, encouraging something that city visitors rarely get – time to look around and absorb the local routine. As people walk along the narrow pier, they may see delivery boats unloading goods or residents heading into town – details that usually go unnoticed when rushing through a place. This (3) ___ the visitor to appreciate how the destination’s character depends on these small, everyday moments. Although carrying luggage further than expected can be a minor hassle, this inconvenience contributes to a distinct atmosphere, which makes the destination feel (4) ___ from busier holiday spots. The limited transport options mean that visitors are (5) ___ to adapt their movement and expectations. Ultimately, the journey here does not just bring people physically, but (6) ___ their experience and perception of the place. By slowing down, the destination seems to reveal itself more fully, proving that how you arrive shapes what you notice and remember. In this way, the road’s end is not a barrier but a (7) ___ to engaging with a community differently. It teaches visitors that convenience is not the only way to discover an area, and sometimes being (8) ___ forces a more meaningful connection.",
+    "example": {
+      "number": 0,
+      "options": [
+        "A) along",
+        "B) across",
+        "C) beyond",
+        "D) through"
+      ],
+      "answer": "D",
+      "explanation": "'Through' the village is correct because it indicates passing inside the village area along the road's length before the road ends."
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 1,
+        "type": "mcq",
+        "options": [
+          "A) expect",
+          "B) afford",
+          "C) agree",
+          "D) decide"
+        ]
+      },
+      {
+        "id": "q2",
+        "number": 2,
+        "type": "mcq",
+        "options": [
+          "A) demands",
+          "B) provides",
+          "C) forces",
+          "D) reveals"
+        ]
+      },
+      {
+        "id": "q3",
+        "number": 3,
+        "type": "mcq",
+        "options": [
+          "A) encourages",
+          "B) reminds",
+          "C) persuades",
+          "D) distracts"
+        ]
+      },
+      {
+        "id": "q4",
+        "number": 4,
+        "type": "mcq",
+        "options": [
+          "A) familiar",
+          "B) similar",
+          "C) different",
+          "D) ordinary"
+        ]
+      },
+      {
+        "id": "q5",
+        "number": 5,
+        "type": "mcq",
+        "options": [
+          "A) allowed",
+          "B) pleased",
+          "C) advised",
+          "D) required"
+        ]
+      },
+      {
+        "id": "q6",
+        "number": 6,
+        "type": "mcq",
+        "options": [
+          "A) refreshes",
+          "B) limits",
+          "C) represents",
+          "D) changes"
+        ]
+      },
+      {
+        "id": "q7",
+        "number": 7,
+        "type": "mcq",
+        "options": [
+          "A) link",
+          "B) gateway",
+          "C) block",
+          "D) question"
+        ]
+      },
+      {
+        "id": "q8",
+        "number": 8,
+        "type": "mcq",
+        "options": [
+          "A) patient",
+          "B) confined",
+          "C) hurried",
+          "D) relaxed"
+        ]
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "answer": "A",
+        "number": 1
+      },
+      {
+        "id": "q2",
+        "answer": "C",
+        "number": 2
+      },
+      {
+        "id": "q3",
+        "answer": "B",
+        "number": 3
+      },
+      {
+        "id": "q4",
+        "answer": "C",
+        "number": 4
+      },
+      {
+        "id": "q5",
+        "answer": "D",
+        "number": 5
+      },
+      {
+        "id": "q6",
+        "answer": "D",
+        "number": 6
+      },
+      {
+        "id": "q7",
+        "answer": "B",
+        "number": 7
+      },
+      {
+        "id": "q8",
+        "answer": "A",
+        "number": 8
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 1,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Example:\nA) along\nB) across\nC) beyond\nD) through\nAnswer: D\nText\nThe place you reach after the road ends\nAt the very end of the road (0) ___ the village, travellers have to switch from car to ferry, or continue on foot. This change in transport signals more than just the end of easy access – it also affects the way people move and notice their surroundings. Visitors waiting for the small ferry soon realise that they cannot (1) ___ to arrive exactly when they want; they must rely on the limited timetable. This planning (2) ___ a slower rhythm to the day, encouraging something that city visitors rarely get – time to look around and absorb the local routine. As people walk along the narrow pier, they may see delivery boats unloading goods or residents heading into town – details that usually go unnoticed when rushing through a place. This (3) ___ the visitor to appreciate how the destination’s character depends on these small, everyday moments. Although carrying luggage further than expected can be a minor hassle, this inconvenience contributes to a distinct atmosphere, which makes the destination feel (4) ___ from busier holiday spots. The limited transport options mean that visitors are (5) ___ to adapt their movement and expectations. Ultimately, the journey here does not just bring people physically, but (6) ___ their experience and perception of the place. By slowing down, the destination seems to reveal itself more fully, proving that how you arrive shapes what you notice and remember. In this way, the road’s end is not a barrier but a (7) ___ to engaging with a community differently. It teaches visitors that convenience is not the only way to discover an area, and sometimes being (8) ___ forces a more meaningful connection.\nQuestions\n\n1\nA expect\nB afford\nC agree\nD decide\n\n2\nA demands\nB provides\nC forces\nD reveals\n\n3\nA encourages\nB reminds\nC persuades\nD distracts\n\n4\nA familiar\nB similar\nC different\nD ordinary\n\n5\nA allowed\nB pleased\nC advised\nD required\n\n6\nA refreshes\nB limits\nC represents\nD changes\n\n7\nA link\nB gateway\nC block\nD question\n\n8\nA patient\nB confined\nC hurried\nD relaxed",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": false
+}

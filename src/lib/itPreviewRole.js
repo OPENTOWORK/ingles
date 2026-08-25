@@ -152,6 +152,9 @@ export function getItPreviewNavSummary(roleId = 'student') {
   if (model.showPrimaryNav) {
     model.sectionLinks.forEach((link) => {
       if (!items.includes(link.label)) items.push(link.label);
+      if (link.label === 'Exam Strategies' && model.examStrategiesLocked) {
+        items.push('(Coming soon)');
+      }
     });
   }
 

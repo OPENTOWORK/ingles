@@ -1,0 +1,173 @@
+{
+  "pack_version": "1.1.3-e02-regenerated",
+  "generation_version": "pilot-regen-e02-v1.1.3",
+  "generated_at": "2026-08-19T12:07:54.116Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-009",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-04",
+  "working_title": "The first song I played for someone else",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 3 transformation variety is low (detected tags: noun, adjective) — soft check.",
+      "Part 3 has no -ly adverb — include at least one when natural (soft check).",
+      "Part 3 has no prefix/negative formation — variety target; include when natural (not forced).",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 0,
+    "warning_count": 4
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Part 3: Word formation",
+    "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "stem": "PLAY",
+      "answer": "playing",
+      "transformationFamily": "adjective"
+    },
+    "title": "The first song I played for someone else",
+    "passage": "I still remember the moment I was asked to play a song at our small community gathering, even though I felt far from (0) ___ (PLAY)_ (PLAY) ready. I'd been learning the guitar for several months, mostly on my own, expecting quick (17) ___ (IMPROVE)_ (IMPROVE) but encountering only slow progress. After repetitive practice sessions that felt more like a chore than fun, I nearly decided to give up, overwhelmed by my own (18) ___ (PATIENCE)_ (PATIENCE). When a neighbour suggested I join to provide simple accompaniment, I hesitated but then accepted, seeing it as a chance to be (19) ___ (INVOLVE)_ (INVOLVE) without pressure. During the event, I made a slight mistake, but instead of embarrassment, I felt a surprising (20) ___ (SATISFY)_ (SATISFY) as the music supported the group atmosphere. This experience changed my view on learning music, shifting from a private, perfectionist approach to a more (21) ___ (PRACTICE)_ (PRACTICE) one focused on connection and enjoyment. Now, I practise not to reach flawless (22) ___ (PERFORM)_ (PERFORM) but to share simple melodies with others. That first public experience gave my hobby a new (23) ___ (MEAN)_ (MEAN) and helped me realise the creative value of music beyond technical (24) ___ (EXACT)_ (EXACT).",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "IMPROVE",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "type": "word-formation",
+        "stem": "PATIENCE",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "type": "word-formation",
+        "stem": "INVOLVE",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "type": "word-formation",
+        "stem": "SATISFY",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "type": "word-formation",
+        "stem": "PRACTICE",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "PERFORM",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "type": "word-formation",
+        "stem": "MEAN",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "type": "word-formation",
+        "stem": "EXACT",
+        "transformationFamily": "noun"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 17,
+        "answer": "improvements",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "answer": "impatience",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "answer": "involved",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "answer": "satisfaction",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "answer": "practical",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "answer": "performance",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "answer": "meaning",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "answer": "exactness",
+        "transformationFamily": "noun"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 3,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Example:\n(0) ___ (PLAY)\nAnswer: 0 → playing\nText\nThe first song I played for someone else\nI still remember the moment I was asked to play a song at our small community gathering, even though I felt far from (0) ___ (PLAY) ready. I'd been learning the guitar for several months, mostly on my own, expecting quick (17) ___ (IMPROVE) but encountering only slow progress. After repetitive practice sessions that felt more like a chore than fun, I nearly decided to give up, overwhelmed by my own (18) ___ (PATIENCE). When a neighbour suggested I join to provide simple accompaniment, I hesitated but then accepted, seeing it as a chance to be (19) ___ (INVOLVE) without pressure. During the event, I made a slight mistake, but instead of embarrassment, I felt a surprising (20) ___ (SATISFY) as the music supported the group atmosphere. This experience changed my view on learning music, shifting from a private, perfectionist approach to a more (21) ___ (PRACTICE) one focused on connection and enjoyment. Now, I practise not to reach flawless (22) ___ (PERFORM) but to share simple melodies with others. That first public experience gave my hobby a new (23) ___ (MEAN) and helped me realise the creative value of music beyond technical (24) ___ (EXACT).",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

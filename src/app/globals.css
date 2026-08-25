@@ -3268,6 +3268,13 @@ body.nav-open {
   box-shadow: none;
 }
 
+.exam-mode-session__card--blocked {
+  opacity: 0.78;
+  background: #f8fafc;
+  border-style: dashed;
+  box-shadow: none;
+}
+
 .exam-mode-session__icon-wrap {
   display: flex;
   align-items: center;
@@ -3355,6 +3362,11 @@ body.nav-open {
 .exam-mode-session__status--locked {
   color: #64748b;
   background: #f1f5f9;
+}
+
+.exam-mode-session__status--blocked {
+  color: #9a3412;
+  background: #ffedd5;
 }
 
 .exam-mode-session__cta {
@@ -16638,8 +16650,30 @@ body.reading-night-mode .levels-writing-strategy__check-item {
 }
 
 /* ——— Perfil: menú de pestañas agrupadas ——— */
+.perfil-page.shell {
+  width: 100%;
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem);
+  box-sizing: border-box;
+}
+
+.perfil-page .header.header--mascot {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 16px;
+  padding: clamp(20px, 3vw, 28px);
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: var(--card, #fff);
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08);
+}
+
 .perfil-page .perfil-tabs-bar {
   margin: 0 0 22px;
+  width: 100%;
+  box-sizing: border-box;
   background: var(--card, #fff);
   border: 1px solid #e2e8f0;
   border-radius: 16px;
@@ -16649,7 +16683,7 @@ body.reading-night-mode .levels-writing-strategy__check-item {
 
 .perfil-tabs-bar--grouped .perfil-tabs-groups {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
   gap: 8px;
 }
 
@@ -16981,6 +17015,7 @@ body.dark .profile-settings-panel__danger-hint {
 
 .profile-tab-panels {
   margin: 4px 0 28px;
+  width: 100%;
 }
 
 .profile-tab-panels__charts-row {

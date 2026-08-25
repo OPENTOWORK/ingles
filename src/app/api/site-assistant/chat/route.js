@@ -1,6 +1,13 @@
 import { NextResponse } from 'next/server';
 import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { getSiteAssistantSystemPrompt, isSiteAssistantNavigationOnly } from '@/lib/siteHelpKnowledge';
+import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
+import { LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
+import {
+  PLAN_USAGE_KEYS,
+  consumePlanUsage,
+  getStudentPlanContext,
+} from '@/lib/planAccess';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
@@ -74,6 +81,36 @@ export async function POST(req) {
 
   const userRole = String(body?.userRole || 'student').slice(0, 32);
   const navigationOnly = isSiteAssistantNavigationOnly(userRole);
+
+  const auth = await getSupabaseUserFromRequest(req);
+  if (auth?.user?.id) {
+    const ctx = await getStudentPlanContext(
+      auth.user.id,
+      auth.user.email ?? '',
+      auth.user.user_metadata,
+    );
+    if (ctx.applyLimits) {
+      const planResult = await consumePlanUsage(
+        auth.user.id,
+        PLAN_USAGE_KEYS.DRALO_ASSISTANT,
+        ctx.planSlug,
+      );
+      if (!planResult.allowed) {
+        const isInfra = planResult.code === 'LIMIT_CHECK_FAILED';
+        return NextResponse.json(
+          {
+            error: isInfra
+              ? 'No se pudo comprobar tu cuota de uso. Inténtalo de nuevo en unos segundos.'
+              : LIMIT_REACHED.draloAssistant.es,
+            code: planResult.code || 'PLAN_LIMIT_REACHED',
+            limit: planResult.limit,
+            used: planResult.used,
+          },
+          { status: 429 },
+        );
+      }
+    }
+  }
 
   try {
     const systemPrompt = navigationOnly

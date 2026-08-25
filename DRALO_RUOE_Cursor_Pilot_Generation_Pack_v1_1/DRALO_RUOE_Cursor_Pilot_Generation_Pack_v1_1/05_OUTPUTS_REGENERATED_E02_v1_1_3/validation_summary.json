@@ -1,0 +1,89 @@
+{
+  "generated_at": "2026-08-19T12:16:24.035Z",
+  "parts": [
+    {
+      "part": 1,
+      "accepted": false,
+      "mechanical_ok": false,
+      "blocking_hard": 1,
+      "quality_review_hard": 0,
+      "quality": 0,
+      "warnings": 1,
+      "blind_mismatches": 0,
+      "blind_ambiguous": 0,
+      "attempts": 5
+    },
+    {
+      "part": 2,
+      "accepted": false,
+      "mechanical_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 1,
+      "quality": 0,
+      "warnings": 3,
+      "blind_mismatches": 2,
+      "blind_ambiguous": 0,
+      "attempts": 5
+    },
+    {
+      "part": 3,
+      "accepted": true,
+      "mechanical_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 0,
+      "warnings": 4,
+      "blind_mismatches": 0,
+      "blind_ambiguous": 0,
+      "attempts": 1
+    },
+    {
+      "part": 5,
+      "accepted": true,
+      "mechanical_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 0,
+      "warnings": 5,
+      "blind_mismatches": 0,
+      "blind_ambiguous": 0,
+      "attempts": 1
+    },
+    {
+      "part": 6,
+      "accepted": true,
+      "mechanical_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 1,
+      "warnings": 2,
+      "blind_mismatches": 0,
+      "blind_ambiguous": 0,
+      "attempts": 1
+    },
+    {
+      "part": 7,
+      "accepted": true,
+      "mechanical_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 0,
+      "warnings": 4,
+      "blind_mismatches": 0,
+      "blind_ambiguous": 0,
+      "attempts": 1
+    },
+    {
+      "part": 4,
+      "accepted": true,
+      "mechanical_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 4,
+      "warnings": 0,
+      "blind_mismatches": 0,
+      "blind_ambiguous": 0,
+      "attempts": 1
+    }
+  ]
+}

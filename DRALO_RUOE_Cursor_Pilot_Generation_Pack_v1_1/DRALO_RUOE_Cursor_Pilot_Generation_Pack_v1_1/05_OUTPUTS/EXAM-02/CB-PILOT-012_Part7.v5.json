@@ -1,0 +1,145 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 5,
+  "generated_at": "2026-08-12T17:11:56.845Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-012",
+  "brief_version": "1.0",
+  "style_card_id": "SC-06",
+  "style_card_version": "v1.0",
+  "working_title": "Small changes that made work feel better",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 4549,
+    "completion_tokens": 1243,
+    "total_tokens": 5792
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "section B word_count 89 severely off-range",
+      "section C word_count 91 severely off-range",
+      "section D word_count 88 severely off-range"
+    ],
+    "warnings": [
+      "section A word_count 100 outside target 120–150",
+      "section B word_count 89 outside target 120–150",
+      "section C word_count 91 outside target 120–150",
+      "section D word_count 88 outside target 120–150"
+    ],
+    "word_count": 368
+  },
+  "exercise": {
+    "part_title": "Small Changes That Made Work Feel Better",
+    "instructions": "You are going to read four profiles of people who describe a change in their workplace that improved their daily experience. For questions 43–52, choose from the profiles A–D. The profiles may be chosen more than once.",
+    "matching_intro": "Why can different people value very different changes in the way their work is organised?",
+    "common_context_title": "Four People Describe Workplace Changes",
+    "sections": {
+      "A": {
+        "label": "A",
+        "text": "As a designer and analyst, my job requires long periods of deep concentration, but constant interruptions made it hard to complete complex tasks. Recently, our team introduced no-meeting focus blocks, allowing us to work undisturbed for set periods. Initially, I was concerned about missing out on spontaneous collaboration, but I've found that planning questions for later has improved my productivity. While it’s not perfect—quick collaboration can be less convenient—finishing one demanding task without switching attention is incredibly satisfying. I wouldn’t want the focus blocks all day, but having them gives me the concentration and clear boundaries I need."
+      },
+      "B": {
+        "label": "B",
+        "text": "Working in a role with personal scheduling constraints, fixed start times were a source of daily stress. With the introduction of flexible start and end times within agreed limits, I now have control over my schedule. This change requires clearer handovers with colleagues who have different hours, but it’s a small price to pay for the predictability and choice I now enjoy. I appreciate having control over my time more than working fewer hours. For me, the balance of predictability and choice is more important than having total freedom."
+      },
+      "C": {
+        "label": "C",
+        "text": "When I was asked to mentor a newcomer, I initially saw it as extra work. I had no motivation at first and only agreed because the team needed help. However, explaining tasks to someone else has improved my understanding of my role. I also find satisfaction in seeing the newcomer become independent. While it takes patience and exposes habits I hadn’t questioned, the experience has made me value feeling useful to another person more than I expected. I started out reluctant, but now I’m quietly proud of the impact I’ve had."
+      },
+      "D": {
+        "label": "D",
+        "text": "Our team was plagued by recurring operational problems, with people complaining separately without resolution. We started regular problem-solving meetings where everyone affected could contribute. Although these sessions can become repetitive if there’s no follow-up, they ensure shared responsibility and lead to action. Each meeting focuses on one issue, with a rotating person presenting it and the team deciding on the next step. I value this collaborative approach, but only when it results in concrete actions. Endless discussion without decisions is frustrating, but when it works, it’s very effective."
+      }
+    },
+    "questions": [
+      {
+        "number": 43,
+        "prompt": "Who appreciates having more control over their schedule?",
+        "answer": "B",
+        "evidence": "B describes the introduction of flexible start and end times within agreed limits, giving them control over their schedule.",
+        "rationale": "B values the predictability and choice that comes with flexible scheduling."
+      },
+      {
+        "number": 44,
+        "prompt": "Who found that explaining tasks improved their own understanding?",
+        "answer": "C",
+        "evidence": "C mentions that explaining tasks to a newcomer has improved their understanding of their own role.",
+        "rationale": "C's experience mentoring a newcomer led to a deeper understanding of their own tasks."
+      },
+      {
+        "number": 45,
+        "prompt": "Who values the ability to concentrate without interruptions?",
+        "answer": "A",
+        "evidence": "A discusses the introduction of no-meeting focus blocks that allow for undisturbed work periods.",
+        "rationale": "A values the concentration and clear boundaries provided by focus blocks."
+      },
+      {
+        "number": 46,
+        "prompt": "Who initially had no motivation to accept a new responsibility?",
+        "answer": "C",
+        "evidence": "C initially saw mentoring as extra work and had no motivation to accept it.",
+        "rationale": "C was initially reluctant to mentor a newcomer, seeing it as an additional burden."
+      },
+      {
+        "number": 47,
+        "prompt": "Who sees the benefit of shared responsibility in decision-making?",
+        "answer": "D",
+        "evidence": "D values shared responsibility in problem-solving meetings where everyone can contribute.",
+        "rationale": "D appreciates the collaborative nature of meetings that result in actions."
+      },
+      {
+        "number": 48,
+        "prompt": "Who prefers predictability combined with some choice over total freedom?",
+        "answer": "B",
+        "evidence": "B states that predictability plus choice is more important than total freedom.",
+        "rationale": "B values the balance of predictability and choice in their work schedule."
+      },
+      {
+        "number": 49,
+        "prompt": "Who was concerned about missing out on spontaneous collaboration?",
+        "answer": "A",
+        "evidence": "A was initially concerned that focus blocks might make quick collaboration less convenient.",
+        "rationale": "A worried about the potential downside of less spontaneous interaction."
+      },
+      {
+        "number": 50,
+        "prompt": "Who finds satisfaction in seeing others become independent?",
+        "answer": "C",
+        "evidence": "C finds satisfaction in seeing the newcomer become independent.",
+        "rationale": "C values the impact of their mentoring on the newcomer's independence."
+      },
+      {
+        "number": 51,
+        "prompt": "Who dislikes meetings that don’t lead to decisions?",
+        "answer": "D",
+        "evidence": "D finds meetings frustrating if they lead to endless discussion without decisions.",
+        "rationale": "D values meetings that result in concrete actions rather than just talk."
+      },
+      {
+        "number": 52,
+        "prompt": "Who would not want their new work structure to last all day?",
+        "answer": "A",
+        "evidence": "A mentions they wouldn’t want the focus blocks all day, but appreciates having them.",
+        "rationale": "A prefers having focus blocks but not for the entire day."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise follows the content brief closely, using the specified workplace changes and individual experiences.",
+      "style_card_notes": "The profiles are differentiated in voice and experience, matching the style card's guidance for varied profiles.",
+      "british_english_notes": "The text uses British English vocabulary and spelling appropriately.",
+      "factuality_notes": "The scenarios are plausible and avoid making unsupported claims about productivity or psychological effects.",
+      "answer_validity_notes": "Each question has one clear, defendable answer based on the profiles' content.",
+      "self_check_flags": []
+    },
+    "_word_count": 368
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

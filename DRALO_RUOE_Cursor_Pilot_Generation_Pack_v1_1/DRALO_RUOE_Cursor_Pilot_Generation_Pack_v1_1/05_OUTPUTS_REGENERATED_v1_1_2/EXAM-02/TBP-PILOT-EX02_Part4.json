@@ -1,0 +1,639 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T13:08:24.960Z",
+  "phase": "B-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 4",
+  "part_number": 4,
+  "brief_id": null,
+  "brief_version": null,
+  "blueprint_id": "TBP-PILOT-EX02",
+  "style_card_id": null,
+  "working_title": null,
+  "repairs_applied": [
+    "meta: Q25: target_structure → wish + past perfect; MP labels → wish + subject | had + past participle",
+    "meta: Q26: target_structure → subject + be EXPECTED + to-infinitive; MP labels → passive be + expected | to + infinitive",
+    "meta: Q27: target_structure → need not have + past participle; fullAnswers synced (2); MP labels → need not have (modal perfect) | past participle complement",
+    "meta: Q28: target_structure → present perfect + time period + since; MP labels → duration/time frame with since | since + past-event clause",
+    "meta: Q29: target_structure → make up one's mind; MP labels → made up (phrasal verb) | possessive + mind",
+    "meta: Q30: target_structure → hardly any + plural noun; MP labels → hardly any quantifier | plural noun continuation",
+    "Q27: post-meta MP need not | have bought"
+  ],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[TEST-P4-ALTERNATIVE-ROUTE] Q25: Keyword + sentence1 pattern may allow a second grammatical route.",
+      "[TEST-P4-TOO-EASY] Q26: Sentence 2 is too parallel to Sentence 1 — little restructuring required.",
+      "[TEST-P4-TOO-EASY] Q30: Sentence 2 is too parallel to Sentence 1 — little restructuring required.",
+      "[TEST-P4-ALTERNATIVE-ROUTE] Q25: Keyword + sentence1 pattern may allow a second grammatical route.",
+      "[TEST-P4-TOO-EASY] Q26: Sentence 2 is too parallel to Sentence 1 — little restructuring required.",
+      "[TEST-P4-TOO-EASY] Q30: Sentence 2 is too parallel to Sentence 1 — little restructuring required."
+    ],
+    "warnings": [],
+    "hard_fail_count": 0,
+    "quality_fail_count": 6,
+    "warning_count": 0
+  },
+  "part4_quality_metrics": {
+    "itemMeta": [
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Standard",
+        "number": 25
+      },
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Standard",
+        "number": 26
+      },
+      {
+        "distance": "multi_step_transformation",
+        "band": "B2-Strong",
+        "number": 27
+      },
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Standard",
+        "number": 28
+      },
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Core",
+        "number": 29
+      },
+      {
+        "distance": "minor_grammatical",
+        "band": "B2-Standard",
+        "number": 30
+      }
+    ],
+    "answerLengthDistribution": {
+      "2": 0,
+      "3": 2,
+      "4": 4,
+      "5": 0
+    },
+    "answerLengths": [
+      4,
+      3,
+      4,
+      4,
+      4,
+      3
+    ]
+  },
+  "editorial_findings": [],
+  "part4_findings": [
+    {
+      "rule_id": "TEST-P4-ALTERNATIVE-ROUTE",
+      "severity": "QUALITY_FAIL",
+      "location": "Q25",
+      "evidence": "WISH",
+      "reason": "Keyword + sentence1 pattern may allow a second grammatical route.",
+      "recommended_local_action": "Tighten sentence frames or document why only one route is valid.",
+      "source": "deterministic"
+    },
+    {
+      "rule_id": "TEST-P4-TOO-EASY",
+      "severity": "QUALITY_FAIL",
+      "location": "Q26",
+      "evidence": "overlap 75%",
+      "reason": "Sentence 2 is too parallel to Sentence 1 — little restructuring required.",
+      "recommended_local_action": "Rewrite sentence2 frame to require genuine transformation.",
+      "source": "deterministic"
+    },
+    {
+      "rule_id": "TEST-P4-TOO-EASY",
+      "severity": "QUALITY_FAIL",
+      "location": "Q30",
+      "evidence": "overlap 80%",
+      "reason": "Sentence 2 is too parallel to Sentence 1 — little restructuring required.",
+      "recommended_local_action": "Rewrite sentence2 frame to require genuine transformation.",
+      "source": "deterministic"
+    }
+  ],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "B2 Reading and Use of English Part 4: Key word transformations",
+    "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "sentence1": "She regrets not telling him the truth earlier.",
+      "keyword": "WISH",
+      "sentence2Start": "She __________________ him the truth earlier.",
+      "answer": "wishes she had told",
+      "grading_metadata": {
+        "type": "b2_key_word_transformation",
+        "version": 1,
+        "keyword": "WISH",
+        "fullAnswers": [
+          "wishes she had told"
+        ],
+        "markingPoints": [
+          {
+            "id": 1,
+            "label": "wish + subject + past perfect",
+            "accepted": [
+              "wishes she had"
+            ]
+          },
+          {
+            "id": 2,
+            "label": "past participle complement",
+            "accepted": [
+              "told"
+            ]
+          }
+        ]
+      }
+    },
+    "questions": [
+      {
+        "id": "TBP-PILOT-EX02-Q25",
+        "number": 25,
+        "type": "transformation",
+        "sentence1": "I regret that I didn’t ask her to stay longer.",
+        "keyword": "WISH",
+        "sentence2Start": "I __________________ her to stay longer.",
+        "answer": "wish I had asked",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "WISH",
+          "fullAnswers": [
+            "wish I had asked"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "wish + subject",
+              "accepted": [
+                "wish I had"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "had + past participle",
+              "accepted": [
+                "asked"
+              ]
+            }
+          ],
+          "target_structure": "wish + past perfect"
+        },
+        "target_structure": "wish + past perfect",
+        "targetStructure": "wish + past perfect",
+        "family_id": "TF-03",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "I __________________ her to stay longer."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q26",
+        "number": 26,
+        "type": "transformation",
+        "sentence1": "People expect the government to take immediate action on climate change.",
+        "keyword": "EXPECTED",
+        "sentence2Start": "The government __________________ take immediate action on climate change.",
+        "answer": "is expected to",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "EXPECTED",
+          "fullAnswers": [
+            "is expected to"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "passive be + expected",
+              "accepted": [
+                "is expected"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "to + infinitive",
+              "accepted": [
+                "to"
+              ]
+            }
+          ],
+          "target_structure": "subject + be EXPECTED + to-infinitive"
+        },
+        "target_structure": "subject + be EXPECTED + to-infinitive",
+        "targetStructure": "subject + be EXPECTED + to-infinitive",
+        "family_id": "TF-04",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "The government __________________ take immediate action on climate change."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q27",
+        "number": 27,
+        "type": "transformation",
+        "sentence1": "It was unnecessary for Jane to buy tickets for the event.",
+        "keyword": "NEED",
+        "sentence2Start": "Jane __________________ tickets for the event.",
+        "answer": "need not have bought",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "NEED",
+          "fullAnswers": [
+            "need not have bought",
+            "needn't have bought"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "need not have (modal perfect)",
+              "accepted": [
+                "need not",
+                "needn't"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "past participle complement",
+              "accepted": [
+                "have bought"
+              ]
+            }
+          ],
+          "target_structure": "need not have + past participle"
+        },
+        "target_structure": "need not have + past participle",
+        "targetStructure": "need not have + past participle",
+        "family_id": "TF-06",
+        "difficulty_band": "B2-Strong",
+        "sentence2": "Jane __________________ tickets for the event."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q28",
+        "number": 28,
+        "type": "transformation",
+        "sentence1": "It has been five years since we travelled to Italy.",
+        "keyword": "SINCE",
+        "sentence2Start": "It is five years __________________ Italy.",
+        "answer": "since we travelled to",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "SINCE",
+          "fullAnswers": [
+            "since we travelled to"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "duration/time frame with since",
+              "accepted": [
+                "since we"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "since + past-event clause",
+              "accepted": [
+                "travelled to"
+              ]
+            }
+          ],
+          "target_structure": "present perfect + time period + since"
+        },
+        "target_structure": "present perfect + time period + since",
+        "targetStructure": "present perfect + time period + since",
+        "family_id": "TF-07",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "It is five years __________________ Italy."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q29",
+        "number": 29,
+        "type": "transformation",
+        "sentence1": "She decided to leave her job after a long time thinking about it.",
+        "keyword": "MIND",
+        "sentence2Start": "She __________________ to leave her job after much thought.",
+        "answer": "made up her mind",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "MIND",
+          "fullAnswers": [
+            "made up her mind"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "made up (phrasal verb)",
+              "accepted": [
+                "made up"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "possessive + mind",
+              "accepted": [
+                "her mind"
+              ]
+            }
+          ],
+          "target_structure": "make up one's mind"
+        },
+        "target_structure": "make up one's mind",
+        "targetStructure": "make up one's mind",
+        "family_id": "TF-10",
+        "difficulty_band": "B2-Core",
+        "sentence2": "She __________________ to leave her job after much thought."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q30",
+        "number": 30,
+        "type": "transformation",
+        "sentence1": "Almost no students attended the lecture yesterday.",
+        "keyword": "FEW",
+        "sentence2Start": "__________________ students attended the lecture yesterday.",
+        "answer": "hardly any few",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "FEW",
+          "fullAnswers": [
+            "hardly any few"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "hardly any quantifier",
+              "accepted": [
+                "hardly any"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "plural noun continuation",
+              "accepted": [
+                "few"
+              ]
+            }
+          ],
+          "target_structure": "hardly any + plural noun"
+        },
+        "target_structure": "hardly any + plural noun",
+        "targetStructure": "hardly any + plural noun",
+        "family_id": "TF-13",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "__________________ students attended the lecture yesterday."
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "TBP-PILOT-EX02-Q25",
+        "number": 25,
+        "answer": "wish I had asked",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "WISH",
+          "fullAnswers": [
+            "wish I had asked"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "wish + subject",
+              "accepted": [
+                "wish I had"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "had + past participle",
+              "accepted": [
+                "asked"
+              ]
+            }
+          ],
+          "target_structure": "wish + past perfect"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q26",
+        "number": 26,
+        "answer": "is expected to",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "EXPECTED",
+          "fullAnswers": [
+            "is expected to"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "passive be + expected",
+              "accepted": [
+                "is expected"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "to + infinitive",
+              "accepted": [
+                "to"
+              ]
+            }
+          ],
+          "target_structure": "subject + be EXPECTED + to-infinitive"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q27",
+        "number": 27,
+        "answer": "need not have bought",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "NEED",
+          "fullAnswers": [
+            "need not have bought",
+            "needn't have bought"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "need not have (modal perfect)",
+              "accepted": [
+                "need not",
+                "needn't"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "past participle complement",
+              "accepted": [
+                "have bought"
+              ]
+            }
+          ],
+          "target_structure": "need not have + past participle"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q28",
+        "number": 28,
+        "answer": "since we travelled to",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "SINCE",
+          "fullAnswers": [
+            "since we travelled to"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "duration/time frame with since",
+              "accepted": [
+                "since we"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "since + past-event clause",
+              "accepted": [
+                "travelled to"
+              ]
+            }
+          ],
+          "target_structure": "present perfect + time period + since"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q29",
+        "number": 29,
+        "answer": "made up her mind",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "MIND",
+          "fullAnswers": [
+            "made up her mind"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "made up (phrasal verb)",
+              "accepted": [
+                "made up"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "possessive + mind",
+              "accepted": [
+                "her mind"
+              ]
+            }
+          ],
+          "target_structure": "make up one's mind"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q30",
+        "number": 30,
+        "answer": "hardly any few",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "FEW",
+          "fullAnswers": [
+            "hardly any few"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "hardly any quantifier",
+              "accepted": [
+                "hardly any"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "plural noun continuation",
+              "accepted": [
+                "few"
+              ]
+            }
+          ],
+          "target_structure": "hardly any + plural noun"
+        }
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 4,
+    "audioClips": [],
+    "part4QualityMetrics": {
+      "itemMeta": [
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "number": 25
+        },
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "number": 26
+        },
+        {
+          "distance": "multi_step_transformation",
+          "band": "B2-Strong",
+          "number": 27
+        },
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "number": 28
+        },
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Core",
+          "number": 29
+        },
+        {
+          "distance": "minor_grammatical",
+          "band": "B2-Standard",
+          "number": 30
+        }
+      ],
+      "answerLengthDistribution": {
+        "2": 0,
+        "3": 2,
+        "4": 4,
+        "5": 0
+      },
+      "answerLengths": [
+        4,
+        3,
+        4,
+        4,
+        4,
+        3
+      ]
+    }
+  },
+  "enunciado_preview": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).\nExample:\n0. She regrets not telling him the truth earlier.\nWISH\nShe __________________ him the truth earlier.\nAnswer: 0 → wishes she had told\n\nQuestions\n25. I regret that I didn’t ask her to stay longer.\nWISH\nI __________________ her to stay longer.\n\n26. People expect the government to take immediate action on climate change.\nEXPECTED\nThe government __________________ take immediate action on climate change.\n\n27. It was unnecessary for Jane to buy tickets for the event.\nNEED\nJane __________________ tickets for the event.\n\n28. It has been five years since we travelled to Italy.\nSINCE\nIt is five years __________________ Italy.\n\n29. She decided to leave her job after a long time thinking about it.\nMIND\nShe __________________ to leave her job after much thought.\n\n30. Almost no students attended the lecture yesterday.\nFEW\n__________________ students attended the lecture yesterday.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

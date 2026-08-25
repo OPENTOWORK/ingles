@@ -94,11 +94,11 @@ addCase('duplicate answer letter fails', (g) => {
 addCase('passage under 500 fails', (g) => {
   g.passage = 'Too short. (37) ______. (38) ______. (39) ______. (40) ______. (41) ______. (42) ______.';
   return g;
-}, /minimum is 500/);
+}, /minimum is 350/);
 addCase('passage over 600 fails', (g) => {
-  while (countWords(g.passage) <= 600) g.passage += FILLER;
+  while (countWords(g.passage) <= 650) g.passage += FILLER;
   return g;
-}, /maximum is 600/);
+}, /maximum is 650/);
 addCase('placeholder option fails', (g) => {
   g.sentencePool[0] = 'A) TODO placeholder option text.';
   return g;

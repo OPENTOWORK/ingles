@@ -1,0 +1,372 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "B",
+  "exam_id": "RUOE-PILOT-E04",
+  "ruoe_exam_id": "RUOE-PILOT-E04",
+  "part": "Part 4",
+  "part_number": 4,
+  "brief_id": null,
+  "brief_version": null,
+  "blueprint_id": "TBP-PILOT-EX04",
+  "blueprint_version": "1.0",
+  "style_card_id": null,
+  "style_card_version": null,
+  "working_title": null,
+  "final_title": null,
+  "title_candidates": [],
+  "source_inputs": {
+    "content_briefs": null,
+    "transformation_blueprints": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_Transformation_Blueprints_E03_E04_v1_0_PROPOSED.json"
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q30 and E02 Q26 are both raised-subject passives with a reporting verb; the blueprint already flagged this for reviewer attention. The perfect infinitive is what separates them."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Adversarial alternate-route check found no second defensible answer. Answer lengths 3, 3, 4, 5, 5, 5 give a wider spread than E01.",
+    "repairs_applied": [
+      "Q25 regenerated during drafting: earlier frames (“We finally ___ the old sofa”) left “were rid of” grammatically available. The present-perfect frame with “Nobody has …” closes that route."
+    ],
+    "teacher_attention_items": [
+      26,
+      30
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 4",
+    "directions": "Part 4: Key word transformations\nFor questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+    "partNumber": 4,
+    "example": {
+      "number": 0,
+      "sentence1": "Only Sam remembered to bring a map.",
+      "keyword": "ONLY",
+      "sentence2Start": "Sam was __________________ remembered to bring a map.",
+      "answer": "the only one who"
+    },
+    "questions": [
+      {
+        "id": "TBP-PILOT-EX04-Q25",
+        "number": 25,
+        "type": "transformation",
+        "sentence1": "Nobody has removed the old notices from the board yet.",
+        "keyword": "RID",
+        "sentence2Start": "Nobody __________________ the old notices from the board yet.",
+        "answer": "has got rid of",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "RID",
+          "family_id": "TF-10",
+          "target_structure": "get rid of",
+          "difficulty_band": "B2-Core",
+          "transformation_distance": "lexical_substitution_with_tense_recovery",
+          "fullAnswers": [
+            "has got rid of"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "correctly tensed GET + RID",
+              "accepted": [
+                "has got rid"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "preposition OF introducing the object",
+              "accepted": [
+                "of"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q26",
+        "number": 26,
+        "type": "transformation",
+        "sentence1": "I am quite sure that Daniel left his keys at the office.",
+        "keyword": "MUST",
+        "sentence2Start": "Daniel __________________ his keys at the office.",
+        "answer": "must have left",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "MUST",
+          "family_id": "TF-06",
+          "target_structure": "must have + past participle for deduction about the past",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "grammatical_reformulation",
+          "fullAnswers": [
+            "must have left"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "MUST HAVE",
+              "accepted": [
+                "must have"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "past participle carrying the deduced event",
+              "accepted": [
+                "left"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q27",
+        "number": 27,
+        "type": "transformation",
+        "sentence1": "I have never eaten oysters before.",
+        "keyword": "TIME",
+        "sentence2Start": "This is the __________________ oysters.",
+        "answer": "first time I have eaten",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "TIME",
+          "family_id": "TF-07",
+          "target_structure": "this is the first time + present perfect",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "fullAnswers": [
+            "first time I have eaten",
+            "first time I’ve eaten"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "FIRST TIME as the fixed frame",
+              "accepted": [
+                "first time"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "subject + present-perfect verb form",
+              "accepted": [
+                "I have eaten",
+                "I’ve eaten"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q28",
+        "number": 28,
+        "type": "transformation",
+        "sentence1": "Please do not tell anyone about this yet.",
+        "keyword": "RATHER",
+        "sentence2Start": "I __________________ anyone about this yet.",
+        "answer": "would rather you didn’t tell",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "RATHER",
+          "family_id": "TF-03",
+          "target_structure": "would rather + subject + past simple",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "fullAnswers": [
+            "would rather you didn’t tell",
+            "would rather you did not tell",
+            "’d rather you didn’t tell"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "WOULD RATHER + second subject",
+              "accepted": [
+                "would rather you",
+                "’d rather you"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "negative past-simple verb required by the second-subject pattern",
+              "accepted": [
+                "didn’t tell",
+                "did not tell"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q29",
+        "number": 29,
+        "type": "transformation",
+        "sentence1": "Nobody knows exactly how deep the lake is.",
+        "keyword": "DEPTH",
+        "sentence2Start": "Nobody knows exactly __________________ the lake.",
+        "answer": "the depth of",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "DEPTH",
+          "family_id": "TF-14",
+          "target_structure": "wh-clause recast as a definite noun phrase",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "fullAnswers": [
+            "the depth of"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "definite article + DEPTH as the nominalised head",
+              "accepted": [
+                "the depth"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "preposition OF linking the noun phrase to its complement",
+              "accepted": [
+                "of"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q30",
+        "number": 30,
+        "type": "transformation",
+        "sentence1": "People think that the fire started in the kitchen.",
+        "keyword": "THOUGHT",
+        "sentence2Start": "The fire __________________ in the kitchen.",
+        "answer": "is thought to have started",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "THOUGHT",
+          "family_id": "TF-04",
+          "target_structure": "impersonal reporting with be thought to have + past participle",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "syntactic_restructuring",
+          "fullAnswers": [
+            "is thought to have started"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "passive BE + THOUGHT",
+              "accepted": [
+                "is thought"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "TO HAVE + past participle carrying the completed event",
+              "accepted": [
+                "to have started"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "TBP-PILOT-EX04-Q25",
+        "number": 25,
+        "answer": "has got rid of"
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q26",
+        "number": 26,
+        "answer": "must have left"
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q27",
+        "number": 27,
+        "answer": "first time I have eaten"
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q28",
+        "number": 28,
+        "answer": "would rather you didn’t tell"
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q29",
+        "number": 29,
+        "answer": "the depth of"
+      },
+      {
+        "id": "TBP-PILOT-EX04-Q30",
+        "number": 30,
+        "answer": "is thought to have started"
+      }
+    ],
+    "part4QualityMetrics": {
+      "itemMeta": [
+        {
+          "number": 25,
+          "distance": "lexical_substitution_with_tense_recovery",
+          "band": "B2-Core",
+          "family": "TF-10"
+        },
+        {
+          "number": 26,
+          "distance": "grammatical_reformulation",
+          "band": "B2-Standard",
+          "family": "TF-06"
+        },
+        {
+          "number": 27,
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "family": "TF-07"
+        },
+        {
+          "number": 28,
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "family": "TF-03"
+        },
+        {
+          "number": 29,
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "family": "TF-14"
+        },
+        {
+          "number": 30,
+          "distance": "syntactic_restructuring",
+          "band": "B2-Strong",
+          "family": "TF-04"
+        }
+      ],
+      "answerLengths": [
+        4,
+        3,
+        5,
+        5,
+        3,
+        5
+      ]
+    }
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

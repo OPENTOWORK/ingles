@@ -1,0 +1,196 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:37:34.577Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-010",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-02",
+  "working_title": "What happens when rooftops become shared spaces",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "Part 5 question 32: distractors are weak — fewer than 2 of 3 wrong options are grounded in passage information (P5-WEAK-DISTRACTOR)."
+    ],
+    "warnings": [
+      "Part 5 question 32: correct option may be solvable by word matching (\"planters with herbs and flowers…\").",
+      "[TQ-03] title: Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "[TQ-03] title: Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 1,
+    "warning_count": 4
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [
+    {
+      "rule_id": "TQ-03",
+      "severity": "WARNING",
+      "location": "title",
+      "evidence": "What happens when rooftops become shared spaces",
+      "reason": "Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "recommended_local_action": "Pick a more concrete or understated title pattern."
+    }
+  ],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Part 5: Multiple choice (reading)",
+    "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+    "title": "What happens when rooftops become shared spaces",
+    "passage": "For many city residents, the view of a flat rooftop is one of missed opportunity. Once simply a sealed surface exposed to rain and sun, these uppermost parts of apartment buildings are being transformed across various cities into shared spaces that offer practical and social benefits. However, turning a rooftop from an unused area into a valuable community asset depends less on the concept’s environmental appeal and more on the social arrangements that emerge in daily life.\n\nConsider an apartment block in an unnamed city where residents recently agreed to convert their previously barren rooftop into a shared green space. The initiative began as a modest effort — some planters with herbs and flowers, a few benches, and basic garden tools stored nearby. The effect was immediate: what had been a forgotten patch of concrete became a spot where neighbours came to relax and chat during mild weather. This example captures a growing trend of urban buildings reconsidering their rooftops, not just as architectural necessities but as extensions of communal life.\n\nYet the idea of shared rooftop gardens is not without its internal contrasts. Within this community, some residents valued the space primarily for quiet gardening and personal calm, while others saw it as an opportunity for occasional social gatherings and even small parties. These conflicting expectations initially led to some discomfort. For instance, those seeking tranquillity found themselves disturbed by louder social groups, while the more social-minded residents felt restricted by low usage during evenings.\n\nPractical challenges soon surfaced, especially around watering the plants. A group of volunteers dedicated time during the week to tend to the garden, but when these volunteers were away or busy, plants suffered. Questions arose about responsibility – should everyone share the duty equally, or should a rota system be introduced? Furthermore, unrestricted access raised concerns about potential misuse or damage to the space.\n\nAfter a few months, the residents made an important adjustment: access to the rooftop was limited to specific hours, and a small committee was set up to oversee maintenance schedules and organise shared use. This change eased tensions and helped clarify expectations. It also meant that tools and materials were better managed, reducing conflicts over resources. This pragmatic approach highlighted the importance of governance in communal projects.\n\nInterestingly, one resident who had initially shown little interest in the rooftop gardening became more engaged after benefiting from the space’s quieter mornings. They appreciated the chance to meditate in peace, an unexpected advantage that changed their view from scepticism to appreciation — though not everyone shared this positive attitude.\n\nLooking beyond this example, it is clear that not every apartment block or community group will fit the same rooftop-sharing model. Urban authorities and planners should recognise that while green, shared rooftops hold potential, their success depends on realistic social arrangements rather than solely on their design or environmental claims.\n\nIn essence, transforming rooftops into communal green spaces is not a guarantee of environmental improvement but rather an invitation to rethink social responsibility and cooperation among residents. The true value surfaces when the initiative aligns with residents’ real lifestyles and preferences, along with practical systems to support ongoing use and care.\n\nImportantly, the rooftop’s transformation is both a physical and social journey. Seen from the street, it may look like a simple architectural feature, but for residents, it becomes a site of negotiation, compromise and even unexpected benefits. This perspective invites us to reconsider how urban living spaces can be shared and managed, balancing ambition with practicality.",
+    "passageWordCount": 603,
+    "questions": [
+      {
+        "id": "q31",
+        "number": 31,
+        "questionType": "main-idea",
+        "prompt": "What is the main point the writer is making about rooftop shared spaces?",
+        "options": [
+          "A) Their usefulness depends mainly on practical social agreements between residents.",
+          "B) Their environmental advantages make them essential in all urban areas.",
+          "C) They are mostly successful when designed by professional architects.",
+          "D) They should be accessible to all residents at any time to be beneficial."
+        ],
+        "evidence": "“turning a rooftop from an unused area into a valuable community asset depends less on the concept’s environmental appeal and more on the social arrangements that emerge in daily life.”",
+        "rationale": "Option A is correct because the text emphasises social arrangements over environmental claims. B is incorrect as the writer downplays environmental impact as the main factor. C is not supported as the text highlights resident management rather than professional design. D conflicts with later mention of limited access improving use."
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "questionType": "detail",
+        "prompt": "According to the text, what was one of the first changes made to the rooftop in the described apartment block?",
+        "options": [
+          "A) Installation of playground equipment for children.",
+          "B) Adding planters with herbs and flowers and some benches.",
+          "C) Creating a sports area for residents to use.",
+          "D) Complete landscaping with trees and shrubs."
+        ],
+        "evidence": "“some planters with herbs and flowers, a few benches, and basic garden tools stored nearby.”",
+        "rationale": "B is correct because the text specifically mentions planters and benches as the initial changes. A and C are not mentioned, and D is an overstatement not supported by the passage."
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "questionType": "inference",
+        "prompt": "What can be inferred about the residents’ reactions to differing uses of the rooftop?",
+        "options": [
+          "A) Residents agreed easily on how to use the space without any conflict.",
+          "B) Differences in expectations caused some discomfort and disagreements.",
+          "C) Most residents preferred the rooftop for social events rather than gardening.",
+          "D) The rooftop was mostly ignored due to conflicting opinions."
+        ],
+        "evidence": "“conflicting expectations initially led to some discomfort... those seeking tranquillity found themselves disturbed by louder social groups...”",
+        "rationale": "B is correct as the passage highlights tension from different desires. A is wrong because conflict occurred. C exaggerates social preference, and D contradicts the evidence that the rooftop was used actively."
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "questionType": "purpose",
+        "prompt": "Why does the writer mention the problem with watering plants and volunteers?",
+        "options": [
+          "A) To show a common practical issue in maintaining shared spaces.",
+          "B) To suggest that gardening is too much work for residents.",
+          "C) To argue that professional gardeners should be hired.",
+          "D) To highlight that the rooftop was eventually abandoned."
+        ],
+        "evidence": "“Practical challenges soon surfaced, especially around watering the plants. A group of volunteers dedicated time... but when these volunteers were away... plants suffered.”",
+        "rationale": "A is correct as this detail illustrates typical problems in shared rooftop care. B is an overgeneralisation. C is not suggested, and D is false as the rooftop continued to be used."
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "questionType": "attitude",
+        "prompt": "What attitude does the initially uninterested resident develop towards the rooftop space?",
+        "options": [
+          "A) They remain indifferent despite the changes.",
+          "B) They become supportive due to enjoying quiet mornings.",
+          "C) They oppose new rules restricting access hours.",
+          "D) They are critical of the social gatherings held there."
+        ],
+        "evidence": "“one resident... had initially shown little interest… became more engaged after benefiting from the space’s quieter mornings.”",
+        "rationale": "B is correct as the resident's attitude shifts to appreciation. A is incorrect since there is a change. C and D are not supported by the passage."
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "questionType": "inference",
+        "prompt": "What does the writer imply about the broader applicability of rooftop garden projects?",
+        "options": [
+          "A) All city buildings should adopt the same rooftop-sharing system.",
+          "B) Rooftop gardens can only succeed with large financial investment.",
+          "C) Different communities require different approaches to rooftop sharing.",
+          "D) Rooftop gardens are not worth pursuing due to practical difficulties."
+        ],
+        "evidence": "“it is clear that not every apartment block or community group will fit the same rooftop-sharing model.”",
+        "rationale": "C is correct, indicating a need to tailor approaches. A is too rigid. B and D are not suggested in the text."
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q31",
+        "number": 31,
+        "answer": "A"
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "answer": "B"
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "answer": "B"
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "answer": "A"
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "answer": "B"
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "answer": "C"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 5,
+    "audioClips": [],
+    "titlePatternFamily": "what_when_how",
+    "__editorialFindings": [
+      {
+        "rule_id": "TQ-03",
+        "severity": "WARNING",
+        "location": "title",
+        "evidence": "What happens when rooftops become shared spaces",
+        "reason": "Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+        "recommended_local_action": "Pick a more concrete or understated title pattern."
+      }
+    ]
+  },
+  "enunciado_preview": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.\nText\nWhat happens when rooftops become shared spaces\nFor many city residents, the view of a flat rooftop is one of missed opportunity. Once simply a sealed surface exposed to rain and sun, these uppermost parts of apartment buildings are being transformed across various cities into shared spaces that offer practical and social benefits. However, turning a rooftop from an unused area into a valuable community asset depends less on the concept’s environmental appeal and more on the social arrangements that emerge in daily life.\nConsider an apartment block in an unnamed city where residents recently agreed to convert their previously barren rooftop into a shared green space. The initiative began as a modest effort — some planters with herbs and flowers, a few benches, and basic garden tools stored nearby. The effect was immediate: what had been a forgotten patch of concrete became a spot where neighbours came to relax and chat during mild weather. This example captures a growing trend of urban buildings reconsidering their rooftops, not just as architectural necessities but as extensions of communal life.\nYet the idea of shared rooftop gardens is not without its internal contrasts. Within this community, some residents valued the space primarily for quiet gardening and personal calm, while others saw it as an opportunity for occasional social gatherings and even small parties. These conflicting expectations initially led to some discomfort. For instance, those seeking tranquillity found themselves disturbed by louder social groups, while the more social-minded residents felt restricted by low usage during evenings.\nPractical challenges soon surfaced, especially around watering the plants. A group of volunteers dedicated time during the week to tend to the garden, but when these volunteers were away or busy, plants suffered. Questions arose about responsibility – should everyone share the duty equally, or should a rota system be introduced? Furthermore, unrestricted access raised concerns about potential misuse or damage to the space.\nAfter a few months, the residents made an important adjustment: access to the rooftop was limited to specific hours, and a small committee was set up to oversee maintenance schedules and organise shared use. This change eased tensions and helped clarify expectations. It also meant that tools and materials were better managed, reducing conflicts over resources. This pragmatic approach highlighted the importance of governance in communal projects.\nInterestingly, one resident who had initially shown little interest in the rooftop gardening became more engaged after benefiting from the space’s quieter mornings. They appreciated the chance to meditate in peace, an unexpected advantage that changed their view from scepticism to appreciation — though not everyone shared this positive attitude.\nLooking beyond this example, it is clear that not every apartment block or community group will fit the same rooftop-sharing model. Urban authorities and planners should recognise that while green, shared rooftops hold potential, their success depends on realistic social arrangements rather than solely on their design or environmental claims.\nIn essence, transforming rooftops into communal green spaces is not a guarantee of environmental improvement but rather an invitation to rethink social responsibility and cooperation among residents. The true value surfaces when the initiative aligns with residents’ real lifestyles and preferences, along with practical systems to support ongoing use and care.\nImportantly, the rooftop’s transformation is both a physical and social journey. Seen from the street, it may look like a simple architectural feature, but for residents, it becomes a site of negotiation, compromise and even unexpected benefits. This perspective invites us to reconsider how urban living spaces can be shared and managed, balancing ambition with practicality.\n\nQuestions\n31. What is the main point the writer is making about rooftop shared spaces? A. Their usefulness depends mainly on practical social agreements between residents. B. Their environmental advantages make them essential in all urban areas. C. They are mostly successful when designed by professional architects. D. They should be accessible to all residents at any time to be beneficial.\n32. According to the text, what was one of the first changes made to the rooftop in the described apartment block? A. Installation of playground equipment for children. B. Adding planters with herbs and flowers and some benches. C. Creating a sports area for residents to use. D. Complete landscaping with trees and shrubs.\n33. What can be inferred about the residents’ reactions to differing uses of the rooftop? A. Residents agreed easily on how to use the space without any conflict. B. Differences in expectations caused some discomfort and disagreements. C. Most residents preferred the rooftop for social events rather than gardening. D. The rooftop was mostly ignored due to conflicting opinions.\n34. Why does the writer mention the problem with watering plants and volunteers? A. To show a common practical issue in maintaining shared spaces. B. To suggest that gardening is too much work for residents. C. To argue that professional gardeners should be hired. D. To highlight that the rooftop was eventually abandoned.\n35. What attitude does the initially uninterested resident develop towards the rooftop space? A. They remain indifferent despite the changes. B. They become supportive due to enjoying quiet mornings. C. They oppose new rules restricting access hours. D. They are critical of the social gatherings held there.\n36. What does the writer imply about the broader applicability of rooftop garden projects? A. All city buildings should adopt the same rooftop-sharing system. B. Rooftop gardens can only succeed with large financial investment. C. Different communities require different approaches to rooftop sharing. D. Rooftop gardens are not worth pursuing due to practical difficulties.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

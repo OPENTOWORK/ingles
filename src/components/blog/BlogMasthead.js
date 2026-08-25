@@ -45,12 +45,6 @@ export default function BlogMasthead() {
           </g>
         </svg>
 
-        <SiteMascot
-          variant={3}
-          width={720}
-          className="blog-mag__masthead-ghost"
-          alt=""
-        />
         <span className="blog-mag__masthead-spark blog-mag__masthead-spark--1" />
         <span className="blog-mag__masthead-spark blog-mag__masthead-spark--2" />
         <span className="blog-mag__masthead-spark blog-mag__masthead-spark--3" />
@@ -90,7 +84,7 @@ export default function BlogMasthead() {
         aria-hidden="true"
         focusable="false"
       >
-        <path fill="#f8fafc" d="M0 42c240 48 480-42 720-18s480 72 720 18v48H0V42Z" />
+        <path fill="#f8fafc" d="M0 48H1440v42H0Z" />
       </svg>
     </header>
   );

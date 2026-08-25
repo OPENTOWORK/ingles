@@ -1,0 +1,205 @@
+{
+  "pack_version": "1.1.3-e02-regenerated",
+  "generation_version": "pilot-regen-e02-v1.1.3",
+  "generated_at": "2026-08-19T12:06:43.191Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-008",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-01",
+  "working_title": "Exploring a place you cannot see clearly",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 2 answers cover only 3 grammar categories (target at least 4: prepositions, relatives, modals, connectors, etc.).",
+      "Gaps 13 look trivially easy for B2.",
+      "Weak item Q13: too obvious 'is' linking verb with no real alternative"
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 1,
+    "quality_review_hard_findings": [
+      "Blind-solve disagreed with the answer key on 2 gaps: Q12 (key \"build\", solver \"form\"), Q13 (key \"is\", solver \"an\"). Likely ambiguous gaps or wrong keys."
+    ],
+    "quality_fail_count": 0,
+    "warning_count": 3
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": {
+    "ok": false,
+    "errors": [
+      "Blind-solve disagreed with the answer key on 2 gaps: Q12 (key \"build\", solver \"form\"), Q13 (key \"is\", solver \"an\"). Likely ambiguous gaps or wrong keys."
+    ],
+    "warnings": [
+      "Gaps 13 look trivially easy for B2.",
+      "Weak item Q13: too obvious 'is' linking verb with no real alternative"
+    ],
+    "blindSolve": {
+      "mismatches": [
+        {
+          "number": 12,
+          "key": "build",
+          "solver": "form"
+        },
+        {
+          "number": 13,
+          "key": "is",
+          "solver": "an"
+        }
+      ],
+      "ambiguous": [],
+      "solvedCount": 8
+    },
+    "rubric": {
+      "cefrLevel": "B2",
+      "textNaturalness": 5,
+      "exampleValid": true,
+      "vocabularyStyleItems": [],
+      "multipleAnswerItems": [],
+      "tooObviousItems": [
+        13
+      ],
+      "categoriesTested": [
+        "adverb",
+        "verb",
+        "preposition",
+        "pronoun/auxiliary",
+        "preposition",
+        "preposition",
+        "preposition",
+        "preposition",
+        "gerund"
+      ],
+      "weakItems": [
+        {
+          "number": 13,
+          "problem": "too obvious 'is' linking verb with no real alternative"
+        }
+      ],
+      "realisticB2": true,
+      "issues": [
+        "gap 13 is too obvious and doesn’t challenge B2 level knowledge"
+      ],
+      "verdict": "pass"
+    }
+  },
+  "generated": {
+    "partTitle": "Part 2: Open cloze",
+    "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "answer": "often"
+    },
+    "title": "Exploring a place you cannot see clearly",
+    "passage": "Exploring underwater can be (0) ___ difficult because light quickly fades, making it impossible to rely just on our eyes. In clear shallow water, divers may see (9) ___ far as a few metres, but deeper down, this range shrinks drastically. To (10) ___ around obstacles or locate features, explorers send sound pulses into the water; the echoes return from surfaces and give clues (11) ___ how far away things are. This technique requires careful listening rather than watching, and then interpreting the signals to (12) ___ a mental picture. A map produced by instruments does not show the area like a photograph but (13) ___ an abstract representation that needs decoding. For example, to find a steep slope on the seabed, explorers combine echo data with other information instead (14) ___ expecting a clear image. Therefore, what they ‘see’ is not always direct visual proof but rather a conclusion drawn (15) ___ piecing together indirect evidence. In this way, underwater exploration redefines vision: it is as much about understanding signals and context as it is about (16) ___ with the eyes alone.",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 9,
+        "type": "short"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "type": "short"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "type": "short"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "type": "short"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "type": "short"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "type": "short"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "type": "short"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "type": "short"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 9,
+        "answer": "as"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "answer": "move"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "answer": "about"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "answer": "build"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "answer": "is"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "answer": "of"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "answer": "from"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "answer": "looking"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 2,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Example:\nAnswer: 0 → often\nText\nExploring a place you cannot see clearly\nExploring underwater can be (0) ___ difficult because light quickly fades, making it impossible to rely just on our eyes. In clear shallow water, divers may see (9) ___ far as a few metres, but deeper down, this range shrinks drastically. To (10) ___ around obstacles or locate features, explorers send sound pulses into the water; the echoes return from surfaces and give clues (11) ___ how far away things are. This technique requires careful listening rather than watching, and then interpreting the signals to (12) ___ a mental picture. A map produced by instruments does not show the area like a photograph but (13) ___ an abstract representation that needs decoding. For example, to find a steep slope on the seabed, explorers combine echo data with other information instead (14) ___ expecting a clear image. Therefore, what they ‘see’ is not always direct visual proof but rather a conclusion drawn (15) ___ piecing together indirect evidence. In this way, underwater exploration redefines vision: it is as much about understanding signals and context as it is about (16) ___ with the eyes alone.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

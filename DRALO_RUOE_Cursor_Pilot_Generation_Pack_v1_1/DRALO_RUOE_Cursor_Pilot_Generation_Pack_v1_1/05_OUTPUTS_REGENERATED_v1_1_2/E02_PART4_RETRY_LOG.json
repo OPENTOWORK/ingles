@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-08-17T12:20:16.746Z",
+  "max_attempts": 3,
+  "attempts": [
+    {
+      "attempt": 1,
+      "variety_seed": 202608321191,
+      "mechanical_ok": false,
+      "hard_errors": [
+        "[P4-MARKING-POINT-MISMATCH] Q27: Marking point label \"modal perfect negative structure\" describes a structure not present in canonical answer.",
+        "[P4-METADATA-MISMATCH] Q29: target_structure lists alternative lexical routes none of which match the canonical answer.",
+        "[P4-METADATA-MISMATCH] Q30: target_structure requires \"hardly any\" but canonical answer does not contain it."
+      ],
+      "hard_count": 3,
+      "quality_count": 8,
+      "warning_count": 0,
+      "repairs": [
+        "Q25: regen + don't | have to"
+      ],
+      "accepted": false
+    },
+    {
+      "attempt": 2,
+      "variety_seed": 202608371191,
+      "mechanical_ok": false,
+      "hard_errors": [
+        "[P4-MARKING-POINT-MISMATCH] Q27: Marking point label \"modal perfect negative structure\" describes a structure not present in canonical answer."
+      ],
+      "hard_count": 1,
+      "quality_count": 4,
+      "warning_count": 0,
+      "repairs": [
+        "Q25: regen + didn't | have to"
+      ],
+      "accepted": false
+    },
+    {
+      "attempt": 3,
+      "variety_seed": 202608421191,
+      "mechanical_ok": false,
+      "hard_errors": [
+        "[P4-MARKING-POINT-MISMATCH] Q27: Marking point label \"modal perfect structure with need\" describes a structure not present in canonical answer.",
+        "[P4-METADATA-MISMATCH] Q29: target_structure lists alternative lexical routes none of which match the canonical answer.",
+        "[P4-METADATA-MISMATCH] Q30: target_structure requires \"hardly any\" but canonical answer does not contain it."
+      ],
+      "hard_count": 3,
+      "quality_count": 14,
+      "warning_count": 0,
+      "repairs": [
+        "Q28: since he | left school",
+        "Q30: very | few"
+      ],
+      "accepted": false
+    }
+  ],
+  "failure_pattern": {
+    "stopped_after_attempts": 3,
+    "recurring_hard_errors": [
+      {
+        "pattern": "[P4-MARKING-POINT-MISMATCH] Q#: Marking point label \"modal perfect negative structure\" describes a structure not present in canonical answer.",
+        "occurrences": 2,
+        "attempts": 3
+      },
+      {
+        "pattern": "[P4-METADATA-MISMATCH] Q#: target_structure lists alternative lexical routes none of which match the canonical answer.",
+        "occurrences": 2,
+        "attempts": 3
+      },
+      {
+        "pattern": "[P4-METADATA-MISMATCH] Q#: target_structure requires \"hardly any\" but canonical answer does not contain it.",
+        "occurrences": 2,
+        "attempts": 3
+      },
+      {
+        "pattern": "[P4-MARKING-POINT-MISMATCH] Q#: Marking point label \"modal perfect structure with need\" describes a structure not present in canonical answer.",
+        "occurrences": 1,
+        "attempts": 3
+      }
+    ],
+    "last_attempt": {
+      "attempt": 3,
+      "variety_seed": 202608421191,
+      "mechanical_ok": false,
+      "hard_errors": [
+        "[P4-MARKING-POINT-MISMATCH] Q27: Marking point label \"modal perfect structure with need\" describes a structure not present in canonical answer.",
+        "[P4-METADATA-MISMATCH] Q29: target_structure lists alternative lexical routes none of which match the canonical answer.",
+        "[P4-METADATA-MISMATCH] Q30: target_structure requires \"hardly any\" but canonical answer does not contain it."
+      ],
+      "hard_count": 3,
+      "quality_count": 14,
+      "warning_count": 0,
+      "repairs": [
+        "Q28: since he | left school",
+        "Q30: very | few"
+      ],
+      "accepted": false
+    }
+  }
+}

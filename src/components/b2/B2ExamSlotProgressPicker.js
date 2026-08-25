@@ -227,6 +227,8 @@ function ExamSlotMenu({
  *   onViewStatistics?: (slot: number) => void,
  *   onRepeatExam?: (slot: number) => void,
  *   lang?: 'es' | 'en',
+ *   lockedSlots?: number[],
+ *   onLockedSlotClick?: (slot: number) => void,
  *   className?: string,
  * }} props
  */
@@ -246,8 +248,11 @@ export function B2ExamSlotProgressPicker({
   onRepeatExam,
   lang = 'en',
   className = '',
+  lockedSlots = [],
+  onLockedSlotClick,
 }) {
   const en = lang === 'en';
+  const lockedSet = new Set((lockedSlots || []).map((n) => Number(n)));
   const [openMenuSlot, setOpenMenuSlot] = useState(null);
   const slotsToShow =
     availableSlots !== undefined
@@ -278,18 +283,31 @@ export function B2ExamSlotProgressPicker({
             const isComplete = partsInPaper > 0 && approvedParts >= partsInPaper;
             const showInProgress = inProgress && !isComplete;
             const label = formatExamSlotDisplayLabel(examLabelsBySlot[n], n);
+            const locked = lockedSet.has(n);
 
             return (
               <div
                 key={n}
-                className={`levels-b2-exam-picker__slot-wrap${active ? ' levels-b2-exam-picker__slot-wrap--active' : ''}`}
+                className={`levels-b2-exam-picker__slot-wrap${active ? ' levels-b2-exam-picker__slot-wrap--active' : ''}${locked ? ' levels-b2-exam-picker__slot-wrap--locked' : ''}`}
               >
                 <button
                   type="button"
-                  onClick={() => onSelect(n)}
+                  onClick={() => {
+                    if (locked) {
+                      onLockedSlotClick?.(n);
+                      return;
+                    }
+                    onSelect(n);
+                  }}
                   aria-pressed={active}
-                  className={`levels-b2-exam-picker__slot${active ? ' levels-b2-exam-picker__slot--active' : ''}`}
+                  aria-disabled={locked || undefined}
+                  className={`levels-b2-exam-picker__slot${active ? ' levels-b2-exam-picker__slot--active' : ''}${locked ? ' levels-b2-exam-picker__slot--locked' : ''}`}
                 >
+                  {locked ? (
+                    <span className="levels-b2-exam-picker__slot-lock" aria-hidden>
+                      🔒
+                    </span>
+                  ) : null}
                   <span className="levels-b2-exam-picker__slot-number">{String(n).padStart(2, '0')}</span>
                   <span className="levels-b2-exam-picker__slot-label">{label}</span>
                   <StarRow filled={stars} />

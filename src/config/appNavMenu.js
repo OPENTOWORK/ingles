@@ -2,6 +2,7 @@ import {
   isAdminRole,
   isCoordinatorRole,
   isItRole,
+  isStudentRole,
   isSupportRole,
   isTeacherRole,
   normalizeRoleName,
@@ -9,7 +10,7 @@ import {
 import { canViewPricing } from '@/utils/pricingAccess';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
-import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { usesStudentContentRestrictions, isExamStrategiesLockedForUser } from '@/constants/studentFeatureAccess';
 import { getExamStrategiesMenuItems } from '@/data/examSkillTheme';
 import { APP_ROUTES, isExamPracticeAppPath, isExamStrategiesPath } from '@/config/appRoutes';
 import { STAFF_PANELS_HUB_PATH } from '@/config/staffPanelHub';
@@ -41,13 +42,13 @@ export function getAdminLearningLinks(userRole) {
   return canViewPlacementAndTraining(userRole) ? NAV_LINKS_LEARNING : [];
 }
 
-/** Planes: solo administradores (ver pricingAccess.js). */
+/** Planes en home: usuarios con sesión excepto estudiantes. */
 export const HOME_PRICING_LINK = { href: '/precios', label: 'Planes', tourId: 'nav-pricing' };
 
-/** Enlaces de home: placement/training solo admin; planes solo admin. */
+/** Enlaces de home: placement/training solo admin; planes no para estudiantes. */
 export function getHomeQuickLinksForRole(userRole) {
   const links = [...getAdminLearningLinks(userRole)];
-  if (canViewPricing(userRole)) links.push(HOME_PRICING_LINK);
+  if (canViewPricing(userRole) && !isStudentRole(userRole)) links.push(HOME_PRICING_LINK);
   return links;
 }
 
@@ -133,6 +134,7 @@ export function buildAppNavModel(userRole, session) {
     showPrimaryNav: shouldShowLoggedInPrimaryNav(session),
     showDralo: shouldShowDraloNav(session),
     draloLocked: !guest && isDraloAiLockedForRole(userRole),
+    examStrategiesLocked: !guest && isExamStrategiesLockedForUser(userRole),
     showPricing,
     showContact: true,
     showLogin: guest,
@@ -171,10 +173,20 @@ export function isNavLinkActive(href, pathname, searchParams) {
   return path === target || path.startsWith(`${target}/`);
 }
 
-/** Solo visible para administradores (ver pricingAccess.js). */
+/** Visible para usuarios con sesión (ver pricingAccess.js). */
 export const NAV_LINK_PRICING = { href: '/precios', label: 'Pricing', tourId: 'nav-pricing' };
 
-export const NAV_LINK_CONTACT = { href: APP_ROUTES.contact, label: 'Contact' };
+export const NAV_LINK_CONTACT = {
+  href: APP_ROUTES.contact,
+  label: 'Contact',
+  tourId: 'nav-contact',
+};
+
+export const NAV_LINK_PROFILE = {
+  href: APP_ROUTES.profile,
+  label: 'Profile',
+  tourId: 'nav-profile',
+};
 
 export const DRALO_MENU_ITEMS = [
   { label: 'Writing', href: '/dralo-ai/writing' },

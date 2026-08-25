@@ -1,0 +1,112 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:47:33.733Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-009",
+  "brief_version": "1.0",
+  "style_card_id": "SC-04",
+  "style_card_version": "v1.0",
+  "working_title": "The first song I played for someone else",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3197,
+    "completion_tokens": 938,
+    "total_tokens": 4135
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 183 outside 150–180"
+    ],
+    "warnings": [],
+    "word_count": 183
+  },
+  "exercise": {
+    "part_title": "Part 3",
+    "instructions": "For questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line. There is an example at the beginning (0). Write your answers IN CAPITAL LETTERS.",
+    "text_title": "The first song I played for someone else",
+    "passage_with_gaps": "When I was asked to play the piano at a local community event, I was both excited and nervous. It felt (0) _______________ early to perform in front of others, as I had only been learning for a few months. My initial (17) _______________ was to decline, but something stopped me. I remembered the (18) _______________ that had led me to start learning in the first place: a desire to play music for enjoyment. EARLY\n\nI had begun taking lessons out of personal (19) _______________, expecting to make quick progress. However, the reality was different. Weeks of repetitive practice left me feeling (20) _______________ and close to giving up. But the invitation to play a simple accompaniment was a turning point.\n\nOn the day of the event, I made a small mistake during the performance. Surprisingly, it didn't ruin the (21) _______________. The music still added to the atmosphere and helped the group. This experience changed my (22) _______________ of success. It wasn't about being perfect but about contributing to something larger.\n\nAfterwards, I continued practising with a new (23) _______________: to make music that others could enjoy, rather than striving for (24) _______________ perfection. It was a more fulfilling path.",
+    "example": {
+      "number": 0,
+      "stem": "EARLY",
+      "answer": "TOO",
+      "explanation": "The word 'early' is transformed into 'too early' to fit the context of performing prematurely."
+    },
+    "questions": [
+      {
+        "number": 17,
+        "stem": "INITIAL",
+        "answer": "REACTION",
+        "transformation_type": "adjective→noun",
+        "rationale": "The adjective 'initial' is transformed into the noun 'reaction' to describe the speaker's first response."
+      },
+      {
+        "number": 18,
+        "stem": "MOTIVATE",
+        "answer": "MOTIVATION",
+        "transformation_type": "verb→noun",
+        "rationale": "The verb 'motivate' is transformed into the noun 'motivation' to describe the reason behind starting to learn music."
+      },
+      {
+        "number": 19,
+        "stem": "CURIOUS",
+        "answer": "CURIOSITY",
+        "transformation_type": "adjective→noun",
+        "rationale": "The adjective 'curious' is transformed into the noun 'curiosity' to express the personal interest in learning."
+      },
+      {
+        "number": 20,
+        "stem": "COURAGE",
+        "answer": "DISCOURAGED",
+        "transformation_type": "noun→adjective",
+        "rationale": "The noun 'courage' is transformed into the adjective 'discouraged' to describe the feeling of wanting to give up."
+      },
+      {
+        "number": 21,
+        "stem": "PERFORM",
+        "answer": "PERFORMANCE",
+        "transformation_type": "verb→noun",
+        "rationale": "The verb 'perform' is transformed into the noun 'performance' to refer to the act of playing music."
+      },
+      {
+        "number": 22,
+        "stem": "PERCEIVE",
+        "answer": "PERCEPTION",
+        "transformation_type": "verb→noun",
+        "rationale": "The verb 'perceive' is transformed into the noun 'perception' to describe the change in understanding of success."
+      },
+      {
+        "number": 23,
+        "stem": "INTEND",
+        "answer": "INTENTION",
+        "transformation_type": "verb→noun",
+        "rationale": "The verb 'intend' is transformed into the noun 'intention' to describe the new goal for practising."
+      },
+      {
+        "number": 24,
+        "stem": "ACHIEVE",
+        "answer": "ACHIEVABLE",
+        "transformation_type": "verb→adjective",
+        "rationale": "The verb 'achieve' is transformed into the adjective 'achievable' to describe the type of perfection that was no longer the goal."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise aligns well with the brief, focusing on the narrative of an adult beginner learning an instrument and experiencing a turning point.",
+      "style_card_notes": "The narrative style is consistent with the style card, using a first-person perspective and focusing on a character's internal journey.",
+      "british_english_notes": "British English conventions are used throughout, ensuring CEFR B2 level appropriateness.",
+      "factuality_notes": "The scenario is plausible and does not rely on invented facts or statistics.",
+      "answer_validity_notes": "Each gap has a single, clear answer that fits grammatically and contextually.",
+      "self_check_flags": []
+    },
+    "_word_count": 183
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

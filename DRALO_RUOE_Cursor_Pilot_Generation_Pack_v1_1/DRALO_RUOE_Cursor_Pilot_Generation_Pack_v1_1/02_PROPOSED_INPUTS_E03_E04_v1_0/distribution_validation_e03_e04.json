@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-08-24T11:06:57.843Z",
+  "scope": "RUOE-PILOT-02 proposal (RUOE-PILOT-E03, RUOE-PILOT-E04)",
+  "note": "Read-only validation. No approved input, historical output, Supabase table or production artefact was written.",
+  "hard_failures": [],
+  "soft_warnings": [
+    {
+      "rule": "DR-02",
+      "message": "CB-PILOT-021: subtopic 'Lifestyle' reused from E01/E02 (documented)"
+    },
+    {
+      "rule": "DR-02",
+      "message": "CB-PILOT-023: subtopic 'Wildlife' reused from E01/E02 (documented)"
+    }
+  ],
+  "info": [
+    {
+      "rule": "P4-DR-08",
+      "message": "Family coverage after E01–E04: {\"TF-01\":2,\"TF-02\":2,\"TF-03\":2,\"TF-04\":2,\"TF-05\":2,\"TF-06\":2,\"TF-07\":2,\"TF-08\":1,\"TF-09\":2,\"TF-10\":2,\"TF-11\":1,\"TF-12\":2,\"TF-13\":1,\"TF-14\":1}"
+    },
+    {
+      "rule": "BP-SYS-§10",
+      "message": "Untested after E01/E02: TF-11, TF-14. Covered by this batch: TF-11, TF-14."
+    },
+    {
+      "rule": "DR-07",
+      "message": "Main Topic counts across E01–E04: {\"MT-07\":3,\"MT-09\":3,\"MT-03\":3,\"MT-10\":3,\"MT-06\":2,\"MT-01\":2,\"MT-04\":2,\"MT-05\":2,\"MT-08\":2,\"MT-02\":2}"
+    },
+    {
+      "rule": "DR-11",
+      "message": "Style Card counts (compatible Parts) across E01–E04: {\"SC-01\":4,\"SC-05\":4,\"SC-02\":4,\"SC-03\":4,\"SC-04\":4}"
+    }
+  ],
+  "summary": {
+    "hard_failure_count": 0,
+    "soft_warning_count": 2,
+    "verdict": "PASS (HARD) — awaiting human approval"
+  }
+}

@@ -1,0 +1,524 @@
+{
+  "baseline_id": "assessment-contract-verify-1",
+  "generated_at": "2026-08-12T10:07:24.272Z",
+  "engine_version": "3.0.0",
+  "schema_version": "1.0.0",
+  "prompt_versions": {
+    "task_analysis": "1.0.0",
+    "observation_assessment": "1.0.0",
+    "cambridge_assessment": "1.0.0",
+    "feedback_composition": "1.0.0"
+  },
+  "model_config": {
+    "model": "gpt-4o-2024-08-06",
+    "snapshot_id": "gpt-4o-2024-08-06",
+    "temperature": 0,
+    "response_format": "json_schema"
+  },
+  "diagnostic_only": true,
+  "selected_cases": [
+    "G-01",
+    "G-09"
+  ],
+  "status": "partial",
+  "missing_source_cases": [],
+  "runnable_cases": 2,
+  "case_results": [
+    {
+      "case_id": "G-01",
+      "label": "Environmental essay A",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate A examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-01",
+        "expected_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 2,
+          "language": 2
+        },
+        "expected_total": 13,
+        "actual_total": 12,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 4,
+            "actual": 5,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 1
+      },
+      "validation_status": "passed",
+      "validation_failures": [],
+      "assessment_confidence": "high",
+      "retries": 1,
+      "latency_ms": 51108,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 765,
+          "output_tokens": 223,
+          "total_tokens": 988,
+          "latency_ms": 2750,
+          "provider_metadata": {
+            "id": "chatcmpl-EC09lDhHQXj8UfwYTdcVV4CIjAWq1",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3342,
+          "output_tokens": 2188,
+          "total_tokens": 5530,
+          "latency_ms": 21271,
+          "provider_metadata": {
+            "id": "chatcmpl-EC09oMLePsVGfvX71DgijUsB2gQxE",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6693,
+          "output_tokens": 1485,
+          "total_tokens": 8178,
+          "latency_ms": 14136,
+          "provider_metadata": {
+            "id": "chatcmpl-EC0A9ohuCpByzdJMm8e0B18OQeeRT",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 2,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6763,
+          "output_tokens": 1456,
+          "total_tokens": 8219,
+          "latency_ms": 12881,
+          "provider_metadata": {
+            "id": "chatcmpl-EC0ANp4FRZOKo9mVu7UKSWWWZ5xAH",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-01",
+          "criterion": "content",
+          "expected_mark": 4,
+          "actual_mark": 5,
+          "positive_evidence": [
+            "The response discusses the role of transport in environmental problems, mentioning the harmful exhaust from vehicles and the potential of environment-friendly engines to reduce pollution.",
+            "The role of rivers and seas in environmental problems is addressed, highlighting the issue of waste being poured into water bodies by factories and plants.",
+            "An additional idea is introduced, emphasizing individual responsibility in contributing to solving environmental problems."
+          ],
+          "limiting_evidence": [],
+          "why_not_higher": "Band 5 is the top of the scale and the descriptor is met.",
+          "why_not_lower": "All mandatory content points are addressed and developed, fully informing the target reader.",
+          "source_rule_ids": [
+            "C01",
+            "C03",
+            "C12"
+          ],
+          "evidence_quotes": [
+            "First of all a huge damage to the environment brings a transport.",
+            "In addition to this our rivers and seas are in not less danger situation.",
+            "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem."
+          ],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "boundary_decision"
+        },
+        {
+          "case_id": "G-01",
+          "criterion": "organisation",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [
+            "The response has a recognisable structure with an introduction, body, and conclusion.",
+            "Basic linking words such as 'First of all', 'In addition to this', and 'Apart from this' are used to connect ideas."
+          ],
+          "limiting_evidence": [
+            "The essay lacks clear paragraphing and logical progression of ideas, making it difficult for the reader to follow the argument.",
+            "Cohesion is mainly local, with limited cross-paragraph connection."
+          ],
+          "why_not_higher": "The response lacks clear paragraphing and logical progression of ideas, which prevents it from achieving Band 3.",
+          "why_not_lower": "The response has a recognisable structure and uses basic linking words, which exceeds the minimal coherence of Band 1.",
+          "source_rule_ids": [
+            "O01",
+            "O02",
+            "O08"
+          ],
+          "evidence_quotes": [
+            "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+            "First of all a huge damage to the environment brings a transport.",
+            "In addition to this our rivers and seas are in not less danger situation.",
+            "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem."
+          ],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "descriptor_application"
+        },
+        {
+          "case_id": "G-01",
+          "criterion": "language",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [
+            "The response uses some everyday vocabulary appropriately, such as 'pollution', 'environment', and 'transport'.",
+            "There is an attempt to use more complex structures, such as conditional clauses."
+          ],
+          "limiting_evidence": [
+            "Frequent grammatical errors, such as incorrect article usage and subject-verb agreement, impede meaning.",
+            "Vocabulary use is sometimes inappropriate, with incorrect collocations and prepositions."
+          ],
+          "why_not_higher": "The frequent grammatical errors and inappropriate vocabulary use prevent the response from achieving Band 3, where meaning should remain clear despite errors.",
+          "why_not_lower": "The response demonstrates some range beyond basic vocabulary and grammar, which exceeds the limited resources of Band 1.",
+          "source_rule_ids": [
+            "L02",
+            "L03",
+            "L06"
+          ],
+          "evidence_quotes": [
+            "pollution and damage to the environment is the most serious and difficult problem",
+            "if people won’t change their attitude",
+            "a huge damage to the environment brings a transport",
+            "one of disadvantage of these accustomed things",
+            "our rivers and seas are in not less danger situation",
+            "pour off their waste to ponds",
+            "Doing a little steps for protection our environment"
+          ],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "descriptor_application"
+        }
+      ],
+      "task_analysis_status": "complete",
+      "assessment_status": "complete"
+    },
+    {
+      "case_id": "G-09",
+      "label": "Fashion essay C",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook paper Candidate C examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-09",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 5,
+          "organisation": 5,
+          "language": 5
+        },
+        "actual_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "expected_total": 20,
+        "actual_total": 13,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 4,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "organisation",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 0
+      },
+      "validation_status": "passed",
+      "validation_failures": [
+        "observation_retry_exhausted: a suggested change would alter the learner's meaning: \"Expand on each content point with specific examples or arguments. For instance, discuss how societal pressure on appearance affects individuals or provide examples of how high clothing prices impact different demographics.\""
+      ],
+      "assessment_confidence": "high",
+      "retries": 3,
+      "latency_ms": 69447,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 768,
+          "output_tokens": 239,
+          "total_tokens": 1007,
+          "latency_ms": 2293,
+          "provider_metadata": {
+            "id": "chatcmpl-EC0AaBjxXT7er9wbBYst4PeKtZWB5",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3407,
+          "output_tokens": 1328,
+          "total_tokens": 4735,
+          "latency_ms": 17330,
+          "provider_metadata": {
+            "id": "chatcmpl-EC0AdlEXKKQix85R20OqvfP7Bl50I",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 2,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3407,
+          "output_tokens": 1511,
+          "total_tokens": 4918,
+          "latency_ms": 15594,
+          "provider_metadata": {
+            "id": "chatcmpl-EC0Auirn0vH7JYUhgSorfiuw5UJtg",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 3,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3407,
+          "output_tokens": 1541,
+          "total_tokens": 4948,
+          "latency_ms": 19642,
+          "provider_metadata": {
+            "id": "chatcmpl-EC0BAulvaP0BaYcFLM0bUkftrjrac",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6097,
+          "output_tokens": 1512,
+          "total_tokens": 7609,
+          "latency_ms": 14564,
+          "provider_metadata": {
+            "id": "chatcmpl-EC0BT529TgBdogsaOHEfrqE0FJ5G3",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-09",
+          "criterion": "content",
+          "expected_mark": 5,
+          "actual_mark": 4,
+          "positive_evidence": [
+            "The response discusses whether people's appearance is important: 'people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.'",
+            "The response discusses the price of clothes: 'not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.'",
+            "The response includes the candidate's own idea related to the topic: 'the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year.'"
+          ],
+          "limiting_evidence": [
+            "The discussion on whether people's appearance is important is not fully developed, as it is only briefly mentioned.",
+            "The candidate's own idea about the fashion industry being a source of profit and income is not directly linked to the negative impact on people's lives."
+          ],
+          "why_not_higher": "The response does not fully develop the discussion on whether people's appearance is important, and the candidate's own idea about the fashion industry being a source of profit and income is not directly linked to the negative impact on people's lives.",
+          "why_not_lower": "The response addresses all mandatory content points and provides a personal viewpoint on the fashion industry's impact, with some development for each point.",
+          "source_rule_ids": [
+            "C13",
+            "C14",
+            "C18"
+          ],
+          "evidence_quotes": [
+            "people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+            "not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+            "the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year."
+          ],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "task_interpretation"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "communicative_achievement",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [
+            "The response uses the conventions of an essay to communicate straightforward ideas, such as the impact of the fashion industry on people's lives.",
+            "The register is generally appropriate for an essay, maintaining a neutral to semi-formal tone."
+          ],
+          "limiting_evidence": [
+            "The response lacks complexity in presenting the personal viewpoint, mainly relying on straightforward ideas.",
+            "The reader's attention is not consistently held due to some unclear expressions, such as 'it values a minority of people in detriment to the majority.'"
+          ],
+          "why_not_higher": "The response lacks complexity in presenting the personal viewpoint and does not consistently hold the reader's attention due to some unclear expressions.",
+          "why_not_lower": "The response uses the conventions of an essay to communicate straightforward ideas, and the register is generally appropriate for an essay.",
+          "source_rule_ids": [
+            "CA12",
+            "CA06",
+            "CA03"
+          ],
+          "evidence_quotes": [
+            "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+            "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority."
+          ],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "task_interpretation"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "organisation",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [
+            "The text is generally well organised with a clear introduction, body, and conclusion structure.",
+            "A variety of linking words and cohesive devices are used, such as 'On one hand,' 'Nevertheless,' and 'Moreover.'"
+          ],
+          "limiting_evidence": [
+            "Some connections between ideas are weak, such as the transition from discussing the fashion industry's economic impact to its social impact.",
+            "The organisation within paragraphs could be improved for better coherence."
+          ],
+          "why_not_higher": "The organisation within paragraphs could be improved for better coherence, and some connections between ideas are weak.",
+          "why_not_lower": "The text is generally well organised with a clear introduction, body, and conclusion structure, and a variety of linking words and cohesive devices are used.",
+          "source_rule_ids": [
+            "O13",
+            "O01",
+            "O03"
+          ],
+          "evidence_quotes": [
+            "On one hand, the fashion industry is undeniably a source of profit and income.",
+            "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people, isolating those who not fit their laws and commands."
+          ],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "descriptor_application"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "language",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [
+            "The response uses everyday vocabulary generally appropriately, such as 'source of profit and income' and 'unrealistically high.'",
+            "Simple grammatical forms are used with a good degree of control, such as 'The society we live today is characterised by technology in constant development.'"
+          ],
+          "limiting_evidence": [
+            "Errors are noticeable, such as 'people, isolating those who not fit their laws and commands,' but meaning can still be determined.",
+            "There is occasional overuse of certain lexis, such as 'fashion industry.'"
+          ],
+          "why_not_higher": "The response lacks the range and flexibility of vocabulary and grammar needed for a higher band, and errors are noticeable.",
+          "why_not_lower": "The response uses everyday vocabulary generally appropriately and simple grammatical forms with a good degree of control, allowing meaning to be determined despite errors.",
+          "source_rule_ids": [
+            "L15",
+            "L03",
+            "L04"
+          ],
+          "evidence_quotes": [
+            "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+            "people, isolating those who not fit their laws and commands."
+          ],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "descriptor_application"
+        }
+      ],
+      "task_analysis_status": "complete",
+      "assessment_status": "complete"
+    }
+  ],
+  "aggregate": {
+    "exact_profiles_matched": 0,
+    "total_cases": 2,
+    "exact_criterion_marks_matched": 1,
+    "total_criterion_marks": 8,
+    "content_accuracy": 0,
+    "communicative_achievement_accuracy": 0.5,
+    "organisation_accuracy": 0,
+    "language_accuracy": 0,
+    "mean_absolute_mark_deviation": {
+      "content": 1,
+      "communicative_achievement": 1,
+      "organisation": 1.5,
+      "language": 1.5
+    },
+    "same_total_wrong_profile_cases": [],
+    "validation_failures": 0,
+    "retry_failures": 0
+  }
+}

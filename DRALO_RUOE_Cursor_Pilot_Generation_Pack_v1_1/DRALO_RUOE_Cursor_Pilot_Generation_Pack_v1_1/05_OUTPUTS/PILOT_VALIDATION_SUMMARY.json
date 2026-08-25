@@ -1,0 +1,368 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "generated_at": "2026-08-12T23:03:25.507Z",
+  "phase_a": {
+    "status": "COMPLETE_READY_FOR_HUMAN_REVIEW",
+    "exercise_count": 12,
+    "pass": 3,
+    "pass_with_warnings": 9,
+    "fail": 0,
+    "results": [
+      {
+        "brief_id": "CB-PILOT-001",
+        "exam_id": "RUOE-PILOT-E01",
+        "part": "Part 1",
+        "style_card_id": "SC-01",
+        "working_title": "When animals solve a new problem",
+        "file": "05_OUTPUTS/EXAM-01/CB-PILOT-001_Part1.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "word_count 153 outside target 160–170"
+        ],
+        "word_count": 153,
+        "attempt": 13
+      },
+      {
+        "brief_id": "CB-PILOT-002",
+        "exam_id": "RUOE-PILOT-E01",
+        "part": "Part 2",
+        "style_card_id": "SC-05",
+        "working_title": "The market that teaches you how a town eats",
+        "file": "05_OUTPUTS/EXAM-01/CB-PILOT-002_Part2.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "word_count 178 outside target 160–170"
+        ],
+        "word_count": 178,
+        "attempt": 1
+      },
+      {
+        "brief_id": "CB-PILOT-003",
+        "exam_id": "RUOE-PILOT-E01",
+        "part": "Part 3",
+        "style_card_id": "SC-02",
+        "working_title": "Games that make practice feel different",
+        "file": "05_OUTPUTS/EXAM-01/CB-PILOT-003_Part3.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "word_count 178 outside target 160–170"
+        ],
+        "word_count": 178,
+        "attempt": 3
+      },
+      {
+        "brief_id": "CB-PILOT-004",
+        "exam_id": "RUOE-PILOT-E01",
+        "part": "Part 5",
+        "style_card_id": "SC-03",
+        "working_title": "The volunteer job I chose for the wrong reason",
+        "file": "05_OUTPUTS/EXAM-01/CB-PILOT-004_Part5.json",
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "word_count": 604,
+        "attempt": 8
+      },
+      {
+        "brief_id": "CB-PILOT-005",
+        "exam_id": "RUOE-PILOT-E01",
+        "part": "Part 6",
+        "style_card_id": "SC-04",
+        "working_title": "The boxes I thought I needed",
+        "file": "05_OUTPUTS/EXAM-01/CB-PILOT-005_Part6.json",
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "word_count": 557,
+        "attempt": 8
+      },
+      {
+        "brief_id": "CB-PILOT-006",
+        "exam_id": "RUOE-PILOT-E01",
+        "part": "Part 7",
+        "style_card_id": "SC-06",
+        "working_title": "Keeping local history alive in different ways",
+        "file": "05_OUTPUTS/EXAM-01/CB-PILOT-006_Part7.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "section C word_count 119 outside target 120–150",
+          "section D word_count 113 outside target 120–150"
+        ],
+        "word_count": 485,
+        "attempt": 6
+      },
+      {
+        "brief_id": "CB-PILOT-007",
+        "exam_id": "RUOE-PILOT-E02",
+        "part": "Part 1",
+        "style_card_id": "SC-05",
+        "working_title": "The place you reach after the road ends",
+        "file": "05_OUTPUTS/EXAM-02/CB-PILOT-007_Part1.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "word_count 157 outside target 160–170"
+        ],
+        "word_count": 157,
+        "attempt": 13
+      },
+      {
+        "brief_id": "CB-PILOT-008",
+        "exam_id": "RUOE-PILOT-E02",
+        "part": "Part 2",
+        "style_card_id": "SC-01",
+        "working_title": "Exploring a place you cannot see clearly",
+        "file": "05_OUTPUTS/EXAM-02/CB-PILOT-008_Part2.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "word_count 175 outside target 160–170"
+        ],
+        "word_count": 175,
+        "attempt": 2
+      },
+      {
+        "brief_id": "CB-PILOT-009",
+        "exam_id": "RUOE-PILOT-E02",
+        "part": "Part 3",
+        "style_card_id": "SC-04",
+        "working_title": "The first song I played for someone else",
+        "file": "05_OUTPUTS/EXAM-02/CB-PILOT-009_Part3.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "word_count 154 outside target 160–170"
+        ],
+        "word_count": 154,
+        "attempt": 12
+      },
+      {
+        "brief_id": "CB-PILOT-010",
+        "exam_id": "RUOE-PILOT-E02",
+        "part": "Part 5",
+        "style_card_id": "SC-02",
+        "working_title": "What happens when rooftops become shared spaces",
+        "file": "05_OUTPUTS/EXAM-02/CB-PILOT-010_Part5.json",
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "word_count": 600,
+        "attempt": 12
+      },
+      {
+        "brief_id": "CB-PILOT-011",
+        "exam_id": "RUOE-PILOT-E02",
+        "part": "Part 6",
+        "style_card_id": "SC-03",
+        "working_title": "The evening routine that was really a work problem",
+        "file": "05_OUTPUTS/EXAM-02/CB-PILOT-011_Part6.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "word_count 520 outside target 540–570"
+        ],
+        "word_count": 520,
+        "attempt": 12
+      },
+      {
+        "brief_id": "CB-PILOT-012",
+        "exam_id": "RUOE-PILOT-E02",
+        "part": "Part 7",
+        "style_card_id": "SC-06",
+        "working_title": "Small changes that made work feel better",
+        "file": "05_OUTPUTS/EXAM-02/CB-PILOT-012_Part7.json",
+        "status": "pass_with_warnings",
+        "errors": [],
+        "warnings": [
+          "section A word_count 118 outside target 120–150",
+          "section B word_count 110 outside target 120–150",
+          "section C word_count 106 outside target 120–150",
+          "section D word_count 103 outside target 120–150"
+        ],
+        "word_count": 437,
+        "attempt": 6
+      }
+    ],
+    "human_review_checklist": "04_REVIEW/DRALO_RUOE_Checklist_Revision_Ejercicios_Piloto_v1_1.docx",
+    "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+  },
+  "phase_b": {
+    "status": "COMPLETE_READY_FOR_HUMAN_REVIEW",
+    "part4_task_count": 2,
+    "scored_transformations": 12,
+    "generation_version": "phase-b-v1.1-2026-08-13",
+    "model": "gpt-4o-2024-08-06",
+    "files": [
+      "05_OUTPUTS/EXAM-01/TBP-PILOT-EX01_Part4.json",
+      "05_OUTPUTS/EXAM-02/TBP-PILOT-EX02_Part4.json"
+    ],
+    "human_review": "05_OUTPUTS/HUMAN_REVIEW_PHASE_B.md",
+    "human_review_checklist": "04_REVIEW/DRALO_RUOE_Checklist_Revision_Part4_Piloto_v1_0.docx",
+    "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+    "tasks": [
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "ruoe_exam_id": "RUOE-PILOT-E01",
+        "status": "pass",
+        "fail_count": 0,
+        "warning_count": 0,
+        "repaired_items": [
+          "Q28",
+          "Q29",
+          "Q30",
+          "Q26",
+          "Q27"
+        ]
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "ruoe_exam_id": "RUOE-PILOT-E02",
+        "status": "pass",
+        "fail_count": 0,
+        "warning_count": 0,
+        "repaired_items": [
+          "Q26",
+          "Q28"
+        ]
+      }
+    ],
+    "counts": {
+      "pass": 12,
+      "pass_with_warnings": 0,
+      "fail": 0
+    },
+    "item_results": [
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": "example(0)",
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 25,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 26,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 2,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 27,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 6,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 28,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 9,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 29,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 3,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 30,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 2,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": "example(0)",
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 25,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 26,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 3,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 27,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 28,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 9,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 29,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 30,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      }
+    ]
+  }
+}

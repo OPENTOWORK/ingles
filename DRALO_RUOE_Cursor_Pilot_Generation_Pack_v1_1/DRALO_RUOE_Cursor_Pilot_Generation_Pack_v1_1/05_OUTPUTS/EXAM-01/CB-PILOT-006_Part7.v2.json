@@ -1,0 +1,145 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:45:41.868Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-006",
+  "brief_version": "1.0",
+  "style_card_id": "SC-06",
+  "style_card_version": "v1.0",
+  "working_title": "Keeping local history alive in different ways",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 4424,
+    "completion_tokens": 1265,
+    "total_tokens": 5689
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "section B word_count 99 severely off-range",
+      "section C word_count 97 severely off-range",
+      "section D word_count 93 severely off-range"
+    ],
+    "warnings": [
+      "section A word_count 108 outside target 120–150",
+      "section B word_count 99 outside target 120–150",
+      "section C word_count 97 outside target 120–150",
+      "section D word_count 93 outside target 120–150"
+    ],
+    "word_count": 397
+  },
+  "exercise": {
+    "part_title": "Part 7: Multiple Matching",
+    "instructions": "You are going to read four profiles of people involved in preserving local history. For questions 43–52, choose from the profiles A–D. The profiles may be chosen more than once.",
+    "matching_intro": "All four people contribute to preserving or sharing the history of a local area, but through different media and audiences.",
+    "common_context_title": "Keeping Local History Alive in Different Ways",
+    "sections": {
+      "A": {
+        "label": "A",
+        "text": "I started volunteering as an oral historian after listening to my neighbour's fascinating stories. It struck me that so many personal experiences could be lost forever if not recorded. I now spend my time interviewing older residents, capturing their memories before they fade away. It's not always straightforward, as people often recall events differently or mix up dates. I try to cross-check facts when I can, but I've learned to value the richness of personal stories over strict accuracy. My focus has shifted from major historical events to the everyday lives of ordinary people, and I believe this approach helps keep history alive in a more relatable way."
+      },
+      "B": {
+        "label": "B",
+        "text": "When I saw the old community cinema in my town standing derelict, I felt compelled to help restore it. I joined a group of volunteers, and together we began the painstaking work of bringing it back to life. Initially, I imagined it would be a quick and glamorous project, but reality soon set in. The work is slow and requires a lot of effort, and sometimes compromises are necessary to make the building functional again. Despite these challenges, I enjoy the camaraderie of working with others and seeing the cinema gradually become a place for the community once more."
+      },
+      "C": {
+        "label": "C",
+        "text": "My journey into preserving history began when I stumbled upon boxes of old family photographs, many without any identification. I decided to create a digital archive to make these images accessible to everyone. The process is challenging, as many photos lack dates or names, and it's easy to make incorrect assumptions. I invite local residents to help identify people and places, ensuring that any uncertain information is clearly marked. It's incredibly satisfying when a small clue leads to the identification of an image, and I love how this project brings together different pieces of our shared past."
+      },
+      "D": {
+        "label": "D",
+        "text": "I organise walking tours around my neighbourhood, inspired by friends who were curious about the area's unusual buildings. My aim is to help residents notice the historical details they pass every day. The challenge lies in keeping the tours engaging without turning speculation into fact. I design routes that highlight visible details and adjust the pace according to the group's interest. While I believe curiosity is important, maintaining trust by sticking to verified stories is crucial. I find it rewarding to see people develop a deeper appreciation for their surroundings through these tours."
+      }
+    },
+    "questions": [
+      {
+        "number": 43,
+        "prompt": "Which person became involved due to a discovery of personal items?",
+        "answer": "C",
+        "evidence": "C says, 'My journey into preserving history began when I stumbled upon boxes of old family photographs.'",
+        "rationale": "C's involvement was triggered by finding boxes of old photographs, which are personal items."
+      },
+      {
+        "number": 44,
+        "prompt": "Who mentions the importance of community collaboration in their work?",
+        "answer": "B",
+        "evidence": "B states, 'I enjoy the camaraderie of working with others.'",
+        "rationale": "B highlights the teamwork aspect of the restoration project, indicating community collaboration."
+      },
+      {
+        "number": 45,
+        "prompt": "Who focuses on ensuring stories are supported by evidence?",
+        "answer": "D",
+        "evidence": "D says, 'maintaining trust by sticking to verified stories is crucial.'",
+        "rationale": "D emphasises the importance of using verified stories during the walking tours."
+      },
+      {
+        "number": 46,
+        "prompt": "Who has adjusted their expectations about the pace of their project?",
+        "answer": "B",
+        "evidence": "B mentions, 'The work is slow and requires a lot of effort.'",
+        "rationale": "B initially thought the restoration would be quick but realised it is a slow process."
+      },
+      {
+        "number": 47,
+        "prompt": "Who finds value in the everyday experiences of people?",
+        "answer": "A",
+        "evidence": "A notes, 'My focus has shifted from major historical events to the everyday lives of ordinary people.'",
+        "rationale": "A values the personal stories and everyday experiences captured in oral histories."
+      },
+      {
+        "number": 48,
+        "prompt": "Who uses digital tools to make historical materials accessible?",
+        "answer": "C",
+        "evidence": "C describes creating a digital archive.",
+        "rationale": "C uses digital technology to preserve and share historical photographs."
+      },
+      {
+        "number": 49,
+        "prompt": "Who adapts their approach based on audience interest?",
+        "answer": "D",
+        "evidence": "D mentions, 'adjust the pace according to the group's interest.'",
+        "rationale": "D tailors the walking tour experience to the interest level of the participants."
+      },
+      {
+        "number": 50,
+        "prompt": "Who enjoys connecting different contributions to a larger project?",
+        "answer": "C",
+        "evidence": "C enjoys 'how this project brings together different pieces of our shared past.'",
+        "rationale": "C finds satisfaction in piecing together contributions to create a comprehensive archive."
+      },
+      {
+        "number": 51,
+        "prompt": "Who mentions the challenge of verifying information?",
+        "answer": "A",
+        "evidence": "A states, 'people often recall events differently or mix up dates.'",
+        "rationale": "A faces challenges in verifying the accuracy of oral histories."
+      },
+      {
+        "number": 52,
+        "prompt": "Who believes that maintaining trust is more important than curiosity?",
+        "answer": "D",
+        "evidence": "D says, 'I believe curiosity is important, but maintaining trust by sticking to verified stories is crucial.'",
+        "rationale": "D prioritises trust over curiosity in the context of historical storytelling."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise aligns with the content brief, focusing on local history preservation through different methods and motivations.",
+      "style_card_notes": "The profiles are distinct and follow the style card's guidance for differentiated voices and experiences.",
+      "british_english_notes": "British English is used consistently throughout the profiles and questions.",
+      "factuality_notes": "The scenarios are plausible and do not rely on invented historical facts.",
+      "answer_validity_notes": "Each question has a clear and defendable answer based on the profiles.",
+      "self_check_flags": []
+    },
+    "_word_count": 397
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

@@ -150,7 +150,7 @@ function answerLetterForQuestion(q, modelAnswers, index) {
   return /^[A-D]$/.test(fromM) ? fromM : null;
 }
 
-function significantWords(text, minLen = 4) {
+export function significantWords(text, minLen = 4) {
   return normalizeForMatch(text)
     .split(/\s+/)
     .filter((w) => w.length >= minLen && !STOP_WORDS.has(w));
@@ -172,6 +172,41 @@ export function detectLiteralPart5Match(passage, correctOptionText) {
 
 export function isAbsurdPart5Option(text) {
   return PART5_ABSURD_DISTRACTOR_PATTERNS.some((re) => re.test(text));
+}
+
+/** Distractor uses vocabulary or ideas traceable to the passage (v1.1). */
+export function isPart5DistractorGrounded(passage, optionText) {
+  const words = significantWords(optionText, 4);
+  if (!words.length) return false;
+  const p = normalizeForMatch(passage);
+  const hits = words.filter((w) => p.includes(w)).length;
+  return hits >= 1;
+}
+
+/** Verify textual reference phrases against passage layout (v1.1). */
+export function checkPart5ReferenceIntegrity(passage, questionText, evidenceText) {
+  const q = String(questionText || '').toLowerCase();
+  const paras = String(passage || '')
+    .split(/\n\s*\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  if (!paras.length) return null;
+  const evidenceNorm = normalizeForMatch(evidenceText).slice(0, 60);
+  if (!evidenceNorm || evidenceNorm.length < 12) return null;
+
+  if (/\blast paragraph\b/.test(q)) {
+    const last = normalizeForMatch(paras[paras.length - 1]);
+    if (!last.includes(evidenceNorm.slice(0, 24))) {
+      return 'question cites "last paragraph" but evidence does not appear there';
+    }
+  }
+  if (/\bfirst paragraph\b/.test(q)) {
+    const first = normalizeForMatch(paras[0]);
+    if (!first.includes(evidenceNorm.slice(0, 24))) {
+      return 'question cites "first paragraph" but evidence does not appear there';
+    }
+  }
+  return null;
 }
 
 export function checkPart5LetterBalance(answers) {
@@ -241,22 +276,27 @@ export function findOverusedPatterns(gen) {
 
 export function analyzePart5Quality(gen) {
   const errors = [];
+  const qualityFails = [];
   const warnings = [];
   const metrics = { wordCount: 0, questionTypes: [], literalMatches: [] };
 
   const passage = String(gen.passage || '');
   metrics.wordCount = countWords(passage);
-  if (metrics.wordCount < 500) {
-    errors.push(`Part 5 passage is ${metrics.wordCount} words; minimum is 500 (target 550–650).`);
-  } else if (metrics.wordCount < 550) {
-    warnings.push(
-      `Part 5 passage is ${metrics.wordCount} words; target is 550–650 (accepted from 500 for generation).`,
+  if (metrics.wordCount < 550) {
+    errors.push(
+      `Part 5 passage is ${metrics.wordCount} words; minimum is 550 (target 550–650).`,
     );
-  } else if (metrics.wordCount > 700) {
-    errors.push(`Part 5 passage is ${metrics.wordCount} words; maximum is 700 (target 550–650).`);
   } else if (metrics.wordCount > 650) {
+    errors.push(
+      `Part 5 passage is ${metrics.wordCount} words; maximum is 650 (target 550–650).`,
+    );
+  } else if (metrics.wordCount < 560) {
     warnings.push(
-      `Part 5 passage is ${metrics.wordCount} words; target is 550–650 (accepted up to 700 for generation).`,
+      `Part 5 passage is ${metrics.wordCount} words; target is 550–650 (prefer ~580–620).`,
+    );
+  } else if (metrics.wordCount > 640) {
+    warnings.push(
+      `Part 5 passage is ${metrics.wordCount} words; target is 550–650 (prefer ~580–620).`,
     );
   }
 
@@ -315,6 +355,22 @@ export function analyzePart5Quality(gen) {
           `${label}: correct option may be solvable by word matching ("${literal.slice(0, 60)}…").`,
         );
       }
+
+      const distractors = opts
+        .filter((o) => extractMcqLetter(o) !== letter)
+        .map((o) => extractMcqOptionText(o))
+        .filter(Boolean);
+      const grounded = distractors.filter((t) => isPart5DistractorGrounded(passage, t)).length;
+      if (distractors.length === 3 && grounded < 2) {
+        qualityFails.push(
+          `${label}: distractors are weak — fewer than 2 of 3 wrong options are grounded in passage information (P5-WEAK-DISTRACTOR).`,
+        );
+      }
+    }
+
+    const refIssue = checkPart5ReferenceIntegrity(passage, stem, String(q?.evidence || q?.rationale || ''));
+    if (refIssue) {
+      errors.push(`${label}: ${refIssue} (P5-BAD-REFERENCE).`);
     }
   });
 
@@ -346,7 +402,7 @@ export function analyzePart5Quality(gen) {
   const cambridge = findForbiddenCambridge(gen, 5);
   if (cambridge) errors.push(cambridge);
 
-  return { errors, warnings, metrics };
+  return { errors, qualityFails, warnings, metrics };
 }
 
 const PART6_COHESION_HINTS =
@@ -762,6 +818,37 @@ export function classifyPart3Derivation(stem, answer) {
   });
   if (a.endsWith('ly')) tags.push('adverb');
   return tags;
+}
+
+/** Longitudinal control metadata for Part 3 items (v1.1.1). */
+export function derivePart3TransformationFamily(stem, answer) {
+  const s = String(stem || '').toUpperCase();
+  const a = String(answer || '').toLowerCase();
+  if (!s || !a) return 'unknown';
+  if (s.toLowerCase() === a) return 'no_transform';
+  const tags = classifyPart3Derivation(stem, answer);
+  if (tags.includes('prefix')) return 'prefix';
+  if (/^(un|dis|mis|non)/i.test(a)) return 'negative';
+  if (tags.includes('adverb')) return 'adverb';
+  if (tags.includes('noun')) return 'noun';
+  if (tags.includes('adjective')) return 'adjective';
+  if (tags.includes('verb')) return 'verb';
+  return tags[0] || 'other';
+}
+
+/** Deterministic: CAPITAL stem visibly jammed BEFORE gap marker (not canonical (N) ___ (STEM)). */
+export function detectPart3StemForcing(passage, stem, gapNumber) {
+  if (!stem || !gapNumber) return false;
+  const escaped = String(stem).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // Forced: stem glued immediately before (N) e.g. "ADAPT (17) ___" — not "(17) ___ (ADAPT)".
+  const stemBeforeGap = new RegExp(`\\b${escaped}\\b\\s*\\(${gapNumber}\\)`, 'i');
+  if (stemBeforeGap.test(passage)) return true;
+  // Forced: gap marker without blank before stem e.g. "(17) (ADAPT)" skipping ___.
+  const gapWithoutBlank = new RegExp(
+    `\\(${gapNumber}\\)(?!\\s*(?:_+|\\.{2,}|…+))\\s*\\(${escaped}\\)`,
+    'i',
+  );
+  return gapWithoutBlank.test(passage);
 }
 
 export function countPart4AnswerWords(answer) {

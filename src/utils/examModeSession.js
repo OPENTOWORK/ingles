@@ -1,5 +1,6 @@
 import { getLevelFullExamSections } from '@/data/nivelesLevelHub';
 import { getCambridgeSectionDurationSeconds } from '@/data/cambridgeExamTimings';
+import { isExamModeSectionKeyBlockedForStudent } from '@/constants/studentFeatureAccess';
 import {
   getActiveScoringVersion,
   isExamModeSessionScoringCompatible,
@@ -9,7 +10,7 @@ import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
 export const EXAM_MODE_SESSION_VERSION = 1;
 
-/** @typedef {'locked' | 'active' | 'completed'} ExamModeSectionStatus */
+/** @typedef {'locked' | 'active' | 'completed' | 'blocked'} ExamModeSectionStatus */
 
 /**
  * @typedef {object} ExamModeSectionState
@@ -47,7 +48,76 @@ function storageKey(slug, examSlot, userId = '') {
   return `dralo_exam_mode_v${EXAM_MODE_SESSION_VERSION}_${uid}${slug}_${examSlot}`;
 }
 
-export function createExamModeSession(slug, examSlot) {
+function isSectionBlockedForRole(section, userRole = '') {
+  return isExamModeSectionKeyBlockedForStudent(userRole, section?.key);
+}
+
+function getPlayableSections(session, userRole = '') {
+  return (session?.sections ?? []).filter((s) => !isSectionBlockedForRole(s, userRole));
+}
+
+function blockedSectionState(section) {
+  return {
+    ...section,
+    status: /** @type {ExamModeSectionStatus} */ ('blocked'),
+    startedAt: null,
+    finishedAt: null,
+    answers: null,
+    sectionDraft: null,
+    scores: null,
+    remainingSeconds: section.durationSeconds ?? section.remainingSeconds ?? null,
+    redoPart: undefined,
+  };
+}
+
+/** Reconcile active/completed state after student restrictions or section completion. */
+export function reconcileExamModeSessionProgress(session, userRole = '') {
+  if (!session?.sections?.length) return session;
+
+  const sections = session.sections.map((s) => {
+    if (!isSectionBlockedForRole(s, userRole)) return { ...s };
+    return blockedSectionState(s);
+  });
+
+  const playable = sections.filter((s) => !isSectionBlockedForRole(s, userRole));
+  const allPlayableComplete =
+    playable.length > 0 && playable.every((s) => s.status === 'completed');
+  const hasActive = playable.some((s) => s.status === 'active');
+
+  if (!allPlayableComplete && !hasActive) {
+    const firstOpen = playable.find((s) => s.status !== 'completed');
+    if (firstOpen) {
+      const now = new Date().toISOString();
+      for (let i = 0; i < sections.length; i += 1) {
+        if (sections[i].key === firstOpen.key) {
+          sections[i] = {
+            ...sections[i],
+            status: 'active',
+            startedAt: sections[i].startedAt || now,
+          };
+        } else if (sections[i].status === 'active') {
+          sections[i] = { ...sections[i], status: 'locked' };
+        }
+      }
+    }
+  }
+
+  return {
+    ...session,
+    sections,
+    status: allPlayableComplete ? 'completed' : 'in_progress',
+    resultsReleased: allPlayableComplete ? true : session.resultsReleased && allPlayableComplete,
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+/** Strip listening/speaking progress for students and fix session progression. */
+export function applyExamModeStudentRestrictions(session, userRole = '') {
+  if (!session?.sections?.length) return session;
+  return reconcileExamModeSessionProgress(session, userRole);
+}
+
+export function createExamModeSession(slug, examSlot, userRole = '') {
   const sections = getLevelFullExamSections(slug).map((s) => ({
     key: s.key,
     title: s.title,
@@ -55,7 +125,9 @@ export function createExamModeSession(slug, examSlot) {
     partMin: s.partMin,
     partMax: s.partMax,
     durationSeconds: getCambridgeSectionDurationSeconds(slug, s.title),
-    status: /** @type {ExamModeSectionStatus} */ ('locked'),
+    status: /** @type {ExamModeSectionStatus} */ (
+      isSectionBlockedForRole({ key: s.key }, userRole) ? 'blocked' : 'locked'
+    ),
     startedAt: null,
     finishedAt: null,
     remainingSeconds: getCambridgeSectionDurationSeconds(slug, s.title),
@@ -64,12 +136,8 @@ export function createExamModeSession(slug, examSlot) {
     scores: null,
   }));
 
-  if (sections.length > 0) {
-    sections[0].status = 'active';
-  }
-
   const now = new Date().toISOString();
-  return {
+  const session = {
     version: EXAM_MODE_SESSION_VERSION,
     slug,
     examSlot,
@@ -80,6 +148,8 @@ export function createExamModeSession(slug, examSlot) {
     sections,
     resultsReleased: false,
   };
+
+  return reconcileExamModeSessionProgress(session, userRole);
 }
 
 export function loadExamModeSession(slug, examSlot, userId = '') {
@@ -122,15 +192,17 @@ export function saveExamModeSession(session, userId = '') {
   return next;
 }
 
-export function getOrCreateExamModeSession(slug, examSlot, userId = '') {
+export function getOrCreateExamModeSession(slug, examSlot, userId = '', userRole = '') {
   const existing = loadExamModeSession(slug, examSlot, userId);
-  if (existing) return existing;
-  const created = createExamModeSession(slug, examSlot);
+  if (existing) {
+    return saveExamModeSession(applyExamModeStudentRestrictions(existing, userRole), userId);
+  }
+  const created = createExamModeSession(slug, examSlot, userRole);
   return saveExamModeSession(created, userId);
 }
 
 /** Clears stored progress and starts a fresh exam-mode session for the same test. */
-export function resetExamModeSession(slug, examSlot, userId = '') {
+export function resetExamModeSession(slug, examSlot, userId = '', userRole = '') {
   if (typeof window !== 'undefined') {
     try {
       localStorage.removeItem(storageKey(slug, examSlot, userId));
@@ -138,7 +210,7 @@ export function resetExamModeSession(slug, examSlot, userId = '') {
       /* ignore */
     }
   }
-  const fresh = createExamModeSession(slug, examSlot);
+  const fresh = createExamModeSession(slug, examSlot, userRole);
   return saveExamModeSession(fresh, userId);
 }
 
@@ -154,8 +226,10 @@ export function getActiveExamModeSection(session) {
 }
 
 /** @param {ExamModeSession} session */
-export function isExamModeComplete(session) {
-  return session?.sections?.every((s) => s.status === 'completed') ?? false;
+export function isExamModeComplete(session, userRole = '') {
+  const playable = getPlayableSections(session, userRole);
+  if (!playable.length) return false;
+  return playable.every((s) => s.status === 'completed');
 }
 
 export function resolveExamModeSectionScoreDisplay(scores) {
@@ -177,7 +251,7 @@ export function resolveExamModeSectionScoreDisplay(scores) {
  * @param {ExamModeSession|null|undefined} session
  * @returns {{ stars: number, correct: number, total: number, approvedParts: number, inProgress: boolean }}
  */
-export function buildExamModeSlotProgress(session) {
+export function buildExamModeSlotProgress(session, userRole = '') {
   const empty = { stars: 0, correct: 0, total: 0, approvedParts: 0, inProgress: false };
   if (!session?.sections?.length) return empty;
 
@@ -186,6 +260,7 @@ export function buildExamModeSlotProgress(session) {
   let approvedParts = 0;
 
   for (const sec of session.sections) {
+    if (isSectionBlockedForRole(sec, userRole)) continue;
     if (sec.status !== 'completed' || !sec.scores) continue;
     approvedParts += 1;
     const display = resolveExamModeSectionScoreDisplay(sec.scores);
@@ -211,11 +286,12 @@ export function buildExamModeSlotProgress(session) {
  * @param {string} [userId]
  * @param {number[]} [slots]
  */
-export function buildExamModeProgressBySlot(slug, userId = '', slots = []) {
+export function buildExamModeProgressBySlot(slug, userId = '', slots = [], userRole = '') {
   const bySlot = {};
   for (const slot of slots) {
     const session = loadExamModeSession(slug, slot, userId);
-    bySlot[slot] = buildExamModeSlotProgress(session);
+    const normalized = session ? applyExamModeStudentRestrictions(session, userRole) : null;
+    bySlot[slot] = buildExamModeSlotProgress(normalized, userRole);
   }
   return bySlot;
 }
@@ -226,7 +302,7 @@ export function buildExamModeProgressBySlot(slug, userId = '', slots = []) {
  * @param {object} answers
  * @param {object|null} scores
  */
-export function completeExamModeSection(session, sectionKey, answers, scores) {
+export function completeExamModeSection(session, sectionKey, answers, scores, userRole = '') {
   const idx = session.sections.findIndex((s) => s.key === sectionKey);
   if (idx < 0) return session;
 
@@ -244,15 +320,24 @@ export function completeExamModeSection(session, sectionKey, answers, scores) {
     };
   });
 
-  if (idx + 1 < sections.length) {
-    sections[idx + 1] = {
-      ...sections[idx + 1],
+  let nextIdx = idx + 1;
+  while (nextIdx < sections.length && isSectionBlockedForRole(sections[nextIdx], userRole)) {
+    nextIdx += 1;
+  }
+
+  if (nextIdx < sections.length) {
+    sections[nextIdx] = {
+      ...sections[nextIdx],
       status: 'active',
-      startedAt: sections[idx + 1].startedAt || now,
+      startedAt: sections[nextIdx].startedAt || now,
     };
   }
 
-  const allDone = sections.every((s) => s.status === 'completed');
+  const allDone = getPlayableSections({ sections }, userRole).every((s) => {
+    const current = sections.find((row) => row.key === s.key);
+    return current?.status === 'completed';
+  });
+
   return {
     ...session,
     sections,

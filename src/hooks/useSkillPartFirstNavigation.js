@@ -5,6 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import { getSkillPracticeThemeKey, resolveSkillPracticeExamSlot } from '@/utils/skillPartFirstProgress';
 import { getSortedExamSlots } from '@/utils/skillPracticeNavigation';
 import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
+import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
+import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
@@ -71,6 +73,12 @@ export function useSkillPartFirstNavigation({
 }) {
   const searchParams = useSearchParams();
   const bypassStarGating = useExamStarGatingBypass();
+  const { maxExamSlot } = usePlanEntitlements();
+  const planGating = useExamSlotPlanGating(progressBySlot, { lang });
+  const slotUnlockOptions = useMemo(
+    () => ({ bypassStarGating, maxExamSlot }),
+    [bypassStarGating, maxExamSlot],
+  );
   const [selectedPartNumber, setSelectedPartNumber] = useState(null);
   const partBootstrapRef = useRef(false);
   const slotBootstrapRef = useRef(false);
@@ -185,7 +193,7 @@ export function useSkillPartFirstNavigation({
       selectedPartNumber,
       examenIdBySlot,
       requestedSlot,
-      { bypassStarGating },
+      slotUnlockOptions,
     );
 
     const resolutionKey = `${selectedPartNumber}:${allowedSlot}`;
@@ -197,7 +205,7 @@ export function useSkillPartFirstNavigation({
     if (!slotBootstrapRef.current || examSlot !== allowedSlot || !examPracticeOpen) {
       if (lastResolvedSlotRef.current !== resolutionKey || examSlot !== allowedSlot) {
         lastResolvedSlotRef.current = resolutionKey;
-        onSelectExam(allowedSlot);
+        planGating.wrapSelectHandler(onSelectExam)(allowedSlot);
       }
     }
 
@@ -215,6 +223,8 @@ export function useSkillPartFirstNavigation({
     examSlot,
     onSelectExam,
     bypassStarGating,
+    slotUnlockOptions,
+    planGating,
   ]);
 
   const selectPartNumber = useCallback(
@@ -261,7 +271,10 @@ export function useSkillPartFirstNavigation({
     examLabelsBySlot,
     examSlotPickerProps,
     bypassStarGating,
+    maxExamSlot,
+    slotUnlockOptions,
     lang,
+    planUpgradeModal: planGating.planUpgradeModal,
   };
 }
 

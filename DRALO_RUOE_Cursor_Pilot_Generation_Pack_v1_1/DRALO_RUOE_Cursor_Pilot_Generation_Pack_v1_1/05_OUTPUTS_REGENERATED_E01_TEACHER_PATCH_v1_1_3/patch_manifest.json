@@ -1,0 +1,93 @@
+{
+  "version": "v1.1.3-e01-teacher-patch",
+  "generated_at": "2026-08-21T13:14:57.363Z",
+  "exam": "RUOE-PILOT-E01",
+  "baseline": "05_OUTPUTS_REGENERATED_v1_1_2/EXAM-01",
+  "feedback_source": "Audit Pilot Test 1 .docx (second human review, Alicia + SR)",
+  "patch_kind": "controlled teacher-feedback patch (not a regeneration)",
+  "supabase_sync": false,
+  "production_write": false,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "patchable_parts": [
+    1,
+    2,
+    3,
+    5,
+    6
+  ],
+  "frozen_parts": [
+    4,
+    7
+  ],
+  "parts": [
+    {
+      "part": 1,
+      "file": "EXAM-01/CB-PILOT-001_Part1.json",
+      "action": "controlled-local-patch",
+      "validation_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 0,
+      "warnings": 3,
+      "changes": 5
+    },
+    {
+      "part": 2,
+      "file": "EXAM-01/CB-PILOT-002_Part2.json",
+      "action": "controlled-local-patch",
+      "validation_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 0,
+      "warnings": 9,
+      "changes": 7
+    },
+    {
+      "part": 3,
+      "file": "EXAM-01/CB-PILOT-003_Part3.json",
+      "action": "controlled-local-patch",
+      "validation_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 2,
+      "warnings": 0,
+      "changes": 7
+    },
+    {
+      "part": 4,
+      "file": "EXAM-01/TBP-PILOT-EX01_Part4.json",
+      "action": "frozen-copy",
+      "sha256": "cb670cf0f1ad69cec34d948248656c089a2da725b74b8bb9b8db032dbcba0322",
+      "byte_identical": true
+    },
+    {
+      "part": 5,
+      "file": "EXAM-01/CB-PILOT-004_Part5.json",
+      "action": "controlled-local-patch",
+      "validation_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 18,
+      "warnings": 0,
+      "changes": 5
+    },
+    {
+      "part": 6,
+      "file": "EXAM-01/CB-PILOT-005_Part6.json",
+      "action": "architecture-v2-rebuild",
+      "validation_ok": true,
+      "blocking_hard": 0,
+      "quality_review_hard": 0,
+      "quality": 3,
+      "warnings": 0,
+      "changes": 3
+    },
+    {
+      "part": 7,
+      "file": "EXAM-01/CB-PILOT-006_Part7.json",
+      "action": "frozen-copy",
+      "sha256": "b0e41eba01ad3f0b15dbca87fa8ddbb6479a3d58ee35d6e9352ae1b61844f421",
+      "byte_identical": true
+    }
+  ]
+}

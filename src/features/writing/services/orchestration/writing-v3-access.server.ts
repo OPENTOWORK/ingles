@@ -12,6 +12,11 @@ import {
   resolveWritingV3Access,
   type WritingV3AccessDecision,
 } from '../../config/writing-v3-flags';
+import {
+  resolveUserPlanSlug,
+  shouldApplyPlanUsageLimits,
+} from '@/lib/planAccess';
+import { hasEntitlement } from '@/lib/subscriptionPlans';
 
 function adminClient() {
   const key = getSupabaseServiceRoleKey()?.trim();
@@ -80,9 +85,28 @@ export async function resolveWritingV3AccessForUser(input: {
   email?: string | null;
 }): Promise<WritingV3AccessDecision> {
   const roleName = await resolveServerRoleName(input.userId, input.email || '');
-  return resolveWritingV3Access({
+  const base = resolveWritingV3Access({
     userId: input.userId,
     email: input.email,
     roleName,
   });
+  if (!base.allowed) return base;
+
+  const applyPlanLimits = await shouldApplyPlanUsageLimits(
+    input.userId,
+    input.email || '',
+  );
+  if (!applyPlanLimits) return base;
+
+  const planSlug = await resolveUserPlanSlug(input.userId, null);
+  if (!hasEntitlement(planSlug, 'writingAdvanced')) {
+    return {
+      allowed: false,
+      reason: 'plan_requires_plus',
+      flag_enabled: base.flag_enabled,
+      role: roleName,
+    };
+  }
+
+  return base;
 }

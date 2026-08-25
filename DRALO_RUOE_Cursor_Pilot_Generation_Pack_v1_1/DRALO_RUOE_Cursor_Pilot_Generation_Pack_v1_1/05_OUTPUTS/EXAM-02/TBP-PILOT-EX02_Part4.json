@@ -1,0 +1,261 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "B",
+  "generation_version": "phase-b-v1.1-2026-08-13",
+  "generated_at": "2026-08-12T23:01:16.540Z",
+  "blueprint_id": "TBP-PILOT-EX02",
+  "blueprint_version": "1.0",
+  "exam_id": "PILOT-EXAM-02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 4",
+  "part_number": 4,
+  "model": "gpt-4o-2024-08-06",
+  "item_attempts": {
+    "example": 1,
+    "Q25": 1,
+    "Q26": 3,
+    "Q27": 1,
+    "Q28": 9,
+    "Q29": 1,
+    "Q30": 1
+  },
+  "repaired_items": [
+    "Q26",
+    "Q28"
+  ],
+  "item_checks": {
+    "example": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 3
+    },
+    "Q25": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 4
+    },
+    "Q26": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 4
+    },
+    "Q27": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 4
+    },
+    "Q28": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 5
+    },
+    "Q29": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 4
+    },
+    "Q30": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 2
+    }
+  },
+  "self_check": {
+    "status": "pass",
+    "fail_count": 0,
+    "warning_count": 0,
+    "scored_items": 6
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "exercise": {
+    "part_title": "Part 4 — Key Word Transformations",
+    "instructions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. Here is an example (0).",
+    "example": {
+      "question_number": 0,
+      "sentence1": "It's a pity you can't come to the party.",
+      "keyword": "WISH",
+      "sentence2": "I ____ come to the party.",
+      "answer": "wish you could",
+      "accepted_variants": [
+        "wish you could"
+      ],
+      "marking_points": [
+        "wish you",
+        "could"
+      ],
+      "family_id": "TF-01",
+      "family_name": "Wish + Past Simple",
+      "target_structure": "Wish + Past Simple",
+      "difficulty_band": "B2",
+      "semantic_equivalence_rationale": "The original sentence expresses a regret about the present situation, which is transformed into a wish about the present using 'wish + past simple'.",
+      "alternative_route_check": "The transformation uses 'wish + past simple' to express a regret about a present situation, which is the only suitable transformation for this context.",
+      "naturalness_notes": "The phrase 'wish you could' is a natural and common expression to convey a regret about someone's inability to do something in the present."
+    },
+    "questions": [
+      {
+        "question_number": 25,
+        "sentence1": "I regret not studying harder for the exam.",
+        "keyword": "WISH",
+        "sentence2": "I ____ harder for the exam.",
+        "answer": "wish I had studied",
+        "accepted_variants": [
+          "wish I'd studied"
+        ],
+        "marking_points": [
+          "wish I",
+          "had studied"
+        ],
+        "family_id": "TF-03",
+        "family_name": "Preference, wish & regret",
+        "target_structure": "wish + past perfect",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "The transformation expresses a regret about not having studied harder, which is a past situation that cannot be changed. The use of 'wish + past perfect' correctly conveys this regret.",
+        "alternative_route_check": "No alternative transformation maintains the past regret meaning with the given constraints.",
+        "naturalness_notes": "The sentence structure is natural for expressing regret in English using 'wish' and past perfect.",
+        "slot_id": "TBP-PILOT-EX02-Q25",
+        "answer_shape": "WISH + subject + past-perfect frame",
+        "marking_point_plan": "MP1: WISH + subject; MP2: HAD + past participle/complement",
+        "semantic_equivalence_goal": "Preserve regret about a past situation that cannot now be changed."
+      },
+      {
+        "question_number": 26,
+        "sentence1": "The new policy will likely be implemented next month.",
+        "keyword": "EXPECTED",
+        "sentence2": "The new policy is ____ next month.",
+        "answer": "expected to be implemented",
+        "accepted_variants": [
+          "expected to be implemented"
+        ],
+        "marking_points": [
+          "expected to be",
+          "implemented"
+        ],
+        "family_id": "TF-04",
+        "family_name": "Passive & reporting structures",
+        "target_structure": "subject + be EXPECTED + to-infinitive",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "The transformation maintains the original meaning by expressing the anticipation of the policy's implementation using a passive reporting structure.",
+        "alternative_route_check": "The transformation has a single valid route using the passive form with 'expected' and the to-infinitive, aligning with the blueprint constraints.",
+        "naturalness_notes": "The transformation is natural and appropriate for B2 level, maintaining the original sentence's meaning while using a passive structure.",
+        "slot_id": "TBP-PILOT-EX02-Q26",
+        "answer_shape": "be + EXPECTED + to-infinitive",
+        "marking_point_plan": "MP1: passive BE + EXPECTED; MP2: TO + infinitive/complement",
+        "semantic_equivalence_goal": "Preserve a general expectation/report about the subject."
+      },
+      {
+        "question_number": 27,
+        "sentence1": "It wasn't necessary for you to bring your umbrella because it didn't rain.",
+        "keyword": "NEED",
+        "sentence2": "You ____ your umbrella because it didn't rain.",
+        "answer": "need not have brought",
+        "accepted_variants": [
+          "need not have brought"
+        ],
+        "marking_points": [
+          "need not have",
+          "brought"
+        ],
+        "family_id": "TF-06",
+        "family_name": "Modality & modal-perfect meaning",
+        "target_structure": "need not have + past participle",
+        "difficulty_band": "B2-Strong",
+        "semantic_equivalence_rationale": "The transformation maintains the meaning that bringing the umbrella was an unnecessary action because it didn't rain.",
+        "alternative_route_check": "The transformation does not allow for alternative routes as 'need not have' is the only correct modal-perfect structure for expressing unnecessary past actions.",
+        "naturalness_notes": "The sentence is natural and appropriate for B2 level, clearly indicating the unnecessary action.",
+        "slot_id": "TBP-PILOT-EX02-Q27",
+        "answer_shape": "NEED NOT HAVE + past participle, using unchanged NEED",
+        "marking_point_plan": "MP1: NEED NOT HAVE; MP2: past participle/complement",
+        "semantic_equivalence_goal": "Preserve that a completed past action was unnecessary."
+      },
+      {
+        "question_number": 28,
+        "sentence1": "I last visited my grandparents three months ago.",
+        "keyword": "SINCE",
+        "sentence2": "It ____ I last visited my grandparents.",
+        "answer": "has been three months since",
+        "accepted_variants": [
+          "has been three months since"
+        ],
+        "marking_points": [
+          "has been three months",
+          "since"
+        ],
+        "family_id": "TF-07",
+        "family_name": "Tense, aspect & duration",
+        "target_structure": "time since + past simple ↔ present-perfect duration",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "The transformation maintains the original meaning by expressing the duration from the past event to the present using a present perfect structure.",
+        "alternative_route_check": "The transformation is controlled by requiring the use of 'since' with a past event, aligning with the target structure.",
+        "naturalness_notes": "The sentence structure is natural and typical of B2 level English, clearly expressing the duration since the past event.",
+        "slot_id": "TBP-PILOT-EX02-Q28",
+        "answer_shape": "time expression + SINCE + past event / equivalent perfect-duration frame",
+        "marking_point_plan": "MP1: duration/time frame; MP2: SINCE + past-event clause",
+        "semantic_equivalence_goal": "Preserve the duration from a past event to now."
+      },
+      {
+        "question_number": 29,
+        "sentence1": "After considering all the options, Sarah finally decided.",
+        "keyword": "MIND",
+        "sentence2": "After considering all the options, Sarah finally ____ .",
+        "answer": "made up her mind",
+        "accepted_variants": [
+          "made up her mind"
+        ],
+        "marking_points": [
+          "made up",
+          "her mind"
+        ],
+        "family_id": "TF-10",
+        "family_name": "Phrasal & multi-word verbs",
+        "target_structure": "make up one’s mind / decision equivalence",
+        "difficulty_band": "B2-Core",
+        "semantic_equivalence_rationale": "The transformation maintains the meaning of reaching a decision by using the phrasal verb 'made up her mind', which is equivalent to 'decided'.",
+        "alternative_route_check": "The transformation route is controlled and unique due to the specific requirement of using 'make up one's mind' with the keyword 'MIND'.",
+        "naturalness_notes": "The sentence is natural and appropriate for B2 level, using a common phrasal verb to express decision-making.",
+        "slot_id": "TBP-PILOT-EX02-Q29",
+        "answer_shape": "make/made up + possessive + MIND within sentence frame",
+        "marking_point_plan": "MP1: MAKE/MADE UP; MP2: possessive + MIND",
+        "semantic_equivalence_goal": "Preserve the meaning of reaching a decision."
+      },
+      {
+        "question_number": 30,
+        "sentence1": "Only a small number of students attended the lecture.",
+        "keyword": "FEW",
+        "sentence2": "Very ____ attended the lecture.",
+        "answer": "few students",
+        "accepted_variants": [
+          "few students"
+        ],
+        "marking_points": [
+          "few",
+          "students"
+        ],
+        "family_id": "TF-13",
+        "family_name": "Quantifiers, determiners & exclusivity",
+        "target_structure": "very few / hardly any equivalence",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "The transformation maintains the meaning of a small number of students attending by using 'very few', which is equivalent to 'only a small number'.",
+        "alternative_route_check": "The only valid alternative is using 'hardly any', which is not allowed by the keyword constraint.",
+        "naturalness_notes": "The sentence is natural and appropriate for B2 level, with 'very few' being a common way to express low quantity.",
+        "slot_id": "TBP-PILOT-EX02-Q30",
+        "answer_shape": "VERY FEW + plural noun/people + verb frame",
+        "marking_point_plan": "MP1: VERY FEW; MP2: lexical/verb continuation needed for equivalence",
+        "semantic_equivalence_goal": "Preserve a small quantity/proportion without changing polarity."
+      }
+    ]
+  },
+  "_relpath": "05_OUTPUTS/EXAM-02/TBP-PILOT-EX02_Part4.json",
+  "repair_pass": {
+    "at": "2026-08-12T23:02:26.435Z",
+    "kind": "marking_points_local"
+  }
+}

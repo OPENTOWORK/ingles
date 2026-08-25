@@ -11,10 +11,15 @@ import OpenAI from 'openai';
 import { loadEnvLocal } from './load-env-local.mjs';
 import { buildExamGeneratePrompt } from '../src/lib/draloAiExamPrompts.js';
 import { validateGeneratedExamPart } from '../src/lib/examPartValidation.js';
+import { validatePart4Quality } from '../src/lib/ruoePart4Quality.js';
 import { countCambridgeKeyWordWords } from '../src/lib/countCambridgeKeyWordWords.js';
 import { validateB2KeyWordAnswerKey } from '../src/lib/validateB2KeyWordAnswerKey.js';
 import { gradeB2KeyWordTransformation } from '../src/lib/gradeB2KeyWordTransformation.js';
 import { keywordInPart4Answer } from '../src/lib/b2RuoeExamQuality.js';
+import {
+  repairPart4MarkingPoints,
+  repairPart4WithRegeneration,
+} from '../src/lib/ruoePart4MarkingPointRepair.js';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(root, 'scripts', 'generated', 'reviews');
@@ -96,6 +101,8 @@ function evaluateGenerated(generated) {
     if (grade.score !== 2) graderCompatible = false;
   });
 
+  const quality = validatePart4Quality(normalized);
+
   const checks = [
     { name: 'JSON parses', ok: true },
     { name: 'Validator ok', ok: validation.ok },
@@ -115,6 +122,7 @@ function evaluateGenerated(generated) {
   return {
     validation,
     normalized,
+    quality,
     checks,
     allChecksOk: checks.every((c) => c.ok),
   };
@@ -155,8 +163,29 @@ HARD REQUIREMENTS:
   });
 
   const raw = completion.choices?.[0]?.message?.content || '';
+  let repairResult = { repairs: [], failed: [], allOk: true };
   try {
     lastGenerated = JSON.parse(raw);
+
+    repairResult = repairPart4MarkingPoints(lastGenerated);
+    lastGenerated = repairResult.gen;
+    if (!repairResult.allOk && attempt < MAX_ATTEMPTS) {
+      const regenResult = await repairPart4WithRegeneration(openai, lastGenerated, {
+        topic: 'travel, work and everyday decisions',
+        model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
+        maxRounds: 1,
+      });
+      lastGenerated = regenResult.gen;
+      repairResult.repairs.push(...regenResult.repairs);
+      repairResult.failed = regenResult.failed;
+      repairResult.allOk = regenResult.allOk;
+    }
+    if (repairResult.repairs.length) {
+      console.error(`Marking-point repairs: ${repairResult.repairs.join('; ')}`);
+    }
+    if (repairResult.failed.length) {
+      console.error(`Marking-point repair failed: ${JSON.stringify(repairResult.failed)}`);
+    }
   } catch {
     const failPath = path.join(outDir, `b2-part4-dry-run-parse-fail-${Date.now()}.txt`);
     writeFileSync(failPath, raw, 'utf8');
@@ -165,6 +194,7 @@ HARD REQUIREMENTS:
   }
 
   lastEval = evaluateGenerated(lastGenerated);
+  lastEval.markingRepairs = repairResult.repairs;
   console.error(`Attempt ${attempt}: ok=${lastEval.allChecksOk}`);
   if (lastEval.allChecksOk) break;
   console.error(`Attempt ${attempt} failed:`, lastEval.validation.errors.slice(0, 12));
@@ -179,7 +209,7 @@ if (!lastEval || !lastGenerated) {
   process.exit(1);
 }
 
-const { validation, normalized, checks } = lastEval;
+const { validation, normalized, quality, checks } = lastEval;
 const report = {
   generatedAt: new Date().toISOString(),
   model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
@@ -188,12 +218,28 @@ const report = {
     mentionsQ25to30: /Q25–30|questions numbered 25–30/i.test(userPrompt),
     requiresMetadata: /grading_metadata/i.test(userPrompt),
     requiresTwoMarkingPoints: /Exactly TWO marking points/i.test(userPrompt),
+    naturalnessFirst: /Naturalness before transformation convenience/i.test(userPrompt),
+    difficultyPolicy: /B2-Standard and B2-Strong/i.test(userPrompt),
   },
   validation: {
     ok: validation.ok,
     errors: validation.errors,
+    qualityFails: validation.qualityFails,
     warnings: validation.warnings,
   },
+  part4Quality: {
+    hardFails: quality.hardFails,
+    qualityFails: quality.qualityFails,
+    warnings: quality.warnings,
+    metrics: quality.metrics,
+    findings: quality.findings?.map((f) => ({
+      rule_id: f.rule_id,
+      severity: f.severity,
+      location: f.location,
+      reason: f.reason,
+    })),
+  },
+  markingPointRepairs: lastEval?.markingRepairs || [],
   checks,
   allChecksOk: lastEval.allChecksOk,
   generated: normalized,
@@ -210,6 +256,8 @@ console.log(
       outPath,
       checks,
       errors: validation.errors,
+      qualityFails: validation.qualityFails,
+      part4QualityMetrics: quality.metrics,
       warnings: validation.warnings,
     },
     null,

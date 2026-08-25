@@ -1,0 +1,137 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:43:34.492Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-004",
+  "brief_version": "1.0",
+  "style_card_id": "SC-03",
+  "style_card_version": "v1.0",
+  "working_title": "The volunteer job I chose for the wrong reason",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3338,
+    "completion_tokens": 1376,
+    "total_tokens": 4714
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 404 outside 550–650",
+      "Part 5 answers use fewer than 3 different letters",
+      "Part 5 answer letter run exceeds 2 at Q35",
+      "Part 5 answer letter run exceeds 2 at Q36"
+    ],
+    "warnings": [],
+    "word_count": 404
+  },
+  "exercise": {
+    "part_title": "Part 5",
+    "instructions": "Read the article and answer the questions 31–36. For each question, choose the correct answer A, B, C or D.",
+    "text_title": "The Volunteer Job I Chose for the Wrong Reason",
+    "article": "When I first signed up to volunteer at a community repair workshop, my motivation was anything but noble. I had heard that volunteering looked impressive on university applications and CVs, and I thought it might give me an edge in the competitive job market. I imagined myself learning practical skills, fixing broken appliances, and perhaps even making some useful connections. However, my experience turned out to be quite different from what I had expected.\n\nOn my first day, I arrived with a sense of anticipation, ready to dive into the world of repairs. To my surprise, instead of being handed a toolbox, I was asked to greet visitors and find out what help they needed. Initially, I was disappointed; this wasn't what I had signed up for. I had pictured myself as a hands-on problem solver, not a receptionist.\n\nIt wasn't long before a visitor arrived, looking sheepish and holding a toaster. As I approached, he admitted he felt embarrassed for not knowing how to fix it himself. I realised that my role was not just about directing people to the right volunteer but also about making them feel comfortable. I found myself explaining the repair process in simple terms, ensuring he didn't feel foolish. This interaction taught me the importance of patience and empathy, skills I hadn't anticipated developing in this environment.\n\nAs the weeks went by, I began to enjoy coordinating tasks among volunteers with different skills. I discovered a knack for organising people and resources, ensuring that each visitor received the help they needed. This was a far cry from the practical repair work I had envisioned, but I found it surprisingly fulfilling.\n\nEventually, it was time to update my CV, and I realised that the most significant outcome of my volunteering wasn't a new line about technical skills. Instead, it was a changed perspective on what I valued in a job. I had always assumed that career satisfaction came from mastering a specific skill, but my time at the workshop taught me that I enjoyed roles involving people-facing coordination more than I had ever expected.\n\nReflecting on my initial reasons for volunteering, I can't help but smile at how misguided I was. While the experience did enhance my CV, the true value lay in the personal insight I gained. I now know that the work I find most rewarding involves not just technical tasks but also meaningful interactions with others.",
+    "questions": [
+      {
+        "number": 31,
+        "question_type": "attitude",
+        "prompt": "How did the narrator initially feel about volunteering at the community repair workshop?",
+        "options": {
+          "A": "Excited to learn new skills.",
+          "B": "Motivated by the potential CV benefits.",
+          "C": "Eager to help the community.",
+          "D": "Interested in meeting new people."
+        },
+        "answer": "B",
+        "evidence": "I had heard that volunteering looked impressive on university applications and CVs, and I thought it might give me an edge in the competitive job market.",
+        "rationale": "The narrator explicitly states their motivation was to enhance their CV, indicating a strategic rather than altruistic attitude."
+      },
+      {
+        "number": 32,
+        "question_type": "purpose",
+        "prompt": "What was the narrator's initial expectation of their role at the workshop?",
+        "options": {
+          "A": "To manage visitor inquiries.",
+          "B": "To organise volunteer tasks.",
+          "C": "To perform hands-on repairs.",
+          "D": "To learn about customer service."
+        },
+        "answer": "C",
+        "evidence": "I imagined myself learning practical skills, fixing broken appliances.",
+        "rationale": "The narrator expected to engage in practical repair tasks, as indicated by their anticipation of learning new skills."
+      },
+      {
+        "number": 33,
+        "question_type": "inference",
+        "prompt": "What does the narrator learn from their interaction with the visitor and the toaster?",
+        "options": {
+          "A": "Technical skills are the most valuable part of the job.",
+          "B": "Making visitors feel comfortable is important.",
+          "C": "Explaining repairs is more difficult than doing them.",
+          "D": "Visitors often feel embarrassed by their lack of knowledge."
+        },
+        "answer": "B",
+        "evidence": "I realised that my role was not just about directing people to the right volunteer but also about making them feel comfortable.",
+        "rationale": "The narrator infers that part of their role involves ensuring visitors feel at ease, highlighting the importance of interpersonal skills."
+      },
+      {
+        "number": 34,
+        "question_type": "main idea",
+        "prompt": "What does the narrator discover about their work preferences by the end of the article?",
+        "options": {
+          "A": "They prefer technical tasks to coordination.",
+          "B": "They enjoy roles that involve working with people.",
+          "C": "They are not suited for volunteer work.",
+          "D": "They should focus on improving their repair skills."
+        },
+        "answer": "B",
+        "evidence": "I enjoyed roles involving people-facing coordination more than I had ever expected.",
+        "rationale": "The narrator concludes that they find satisfaction in roles that involve interacting with people, rather than purely technical tasks."
+      },
+      {
+        "number": 35,
+        "question_type": "reference",
+        "prompt": "What does the phrase 'a far cry from the practical repair work I had envisioned' suggest about the narrator's experience?",
+        "options": {
+          "A": "Their experience was similar to their expectations.",
+          "B": "Their role was less hands-on than expected.",
+          "C": "They found the repair work straightforward.",
+          "D": "They were disappointed with the tasks they received."
+        },
+        "answer": "B",
+        "evidence": "I began to enjoy coordinating tasks among volunteers with different skills.",
+        "rationale": "The phrase indicates a significant difference between the narrator's expectations and reality, highlighting the less hands-on nature of their role."
+      },
+      {
+        "number": 36,
+        "question_type": "inference",
+        "prompt": "What can be inferred about the narrator's view on career satisfaction by the end of the article?",
+        "options": {
+          "A": "It is solely based on technical expertise.",
+          "B": "It comes from unexpected experiences.",
+          "C": "It is less important than a strong CV.",
+          "D": "It is determined by formal education."
+        },
+        "answer": "B",
+        "evidence": "The true value lay in the personal insight I gained.",
+        "rationale": "The narrator realises that career satisfaction can arise from unexpected experiences, not just from formal qualifications or skills."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The article aligns with the brief, focusing on the narrator's change in perspective and discovery of career preferences through volunteering.",
+      "style_card_notes": "The style card's guidelines for a personal reflective experience are followed, with a natural first-person voice and a clear change in perspective.",
+      "british_english_notes": "British English is consistently used throughout the article and questions.",
+      "factuality_notes": "No factual inaccuracies are present, and the narrative is plausible without making unsupported claims about volunteering.",
+      "answer_validity_notes": "Each question has one clear, defendable answer supported by evidence from the text.",
+      "self_check_flags": []
+    },
+    "_word_count": 404
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

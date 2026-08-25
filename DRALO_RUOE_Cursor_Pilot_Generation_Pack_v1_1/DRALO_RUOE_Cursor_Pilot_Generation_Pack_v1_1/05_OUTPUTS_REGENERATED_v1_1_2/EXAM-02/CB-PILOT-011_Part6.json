@@ -1,0 +1,124 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:37:54.615Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-011",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-03",
+  "working_title": "The evening routine that was really a work problem",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[TEST-P6-MULTIFIT] option B: Option may fully fit multiple gaps (heuristic cohesion score).",
+      "[TEST-P6-MULTIFIT] option G: Option may fully fit multiple gaps (heuristic cohesion score)."
+    ],
+    "warnings": [
+      "Part 6 passage is 427 words; target is 500–600 (accepted from 350 for generation).",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 2,
+    "warning_count": 2
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 6: Gapped text",
+    "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+    "title": "The evening routine that was really a work problem",
+    "passage": "For months, I prepared what I thought was the perfect evening routine. Each detail was deliberately chosen — a calming herbal tea, a chapter from a light novel, a fixed bedtime. (37) Yet, despite all these careful efforts, I found myself still feeling weary and restless as soon as I lay down. The frustration grew with every night that passed, making me wonder if I was missing something fundamental.\n\nEven after all that, I decided to try tweaking a few habits that seemed harmless enough. Turning off screens earlier, dimming the lights, and even gentle stretches were on my list. However, no matter how many small changes I made, I couldn’t shake the sensation that my mind was still engaged elsewhere. (38) The pattern was becoming clear: surface routines weren't enough to quiet the constant background noise of work.\n\nOne evening, a sudden ping of a work email interrupted my carefully set relaxation. It was just a simple update, nothing urgent, yet it jolted me out of a rare moment of peace and reminded me of the tasks I hadn’t fully finished. (39) This unexpected disturbance brought to light a hidden truth — the boundary between work and personal time was a lot blurrier than I had admitted.\n\nRecognising this, I introduced a new ritual designed to close the working day for good. Each evening, I’d write down the most important task for tomorrow and physically tuck away my laptop and notes. (40) This wasn’t a magical cure, but it marked a clear shift in my evenings, signaling an end to work even if my mind was slow to follow.\n\nThat rule became a test of willpower. Unsurprisingly, there were evenings when I almost reopened work, convinced that checking one last detail wouldn’t hurt. (41) Still, the more consistently I stuck to the ritual, the less tempting those returns felt.\n\nGradually, I noticed that my attention in the evenings turned towards non-work things — simple pleasures like music, a phone call with a friend, or just watching the darkening sky outside. Importantly, I avoided any claims about revolutionising my sleep or solving all tiredness instantly. (42) Ultimately, the experiment taught me that the real barrier was setting a boundary, not controlling sleep directly.\n\nLooking back, I see that my first assumption — that a perfect evening routine could fix my tiredness — was incomplete. While rituals have their place, the practical end of the working day made the biggest difference. This modest discovery didn’t turn me into a sleep expert but did give me a simple way to feel more settled at night.",
+    "passageWordCount": 565,
+    "sentencePool": [
+      "A) Yet, that evening showed me how little my well-meaning tactics had actually impacted the core issue.",
+      "B) It became obvious that the time when work stopped physically didn’t match when it stopped mentally.",
+      "C) This new habit wasn’t easy at first, but it introduced a sense of closure I hadn’t realised I needed.",
+      "D) Despite that, the temptation to reopen my laptop was frequent and required conscious effort to resist.",
+      "E) I found these early distractions amusing but futile, like arranging cushions while still running meetings in my head.",
+      "F) That moment made me reassess how much ‘unfinished business’ I carried into each evening.",
+      "G) Even if I tried to force myself to sleep better, it wasn’t addressing the real cause of my restlessness."
+    ],
+    "questions": [
+      {
+        "id": "q37",
+        "number": 37
+      },
+      {
+        "id": "q38",
+        "number": 38
+      },
+      {
+        "id": "q39",
+        "number": 39
+      },
+      {
+        "id": "q40",
+        "number": 40
+      },
+      {
+        "id": "q41",
+        "number": 41
+      },
+      {
+        "id": "q42",
+        "number": 42
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q37",
+        "number": 37,
+        "answer": "G"
+      },
+      {
+        "id": "q38",
+        "number": 38,
+        "answer": "E"
+      },
+      {
+        "id": "q39",
+        "number": 39,
+        "answer": "F"
+      },
+      {
+        "id": "q40",
+        "number": 40,
+        "answer": "C"
+      },
+      {
+        "id": "q41",
+        "number": 41,
+        "answer": "D"
+      },
+      {
+        "id": "q42",
+        "number": 42,
+        "answer": "B"
+      }
+    ],
+    "sections": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 6,
+    "audioClips": [],
+    "titlePatternFamily": "the_x_that"
+  },
+  "enunciado_preview": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.\nText\nThe evening routine that was really a work problem\nFor months, I prepared what I thought was the perfect evening routine. Each detail was deliberately chosen — a calming herbal tea, a chapter from a light novel, a fixed bedtime. (37) Yet, despite all these careful efforts, I found myself still feeling weary and restless as soon as I lay down. The frustration grew with every night that passed, making me wonder if I was missing something fundamental.\nEven after all that, I decided to try tweaking a few habits that seemed harmless enough. Turning off screens earlier, dimming the lights, and even gentle stretches were on my list. However, no matter how many small changes I made, I couldn’t shake the sensation that my mind was still engaged elsewhere. (38) The pattern was becoming clear: surface routines weren't enough to quiet the constant background noise of work.\nOne evening, a sudden ping of a work email interrupted my carefully set relaxation. It was just a simple update, nothing urgent, yet it jolted me out of a rare moment of peace and reminded me of the tasks I hadn’t fully finished. (39) This unexpected disturbance brought to light a hidden truth — the boundary between work and personal time was a lot blurrier than I had admitted.\nRecognising this, I introduced a new ritual designed to close the working day for good. Each evening, I’d write down the most important task for tomorrow and physically tuck away my laptop and notes. (40) This wasn’t a magical cure, but it marked a clear shift in my evenings, signaling an end to work even if my mind was slow to follow.\nThat rule became a test of willpower. Unsurprisingly, there were evenings when I almost reopened work, convinced that checking one last detail wouldn’t hurt. (41) Still, the more consistently I stuck to the ritual, the less tempting those returns felt.\nGradually, I noticed that my attention in the evenings turned towards non-work things — simple pleasures like music, a phone call with a friend, or just watching the darkening sky outside. Importantly, I avoided any claims about revolutionising my sleep or solving all tiredness instantly. (42) Ultimately, the experiment taught me that the real barrier was setting a boundary, not controlling sleep directly.\nLooking back, I see that my first assumption — that a perfect evening routine could fix my tiredness — was incomplete. While rituals have their place, the practical end of the working day made the biggest difference. This modest discovery didn’t turn me into a sleep expert but did give me a simple way to feel more settled at night.\n\nSentences\nA Yet, that evening showed me how little my well-meaning tactics had actually impacted the core issue.\nB It became obvious that the time when work stopped physically didn’t match when it stopped mentally.\nC This new habit wasn’t easy at first, but it introduced a sense of closure I hadn’t realised I needed.\nD Despite that, the temptation to reopen my laptop was frequent and required conscious effort to resist.\nE I found these early distractions amusing but futile, like arranging cushions while still running meetings in my head.\nF That moment made me reassess how much ‘unfinished business’ I carried into each evening.\nG Even if I tried to force myself to sleep better, it wasn’t addressing the real cause of my restlessness.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

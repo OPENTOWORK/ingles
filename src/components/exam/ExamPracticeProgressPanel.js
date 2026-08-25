@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useExamPracticeSlotProgress } from '@/hooks/useExamPracticeSlotProgress';
+import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import ExamPracticePartScoreHistorySection from '@/components/exam/ExamPracticePartScoreHistorySection';
 
@@ -30,11 +31,28 @@ export default function ExamPracticeProgressPanel({
 }) {
   const en = lang === 'en';
   const [open, setOpen] = useState(false);
+  const { applyLimits, progressTracking, loading: planLoading } = usePlanEntitlements();
+  const showProgress = enabled && (!applyLimits || progressTracking);
   const { signedIn, loading, estadisticasByPart } = useExamPracticeSlotProgress({
     slug,
     examSlot,
-    enabled,
+    enabled: showProgress,
   });
+
+  if (!showProgress && !planLoading) {
+    return (
+      <aside className="levels-listening-strategy levels-listening-strategy--progress">
+        <div className="levels-listening-strategy__body">
+          <p className="levels-listening-strategy__upgrade-hint">
+            {en
+              ? 'Progress tracking is included in Plus and Premium plans.'
+              : 'El seguimiento de progreso está incluido en los planes Plus y Premium.'}{' '}
+            <a href="/precios">{en ? 'View plans' : 'Ver planes'}</a>
+          </p>
+        </div>
+      </aside>
+    );
+  }
 
   const partsCount = partMax - partMin + 1;
   const approved = progressSlot?.approvedParts ?? 0;

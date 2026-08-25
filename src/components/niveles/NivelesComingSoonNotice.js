@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 
-export default function NivelesComingSoonNotice({ level }) {
+export default function NivelesComingSoonNotice({ level, skillLabel = null, backHref = '/niveles' }) {
+  const message = skillLabel
+    ? `${skillLabel} practice for level ${level} is not available yet. Reading, Writing and Exam mode are open on B2.`
+    : `Level ${level} is not available yet. B2 is open for student practice — check back later for more levels.`;
+
   return (
     <main className="shell niveles-coming-soon-page">
       <div className="niveles-coming-soon-card">
@@ -10,12 +14,9 @@ export default function NivelesComingSoonNotice({ level }) {
           🕐
         </span>
         <h1>COMING SOON</h1>
-        <p>
-          Level {level} is not available yet. B2 is open for student practice — check back later for more
-          levels.
-        </p>
-        <Link href="/niveles" className="niveles-coming-soon-link">
-          Back to levels
+        <p>{message}</p>
+        <Link href={backHref} className="niveles-coming-soon-link">
+          {skillLabel ? 'Back to exams' : 'Back to levels'}
         </Link>
       </div>
       <style jsx>{`

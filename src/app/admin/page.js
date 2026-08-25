@@ -90,6 +90,7 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [teamStarFilter, setTeamStarFilter] = useState('all');
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [mailSubject, setMailSubject] = useState('');
   const [mailMessage, setMailMessage] = useState('');
@@ -183,6 +184,10 @@ export default function AdminDashboard() {
 
   const loadUsers = async () => {
     const selectVariants = [
+      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo, consentimiento_comercial',
+      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo, marketing_updates',
+      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo, metadata',
+      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo',
       'id, email, nombre, rol_id, creado_en, activo, consentimiento_comercial',
       'id, email, nombre, rol_id, creado_en, activo, marketing_updates',
       'id, email, nombre, rol_id, creado_en, activo, metadata',
@@ -224,6 +229,7 @@ export default function AdminDashboard() {
 
       return {
         ...item,
+        destacado_equipo: Boolean(item.destacado_equipo),
         marketingAccepted:
           consentFromDirectColumn === null ? consentFromMetadata : consentFromDirectColumn,
       };
@@ -478,6 +484,37 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleTeamStarToggle = async (targetUser) => {
+    if (!targetUser?.id) return;
+    const targetUserId = targetUser.id;
+    const newValue = !Boolean(targetUser.destacado_equipo);
+    setSavingByUser((prev) => ({ ...prev, [targetUserId]: true }));
+    try {
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(targetUserId)}/team-star`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+        body: JSON.stringify({ starred: newValue }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload?.error || 'No se pudo actualizar la estrella del equipo.');
+      }
+      setUsers((prev) =>
+        prev.map((item) =>
+          item.id === targetUserId
+            ? { ...item, destacado_equipo: Boolean(payload.destacado_equipo ?? newValue) }
+            : item,
+        ),
+      );
+    } catch (error) {
+      console.error('Error toggling team star:', error);
+      alert(error.message || 'No se pudo actualizar la estrella del equipo.');
+    } finally {
+      setSavingByUser((prev) => ({ ...prev, [targetUserId]: false }));
+    }
+  };
+
   const toggleUserActive = async (targetUser) => {
     setSavingByUser((prev) => ({ ...prev, [targetUser.id]: true }));
     try {
@@ -598,20 +635,33 @@ export default function AdminDashboard() {
     return acc;
   }, {});
 
-  const filteredUsers = users.filter((item) => {
-    const text = `${item.nombre || ''} ${item.email || ''}`.toLowerCase();
-    const matchesSearch = text.includes(searchTerm.toLowerCase().trim());
-    const matchesRole =
-      roleFilter === 'all' ? true : item.rol_id === roleFilter;
-    const matchesStatus =
-      statusFilter === 'all'
-        ? true
-        : statusFilter === 'active'
-          ? item.activo !== false
-          : item.activo === false;
+  const filteredUsers = users
+    .filter((item) => {
+      const text = `${item.nombre || ''} ${item.email || ''}`.toLowerCase();
+      const matchesSearch = text.includes(searchTerm.toLowerCase().trim());
+      const matchesRole =
+        roleFilter === 'all' ? true : item.rol_id === roleFilter;
+      const matchesStatus =
+        statusFilter === 'all'
+          ? true
+          : statusFilter === 'active'
+            ? item.activo !== false
+            : item.activo === false;
+      const matchesTeamStar =
+        teamStarFilter === 'all' ? true : Boolean(item.destacado_equipo);
 
-    return matchesSearch && matchesRole && matchesStatus;
-  });
+      return matchesSearch && matchesRole && matchesStatus && matchesTeamStar;
+    })
+    .sort((a, b) => {
+      const aStar = a.destacado_equipo ? 0 : 1;
+      const bStar = b.destacado_equipo ? 0 : 1;
+      if (aStar !== bStar) return aStar - bStar;
+      const aTime = new Date(a.creado_en || 0).getTime();
+      const bTime = new Date(b.creado_en || 0).getTime();
+      return bTime - aTime;
+    });
+
+  const starredTeamCount = users.filter((item) => item.destacado_equipo).length;
 
   const selectedUsers = filteredUsers.filter((u) => selectedUserIds.includes(u.id));
   const allFilteredSelected = filteredUsers.length > 0 && filteredUsers.every((u) => selectedUserIds.includes(u.id));
@@ -645,6 +695,7 @@ export default function AdminDashboard() {
         placement_test: placement?.done ? 'Si' : 'No',
         nivel_placement: placement?.level || '—',
         rol: getRoleNameById(item.rol_id),
+        equipo_destacado: item.destacado_equipo ? 'Si' : 'No',
         acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
         conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
         tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
@@ -673,6 +724,7 @@ export default function AdminDashboard() {
         placement_test: placement?.done ? 'Si' : 'No',
         nivel_placement: placement?.level || '—',
         rol: getRoleNameById(item.rol_id),
+        equipo_destacado: item.destacado_equipo ? 'Si' : 'No',
         acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
         conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
         tiempo_sesion: userActivityByUser[item.id]?.totalSessionLabel || '0 s',
@@ -928,7 +980,7 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">Buscar usuario</label>
                 <input
@@ -964,6 +1016,17 @@ export default function AdminDashboard() {
                   <option value="all">Todos</option>
                   <option value="active">Activa</option>
                   <option value="paused">Pausada</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Equipo destacado</label>
+                <select
+                  value={teamStarFilter}
+                  onChange={(e) => setTeamStarFilter(e.target.value)}
+                  className="w-full border rounded px-3 py-2 text-sm"
+                >
+                  <option value="all">Todos ({users.length})</option>
+                  <option value="starred">Solo con estrella ({starredTeamCount})</option>
                 </select>
               </div>
             </div>
@@ -1037,6 +1100,9 @@ export default function AdminDashboard() {
                         aria-label="Seleccionar todos"
                       />
                     </th>
+                    <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      ★
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cambiar rol</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conexión</th>
@@ -1054,7 +1120,7 @@ export default function AdminDashboard() {
                   {filteredUsers.map((item) => {
                     const placement = placementByUser[item.id];
                     return (
-                    <tr key={item.id}>
+                    <tr key={item.id} className={item.destacado_equipo ? 'bg-amber-50/60' : undefined}>
                       <td className="px-6 py-4 text-sm text-gray-900">
                         <input
                           type="checkbox"
@@ -1062,6 +1128,30 @@ export default function AdminDashboard() {
                           onChange={() => toggleSelectUser(item.id)}
                           aria-label={`Seleccionar ${item.email}`}
                         />
+                      </td>
+                      <td className="px-3 py-4 text-sm text-center">
+                        <button
+                          type="button"
+                          onClick={() => handleTeamStarToggle(item)}
+                          disabled={Boolean(savingByUser[item.id])}
+                          className={`text-xl leading-none transition-colors ${
+                            item.destacado_equipo
+                              ? 'text-amber-500 hover:text-amber-600'
+                              : 'text-gray-300 hover:text-amber-400'
+                          }`}
+                          aria-label={
+                            item.destacado_equipo
+                              ? 'Quitar de equipo destacado'
+                              : 'Marcar en equipo destacado'
+                          }
+                          title={
+                            item.destacado_equipo
+                              ? 'Quitar de equipo destacado'
+                              : 'Marcar en equipo destacado'
+                          }
+                        >
+                          {item.destacado_equipo ? '★' : '☆'}
+                        </button>
                       </td>
                       <td className="px-6 py-4 text-sm">
                         <Link

@@ -1,0 +1,116 @@
+{
+  "retrieval_date": "2026-08-11",
+  "sources": [
+    {
+      "id": "handbook_167791",
+      "url": "https://www.cambridgeenglish.org/Images/167791-b2-first-handbook.pdf",
+      "local_path": "docs/writing-v3/calibration/sources/167791-b2-first-handbook.pdf",
+      "sha256": "73F1AB54345E938F2443DB5E7C81E541DF53F1A47B1D92B0D1C1664C17DA1C9A",
+      "identity": "B2 First Handbook for Teachers (Cambridge English)",
+      "used_for": "G-01–G-11 candidate scripts + examiner marks; digital/paper sample answers"
+    },
+    {
+      "id": "sample_answers_182410",
+      "url": "https://www.cambridgeenglish.org/images/182410-first-writing-sample-answers-and-examiner-comments-2015.pdf",
+      "local_path": "docs/writing-v3/calibration/sources/182410-first-writing-sample-answers-and-examiner-comments-2015.pdf",
+      "sha256": "48AE1EB99E966C5479D155EE65E9FE7FE995973CD629F2938B21E700C5E152B7",
+      "identity": "First Writing sample answers and examiner comments (2015)",
+      "used_for": "G-12 Candidate F course review script + marks"
+    },
+    {
+      "id": "sample_paper_1_writing_174037",
+      "url": "https://www.cambridgeenglish.org/Images/174037-b2-first-sample-paper-1.zip",
+      "local_path": "docs/writing-v3/calibration/sources/174037-b2-first-sample-paper-1/B2 First sample paper 1 Writing 2022.pdf",
+      "identity": "B2 First Sample Paper 1 Writing 2022 (official zip)",
+      "used_for": "G-01–G-06 exact digital task prompts"
+    },
+    {
+      "id": "sample_paper_2_writing_178516",
+      "url": "https://www.cambridgeenglish.org/Images/178516-b2-first-sample-paper-2.zip",
+      "local_path": "docs/writing-v3/calibration/sources/178516-b2-first-sample-paper-2/B2 First sample paper 2 Writing 2022.pdf",
+      "identity": "B2 First Sample Paper 2 Writing 2022 (official zip)",
+      "used_for": "G-07–G-12 exact paper task prompts"
+    },
+    {
+      "id": "digital_sample_link",
+      "url": "https://camengli.sh/3YMtIM6",
+      "resolves_to": "https://www.cambridgeenglish.org/exams-and-tests/qualifications/first/preparation/",
+      "digital_writing_player": "https://ceq.inspera.com/player/?assessmentRunId=146732614&context=exam",
+      "note": "Handbook-linked complete digital sample; task wording for digital set taken from matching official sample paper 1 Writing PDF (same scripts as handbook digital samples)."
+    }
+  ],
+  "golden_cases": [
+    {
+      "case_id": "G-01",
+      "task_prompt_checksum": "55b5def94eff75ba4a8972c9899421ad8aa76d7ba48f959531abb7b13f1b4a63",
+      "candidate_response_checksum": "8864b466c0295a2269177719614998d616f4048ee1f5a1f2954f175c0d6057e5",
+      "source_reference": "167791-b2-first-handbook.pdf pp.37–38 digital Candidate A; task from 174037 B2 First sample paper 1 Writing 2022.pdf Part 1 Q1"
+    },
+    {
+      "case_id": "G-02",
+      "task_prompt_checksum": "55b5def94eff75ba4a8972c9899421ad8aa76d7ba48f959531abb7b13f1b4a63",
+      "candidate_response_checksum": "6c959b1eff06083e2c1938c940b6f2abfbe6873a2e7240daff4289d84be57fb4",
+      "source_reference": "167791-b2-first-handbook.pdf pp.38–39 digital Candidate B; task from 174037 Writing 2022 Part 1 Q1"
+    },
+    {
+      "case_id": "G-03",
+      "task_prompt_checksum": "55b5def94eff75ba4a8972c9899421ad8aa76d7ba48f959531abb7b13f1b4a63",
+      "candidate_response_checksum": "7a3f91df0830bcb4dd80ae0f47a42810fc3abb32471ac2f1e8cd73c83991166f",
+      "source_reference": "167791-b2-first-handbook.pdf pp.39–40 digital Candidate C; task from 174037 Writing 2022 Part 1 Q1"
+    },
+    {
+      "case_id": "G-04",
+      "task_prompt_checksum": "a46d8804831d4dfde77ac160595ad7c3fb50abb39558bb514a855dd8336ad044",
+      "candidate_response_checksum": "85949e2bd85bb9010257197d1b33ff1a47956f2cb45d6d2be88d6aa15bfd18e0",
+      "source_reference": "167791-b2-first-handbook.pdf pp.40–41 digital Candidate D; task from 174037 Writing 2022 Part 2 Q2"
+    },
+    {
+      "case_id": "G-05",
+      "task_prompt_checksum": "254ed42d397114b94d761e36c8fdb894f0a037108a51366e3179baaee718d0f8",
+      "candidate_response_checksum": "1d7c93976fa802005147b2217bb11565ab63e30a2ee6c70e7e399f0f89231297",
+      "source_reference": "167791-b2-first-handbook.pdf pp.41–42 digital Candidate E; task from 174037 Writing 2022 Part 2 Q3"
+    },
+    {
+      "case_id": "G-06",
+      "task_prompt_checksum": "77f925c7e807170198ec715135e4e2547fb02064c7610991c5a4668754225043",
+      "candidate_response_checksum": "0354497f654b03f2851b61c495fa417742c0433b4b44232cbc997e7108f2b18e",
+      "source_reference": "167791-b2-first-handbook.pdf pp.42–43 digital Candidate F; task from 174037 Writing 2022 Part 2 Q4"
+    },
+    {
+      "case_id": "G-07",
+      "task_prompt_checksum": "f425c92e7d1905990e18c6351ce83d45b50bfee5b3d2b6a2b166e5e82b321109",
+      "candidate_response_checksum": "0c14e7bc06c706a76d7b81ae8c41076e4fe18b50556d5f8ed9cccb4b01479162",
+      "source_reference": "167791-b2-first-handbook.pdf pp.44–45 paper Candidate A; task from 178516 B2 First sample paper 2 Writing 2022.pdf Part 1 Q1"
+    },
+    {
+      "case_id": "G-08",
+      "task_prompt_checksum": "f425c92e7d1905990e18c6351ce83d45b50bfee5b3d2b6a2b166e5e82b321109",
+      "candidate_response_checksum": "d00c9caea7c9c187279250793b2d6bb32ae3b889789599d3139c0b49a814e409",
+      "source_reference": "167791-b2-first-handbook.pdf pp.45–46 paper Candidate B; task from 178516 Writing 2022 Part 1 Q1"
+    },
+    {
+      "case_id": "G-09",
+      "task_prompt_checksum": "f425c92e7d1905990e18c6351ce83d45b50bfee5b3d2b6a2b166e5e82b321109",
+      "candidate_response_checksum": "94a8316bf7be9ca932838a198f98df863a453a58c47bc9c568cdd2cb53c09fe8",
+      "source_reference": "167791-b2-first-handbook.pdf pp.46–47 paper Candidate C; task from 178516 Writing 2022 Part 1 Q1"
+    },
+    {
+      "case_id": "G-10",
+      "task_prompt_checksum": "ab052e7135af027a1822673aae1ecf14d88aeea1da4417c5dad7ff90b07f52d4",
+      "candidate_response_checksum": "bd1dd550d8c7d69b172d4933edb1294b49797b7230efdfaafbbb1926fc23368a",
+      "source_reference": "167791-b2-first-handbook.pdf pp.47–48 paper Candidate D; task from 178516 Writing 2022 Part 2 Q2"
+    },
+    {
+      "case_id": "G-11",
+      "task_prompt_checksum": "250fa3aebd4a4f08da793dea88961dea2dd4d9d62b09af50169e47993c39371e",
+      "candidate_response_checksum": "f89a616f62a63cb8b00e008ea08ac3dcc1d76ecb2865cee5ffd6f1060ab894f0",
+      "source_reference": "167791-b2-first-handbook.pdf pp.48–49 paper Candidate E; task from 178516 Writing 2022 Part 2 Q3"
+    },
+    {
+      "case_id": "G-12",
+      "task_prompt_checksum": "315fe04b080b0a13ee643ec799aedefb5dd494ace023bdef2b2e6bf380c8dfb1",
+      "candidate_response_checksum": "af63b794651638c15b4c2d3c8f71286e2a23604962a929f40bb6890ca413ebde",
+      "source_reference": "182410-first-writing-sample-answers-and-examiner-comments-2015.pdf Question 4 Candidate F; task from 178516 Writing 2022 Part 2 Q4"
+    }
+  ]
+}

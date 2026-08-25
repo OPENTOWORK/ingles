@@ -1,0 +1,112 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:42:44.383Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-003",
+  "brief_version": "1.0",
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.0",
+  "working_title": "Games that make practice feel different",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3211,
+    "completion_tokens": 910,
+    "total_tokens": 4121
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 195 outside 150–180"
+    ],
+    "warnings": [],
+    "word_count": 195
+  },
+  "exercise": {
+    "part_title": "Part 3: Word Formation",
+    "instructions": "For questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line.",
+    "text_title": "Games that make practice feel different",
+    "passage_with_gaps": "In recent years, the use of games in educational settings has become increasingly common. At a local learning club, a small group of learners gathers around a table, discussing their next move in a cooperative game with the seriousness usually reserved for a formal lesson. The game requires each member to contribute their own ideas, encouraging (0) **INTERACT** among participants. \n\nOne learner explains a plan, not merely choosing the right answer but ensuring everyone understands the (17) **STRATEGY**. This approach fosters communication and teamwork, essential skills in many (18) **PROFESSION**. However, not every attempt is (19) **SUCCESS**. When a plan fails, the group must quickly adapt, demonstrating the importance of feedback and (20) **REVISE**. \n\nThe facilitator observes, stepping back to allow the group to take (21) **RESPONSIBLE** for their decisions. This method shows that games can indeed support learning when the demands of the game align with the skills being practised. It is crucial, however, to acknowledge that not all games are (22) **SUIT** for educational purposes. The key is to find a balance between enjoyment and (23) **PURPOSE** practice. \n\nUltimately, while games offer an engaging way to practise certain skills, they should not be viewed as a (24) **REPLACE** for traditional teaching methods.",
+    "example": {
+      "number": 0,
+      "stem": "INTERACT",
+      "answer": "interaction",
+      "explanation": "The word 'interaction' is a noun formed from the verb 'interact', fitting the context of encouraging communication among participants."
+    },
+    "questions": [
+      {
+        "number": 17,
+        "stem": "STRATEGY",
+        "answer": "strategically",
+        "transformation_type": "noun→adverb",
+        "rationale": "The adverb 'strategically' describes how the plan should be explained, fitting the context of ensuring understanding."
+      },
+      {
+        "number": 18,
+        "stem": "PROFESSION",
+        "answer": "professions",
+        "transformation_type": "noun→plural noun",
+        "rationale": "The plural noun 'professions' fits the context of essential skills needed in various professional fields."
+      },
+      {
+        "number": 19,
+        "stem": "SUCCESS",
+        "answer": "successful",
+        "transformation_type": "noun→adjective",
+        "rationale": "The adjective 'successful' describes whether the attempt was achieved, fitting the context of attempts and outcomes."
+      },
+      {
+        "number": 20,
+        "stem": "REVISE",
+        "answer": "revision",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'revision' fits the context of making changes based on feedback, aligning with the need for adjustment."
+      },
+      {
+        "number": 21,
+        "stem": "RESPONSIBLE",
+        "answer": "responsibility",
+        "transformation_type": "adjective→noun",
+        "rationale": "The noun 'responsibility' fits the context of taking charge of decisions, aligning with the facilitator's role."
+      },
+      {
+        "number": 22,
+        "stem": "SUIT",
+        "answer": "suitable",
+        "transformation_type": "verb→adjective",
+        "rationale": "The adjective 'suitable' describes whether the games fit educational purposes, aligning with the context of appropriateness."
+      },
+      {
+        "number": 23,
+        "stem": "PURPOSE",
+        "answer": "purposeful",
+        "transformation_type": "noun→adjective",
+        "rationale": "The adjective 'purposeful' describes the type of practice, fitting the context of balancing enjoyment with intention."
+      },
+      {
+        "number": 24,
+        "stem": "REPLACE",
+        "answer": "replacement",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'replacement' fits the context of discussing whether games can substitute traditional methods."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise aligns with the brief by discussing the educational use of games and the balance between enjoyment and purposeful practice.",
+      "style_card_notes": "The text maintains a reporting tone, focusing on educational trends and their implications, as guided by the style card.",
+      "british_english_notes": "The text uses British English spelling and conventions appropriately.",
+      "factuality_notes": "The text avoids making unfounded claims about the educational efficacy of games, aligning with the brief's factuality guidelines.",
+      "answer_validity_notes": "Each gap has a single valid answer, ensuring clarity and precision in word formation.",
+      "self_check_flags": []
+    },
+    "_word_count": 195
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

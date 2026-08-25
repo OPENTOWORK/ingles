@@ -1,0 +1,283 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:29:11.226Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-007",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-05",
+  "working_title": "The place you reach after the road ends",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 1 passage is 186 words; target is 150–180 (accepted up to 200 for generation).",
+      "Solver flagged Q1 as ambiguous (B/C): Both 'involves' and 'demands' collocate naturally with 'a deliberate slowing of the journey' and are appropriate for a B2 level..",
+      "Solver flagged Q7 as ambiguous (A/C): 'Reflect' and 'consider' both fit the meaning and are suitable collocations with 'on their surroundings'..",
+      "Rubric verdict: revise. Issues: item 1 has two defensible answers | item 4 preposition on is preferred but not the only possible choice | item 5 subtle difference between inconvenience and bother | item 8 verbs have overlapping meanings",
+      "Weak item Q1: Two options (A requires and C demands) are very close in meaning, making the best answer debatable"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 5,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 1,
+    "quality_review_hard_findings": [
+      "Blind-solve disagreed with the answer key on 3 items: Q1 (key A, solver B), Q4 (key D, solver A), Q8 (key B, solver D). Likely ambiguous items or wrong keys."
+    ]
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": {
+    "ok": false,
+    "errors": [
+      "Blind-solve disagreed with the answer key on 3 items: Q1 (key A, solver B), Q4 (key D, solver A), Q8 (key B, solver D). Likely ambiguous items or wrong keys."
+    ],
+    "warnings": [
+      "Solver flagged Q1 as ambiguous (B/C): Both 'involves' and 'demands' collocate naturally with 'a deliberate slowing of the journey' and are appropriate for a B2 level..",
+      "Solver flagged Q7 as ambiguous (A/C): 'Reflect' and 'consider' both fit the meaning and are suitable collocations with 'on their surroundings'..",
+      "Rubric verdict: revise. Issues: item 1 has two defensible answers | item 4 preposition on is preferred but not the only possible choice | item 5 subtle difference between inconvenience and bother | item 8 verbs have overlapping meanings",
+      "Weak item Q1: Two options (A requires and C demands) are very close in meaning, making the best answer debatable"
+    ],
+    "blindSolve": {
+      "mismatches": [
+        {
+          "number": 1,
+          "key": "A",
+          "solver": "B"
+        },
+        {
+          "number": 4,
+          "key": "D",
+          "solver": "A"
+        },
+        {
+          "number": 8,
+          "key": "B",
+          "solver": "D"
+        }
+      ],
+      "ambiguous": [
+        {
+          "number": 1,
+          "letters": [
+            "B",
+            "C"
+          ],
+          "reason": "Both 'involves' and 'demands' collocate naturally with 'a deliberate slowing of the journey' and are appropriate for a B2 level."
+        },
+        {
+          "number": 7,
+          "letters": [
+            "A",
+            "C"
+          ],
+          "reason": "'Reflect' and 'consider' both fit the meaning and are suitable collocations with 'on their surroundings'."
+        }
+      ],
+      "solvedCount": 8
+    },
+    "rubric": {
+      "cefrLevel": "B2",
+      "textNaturalness": 4,
+      "questionClarity": 5,
+      "distractorQuality": 4,
+      "verbOnlyItems": 1,
+      "categoriesTested": [
+        "verb collocation",
+        "adjective choice",
+        "verb choice",
+        "preposition",
+        "noun choice (abstract)",
+        "verb choice (phrasal meaning)"
+      ],
+      "weakItems": [
+        {
+          "number": 1,
+          "problem": "Two options (A requires and C demands) are very close in meaning, making the best answer debatable"
+        }
+      ],
+      "realisticB2": true,
+      "issues": [
+        "item 1 has two defensible answers",
+        "item 4 preposition on is preferred but not the only possible choice",
+        "item 5 subtle difference between inconvenience and bother",
+        "item 8 verbs have overlapping meanings"
+      ],
+      "verdict": "revise"
+    }
+  },
+  "generated": {
+    "partTitle": "Reading and Use of English Part 1",
+    "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+    "title": "The place you reach after the road ends",
+    "passage": "At the very end of the road, where the vehicles must stop and the paved surface (0) ___, lies a small coastal settlement. Visitors arrive either by a brief local ferry or on foot, which (1) ___ a deliberate slowing of the journey. This limited access means people cannot simply travel whenever they want, so planning ahead becomes (2) ___ to avoid long waits. The absence of cars beyond the main point has a subtle effect: it encourages visitors to (3) ___ the village at a more relaxed pace. Local life becomes immediately visible – fishermen arriving with their daily catch and residents walking between houses (4) ___ their errands. At first, carrying luggage over uneven paths can feel like (5) ___, but soon it blends into the rhythm here. What might seem inconvenient at first is actually part of the place's (6) ___; it prevents it from feeling like many other destinations. This practical constraint allows visitors to appreciate the community’s unique pace and quieter moments, offering a chance to (7) ___ on their surroundings rather than rush past. In this way, the journey has not only brought people to the destination but has (8) ___ how they experience it.",
+    "example": {
+      "number": 0,
+      "options": [
+        "A) ends",
+        "B) stops",
+        "C) finishes",
+        "D) breaks"
+      ],
+      "answer": "C",
+      "explanation": "“Finishes” fits best because it collocates naturally with 'the paved surface' ending, unlike the others."
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 1,
+        "type": "mcq",
+        "options": [
+          "A) requires",
+          "B) involves",
+          "C) demands",
+          "D) compels"
+        ]
+      },
+      {
+        "id": "q2",
+        "number": 2,
+        "type": "mcq",
+        "options": [
+          "A) vital",
+          "B) useful",
+          "C) essential",
+          "D) necessary"
+        ]
+      },
+      {
+        "id": "q3",
+        "number": 3,
+        "type": "mcq",
+        "options": [
+          "A) visit",
+          "B) inspect",
+          "C) observe",
+          "D) explore"
+        ]
+      },
+      {
+        "id": "q4",
+        "number": 4,
+        "type": "mcq",
+        "options": [
+          "A) in",
+          "B) at",
+          "C) with",
+          "D) on"
+        ]
+      },
+      {
+        "id": "q5",
+        "number": 5,
+        "type": "mcq",
+        "options": [
+          "A) trouble",
+          "B) inconvenience",
+          "C) bother",
+          "D) difficulty"
+        ]
+      },
+      {
+        "id": "q6",
+        "number": 6,
+        "type": "mcq",
+        "options": [
+          "A) nature",
+          "B) identity",
+          "C) character",
+          "D) personality"
+        ]
+      },
+      {
+        "id": "q7",
+        "number": 7,
+        "type": "mcq",
+        "options": [
+          "A) reflect",
+          "B) focus",
+          "C) consider",
+          "D) concentrate"
+        ]
+      },
+      {
+        "id": "q8",
+        "number": 8,
+        "type": "mcq",
+        "options": [
+          "A) modified",
+          "B) reshaped",
+          "C) changed",
+          "D) transformed"
+        ]
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "answer": "A",
+        "number": 1
+      },
+      {
+        "id": "q2",
+        "answer": "C",
+        "number": 2
+      },
+      {
+        "id": "q3",
+        "answer": "D",
+        "number": 3
+      },
+      {
+        "id": "q4",
+        "answer": "D",
+        "number": 4
+      },
+      {
+        "id": "q5",
+        "answer": "B",
+        "number": 5
+      },
+      {
+        "id": "q6",
+        "answer": "C",
+        "number": 6
+      },
+      {
+        "id": "q7",
+        "answer": "A",
+        "number": 7
+      },
+      {
+        "id": "q8",
+        "answer": "B",
+        "number": 8
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 1,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Example:\nA) ends\nB) stops\nC) finishes\nD) breaks\nAnswer: C\nText\nThe place you reach after the road ends\nAt the very end of the road, where the vehicles must stop and the paved surface (0) ___, lies a small coastal settlement. Visitors arrive either by a brief local ferry or on foot, which (1) ___ a deliberate slowing of the journey. This limited access means people cannot simply travel whenever they want, so planning ahead becomes (2) ___ to avoid long waits. The absence of cars beyond the main point has a subtle effect: it encourages visitors to (3) ___ the village at a more relaxed pace. Local life becomes immediately visible – fishermen arriving with their daily catch and residents walking between houses (4) ___ their errands. At first, carrying luggage over uneven paths can feel like (5) ___, but soon it blends into the rhythm here. What might seem inconvenient at first is actually part of the place's (6) ___; it prevents it from feeling like many other destinations. This practical constraint allows visitors to appreciate the community’s unique pace and quieter moments, offering a chance to (7) ___ on their surroundings rather than rush past. In this way, the journey has not only brought people to the destination but has (8) ___ how they experience it.\nQuestions\n\n1\nA requires\nB involves\nC demands\nD compels\n\n2\nA vital\nB useful\nC essential\nD necessary\n\n3\nA visit\nB inspect\nC observe\nD explore\n\n4\nA in\nB at\nC with\nD on\n\n5\nA trouble\nB inconvenience\nC bother\nD difficulty\n\n6\nA nature\nB identity\nC character\nD personality\n\n7\nA reflect\nB focus\nC consider\nD concentrate\n\n8\nA modified\nB reshaped\nC changed\nD transformed",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

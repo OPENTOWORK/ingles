@@ -8,18 +8,19 @@ import HomeInstallAppButton from '@/components/home/HomeInstallAppButton';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useUserRole } from '@/context/UserRoleContext';
+import { isStudentRole } from '@/utils/authRoles';
 
 const FEATURES = [
   'Interactive',
   'Personalised progress',
   'Instant feedback',
-  'Free to use',
 ];
 
 export default function Home() {
-  const { session } = useUserRole();
+  const { session, userRole } = useUserRole();
   const { startTour } = useGuidedTour();
   const isRegistered = Boolean(session?.user);
+  const isStudentView = isRegistered && isStudentRole(userRole);
   return (
     <main className="home-page">
       <div className="home-page__inner">
@@ -40,11 +41,13 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            <div className="home-hero__cta">
-              <Link href="/niveles" className="home-cta__btn home-cta__btn--inline">
-                Start practising
-              </Link>
-            </div>
+            {!isStudentView ? (
+              <div className="home-hero__cta">
+                <Link href="/niveles" className="home-cta__btn home-cta__btn--inline">
+                  Start practising
+                </Link>
+              </div>
+            ) : null}
           </div>
 
           <div className="home-hero__mascot">

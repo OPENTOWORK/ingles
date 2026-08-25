@@ -1,0 +1,186 @@
+DRALO
+
+RUOE QA LESSONS LEARNED
+
+Pilot evidence → root cause → approved system destination
+
+Version 1.0 · 14 August 2026
+
+
+
+1. Purpose
+
+This document is the audit trail for human feedback. It is not the runtime brain. Any lesson judged important enough for future prevention must be promoted into the appropriate Style Card, Part prompt, validator or architecture specification.
+
+2. Pilot findings promoted to system rules
+
+ID
+
+Evidence
+
+Finding
+
+Destination
+
+System action
+
+Status
+
+QA-001
+
+P1 E02
+
+Two distractors/correct answers defensible in Q6/Q8.
+
+Item-generation + validator
+
+Adversarial option test; multi-defensible = HARD FAIL.
+
+PROMOTED
+
+QA-002
+
+P3 E01
+
+ADAPT→adapt; no prefix/negative variety.
+
+P3 prompt + validator
+
+Require genuine derivation variety; root=answer default fail.
+
+PROMOTED
+
+QA-003
+
+P3 E02
+
+Naturalness sacrificed to planned word formation.
+
+P3 prompt + Editorial Quality
+
+Change stem/item before forcing unnatural prose.
+
+PROMOTED
+
+QA-004
+
+P5 E01
+
+Repetitive final paragraphs / filler.
+
+Editorial Quality + Style Card
+
+Every paragraph must advance; redundancy scan.
+
+PROMOTED
+
+QA-005
+
+P5 E02
+
+Weak distractors not grounded in real text information.
+
+P5 prompt + validator
+
+Build plausible distractors from passage content; adversarial discrimination.
+
+PROMOTED
+
+QA-006
+
+P5 E02
+
+Question references wrong paragraph location.
+
+P5 validator
+
+Reference integrity check against final text.
+
+PROMOTED
+
+QA-007
+
+P6 E01+E02
+
+A–G answers remain duplicated inside passage.
+
+P6 architecture + HARD validator
+
+Generate full text → remove six sentences → gap → add distractor → validate no duplication.
+
+PROMOTED
+
+QA-008
+
+P6 E01+E02
+
+Options too short/simple versus reference mechanism.
+
+P6 prompt + quality validator
+
+One complete but meaningfully developed sentence; soft length range; cohesion-rich options.
+
+PROMOTED
+
+QA-009
+
+P7 E02
+
+Literal word matching makes item too easy.
+
+P7 prompt + validator
+
+Paraphrase evidence; lexical-overlap warning.
+
+PROMOTED
+
+QA-010
+
+Multiple Parts
+
+Grammatical but unnatural/AI-like phrasing.
+
+Editorial Quality + Style Cards
+
+Global naturalness standard + independent editorial validator.
+
+PROMOTED
+
+QA-011
+
+Multiple Parts
+
+Titles feel formulaic/literal.
+
+Style Cards + Editorial Quality + history
+
+Title families, 3-candidate generation, pattern-history check.
+
+PROMOTED
+
+QA-012
+
+P1/P2/P3/P7
+
+Minor target-length drift.
+
+Part validators
+
+Keep as mechanical target/warning; do not alter Topic Bank.
+
+RETAINED
+
+
+
+3. Promotion rule for future feedback
+
+• One isolated teacher preference → record first; do not automatically alter architecture.
+
+• Repeated issue across exercises or a clear exam-mechanic violation → propose promotion to system rule.
+
+• Human approval is required before changing a structural source of truth.
+
+• Once promoted, record the destination layer and version in this register.
+
+• Do not rely on Cursor conversation memory as persistence.
+

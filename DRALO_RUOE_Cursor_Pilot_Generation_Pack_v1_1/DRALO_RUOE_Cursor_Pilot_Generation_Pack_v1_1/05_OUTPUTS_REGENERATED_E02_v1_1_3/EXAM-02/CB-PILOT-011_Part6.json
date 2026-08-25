@@ -1,0 +1,126 @@
+{
+  "pack_version": "1.1.3-e02-regenerated",
+  "generation_version": "pilot-regen-e02-v1.1.3",
+  "generated_at": "2026-08-19T12:12:23.016Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-011",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-03",
+  "working_title": "The evening routine that was really a work problem",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[TEST-P6-MULTIFIT] option C: Option may fully fit multiple gaps (heuristic cohesion score)."
+    ],
+    "warnings": [
+      "Part 6 passage is 494 words; target is 500–600 (accepted from 350 for generation).",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 1,
+    "warning_count": 2
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 6: Gapped text",
+    "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+    "title": "The evening routine that was really a work problem",
+    "passage": "I always believed that the secret to feeling refreshed in the evening was a carefully planned routine. I would arrange my time after work with precision—brewing herbal tea just right, reading a chapter of a book, and avoiding screens. Yet, despite all my best efforts, those evenings still felt exhausting rather than relaxing. (37) It was clear that no combination of relaxing activities could fix this constant tiredness.\n\nEven after all those surface-level changes, I found myself mentally sifting through unfinished tasks, replaying email threads in my mind or wondering if I’d missed a message. I tried turning off notifications and setting strict times to check work emails, hoping that cutting back on screen time would ease my mind. (38) But the nagging feeling of not having fully “logged off” from work haunted every attempt.\n\nThis only became undeniable one evening when I found a reminder for an incomplete task pinned to my desk, which I hadn’t addressed properly during the day. That small interruption made me realise how much unfinished work I was carrying mentally into my personal time. I wasn’t really ending my workday at all; the boundary between work and home was simply blurred. (39) From that moment, I understood that my exhaustion was less about bedtime habits, and more about not closing the chapter on work.\n\nMotivated by this insight, I introduced a straightforward end-of-work ritual: I would write down the first task for the next day, organise my workspace, and physically put away all work-related materials. This simple act became my signal that work was truly over for the day and that the evening belonged to me. (40) I found comfort in this clear separation, though it took some effort to stick to it consistently.\n\nHowever, old habits died hard. On several occasions, I felt tempted to reopen my laptop just to check one last thing or respond to a quick message. That tiny slip would pull me back into work mode, undoing the mental boundary I had tried to set. (41) Yet, recognising the pattern helped me resist these urges more effectively each time, and I grew more confident in protecting my evening space.\n\nGradually, I noticed that my attention in the evenings shifted towards activities that were not tied to work. I didn’t suddenly start sleeping like a baby or claim miraculous energy boosts, but there was a difference in how occupied my mind felt. Evening time felt less dominated by work worries and more open for genuine relaxation. (42) This transition, although subtle, was enough to change my experience of after-hours completely.\n\nLooking back, I realise that the useful change was never about finding a perfect sleep routine. Instead, it was about establishing a clear boundary between working hours and personal time. Creating that end-of-day line allowed me to mentally switch off without any unrealistic promises about sleep quality. (37) There’s no magic formula for sleep, but treating evenings as a space free from work chatter has certainly made a difference for me.",
+    "passageWordCount": 565,
+    "sentencePool": [
+      "A) I had tried countless combinations of activities, hoping one would finally ease the tiredness, but nothing seemed to work completely.",
+      "B) Despite the temptation to check the unfinished tasks, I gradually learned to avoid revisiting work, aware that it disturbed my peace.",
+      "C) This made me think that the problem might require more than just tweaking my bedtime habits; perhaps I needed to rethink how I ended work altogether.",
+      "D) This simple ritual was not about productivity but about signalling to myself that the workday had finished and personal time had started.",
+      "E) It was surprising how a physical action like tidying my desk could make such a mental impact on my evening routine.",
+      "F) Although these temptations challenged my new boundary, acknowledging them was part of adapting to this change.",
+      "G) While this change didn’t transform my sleep overnight, it shifted my evenings into a space where work no longer dominated my thoughts."
+    ],
+    "questions": [
+      {
+        "id": 37,
+        "number": 37
+      },
+      {
+        "id": 38,
+        "number": 38
+      },
+      {
+        "id": 39,
+        "number": 39
+      },
+      {
+        "id": 40,
+        "number": 40
+      },
+      {
+        "id": 41,
+        "number": 41
+      },
+      {
+        "id": 42,
+        "number": 42
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": 37,
+        "number": 37,
+        "answer": "A"
+      },
+      {
+        "id": 38,
+        "number": 38,
+        "answer": "C"
+      },
+      {
+        "id": 39,
+        "number": 39,
+        "answer": "E"
+      },
+      {
+        "id": 40,
+        "number": 40,
+        "answer": "D"
+      },
+      {
+        "id": 41,
+        "number": 41,
+        "answer": "F"
+      },
+      {
+        "id": 42,
+        "number": 42,
+        "answer": "G"
+      }
+    ],
+    "sections": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 6,
+    "audioClips": [],
+    "titlePatternFamily": "the_x_that"
+  },
+  "enunciado_preview": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.\nText\nThe evening routine that was really a work problem\nI always believed that the secret to feeling refreshed in the evening was a carefully planned routine. I would arrange my time after work with precision—brewing herbal tea just right, reading a chapter of a book, and avoiding screens. Yet, despite all my best efforts, those evenings still felt exhausting rather than relaxing. (37) It was clear that no combination of relaxing activities could fix this constant tiredness.\nEven after all those surface-level changes, I found myself mentally sifting through unfinished tasks, replaying email threads in my mind or wondering if I’d missed a message. I tried turning off notifications and setting strict times to check work emails, hoping that cutting back on screen time would ease my mind. (38) But the nagging feeling of not having fully “logged off” from work haunted every attempt.\nThis only became undeniable one evening when I found a reminder for an incomplete task pinned to my desk, which I hadn’t addressed properly during the day. That small interruption made me realise how much unfinished work I was carrying mentally into my personal time. I wasn’t really ending my workday at all; the boundary between work and home was simply blurred. (39) From that moment, I understood that my exhaustion was less about bedtime habits, and more about not closing the chapter on work.\nMotivated by this insight, I introduced a straightforward end-of-work ritual: I would write down the first task for the next day, organise my workspace, and physically put away all work-related materials. This simple act became my signal that work was truly over for the day and that the evening belonged to me. (40) I found comfort in this clear separation, though it took some effort to stick to it consistently.\nHowever, old habits died hard. On several occasions, I felt tempted to reopen my laptop just to check one last thing or respond to a quick message. That tiny slip would pull me back into work mode, undoing the mental boundary I had tried to set. (41) Yet, recognising the pattern helped me resist these urges more effectively each time, and I grew more confident in protecting my evening space.\nGradually, I noticed that my attention in the evenings shifted towards activities that were not tied to work. I didn’t suddenly start sleeping like a baby or claim miraculous energy boosts, but there was a difference in how occupied my mind felt. Evening time felt less dominated by work worries and more open for genuine relaxation. (42) This transition, although subtle, was enough to change my experience of after-hours completely.\nLooking back, I realise that the useful change was never about finding a perfect sleep routine. Instead, it was about establishing a clear boundary between working hours and personal time. Creating that end-of-day line allowed me to mentally switch off without any unrealistic promises about sleep quality. (37) There’s no magic formula for sleep, but treating evenings as a space free from work chatter has certainly made a difference for me.\n\nSentences\nA I had tried countless combinations of activities, hoping one would finally ease the tiredness, but nothing seemed to work completely.\nB Despite the temptation to check the unfinished tasks, I gradually learned to avoid revisiting work, aware that it disturbed my peace.\nC This made me think that the problem might require more than just tweaking my bedtime habits; perhaps I needed to rethink how I ended work altogether.\nD This simple ritual was not about productivity but about signalling to myself that the workday had finished and personal time had started.\nE It was surprising how a physical action like tidying my desk could make such a mental impact on my evening routine.\nF Although these temptations challenged my new boundary, acknowledging them was part of adapting to this change.\nG While this change didn’t transform my sleep overnight, it shifted my evenings into a space where work no longer dominated my thoughts.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

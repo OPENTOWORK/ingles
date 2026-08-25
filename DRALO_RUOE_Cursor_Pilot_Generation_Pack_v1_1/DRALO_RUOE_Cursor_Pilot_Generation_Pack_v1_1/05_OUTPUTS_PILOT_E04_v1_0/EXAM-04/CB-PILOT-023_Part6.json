@@ -1,0 +1,134 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E04",
+  "ruoe_exam_id": "RUOE-PILOT-E04",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-023",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-01",
+  "style_card_version": "v1.1",
+  "working_title": "Bringing back a river’s summer",
+  "final_title": "The cheapest thing they did",
+  "title_candidates": [
+    "The cheapest thing they did",
+    "Last on the list",
+    "What the trees were actually for"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Gap 39 is a paragraph-initial gap; the brief prefers gaps inside paragraphs, and five of the six are."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Each gap was re-solved with the pool shuffled. Every gap resolved to one option and the extra fitted nowhere.",
+    "repairs_applied": [
+      "The observable-change sentence was moved out of the three-year-delay sentence during drafting so that gap 41 carries the outcome rather than the delay."
+    ],
+    "teacher_attention_items": []
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 6",
+    "directions": "Part 6: Gapped text\nYou are going to read an article. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (37–42). There is one extra sentence which you do not need to use.",
+    "partNumber": 6,
+    "title": "The cheapest thing they did",
+    "titlePatternFamily": "superlative_title",
+    "passage": "Most of the money went into the riverbed. Two winters of work, a great deal of heavy machinery and a budget that had taken four years to assemble were spent on reshaping two miles of a small river in a valley in the west of England. The measure that made the difference cost less than a tenth of that, took a single winter to carry out and had been ranked last on the list of options. It was planting trees along the bank, an item that had been costed in a single afternoon and very nearly left out.\n\nThe problem was easy enough to describe. The river had been straightened and deepened a century earlier to drain the fields beside it, and the fish that had once spawned along that stretch no longer did. (37) ___ The team therefore proposed two measures: restoring some of the bends the river had lost, and putting gravel back into a bed that had been scoured down to bare clay.\n\nThe bends came first, and they worked, up to a point. Within two seasons the water had slowed where it was meant to slow, silt had begun to collect on the inside of each curve, and a stretch that had been uniformly grey was visibly varied. Insect life increased. (38) ___ The fish, however, did not come back in any number that anybody was willing to report.\n\n(39) ___ Sixty lorry-loads of graded gravel were laid over eleven months, at a cost that consumed most of what remained. For one summer the bed looked exactly as the drawings had promised. Then, in the second August, its surface turned the same dull green as the old one, and by September a good deal of it had silted over again.\n\nNeither measure had touched the thing that was actually limiting the river, and it took an unusually hot summer to make that obvious. (40) ___ Warm water holds less oxygen than cold water, and below a certain point it holds too little for the eggs of the species the scheme was meant to bring back, whatever the gravel beneath them looks like. The straightening had done more than alter the shape of the channel. It had removed almost every tree that used to stand over it.\n\nPlanting was the last item on the list because it was the cheapest and the slowest. Two thousand young trees went in along both banks over a single winter, mostly alder and willow, protected from deer by tubes that the volunteers still complain about. Nothing visible happened for three years, which is roughly how long it takes a willow to cast a useful shadow. (41) ___ The difference showed up first in the insects and then, the following year, in the fish.\n\nThe team now begins with temperature. Before anything is dug or delivered, somebody spends a summer measuring the water at the warmest hour of the warmest weeks, and the results decide the order of everything else. (42) ___ On a shaded upland stream, or on a river whose difficulty really is the absence of gravel, planting more trees would achieve very little. What this valley demonstrated was not that shade always matters, but that the cheapest item on a list is not the same as the least important one.",
+    "passageWordCount": 545,
+    "sentencePool": [
+      "A) By the fifth summer the shaded sections were running two or three degrees cooler than the open ones at the same hour of the day.",
+      "B) Both of the obvious explanations concerned the shape of the channel: the water ran too fast, and there was nowhere for eggs to settle.",
+      "C) Rivers of this kind were once common across the whole of lowland Britain, and only a handful now run as they used to.",
+      "D) The stretch had no shade at all, and in July the water in it reached temperatures that would have been unremarkable in a pond.",
+      "E) The second measure was more expensive than the first and, at the outset, a good deal more convincing.",
+      "F) That is a rule about sequence rather than about trees, and it does not transfer everywhere.",
+      "G) Even so, the change was easier to see than to measure, and the counts taken that autumn were much the same as before."
+    ],
+    "questions": [
+      {
+        "id": "q37",
+        "number": 37
+      },
+      {
+        "id": "q38",
+        "number": 38
+      },
+      {
+        "id": "q39",
+        "number": 39
+      },
+      {
+        "id": "q40",
+        "number": 40
+      },
+      {
+        "id": "q41",
+        "number": 41
+      },
+      {
+        "id": "q42",
+        "number": 42
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q37",
+        "number": 37,
+        "answer": "B",
+        "rationale": "Backward: the two explanations follow directly from the straightening and deepening. Forward: “The team therefore proposed two measures” needs a diagnosis to reason from, and the two measures answer the two explanations in order."
+      },
+      {
+        "id": "q38",
+        "number": 38,
+        "answer": "G",
+        "rationale": "“Even so” concedes the visible improvements just listed, and the following “however” about the fish depends on the counts already having been described as unchanged."
+      },
+      {
+        "id": "q39",
+        "number": 39,
+        "answer": "E",
+        "rationale": "Opens the paragraph by contrasting the second measure with the first, which is what allows the next sentence to start straight in with the lorry-loads."
+      },
+      {
+        "id": "q40",
+        "number": 40,
+        "answer": "D",
+        "rationale": "Backward: it explains what the hot summer made obvious. Forward: the oxygen sentence only makes sense once high water temperature has been introduced."
+      },
+      {
+        "id": "q41",
+        "number": 41,
+        "answer": "A",
+        "rationale": "Supplies the observable change after the three-year delay and gives “The difference” in the following sentence something to refer to."
+      },
+      {
+        "id": "q42",
+        "number": 42,
+        "answer": "F",
+        "rationale": "“That is a rule about sequence” refers back to the new measuring procedure, and “it does not transfer everywhere” sets up the two counter-examples that follow."
+      }
+    ],
+    "unusedOption": "C"
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

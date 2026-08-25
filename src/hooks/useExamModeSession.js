@@ -2,12 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUserRole } from '@/context/UserRoleContext';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import {
   shouldSyncExamModeSessionToServer,
   shouldClearExamSlotPuntuacionesOnRepeat,
 } from '@/lib/b2ScoringV2FeatureFlag';
 import {
+  applyExamModeStudentRestrictions,
   completeExamModeSection,
   getOrCreateExamModeSession,
   loadExamModeSession,
@@ -44,6 +46,7 @@ const TIMER_SERVER_SYNC_MS = 30000;
  */
 export function useExamModeSession(slug, examSlot) {
   const router = useRouter();
+  const { userRole } = useUserRole();
   const [session, setSession] = useState(null);
   const [userId, setUserId] = useState('');
   const [ready, setReady] = useState(false);
@@ -61,11 +64,11 @@ export function useExamModeSession(slug, examSlot) {
     void (async () => {
       const uid = (await getSessionUserId()) || '';
       setUserId(uid);
-      const s = getOrCreateExamModeSession(slug, examSlot, uid);
+      const s = getOrCreateExamModeSession(slug, examSlot, uid, userRole);
       setSession(s);
       setReady(true);
     })();
-  }, [slug, examSlot]);
+  }, [slug, examSlot, userRole]);
 
   const flushServerSync = useCallback(() => {
     if (serverSyncTimerRef.current) {
@@ -131,16 +134,16 @@ export function useExamModeSession(slug, examSlot) {
 
   const reload = useCallback(() => {
     const s = loadExamModeSession(slug, examSlot, userId);
-    if (s) setSession(s);
-  }, [slug, examSlot, userId]);
+    if (s) setSession(applyExamModeStudentRestrictions(s, userRole));
+  }, [slug, examSlot, userId, userRole]);
 
   const finishSection = useCallback(
     (sectionKey, answers, scores) => {
       if (!session) return null;
-      const next = completeExamModeSection(session, sectionKey, answers, scores);
+      const next = completeExamModeSection(session, sectionKey, answers, scores, userRole);
       return persist(next);
     },
-    [session, persist],
+    [session, persist, userRole],
   );
 
   const touchSectionTimer = useCallback(
@@ -168,11 +171,11 @@ export function useExamModeSession(slug, examSlot) {
   );
 
   const resetExam = useCallback(() => {
-    const fresh = resetExamModeSession(slug, examSlot, userId);
+    const fresh = resetExamModeSession(slug, examSlot, userId, userRole);
     setSession(fresh);
     void syncExamModeToServer(fresh, userId);
     return fresh;
-  }, [slug, examSlot, userId]);
+  }, [slug, examSlot, userId, userRole]);
 
   const repeatExam = useCallback(
     async (options = {}) => {

@@ -1,0 +1,190 @@
+DRALO
+
+RUOE EDITORIAL QUALITY STANDARD
+
+Global language, authenticity and title rules for B2 RUOE generation
+
+Version 1.0 · 14 August 2026
+
+
+
+1. Purpose
+
+This standard is a global quality layer for Parts 1, 2, 3, 5, 6 and 7. It does not replace Topic Bank, Style Cards, Content Briefs or Part mechanics. It governs whether generated language is publishable-quality DRALO English after the structural requirements have been met.
+
+Core principle
+
+A sentence must not merely be grammatical. It must be natural, idiomatic, genre-appropriate British English at B2 level. Exercise mechanics must adapt to natural language, not the other way round.
+
+
+
+2. Global editorial rules
+
+ID
+
+Rule
+
+Operational meaning
+
+EQS-01
+
+Naturalness before item convenience
+
+If an item, stem, option or gap forces awkward wording, redesign the item rather than preserve the awkward sentence.
+
+EQS-02
+
+Idiomatic collocation
+
+Prefer common, defensible lexical combinations. Reject technically possible but noticeably unnatural collocations.
+
+EQS-03
+
+Concrete before abstract
+
+Prefer concrete verbs, actions and situations over unnecessary nominalisation, corporate language or vague abstraction.
+
+EQS-04
+
+Genre authenticity
+
+The text should sound like a plausible magazine, feature, report, narrative or profile, not like instructions translated into prose.
+
+EQS-05
+
+No filler
+
+Every paragraph must add a new event, fact, contrast, perspective, example, consequence or inference. Repetition to reach word count is not acceptable.
+
+EQS-06
+
+Controlled repetition
+
+Key lexical repetition may support cohesion, but repeated conclusions, repeated evaluative language or repeated abstract nouns must be flagged.
+
+EQS-07
+
+B2 control
+
+Do not increase complexity simply to sound sophisticated. Natural B2 is preferable to forced C1/C2 phrasing.
+
+EQS-08
+
+British English
+
+Prefer natural British usage where alternatives exist, without forcing artificial Britishisms.
+
+EQS-09
+
+Item invisibility
+
+If the exercise mechanics were removed, the remaining text should still read like natural prose.
+
+EQS-10
+
+Adversarial review
+
+A validator must actively try to disprove answer uniqueness and naturalness; generator self-claims are not sufficient evidence.
+
+
+
+3. Title Quality Standard
+
+Titles are editorial elements, not labels copied from the Content Brief. The generator should create multiple candidates internally and select one after checking naturalness, originality and recent title patterns.
+
+• TQ-01 · Do not paraphrase the brief literally.
+
+• TQ-02 · Do not reveal the complete lesson, conclusion or answer of the text.
+
+• TQ-03 · Avoid repeated templates such as “The X that…”, “What happens when…”, “When X…” across a batch.
+
+• TQ-04 · Prefer a concrete image, intriguing observation, understated contrast, concise statement, personal realisation or genuinely useful question.
+
+• TQ-05 · Title wording must be natural for the assigned Style Card and text genre.
+
+• TQ-06 · Generate at least 3 candidate titles internally; score them for naturalness, distinctiveness, genre fit and overlap with recent titles.
+
+• TQ-07 · Usage History should store final title plus a coarse title-pattern family so repetitive patterns can be detected longitudinally.
+
+4. Editorial Quality Validator
+
+Run this as a separate pass after the Part-specific structural validator. It should not be the same generation call that produced the exercise.
+
+Dimension
+
+Validator behaviour
+
+Naturalness
+
+Flag awkward collocations, translated-sounding phrasing, over-abstract language and sentences that a competent editor would normally rewrite.
+
+Redundancy
+
+Detect repeated ideas, repeated conclusions, filler paragraphs and excessive recurrence of the same lexical family.
+
+Genre fit
+
+Check that voice, register and paragraph movement match the assigned Style Card.
+
+Title quality
+
+Check title-pattern repetition, literal brief paraphrase, genericness and over-explanation.
+
+Item interference
+
+Ask whether the text has been distorted to accommodate a gap, stem, option or question.
+
+Adversarial answer test
+
+Attempt to justify every distractor or alternative answer. More than one defensible answer is a fail.
+
+Reference integrity
+
+Verify paragraph references, quotations, pronouns and cited locations against the actual passage.
+
+
+
+5. Severity
+
+Level
+
+Meaning
+
+Action
+
+HARD FAIL
+
+Invalid exam mechanics, ambiguous answer, duplicated P6 option in passage, factual/reference contradiction.
+
+Local repair/regeneration required.
+
+QUALITY FAIL
+
+Unnatural wording, weak distractor set, forced item language, substantial filler, non-Cambridge-like task behaviour.
+
+Local repair/regeneration required.
+
+WARNING
+
+Minor target-length drift, mild repetition or title weakness that does not invalidate the task.
+
+Human review or local polish.
+
+PASS
+
+Structural and editorial checks pass.
+
+Eligible for human pedagogical review.
+
+
+
+6. Scope boundaries
+
+• Topic Bank is not changed by these findings: the pilot issues concern language realisation and item construction, not thematic selection.
+
+• Distribution Rules remain responsible for variety across exams; title-pattern history can later be added as a longitudinal soft control.
+
+• Style Cards define genre-specific voice; this standard defines quality that applies to every Style Card.
+
+• Part prompts define exercise mechanics; validators enforce rules so they cannot be forgotten in future generations.
+

@@ -1,0 +1,154 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E04",
+  "ruoe_exam_id": "RUOE-PILOT-E04",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-020",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.1",
+  "working_title": "Buses that only run when asked",
+  "final_title": "Nothing leaves until somebody asks",
+  "title_candidates": [
+    "Nothing leaves until somebody asks",
+    "The frame with no timetable in it",
+    "A route assembled overnight"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 0
+  },
+  "part_quality": {
+    "blindSolve": "Blind-solve produced one answer for each gap and matched the key on 8/8. Gap 13 was checked specifically against “Then”, which does not carry the conditional consequence and reads oddly after a full stop.",
+    "repairs_applied": [
+      "Gap 9 regenerated during drafting: the first version gapped the preposition in “runs to/on a fixed schedule”, where both are defensible.",
+      "Gap 12 regenerated during drafting: the first version gapped a duration preposition where “for” and “during” were equally natural."
+    ],
+    "teacher_attention_items": []
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 2",
+    "directions": "Part 2: Open cloze\nFor questions 9–16, read the text below and think of the word which best fits each gap. Use only one word in each gap. There is an example at the beginning (0).",
+    "partNumber": 2,
+    "title": "Nothing leaves until somebody asks",
+    "titlePatternFamily": "statement_title",
+    "passage": "The aluminium frame that once held the timetable is still screwed to the post at the top of the lane, and there is (0) ___ inside it. That is not neglect. On this route the printed timetable has been done (9) ___ with altogether.\n\nPassengers book a seat online or by telephone the evening before, and the driver follows whatever route the bookings (10) ___ produced. The route was changed because the old bus had spent most of its day running empty. Anyone (11) ___ journeys are irregular now gets a vehicle that stops within a few minutes (12) ___ their own door.\n\nThere is a condition. A seat must be booked by nine the night before. (13) ___ the depot has no reason to send anything out. That assumes a telephone, a plan and a day’s notice, (14) ___ of which is any help when a lift falls through at eight in the morning.\n\nSo the service suits people who can arrange their week far better (15) ___ people who cannot, and (16) ___ is the second group who used to depend on the bus most.",
+    "example": {
+      "number": 0,
+      "answer": "nothing"
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 9,
+        "type": "short"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "type": "short"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "type": "short"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "type": "short"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "type": "short"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "type": "short"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "type": "short"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "type": "short"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 9,
+        "answer": "away",
+        "category": "phrasal-verb particle"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "answer": "have",
+        "category": "auxiliary — present perfect"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "answer": "whose",
+        "category": "relative pronoun (possessive)"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "answer": "of",
+        "category": "preposition in a fixed frame"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "answer": "Otherwise",
+        "category": "linking adverb"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "answer": "none",
+        "category": "quantifying pronoun"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "answer": "than",
+        "category": "comparative"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "answer": "it",
+        "category": "cleft pronoun"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

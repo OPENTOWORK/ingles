@@ -1,0 +1,607 @@
+{
+  "pack_version": "1.1.3-e02-regenerated",
+  "generation_version": "pilot-regen-e02-v1.1.3",
+  "generated_at": "2026-08-19T12:16:23.355Z",
+  "phase": "B-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 4",
+  "part_number": 4,
+  "brief_id": null,
+  "brief_version": null,
+  "blueprint_id": "TBP-PILOT-EX02",
+  "style_card_id": null,
+  "working_title": null,
+  "repairs_applied": [
+    "meta: Q25: target_structure → wish + past perfect; fullAnswers synced (1); MP labels → wish + subject | had + past participle",
+    "meta: Q26: target_structure → subject + be EXPECTED + to-infinitive",
+    "meta: Q27: target_structure → need not have + past participle; MP labels → need not have (modal perfect) | past participle complement",
+    "meta: Q28: target_structure → present perfect + time period + since; MP labels → duration/time frame with since | since + past-event clause",
+    "meta: Q29: target_structure → make up one's mind; MP labels → made up (phrasal verb) | possessive + mind",
+    "meta: Q30: target_structure → very few + plural noun; MP labels → very few quantifier | few + plural continuation",
+    "Q25: post-meta MP wish i had | told him"
+  ],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[TEST-P4-ALTERNATIVE-ROUTE] Q25: Keyword + sentence1 pattern may allow a second grammatical route.",
+      "[TEST-P4-TOO-EASY] Q29: Sentence 2 is too parallel to Sentence 1 — little restructuring required.",
+      "[TEST-P4-ALTERNATIVE-ROUTE] Q25: Keyword + sentence1 pattern may allow a second grammatical route.",
+      "[TEST-P4-TOO-EASY] Q29: Sentence 2 is too parallel to Sentence 1 — little restructuring required."
+    ],
+    "warnings": [],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 4,
+    "warning_count": 0
+  },
+  "part4_quality_metrics": {
+    "itemMeta": [
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Standard",
+        "number": 25
+      },
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Standard",
+        "number": 26
+      },
+      {
+        "distance": "multi_step_transformation",
+        "band": "B2-Strong",
+        "number": 27
+      },
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Standard",
+        "number": 28
+      },
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Core",
+        "number": 29
+      },
+      {
+        "distance": "syntactic_restructuring",
+        "band": "B2-Standard",
+        "number": 30
+      }
+    ],
+    "answerLengthDistribution": {
+      "2": 0,
+      "3": 2,
+      "4": 3,
+      "5": 1
+    },
+    "answerLengths": [
+      5,
+      3,
+      4,
+      4,
+      4,
+      3
+    ]
+  },
+  "editorial_findings": [],
+  "part4_findings": [
+    {
+      "rule_id": "TEST-P4-ALTERNATIVE-ROUTE",
+      "severity": "QUALITY_FAIL",
+      "location": "Q25",
+      "evidence": "WISH",
+      "reason": "Keyword + sentence1 pattern may allow a second grammatical route.",
+      "recommended_local_action": "Tighten sentence frames or document why only one route is valid.",
+      "source": "deterministic"
+    },
+    {
+      "rule_id": "TEST-P4-TOO-EASY",
+      "severity": "QUALITY_FAIL",
+      "location": "Q29",
+      "evidence": "overlap 83%",
+      "reason": "Sentence 2 is too parallel to Sentence 1 — little restructuring required.",
+      "recommended_local_action": "Rewrite sentence2 frame to require genuine transformation.",
+      "source": "deterministic"
+    }
+  ],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 4: Key word transformations",
+    "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "sentence1": "It was not my intention to upset you with my comments.",
+      "keyword": "MEANT",
+      "sentence2Start": "I __________________ to upset you with my comments.",
+      "answer": "meant no harm"
+    },
+    "questions": [
+      {
+        "id": "TBP-PILOT-EX02-Q25",
+        "number": 25,
+        "type": "transformation",
+        "sentence1": "I regret not telling him about the change earlier.",
+        "keyword": "WISH",
+        "sentence2Start": "I __________________ about the change earlier.",
+        "answer": "wish I had told him",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "WISH",
+          "fullAnswers": [
+            "wish I had told him"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "wish + subject",
+              "accepted": [
+                "wish i had"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "had + past participle",
+              "accepted": [
+                "told him"
+              ]
+            }
+          ],
+          "target_structure": "wish + past perfect"
+        },
+        "target_structure": "wish + past perfect",
+        "targetStructure": "wish + past perfect",
+        "family_id": "TF-03",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "I __________________ about the change earlier."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q26",
+        "number": 26,
+        "type": "transformation",
+        "sentence1": "Everyone thinks they will arrive on time tomorrow.",
+        "keyword": "EXPECTED",
+        "sentence2Start": "They __________________ to arrive on time tomorrow.",
+        "answer": "are expected to",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "EXPECTED",
+          "fullAnswers": [
+            "are expected to"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "passive be + expected",
+              "accepted": [
+                "are expected"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "to + infinitive",
+              "accepted": [
+                "to"
+              ]
+            }
+          ],
+          "target_structure": "subject + be EXPECTED + to-infinitive"
+        },
+        "target_structure": "subject + be EXPECTED + to-infinitive",
+        "targetStructure": "subject + be EXPECTED + to-infinitive",
+        "family_id": "TF-04",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "They __________________ to arrive on time tomorrow."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q27",
+        "number": 27,
+        "type": "transformation",
+        "sentence1": "It was unnecessary for her to take a taxi; she could have walked.",
+        "keyword": "NEED",
+        "sentence2Start": "She __________________ a taxi.",
+        "answer": "need not have taken",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "NEED",
+          "fullAnswers": [
+            "need not have taken",
+            "needn't have taken"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "need not have (modal perfect)",
+              "accepted": [
+                "need not have",
+                "needn't have"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "past participle complement",
+              "accepted": [
+                "taken"
+              ]
+            }
+          ],
+          "target_structure": "need not have + past participle"
+        },
+        "target_structure": "need not have + past participle",
+        "targetStructure": "need not have + past participle",
+        "family_id": "TF-06",
+        "difficulty_band": "B2-Strong",
+        "sentence2": "She __________________ a taxi."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q28",
+        "number": 28,
+        "type": "transformation",
+        "sentence1": "It has been over a year since I last saw her.",
+        "keyword": "SINCE",
+        "sentence2Start": "It __________________ I last saw her.",
+        "answer": "is a year since",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "SINCE",
+          "fullAnswers": [
+            "is a year since"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "duration/time frame with since",
+              "accepted": [
+                "is a year"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "since + past-event clause",
+              "accepted": [
+                "since"
+              ]
+            }
+          ],
+          "target_structure": "present perfect + time period + since"
+        },
+        "target_structure": "present perfect + time period + since",
+        "targetStructure": "present perfect + time period + since",
+        "family_id": "TF-07",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "It __________________ I last saw her."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q29",
+        "number": 29,
+        "type": "transformation",
+        "sentence1": "They decided to cancel their holiday at the last minute.",
+        "keyword": "MIND",
+        "sentence2Start": "They __________________ to cancel their holiday at the last minute.",
+        "answer": "made up their mind",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "MIND",
+          "fullAnswers": [
+            "made up their mind"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "made up (phrasal verb)",
+              "accepted": [
+                "made up"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "possessive + mind",
+              "accepted": [
+                "their mind"
+              ]
+            }
+          ],
+          "target_structure": "make up one's mind"
+        },
+        "target_structure": "make up one's mind",
+        "targetStructure": "make up one's mind",
+        "family_id": "TF-10",
+        "difficulty_band": "B2-Core",
+        "sentence2": "They __________________ to cancel their holiday at the last minute."
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q30",
+        "number": 30,
+        "type": "transformation",
+        "sentence1": "Almost nobody attended the meeting due to the storm.",
+        "keyword": "FEW",
+        "sentence2Start": "__________________ people attended the meeting due to the storm.",
+        "answer": "very few people",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "FEW",
+          "fullAnswers": [
+            "very few people"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "very few quantifier",
+              "accepted": [
+                "very few"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "few + plural continuation",
+              "accepted": [
+                "people"
+              ]
+            }
+          ],
+          "target_structure": "very few + plural noun"
+        },
+        "target_structure": "very few + plural noun",
+        "targetStructure": "very few + plural noun",
+        "family_id": "TF-13",
+        "difficulty_band": "B2-Standard",
+        "sentence2": "__________________ people attended the meeting due to the storm."
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "TBP-PILOT-EX02-Q25",
+        "number": 25,
+        "answer": "wish I had told him",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "WISH",
+          "fullAnswers": [
+            "wish I had told him"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "wish + subject",
+              "accepted": [
+                "wish i had"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "had + past participle",
+              "accepted": [
+                "told him"
+              ]
+            }
+          ],
+          "target_structure": "wish + past perfect"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q26",
+        "number": 26,
+        "answer": "are expected to",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "EXPECTED",
+          "fullAnswers": [
+            "are expected to"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "passive be + expected",
+              "accepted": [
+                "are expected"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "to + infinitive",
+              "accepted": [
+                "to"
+              ]
+            }
+          ],
+          "target_structure": "subject + be EXPECTED + to-infinitive"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q27",
+        "number": 27,
+        "answer": "need not have taken",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "NEED",
+          "fullAnswers": [
+            "need not have taken",
+            "needn't have taken"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "need not have (modal perfect)",
+              "accepted": [
+                "need not have",
+                "needn't have"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "past participle complement",
+              "accepted": [
+                "taken"
+              ]
+            }
+          ],
+          "target_structure": "need not have + past participle"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q28",
+        "number": 28,
+        "answer": "is a year since",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "SINCE",
+          "fullAnswers": [
+            "is a year since"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "duration/time frame with since",
+              "accepted": [
+                "is a year"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "since + past-event clause",
+              "accepted": [
+                "since"
+              ]
+            }
+          ],
+          "target_structure": "present perfect + time period + since"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q29",
+        "number": 29,
+        "answer": "made up their mind",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "MIND",
+          "fullAnswers": [
+            "made up their mind"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "made up (phrasal verb)",
+              "accepted": [
+                "made up"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "possessive + mind",
+              "accepted": [
+                "their mind"
+              ]
+            }
+          ],
+          "target_structure": "make up one's mind"
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX02-Q30",
+        "number": 30,
+        "answer": "very few people",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "FEW",
+          "fullAnswers": [
+            "very few people"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "very few quantifier",
+              "accepted": [
+                "very few"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "few + plural continuation",
+              "accepted": [
+                "people"
+              ]
+            }
+          ],
+          "target_structure": "very few + plural noun"
+        }
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 4,
+    "audioClips": [],
+    "part4QualityMetrics": {
+      "itemMeta": [
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "number": 25
+        },
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "number": 26
+        },
+        {
+          "distance": "multi_step_transformation",
+          "band": "B2-Strong",
+          "number": 27
+        },
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "number": 28
+        },
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Core",
+          "number": 29
+        },
+        {
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "number": 30
+        }
+      ],
+      "answerLengthDistribution": {
+        "2": 0,
+        "3": 2,
+        "4": 3,
+        "5": 1
+      },
+      "answerLengths": [
+        5,
+        3,
+        4,
+        4,
+        4,
+        3
+      ]
+    }
+  },
+  "enunciado_preview": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).\nExample:\n0. It was not my intention to upset you with my comments.\nMEANT\nI __________________ to upset you with my comments.\nAnswer: 0 → meant no harm\n\nQuestions\n25. I regret not telling him about the change earlier.\nWISH\nI __________________ about the change earlier.\n\n26. Everyone thinks they will arrive on time tomorrow.\nEXPECTED\nThey __________________ to arrive on time tomorrow.\n\n27. It was unnecessary for her to take a taxi; she could have walked.\nNEED\nShe __________________ a taxi.\n\n28. It has been over a year since I last saw her.\nSINCE\nIt __________________ I last saw her.\n\n29. They decided to cancel their holiday at the last minute.\nMIND\nThey __________________ to cancel their holiday at the last minute.\n\n30. Almost nobody attended the meeting due to the storm.\nFEW\n__________________ people attended the meeting due to the storm.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

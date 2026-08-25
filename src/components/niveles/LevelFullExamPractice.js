@@ -21,6 +21,7 @@ import { sortLevelsExamenesRows } from '@/utils/b2ResolveExam';
 import { filterVisibleExamenes } from '@/utils/levelsExamVisibility';
 import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import { getAvailableExamSlots } from '@/hooks/useLevelsExamAdminFlow';
+import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 
@@ -77,6 +78,7 @@ function LevelFullExamPracticeInner({ slug }) {
   }, [loadExamCatalog]);
 
   const { examPracticeOpen, handleSelectExam, refreshPuntuacionesProgress } = scoring;
+  const planGating = useExamSlotPlanGating(scoring.progressBySlot);
 
   useEffect(() => {
     const q = searchParams.get('examen');
@@ -124,11 +126,15 @@ function LevelFullExamPracticeInner({ slug }) {
     <B2ExamPracticeLayout examPracticeOpen={examPracticeOpen}>
       <B2ExamSlotProgressPicker
         value={examSlot}
-        onSelect={(n) => handleSelectExam(selectExamSlot, n)}
+        onSelect={(n) =>
+          planGating.wrapSelectHandler((s) => handleSelectExam(selectExamSlot, s))(n)
+        }
         progressBySlot={scoring.progressBySlot}
         partsInPaper={partsCount}
         examLabelsBySlot={examNamesBySlot}
         availableSlots={getAvailableExamSlots(scoring.examenIdBySlot)}
+        lockedSlots={planGating.lockedSlots}
+        onLockedSlotClick={planGating.onLockedSlotClick}
       />
 
       {catalogError ? (
@@ -299,6 +305,7 @@ function LevelFullExamPracticeInner({ slug }) {
           ← Volver a {config.cefr}
         </Link>
       </div>
+      {planGating.planUpgradeModal}
     </B2ExamPracticeLayout>
   );
 }

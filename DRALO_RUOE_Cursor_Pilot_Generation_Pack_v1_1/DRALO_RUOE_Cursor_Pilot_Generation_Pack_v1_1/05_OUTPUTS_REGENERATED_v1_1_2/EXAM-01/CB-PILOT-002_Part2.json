@@ -1,0 +1,209 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:14:28.289Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-002",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-05",
+  "working_title": "The market that teaches you how a town eats",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 2 passage is 189 words; target is 150–180 (accepted up to 200 for generation).",
+      "Part 2 answers cover only 3 grammar categories (target at least 4: prepositions, relatives, modals, connectors, etc.).",
+      "[TQ-03] title: Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "[TQ-03] title: Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "Blind-solve disagreed on Q9 (key \"have\", solver \"showed\"). Review this gap.",
+      "Gaps 9, 13, 16 look trivially easy for B2."
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 6
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [
+    {
+      "rule_id": "TQ-03",
+      "severity": "WARNING",
+      "location": "title",
+      "evidence": "The market that teaches you how a town eats",
+      "reason": "Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "recommended_local_action": "Pick a more concrete or understated title pattern."
+    }
+  ],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": {
+    "ok": true,
+    "errors": [],
+    "warnings": [
+      "Blind-solve disagreed on Q9 (key \"have\", solver \"showed\"). Review this gap.",
+      "Gaps 9, 13, 16 look trivially easy for B2."
+    ],
+    "blindSolve": {
+      "mismatches": [
+        {
+          "number": 9,
+          "key": "have",
+          "solver": "showed"
+        }
+      ],
+      "ambiguous": [],
+      "solvedCount": 8
+    },
+    "rubric": {
+      "cefrLevel": "B2",
+      "textNaturalness": 5,
+      "exampleValid": true,
+      "vocabularyStyleItems": [],
+      "multipleAnswerItems": [],
+      "tooObviousItems": [
+        9,
+        13,
+        16
+      ],
+      "categoriesTested": [
+        "auxiliary",
+        "phrasal verb",
+        "relative adverb",
+        "infinitive marker",
+        "linker",
+        "superlative adverb",
+        "conjunction",
+        "preposition"
+      ],
+      "weakItems": [],
+      "realisticB2": true,
+      "issues": [],
+      "verdict": "pass"
+    }
+  },
+  "generated": {
+    "partTitle": "Part 2: Open cloze",
+    "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "answer": "just"
+    },
+    "title": "The market that teaches you how a town eats",
+    "passage": "At the heart of the town, a busy market bustles (0) ___ just before sunrise, with vendors quickly arranging fresh fruit and vegetables on their stalls. I arrived expecting to find the town’s famous pie, but soon realised the locals (9) ___ little interest in such treats early in the morning. Instead, they carefully selected ordinary ingredients, like leafy greens and root vegetables that will (10) ___ into the day’s meals. One stallholder, noticing my curiosity, explained (11) ___ to prepare a sauce from the wild herbs displayed. Her advice was simple but revealing: it’s best (12) ___ use these herbs fresh, to bring out their full flavour. As I watched regular customers chatting and exchanging tips with sellers, it became clear that the market (13) ___ more than just buying food; it builds community connections. People shared advice about how (14) ___ best to store food or combine flavours, often revisiting the same stalls for guidance. The market showed me that understanding a town’s eating habits means looking beyond tourist favourites (15) ___ paying attention to everyday actions. By the time I left, my view of the place had changed; it wasn’t about finding something rare but about seeing how food ties people (16) ___.",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 9,
+        "type": "short"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "type": "short"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "type": "short"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "type": "short"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "type": "short"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "type": "short"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "type": "short"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "type": "short"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 9,
+        "answer": "have"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "answer": "go"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "answer": "how"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "answer": "to"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "answer": "is"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "answer": "best"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "answer": "but"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "answer": "together"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 2,
+    "audioClips": [],
+    "titlePatternFamily": "the_x_that",
+    "__editorialFindings": [
+      {
+        "rule_id": "TQ-03",
+        "severity": "WARNING",
+        "location": "title",
+        "evidence": "The market that teaches you how a town eats",
+        "reason": "Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+        "recommended_local_action": "Pick a more concrete or understated title pattern."
+      }
+    ]
+  },
+  "enunciado_preview": "Example:\nAnswer: 0 → just\nText\nThe market that teaches you how a town eats\nAt the heart of the town, a busy market bustles (0) ___ just before sunrise, with vendors quickly arranging fresh fruit and vegetables on their stalls. I arrived expecting to find the town’s famous pie, but soon realised the locals (9) ___ little interest in such treats early in the morning. Instead, they carefully selected ordinary ingredients, like leafy greens and root vegetables that will (10) ___ into the day’s meals. One stallholder, noticing my curiosity, explained (11) ___ to prepare a sauce from the wild herbs displayed. Her advice was simple but revealing: it’s best (12) ___ use these herbs fresh, to bring out their full flavour. As I watched regular customers chatting and exchanging tips with sellers, it became clear that the market (13) ___ more than just buying food; it builds community connections. People shared advice about how (14) ___ best to store food or combine flavours, often revisiting the same stalls for guidance. The market showed me that understanding a town’s eating habits means looking beyond tourist favourites (15) ___ paying attention to everyday actions. By the time I left, my view of the place had changed; it wasn’t about finding something rare but about seeing how food ties people (16) ___.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

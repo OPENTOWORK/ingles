@@ -44,7 +44,9 @@ export async function POST(req) {
   if (!access.allowed) {
     return aiErrorJson(
       'WRITING_V3_FORBIDDEN',
-      'Writing Engine v3 is not available for this account.',
+      access.reason === 'plan_requires_plus'
+        ? 'Advanced writing correction requires a Plus or Premium plan.'
+        : 'Writing Engine v3 is not available for this account.',
       { engine: 'v3', reason: access.reason },
       403,
     );
@@ -111,6 +113,7 @@ export async function POST(req) {
     userEmail,
     accessToken: aiCtx.accessToken,
     action: AI_ACTIONS.EXAM_WRITING_CORRECTION,
+    planBased: Boolean(preflight.daily?.planBased),
     model: usage?.actual_models?.assessment || 'gpt-4o-2024-08-06',
     usage: usage
       ? {

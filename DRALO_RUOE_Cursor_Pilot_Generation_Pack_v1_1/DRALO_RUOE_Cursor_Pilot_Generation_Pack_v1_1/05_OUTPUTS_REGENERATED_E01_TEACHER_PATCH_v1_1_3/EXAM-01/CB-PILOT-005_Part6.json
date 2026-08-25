@@ -1,0 +1,306 @@
+{
+  "pack_version": "1.1.3-e01-teacher-patch",
+  "generation_version": "pilot-patch-e01-teacher-feedback-v1.1.3",
+  "generated_at": "2026-08-17T11:23:42.294Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-005",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-04",
+  "working_title": "The boxes I thought I needed",
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[TEST-P6-MULTIFIT] Q39: Option D may fit gaps 39,40: Could logically refer to items mentioned before and contrast interest, fits well in 40 but also possibly 39 in discourse terms, but better in 40",
+      "[TEST-P6-MULTIFIT] Q39: Option F may fit gaps 39,40: Explains the event type, fits well in 39 but could superficially fit 40",
+      "[P6-WEAK-COHESION] Q39: Sentence introduces the swap and repair event, but the link to previous ideas is only moderate since the move is about possessions and the event is newly introduced"
+    ],
+    "warnings": [],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 3,
+    "warning_count": 0
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [
+    {
+      "rule_id": "TEST-P6-MULTIFIT",
+      "severity": "QUALITY_FAIL",
+      "location": "Q39",
+      "evidence": "D",
+      "reason": "Option D may fit gaps 39,40: Could logically refer to items mentioned before and contrast interest, fits well in 40 but also possibly 39 in discourse terms, but better in 40",
+      "recommended_local_action": "Rewrite option or gap context so only one gap accepts the sentence.",
+      "source": "ai_adversarial"
+    },
+    {
+      "rule_id": "TEST-P6-MULTIFIT",
+      "severity": "QUALITY_FAIL",
+      "location": "Q39",
+      "evidence": "F",
+      "reason": "Option F may fit gaps 39,40: Explains the event type, fits well in 39 but could superficially fit 40",
+      "recommended_local_action": "Rewrite option or gap context so only one gap accepts the sentence.",
+      "source": "ai_adversarial"
+    },
+    {
+      "rule_id": "P6-WEAK-COHESION",
+      "severity": "QUALITY_FAIL",
+      "location": "Q39",
+      "evidence": "Sentence introduces the swap and repair event, but the link to previous ideas is only moderate since the move is about possessions and the event is newly introduced",
+      "reason": "Sentence introduces the swap and repair event, but the link to previous ideas is only moderate since the move is about possessions and the event is newly introduced",
+      "recommended_local_action": "Improve backward/forward discourse clues.",
+      "source": "ai_adversarial"
+    }
+  ],
+  "part_quality": {
+    "findings": [
+      {
+        "rule_id": "TEST-P6-MULTIFIT",
+        "severity": "QUALITY_FAIL",
+        "location": "Q39",
+        "evidence": "D",
+        "reason": "Option D may fit gaps 39,40: Could logically refer to items mentioned before and contrast interest, fits well in 40 but also possibly 39 in discourse terms, but better in 40",
+        "recommended_local_action": "Rewrite option or gap context so only one gap accepts the sentence.",
+        "source": "ai_adversarial"
+      },
+      {
+        "rule_id": "TEST-P6-MULTIFIT",
+        "severity": "QUALITY_FAIL",
+        "location": "Q39",
+        "evidence": "F",
+        "reason": "Option F may fit gaps 39,40: Explains the event type, fits well in 39 but could superficially fit 40",
+        "recommended_local_action": "Rewrite option or gap context so only one gap accepts the sentence.",
+        "source": "ai_adversarial"
+      },
+      {
+        "rule_id": "P6-WEAK-COHESION",
+        "severity": "QUALITY_FAIL",
+        "location": "Q39",
+        "evidence": "Sentence introduces the swap and repair event, but the link to previous ideas is only moderate since the move is about possessions and the event is newly introduced",
+        "reason": "Sentence introduces the swap and repair event, but the link to previous ideas is only moderate since the move is about possessions and the event is newly introduced",
+        "recommended_local_action": "Improve backward/forward discourse clues.",
+        "source": "ai_adversarial"
+      }
+    ],
+    "qualityFails": [
+      "[TEST-P6-MULTIFIT] Q39: Option D may fit gaps 39,40: Could logically refer to items mentioned before and contrast interest, fits well in 40 but also possibly 39 in discourse terms, but better in 40",
+      "[TEST-P6-MULTIFIT] Q39: Option F may fit gaps 39,40: Explains the event type, fits well in 39 but could superficially fit 40",
+      "[P6-WEAK-COHESION] Q39: Sentence introduces the swap and repair event, but the link to previous ideas is only moderate since the move is about possessions and the event is newly introduced"
+    ],
+    "warnings": [],
+    "rubric": {
+      "assignments": [
+        {
+          "gap": 37,
+          "letter": "C",
+          "confidence": "high"
+        },
+        {
+          "gap": 38,
+          "letter": "G",
+          "confidence": "high"
+        },
+        {
+          "gap": 39,
+          "letter": "F",
+          "confidence": "high"
+        },
+        {
+          "gap": 40,
+          "letter": "D",
+          "confidence": "high"
+        },
+        {
+          "gap": 41,
+          "letter": "A",
+          "confidence": "high"
+        },
+        {
+          "gap": 42,
+          "letter": "E",
+          "confidence": "high"
+        }
+      ],
+      "multifit": [
+        {
+          "letter": "D",
+          "gaps": [
+            39,
+            40
+          ],
+          "reason": "Could logically refer to items mentioned before and contrast interest, fits well in 40 but also possibly 39 in discourse terms, but better in 40"
+        },
+        {
+          "letter": "F",
+          "gaps": [
+            39,
+            40
+          ],
+          "reason": "Explains the event type, fits well in 39 but could superficially fit 40"
+        }
+      ],
+      "unusedLetter": "B",
+      "weakCohesion": [
+        {
+          "gap": 39,
+          "reason": "Sentence introduces the swap and repair event, but the link to previous ideas is only moderate since the move is about possessions and the event is newly introduced"
+        }
+      ],
+      "issues": [
+        "Sentence for gap 39 less linked to previous context than others",
+        "Letters D and F could fit more than one gap, possibly causing confusion"
+      ],
+      "verdict": "pass"
+    },
+    "blindSolve": {
+      "assignments": [
+        {
+          "gap": 37,
+          "letter": "C",
+          "confidence": "high"
+        },
+        {
+          "gap": 38,
+          "letter": "G",
+          "confidence": "high"
+        },
+        {
+          "gap": 39,
+          "letter": "F",
+          "confidence": "high"
+        },
+        {
+          "gap": 40,
+          "letter": "D",
+          "confidence": "high"
+        },
+        {
+          "gap": 41,
+          "letter": "A",
+          "confidence": "high"
+        },
+        {
+          "gap": 42,
+          "letter": "E",
+          "confidence": "high"
+        }
+      ]
+    }
+  },
+  "generated": {
+    "partTitle": "Reading and Use of English Part 6: Gapped text",
+    "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+    "title": "The boxes I thought I needed",
+    "passage": "Moving into a smaller flat was supposed to be a straightforward step: fewer rooms to clean, lower bills and, I hoped, a fresh start. Instead, I spent my first evening sitting on the bare floor, hemmed in by towers of cardboard that had already claimed every corner of the sitting room. (37) Opening them only made matters worse, because most held nothing more than odds and ends I had packed out of habit rather than need: three identical chargers, a bag of assorted keys, a folder of instruction manuals for appliances I no longer owned. Somewhere between the third and fourth box, I accepted that keeping everything was not merely impractical but physically impossible.\n\nOne box defeated me completely. Inside, wrapped in a supermarket bag as though it were valuable, was a compact umbrella I had been given years earlier and never once opened. (38) Holding it in the middle of that half-empty room, I understood that a surprising number of my possessions were being stored for a future I had never actually described to myself. In a flat of this size, that vagueness turned out to be expensive, because every undecided object was occupying space I genuinely needed.\n\nA few days later, my downstairs neighbour, Ruth, mentioned a swap and repair event at the community centre. (39) That distinction mattered to me more than I expected. Throwing things away had always felt like an admission of waste, and I had been postponing decisions largely to avoid that feeling; passing something on, or watching it mended, sounded almost like the opposite.\n\nI arrived on the Saturday with a bag of things nobody could possibly want: a chipped mug, a scarf worn thin at the elbows and a desk lamp with an unfashionable shade. The lamp went first, claimed within minutes by a student who said it was exactly right for the corner of her room. (40) What I had been calling clutter, I realised, was simply a set of guesses about other people, and my guesses were poor. Value was not a property the objects carried around with them; it depended entirely on who was standing in front of them.\n\nNot everything was so easy to reason about. I had also brought a hand-knitted blanket of my grandmother’s, which is warm, takes up an absurd amount of shelf space and does nothing that I actually need doing. Twice I put it on the swap table, and twice I took it back before anyone could look at it properly. (41) Some things earn their place by meaning rather than use, provided you are willing to say honestly which of the two you are claiming.\n\nWalking home, I found myself drafting a rule. Anything I kept had to do a job or mean something specific, and I had to be able to say which of the two it was without hesitating. (42) It has not turned me into a minimalist, and the flat is certainly not empty; it is merely more honest about what it contains and why.\n\nThere is still one shelf I avoid, holding a handful of objects whose value I cannot yet argue either way. I have decided that this is acceptable, at least for now. A home edited down to nothing but justifications would not be a home I would want to come back to.",
+    "passageWordCount": 551,
+    "sentencePool": [
+      "A) It went home with me again, and I have stopped pretending that this was an oversight.",
+      "B) The community centre had put out tea and biscuits, which struck me as a generous touch for a Saturday morning.",
+      "C) Each of these boxes was labelled ‘keep’, which told me nothing useful about what was actually inside.",
+      "D) The mug and the scarf, by contrast, attracted no interest at all, even though I had privately expected them to go before the lamp.",
+      "E) Put like that, the test sounds severe, but in practice it simply forced me to finish sentences I had been leaving unfinished for years.",
+      "F) It was not a jumble sale, she explained, but a morning for mending what was broken and rehoming what was not.",
+      "G) I had kept it ‘just in case’, although I could no longer remember what that case might be."
+    ],
+    "questions": [
+      {
+        "id": "q37",
+        "number": 37
+      },
+      {
+        "id": "q38",
+        "number": 38
+      },
+      {
+        "id": "q39",
+        "number": 39
+      },
+      {
+        "id": "q40",
+        "number": 40
+      },
+      {
+        "id": "q41",
+        "number": 41
+      },
+      {
+        "id": "q42",
+        "number": 42
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q37",
+        "number": 37,
+        "answer": "C"
+      },
+      {
+        "id": "q38",
+        "number": 38,
+        "answer": "G"
+      },
+      {
+        "id": "q39",
+        "number": 39,
+        "answer": "F"
+      },
+      {
+        "id": "q40",
+        "number": 40,
+        "answer": "D"
+      },
+      {
+        "id": "q41",
+        "number": 41,
+        "answer": "A"
+      },
+      {
+        "id": "q42",
+        "number": 42,
+        "answer": "E"
+      }
+    ],
+    "sections": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 6,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.\nText\nThe boxes I thought I needed\nMoving into a smaller flat was supposed to be a straightforward step: fewer rooms to clean, lower bills and, I hoped, a fresh start. Instead, I spent my first evening sitting on the bare floor, hemmed in by towers of cardboard that had already claimed every corner of the sitting room. (37) Opening them only made matters worse, because most held nothing more than odds and ends I had packed out of habit rather than need: three identical chargers, a bag of assorted keys, a folder of instruction manuals for appliances I no longer owned. Somewhere between the third and fourth box, I accepted that keeping everything was not merely impractical but physically impossible.\nOne box defeated me completely. Inside, wrapped in a supermarket bag as though it were valuable, was a compact umbrella I had been given years earlier and never once opened. (38) Holding it in the middle of that half-empty room, I understood that a surprising number of my possessions were being stored for a future I had never actually described to myself. In a flat of this size, that vagueness turned out to be expensive, because every undecided object was occupying space I genuinely needed.\nA few days later, my downstairs neighbour, Ruth, mentioned a swap and repair event at the community centre. (39) That distinction mattered to me more than I expected. Throwing things away had always felt like an admission of waste, and I had been postponing decisions largely to avoid that feeling; passing something on, or watching it mended, sounded almost like the opposite.\nI arrived on the Saturday with a bag of things nobody could possibly want: a chipped mug, a scarf worn thin at the elbows and a desk lamp with an unfashionable shade. The lamp went first, claimed within minutes by a student who said it was exactly right for the corner of her room. (40) What I had been calling clutter, I realised, was simply a set of guesses about other people, and my guesses were poor. Value was not a property the objects carried around with them; it depended entirely on who was standing in front of them.\nNot everything was so easy to reason about. I had also brought a hand-knitted blanket of my grandmother’s, which is warm, takes up an absurd amount of shelf space and does nothing that I actually need doing. Twice I put it on the swap table, and twice I took it back before anyone could look at it properly. (41) Some things earn their place by meaning rather than use, provided you are willing to say honestly which of the two you are claiming.\nWalking home, I found myself drafting a rule. Anything I kept had to do a job or mean something specific, and I had to be able to say which of the two it was without hesitating. (42) It has not turned me into a minimalist, and the flat is certainly not empty; it is merely more honest about what it contains and why.\nThere is still one shelf I avoid, holding a handful of objects whose value I cannot yet argue either way. I have decided that this is acceptable, at least for now. A home edited down to nothing but justifications would not be a home I would want to come back to.\n\nSentences\nA It went home with me again, and I have stopped pretending that this was an oversight.\nB The community centre had put out tea and biscuits, which struck me as a generous touch for a Saturday morning.\nC Each of these boxes was labelled ‘keep’, which told me nothing useful about what was actually inside.\nD The mug and the scarf, by contrast, attracted no interest at all, even though I had privately expected them to go before the lamp.\nE Put like that, the test sounds severe, but in practice it simply forced me to finish sentences I had been leaving unfinished for years.\nF It was not a jumble sale, she explained, but a morning for mending what was broken and rehoming what was not.\nG I had kept it ‘just in case’, although I could no longer remember what that case might be.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "patched_at": "2026-08-21T13:14:57.362Z",
+  "patch_source": "Audit Pilot Test 1 .docx (second human review, Alicia + SR)",
+  "patch_kind": "architecture-v2-rebuild",
+  "teacher_patch_changes": [
+    {
+      "locus": "Whole Part — Architecture v2 rebuild",
+      "feedback": "\"the sentences to be introduced read disjointed - is there a way to get the AI to create the text and then remove the sentences rather than create random sentences that could fit into the text?\"",
+      "reason": "Rebuild authorised for Part 6 only. CB-PILOT-005, topic, Style Card SC-04 and the reflective first-person intent are preserved; the problematic sentences were not reused."
+    },
+    {
+      "locus": "Q37 — antecedent mismatch",
+      "feedback": "Q37: \"right after the gap we read Many weren’t even full - but the answer is referring to the objects not the boxes\".",
+      "reason": "Both the sentence before the gap (\"towers of cardboard\") and the sentence after it (\"them\", \"most\") now point to the boxes, so the reference chain is consistent."
+    },
+    {
+      "locus": "Q40 — lexical repetition",
+      "feedback": "Q40: \"How many times can we put different into two lines?\"",
+      "reason": "The word \"different\" no longer appears anywhere in Part 6. The contrast is now carried by the lamp/mug-and-scarf comparison and the marker \"by contrast\" instead of repeated vocabulary."
+    }
+  ],
+  "repairs_applied": []
+}

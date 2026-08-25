@@ -1,0 +1,175 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:23:00.612Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-004",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-03",
+  "working_title": "The volunteer job I chose for the wrong reason",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 5 question 31: unknown questionType \"main-idea / global\".",
+      "Part 5 question 34: unknown questionType \"attitude / opinion / tone\".",
+      "Part 5 answer key uses only 2 different letters (target: spread across A–D).",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 4
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Part 5",
+    "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+    "title": "The volunteer job I chose for the wrong reason",
+    "passage": "I signed up to volunteer at the local community repair workshop for what I now admit was a distinctly selfish reason: I was certain that adding some volunteer work to my CV would impress future employers and help me stand out in job applications. At the time, I imagined spending my weekends fixing gadgets or tinkering with small machines — something hands-on that would demonstrate practical skills. I was convinced that volunteering was just another bullet point, a way to check a box rather than an experience that would change how I thought about work.\n\nOn my first shift, however, I was surprised to find that my main task was not repairing anything but welcoming visitors and working out what help they needed. It quickly became clear that I was expected to be a friendly face, to listen to people’s requests, and then direct them to volunteers more skilled than myself. This was unexpected and initially rather frustrating. I had pictured myself elbow-deep in tools, not chatting with people or scribbling notes. But as the day went on, I realised that this role, though unglamorous, was essential for the workshop to function smoothly and for visitors to feel comfortable asking for help.\n\nOne particular encounter has stayed with me. A visitor came in, clearly embarrassed, clutching a small radio that wouldn’t switch on. He was sheepish about not understanding even such a simple fix, and I could tell he worried that asking for help would make him seem unintelligent or careless. I learned then that the way I spoke to him mattered — explaining the problem without assuming any prior knowledge, avoiding jargon, and most importantly, not making him feel foolish for not knowing how to fix something so ordinary.\n\nAs weeks turned into months, I took on more responsibility, gradually moving from greeting guests to coordinating the volunteers and the repair tasks depending on their skills and availability. I found myself not just managing logistics but enjoying this role more than I expected. It gave me a sense of accomplishment and control, and I liked the social interaction. This was a side of volunteering I had not anticipated or considered when I first signed up. I discovered I was more interested in enabling others to do their work than in doing the hands-on repairs myself.\n\nWhen it came time to update my CV, I reflected on my experience and realised that the most valuable aspect was not the line about volunteering but what the experience taught me about myself. I now see that coordinating people and communicating effectively suit me better than the solitary, technical tasks I thought I wanted. The CV still includes a note about my volunteering, but the real benefit is a changed understanding of the kind of work I find fulfilling. Volunteering was not just about adding a badge to my applications but about discovering what I actually enjoy doing.\n\nLooking back, I can also laugh at some minor mistakes that day one, when I proudly tried to hand a screwdriver to someone who didn’t actually want it, highlighting how clueless I was about the workshop’s unofficial routines. My previous belief that \"serious\" career skills came only from formal jobs or internships now seems limited. Doing regular, sometimes mundane tasks with real people revealed strengths I hadn’t expected in myself.\n\nIn essence, this volunteer role became a mirror rather than just a step on the career ladder. It reflected back to me not only what I could do but what kind of work energises me and feels worthwhile. This shift in perspective — from seeing volunteering as a strategic CV move to a personal discovery — has influenced how I think about future jobs and even how I define success. Sometimes, it’s the small, everyday interactions and responsibilities that open our eyes to new directions.",
+    "passageWordCount": 614,
+    "questions": [
+      {
+        "id": "q31",
+        "number": 31,
+        "questionType": "main-idea / global",
+        "prompt": "What is the main theme of the article?",
+        "options": [
+          "A) How volunteering can help develop practical repair skills.",
+          "B) The unexpected personal insights gained through volunteering.",
+          "C) Strategies for improving job applications with volunteer experience.",
+          "D) The importance of technical knowledge in community workshops."
+        ],
+        "evidence": "The writer explains starting with a motive to improve their CV but ends up discovering more about personal interests through the experience.",
+        "rationale": "Option B reflects the overall message that the volunteer experience led to unexpected self-discovery. A is incorrect because the focus is less on repair skills; C is too narrow, focusing on applications rather than insights; D is incorrect as technical skills were less emphasized."
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "questionType": "detail",
+        "prompt": "What was the narrator’s main task on the first day of volunteering?",
+        "options": [
+          "A) Repairing small machines brought in by visitors.",
+          "B) Organising the volunteers and their tasks.",
+          "C) Welcoming visitors and determining their needs.",
+          "D) Teaching visitors how to fix items themselves."
+        ],
+        "evidence": "‘…my main task was not repairing anything but welcoming visitors and working out what help they needed.’",
+        "rationale": "C is correct as per the explicit description of the first shift. A and B describe tasks the narrator expected or later took on. D is not mentioned as a main task."
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "questionType": "inference",
+        "prompt": "How did the visitor with the broken radio feel, and why was this significant for the narrator?",
+        "options": [
+          "A) Confident because he understood the repair process.",
+          "B) Embarrassed and worried about seeming unintelligent.",
+          "C) Frustrated at the workshop’s slow service.",
+          "D) Unconcerned about the simplicity of the repair."
+        ],
+        "evidence": "‘A visitor came in, clearly embarrassed ... worried that asking for help would make him seem unintelligent...’",
+        "rationale": "B directly matches the passage’s description of the visitor’s feelings and the learning moment for the narrator. A is the opposite; C and D are not supported by the text."
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "questionType": "attitude / opinion / tone",
+        "prompt": "Which statement best describes the narrator’s attitude towards their initial motive for volunteering?",
+        "options": [
+          "A) They felt proud of making a strategic career decision.",
+          "B) They admitted their motive was somewhat selfish.",
+          "C) They believed the motive was entirely genuine.",
+          "D) They considered the motive to be irrelevant to the experience."
+        ],
+        "evidence": "‘…what I now admit was a distinctly selfish reason: I was certain that adding some volunteer work to my CV would impress future employers…’",
+        "rationale": "B is correct as the narrator openly admits a selfish motive. A contradicts the tone of admission; C is not suggested; D is not expressed."
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "questionType": "purpose",
+        "prompt": "Why does the narrator mention the small mistake on their first day?",
+        "options": [
+          "A) To highlight the importance of technical skills.",
+          "B) To criticise the workshop’s informal routines.",
+          "C) To add light humour and show initial awkwardness.",
+          "D) To explain why they stopped volunteering."
+        ],
+        "evidence": "‘…I can also laugh at some minor mistakes that day one, when I proudly tried to hand a screwdriver to someone who didn’t actually want it…’",
+        "rationale": "C is correct as the narrator uses the example humorously and self-deprecatingly. A and B are incorrect because the mistake is personal and light-hearted; D is incorrect as they continued volunteering."
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "questionType": "reference",
+        "prompt": "What does the phrase \"a mirror rather than just a step on the career ladder\" mean in the last paragraph?",
+        "options": [
+          "A) The volunteer work was only career-focused, not personal.",
+          "B) The volunteering reflected the narrator's true interests and abilities.",
+          "C) The experience was disappointing and didn’t lead anywhere.",
+          "D) The workshop offered a clear path to promotion and success."
+        ],
+        "evidence": "‘This volunteer role became a mirror ... It reflected back to me not only what I could do but what kind of work energises me and feels worthwhile.’",
+        "rationale": "B matches the metaphor that volunteering gave self-awareness. A and C misinterpret the positive reflection; D is unrelated to the metaphor."
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q31",
+        "number": 31,
+        "answer": "B"
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "answer": "C"
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "answer": "B"
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "answer": "B"
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "answer": "C"
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "answer": "B"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 5,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.\nText\nThe volunteer job I chose for the wrong reason\nI signed up to volunteer at the local community repair workshop for what I now admit was a distinctly selfish reason: I was certain that adding some volunteer work to my CV would impress future employers and help me stand out in job applications. At the time, I imagined spending my weekends fixing gadgets or tinkering with small machines — something hands-on that would demonstrate practical skills. I was convinced that volunteering was just another bullet point, a way to check a box rather than an experience that would change how I thought about work.\nOn my first shift, however, I was surprised to find that my main task was not repairing anything but welcoming visitors and working out what help they needed. It quickly became clear that I was expected to be a friendly face, to listen to people’s requests, and then direct them to volunteers more skilled than myself. This was unexpected and initially rather frustrating. I had pictured myself elbow-deep in tools, not chatting with people or scribbling notes. But as the day went on, I realised that this role, though unglamorous, was essential for the workshop to function smoothly and for visitors to feel comfortable asking for help.\nOne particular encounter has stayed with me. A visitor came in, clearly embarrassed, clutching a small radio that wouldn’t switch on. He was sheepish about not understanding even such a simple fix, and I could tell he worried that asking for help would make him seem unintelligent or careless. I learned then that the way I spoke to him mattered — explaining the problem without assuming any prior knowledge, avoiding jargon, and most importantly, not making him feel foolish for not knowing how to fix something so ordinary.\nAs weeks turned into months, I took on more responsibility, gradually moving from greeting guests to coordinating the volunteers and the repair tasks depending on their skills and availability. I found myself not just managing logistics but enjoying this role more than I expected. It gave me a sense of accomplishment and control, and I liked the social interaction. This was a side of volunteering I had not anticipated or considered when I first signed up. I discovered I was more interested in enabling others to do their work than in doing the hands-on repairs myself.\nWhen it came time to update my CV, I reflected on my experience and realised that the most valuable aspect was not the line about volunteering but what the experience taught me about myself. I now see that coordinating people and communicating effectively suit me better than the solitary, technical tasks I thought I wanted. The CV still includes a note about my volunteering, but the real benefit is a changed understanding of the kind of work I find fulfilling. Volunteering was not just about adding a badge to my applications but about discovering what I actually enjoy doing.\nLooking back, I can also laugh at some minor mistakes that day one, when I proudly tried to hand a screwdriver to someone who didn’t actually want it, highlighting how clueless I was about the workshop’s unofficial routines. My previous belief that \"serious\" career skills came only from formal jobs or internships now seems limited. Doing regular, sometimes mundane tasks with real people revealed strengths I hadn’t expected in myself.\nIn essence, this volunteer role became a mirror rather than just a step on the career ladder. It reflected back to me not only what I could do but what kind of work energises me and feels worthwhile. This shift in perspective — from seeing volunteering as a strategic CV move to a personal discovery — has influenced how I think about future jobs and even how I define success. Sometimes, it’s the small, everyday interactions and responsibilities that open our eyes to new directions.\n\nQuestions\n31. What is the main theme of the article? A. How volunteering can help develop practical repair skills. B. The unexpected personal insights gained through volunteering. C. Strategies for improving job applications with volunteer experience. D. The importance of technical knowledge in community workshops.\n32. What was the narrator’s main task on the first day of volunteering? A. Repairing small machines brought in by visitors. B. Organising the volunteers and their tasks. C. Welcoming visitors and determining their needs. D. Teaching visitors how to fix items themselves.\n33. How did the visitor with the broken radio feel, and why was this significant for the narrator? A. Confident because he understood the repair process. B. Embarrassed and worried about seeming unintelligent. C. Frustrated at the workshop’s slow service. D. Unconcerned about the simplicity of the repair.\n34. Which statement best describes the narrator’s attitude towards their initial motive for volunteering? A. They felt proud of making a strategic career decision. B. They admitted their motive was somewhat selfish. C. They believed the motive was entirely genuine. D. They considered the motive to be irrelevant to the experience.\n35. Why does the narrator mention the small mistake on their first day? A. To highlight the importance of technical skills. B. To criticise the workshop’s informal routines. C. To add light humour and show initial awkwardness. D. To explain why they stopped volunteering.\n36. What does the phrase \"a mirror rather than just a step on the career ladder\" mean in the last paragraph? A. The volunteer work was only career-focused, not personal. B. The volunteering reflected the narrator's true interests and abilities. C. The experience was disappointing and didn’t lead anywhere. D. The workshop offered a clear path to promotion and success.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

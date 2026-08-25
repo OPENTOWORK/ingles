@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
 import { cefrSlugFromNivelesPath } from '@/lib/placementLevelAccess';
 import { isNivelesLevelComingSoonForUser, usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { getStudentBlockedExamSkillFromPath } from '@/data/nivelesLevelHub';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
 
@@ -29,6 +30,21 @@ export default function NivelesLevelRouteGate({ children }) {
     isNivelesLevelComingSoonForUser(userRole, level, session?.user?.email)
   ) {
     return <NivelesComingSoonNotice level={level} />;
+  }
+
+  const blockedSkill =
+    session && isStudentView && !isPartTipsRoute
+      ? getStudentBlockedExamSkillFromPath(pathname)
+      : null;
+
+  if (blockedSkill) {
+    return (
+      <NivelesComingSoonNotice
+        level={blockedSkill.cefr}
+        skillLabel={blockedSkill.label}
+        backHref={blockedSkill.backHref}
+      />
+    );
   }
 
   return children;

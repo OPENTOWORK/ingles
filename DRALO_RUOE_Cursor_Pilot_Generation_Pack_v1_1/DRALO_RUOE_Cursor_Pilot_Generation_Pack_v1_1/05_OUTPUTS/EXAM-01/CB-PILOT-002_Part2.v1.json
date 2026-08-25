@@ -1,0 +1,103 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:42:29.003Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-002",
+  "brief_version": "1.0",
+  "style_card_id": "SC-05",
+  "style_card_version": "v1.0",
+  "working_title": "The market that teaches you how a town eats",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3258,
+    "completion_tokens": 727,
+    "total_tokens": 3985
+  },
+  "self_check": {
+    "status": "pass_with_warnings",
+    "errors": [],
+    "warnings": [
+      "word_count 178 outside target 160–170"
+    ],
+    "word_count": 178
+  },
+  "exercise": {
+    "part_title": "Part 2: Open Cloze",
+    "instructions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only one word in each gap.",
+    "text_title": "The Market that Teaches You How a Town Eats",
+    "passage_with_gaps": "Walking into the bustling market, the first thing I noticed was the vibrant display of fresh vegetables. The air was filled (0) **with** the scent of ripe tomatoes and herbs. I had come expecting to find a famous local dish, but (9) ___ my surprise, most of the residents were busy selecting ordinary seasonal ingredients. It seemed (10) ___ though they were more interested in what was fresh and available rather than any specific delicacy.\n\nAs I wandered from stall to stall, I watched a woman ask a vendor (11) ___ advice on how to prepare a certain type of squash. The stallholder, (12) ___ knew her well, explained how it could be roasted with olive oil and garlic. This simple interaction showed me (13) ___ familiar the sellers were with their regular customers.\n\nI realised that the market was not just a place to buy food, (14) ___ a hub of community life. People exchanged recipes and tips, and it was clear (15) ___ everyone knew each other's preferences. By the end of my visit, I had learned more (16) ___ the town's culture from these interactions than I ever could from a guidebook.",
+    "example": {
+      "number": 0,
+      "answer": "with",
+      "explanation": "The preposition 'with' is used to indicate the presence of a smell in the air."
+    },
+    "questions": [
+      {
+        "number": 9,
+        "answer": "to",
+        "grammar_focus": "Preposition",
+        "rationale": "The phrase 'to my surprise' is a fixed expression indicating an unexpected discovery."
+      },
+      {
+        "number": 10,
+        "answer": "as",
+        "grammar_focus": "Conjunction",
+        "rationale": "The expression 'as though' is used to make a comparison or suggest a situation."
+      },
+      {
+        "number": 11,
+        "answer": "for",
+        "grammar_focus": "Preposition",
+        "rationale": "The preposition 'for' is used to indicate the purpose of the woman's request."
+      },
+      {
+        "number": 12,
+        "answer": "who",
+        "grammar_focus": "Relative pronoun",
+        "rationale": "The relative pronoun 'who' refers to the stallholder, connecting the clause to the noun."
+      },
+      {
+        "number": 13,
+        "answer": "how",
+        "grammar_focus": "Conjunction",
+        "rationale": "The word 'how' is used to introduce the manner in which something is done or known."
+      },
+      {
+        "number": 14,
+        "answer": "but",
+        "grammar_focus": "Conjunction",
+        "rationale": "The conjunction 'but' is used to contrast two ideas: buying food and being a community hub."
+      },
+      {
+        "number": 15,
+        "answer": "that",
+        "grammar_focus": "Conjunction",
+        "rationale": "The word 'that' is used to introduce a clause explaining the situation."
+      },
+      {
+        "number": 16,
+        "answer": "about",
+        "grammar_focus": "Preposition",
+        "rationale": "The preposition 'about' is used to indicate the subject of what was learned."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise follows the brief by focusing on a market setting and cultural interactions.",
+      "style_card_notes": "The style is warm and observant, aligning with the assigned Style Card.",
+      "british_english_notes": "British English is consistently used throughout the text.",
+      "factuality_notes": "The text avoids making unverifiable claims about regional traditions.",
+      "answer_validity_notes": "Each gap has a single correct answer that fits grammatically and contextually.",
+      "self_check_flags": []
+    },
+    "_word_count": 178
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

@@ -1,0 +1,134 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 11,
+  "generated_at": "2026-08-12T17:10:55.043Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-010",
+  "brief_version": "1.0",
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.0",
+  "working_title": "What happens when rooftops become shared spaces",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 5322,
+    "completion_tokens": 1621,
+    "total_tokens": 6943
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "Part 5 answers use fewer than 3 different letters"
+    ],
+    "warnings": [],
+    "word_count": 600
+  },
+  "exercise": {
+    "part_title": "Part 5",
+    "instructions": "Read the text and answer the questions 31–36. For each question, choose the correct answer A, B, C or D.",
+    "text_title": "What happens when rooftops become shared spaces",
+    "article": "In the heart of the city, a once-empty rooftop has undergone a transformation. Where there was once only concrete, now lies a vibrant green space shared by the residents of the building. This change is part of a growing trend where urban rooftops are being repurposed into communal areas for gardening and socialising. The idea is simple: use underutilised spaces to create small green oases that can benefit both the environment and the community.\n\nThe residents of the building have embraced this change, but not without some initial challenges. On one hand, there are those who see the rooftop as a peaceful retreat, a place to tend to plants and enjoy a quiet moment away from the hustle and bustle of city life. On the other hand, some residents view it as a social hub, perfect for gatherings and community events. This difference in expectations has led to some tension, as the space cannot simultaneously serve both purposes effectively.\n\nA practical issue that arose early on was the maintenance of the garden. Initially, a few enthusiastic volunteers took on the responsibility of watering and caring for the plants. However, when these volunteers were away, the plants suffered from neglect. To address this, the residents decided to implement a rota system, ensuring that the responsibility was shared more evenly among them.\n\nThis adjustment proved to be a turning point. The rota not only ensured the plants were cared for but also fostered a sense of shared responsibility and community spirit. It was a small change, but it made a significant difference in how the rooftop was perceived and used.\n\nInterestingly, one resident, who had been sceptical about the project from the start, found unexpected benefits. Initially uninterested in gardening, they discovered that the rooftop provided a unique opportunity to connect with neighbours they rarely saw otherwise. This social aspect of the project became invaluable to them, highlighting that the benefits of such spaces can extend beyond the environmental.\n\nAnother aspect that emerged was the need for clear rules about access times and noise levels, which were adjusted after early feedback. This ensured that the rooftop could be enjoyed by everyone without causing inconvenience. Such adjustments demonstrate the importance of flexibility and responsiveness in managing shared spaces.\n\nIt's important to acknowledge, however, that not every building or resident group will find this model suitable. Some may lack the interest or capacity to maintain such a space, and that's perfectly fine. The success of these projects depends heavily on the specific needs and capabilities of the residents involved.\n\nUltimately, while the idea of turning rooftops into green spaces is appealing, its success relies on practical considerations. The true value lies in how these spaces are integrated into the daily lives of the residents, rather than just the aesthetic or environmental appeal. In cities, where space is at a premium, such projects work best when they are tailored to fit the routines and desires of those who use them.\n\nMoreover, the contrast between what designers imagined and what residents actually use most is telling. While the initial concept might focus on environmental benefits, residents often prioritise social interactions or personal relaxation. This highlights that the success of such projects is not just about the physical transformation but also about meeting the diverse needs of the community.\n\nThe rooftop, once a neglected space, now serves as a testament to what can be achieved when practicality meets ambition. It stands as a reminder that urban sustainability is not just about planting trees or creating gardens, but about fostering spaces that people can truly use and enjoy.",
+    "questions": [
+      {
+        "number": 31,
+        "question_type": "main_idea",
+        "prompt": "What is the main idea of the article?",
+        "options": {
+          "A": "Rooftop gardens are always successful in urban areas.",
+          "B": "The success of rooftop projects depends on practical decisions.",
+          "C": "Rooftop gardens significantly improve the environment.",
+          "D": "All residents appreciate the social benefits of rooftop gardens."
+        },
+        "answer": "B",
+        "evidence": "The true value lies in how these spaces are integrated into the daily lives of the residents, rather than just the aesthetic or environmental appeal.",
+        "rationale": "The article focuses on how the practical arrangements and resident involvement determine the success of rooftop projects, rather than just the concept itself."
+      },
+      {
+        "number": 32,
+        "question_type": "detail",
+        "prompt": "What caused tension among the residents regarding the rooftop space?",
+        "options": {
+          "A": "The lack of funding for the project.",
+          "B": "The different expectations for the use of the space.",
+          "C": "The difficulty in accessing the rooftop.",
+          "D": "The environmental impact of the project."
+        },
+        "answer": "B",
+        "evidence": "This difference in expectations has led to some tension, as the space cannot simultaneously serve both purposes effectively.",
+        "rationale": "The tension arose because residents had different ideas about whether the space should be a quiet retreat or a social hub."
+      },
+      {
+        "number": 33,
+        "question_type": "inference",
+        "prompt": "What was the effect of introducing a rota system for maintaining the garden?",
+        "options": {
+          "A": "It reduced the number of volunteers needed.",
+          "B": "It caused more disputes among residents.",
+          "C": "It improved the care of the plants and community spirit.",
+          "D": "It made the project less popular among residents."
+        },
+        "answer": "C",
+        "evidence": "The rota not only ensured the plants were cared for but also fostered a sense of shared responsibility and community spirit.",
+        "rationale": "The introduction of the rota system improved plant care and increased a sense of community among residents."
+      },
+      {
+        "number": 34,
+        "question_type": "attitude",
+        "prompt": "How did one sceptical resident's attitude change towards the rooftop project?",
+        "options": {
+          "A": "They remained uninterested in the project.",
+          "B": "They became more involved in gardening.",
+          "C": "They appreciated the social aspect of the project.",
+          "D": "They opposed the project even more."
+        },
+        "answer": "C",
+        "evidence": "Initially uninterested in gardening, they discovered that the rooftop provided a unique opportunity to connect with neighbours they rarely saw otherwise.",
+        "rationale": "The sceptical resident came to value the social opportunities provided by the rooftop, despite their initial lack of interest."
+      },
+      {
+        "number": 35,
+        "question_type": "purpose",
+        "prompt": "Why does the author mention that not every building will find the rooftop model suitable?",
+        "options": {
+          "A": "To suggest that the model is flawed.",
+          "B": "To highlight the need for flexibility in such projects.",
+          "C": "To show that some buildings lack the necessary space.",
+          "D": "To argue against the implementation of rooftop gardens."
+        },
+        "answer": "B",
+        "evidence": "Some may lack the interest or capacity to maintain such a space, and that's perfectly fine.",
+        "rationale": "The author acknowledges that flexibility is key and that the model may not suit every building or resident group."
+      },
+      {
+        "number": 36,
+        "question_type": "reference",
+        "prompt": "What does the author mean by 'practical considerations' in the last paragraph?",
+        "options": {
+          "A": "The aesthetic design of the rooftop garden.",
+          "B": "The environmental benefits of the project.",
+          "C": "The integration of the space into residents' daily lives.",
+          "D": "The financial costs of creating the rooftop garden."
+        },
+        "answer": "C",
+        "evidence": "The true value lies in how these spaces are integrated into the daily lives of the residents.",
+        "rationale": "'Practical considerations' refer to how well the rooftop space fits into the everyday lives and routines of the residents."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise faithfully follows the content brief, focusing on sustainability and community dynamics in urban settings.",
+      "style_card_notes": "The style card's guidelines are observed, presenting a balanced and current-feeling report on an emerging trend.",
+      "british_english_notes": "British English is consistently used throughout the article and questions.",
+      "factuality_notes": "The article avoids unverified claims and maintains plausible scenarios.",
+      "answer_validity_notes": "Each question has a single, defendable correct answer with supporting evidence from the text.",
+      "self_check_flags": []
+    },
+    "_word_count": 600
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

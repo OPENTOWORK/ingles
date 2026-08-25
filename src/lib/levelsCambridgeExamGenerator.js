@@ -423,7 +423,7 @@ export function resolveDefaultLevelExamPartPrompt({
   };
 }
 
-async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef, options) {
+export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef, options) {
   const slug = String(levelSlug || '').toLowerCase();
   const parts = getLevelExamParts(slug) || [];
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
@@ -473,11 +473,21 @@ ${validation.errors.map((e) => `- ${e}`).join('\n')}
 ${lengthHint}`;
     }
 
-    generated = await generatePartJson(levelLabel, partDef, {
-      ...options,
-      userPrompt: `${baseUserPrompt}${repairSuffix}`,
-      varietySeed: seedBase + Math.max(partIndex, 0) + attempt * 3000,
-    });
+    try {
+      generated = await generatePartJson(levelLabel, partDef, {
+        ...options,
+        userPrompt: `${baseUserPrompt}${repairSuffix}`,
+        varietySeed: seedBase + Math.max(partIndex, 0) + attempt * 3000,
+      });
+    } catch (e) {
+      validation = {
+        ok: false,
+        errors: [`Generation/parse error: ${e?.message || e}`],
+        warnings: [],
+        normalized: generated,
+      };
+      continue;
+    }
 
     validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
     generated = validation.normalized;
@@ -962,18 +972,31 @@ export async function previewLevelExamPartGeneration({
   const partTitle = getExamPartDisplayLabel(slug, partDef.partNumber);
 
   // Validación de calidad IA (B2 Parts 1–2): blind solve + rúbrica. Sus errores bloquean igual que los mecánicos.
+  // Parts 3, 5, 6, 7: adversarial QUALITY review (structured findings — no mechanical HARD promotion).
   let quality = null;
   const qualityErrors = [];
   const qualityWarnings = [];
-  if (slug === 'b2' && (partDef.partNumber === 1 || partDef.partNumber === 2) && validation.ok) {
+  const adversarialQualityFails = [];
+  if (slug === 'b2' && validation.ok) {
     try {
-      const { validateB2Part1Quality, validateB2Part2Quality } = await import('@/lib/examPartQualityValidator');
-      quality =
-        partDef.partNumber === 1
-          ? await validateB2Part1Quality(generated)
-          : await validateB2Part2Quality(generated);
-      qualityErrors.push(...quality.errors);
-      qualityWarnings.push(...quality.warnings);
+      if (partDef.partNumber === 1 || partDef.partNumber === 2) {
+        const { validateB2Part1Quality, validateB2Part2Quality } = await import('@/lib/examPartQualityValidator');
+        quality =
+          partDef.partNumber === 1
+            ? await validateB2Part1Quality(generated)
+            : await validateB2Part2Quality(generated);
+        qualityErrors.push(...quality.errors);
+        qualityWarnings.push(...quality.warnings);
+      } else if ([3, 5, 6, 7].includes(partDef.partNumber)) {
+        const { runRuoeAdversarialQualityReview } = await import('@/lib/ruoeAiAdversarialQuality');
+        const adversarial = await runRuoeAdversarialQualityReview(partDef.partNumber, generated);
+        quality = adversarial;
+        adversarialQualityFails.push(...adversarial.qualityFails);
+        qualityWarnings.push(...adversarial.warnings);
+        if (adversarial.findings?.length) {
+          generated.__adversarialFindings = adversarial.findings;
+        }
+      }
     } catch (e) {
       qualityWarnings.push(`Quality validator failed to run: ${e?.message || e}`);
     }
@@ -982,6 +1005,13 @@ export async function previewLevelExamPartGeneration({
   // Posible segunda respuesta defendible (blind solve / rúbrica): el preview se permite,
   // pero el guardado queda bloqueado salvo override manual explícito (ver save).
   const needsReview = collectAmbiguityFindings(quality);
+  for (const msg of [...(validation.qualityFails || []), ...adversarialQualityFails]) {
+    needsReview.push({
+      itemNumber: null,
+      type: 'quality_fail',
+      detail: msg,
+    });
+  }
   if (needsReview.length) {
     generated.__needsReview = {
       status: 'ambiguity_warning',
@@ -1016,6 +1046,7 @@ export async function previewLevelExamPartGeneration({
     validation: {
       ok: mergedOk,
       errors: mergedErrors,
+      qualityFails: [...(validation.qualityFails || []), ...adversarialQualityFails],
       warnings: mergedWarnings,
       needsReview,
     },

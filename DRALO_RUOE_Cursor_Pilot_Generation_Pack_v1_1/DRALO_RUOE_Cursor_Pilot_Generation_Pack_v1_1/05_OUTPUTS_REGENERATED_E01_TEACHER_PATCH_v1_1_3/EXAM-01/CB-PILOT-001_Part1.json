@@ -1,0 +1,277 @@
+{
+  "pack_version": "1.1.3-e01-teacher-patch",
+  "generation_version": "pilot-patch-e01-teacher-feedback-v1.1.3",
+  "generated_at": "2026-08-17T11:44:49.538Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-001",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-01",
+  "working_title": "When animals solve a new problem",
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 1 passage is 189 words; target is 150–180 (accepted up to 200 for generation).",
+      "Weak item Q1: The distractors (A, C, D) are close in meaning and register, but B is the best fit; still might confuse weaker B2s.",
+      "Weak item Q8: All options are synonyms but differ in register and subtlety; 'genuine' and 'honest' are both plausible, creating slight ambiguity."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 0,
+    "warning_count": 3
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": {
+    "ok": true,
+    "errors": [],
+    "warnings": [
+      "Weak item Q1: The distractors (A, C, D) are close in meaning and register, but B is the best fit; still might confuse weaker B2s.",
+      "Weak item Q8: All options are synonyms but differ in register and subtlety; 'genuine' and 'honest' are both plausible, creating slight ambiguity."
+    ],
+    "blindSolve": {
+      "mismatches": [],
+      "ambiguous": [],
+      "solvedCount": 8
+    },
+    "rubric": {
+      "cefrLevel": "B2",
+      "textNaturalness": 4,
+      "questionClarity": 4,
+      "distractorQuality": 3,
+      "verbOnlyItems": 0,
+      "categoriesTested": [
+        "adverb choice",
+        "preposition",
+        "gerund vs participle",
+        "verb collocation",
+        "verb collocation",
+        "verb collocation",
+        "gerund collocation",
+        "adjective choice"
+      ],
+      "weakItems": [
+        {
+          "number": 1,
+          "problem": "The distractors (A, C, D) are close in meaning and register, but B is the best fit; still might confuse weaker B2s."
+        },
+        {
+          "number": 8,
+          "problem": "All options are synonyms but differ in register and subtlety; 'genuine' and 'honest' are both plausible, creating slight ambiguity."
+        }
+      ],
+      "realisticB2": true,
+      "issues": [
+        "Option words are all single words except preposition (item 2) and no multiword options, which is good.",
+        "Distractors sometimes close in meaning, which adds challenge but could confuse some borderline B2 candidates.",
+        "No item tests all verbs; item types vary appropriately.",
+        "The passage is natural and academic in tone, suitable for upper-intermediate level."
+      ],
+      "verdict": "pass"
+    }
+  },
+  "generated": {
+    "partTitle": "Reading and Use of English Part 1",
+    "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+    "title": "When animals solve a new problem",
+    "passage": "Imagine an animal trying to reach food but suddenly finds its usual way blocked (0) ___. The real challenge is not just repeated action but adapting to this new obstacle. This (1) ___ means the animal must notice the change and think about how to overcome it rather than just trying the same thing again. For example, a bird might try several ways of opening a container and, (2) ___ doing so, it gradually learns which movements are useless. The process involves memory, attention, and (3) ___ to new tactics until the goal is met. This flexible problem-solving contrasts with the automatic response that works immediately without change. Observers looking at animal behaviour (4) ___ this distinction carefully, because what seems like cleverness could be just a fixed routine. By watching how an animal’s actions develop, researchers see how sensory awareness (5) ___ with trial-and-error to produce new solutions. In short, the interesting part is not whether the animal solves the task but how its behaviour (6) ___ to meet the challenge. This shows that flexible problem-solving often depends on several abilities (7) ___, rather than a single instinct. Ultimately, such observations help us understand what counts as (8) ___ intelligence in the animal world.",
+    "example": {
+      "number": 0,
+      "options": [
+        "A) first",
+        "B) originally",
+        "C) suddenly",
+        "D) finally"
+      ],
+      "answer": "C",
+      "explanation": "“Suddenly” fits best to indicate an unexpected obstacle appearing."
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 1,
+        "type": "mcq",
+        "options": [
+          "A) gradually",
+          "B) basically",
+          "C) largely",
+          "D) frequently"
+        ]
+      },
+      {
+        "id": "q2",
+        "number": 2,
+        "type": "mcq",
+        "options": [
+          "A) at",
+          "B) to",
+          "C) in",
+          "D) on"
+        ]
+      },
+      {
+        "id": "q3",
+        "number": 3,
+        "type": "mcq",
+        "options": [
+          "A) adapting",
+          "B) relating",
+          "C) depending",
+          "D) preferring"
+        ]
+      },
+      {
+        "id": "q4",
+        "number": 4,
+        "type": "mcq",
+        "options": [
+          "A) make",
+          "B) involve",
+          "C) base",
+          "D) consider"
+        ]
+      },
+      {
+        "id": "q5",
+        "number": 5,
+        "type": "mcq",
+        "options": [
+          "A) connects",
+          "B) combines",
+          "C) joins",
+          "D) relates"
+        ]
+      },
+      {
+        "id": "q6",
+        "number": 6,
+        "type": "mcq",
+        "options": [
+          "A) responds",
+          "B) reacts",
+          "C) returns",
+          "D) changes"
+        ]
+      },
+      {
+        "id": "q7",
+        "number": 7,
+        "type": "mcq",
+        "options": [
+          "A) combining",
+          "B) competing",
+          "C) controlling",
+          "D) completing"
+        ]
+      },
+      {
+        "id": "q8",
+        "number": 8,
+        "type": "mcq",
+        "options": [
+          "A) truthful",
+          "B) sincere",
+          "C) genuine",
+          "D) honest"
+        ]
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "answer": "B",
+        "number": 1
+      },
+      {
+        "id": "q2",
+        "answer": "C",
+        "number": 2
+      },
+      {
+        "id": "q3",
+        "answer": "A",
+        "number": 3
+      },
+      {
+        "id": "q4",
+        "answer": "D",
+        "number": 4
+      },
+      {
+        "id": "q5",
+        "answer": "B",
+        "number": 5
+      },
+      {
+        "id": "q6",
+        "answer": "D",
+        "number": 6
+      },
+      {
+        "id": "q7",
+        "answer": "A",
+        "number": 7
+      },
+      {
+        "id": "q8",
+        "answer": "C",
+        "number": 8
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 1,
+    "audioClips": [],
+    "titlePatternFamily": "when_x"
+  },
+  "enunciado_preview": "Example:\nA) first\nB) originally\nC) suddenly\nD) finally\nAnswer: C\nText\nWhen animals solve a new problem\nImagine an animal trying to reach food but suddenly finds its usual way blocked (0) ___. The real challenge is not just repeated action but adapting to this new obstacle. This (1) ___ means the animal must notice the change and think about how to overcome it rather than just trying the same thing again. For example, a bird might try several ways of opening a container and, (2) ___ doing so, it gradually learns which movements are useless. The process involves memory, attention, and (3) ___ to new tactics until the goal is met. This flexible problem-solving contrasts with the automatic response that works immediately without change. Observers looking at animal behaviour (4) ___ this distinction carefully, because what seems like cleverness could be just a fixed routine. By watching how an animal’s actions develop, researchers see how sensory awareness (5) ___ with trial-and-error to produce new solutions. In short, the interesting part is not whether the animal solves the task but how its behaviour (6) ___ to meet the challenge. This shows that flexible problem-solving often depends on several abilities (7) ___, rather than a single instinct. Ultimately, such observations help us understand what counts as (8) ___ intelligence in the animal world.\nQuestions\n\n1\nA gradually\nB basically\nC largely\nD frequently\n\n2\nA at\nB to\nC in\nD on\n\n3\nA adapting\nB relating\nC depending\nD preferring\n\n4\nA make\nB involve\nC base\nD consider\n\n5\nA connects\nB combines\nC joins\nD relates\n\n6\nA responds\nB reacts\nC returns\nD changes\n\n7\nA combining\nB competing\nC controlling\nD completing\n\n8\nA truthful\nB sincere\nC genuine\nD honest",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "patched_at": "2026-08-21T13:14:04.813Z",
+  "patch_source": "Audit Pilot Test 1 .docx (second human review, Alicia + SR)",
+  "patch_kind": "controlled-local-patch",
+  "teacher_patch_changes": [
+    {
+      "locus": "Q2 — passage sentence",
+      "feedback": "Q2: \"la respuesta es finally, pero justo esa misma palabra ya aparece en la frase de dicho hueco… Habría que eliminar ese finally\". Alternative direction: test a B2 fixed expression such as \"in doing so\".",
+      "reason": "The key was visible immediately before the gap, so the item was unsolvable as designed. The sentence was re-gapped around the fixed expression \"in doing so\", which removes the leak and tests a genuine word combination instead of an obvious adverb choice."
+    },
+    {
+      "locus": "Q2 — options and key",
+      "feedback": "Q2: options \"parecen demasiado básicas\"; proposal \"in doing so / at doing so / to do so / on doing so\".",
+      "reason": "Teacher intent preserved, but Part 1 options must be single words in this pipeline (multi-word options are a hard validation failure), so \"doing so\" stays in the text and the gap sits on the preposition. The option set is exactly the teacher's four variants reduced to their distinguishing word, which makes this the dependent-preposition / fixed-expression item the review found missing. \"gradually\" in the same clause rules out the temporal reading of \"on doing so\"."
+    },
+    {
+      "locus": "Q5 — options and key",
+      "feedback": "Q5: \"la respuesta debe ser mixes porque el sujeto sensory awareness aparece singular. Además, sensory awareness mixes with trial-and-error no es la colocación más natural\". Direction: combines / connects / joins / relates.",
+      "reason": "Fixes both faults at once: every option is third-person singular, so it agrees with the singular subject, and \"combines with … to produce\" is the natural British English collocation. Option order was set so the Part 1 key spread covers A–D."
+    },
+    {
+      "locus": "Q6 — passage sentence",
+      "feedback": "Q6: \"whether es más recomendable por naturalidad\".",
+      "reason": "\"not whether X but how Y\" is the natural British English pairing. Q6 options and key were re-checked afterwards and still work: \"changes to meet the challenge\" remains the only natural completion, so the key stays A."
+    },
+    {
+      "locus": "Q8 — options and key",
+      "feedback": "Q8: \"los distractores son muy fáciles… al estudiante no le hace ni falta entender el texto\"; \"hay un fallo porque la respuesta dice ser D: intelligent, pero quedaría intelligent intelligence\". SR: use options close in meaning.",
+      "reason": "Removes the impossible collocation and replaces an easy set with four near-synonymous adjectives about authenticity. All are plausible before reading the context, but only \"genuine intelligence\" is a natural collocation, so the item now tests semantic distinction — the category the review found missing."
+    }
+  ],
+  "repairs_applied": []
+}

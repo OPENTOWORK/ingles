@@ -1,0 +1,386 @@
+{
+  "schema_version": "1.0",
+  "status": "PROPOSED — AWAITING HUMAN APPROVAL",
+  "batch_id": "RUOE-PILOT-02",
+  "schema_source": "DRALO_RUOE_Transformation_Blueprint_System_v1_0",
+  "generation_lock": "No Part 4 item may be generated from these blueprints until status is 'Approved for Pilot' and human approval is recorded.",
+  "policy": {
+    "level": "B2",
+    "language": "British English",
+    "part": 4,
+    "scored_slots": [25, 26, 27, 28, 29, 30],
+    "answer_word_count": "2-5 including keyword",
+    "marking_points": 2,
+    "example_policy": "Generate example (0) from a family/target/keyword not used in scored slots and not used in the example of E01/E02."
+  },
+  "batch_design_rationale": {
+    "untested_families_prioritised": "TF-11 Fixed expressions & collocations and TF-14 Clause & phrase restructuring were the only two families left untested after E01/E02. The Blueprint System v1.0 §10 explicitly requires them to be prioritised in the next batch. TF-11 is placed in E03 and TF-14 in E04, one each, so that neither is repeated in neighbouring exams.",
+    "neighbour_separation": "E03 draws its five remaining families from the E01 set (TF-01, TF-02, TF-05, TF-09, TF-12) and E04 from the E02 set (TF-03, TF-04, TF-06, TF-07, TF-10). No primary family is repeated between two consecutive exams anywhere in E01→E04.",
+    "families_rested_this_batch": "TF-08 Causative & service structures (used E01) and TF-13 Quantifiers, determiners & exclusivity (used E02). Both have narrow B2 target ranges and were tested recently; they should return in the next batch.",
+    "target_structure_freshness": "Every reused family carries a target_structure that differs materially from the one it used in E01/E02, satisfying P4-DR-05.",
+    "keyword_freshness": "No keyword in this batch has been used in E01 or E02, and no keyword is repeated between E03 and E04, satisfying P4-DR-03 and P4-DR-06.",
+    "cumulative_family_coverage_after_E04": {
+      "TF-01": 2, "TF-02": 2, "TF-03": 2, "TF-04": 2, "TF-05": 2, "TF-06": 2, "TF-07": 2,
+      "TF-08": 1, "TF-09": 2, "TF-10": 2, "TF-11": 1, "TF-12": 2, "TF-13": 1, "TF-14": 1
+    },
+    "blind_solve_learning_applied": "The E01 Part 2 teacher patch recorded four open-cloze items where a second answer stayed defensible (if/when, was/is, best/how, in/for). That finding belongs to the open-cloze construct, not to Part 4, but the same principle is applied here through P4-DR-13: every slot's `avoid` block now names the specific competing route that must be closed at generation, rather than leaving uniqueness to be discovered after the item exists."
+  },
+  "blueprints": [
+    {
+      "blueprint_id": "TBP-PILOT-EX03",
+      "blueprint_version": "1.0",
+      "exam_id": "RUOE-PILOT-E03",
+      "status": "Draft — awaiting human approval",
+      "difficulty_mix": "1 B2-Core · 4 B2-Standard · 1 B2-Strong",
+      "slots": [
+        {
+          "slot_id": "TBP-PILOT-EX03-Q25",
+          "question_number": 25,
+          "family_id": "TF-01",
+          "family_name": "Comparison & degree",
+          "target_structure": "negative equivalence with not as … as",
+          "semantic_equivalence_goal": "Preserve a comparative relation between two items by reversing which one is the subject, without changing which is greater.",
+          "keyword_constraint": { "mode": "exact", "keyword": "AS" },
+          "answer_shape": "AS + gradable adjective + AS",
+          "marking_point_plan": "MP1: AS + correct gradable adjective; MP2: second AS introducing the standard of comparison",
+          "difficulty_band": "B2-Core",
+          "secondary_tags": ["equative_comparison", "negation"],
+          "avoid": [
+            "Do not choose an adjective that also permits a natural 'less … than' answer, since sentence2 must be uniquely solvable.",
+            "Do not select an adjective with an irregular or contested comparative form.",
+            "Do not allow the answer to be recoverable without reversing the subjects.",
+            "Do not reuse the comparative + THAN mechanism already tested at E01 Q27."
+          ],
+          "collision_key": "tf01|not_as_adj_as|as",
+          "history_notes": [
+            "TF-01 used once at E01 Q27 with target 'comparative equivalence with THAN' and keyword THAN. Target structure and keyword both changed."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX03-Q26",
+          "question_number": 26,
+          "family_id": "TF-02",
+          "family_name": "Conditionals & hypothetical meaning",
+          "target_structure": "negative condition expressed with UNLESS",
+          "semantic_equivalence_goal": "Preserve a real-time conditional relation while converting a negative if-clause into a single-word negative conditional.",
+          "keyword_constraint": { "mode": "exact", "keyword": "UNLESS" },
+          "answer_shape": "UNLESS + subject + affirmative present-simple verb",
+          "marking_point_plan": "MP1: UNLESS + subject; MP2: affirmative verb form required by the polarity change",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["first_conditional", "polarity_reversal"],
+          "avoid": [
+            "Do not write sentence1 so that 'if … not' would fit sentence2 equally well; the keyword must be structurally necessary.",
+            "Do not leave the verb negative in the answer, which is the commonest wrong route.",
+            "Do not use a context where 'otherwise' or 'without' would also complete sentence2 naturally.",
+            "Do not reuse the third-conditional mechanism already tested at E01 Q25."
+          ],
+          "collision_key": "tf02|unless_negative_condition|unless",
+          "history_notes": [
+            "TF-02 used once at E01 Q25 with target 'third conditional / unreal past consequence' and keyword HAD. Time reference, target structure and keyword all changed."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX03-Q27",
+          "question_number": 27,
+          "family_id": "TF-05",
+          "family_name": "Reported speech, requests & advice",
+          "target_structure": "reported advice with ADVISED + object + to-infinitive",
+          "semantic_equivalence_goal": "Preserve the speech act of advising and the propositional content of the advice given.",
+          "keyword_constraint": { "mode": "exact", "keyword": "ADVISED" },
+          "answer_shape": "ADVISED + object pronoun + TO + base verb",
+          "marking_point_plan": "MP1: ADVISED + object; MP2: TO-infinitive carrying the advised action",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["reporting_verb_pattern", "object_plus_infinitive"],
+          "avoid": [
+            "Do not write sentence1 so that 'suggested' or 'recommended' would be the natural report, since those verbs take a different pattern.",
+            "Do not make the direct speech an instruction or order, which would point to 'told'.",
+            "Do not allow the object to be omissible; ADVISED must require one here.",
+            "Do not reuse the reported-request mechanism already tested at E01 Q28."
+          ],
+          "collision_key": "tf05|advised_object_to_infinitive|advised",
+          "history_notes": [
+            "TF-05 used once at E01 Q28 with target 'reported request / ask someone to' and keyword ASKED. Speech act changed from request to advice; keyword changed."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX03-Q28",
+          "question_number": 28,
+          "family_id": "TF-09",
+          "family_name": "Verb patterns & complementation",
+          "target_structure": "have difficulty (in) + gerund",
+          "semantic_equivalence_goal": "Preserve the meaning that an action was hard for the subject, moving from an adjective frame to a noun-plus-gerund complement.",
+          "keyword_constraint": { "mode": "exact", "keyword": "DIFFICULTY" },
+          "answer_shape": "HAVE (correct tense) + DIFFICULTY + gerund",
+          "marking_point_plan": "MP1: correctly tensed form of HAVE + DIFFICULTY; MP2: gerund carrying the action",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["gerund_complement", "noun_plus_ing"],
+          "avoid": [
+            "Do not allow 'trouble' or 'problems' to fit, since the keyword is fixed but sentence1 must not simply signal a synonym swap.",
+            "Do not write sentence1 so that a to-infinitive complement would read naturally after DIFFICULTY.",
+            "Do not leave the tense of HAVE recoverable from more than one reading of sentence1.",
+            "Accept 'difficulty in + gerund' as a controlled variant, mapping to the same two marking points, provided the total stays within five words.",
+            "Do not reuse the 'there is no point in + gerund' mechanism already tested at E01 Q29."
+          ],
+          "collision_key": "tf09|have_difficulty_gerund|difficulty",
+          "history_notes": [
+            "TF-09 used once at E01 Q29 with target 'there is no point in + gerund' and keyword POINT. Both are noun-plus-gerund frames, so the generation prompt must keep the sentence contexts clearly unrelated."
+          ],
+          "validator_status": "PASS_WITH_WARNINGS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX03-Q29",
+          "question_number": 29,
+          "family_id": "TF-12",
+          "family_name": "Dependent prepositions & lexical grammar",
+          "target_structure": "be responsible for + noun phrase or gerund",
+          "semantic_equivalence_goal": "Preserve the attribution of duty or cause, moving from a plain verb to an adjective-plus-dependent-preposition frame.",
+          "keyword_constraint": { "mode": "exact", "keyword": "RESPONSIBLE" },
+          "answer_shape": "BE (correct tense) + RESPONSIBLE + FOR",
+          "marking_point_plan": "MP1: correctly tensed BE + RESPONSIBLE; MP2: dependent preposition FOR introducing the complement",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["dependent_preposition", "adjective_complementation"],
+          "avoid": [
+            "Do not write sentence1 so that 'in charge of' or 'responsible to' could be read as equally correct.",
+            "Do not make the tense of BE ambiguous between present and past.",
+            "Do not choose a context where blame rather than duty is meant, unless sentence1 makes that unambiguous.",
+            "Do not reuse the 'accuse someone of' mechanism already tested at E01 Q30."
+          ],
+          "collision_key": "tf12|responsible_for|responsible",
+          "history_notes": [
+            "TF-12 used once at E01 Q30 with target 'accuse someone of + gerund/noun' and keyword ACCUSED. Lexical head and preposition both changed."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX03-Q30",
+          "question_number": 30,
+          "family_id": "TF-11",
+          "family_name": "Fixed expressions & collocations",
+          "target_structure": "do somebody a favour",
+          "semantic_equivalence_goal": "Preserve a polite request for help by replacing a direct request with a fixed idiomatic chunk.",
+          "keyword_constraint": { "mode": "exact", "keyword": "FAVOUR" },
+          "answer_shape": "DO + indirect object + A + FAVOUR",
+          "marking_point_plan": "MP1: DO + indirect object; MP2: determiner A + FAVOUR as a fixed chunk",
+          "difficulty_band": "B2-Strong",
+          "secondary_tags": ["fixed_expression", "ditransitive_pattern", "politeness"],
+          "avoid": [
+            "Do not permit 'do a favour for me', which changes the pattern and the word count; sentence2 must force the ditransitive order.",
+            "Do not allow the determiner to be droppable.",
+            "Do not choose a context where 'help me out' would fit sentence2 without the keyword.",
+            "Use the British spelling FAVOUR throughout; FAVOR must not be accepted as a variant."
+          ],
+          "collision_key": "tf11|do_someone_a_favour|favour",
+          "history_notes": [
+            "TF-11 is untested. Blueprint System v1.0 §10 requires it to be prioritised in this batch. First scored use in the system."
+          ],
+          "validator_status": "PASS"
+        }
+      ],
+      "example_slot_guidance": {
+        "requirement": "Example (0) must not use TF-01, TF-02, TF-05, TF-09, TF-12 or TF-11, and must not use AS, UNLESS, ADVISED, DIFFICULTY, RESPONSIBLE or FAVOUR.",
+        "suggested_source": "Draw the example from TF-08 or TF-13, both of which are rested from the scored slots in this batch, and from a keyword unused in E01/E02."
+      },
+      "blueprint_validator": {
+        "P4-BV-01_six_slots_25_30": "PASS",
+        "P4-BV-02_six_distinct_families": "PASS — TF-01, TF-02, TF-05, TF-09, TF-11, TF-12",
+        "P4-BV-03_no_repeated_keyword": "PASS — AS, UNLESS, ADVISED, DIFFICULTY, RESPONSIBLE, FAVOUR",
+        "P4-BV-04_no_duplicate_target_or_collision_key": "PASS — six distinct collision keys",
+        "P4-BV-05_targets_are_B2_and_natural": "PASS",
+        "P4-BV-06_keyword_constrains_route": "PASS",
+        "P4-BV-07_answer_feasible_in_2_to_5_words": "PASS",
+        "P4-BV-08_two_non_overlapping_marking_points": "PASS",
+        "P4-BV-09_semantic_equivalence_goal_explicit": "PASS",
+        "P4-BV-10_avoid_notes_identify_alternative_routes": "PASS",
+        "P4-BV-11_difficulty_mix": "PASS — 1 Core, 4 Standard, 1 Strong",
+        "P4-BV-12_grammar_lexis_mix": "PASS — three grammar-led (TF-01, TF-02, TF-05), one pattern-led (TF-09) and two lexical-grammar-led (TF-11, TF-12)",
+        "P4-BV-13_history_checked": "PASS — no family, target structure or keyword repeated from E01/E02",
+        "P4-BV-14_example_collision": "DEFERRED — checked at generation",
+        "P4-BV-15_post_generation": "DEFERRED — checked after item generation",
+        "warnings": [
+          "Q28 shares a noun-plus-gerund shape with E01 Q29 (TF-09, POINT). Different family target and different keyword, but the generation prompt must keep the sentence contexts clearly unrelated."
+        ]
+      }
+    },
+    {
+      "blueprint_id": "TBP-PILOT-EX04",
+      "blueprint_version": "1.0",
+      "exam_id": "RUOE-PILOT-E04",
+      "status": "Draft — awaiting human approval",
+      "difficulty_mix": "1 B2-Core · 4 B2-Standard · 1 B2-Strong",
+      "slots": [
+        {
+          "slot_id": "TBP-PILOT-EX04-Q25",
+          "question_number": 25,
+          "family_id": "TF-10",
+          "family_name": "Phrasal & multi-word verbs",
+          "target_structure": "get rid of",
+          "semantic_equivalence_goal": "Preserve the meaning of disposing of or removing something, replacing a single lexical verb with a fixed three-part multi-word verb.",
+          "keyword_constraint": { "mode": "exact", "keyword": "RID" },
+          "answer_shape": "GET (correct tense) + RID + OF",
+          "marking_point_plan": "MP1: correctly tensed GET + RID; MP2: preposition OF introducing the object",
+          "difficulty_band": "B2-Core",
+          "secondary_tags": ["multi_word_verb", "tense_recovery"],
+          "avoid": [
+            "Do not make the tense of GET recoverable in more than one way from sentence1.",
+            "Do not choose an object that makes 'throw away' the only natural reading, since the two are not always interchangeable.",
+            "Do not allow 'be rid of', which is a different structure with a different meaning.",
+            "Do not reuse the 'make up one's mind' mechanism already tested at E02 Q29."
+          ],
+          "collision_key": "tf10|get_rid_of|rid",
+          "history_notes": [
+            "TF-10 used once at E02 Q29 with target 'make up one's mind / decision equivalence' and keyword MIND. Verb and keyword both changed."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX04-Q26",
+          "question_number": 26,
+          "family_id": "TF-06",
+          "family_name": "Modality & modal-perfect meaning",
+          "target_structure": "must have + past participle for deduction about the past",
+          "semantic_equivalence_goal": "Preserve a confident deduction about a completed past event, converting an explicit statement of certainty into modal-perfect form.",
+          "keyword_constraint": { "mode": "exact", "keyword": "MUST" },
+          "answer_shape": "MUST + HAVE + past participle",
+          "marking_point_plan": "MP1: MUST HAVE; MP2: past participle carrying the deduced event",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["modal_perfect", "deduction"],
+          "avoid": [
+            "Do not write sentence1 so that 'might have' or 'could have' would preserve the meaning; the certainty must be explicit.",
+            "Do not allow a negative deduction reading, which would point to 'can't have'.",
+            "Do not use an obligation context, which would make MUST a different modal altogether.",
+            "Do not reuse the 'need not have' mechanism already tested at E02 Q27."
+          ],
+          "collision_key": "tf06|must_have_deduction|must",
+          "history_notes": [
+            "TF-06 used once at E02 Q27 with target 'need not have + past participle' and keyword NEED. Modal meaning changed from unnecessary-but-done to past deduction; keyword changed."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX04-Q27",
+          "question_number": 27,
+          "family_id": "TF-07",
+          "family_name": "Tense, aspect & duration",
+          "target_structure": "this is the first time + present perfect",
+          "semantic_equivalence_goal": "Preserve the meaning that an experience has never happened before, converting a negative present-perfect statement into a first-time frame.",
+          "keyword_constraint": { "mode": "exact", "keyword": "TIME" },
+          "answer_shape": "FIRST + TIME + subject + present perfect",
+          "marking_point_plan": "MP1: FIRST TIME as the fixed frame; MP2: subject + present-perfect verb form",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["present_perfect", "experience", "contraction_relevant"],
+          "avoid": [
+            "Do not allow a past-simple continuation, which is the commonest wrong route.",
+            "Do not write sentence1 so that 'the first time' could refer to a specific past occasion rather than the present one.",
+            "Accept the contracted present perfect ('I've') as a controlled variant mapping to the same two marking points; the uncontracted form must also fit inside five words.",
+            "Do not reuse the 'time since + past simple' mechanism already tested at E02 Q28."
+          ],
+          "collision_key": "tf07|first_time_present_perfect|time",
+          "history_notes": [
+            "TF-07 used once at E02 Q28 with target 'time since + past simple ↔ present-perfect duration' and keyword SINCE. Both involve the present perfect, so the generation prompt must avoid any duration reading here."
+          ],
+          "validator_status": "PASS_WITH_WARNINGS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX04-Q28",
+          "question_number": 28,
+          "family_id": "TF-03",
+          "family_name": "Preference, wish & regret",
+          "target_structure": "would rather + subject + past simple",
+          "semantic_equivalence_goal": "Preserve a speaker's preference about somebody else's behaviour, converting a direct request or preference into the unreal-past would-rather pattern.",
+          "keyword_constraint": { "mode": "exact", "keyword": "RATHER" },
+          "answer_shape": "WOULD + RATHER + subject + past-simple verb",
+          "marking_point_plan": "MP1: WOULD RATHER + subject; MP2: past-simple verb form required by the second-subject pattern",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["unreal_past", "preference", "second_subject"],
+          "avoid": [
+            "Do not write sentence1 so that a to-infinitive continuation ('would rather not do it') would fit; the preference must concern another person.",
+            "Do not allow a present-simple verb after the second subject, which is the commonest wrong route.",
+            "Do not use a context where 'would prefer you to' fits sentence2 equally naturally.",
+            "Do not reuse the 'wish + past perfect' mechanism already tested at E02 Q25."
+          ],
+          "collision_key": "tf03|would_rather_second_subject|rather",
+          "history_notes": [
+            "TF-03 used once at E02 Q25 with target 'wish + past perfect' and keyword WISH. Regret about the past changed to preference about another person's present behaviour; keyword changed."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX04-Q29",
+          "question_number": 29,
+          "family_id": "TF-14",
+          "family_name": "Clause & phrase restructuring",
+          "target_structure": "adjective clause recast as a definite noun phrase: how deep it is → the depth of it",
+          "semantic_equivalence_goal": "Preserve the same proposition while replacing an embedded wh-clause with a nominalised measurement phrase.",
+          "keyword_constraint": { "mode": "exact", "keyword": "DEPTH" },
+          "answer_shape": "THE + DEPTH + OF",
+          "marking_point_plan": "MP1: definite article + DEPTH as the nominalised head; MP2: preposition OF linking the noun phrase to its complement",
+          "difficulty_band": "B2-Standard",
+          "secondary_tags": ["nominalisation", "clause_to_phrase", "measurement"],
+          "avoid": [
+            "Do not leave the wh-clause recoverable, since the transformation must be structural rather than lexical.",
+            "Do not choose a noun whose derived form is irregular or above B2.",
+            "Do not allow 'how deep' to remain grammatical in sentence2.",
+            "Do not write sentence1 so that a possessive ('its depth') would fit sentence2, since that changes the word count and the marking points."
+          ],
+          "collision_key": "tf14|wh_clause_to_noun_phrase|depth",
+          "history_notes": [
+            "TF-14 is untested. Blueprint System v1.0 §10 requires it to be prioritised in this batch. First scored use in the system."
+          ],
+          "validator_status": "PASS"
+        },
+        {
+          "slot_id": "TBP-PILOT-EX04-Q30",
+          "question_number": 30,
+          "family_id": "TF-04",
+          "family_name": "Passive & reporting structures",
+          "target_structure": "impersonal reporting with be thought to have + past participle",
+          "semantic_equivalence_goal": "Preserve an attributed general belief about a completed past event, converting 'people think that …' into a personal passive with a perfect infinitive.",
+          "keyword_constraint": { "mode": "exact", "keyword": "THOUGHT" },
+          "answer_shape": "BE (present) + THOUGHT + TO HAVE + past participle",
+          "marking_point_plan": "MP1: passive BE + THOUGHT; MP2: TO HAVE + past participle carrying the completed event",
+          "difficulty_band": "B2-Strong",
+          "secondary_tags": ["impersonal_passive", "perfect_infinitive", "reporting_verb"],
+          "avoid": [
+            "Do not allow a simple infinitive ('to cause'), which would lose the past reference; sentence1 must place the event clearly in the past.",
+            "Do not allow the anticipatory 'it is thought that' route to fit sentence2; the subject must already be raised.",
+            "Do not make the tense of BE ambiguous; the belief must be current.",
+            "Do not reuse the 'be expected to + infinitive' mechanism already tested at E02 Q26, which has no perfect infinitive."
+          ],
+          "collision_key": "tf04|be_thought_to_have_pp|thought",
+          "history_notes": [
+            "TF-04 used once at E02 Q26 with target 'subject + be EXPECTED + to-infinitive' and keyword EXPECTED. The perfect infinitive and the past reference are what distinguish this slot; flagged for reviewer attention because both are raised-subject passives."
+          ],
+          "validator_status": "PASS_WITH_WARNINGS"
+        }
+      ],
+      "example_slot_guidance": {
+        "requirement": "Example (0) must not use TF-03, TF-04, TF-06, TF-07, TF-10 or TF-14, and must not use RID, MUST, TIME, RATHER, DEPTH or THOUGHT.",
+        "suggested_source": "Draw the example from TF-08 or TF-13, both rested from the scored slots in this batch, and from a keyword unused in E01/E02/E03."
+      },
+      "blueprint_validator": {
+        "P4-BV-01_six_slots_25_30": "PASS",
+        "P4-BV-02_six_distinct_families": "PASS — TF-03, TF-04, TF-06, TF-07, TF-10, TF-14",
+        "P4-BV-03_no_repeated_keyword": "PASS — RID, MUST, TIME, RATHER, DEPTH, THOUGHT",
+        "P4-BV-04_no_duplicate_target_or_collision_key": "PASS — six distinct collision keys",
+        "P4-BV-05_targets_are_B2_and_natural": "PASS",
+        "P4-BV-06_keyword_constrains_route": "PASS",
+        "P4-BV-07_answer_feasible_in_2_to_5_words": "PASS",
+        "P4-BV-08_two_non_overlapping_marking_points": "PASS",
+        "P4-BV-09_semantic_equivalence_goal_explicit": "PASS",
+        "P4-BV-10_avoid_notes_identify_alternative_routes": "PASS",
+        "P4-BV-11_difficulty_mix": "PASS — 1 Core, 4 Standard, 1 Strong",
+        "P4-BV-12_grammar_lexis_mix": "PASS — four grammar-led (TF-03, TF-04, TF-06, TF-07), one lexical (TF-10) and one structural (TF-14)",
+        "P4-BV-13_history_checked": "PASS — no family, target structure or keyword repeated from E01, E02 or E03",
+        "P4-BV-14_example_collision": "DEFERRED — checked at generation",
+        "P4-BV-15_post_generation": "DEFERRED — checked after item generation",
+        "warnings": [
+          "Q30 and E02 Q26 are both raised-subject passives with a reporting verb. The perfect infinitive and past reference distinguish them, but the reviewer should confirm this is enough separation between exams two apart.",
+          "Q27 and E02 Q28 both involve the present perfect. The target structures differ (first-time experience versus duration since a past event), and no duration reading is permitted here."
+        ]
+      }
+    }
+  ]
+}

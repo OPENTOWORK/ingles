@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
@@ -33,6 +33,7 @@ import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS, isStudentHiddenProfileTab, getVisibleProfileTabs } from '@/components/perfil/profileTabsConfig';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
 import {
   getMascotAvatarPath,
@@ -165,6 +166,8 @@ export default function ProfilePage() {
   const router = useRouter();
   const { userRole, session: layoutSession } = useUserRole();
   const isStudent = usesStudentContentRestrictions(userRole);
+  const { applyLimits, progressTracking } = usePlanEntitlements();
+  const showProgressTracking = !applyLimits || progressTracking;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -769,7 +772,7 @@ export default function ProfilePage() {
   const subscriptionSlug = authMetadataPlanSlug(user?.user_metadata?.subscription_plan);
   const subscriptionPlan = getPlanBySlug(subscriptionSlug);
   const subscriptionDisplay = getPlanProfileDisplay(subscriptionPlan);
-  const showPricingLink = !isStudent && canViewPricing(userRole);
+  const showPricingLink = canViewPricing(userRole);
 
   const tabsProps = {
     tabs: getVisibleProfileTabs(isStudent),
@@ -837,34 +840,45 @@ export default function ProfilePage() {
           ) : null}
 
           <ProfileCollapsibleSection title="General statistics">
-            <ProfileGeneralStats
-              accessToken={layoutSession?.access_token}
-              onSummaryLoaded={(summary) => {
-                setStats((prev) => ({
-                  ...(prev || { exams: [], training: [], theory: [], stats: {} }),
-                  stats: {
-                    ...(prev?.stats || {}),
-                    ...summary,
-                  },
-                }));
-              }}
-            />
+            {showProgressTracking ? (
+              <ProfileGeneralStats
+                accessToken={layoutSession?.access_token}
+                onSummaryLoaded={(summary) => {
+                  setStats((prev) => ({
+                    ...(prev || { exams: [], training: [], theory: [], stats: {} }),
+                    stats: {
+                      ...(prev?.stats || {}),
+                      ...summary,
+                    },
+                  }));
+                }}
+              />
+            ) : (
+              <p className="profile-plan-upgrade-hint">
+                Progress tracking is included in Plus and Premium plans.{' '}
+                <Link href="/precios">View plans</Link>
+              </p>
+            )}
           </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection
-            title="Exam statistics"
-            className="profile-section--nested-exam-stats profile-section--exam-practice-combined"
-          >
-            <ExamStatistics userId={user?.id} embedded />
-          </ProfileCollapsibleSection>
+          {showProgressTracking ? (
+            <>
+              <ProfileCollapsibleSection
+                title="Exam statistics"
+                className="profile-section--nested-exam-stats profile-section--exam-practice-combined"
+              >
+                <ExamStatistics userId={user?.id} embedded />
+              </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title="Study activity">
-            <StudyActivityHeatmap accessToken={layoutSession?.access_token} />
-          </ProfileCollapsibleSection>
+              <ProfileCollapsibleSection title="Study activity">
+                <StudyActivityHeatmap accessToken={layoutSession?.access_token} />
+              </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title="Practice times">
-            <LevelsPartTimePerformancePanel userId={user?.id} />
-          </ProfileCollapsibleSection>
+              <ProfileCollapsibleSection title="Practice times">
+                <LevelsPartTimePerformancePanel userId={user?.id} />
+              </ProfileCollapsibleSection>
+            </>
+          ) : null}
         </div>
       )}
 
@@ -1050,13 +1064,15 @@ export default function ProfilePage() {
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection title="My subscription">
-            <ProfileSubscriptionCard
-              plan={subscriptionPlan}
-              description={subscriptionDisplay.descripcionCorta}
-              highlights={subscriptionDisplay.highlights}
-              badge={subscriptionDisplay.badge}
-              showPricingLink={showPricingLink}
-            />
+            <Suspense fallback={<p className="section-desc">Loading subscription…</p>}>
+              <ProfileSubscriptionCard
+                plan={subscriptionPlan}
+                description={subscriptionDisplay.descripcionCorta}
+                highlights={subscriptionDisplay.highlights}
+                badge={subscriptionDisplay.badge}
+                showPricingLink={showPricingLink}
+              />
+            </Suspense>
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection
@@ -1784,15 +1800,24 @@ function GlobalStyles() {
         color: var(--text);
         min-height: 100vh;
       }
-      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
+      .perfil-page.shell {
+        min-height: calc(100svh - 4rem);
+        width: 100%;
+        max-width: 1320px;
+        margin: 0 auto;
+        padding: clamp(1.25rem, 3vw, 2rem) clamp(1rem, 3vw, 2rem);
+        box-sizing: border-box;
+      }
       .center{display:grid;place-items:center}
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
       .header p{margin:0;color:#666}
       .section-desc{margin:-8px 0 16px;color:#64748b;font-size:15px;line-height:1.5}
+      .profile-plan-upgrade-hint{margin:0;padding:14px 16px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:0.9rem;line-height:1.5}
+      .profile-plan-upgrade-hint a{color:#2563eb;font-weight:600;text-decoration:none}
+      .profile-plan-upgrade-hint a:hover{text-decoration:underline}
       .form-hint{margin:0 0 12px;font-size:14px}
       .form-hint--error{color:#dc2626}
       .form-hint--success{color:#16a34a}
-      .perfil-page--mis-datos .shell{max-width:1200px;padding-left:32px;padding-right:32px}
       .mis-datos-panel{width:100%}
       .mis-datos-panel .profile-section:not(.profile-section--collapsible):not(.profile-collapse){padding:28px 32px}
       .mis-datos-panel .profile-section.profile-section--collapsible,.mis-datos-panel .profile-collapse{padding:0}
@@ -1813,7 +1838,7 @@ function GlobalStyles() {
       .mis-datos-panel .profile-name-section textarea.form-input{min-height:120px}
       .mis-datos-panel .profile-name-section .action-btn{margin-top:8px;padding:14px 24px;font-size:16px}
       @media (max-width:639px){.mis-datos-facts{grid-template-columns:1fr}}
-      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
+      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:0}
       .header__avatar{flex:0 0 auto}
       .header__avatar .profile-avatar__error{max-width:140px;font-size:12px;text-align:center}
       .header__copy{flex:1 1 240px;min-width:0}
@@ -1853,7 +1878,7 @@ function GlobalStyles() {
       .profile-coming-soon__title{margin:0 0 10px;font-size:22px;color:var(--text)}
       .profile-coming-soon__text{margin:0 auto;max-width:32rem;color:#64748b;line-height:1.55;font-size:15px}
       
-      .profile-tab-panels{display:flex;flex-direction:column;gap:10px;margin:4px 0 28px}
+      .profile-tab-panels{display:flex;flex-direction:column;gap:10px;margin:4px 0 28px;width:100%}
       .profile-tab-panels__charts-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
       .profile-section{margin:22px 0;padding:24px;border:1px solid #eaeaea;border-radius:16px;background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,0.1)}
       .profile-section.profile-section--collapsible,.profile-section.profile-collapse{margin:0;padding:0;background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:12px;box-shadow:0 1px 2px rgba(15,23,42,.04),0 4px 14px rgba(15,23,42,.04)}

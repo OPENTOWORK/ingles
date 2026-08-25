@@ -84,6 +84,11 @@ export function buildExamGeneratePrompt(mode, activity, level, options = {}) {
     if (activity === 'key-word' && L === 'B2') {
       return `Create ONE complete B2 Reading and Use of English Part 4: Key word transformations (Q25–30).
 The task should match official B2 First style, difficulty, wording and item design.
+
+GLOBAL PRINCIPLE (v1.1): Naturalness before transformation convenience.
+Sentence 1 and Sentence 2 must sound like natural British English in a plausible situation.
+Do NOT invent artificial sentences only to force a transformation family.
+
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
@@ -101,6 +106,13 @@ EACH SCORED QUESTION MUST INCLUDE:
 - sentence2Start OR sentence2: second sentence with exactly ONE gap written as __________________
 - answer: ONE primary correct gap completion (2–5 Cambridge words including the keyword)
 - grading_metadata: object required for Dralo's deterministic 0/1/2 grader (see below)
+- Blueprint metadata on each scored item (for engine validation):
+  family_id (e.g. TF-02 — keep existing Transformation Family IDs, do not invent new families)
+  target_structure: concise description of the ONE required grammatical frame
+  difficulty_band: B2-Core | B2-Standard | B2-Strong (predominance must be B2-Standard/B2-Strong)
+  transformation_distance: lexical_substitution | minor_grammatical | syntactic_restructuring | multi_step_transformation
+  marking_point_plan: brief MP1/MP2 intent aligned with markingPoints labels
+  alternative_route_check: confirm only one defendable route (or explain why alternatives are blocked)
 
 ANSWER LENGTH (CRITICAL — match real FCE Part 4):
 - Prefer answers of 4 or 5 Cambridge words. Most items should use nearly the full 2–5 word allowance.
@@ -155,6 +167,20 @@ QUALITY RULES:
 - Exactly one main correct grammatical solution per item.
 - Choose common B2 grammatical/lexical keywords.
 - Do NOT generate an item that cannot be split naturally into two marking points.
+- Sentence 1 and Sentence 2 must be contextually complete (no dangling decided/considered without enough meaning).
+- Target B2-Standard and B2-Strong difficulty — avoid B1-trivial items.
+- Show real transformation distance: mix syntactic restructuring and multi-step items; avoid a set of near-copy answers.
+- target_structure, sentence2, canonical answer, markingPoints and accepted variants must describe the SAME transformation (internal consistency).
+
+ACCEPTED VARIANTS (v1.1):
+- canonical answer is mandatory in fullAnswers.
+- List explicit accepted variants only (e.g. "do not need" / "don't need"; "need not have brought" / "needn't have brought").
+- Each variant: 2–5 Cambridge words, keyword unchanged, same meaning, same marking partition.
+- No free acceptance — no alternate grammatical routes as separate fullAnswers.
+
+DIFFICULTY POLICY (v1.1):
+- At least 4/6 items should be B2-Standard or B2-Strong (inferable from restructuring depth, not labels alone).
+- Avoid concentrating on 2-word answers — vary 2–5 words naturally across the set.
 
 ITEM VARIETY (across Q25–30):
 Include a balanced mix such as: passive voice; reported speech; conditionals; wishes/regrets; modal verbs; comparatives; infinitive/gerund patterns; phrasal verbs; fixed expressions; verb patterns; dependent prepositions; emphasis structures; relative clauses; quantifiers.
@@ -168,10 +194,10 @@ FORBIDDEN:
 - question numbers outside 25–30
 - multiple-choice options
 - answers under 2 or over 5 Cambridge words
-- a set where fewer than 3 answers use 4–5 words
 - missing grading_metadata / missing marking points
 - keyword changed, split, or omitted
-- two equally valid different transformation routes
+- two equally valid different transformation routes in fullAnswers
+- target_structure or marking labels that contradict the canonical answer
 
 Each modelAnswers entry: {id, number:25–30, answer:"2–5 word primary answer"} matching the question answer.
 Generate exactly 6 questions numbered 25–30.
@@ -237,7 +263,7 @@ OPTIONS RULES (CRITICAL):
 - Exactly 4 options per question: "A) word", "B) word", "C) word", "D) word".
 - Each option is ONE word only. No phrases, no multi-word options.
 - Exactly ONE correct answer per item. The three distractors must be plausible same-class words that fail on collocation, dependent preposition, precise meaning or word partnership — never absurd or obviously wrong.
-- Never repeat the same word twice within one item's options.
+- Adversarially test all four options before finalising. If two options are defensible in context, redesign the item (v1.1 HARD FAIL).
 - Spread the correct letters across A, B, C and D — no letter may be correct more than 3 times across Q1–8.
 
 EXAMPLE RULES (CRITICAL):
@@ -388,7 +414,8 @@ GAP DESIGN (CRITICAL):
 ITEM VARIETY (CRITICAL):
 - Include a genuine mix of: prefixes; suffixes; changes of word class; positive and negative forms; abstract nouns; adjectives; adverbs; verbs.
 - Do not overuse any single transformation type.
-- Do not repeat the same word family.
+- Natural sentence first, transformation second. Root identical to answer is invalid unless explicitly justified (v1.1).
+- **HARD RULE (v1.1.2):** The derived answer must NEVER be identical to the base stem (e.g. stem PERFORM → answer perform is FORBIDDEN). Every answer must show genuine word formation (suffix, prefix, or class change).
 - Do not repeat the same transformation pattern excessively.
 - Keep base words within expected B2 Cambridge-style vocabulary range.
 
@@ -410,6 +437,7 @@ FORBIDDEN:
 - repeated word families
 - two equally valid derived answers
 - passage shorter than 150 or longer than 180 words
+- any scored answer identical to its stem (case-insensitive)
 
 Each questions entry: {id:"q1"–"q8", number:17–24, type:"word-formation", stem:"CAPITALS"}.
 Each modelAnswers entry MUST be an object: {id:"q1"–"q8", number:17–24, answer:"one derived word"} — never a bare string array.
@@ -453,7 +481,8 @@ FORMAT (CRITICAL):
 TEXT REQUIREMENTS:
 - Natural published-style article of 550–650 words with a short title.
 - STRICT word count: minimum 550 words, maximum 650 words. Count carefully. Do NOT exceed 650.
-- Prefer ~580–620 words. Write enough developed paragraphs. If the draft is shorter than 550, add 1–2 full paragraphs before returning JSON. If longer than 650, cut redundant clauses.
+- Prefer ~580–620 words. Write enough developed paragraphs (typically 5–7). If the draft is under 550, add 1–2 full paragraphs before returning JSON. If longer than 650, cut redundant clauses.
+- Include integer field passageWordCount with your counted passage words (must be 550–650).
 - Style similar to a magazine, newspaper, website or popular science article.
 - Authentic B2-level British English.
 - Difficulty should come from: inference; lexical precision; understanding of ideas; writer attitude; writer purpose; reference and implication.
@@ -475,6 +504,8 @@ QUESTION DESIGN (CRITICAL):
   - reference
   - vocabulary
 - Do NOT make all questions simple detail questions.
+- v1.1: Build distractors from passage information (distorted relation/scope/attitude); reject options unrelated to the text unless strategically justified.
+- v1.1: Verify paragraph references ("last paragraph", etc.) and quoted evidence against the final passage before returning JSON.
 - Include at least 2 inferential/attitude/purpose/reference/global questions.
 - Avoid direct copying from the passage into stems or options.
 
@@ -496,6 +527,7 @@ FORBIDDEN:
 - fewer or more than 6 questions
 - question numbers outside 31–36
 - passage under 550 or over 650 words
+- missing passageWordCount or wrong count
 - missing options or non A–D answers
 - placeholder text
 - visible "Cambridge" in student-facing fields
@@ -508,6 +540,17 @@ Return ONLY JSON with: partTitle, directions, title, passage (550–650 words), 
     if (activity === 'gapped-text' && L === 'B2') {
       return `Create ONE complete B2 Reading and Use of English Part 6: Gapped text (Q37–42).
 The task should match official B2 First style, difficulty, wording and item design.
+
+PART 6 ARCHITECTURE v2 (MANDATORY SEQUENCE):
+1. Generate a complete coherent article from the Content Brief and Style Card — NO gaps yet.
+2. Identify six genuine cohesion opportunities at paragraph / inter-paragraph level.
+3. For each, record cohesion metadata (discourse function, backward/forward anchors, reference chain).
+4. Write/select one complete removable sentence per opportunity (normally ONE sentence each; may be developed and span several visual lines — do NOT force artificially short options).
+5. PHYSICALLY REMOVE those six sentences from the article and replace with gaps (37)–(42). No option text may remain verbatim in the gapped passage.
+6. Create one plausible unused sentence (topic-related but fails cohesion in every gap).
+7. Shuffle options A–G only after extraction.
+8. Validate: 6 gaps, 7 options, 1 unused, no duplication, no multifit.
+
 ${variety}
 ${SHARED_JSON_RULES}
 ${directions}
@@ -538,6 +581,7 @@ PASSAGE STRUCTURE:
 - Aim for roughly 70–90 words per paragraph so the full passage lands in 540–570 words.
 - Remove one complete sentence from six paragraphs / positions, leaving gaps (37)–(42).
 - Each gap must sit where the missing sentence connects naturally with: the sentence before; the sentence after; the wider paragraph; the wider article progression.
+- Before finalising each gap, verify backward cohesion (links to prior sentence) AND forward cohesion (sets up the next sentence). If either link is weak, rewrite the gap context or choose a different removable sentence.
 - Prefer gaps inside paragraphs (not all at paragraph endings) so surrounding context is clear.
 - Passage must remain coherent when the correct sentences are restored.
 
@@ -549,8 +593,11 @@ QUESTION / GAP DESIGN (CRITICAL):
 
 CANDIDATE SENTENCES A–G (CRITICAL):
 - Exactly 7 complete sentences labelled "A) ...", "B) ...", … "G) ...".
-- Each must have a natural length and resemble an authentic removed sentence.
-- The correct sentence for each gap must fit continuous prose and connect clearly with surrounding context.
+- Each must be a natural, developed sentence that could have been removed from a magazine article — not a label, tagline, or fragment.
+- Soft target ~12–28 words per sentence when cohesion requires; avoid telegraphic options under ~10 words unless the discourse function is genuinely minimal.
+- Do NOT shorten sentences merely to hit a word count; each option should read like authentic removed prose.
+- The correct sentence for each gap must fit continuous prose and connect clearly with surrounding context via discourse links (this/that/these, however, therefore, meanwhile, etc.).
+- The EXTRA sentence must be topic-plausible but fail every gap because of meaning, reference, logic or cohesion.
 - The EXTRA sentence must be topic-plausible but fail every gap because of meaning, reference, logic or cohesion.
 - Several incorrect sentences may look partially suitable for a gap, but only ONE must fit perfectly.
 - Avoid: obviously wrong options; options that fit more than one gap defensibly; options that rely only on repeated keywords; unexplained references; options that make the article illogical.
@@ -614,6 +661,8 @@ QUESTION DESIGN (CRITICAL):
 - Each question stem (field "prompt" or "question") MUST start with "Who" (e.g. Who felt that…, Who mentions…, Who prefers…).
 - Assess understanding of: opinions; attitudes; experiences; intentions; preferences; motivations; feelings; specific details; comparisons; implications.
 - Questions must require candidates to compare information across multiple texts.
+- v1.1.2 PARAPHRASE RULE: Questions must paraphrase profile content — never copy a 4+ word phrase from any section. Replace copied vocabulary with synonyms and restructure (e.g. NOT "Who felt overwhelmed when the deadline arrived" if a profile says "I felt overwhelmed when the deadline arrived"; use "Who struggled to cope when a work deadline approached without guidance?").
+- Require meaning discrimination (attitude, motivation, consequence) — not lexical matching.
 - Not answerable by simple keyword matching or one isolated sentence.
 - Paraphrase naturally; do NOT copy wording directly from the texts.
 - Use concise B2 exam-style statements.

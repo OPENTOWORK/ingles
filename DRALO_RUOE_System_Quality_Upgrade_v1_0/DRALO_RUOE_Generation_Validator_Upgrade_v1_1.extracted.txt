@@ -1,0 +1,242 @@
+DRALO
+
+RUOE GENERATION & VALIDATOR UPGRADE
+
+Part-specific rules derived from pilot evidence · Includes Part 6 Architecture v2
+
+Version 1.1 · 14 August 2026
+
+
+
+1. Architectural placement
+
+Layer
+
+Change
+
+Do not put here
+
+Topic Bank
+
+No change from pilot findings.
+
+Naturalness, distractor logic, title rules.
+
+Distribution Rules
+
+No core change; later add title-pattern history as soft longitudinal control.
+
+Part mechanics.
+
+Editorial Quality Standard
+
+Global naturalness, filler, title and adversarial quality rules.
+
+Topic allocation.
+
+Style Cards v1.1
+
+Genre-specific voice + title families + naturalness emphasis.
+
+Exact gap/question mechanics.
+
+Part prompts v1.1
+
+How each Part is constructed.
+
+Longitudinal topic allocation.
+
+Validators v1.1
+
+Independent enforcement and adversarial checks.
+
+Creative planning decisions.
+
+QA Lessons Learned
+
+Evidence/audit trail and promotion history.
+
+Rules that must be remembered only informally.
+
+
+
+2. Cross-Part prompt changes
+
+• Generate natural prose first; item construction must not degrade the text.
+
+• Before finalising, rewrite any sentence whose main justification is ‘it makes the item work’.
+
+• Run an internal title-candidate stage after the text is stable.
+
+• Do not rely on generator self-assessment for answer uniqueness; pass output to independent validators.
+
+• Repair locally: sentence/item/question before whole exercise; whole exercise only when the structure is fundamentally unsalvageable.
+
+3. Part-specific changes
+
+Part 1 · Multiple-choice cloze
+
+• Build each item around a genuine lexical/collocational distinction in a natural sentence.
+
+• Adversarially test all four options. If two options are defensible in context, the item fails.
+
+• Do not rebalance A–D by changing the correct answer. Only reorder intact option sets when semantically safe.
+
+• Distractors must fail for an explainable lexical, collocational, semantic or grammatical reason.
+
+Part 2 · Open cloze
+
+• Prefer gaps that test meaningful function words/grammar rather than trivially obligatory continuations when the batch becomes too easy.
+
+• Naturalness of surrounding prose overrides desire to force a particular preposition/conjunction.
+
+• Check that each gap has one defensible one-word answer in context.
+
+Part 3 · Word formation
+
+• Require genuine derivational variety across the eight scored items: category changes, suffixes, prefixes and negative formation where natural.
+
+• Root identical to answer does not count as a valid transformation unless explicitly justified by the official mechanic; default action is replace the item.
+
+• If a planned stem produces an unnatural sentence, change the stem/item rather than force the sentence.
+
+• Validator must flag a batch with no prefix/negative formation or excessive same-type transformations.
+
+• Natural sentence first, transformation second.
+
+Part 5 · Multiple-choice reading
+
+• Construct distractors mainly from real passage information, but distort relation, cause, scope, attitude, speaker, timing or implication.
+
+• Reject distractors that can be discarded because the text never mentions the idea at all, unless strategically justified.
+
+• Verify every textual reference (‘last paragraph’, quoted phrase, pronoun) against the final passage.
+
+• Reduce literal word matching between question/option and evidence.
+
+Part 7 · Multiple matching
+
+• Questions should paraphrase evidence rather than reuse the decisive wording from a profile.
+
+• Each question must require discrimination of meaning, attitude, motivation, timing, cause or outcome.
+
+• Run a lexical-overlap check; high overlap with exactly one profile is a warning and may require rewriting.
+
+4. Part 6 Generation Architecture v2
+
+Structural correction
+
+Part 6 must be generated as a true gapped-text task. The six correct A–G options are sentences removed from the article; they must not remain duplicated in the passage.
+
+
+
+Step
+
+Required behaviour
+
+P6-V2-01
+
+Generate a complete, coherent article from the approved Content Brief and Style Card, with no gaps yet.
+
+P6-V2-02
+
+Identify six genuine cohesion opportunities at paragraph/inter-paragraph level.
+
+P6-V2-03
+
+For each candidate, record: discourse function, backward anchor, forward anchor, reference chain, logical relation and why it should fit only one position.
+
+P6-V2-04
+
+Write/select one complete removable sentence for each opportunity. A Cambridge-like option is normally one sentence, but it may be developed enough to occupy several visual lines.
+
+P6-V2-05
+
+Physically remove the six sentences from the article and replace them with gaps 37–42.
+
+P6-V2-06
+
+Create one plausible unused sentence that shares topic/lexis but fails at least one essential cohesion relation in every gap.
+
+P6-V2-07
+
+Shuffle the seven options A–G only after extraction.
+
+P6-V2-08
+
+Run structural, uniqueness and editorial validators before output.
+
+
+
+5. Part 6 option design standard
+
+• Each A–G option is normally one complete sentence, not 3–4 separate sentences.
+
+• Options may be substantially longer than the pilot outputs; Cambridge reference samples include both concise and developed single-sentence options.
+
+• Use a soft editorial target rather than a hard word count: roughly 8–30 words is acceptable when cohesion requires it; justified exceptions are allowed.
+
+• An option should carry meaningful discourse: reference, contrast, consequence, reformulation, exemplification, continuation, cause, concession or temporal development.
+
+• Do not shorten an option merely to hit a target if that removes the cohesion signal.
+
+• Across the seven options, vary cohesion mechanisms; do not make every answer solvable by one pronoun or one repeated noun.
+
+• The correct option must make sense with both the preceding and following text, not merely with one side.
+
+6. Part 6 HARD validators
+
+ID
+
+Hard check
+
+P6-H01
+
+Exactly 6 gaps numbered 37–42.
+
+P6-H02
+
+Exactly 7 options A–G and exactly one unused option.
+
+P6-H03
+
+No option A–G may remain verbatim in the gapped passage.
+
+P6-H04
+
+Each correct option fits one and only one gap.
+
+P6-H05
+
+No gap has two fully defensible answers.
+
+P6-H06
+
+Unused option fits no gap fully.
+
+P6-H07
+
+Correct option must have a documented cohesion relation to both local sides of the gap.
+
+P6-H08
+
+Final passage plus inserted correct options reconstructs coherent prose without duplication.
+
+
+
+7. Quality/adversarial validators
+
+• Try every wrong option in every gap and explain why it fails. If the explanation is weak or subjective, flag for regeneration.
+
+• Check that options are not all trivially short or generic.
+
+• Check lexical overlap: repeated nouns may support cohesion but must not make answers obvious by keyword matching alone.
+
+• Check paragraph progression after reinsertion of all six answers.
+
+• Check title and prose using Editorial Quality Validator after P6 mechanics pass.
+
+8. Acceptance gate before scaling
+
+Do not treat these rules as validated merely because they have been implemented. Generate a second controlled pilot and require human review. Only promote to production-scale generation after the new validators catch seeded bad cases and teachers confirm a material reduction in naturalness/item-quality problems.
+

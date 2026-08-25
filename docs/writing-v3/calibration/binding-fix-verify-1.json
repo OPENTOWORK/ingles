@@ -1,0 +1,2302 @@
+{
+  "baseline_id": "binding-fix-verify-1",
+  "generated_at": "2026-08-12T09:56:23.798Z",
+  "engine_version": "3.0.0",
+  "schema_version": "1.0.0",
+  "prompt_versions": {
+    "task_analysis": "1.0.0",
+    "observation_assessment": "1.0.0",
+    "cambridge_assessment": "1.0.0",
+    "feedback_composition": "1.0.0"
+  },
+  "model_config": {
+    "model": "gpt-4o-2024-08-06",
+    "snapshot_id": "gpt-4o-2024-08-06",
+    "temperature": 0,
+    "response_format": "json_schema"
+  },
+  "diagnostic_only": true,
+  "selected_cases": [
+    "G-01",
+    "G-09"
+  ],
+  "status": "partial",
+  "missing_source_cases": [],
+  "runnable_cases": 2,
+  "case_results": [
+    {
+      "case_id": "G-01",
+      "label": "Environmental essay A",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate A examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-01",
+        "expected_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 3,
+          "communicative_achievement": 3,
+          "organisation": 2,
+          "language": 2
+        },
+        "expected_total": 13,
+        "actual_total": 10,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 4,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 1
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "assessment: the assembled assessment record does not satisfy the assessment contract"
+      ],
+      "assessment_confidence": null,
+      "retries": 5,
+      "latency_ms": 113100,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 765,
+          "output_tokens": 204,
+          "total_tokens": 969,
+          "latency_ms": 2460,
+          "provider_metadata": {
+            "id": "chatcmpl-EBzz7e0hHfhy6LvaDHWQguk9BaWc3",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3314,
+          "output_tokens": 2287,
+          "total_tokens": 5601,
+          "latency_ms": 21188,
+          "provider_metadata": {
+            "id": "chatcmpl-EBzz951ieLfjvHaLGj8A7RNzjSYqG",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-01",
+          "attempt": 2,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3314,
+          "output_tokens": 2337,
+          "total_tokens": 5651,
+          "latency_ms": 23154,
+          "provider_metadata": {
+            "id": "chatcmpl-EBzzUx6kTB7MPBEdKiWWli15Jb46Y",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-01",
+          "attempt": 3,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3314,
+          "output_tokens": 2677,
+          "total_tokens": 5991,
+          "latency_ms": 28354,
+          "provider_metadata": {
+            "id": "chatcmpl-EBzzr7vzQo7QzBEGGMwY0ynUXWANL",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6920,
+          "output_tokens": 1463,
+          "total_tokens": 8383,
+          "latency_ms": 13537,
+          "provider_metadata": {
+            "id": "chatcmpl-EC00KUIWVstmTwf6ukvtFjseQ8kGM",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 2,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6920,
+          "output_tokens": 1482,
+          "total_tokens": 8402,
+          "latency_ms": 12008,
+          "provider_metadata": {
+            "id": "chatcmpl-EC00YuQfD6SRoVmFwWnqiLiWHZdVe",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 3,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6920,
+          "output_tokens": 1467,
+          "total_tokens": 8387,
+          "latency_ms": 12326,
+          "provider_metadata": {
+            "id": "chatcmpl-EC00kskkWtup6LRS9q3FR9omLu7g4",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-01",
+          "criterion": "content",
+          "expected_mark": 4,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-01",
+          "criterion": "organisation",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-01",
+          "criterion": "language",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "binding_diagnostics": [
+        {
+          "attempt": 1,
+          "criterion_of_first_failure": null,
+          "first_failure_reason": null,
+          "evidence_bindings": [
+            {
+              "criterion": "content",
+              "quote": "First of all a huge damage to the environment brings a transport.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 252,
+              "span_end": 317,
+              "bound_text": "First of all a huge damage to the environment brings a transport."
+            },
+            {
+              "criterion": "content",
+              "quote": "In addition to this our rivers and seas are in not less danger situation.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 596,
+              "span_end": 669,
+              "bound_text": "In addition to this our rivers and seas are in not less danger situation."
+            },
+            {
+              "criterion": "content",
+              "quote": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 858,
+              "span_end": 974,
+              "bound_text": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 133,
+              "span_end": 251,
+              "bound_text": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "First of all a huge damage to the environment brings a transport.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 252,
+              "span_end": 317,
+              "bound_text": "First of all a huge damage to the environment brings a transport."
+            },
+            {
+              "criterion": "language",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "language",
+              "quote": "a huge damage to the environment brings a transport",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 265,
+              "span_end": 316,
+              "bound_text": "a huge damage to the environment brings a transport"
+            }
+          ],
+          "raw_assessment_payload": {
+            "assessable": true,
+            "unassessable_reason": null,
+            "overall_confidence": "high",
+            "criteria": [
+              {
+                "criterion": "content",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response addresses the role of transport in environmental problems: 'a huge damage to the environment brings a transport.'",
+                  "The response addresses the role of rivers and seas in environmental problems: 'our rivers and seas are in not less danger situation.'",
+                  "The response introduces an additional idea related to environmental problems: 'every person can and must contribute to solving this important problem.'"
+                ],
+                "limiting_evidence": [
+                  "The points about transport and rivers and seas lack detailed examples or explanations to fully develop the ideas.",
+                  "The additional idea about individual contributions is mentioned but not fully developed with specific examples or reasoning."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "First of all a huge damage to the environment brings a transport.",
+                    "occurrence_index": 1
+                  },
+                  {
+                    "quote": "In addition to this our rivers and seas are in not less danger situation.",
+                    "occurrence_index": 2
+                  },
+                  {
+                    "quote": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem.",
+                    "occurrence_index": 3
+                  }
+                ],
+                "why_not_higher": "The response lacks detailed examples or explanations to fully develop the ideas, leaving the reader with an information gap.",
+                "why_not_lower": "The response addresses all mandatory content points, providing a basic level of information on each.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "C14",
+                  "lower_band_evidence": "The task is substantially completed, but at least one notable point, function or required development is missing, limited or only indirectly addressed.",
+                  "higher_band_reference": "C13",
+                  "higher_band_evidence": "The response is close to complete but contains a limited omission, underdeveloped point or small relevance problem."
+                },
+                "confidence": "high",
+                "confidence_reason": "The task analysis and response provide clear evidence for the content mark.",
+                "source_rule_ids": [
+                  "C03",
+                  "C04",
+                  "C06",
+                  "C14"
+                ],
+                "evidence_observation_ids": [
+                  "obs_55e2ed24c947"
+                ]
+              },
+              {
+                "criterion": "communicative_achievement",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The essay uses the conventions of the task to communicate straightforward ideas about environmental problems.",
+                  "The reader can follow the argument and remains engaged with the topic."
+                ],
+                "limiting_evidence": [
+                  "The response lacks complexity and flexibility in communicating ideas, relying mainly on straightforward statements.",
+                  "There is some awkward phrasing that affects the clarity of communication."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet.",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response does not effectively communicate complex ideas or maintain a consistent level of reader engagement throughout.",
+                "why_not_lower": "The response uses the conventions of the task to hold the reader's attention and communicate straightforward ideas.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "CA12",
+                  "lower_band_evidence": "Uses the conventions of the communicative task to hold the target reader’s attention and communicate straightforward ideas.",
+                  "higher_band_reference": "CA13",
+                  "higher_band_evidence": "The response is clearly successful and often effective, but either complexity, flexibility, consistency or reader impact is not sustained enough for Band 5."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly fits the Band 3 descriptor for communicative achievement.",
+                "source_rule_ids": [
+                  "CA03",
+                  "CA06",
+                  "CA12"
+                ],
+                "evidence_observation_ids": [
+                  "obs_04275c4df314"
+                ]
+              },
+              {
+                "criterion": "organisation",
+                "mark": 2,
+                "band_anchor": "2",
+                "positive_evidence": [
+                  "The response has a recognisable structure with an introduction, body, and conclusion.",
+                  "Basic linking words are used to connect ideas, such as 'First of all' and 'In addition to this.'"
+                ],
+                "limiting_evidence": [
+                  "The essay lacks clear paragraphing and logical progression between ideas, making it difficult for the reader to follow the argument smoothly.",
+                  "Each paragraph should focus on a single main idea and develop it fully before moving to the next."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "First of all a huge damage to the environment brings a transport.",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response lacks clear paragraphing and logical progression between ideas, which affects the overall coherence.",
+                "why_not_lower": "The response has a recognisable structure and uses basic linking words to connect ideas.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "O13",
+                  "lower_band_evidence": "Text is generally well organised and coherent, using a variety of linking words and cohesive devices.",
+                  "higher_band_reference": "O14",
+                  "higher_band_evidence": "The text is clearly well organised and contains some higher-band cohesion or patterning, but cross-paragraph connection, consistency or flexibility is not fully sustained."
+                },
+                "confidence": "high",
+                "confidence_reason": "The evidence clearly supports a Band 2 mark for organisation due to the lack of clear paragraphing and progression.",
+                "source_rule_ids": [
+                  "O01",
+                  "O02",
+                  "O08",
+                  "O14"
+                ],
+                "evidence_observation_ids": [
+                  "obs_fbd59976d83d"
+                ]
+              },
+              {
+                "criterion": "language",
+                "mark": 2,
+                "band_anchor": "2",
+                "positive_evidence": [
+                  "The response uses everyday vocabulary generally appropriately.",
+                  "Simple grammatical forms are used with some degree of control."
+                ],
+                "limiting_evidence": [
+                  "There are noticeable errors in grammar and vocabulary that affect the clarity of the response.",
+                  "Awkward phrasing and incorrect article usage are present throughout the text."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "a huge damage to the environment brings a transport",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response lacks the range and control required for Band 3, with frequent errors affecting clarity.",
+                "why_not_lower": "The response uses basic vocabulary reasonably appropriately and simple grammatical forms with some degree of control.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "L15",
+                  "lower_band_evidence": "Uses everyday vocabulary generally appropriately, while occasionally overusing certain lexis. Uses simple grammatical forms with a good degree of control.",
+                  "higher_band_reference": "L16",
+                  "higher_band_evidence": "The response contains substantial Band 5 evidence but lacks full consistency, breadth or flexibility."
+                },
+                "confidence": "high",
+                "confidence_reason": "The language errors are frequent enough to clearly place the response in Band 2.",
+                "source_rule_ids": [
+                  "L03",
+                  "L04",
+                  "L06",
+                  "L18"
+                ],
+                "evidence_observation_ids": [
+                  "obs_9ff8c4ca181d",
+                  "obs_f0dd6aa79969",
+                  "obs_6b608bfbfc7e",
+                  "obs_e0365291959a",
+                  "obs_9013fb802a31",
+                  "obs_12b8d60d0259",
+                  "obs_7c78eccb20e5"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "criterion_of_first_failure": null,
+          "first_failure_reason": null,
+          "evidence_bindings": [
+            {
+              "criterion": "content",
+              "quote": "First of all a huge damage to the environment brings a transport.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 252,
+              "span_end": 317,
+              "bound_text": "First of all a huge damage to the environment brings a transport."
+            },
+            {
+              "criterion": "content",
+              "quote": "In addition to this our rivers and seas are in not less danger situation.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 596,
+              "span_end": 669,
+              "bound_text": "In addition to this our rivers and seas are in not less danger situation."
+            },
+            {
+              "criterion": "content",
+              "quote": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 858,
+              "span_end": 974,
+              "bound_text": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 133,
+              "span_end": 251,
+              "bound_text": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "First of all a huge damage to the environment brings a transport.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 252,
+              "span_end": 317,
+              "bound_text": "First of all a huge damage to the environment brings a transport."
+            },
+            {
+              "criterion": "language",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "language",
+              "quote": "a huge damage to the environment brings a transport",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 265,
+              "span_end": 316,
+              "bound_text": "a huge damage to the environment brings a transport"
+            }
+          ],
+          "raw_assessment_payload": {
+            "assessable": true,
+            "unassessable_reason": null,
+            "overall_confidence": "high",
+            "criteria": [
+              {
+                "criterion": "content",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response addresses the role of transport in environmental problems: 'a huge damage to the environment brings a transport.'",
+                  "The response addresses the role of rivers and seas in environmental problems: 'our rivers and seas are in not less danger situation.'",
+                  "The response introduces an additional idea related to environmental problems: 'every person can and must contribute to solving this important problem.'"
+                ],
+                "limiting_evidence": [
+                  "The points about transport and rivers and seas lack detailed examples or explanations to fully develop the ideas.",
+                  "The additional idea about individual contributions is mentioned but not developed with specific examples or reasoning."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "First of all a huge damage to the environment brings a transport.",
+                    "occurrence_index": 1
+                  },
+                  {
+                    "quote": "In addition to this our rivers and seas are in not less danger situation.",
+                    "occurrence_index": 2
+                  },
+                  {
+                    "quote": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem.",
+                    "occurrence_index": 3
+                  }
+                ],
+                "why_not_higher": "The response lacks detailed examples or explanations to fully develop the ideas, leaving the reader with a real information gap.",
+                "why_not_lower": "The response addresses all mandatory content points, providing a basic level of information for each.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "C14",
+                  "lower_band_evidence": "The task is substantially completed, but at least one notable point, function or required development is missing, limited or only indirectly addressed.",
+                  "higher_band_reference": "C12",
+                  "higher_band_evidence": "No meaningful content gap remains. Minor linguistic ambiguity belongs elsewhere unless it prevents the content from being understood."
+                },
+                "confidence": "high",
+                "confidence_reason": "The task analysis clearly outlines the mandatory content points, and the response addresses each point, albeit with limited development.",
+                "source_rule_ids": [
+                  "C03",
+                  "C04",
+                  "C14"
+                ],
+                "evidence_observation_ids": [
+                  "obs_55e2ed24c947"
+                ]
+              },
+              {
+                "criterion": "communicative_achievement",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The essay uses the conventions of the task to communicate straightforward ideas about environmental problems.",
+                  "The reader can follow the argument and remains engaged with the topic."
+                ],
+                "limiting_evidence": [
+                  "The response relies mainly on straightforward ideas and lacks complexity or flexibility in communicating more demanding ideas.",
+                  "There is some awkward phrasing that affects the clarity of communication."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet.",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response lacks complexity and flexibility in communicating more demanding ideas, which limits its effectiveness.",
+                "why_not_lower": "The essay uses the conventions of the task to hold the reader's attention and communicate straightforward ideas.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "CA12",
+                  "lower_band_evidence": "Uses the conventions of the communicative task to hold the target reader’s attention and communicate straightforward ideas.",
+                  "higher_band_reference": "CA11",
+                  "higher_band_evidence": "Genre, format, register and function consistently support the communication. The writer controls the reader relationship and can bring together both simple and more demanding ideas when the task provides an opportunity."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly uses the conventions of the task to communicate straightforward ideas, but lacks complexity.",
+                "source_rule_ids": [
+                  "CA03",
+                  "CA06",
+                  "CA12"
+                ],
+                "evidence_observation_ids": [
+                  "obs_04275c4df314"
+                ]
+              },
+              {
+                "criterion": "organisation",
+                "mark": 2,
+                "band_anchor": "2",
+                "positive_evidence": [
+                  "The response has a recognisable structure with an introduction, body, and conclusion.",
+                  "Basic linking words are used to connect ideas, such as 'First of all' and 'In addition to this.'"
+                ],
+                "limiting_evidence": [
+                  "The essay lacks clear paragraphing and logical progression between ideas, making it difficult for the reader to follow the argument.",
+                  "Each paragraph should focus on a single main idea and develop it fully before moving to the next."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "First of all a huge damage to the environment brings a transport.",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response lacks clear paragraphing and logical progression between ideas, which limits coherence.",
+                "why_not_lower": "The response has a recognisable structure and uses basic linking words to connect ideas.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "O13",
+                  "lower_band_evidence": "Text is generally well organised and coherent, using a variety of linking words and cohesive devices.",
+                  "higher_band_reference": "O05",
+                  "higher_band_evidence": "Text is well organised and coherent, using a variety of cohesive devices and organisational patterns to generally good effect."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response has a recognisable structure but lacks clear paragraphing and logical progression, which is evident from the text.",
+                "source_rule_ids": [
+                  "O01",
+                  "O02",
+                  "O08"
+                ],
+                "evidence_observation_ids": [
+                  "obs_fbd59976d83d"
+                ]
+              },
+              {
+                "criterion": "language",
+                "mark": 2,
+                "band_anchor": "2",
+                "positive_evidence": [
+                  "The response uses everyday vocabulary generally appropriately.",
+                  "Simple grammatical forms are used with some degree of control."
+                ],
+                "limiting_evidence": [
+                  "There are noticeable errors in grammar and vocabulary that affect the clarity of the response.",
+                  "Awkward phrasing and incorrect article usage are present throughout the text."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "a huge damage to the environment brings a transport",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response contains noticeable errors in grammar and vocabulary that affect clarity, limiting the evidence of control and range.",
+                "why_not_lower": "The response uses everyday vocabulary generally appropriately and simple grammatical forms with some degree of control.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "L15",
+                  "lower_band_evidence": "Uses everyday vocabulary generally appropriately, while occasionally overusing certain lexis. Uses simple grammatical forms with a good degree of control.",
+                  "higher_band_reference": "L17",
+                  "higher_band_evidence": "Uses a range of vocabulary, including less common lexis, appropriately. Uses a range of simple and complex grammatical forms with control and flexibility."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response contains noticeable errors that affect clarity, but it uses everyday vocabulary and simple grammatical forms with some control.",
+                "source_rule_ids": [
+                  "L03",
+                  "L04",
+                  "L08"
+                ],
+                "evidence_observation_ids": [
+                  "obs_9ff8c4ca181d",
+                  "obs_f0dd6aa79969",
+                  "obs_6b608bfbfc7e",
+                  "obs_e0365291959a",
+                  "obs_9013fb802a31",
+                  "obs_12b8d60d0259",
+                  "obs_7c78eccb20e5"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 3,
+          "criterion_of_first_failure": null,
+          "first_failure_reason": null,
+          "evidence_bindings": [
+            {
+              "criterion": "content",
+              "quote": "First of all a huge damage to the environment brings a transport.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 252,
+              "span_end": 317,
+              "bound_text": "First of all a huge damage to the environment brings a transport."
+            },
+            {
+              "criterion": "content",
+              "quote": "In addition to this our rivers and seas are in not less danger situation.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 596,
+              "span_end": 669,
+              "bound_text": "In addition to this our rivers and seas are in not less danger situation."
+            },
+            {
+              "criterion": "content",
+              "quote": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 858,
+              "span_end": 974,
+              "bound_text": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 133,
+              "span_end": 251,
+              "bound_text": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "First of all a huge damage to the environment brings a transport.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 252,
+              "span_end": 317,
+              "bound_text": "First of all a huge damage to the environment brings a transport."
+            },
+            {
+              "criterion": "language",
+              "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 132,
+              "bound_text": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world."
+            },
+            {
+              "criterion": "language",
+              "quote": "a huge damage to the environment brings a transport",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 265,
+              "span_end": 316,
+              "bound_text": "a huge damage to the environment brings a transport"
+            }
+          ],
+          "raw_assessment_payload": {
+            "assessable": true,
+            "unassessable_reason": null,
+            "overall_confidence": "high",
+            "criteria": [
+              {
+                "criterion": "content",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response addresses the role of transport in environmental problems: 'a huge damage to the environment brings a transport.'",
+                  "The response addresses the role of rivers and seas in environmental problems: 'our rivers and seas are in not less danger situation.'",
+                  "The response introduces an additional idea related to environmental problems: 'every person can and must contribute to solving this important problem.'"
+                ],
+                "limiting_evidence": [
+                  "The points on transport and rivers and seas lack detailed examples or explanations to fully develop the ideas.",
+                  "The additional idea about individual contributions is mentioned but not developed with specific examples or reasoning."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "First of all a huge damage to the environment brings a transport.",
+                    "occurrence_index": 1
+                  },
+                  {
+                    "quote": "In addition to this our rivers and seas are in not less danger situation.",
+                    "occurrence_index": 2
+                  },
+                  {
+                    "quote": "Apart from this I’m inclined to believe that every person can and must contribute to solving this important problem.",
+                    "occurrence_index": 3
+                  }
+                ],
+                "why_not_higher": "The response lacks detailed examples or explanations to fully develop the ideas, leaving the reader with an information gap.",
+                "why_not_lower": "The response addresses all mandatory content points, providing a basic level of information on each.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "C14",
+                  "lower_band_evidence": "The task is substantially completed, but at least one notable point, function or required development is missing, limited or only indirectly addressed.",
+                  "higher_band_reference": "C12",
+                  "higher_band_evidence": "Every mandatory point and function is recognisably fulfilled and developed to the degree required. No meaningful content gap remains."
+                },
+                "confidence": "high",
+                "confidence_reason": "The task analysis and response provide clear evidence for the content mark, with all mandatory points addressed but lacking full development.",
+                "source_rule_ids": [
+                  "C03",
+                  "C04",
+                  "C14"
+                ],
+                "evidence_observation_ids": [
+                  "obs_55e2ed24c947"
+                ]
+              },
+              {
+                "criterion": "communicative_achievement",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The essay uses the conventions of the task to communicate straightforward ideas about environmental problems.",
+                  "The reader can follow the argument and remains engaged with the topic."
+                ],
+                "limiting_evidence": [
+                  "The response relies mainly on straightforward ideas and lacks complexity or flexibility in presenting arguments.",
+                  "There is some awkward phrasing that affects the clarity of communication."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "Scientists of different countries predict a global ecocatastrophe if people won’t change their attitude to our planet.",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response does not consistently use the conventions of the task to communicate complex ideas effectively.",
+                "why_not_lower": "The response uses the conventions of the task to hold the reader's attention and communicate straightforward ideas.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "CA12",
+                  "lower_band_evidence": "Uses the conventions of the communicative task to hold the target reader’s attention and communicate straightforward ideas.",
+                  "higher_band_reference": "CA11",
+                  "higher_band_evidence": "Uses the conventions of the communicative task effectively to hold the target reader’s attention and communicate straightforward and complex ideas, as appropriate."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly fits the Band 3 descriptor, with straightforward communication and some limitations in complexity.",
+                "source_rule_ids": [
+                  "CA03",
+                  "CA06",
+                  "CA12"
+                ],
+                "evidence_observation_ids": [
+                  "obs_04275c4df314"
+                ]
+              },
+              {
+                "criterion": "organisation",
+                "mark": 2,
+                "band_anchor": "2",
+                "positive_evidence": [
+                  "The response has a recognisable structure with an introduction, body, and conclusion.",
+                  "Basic linking words are used to connect ideas, such as 'First of all' and 'In addition to this.'"
+                ],
+                "limiting_evidence": [
+                  "The essay lacks clear paragraphing and logical progression between ideas.",
+                  "Each paragraph should focus on a single main idea and develop it fully before moving to the next."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "First of all a huge damage to the environment brings a transport.",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response lacks clear paragraphing and logical progression between ideas, which affects the overall coherence.",
+                "why_not_lower": "The response has a recognisable structure and uses basic linking words to connect ideas.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "O13",
+                  "lower_band_evidence": "Text is generally well organised and coherent, using a variety of linking words and cohesive devices.",
+                  "higher_band_reference": "O05",
+                  "higher_band_evidence": "Text is well organised and coherent, using a variety of cohesive devices and organisational patterns to generally good effect."
+                },
+                "confidence": "high",
+                "confidence_reason": "The evidence clearly supports a Band 2 mark due to the lack of clear paragraphing and logical progression.",
+                "source_rule_ids": [
+                  "O01",
+                  "O02",
+                  "O08"
+                ],
+                "evidence_observation_ids": [
+                  "obs_fbd59976d83d"
+                ]
+              },
+              {
+                "criterion": "language",
+                "mark": 2,
+                "band_anchor": "2",
+                "positive_evidence": [
+                  "The response uses everyday vocabulary generally appropriately.",
+                  "Simple grammatical forms are used with some degree of control."
+                ],
+                "limiting_evidence": [
+                  "There are noticeable errors in grammar and vocabulary that affect clarity, such as incorrect article usage and awkward phrasing.",
+                  "The response lacks a range of complex grammatical forms and less common lexis."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "To begin with pollution and damage to the environment is the most serious and difficult problem for countries of all over the world.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "a huge damage to the environment brings a transport",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response lacks a range of complex grammatical forms and less common lexis, and errors affect clarity.",
+                "why_not_lower": "The response uses everyday vocabulary generally appropriately and simple grammatical forms with some degree of control.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "L15",
+                  "lower_band_evidence": "Uses everyday vocabulary generally appropriately, while occasionally overusing certain lexis. Uses simple grammatical forms with a good degree of control.",
+                  "higher_band_reference": "L17",
+                  "higher_band_evidence": "Uses a range of vocabulary, including less common lexis, appropriately. Uses a range of simple and complex grammatical forms with control and flexibility."
+                },
+                "confidence": "high",
+                "confidence_reason": "The language evidence clearly supports a Band 2 mark due to the presence of errors and limited range.",
+                "source_rule_ids": [
+                  "L03",
+                  "L04",
+                  "L08"
+                ],
+                "evidence_observation_ids": [
+                  "obs_9ff8c4ca181d",
+                  "obs_f0dd6aa79969",
+                  "obs_6b608bfbfc7e",
+                  "obs_e0365291959a",
+                  "obs_9013fb802a31",
+                  "obs_12b8d60d0259",
+                  "obs_7c78eccb20e5"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "error": "the assembled assessment record does not satisfy the assessment contract",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-09",
+      "label": "Fashion essay C",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook paper Candidate C examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-09",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 5,
+          "organisation": 5,
+          "language": 5
+        },
+        "actual_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "expected_total": 20,
+        "actual_total": 13,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 4,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "organisation",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 0
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Expand on each content point with specific examples or arguments. For instance, discuss how societal pressure on appearance affects individuals or provide examples of how high clothing prices impact different demographics.\"",
+        "assessment: the assembled assessment record does not satisfy the assessment contract"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 91410,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 768,
+          "output_tokens": 239,
+          "total_tokens": 1007,
+          "latency_ms": 2605,
+          "provider_metadata": {
+            "id": "chatcmpl-EC00w5Pht5PIkQbcRWcsodv7sMKN9",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3407,
+          "output_tokens": 1431,
+          "total_tokens": 4838,
+          "latency_ms": 14611,
+          "provider_metadata": {
+            "id": "chatcmpl-EC00yweLV8DTQiGrHDfbsKnWwajE8",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 2,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3407,
+          "output_tokens": 1756,
+          "total_tokens": 5163,
+          "latency_ms": 19511,
+          "provider_metadata": {
+            "id": "chatcmpl-EC01DMfzADD8JJhvwJcxt5XVXEThX",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 3,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3407,
+          "output_tokens": 1586,
+          "total_tokens": 4993,
+          "latency_ms": 15838,
+          "provider_metadata": {
+            "id": "chatcmpl-EC01WMfA966z0QiJPG437vSHO1SNr",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5942,
+          "output_tokens": 1563,
+          "total_tokens": 7505,
+          "latency_ms": 11461,
+          "provider_metadata": {
+            "id": "chatcmpl-EC01mfUKQirw0zxqdvSx579d61feg",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-09",
+          "attempt": 2,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5942,
+          "output_tokens": 1574,
+          "total_tokens": 7516,
+          "latency_ms": 11753,
+          "provider_metadata": {
+            "id": "chatcmpl-EC01ybs2mML23eIhRIsdVxJyDeFrx",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-09",
+          "attempt": 3,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5942,
+          "output_tokens": 1740,
+          "total_tokens": 7682,
+          "latency_ms": 15594,
+          "provider_metadata": {
+            "id": "chatcmpl-EC02AAojZVcjW27CXpifSuaZdOkth",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-09",
+          "criterion": "content",
+          "expected_mark": 5,
+          "actual_mark": 4,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "communicative_achievement",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "organisation",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "language",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "binding_diagnostics": [
+        {
+          "attempt": 1,
+          "criterion_of_first_failure": "organisation",
+          "first_failure_reason": "quote_not_found",
+          "evidence_bindings": [
+            {
+              "criterion": "content",
+              "quote": "people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 911,
+              "span_end": 1049,
+              "bound_text": "people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation."
+            },
+            {
+              "criterion": "content",
+              "quote": "not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1060,
+              "span_end": 1214,
+              "bound_text": "not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger."
+            },
+            {
+              "criterion": "content",
+              "quote": "it put into a good use, it can save lives.",
+              "requested_occurrence_index": 5,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1402,
+              "span_end": 1444,
+              "bound_text": "it put into a good use, it can save lives."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority.",
+              "requested_occurrence_index": 5,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1215,
+              "span_end": 1361,
+              "bound_text": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "On one hand, the fashion industry is undeniably a source of profit and income.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 339,
+              "span_end": 417,
+              "bound_text": "On one hand, the fashion industry is undeniably a source of profit and income."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": null,
+              "model_index_ignored": false,
+              "occurrences_found": 0,
+              "binding_status": "failed",
+              "binding_reason": "quote_not_found",
+              "span_start": null,
+              "span_end": null,
+              "bound_text": null
+            },
+            {
+              "criterion": "language",
+              "quote": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 209,
+              "bound_text": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking."
+            },
+            {
+              "criterion": "language",
+              "quote": "not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1060,
+              "span_end": 1214,
+              "bound_text": "not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger."
+            }
+          ],
+          "raw_assessment_payload": {
+            "assessable": true,
+            "unassessable_reason": null,
+            "overall_confidence": "high",
+            "criteria": [
+              {
+                "criterion": "content",
+                "mark": 4,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response discusses whether people's appearance is important by stating 'people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.'",
+                  "The response discusses the price of clothes by mentioning 'not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.'",
+                  "The candidate includes their own idea by discussing the fashion industry's potential to 'save lives' if 'put into a good use.'"
+                ],
+                "limiting_evidence": [
+                  "The discussion on whether people's appearance is important is not fully developed, as it lacks depth and examples.",
+                  "The candidate's own idea about the fashion industry saving lives is not fully developed or clearly linked to the main argument."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+                    "occurrence_index": 3
+                  },
+                  {
+                    "quote": "not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+                    "occurrence_index": 3
+                  },
+                  {
+                    "quote": "it put into a good use, it can save lives.",
+                    "occurrence_index": 5
+                  }
+                ],
+                "why_not_higher": "The response does not fully develop the discussion on whether people's appearance is important and the candidate's own idea about the fashion industry saving lives is not clearly linked to the main argument.",
+                "why_not_lower": "The response addresses all mandatory content points and provides a personal viewpoint on the fashion industry's effect on people's lives.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "C14",
+                  "lower_band_evidence": "The task is substantially completed, but the discussion on appearance and the candidate's own idea are not fully developed.",
+                  "higher_band_reference": "C13",
+                  "higher_band_evidence": "The response is close to complete but contains a limited underdeveloped point regarding the importance of appearance and the candidate's own idea."
+                },
+                "confidence": "high",
+                "confidence_reason": "The task analysis is clear, and the response addresses all mandatory points, though with some underdevelopment.",
+                "source_rule_ids": [
+                  "C03",
+                  "C13",
+                  "C14"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "communicative_achievement",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response uses the conventions of an essay to communicate straightforward ideas about the fashion industry's impact.",
+                  "The candidate presents a personal viewpoint on the fashion industry's effect on people's lives, stating 'I do believe that the fashion industry, as it is today, has a harmful effect.'"
+                ],
+                "limiting_evidence": [
+                  "The response lacks complexity and flexibility in presenting and justifying the viewpoint, relying mainly on straightforward ideas.",
+                  "The reader's attention is not consistently held due to some unclear expressions and lack of depth in argumentation."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority.",
+                    "occurrence_index": 5
+                  }
+                ],
+                "why_not_higher": "The response does not consistently use the conventions of the essay to hold the reader's attention with complex ideas or flexible communication.",
+                "why_not_lower": "The response uses the conventions of an essay to communicate straightforward ideas and presents a personal viewpoint.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "CA12",
+                  "lower_band_evidence": "The response uses the conventions of the communicative task to hold the target reader’s attention and communicate straightforward ideas.",
+                  "higher_band_reference": "CA13",
+                  "higher_band_evidence": "The response is clearly successful and often effective, but complexity, flexibility, consistency or reader impact is not sustained enough for Band 5."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly fits the Band 3 descriptor, with straightforward communication and some limitations in complexity and flexibility.",
+                "source_rule_ids": [
+                  "CA03",
+                  "CA12",
+                  "CA13"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "organisation",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The text is generally well organised with an introduction, body, and conclusion structure.",
+                  "The response uses a variety of linking words and cohesive devices, such as 'On one hand,' 'Furthermore,' and 'Nevertheless.'"
+                ],
+                "limiting_evidence": [
+                  "Some connections between ideas are weak, such as the transition from discussing the fashion industry's negative effects to its potential to 'save lives.'",
+                  "The organisation lacks flexibility and relies on conventional linking words."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "On one hand, the fashion industry is undeniably a source of profit and income.",
+                    "occurrence_index": 2
+                  },
+                  {
+                    "quote": "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people.",
+                    "occurrence_index": 3
+                  }
+                ],
+                "why_not_higher": "The organisation lacks flexibility and relies on conventional linking words, with some weak connections between ideas.",
+                "why_not_lower": "The text is generally well organised and coherent, using a variety of linking words and cohesive devices.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "O13",
+                  "lower_band_evidence": "The response has a clear structure and is easy to follow overall, with conventional connections.",
+                  "higher_band_reference": "O14",
+                  "higher_band_evidence": "The text is clearly well organised and contains some higher-band cohesion or patterning, but cross-paragraph connection, consistency or flexibility is not fully sustained."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response fits well within the Band 3 descriptor, with clear organisation and some limitations in flexibility and cohesion.",
+                "source_rule_ids": [
+                  "O03",
+                  "O13",
+                  "O14"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "language",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response uses everyday vocabulary generally appropriately, such as 'source of profit and income' and 'unrealistically high.'",
+                  "Simple grammatical forms are used with a good degree of control, such as 'The society we live today is characterised by technology.'"
+                ],
+                "limiting_evidence": [
+                  "Errors are noticeable, such as 'the material, world, sadly true,' which affects clarity.",
+                  "The response occasionally overuses certain lexis, such as 'fashion industry.'"
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+                    "occurrence_index": 1
+                  },
+                  {
+                    "quote": "not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+                    "occurrence_index": 3
+                  }
+                ],
+                "why_not_higher": "The response lacks the range and flexibility required for Band 4, with noticeable errors and occasional overuse of lexis.",
+                "why_not_lower": "The response uses everyday vocabulary generally appropriately and simple grammatical forms with a good degree of control.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "L15",
+                  "lower_band_evidence": "The writer has a functional B2 range and can use some more demanding resources. Errors are visible but meaning remains clear.",
+                  "higher_band_reference": "L16",
+                  "higher_band_evidence": "The response contains substantial Band 5 evidence but lacks full consistency, breadth or flexibility."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly fits the Band 3 descriptor, with appropriate vocabulary and control of simple grammatical forms, despite some errors.",
+                "source_rule_ids": [
+                  "L03",
+                  "L15",
+                  "L16"
+                ],
+                "evidence_observation_ids": []
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 2,
+          "criterion_of_first_failure": "organisation",
+          "first_failure_reason": "quote_not_found",
+          "evidence_bindings": [
+            {
+              "criterion": "content",
+              "quote": "It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 893,
+              "span_end": 1049,
+              "bound_text": "It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation."
+            },
+            {
+              "criterion": "content",
+              "quote": "Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+              "requested_occurrence_index": 4,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1050,
+              "span_end": 1214,
+              "bound_text": "Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger."
+            },
+            {
+              "criterion": "content",
+              "quote": "the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 352,
+              "span_end": 510,
+              "bound_text": "the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority.",
+              "requested_occurrence_index": 5,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1215,
+              "span_end": 1361,
+              "bound_text": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "it put into a good use, it can save lives.",
+              "requested_occurrence_index": 5,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1402,
+              "span_end": 1444,
+              "bound_text": "it put into a good use, it can save lives."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "On one hand, the fashion industry is undeniably a source of profit and income.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 339,
+              "span_end": 417,
+              "bound_text": "On one hand, the fashion industry is undeniably a source of profit and income."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": null,
+              "model_index_ignored": false,
+              "occurrences_found": 0,
+              "binding_status": "failed",
+              "binding_reason": "quote_not_found",
+              "span_start": null,
+              "span_end": null,
+              "bound_text": null
+            },
+            {
+              "criterion": "language",
+              "quote": "it put into a good use, it can save lives.",
+              "requested_occurrence_index": 5,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1402,
+              "span_end": 1444,
+              "bound_text": "it put into a good use, it can save lives."
+            },
+            {
+              "criterion": "language",
+              "quote": "fashion industry",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 1,
+              "model_index_ignored": false,
+              "occurrences_found": 5,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 356,
+              "span_end": 372,
+              "bound_text": "fashion industry"
+            }
+          ],
+          "raw_assessment_payload": {
+            "assessable": true,
+            "unassessable_reason": null,
+            "overall_confidence": "high",
+            "criteria": [
+              {
+                "criterion": "content",
+                "mark": 4,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response discusses whether people's appearance is important: 'It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.'",
+                  "The response discusses the price of clothes: 'Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.'",
+                  "The response includes the candidate's own idea related to the topic: 'the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year.'"
+                ],
+                "limiting_evidence": [
+                  "The discussion on whether people's appearance is important is not fully developed, as it lacks depth and examples.",
+                  "The candidate's own idea about the fashion industry being a source of profit and income is not directly linked to the main question of whether the fashion industry has a bad effect on people's lives."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+                    "occurrence_index": 3
+                  },
+                  {
+                    "quote": "Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+                    "occurrence_index": 4
+                  },
+                  {
+                    "quote": "the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year.",
+                    "occurrence_index": 2
+                  }
+                ],
+                "why_not_higher": "The response does not fully develop the discussion on whether people's appearance is important, and the candidate's own idea is not directly linked to the main question of whether the fashion industry has a bad effect on people's lives.",
+                "why_not_lower": "The response addresses all mandatory content points and provides a personal viewpoint on the fashion industry's effect on people's lives.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "C14",
+                  "lower_band_evidence": "The response addresses all mandatory content points and provides a personal viewpoint on the fashion industry's effect on people's lives.",
+                  "higher_band_reference": "C12",
+                  "higher_band_evidence": "The response does not fully develop the discussion on whether people's appearance is important, and the candidate's own idea is not directly linked to the main question of whether the fashion industry has a bad effect on people's lives."
+                },
+                "confidence": "high",
+                "confidence_reason": "The task analysis and response provide clear evidence for each content point, allowing for a confident assessment of content fulfilment.",
+                "source_rule_ids": [
+                  "C01",
+                  "C03",
+                  "C13",
+                  "C14",
+                  "C18"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "communicative_achievement",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response uses the conventions of an essay to hold the target reader’s attention and communicate straightforward ideas.",
+                  "The response presents a personal viewpoint on the fashion industry's effect on people's lives: 'I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority.'"
+                ],
+                "limiting_evidence": [
+                  "The response lacks complexity and flexibility in communicating ideas, as it mainly relies on straightforward ideas.",
+                  "The register is generally appropriate, but there are moments where the expression could be clearer, such as 'it put into a good use, it can save lives.'"
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority.",
+                    "occurrence_index": 5
+                  },
+                  {
+                    "quote": "it put into a good use, it can save lives.",
+                    "occurrence_index": 5
+                  }
+                ],
+                "why_not_higher": "The response lacks complexity and flexibility in communicating ideas, as it mainly relies on straightforward ideas.",
+                "why_not_lower": "The response uses the conventions of an essay to hold the target reader’s attention and communicate straightforward ideas.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "CA12",
+                  "lower_band_evidence": "The response uses the conventions of an essay to hold the target reader’s attention and communicate straightforward ideas.",
+                  "higher_band_reference": "CA11",
+                  "higher_band_evidence": "The response lacks complexity and flexibility in communicating ideas, as it mainly relies on straightforward ideas."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly demonstrates the use of essay conventions and communicates straightforward ideas effectively, allowing for a confident assessment of communicative achievement.",
+                "source_rule_ids": [
+                  "CA03",
+                  "CA06",
+                  "CA12",
+                  "CA13"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "organisation",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The text is generally well organised and coherent, using a variety of linking words and cohesive devices.",
+                  "The response has a clear structure with an introduction, body, and conclusion."
+                ],
+                "limiting_evidence": [
+                  "Some connections are conventional and lack flexibility, such as 'On one hand' and 'Nevertheless.'",
+                  "There is some repetition in ideas, which affects the overall cohesion."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "On one hand, the fashion industry is undeniably a source of profit and income.",
+                    "occurrence_index": 2
+                  },
+                  {
+                    "quote": "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people.",
+                    "occurrence_index": 3
+                  }
+                ],
+                "why_not_higher": "The response lacks flexibility in connections and contains some repetition in ideas, which affects the overall cohesion.",
+                "why_not_lower": "The text is generally well organised and coherent, using a variety of linking words and cohesive devices.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "O13",
+                  "lower_band_evidence": "The text is generally well organised and coherent, using a variety of linking words and cohesive devices.",
+                  "higher_band_reference": "O15",
+                  "higher_band_evidence": "The response lacks flexibility in connections and contains some repetition in ideas, which affects the overall cohesion."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response demonstrates clear organisation and coherence, allowing for a confident assessment of organisation.",
+                "source_rule_ids": [
+                  "O03",
+                  "O13",
+                  "O14"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "language",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "Uses everyday vocabulary generally appropriately, while occasionally overusing certain lexis.",
+                  "Uses simple grammatical forms with a good degree of control."
+                ],
+                "limiting_evidence": [
+                  "Errors are noticeable, such as 'it put into a good use, it can save lives.'",
+                  "There is occasional overuse of certain lexis, such as 'fashion industry.'"
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "it put into a good use, it can save lives.",
+                    "occurrence_index": 5
+                  },
+                  {
+                    "quote": "fashion industry",
+                    "occurrence_index": 1
+                  }
+                ],
+                "why_not_higher": "The response contains noticeable errors and occasional overuse of certain lexis, which limits the range and control.",
+                "why_not_lower": "The response uses everyday vocabulary generally appropriately and simple grammatical forms with a good degree of control.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "L15",
+                  "lower_band_evidence": "The response uses everyday vocabulary generally appropriately and simple grammatical forms with a good degree of control.",
+                  "higher_band_reference": "L17",
+                  "higher_band_evidence": "The response contains noticeable errors and occasional overuse of certain lexis, which limits the range and control."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response provides clear evidence of language use, allowing for a confident assessment of language.",
+                "source_rule_ids": [
+                  "L02",
+                  "L03",
+                  "L04",
+                  "L15"
+                ],
+                "evidence_observation_ids": []
+              }
+            ]
+          }
+        },
+        {
+          "attempt": 3,
+          "criterion_of_first_failure": null,
+          "first_failure_reason": null,
+          "evidence_bindings": [
+            {
+              "criterion": "content",
+              "quote": "It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 893,
+              "span_end": 1049,
+              "bound_text": "It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation."
+            },
+            {
+              "criterion": "content",
+              "quote": "Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+              "requested_occurrence_index": 3,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1050,
+              "span_end": 1214,
+              "bound_text": "Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger."
+            },
+            {
+              "criterion": "content",
+              "quote": "the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 352,
+              "span_end": 510,
+              "bound_text": "the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 209,
+              "bound_text": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking."
+            },
+            {
+              "criterion": "communicative_achievement",
+              "quote": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority.",
+              "requested_occurrence_index": 4,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 1215,
+              "span_end": 1361,
+              "bound_text": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "On one hand, the fashion industry is undeniably a source of profit and income.",
+              "requested_occurrence_index": 1,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 339,
+              "span_end": 417,
+              "bound_text": "On one hand, the fashion industry is undeniably a source of profit and income."
+            },
+            {
+              "criterion": "organisation",
+              "quote": "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people, isolating those who not fit their laws and commands.",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 691,
+              "span_end": 892,
+              "bound_text": "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people, isolating those who not fit their laws and commands."
+            },
+            {
+              "criterion": "language",
+              "quote": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+              "requested_occurrence_index": 0,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": false,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 0,
+              "span_end": 209,
+              "bound_text": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking."
+            },
+            {
+              "criterion": "language",
+              "quote": "those who not fit their laws and commands",
+              "requested_occurrence_index": 2,
+              "canonical_occurrence_index": 0,
+              "model_index_ignored": true,
+              "occurrences_found": 1,
+              "binding_status": "bound",
+              "binding_reason": null,
+              "span_start": 850,
+              "span_end": 891,
+              "bound_text": "those who not fit their laws and commands"
+            }
+          ],
+          "raw_assessment_payload": {
+            "assessable": true,
+            "unassessable_reason": null,
+            "overall_confidence": "high",
+            "criteria": [
+              {
+                "criterion": "content",
+                "mark": 4,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response discusses whether people's appearance is important: 'It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.'",
+                  "The response discusses the price of clothes: 'Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.'",
+                  "The response includes the candidate's own idea related to the topic: 'the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year.'"
+                ],
+                "limiting_evidence": [
+                  "The discussion on whether people's appearance is important is not fully developed, as it is only briefly mentioned.",
+                  "The candidate's own idea about the fashion industry being a source of profit and income is not directly linked to the main question of whether the fashion industry has a bad effect on people's lives."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "It is stated that people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+                    "occurrence_index": 3
+                  },
+                  {
+                    "quote": "Moreover, not only are the costs of fashion item unrealistically high, it is thought to be a money better spent on more pressing issues, such as poverty and hunger.",
+                    "occurrence_index": 3
+                  },
+                  {
+                    "quote": "the fashion industry is undeniably a source of profit and income. It hires millions of people all over the world and generates millions of dollars every year.",
+                    "occurrence_index": 2
+                  }
+                ],
+                "why_not_higher": "The response does not fully develop the discussion on whether people's appearance is important, and the candidate's own idea is not directly linked to the main question of whether the fashion industry has a bad effect on people's lives.",
+                "why_not_lower": "The response addresses all mandatory content points and provides some development for each, ensuring the target reader is more than minimally informed.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "C14",
+                  "lower_band_evidence": "The response addresses all mandatory content points and provides some development for each, ensuring the target reader is more than minimally informed.",
+                  "higher_band_reference": "C13",
+                  "higher_band_evidence": "The response does not fully develop the discussion on whether people's appearance is important, and the candidate's own idea is not directly linked to the main question of whether the fashion industry has a bad effect on people's lives."
+                },
+                "confidence": "high",
+                "confidence_reason": "The task analysis is clear, and the response is complete, allowing for a confident assessment of content fulfilment.",
+                "source_rule_ids": [
+                  "C03",
+                  "C04",
+                  "C13",
+                  "C14"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "communicative_achievement",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response uses the conventions of an essay to communicate straightforward ideas, such as the impact of the fashion industry on people's lives.",
+                  "The register is generally appropriate for an essay, maintaining a neutral to semi-formal tone."
+                ],
+                "limiting_evidence": [
+                  "The response lacks complexity in presenting and justifying the personal viewpoint, relying mainly on straightforward ideas.",
+                  "The reader's attention is not consistently held due to some unclear expressions, such as 'it values a minority of people in detriment to the majority.'"
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "I do believe that the fashion industry, as it is today, has a harmful effect, because it values a minority of people in detriment to the majority.",
+                    "occurrence_index": 4
+                  }
+                ],
+                "why_not_higher": "The response lacks complexity in presenting and justifying the personal viewpoint, relying mainly on straightforward ideas.",
+                "why_not_lower": "The response uses the conventions of an essay to communicate straightforward ideas, and the register is generally appropriate for an essay.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "CA12",
+                  "lower_band_evidence": "The response uses the conventions of an essay to communicate straightforward ideas, and the register is generally appropriate for an essay.",
+                  "higher_band_reference": "CA13",
+                  "higher_band_evidence": "The response lacks complexity in presenting and justifying the personal viewpoint, relying mainly on straightforward ideas."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly fits the Band 3 descriptor, with straightforward communication and appropriate register, but lacks the complexity needed for a higher band.",
+                "source_rule_ids": [
+                  "CA03",
+                  "CA06",
+                  "CA12",
+                  "CA13"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "organisation",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The text is generally well organised with a clear introduction, body, and conclusion structure.",
+                  "A variety of linking words and cohesive devices are used, such as 'On one hand,' 'Nevertheless,' and 'Moreover.'"
+                ],
+                "limiting_evidence": [
+                  "Some local links are weak, such as the transition between discussing the fashion industry's economic impact and its social impact.",
+                  "The organisation relies on conventional linking words, with limited use of more sophisticated cohesive devices."
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "On one hand, the fashion industry is undeniably a source of profit and income.",
+                    "occurrence_index": 1
+                  },
+                  {
+                    "quote": "Nevertheless, for those who are neither impressed nor motivated by numbers and figures, the fashion industry is seen as one which segregates people, isolating those who not fit their laws and commands.",
+                    "occurrence_index": 2
+                  }
+                ],
+                "why_not_higher": "The organisation relies on conventional linking words, with limited use of more sophisticated cohesive devices.",
+                "why_not_lower": "The text is generally well organised with a clear introduction, body, and conclusion structure, and a variety of linking words and cohesive devices are used.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "O13",
+                  "lower_band_evidence": "The text is generally well organised with a clear introduction, body, and conclusion structure, and a variety of linking words and cohesive devices are used.",
+                  "higher_band_reference": "O14",
+                  "higher_band_evidence": "The organisation relies on conventional linking words, with limited use of more sophisticated cohesive devices."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly fits the Band 3 descriptor, with general coherence and a clear structure, but lacks the sophistication needed for a higher band.",
+                "source_rule_ids": [
+                  "O03",
+                  "O04",
+                  "O13",
+                  "O14"
+                ],
+                "evidence_observation_ids": []
+              },
+              {
+                "criterion": "language",
+                "mark": 3,
+                "band_anchor": "3",
+                "positive_evidence": [
+                  "The response uses everyday vocabulary generally appropriately, such as 'source of profit and income' and 'unrealistically high.'",
+                  "Simple grammatical forms are used with a good degree of control, such as 'The society we live today is characterised by technology in constant development.'"
+                ],
+                "limiting_evidence": [
+                  "Errors are noticeable, such as 'those who not fit their laws and commands,' but meaning can still be determined.",
+                  "There is limited use of complex grammatical forms, and some attempts at complexity are not fully controlled, such as 'it values a minority of people in detriment to the majority.'"
+                ],
+                "text_evidence": [
+                  {
+                    "quote": "The society we live today is characterised by technology in constant development, fast speed processes, information travelling and getting to people at a blink of an eye and a complex web of social networking.",
+                    "occurrence_index": 0
+                  },
+                  {
+                    "quote": "those who not fit their laws and commands",
+                    "occurrence_index": 2
+                  }
+                ],
+                "why_not_higher": "There is limited use of complex grammatical forms, and some attempts at complexity are not fully controlled.",
+                "why_not_lower": "The response uses everyday vocabulary generally appropriately, and simple grammatical forms are used with a good degree of control.",
+                "adjacent_band_evidence": {
+                  "lower_band_reference": "L15",
+                  "lower_band_evidence": "The response uses everyday vocabulary generally appropriately, and simple grammatical forms are used with a good degree of control.",
+                  "higher_band_reference": "L16",
+                  "higher_band_evidence": "There is limited use of complex grammatical forms, and some attempts at complexity are not fully controlled."
+                },
+                "confidence": "high",
+                "confidence_reason": "The response clearly fits the Band 3 descriptor, with functional B2 range and control, but lacks the range and flexibility needed for a higher band.",
+                "source_rule_ids": [
+                  "L03",
+                  "L04",
+                  "L15",
+                  "L16"
+                ],
+                "evidence_observation_ids": []
+              }
+            ]
+          }
+        }
+      ],
+      "error": "the assembled assessment record does not satisfy the assessment contract",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    }
+  ],
+  "aggregate": {
+    "exact_profiles_matched": 0,
+    "total_cases": 2,
+    "exact_criterion_marks_matched": 1,
+    "total_criterion_marks": 8,
+    "content_accuracy": 0,
+    "communicative_achievement_accuracy": 0.5,
+    "organisation_accuracy": 0,
+    "language_accuracy": 0,
+    "mean_absolute_mark_deviation": {
+      "content": 1,
+      "communicative_achievement": 1,
+      "organisation": 1.5,
+      "language": 1.5
+    },
+    "same_total_wrong_profile_cases": [],
+    "validation_failures": 2,
+    "retry_failures": 0
+  }
+}

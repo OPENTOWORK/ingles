@@ -1,0 +1,190 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:31:12.252Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-008",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-01",
+  "working_title": "Exploring a place you cannot see clearly",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 2 repeats the same answer word: to.",
+      "Part 2 passage is 198 words; target is 150–180 (accepted up to 200 for generation).",
+      "Part 2 answers cover only 2 grammar categories (target at least 4: prepositions, relatives, modals, connectors, etc.)."
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 3,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 1,
+    "quality_review_hard_findings": [
+      "Blind-solve disagreed with the answer key on 2 gaps: Q10 (key \"of\", solver \"to\"), Q13 (key \"this\", solver \"the\"). Likely ambiguous gaps or wrong keys."
+    ]
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": {
+    "ok": false,
+    "errors": [
+      "Blind-solve disagreed with the answer key on 2 gaps: Q10 (key \"of\", solver \"to\"), Q13 (key \"this\", solver \"the\"). Likely ambiguous gaps or wrong keys."
+    ],
+    "warnings": [],
+    "blindSolve": {
+      "mismatches": [
+        {
+          "number": 10,
+          "key": "of",
+          "solver": "to"
+        },
+        {
+          "number": 13,
+          "key": "this",
+          "solver": "the"
+        }
+      ],
+      "ambiguous": [],
+      "solvedCount": 8
+    },
+    "rubric": {
+      "cefrLevel": "B2",
+      "textNaturalness": 5,
+      "exampleValid": true,
+      "vocabularyStyleItems": [],
+      "multipleAnswerItems": [],
+      "tooObviousItems": [],
+      "categoriesTested": [
+        "preposition",
+        "determiner",
+        "infinitive marker",
+        "demonstrative determiner",
+        "article",
+        "preposition (infinitive of purpose)"
+      ],
+      "weakItems": [],
+      "realisticB2": true,
+      "issues": [],
+      "verdict": "pass"
+    }
+  },
+  "generated": {
+    "partTitle": "Part 2: Open cloze",
+    "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "answer": "just"
+    },
+    "title": "Seeing the Unseen Underwater",
+    "passage": "Exploring underwater can seem (0) ___ impossible. Light fades quickly, so divers and cameras only capture a small part of their surroundings. This lack of clarity means explorers must rely (9) ___ other methods. One helpful approach is using sound. Unlike light, sound travels efficiently through water and its echoes can reveal the distance (10) ___ objects. Devices send out a pulse and listen for what bounces back. However, this sound data doesn’t automatically provide (11) ___ clear image. Experts need to interpret the signals and build a picture from incomplete clues. For example, when exploring a sloped seabed, it’s necessary (12) ___ combine sound reflections with instrument readings to understand its shape properly. In fact, maps produced in this way are not perfect photos but rather guides that suggest possibilities rather than certainties. So, while we often think of seeing as relying on our eyes, underwater exploration challenges (13) ___ idea. It proves that “seeing” can also mean using indirect evidence and careful inference to understand (14) ___ world around us. This broader view opens new ways for humans (15) ___ discover places that are hidden from view. In the end, exploration is less about what can be seen directly and more about how information is gathered and combined (16) ___ form a useful whole.",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 9,
+        "type": "short"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "type": "short"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "type": "short"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "type": "short"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "type": "short"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "type": "short"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "type": "short"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "type": "short"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 9,
+        "answer": "on"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "answer": "of"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "answer": "a"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "answer": "to"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "answer": "this"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "answer": "the"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "answer": "to"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "answer": "to"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 2,
+    "audioClips": [],
+    "titlePatternFamily": "concise_statement"
+  },
+  "enunciado_preview": "Example:\nAnswer: 0 → just\nText\nSeeing the Unseen Underwater\nExploring underwater can seem (0) ___ impossible. Light fades quickly, so divers and cameras only capture a small part of their surroundings. This lack of clarity means explorers must rely (9) ___ other methods. One helpful approach is using sound. Unlike light, sound travels efficiently through water and its echoes can reveal the distance (10) ___ objects. Devices send out a pulse and listen for what bounces back. However, this sound data doesn’t automatically provide (11) ___ clear image. Experts need to interpret the signals and build a picture from incomplete clues. For example, when exploring a sloped seabed, it’s necessary (12) ___ combine sound reflections with instrument readings to understand its shape properly. In fact, maps produced in this way are not perfect photos but rather guides that suggest possibilities rather than certainties. So, while we often think of seeing as relying on our eyes, underwater exploration challenges (13) ___ idea. It proves that “seeing” can also mean using indirect evidence and careful inference to understand (14) ___ world around us. This broader view opens new ways for humans (15) ___ discover places that are hidden from view. In the end, exploration is less about what can be seen directly and more about how information is gathered and combined (16) ___ form a useful whole.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

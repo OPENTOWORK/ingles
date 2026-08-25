@@ -1,0 +1,1757 @@
+{
+  "batch_id": "RUOE-PILOT-01",
+  "status": "Approved for Pilot",
+  "briefs": [
+    {
+      "brief_id": "CB-PILOT-001",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E01",
+      "part": "Part 1",
+      "brief_version": "1.0",
+      "topic_id": "TB-008",
+      "main_topic_id": "MT-07",
+      "main_topic": "Science",
+      "subtopic_1_id": "ST-006",
+      "subtopic_1": "Wildlife",
+      "subtopic_2_id": "ST-062",
+      "subtopic_2": "Research",
+      "style_card_id": "SC-01",
+      "style_card_version": "v1.0",
+      "style_card_name": "Curiosity & Explanatory Article",
+      "working_title": "When animals solve a new problem",
+      "content_angle": "A compact explanatory article about how animals can respond to unfamiliar practical problems by combining observation, memory and trial-and-error rather than following one fixed instinctive response.",
+      "central_question": "What makes an animal’s response look flexible rather than automatic?",
+      "central_idea": "Animal problem-solving becomes interesting when behaviour changes in response to a new situation, showing that a successful action can emerge from several simple abilities working together.",
+      "reader_takeaway": "The reader should finish with a more precise idea of what researchers look for when they describe animal behaviour as flexible.",
+      "main_tension_or_contrast": "Fixed instinct versus flexible response to an unfamiliar situation.",
+      "reader_interest_hook": "Everyday stories about clever animals are familiar, but the text reframes the curiosity around what would actually count as evidence of flexible problem-solving.",
+      "content_purpose": "explain",
+      "required_details": [
+        [
+          "RD-01",
+          "Open with a simple unfamiliar task for an animal, such as reaching food or moving around a new obstacle.",
+          "Creates the curiosity and concrete problem.",
+          "general_factual"
+        ],
+        [
+          "RD-02",
+          "Explain that repeating a familiar action is different from adjusting behaviour when the situation changes.",
+          "Clarifies the central distinction.",
+          "general_factual"
+        ],
+        [
+          "RD-03",
+          "Include one general example of an animal trying more than one approach before succeeding, without naming a study or claiming measured results.",
+          "Provides memorable evidence without invented research.",
+          "general_factual"
+        ],
+        [
+          "RD-04",
+          "Show that memory, attention to surroundings and trial-and-error can all contribute to the successful response.",
+          "Adds mechanism and substance.",
+          "general_factual"
+        ]
+      ],
+      "optional_supporting_details": [
+        "A brief contrast between a response that works immediately and one that improves after an unsuccessful attempt."
+      ],
+      "protagonist_case_setting": "General animal-behaviour observations; no named institution or specific research project.",
+      "opening_strategy": "Begin with an accessible puzzle: an animal meets a familiar goal but the usual route is blocked. Establish immediately why the behaviour is worth noticing.",
+      "content_progression": [
+        "Unfamiliar practical problem.",
+        "Difference between routine response and adjustment.",
+        "Concrete trial-and-error example.",
+        "Explanation of the abilities involved.",
+        "Close on what this tells observers to look for."
+      ],
+      "closing_function": "Resolve the opening curiosity by shifting attention from whether an animal succeeds to how its behaviour changes while solving the problem.",
+      "tone_and_voice": "Accessible, intelligent and curious; explanatory rather than academic.",
+      "point_of_view": "third_person",
+      "factuality_mode": "general_factual",
+      "fact_safety_notes": [
+        "Do not invent species-specific abilities that are uncertain.",
+        "Do not cite unnamed scientists, studies, percentages or institutions."
+      ],
+      "why_this_fits_the_part": "The compact explanatory arc supports a natural, coherent 150–180-word text with varied lexical relationships and collocational contexts while the Part prompt remains responsible for the cloze items.",
+      "examinable_potential": "A concise factual text with cause/effect, contrast and precise lexical choices can support strong multiple-choice cloze item design without distorting the content.",
+      "understanding_targets": [
+        "lexical context",
+        "collocation",
+        "semantic precision",
+        "cohesion"
+      ],
+      "avoid": [
+        "Turning the text into a list of “amazing animal facts”.",
+        "Using technical cognitive-science terminology.",
+        "Claiming that one behaviour proves human-like intelligence.",
+        "Generic moral about animals being smarter than people."
+      ],
+      "generic_filler_risks": [
+        "Vague claims such as “animals are very intelligent”.",
+        "Repeating “researchers study animals” without adding a mechanism."
+      ],
+      "likely_cliches": [
+        "“Animals never cease to amaze us.”"
+      ],
+      "potential_incoherences": [
+        "Describing the task as new but later implying the animal was already trained to solve it."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Overclaiming cognition from a simple behaviour."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "flexible_problem_solving",
+        "progression_pattern": "puzzle→distinction→example→explanation",
+        "tension_tag": "instinct_vs_adaptation",
+        "opening_mechanism": "accessible_puzzle",
+        "ending_mechanism": "reframed_observation",
+        "protagonist_type": "animal_subject",
+        "setting_tag": "observation",
+        "style_card_id": "SC-01"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-002",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E01",
+      "part": "Part 2",
+      "brief_version": "1.0",
+      "topic_id": "TB-015",
+      "main_topic_id": "MT-09",
+      "main_topic": "Travel",
+      "subtopic_1_id": "ST-017",
+      "subtopic_1": "Culture",
+      "subtopic_2_id": "ST-032",
+      "subtopic_2": "Food",
+      "style_card_id": "SC-05",
+      "style_card_version": "v1.0",
+      "style_card_name": "Culture, Travel & Community Feature",
+      "working_title": "The market that teaches you how a town eats",
+      "content_angle": "A short travel-and-community feature in which a visitor understands a town less through famous sights than through the routines of a morning food market: when people arrive, how they choose ingredients and how stallholders guide newcomers.",
+      "central_question": "How can an ordinary food market reveal the habits and relationships of a place?",
+      "central_idea": "A local market becomes meaningful not because it is picturesque, but because repeated food-buying routines show how residents use, share and talk about everyday ingredients.",
+      "reader_takeaway": "The setting itself can reveal local culture through ordinary behaviour rather than through a list of tourist attractions.",
+      "main_tension_or_contrast": "Visitor expectation of “local food” as something to consume versus food culture as an everyday community routine.",
+      "reader_interest_hook": "Many travellers look for a memorable meal; the more interesting discovery is seeing how local people choose food before that meal exists.",
+      "content_purpose": "feature",
+      "required_details": [
+        [
+          "RD-01",
+          "Anchor the opening in a busy morning market and one concrete sensory detail connected to food preparation or display.",
+          "Makes the place active and immediate.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "Show a visitor initially looking for a famous speciality but noticing that residents are buying ordinary seasonal ingredients instead.",
+          "Creates contrast between visitor expectation and local reality.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "Include a stallholder explaining or demonstrating how one ingredient is normally used at home, without claiming a specific regional tradition as fact.",
+          "Adds human interaction and cultural substance safely.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "Show that regular customers and sellers know each other’s preferences or exchange small practical advice.",
+          "Establishes community relevance.",
+          "plausible_case"
+        ]
+      ],
+      "optional_supporting_details": [
+        "A brief moment in which the visitor changes what they decide to buy or eat after watching local customers."
+      ],
+      "protagonist_case_setting": "Plausible unnamed town and food market; first-person or close third-person visitor perspective.",
+      "opening_strategy": "Place the reader inside the market immediately, using one concrete food-related action rather than a broad description of the destination.",
+      "content_progression": [
+        "Arrival with a tourist-style expectation.",
+        "Observation of ordinary local buying habits.",
+        "Interaction with a seller.",
+        "Recognition of community relationships around food.",
+        "Close on a changed way of noticing the town."
+      ],
+      "closing_function": "Return to the visitor’s changed perception: the market matters because it shows daily life, not because it provides a checklist of exotic foods.",
+      "tone_and_voice": "Warm, observant and respectful; compact feature-writing.",
+      "point_of_view": "first_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Keep the town unnamed or clearly fictionalised.",
+        "Do not invent claims about authentic national/regional traditions."
+      ],
+      "why_this_fits_the_part": "The short feature provides a coherent natural text with functional grammatical relationships, reference and linking, while remaining compact enough for Part 2.",
+      "examinable_potential": "The text naturally supports grammatical and functional-language contexts without requiring the brief to pre-design any gaps.",
+      "understanding_targets": [
+        "grammatical cohesion",
+        "reference",
+        "functional language",
+        "prepositional and connective relationships"
+      ],
+      "avoid": [
+        "Tourist-brochure superlatives.",
+        "Treating local people as colourful background.",
+        "Invented historical claims about dishes.",
+        "Ending with “everyone should visit”."
+      ],
+      "generic_filler_risks": [
+        "Generic adjectives such as beautiful, amazing and authentic.",
+        "Listing foods without showing what they reveal."
+      ],
+      "likely_cliches": [
+        "“A feast for the senses.”"
+      ],
+      "potential_incoherences": [
+        "Presenting the visitor as unfamiliar with the place but later giving unexplained expert knowledge."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Accidentally presenting invented customs as verified traditions."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "culture_through_routine",
+        "progression_pattern": "expectation→observation→interaction→changed_view",
+        "tension_tag": "tourist_image_vs_daily_life",
+        "opening_mechanism": "sensory_scene",
+        "ending_mechanism": "changed_perception",
+        "protagonist_type": "visitor",
+        "setting_tag": "food_market",
+        "style_card_id": "SC-05"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-003",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E01",
+      "part": "Part 3",
+      "brief_version": "1.0",
+      "topic_id": "TB-013",
+      "main_topic_id": "MT-03",
+      "main_topic": "Entertainment",
+      "subtopic_1_id": "ST-033",
+      "subtopic_1": "Games",
+      "subtopic_2_id": "ST-020",
+      "subtopic_2": "Education",
+      "style_card_id": "SC-02",
+      "style_card_version": "v1.0",
+      "style_card_name": "Trend & Social Report",
+      "working_title": "Games that make practice feel different",
+      "content_angle": "A short social/education report about informal learning clubs using cooperative games not to replace lessons, but to give learners repeated practice in planning, explaining and responding to feedback.",
+      "central_question": "What changes when a game is used as a setting for practising a skill rather than simply for entertainment?",
+      "central_idea": "The useful shift is not that games automatically teach better, but that a clear goal, immediate consequences and repeated attempts can make certain kinds of practice more engaging.",
+      "reader_takeaway": "Games can support learning when the activity and the skill genuinely match; entertainment alone is not the educational value.",
+      "main_tension_or_contrast": "Enjoyment versus purposeful practice.",
+      "reader_interest_hook": "People often ask whether games can teach; the more useful question is what kind of practice a particular game actually creates.",
+      "content_purpose": "report",
+      "required_details": [
+        [
+          "RD-01",
+          "Describe an informal club or classroom moment in which a small group uses a cooperative game to complete a shared task.",
+          "Gives human-scale evidence.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "Show one learner needing to explain a plan clearly to others rather than simply choosing the right answer alone.",
+          "Connects game behaviour to learning.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "Include a failed attempt followed by an immediate change of strategy.",
+          "Shows why repetition/feedback matters.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "Acknowledge that a game is only useful when its demands match the skill being practised.",
+          "Prevents simplistic “games are educational” conclusion.",
+          "general_factual"
+        ]
+      ],
+      "optional_supporting_details": [
+        "A teacher/facilitator stepping back rather than directing every move."
+      ],
+      "protagonist_case_setting": "Plausible learning club or classroom; no named school or study.",
+      "opening_strategy": "Open with a recognisable change in a learning space: a group is discussing a game move with the seriousness normally associated with a lesson task.",
+      "content_progression": [
+        "Establish game-based practice setting.",
+        "Show communication/planning demand.",
+        "Show failure and rapid adjustment.",
+        "Explain why this can support practice.",
+        "Close with the condition that game and skill must match."
+      ],
+      "closing_function": "End on a qualified implication rather than a claim that games replace teaching.",
+      "tone_and_voice": "Readable, balanced magazine/reporting voice.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not invent research findings or performance statistics."
+      ],
+      "why_this_fits_the_part": "The compact report allows a coherent 150–180-word text with rich word-family contexts and clear semantic development, while the Part 3 prompt controls the actual word-formation targets.",
+      "examinable_potential": "Connected descriptions of behaviour, effectiveness and adjustment create natural contexts for nouns, adjectives, adverbs and derived forms.",
+      "understanding_targets": [
+        "word-class context",
+        "semantic development",
+        "cohesion",
+        "register"
+      ],
+      "avoid": [
+        "Claiming games improve grades.",
+        "Making the text an advert for educational technology.",
+        "Generic statement that learning should always be fun.",
+        "Invented survey data."
+      ],
+      "generic_filler_risks": [
+        "“Games are becoming increasingly popular in education” without a concrete practice."
+      ],
+      "likely_cliches": [
+        "“Learning can be fun.”"
+      ],
+      "potential_incoherences": [
+        "Calling the activity cooperative but making success depend only on one individual."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Overstating educational outcomes."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "practice_through_gameplay",
+        "progression_pattern": "trend→case→failed_attempt→qualification",
+        "tension_tag": "enjoyment_vs_purpose",
+        "opening_mechanism": "changed_setting",
+        "ending_mechanism": "qualified_implication",
+        "protagonist_type": "learners",
+        "setting_tag": "learning_club",
+        "style_card_id": "SC-02"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-004",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E01",
+      "part": "Part 5",
+      "brief_version": "1.0",
+      "topic_id": "TB-017",
+      "main_topic_id": "MT-10",
+      "main_topic": "Work",
+      "subtopic_1_id": "ST-005",
+      "subtopic_1": "Volunteering",
+      "subtopic_2_id": "ST-010",
+      "subtopic_2": "Careers",
+      "style_card_id": "SC-03",
+      "style_card_version": "v1.0",
+      "style_card_name": "Personal Reflective Experience",
+      "working_title": "The volunteer job I chose for the wrong reason",
+      "content_angle": "A first-person magazine article about someone who joins a community repair workshop mainly to strengthen a CV, then discovers that listening to visitors and explaining simple tasks changes what they value in future work.",
+      "central_question": "What can a volunteer experience reveal about the kind of work a person actually enjoys?",
+      "central_idea": "The narrator’s most useful career discovery comes not from adding an impressive line to a CV, but from noticing which small responsibilities make them feel engaged and capable.",
+      "reader_takeaway": "Career insight can emerge from the experience of doing ordinary work with people, not only from formal career planning.",
+      "main_tension_or_contrast": "External career value versus personally meaningful work.",
+      "reader_interest_hook": "The narrator openly admits a slightly selfish reason for volunteering, creating room for an earned change of perspective.",
+      "content_purpose": "reflect",
+      "required_details": [
+        [
+          "RD-01",
+          "Narrator joins a community repair workshop because they believe volunteering will look useful on applications.",
+          "Sets up imperfect initial motivation.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "On an early shift, the narrator expects practical repair tasks but is instead asked to welcome visitors and find out what help they need.",
+          "Creates mismatch between expectation and reality.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "A visitor arrives embarrassed about not understanding a simple repair; the narrator learns to explain without making the person feel foolish.",
+          "Provides a concrete human interaction and attitude material.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "The narrator later helps organise tasks between volunteers with different skills and enjoys the coordination more than the repair itself.",
+          "Develops self-discovery through action.",
+          "plausible_case"
+        ],
+        [
+          "RD-05",
+          "When updating the CV, the narrator realises the most important outcome is a changed idea about future roles: people-facing coordination now appeals more than expected.",
+          "Completes reflective arc.",
+          "plausible_case"
+        ]
+      ],
+      "optional_supporting_details": [
+        "A small mistake on the first day that the narrator can describe with mild self-deprecating humour.",
+        "A contrast with a previous assumption that “serious” career skills had to come from formal work experience."
+      ],
+      "protagonist_case_setting": "First-person young adult volunteer in a plausible community repair workshop; no named organisation.",
+      "opening_strategy": "Open with the narrator admitting they originally saw volunteering as a CV strategy, not as something personally important.",
+      "content_progression": [
+        "Initial instrumental motivation.",
+        "Unexpected people-facing role.",
+        "Specific interaction requiring patience and explanation.",
+        "Growing enjoyment of coordination.",
+        "Reassessment of future work preferences."
+      ],
+      "closing_function": "End with the narrator looking at the same CV differently: the line matters less than what the experience revealed about the work they want.",
+      "tone_and_voice": "Natural first-person magazine voice; reflective, lightly self-aware, not inspirational.",
+      "point_of_view": "first_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not imply volunteering guarantees employment or career success."
+      ],
+      "why_this_fits_the_part": "The layered change of attitude, motives, interactions and retrospective judgement provides sufficient depth for a 550–650-word Part 5 text.",
+      "examinable_potential": "Supports questions on attitude, purpose, inference, reference, reasons for decisions and interpretation of phrases because the narrator’s stated motives evolve over the article.",
+      "understanding_targets": [
+        "attitude",
+        "inference",
+        "purpose",
+        "reference",
+        "main idea",
+        "interpretation of expression"
+      ],
+      "avoid": [
+        "Generic lesson that volunteering “changes lives”.",
+        "Making the narrator morally perfect by the end.",
+        "Turning the article into career advice.",
+        "Overexplaining the repair process instead of the human experience."
+      ],
+      "generic_filler_risks": [
+        "Long background about the narrator’s studies.",
+        "Abstract reflection not tied to events."
+      ],
+      "likely_cliches": [
+        "“I learned the true meaning of teamwork.”"
+      ],
+      "potential_incoherences": [
+        "Claiming the narrator disliked practical work while later presenting them as an expert repairer."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Claims about career benefits of volunteering."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "career_preference_discovery",
+        "progression_pattern": "instrumental_motive→unexpected_role→skill_discovery→reassessment",
+        "tension_tag": "cv_value_vs_personal_fit",
+        "opening_mechanism": "personal_admission",
+        "ending_mechanism": "changed_view",
+        "protagonist_type": "volunteer",
+        "setting_tag": "community_workshop",
+        "style_card_id": "SC-03"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-005",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E01",
+      "part": "Part 6",
+      "brief_version": "1.0",
+      "topic_id": "TB-040",
+      "main_topic_id": "MT-06",
+      "main_topic": "Lifestyle",
+      "subtopic_1_id": "ST-040",
+      "subtopic_1": "Home",
+      "subtopic_2_id": "ST-024",
+      "subtopic_2": "Environment",
+      "style_card_id": "SC-04",
+      "style_card_version": "v1.0",
+      "style_card_name": "Narrative Story",
+      "working_title": "The boxes I thought I needed",
+      "content_angle": "A first-person narrative about moving to a smaller home and dealing with boxes kept “just in case”; a local swap event turns the practical problem into a sequence of decisions about what objects are actually useful, repairable or meaningful.",
+      "central_question": "What changes when a person has to decide which possessions deserve space in a smaller home?",
+      "central_idea": "The move becomes less about owning fewer things in principle and more about learning to distinguish objects with a real use or story from objects kept only through habit.",
+      "reader_takeaway": "A change in living space can make ordinary possessions reveal different kinds of value without requiring a moral about minimalism.",
+      "main_tension_or_contrast": "Habitual keeping versus purposeful use; convenience of discarding versus effort of reuse.",
+      "reader_interest_hook": "The narrator is surrounded by boxes labelled “keep” but cannot explain what many of them contain.",
+      "content_purpose": "narrate",
+      "required_details": [
+        [
+          "RD-01",
+          "Opening scene: narrator sits among moving boxes in a noticeably smaller new home and realises that “keeping everything” is physically impossible.",
+          "Establishes setting and immediate problem.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "One box contains an object kept for years “just in case” but never used; this becomes a concrete symbol of habitual keeping.",
+          "Reveals character through object.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "Narrator hears about a local swap/repair event and takes several uncertain items there rather than simply throwing them away.",
+          "Creates turning point and environment link.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "At the event, one object the narrator expected nobody to want is useful to another person, while another sentimental object returns home with the narrator.",
+          "Creates contrast between use-value and personal value.",
+          "plausible_case"
+        ],
+        [
+          "RD-05",
+          "Back home, the narrator develops a more deliberate rule for what earns space, but still keeps a few impractical objects for personal reasons.",
+          "Avoids simplistic minimalism.",
+          "plausible_case"
+        ]
+      ],
+      "optional_supporting_details": [
+        "A neighbour or volunteer making a practical observation that changes the narrator’s thinking without becoming a moralising speech."
+      ],
+      "protagonist_case_setting": "First-person adult moving into a smaller flat/home; plausible local swap/repair event.",
+      "opening_strategy": "Open in the physical scene of blocked floor space and unopened boxes; reveal the problem through action, not explanation.",
+      "content_progression": [
+        "P1: Arrival in smaller home; boxes create immediate obstacle.",
+        "P2: Discovery of “just in case” objects and narrator’s reluctance to decide.",
+        "P3: Introduction of local swap/repair event as an alternative to disposal.",
+        "P4: Event interaction; an unwanted object becomes useful to someone else.",
+        "P5: Contrast: narrator chooses to keep one object with personal meaning despite little practical use.",
+        "P6: Return home; new decision rule begins to emerge.",
+        "P7: Final small action shows changed behaviour without claiming total transformation."
+      ],
+      "closing_function": "End with a concrete choice in the new home that shows a more deliberate relationship with possessions, while retaining some imperfection.",
+      "tone_and_voice": "Immersive, economical first-person narrative with purposeful domestic detail and mild humour.",
+      "point_of_view": "first_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not make environmental impact claims or quantify waste reduction."
+      ],
+      "why_this_fits_the_part": "The story has an ordered sequence of scenes, referential chains, contrasts and cause/effect links that make paragraph/sentence order meaningful for Part 6.",
+      "examinable_potential": "Strong discourse cohesion can support removed-sentence placement through references to objects, decisions, the event and the narrator’s changing criteria.",
+      "understanding_targets": [
+        "cohesion",
+        "reference",
+        "logical sequencing",
+        "contrast",
+        "cause/effect"
+      ],
+      "avoid": [
+        "Minimalism manifesto.",
+        "Generic environmental lecture.",
+        "Paragraphs that each independently describe a possession.",
+        "A sudden final personality transformation."
+      ],
+      "generic_filler_risks": [
+        "Lists of objects with no narrative function.",
+        "Repeated statements that the home is small."
+      ],
+      "likely_cliches": [
+        "“Less is more.”"
+      ],
+      "potential_incoherences": [
+        "Having the narrator discard everything before the swap event."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Unsupported claims about sustainability benefits."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "purposeful_possessions",
+        "progression_pattern": "constraint→reluctance→alternative→contrast→new_rule",
+        "tension_tag": "habit_vs_use",
+        "opening_mechanism": "domestic_scene",
+        "ending_mechanism": "revealing_action",
+        "protagonist_type": "resident",
+        "setting_tag": "home_and_swap_event",
+        "style_card_id": "SC-04"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "part_specific": {
+        "paragraph_functions": [
+          "P1 establish space constraint and immediate problem",
+          "P2 reveal habitual keeping through one object",
+          "P3 introduce alternative action and move story outward",
+          "P4 show first consequence at swap/repair event",
+          "P5 complicate the new rule with sentimental value",
+          "P6 return to home and formulate a practical criterion",
+          "P7 demonstrate changed behaviour through a final action"
+        ],
+        "discourse_links": [
+          "Physical box references connect P1–P2.",
+          "“Instead of throwing them away” logic links P2–P3.",
+          "The event introduced in P3 becomes the scene of P4–P5.",
+          "Contrast between useful-to-someone-else and personally meaningful links P4–P5.",
+          "Return-home time shift links P5–P6.",
+          "Final action in P7 depends on the criterion formed in P6."
+        ],
+        "reference_chain_plan": [
+          "boxes → one box → it/that object",
+          "the event → there → another visitor/volunteer",
+          "the sentimental object → it → back on the shelf"
+        ],
+        "sequencing_logic": "Each paragraph depends on a decision or referent established earlier; moving the event before the object problem or the final action before the criterion would weaken logic.",
+        "removable_sentence_opportunities": [
+          "Sentence referring back to “those boxes” between P1/P2.",
+          "Sentence using “there” to refer to the swap event.",
+          "Contrast sentence beginning with “That was different…” after the unwanted object finds a use.",
+          "Final reference to “that rule” after the narrator forms the criterion."
+        ],
+        "interchangeability_risk": "Low: event, contrast and final rule are causally ordered."
+      },
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-006",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E01",
+      "part": "Part 7",
+      "brief_version": "1.0",
+      "topic_id": "TB-049",
+      "main_topic_id": "MT-01",
+      "main_topic": "Culture",
+      "subtopic_1_id": "ST-037",
+      "subtopic_1": "History",
+      "subtopic_2_id": "ST-084",
+      "subtopic_2": "Society",
+      "style_card_id": "SC-06",
+      "style_card_version": "v1.0",
+      "style_card_name": "Multiple Profiles & Testimonies",
+      "working_title": "Keeping local history alive in different ways",
+      "content_angle": "Four people describe practical ways they help preserve or share local history, showing different motivations, frustrations and ideas about what makes the past meaningful to people now.",
+      "central_question": "Why do people choose different methods for keeping local history visible and useful?",
+      "central_idea": "Preserving history can mean collecting memories, restoring places, organising digital material or guiding people through a neighbourhood; each method protects something different and creates different tensions.",
+      "reader_takeaway": "Local history is not one activity: different forms of preservation depend on distinct skills, motivations and relationships with the community.",
+      "main_tension_or_contrast": "Preserving material accurately versus making it engaging and accessible to people now.",
+      "reader_interest_hook": "The four profiles share a concern for the past but disagree, implicitly, about what deserves the most attention.",
+      "content_purpose": "compare",
+      "required_details": [
+        [
+          "RD-01",
+          "All four profiles must include a concrete trigger for becoming involved.",
+          "Creates comparable motivation evidence.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "Each profile must include one practical difficulty or trade-off.",
+          "Provides discriminating tension.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "Each profile must show a present-day outcome or judgement.",
+          "Creates endings and comparison material.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "At least two dimensions must overlap across pairs of profiles for paraphrased matching.",
+          "Supports Part 7 discrimination.",
+          "plausible_case"
+        ]
+      ],
+      "optional_supporting_details": [
+        "Light references to volunteers, residents or visitors, without naming real organisations."
+      ],
+      "protagonist_case_setting": "Four plausible community-history contributors in different local settings.",
+      "opening_strategy": "Use a brief shared frame, then let each profile begin from a different trigger or concrete activity.",
+      "content_progression": [
+        "Four independent mini-arcs with deliberately varied order of motivation, difficulty, benefit and reflection."
+      ],
+      "closing_function": "Each profile ends on a distinct current judgement or next priority rather than a uniform conclusion.",
+      "tone_and_voice": "Natural differentiated first-person voices; warm, practical and non-academic.",
+      "point_of_view": "multi_profile",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not invent claims about real historic sites or archives."
+      ],
+      "why_this_fits_the_part": "The shared theme plus deliberately distributed similarities and differences creates the comparison architecture required for Part 7.",
+      "examinable_potential": "Supports at least 10 paraphrasable matching statements across motivation, difficulty, satisfaction, skills, audience and priorities.",
+      "understanding_targets": [
+        "comparison",
+        "attitude",
+        "detail matching",
+        "paraphrase",
+        "inference"
+      ],
+      "avoid": [
+        "Four profiles that all “love history” for the same reason.",
+        "Obvious keyword matches between future questions and profile wording.",
+        "One profile containing most of the strong evidence.",
+        "Invented heritage facts."
+      ],
+      "generic_filler_risks": [
+        "Repeated claims that history is “important”."
+      ],
+      "likely_cliches": [
+        "“Bringing history to life” repeated across profiles."
+      ],
+      "potential_incoherences": [
+        "A profile claiming accuracy is the priority while repeatedly admitting they do not check sources."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Accidentally presenting fictional local history as real."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "local_history_methods",
+        "progression_pattern": "four_profile_comparison",
+        "tension_tag": "preservation_vs_access",
+        "opening_mechanism": "shared_frame",
+        "ending_mechanism": "distinct_current_view",
+        "protagonist_type": "community_contributors",
+        "setting_tag": "mixed_local_contexts",
+        "style_card_id": "SC-06"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "part_specific": {
+        "shared_frame": "All four people contribute to preserving or sharing the history of a local area, but through different media and audiences.",
+        "profiles": {
+          "A": {
+            "role": "Oral-history volunteer",
+            "trigger": "An older neighbour’s stories made them realise many memories were never written down.",
+            "motivation": "Capture personal experiences before they disappear.",
+            "difficulty": "Interviewees sometimes move away from dates and facts into memories that are hard to verify.",
+            "key_details": [
+              "Records conversations",
+              "Learns to ask open questions",
+              "Cross-checks basic facts where possible"
+            ],
+            "result_current_position": "Values ordinary memories more than famous events, but has become more careful about separating memory from fact.",
+            "reflection_attitude": "Patient, people-focused, cautious about accuracy."
+          },
+          "B": {
+            "role": "Volunteer helping restore an old community cinema",
+            "trigger": "Joined after seeing the building closed and neglected.",
+            "motivation": "Protect a place linked to shared local experience.",
+            "difficulty": "Restoration work is slower and less glamorous than expected.",
+            "key_details": [
+              "Helps clean/repair usable features",
+              "Enjoys practical teamwork",
+              "Learns that some changes are necessary for modern use"
+            ],
+            "result_current_position": "Accepts compromise if the building can function again.",
+            "reflection_attitude": "Practical, initially romantic, now realistic."
+          },
+          "C": {
+            "role": "Creator of a digital photo archive",
+            "trigger": "Found boxes of unidentified family and street photographs.",
+            "motivation": "Make scattered images searchable and accessible.",
+            "difficulty": "Photographs often lack dates/names and online descriptions can easily become guesses.",
+            "key_details": [
+              "Invites residents to identify people/places",
+              "Keeps uncertain information labelled as uncertain",
+              "Enjoys connecting separate contributions"
+            ],
+            "result_current_position": "Most satisfied when several small clues combine to identify an image.",
+            "reflection_attitude": "Methodical, collaborative, detail-oriented."
+          },
+          "D": {
+            "role": "Local walking-tour organiser",
+            "trigger": "Friends kept asking about unusual buildings in the neighbourhood.",
+            "motivation": "Help residents notice places they pass every day.",
+            "difficulty": "Needs to keep tours engaging without turning uncertain stories into facts.",
+            "key_details": [
+              "Builds routes around visible details",
+              "Changes pace according to group",
+              "Leaves out stories that cannot be supported"
+            ],
+            "result_current_position": "Believes curiosity matters, but trust matters more.",
+            "reflection_attitude": "Energetic, audience-aware, disciplined about claims."
+          }
+        },
+        "comparison_dimensions": [
+          "trigger",
+          "accuracy concerns",
+          "working with other people",
+          "practical versus interpretive work",
+          "satisfaction",
+          "compromise",
+          "audience"
+        ],
+        "controlled_overlap": [
+          "A and D both manage the boundary between story and verified fact, but A handles personal memories while D handles public storytelling.",
+          "B and C both depend on community contributions, but B works on a physical place while C organises information.",
+          "C and D both make material easier for others to access, through different formats."
+        ],
+        "exclusive_details": [
+          "A: interviewing older residents",
+          "B: physical restoration compromise",
+          "C: labelling uncertain photo information",
+          "D: changing route/pacing for groups"
+        ],
+        "voice_differentiation": "A reflective and patient; B practical and slightly self-correcting; C precise and quietly enthusiastic; D lively but cautious about trust.",
+        "potential_answer_distribution": "Plan approximately 2–3 strong claims per profile, with letters reusable and no profile carrying more than three obvious matches.",
+        "questionability_notes": "At least 12 candidate claims exist across accuracy, motivation, collaboration, compromise, audience and satisfaction, allowing 10 final questions without direct lexical copying."
+      },
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-007",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E02",
+      "part": "Part 1",
+      "brief_version": "1.0",
+      "topic_id": "TB-002",
+      "main_topic_id": "MT-09",
+      "main_topic": "Travel",
+      "subtopic_1_id": "ST-079",
+      "subtopic_1": "Adventure",
+      "subtopic_2_id": "ST-019",
+      "subtopic_2": "Destinations",
+      "style_card_id": "SC-05",
+      "style_card_version": "v1.0",
+      "style_card_name": "Culture, Travel & Community Feature",
+      "working_title": "The place you reach after the road ends",
+      "content_angle": "A compact travel feature about an unnamed coastal destination reached by a short local ferry and footpath, where the limited access changes how visitors move, what they notice and how they interact with residents.",
+      "central_question": "How can the way a destination is reached shape the experience of being there?",
+      "central_idea": "A place can feel distinctive because access is part of the experience: slower arrival, fewer transport choices and local routines make visitors pay attention differently.",
+      "reader_takeaway": "The character of a destination can come from practical constraints and local rhythm, not from spectacular attractions.",
+      "main_tension_or_contrast": "Convenient access versus slower, more attentive travel.",
+      "reader_interest_hook": "The road literally stops before the destination, so arrival requires changing pace and transport.",
+      "content_purpose": "feature",
+      "required_details": [
+        [
+          "RD-01",
+          "Open at the point where the road ends and travellers transfer to a small ferry or continue on foot.",
+          "Makes access central to setting.",
+          "plausible_fiction"
+        ],
+        [
+          "RD-02",
+          "Show that visitors must plan around limited transport rather than moving whenever they choose.",
+          "Creates practical constraint.",
+          "plausible_fiction"
+        ],
+        [
+          "RD-03",
+          "Include one ordinary local routine that becomes noticeable because visitors are moving slowly, such as deliveries, boats arriving or residents walking between places.",
+          "Adds community substance.",
+          "plausible_fiction"
+        ],
+        [
+          "RD-04",
+          "Show a visitor realising that the lack of convenience is also what prevents the destination from feeling interchangeable with busier places.",
+          "Provides meaning without romanticising.",
+          "plausible_fiction"
+        ]
+      ],
+      "optional_supporting_details": [
+        "A small inconvenience such as carrying a bag further than expected, treated lightly."
+      ],
+      "protagonist_case_setting": "Unnamed plausible coastal settlement/destination; no real geographic claims.",
+      "opening_strategy": "Anchor the opening in the physical end of the road and the change of transport.",
+      "content_progression": [
+        "Arrival constraint.",
+        "Adjustment to slower movement.",
+        "Observation of local routine.",
+        "Reassessment of inconvenience.",
+        "Close on how access shapes perception."
+      ],
+      "closing_function": "End on the idea that the journey has not simply delivered the visitor to the place; it has altered the way the place is experienced.",
+      "tone_and_voice": "Warm, observant feature voice; concrete and non-promotional.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_fiction",
+      "fact_safety_notes": [
+        "Keep destination unnamed/fictional so no invented access details are attributed to a real place."
+      ],
+      "why_this_fits_the_part": "A compact place-based progression can create natural lexical/collocational contexts in a 150–180-word text without becoming a travel list.",
+      "examinable_potential": "Precise language around travel, movement, constraint and perception gives the Part prompt good lexical material.",
+      "understanding_targets": [
+        "lexical context",
+        "collocation",
+        "semantic nuance",
+        "cohesion"
+      ],
+      "avoid": [
+        "Hidden-gem tourism clichés.",
+        "Calling inconvenience “authentic”.",
+        "Inventing real ferry schedules or geography.",
+        "Generic praise of slow travel."
+      ],
+      "generic_filler_risks": [
+        "Long scenery descriptions."
+      ],
+      "likely_cliches": [
+        "“Off the beaten track.”"
+      ],
+      "potential_incoherences": [
+        "Claiming there are no roads while later describing cars in the centre."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Implying fictional access conditions are factual."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "access_shapes_place",
+        "progression_pattern": "arrival_constraint→observation→reassessment",
+        "tension_tag": "convenience_vs_attention",
+        "opening_mechanism": "physical_threshold",
+        "ending_mechanism": "place_reinterpretation",
+        "protagonist_type": "visitor",
+        "setting_tag": "coastal_destination",
+        "style_card_id": "SC-05"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-008",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E02",
+      "part": "Part 2",
+      "brief_version": "1.0",
+      "topic_id": "TB-018",
+      "main_topic_id": "MT-07",
+      "main_topic": "Science",
+      "subtopic_1_id": "ST-055",
+      "subtopic_1": "Oceans",
+      "subtopic_2_id": "ST-027",
+      "subtopic_2": "Exploration",
+      "style_card_id": "SC-01",
+      "style_card_version": "v1.0",
+      "style_card_name": "Curiosity & Explanatory Article",
+      "working_title": "Exploring a place you cannot see clearly",
+      "content_angle": "A short explanatory article about why underwater exploration often depends on indirect information such as sound, mapped shapes and instrument readings when visibility is poor.",
+      "central_question": "How do explorers build a useful picture of underwater surroundings when sight is limited?",
+      "central_idea": "Underwater exploration often works by combining several incomplete signals rather than relying on a single clear view.",
+      "reader_takeaway": "Exploration can mean interpreting indirect evidence, not simply seeing an unknown place with one’s own eyes.",
+      "main_tension_or_contrast": "Direct sight versus indirect sensing and interpretation.",
+      "reader_interest_hook": "The surprising idea is that “looking” underwater may involve listening to returning sound or reading a map created from measurements.",
+      "content_purpose": "explain",
+      "required_details": [
+        [
+          "RD-01",
+          "Establish that light and visibility can become limited underwater, making direct observation difficult.",
+          "Creates knowledge gap.",
+          "general_factual"
+        ],
+        [
+          "RD-02",
+          "Explain in simple terms that sound can travel through water and reflected signals can help indicate distance/shape.",
+          "Provides mechanism.",
+          "general_factual"
+        ],
+        [
+          "RD-03",
+          "Show that a map or instrument display still requires interpretation rather than giving a perfect picture automatically.",
+          "Adds nuance.",
+          "general_factual"
+        ],
+        [
+          "RD-04",
+          "Give a general exploration example such as locating a slope, object or seafloor feature without naming a specific expedition.",
+          "Makes explanation concrete.",
+          "general_factual"
+        ]
+      ],
+      "optional_supporting_details": [
+        "Brief contrast between what a camera can show nearby and what mapping can suggest beyond visible range."
+      ],
+      "protagonist_case_setting": "General underwater exploration; no named expedition or institution.",
+      "opening_strategy": "Open with the apparent contradiction of exploring a place that cannot always be seen clearly.",
+      "content_progression": [
+        "Visibility problem.",
+        "Indirect sensing via sound.",
+        "Need to interpret readings.",
+        "General exploration example.",
+        "Close on a broader definition of “seeing”."
+      ],
+      "closing_function": "Resolve the paradox by showing that exploration depends on combining evidence into a usable picture.",
+      "tone_and_voice": "Curious, clear, non-technical.",
+      "point_of_view": "third_person",
+      "factuality_mode": "general_factual",
+      "fact_safety_notes": [
+        "Keep explanation high-level and scientifically conservative.",
+        "Do not invent depths, equipment performance or expedition results."
+      ],
+      "why_this_fits_the_part": "The compact explanatory text provides cohesive grammatical relationships and reference chains suitable for Part 2 while the structural prompt designs the one-word gaps.",
+      "examinable_potential": "Cause/effect, relative reference, prepositional relationships and functional connectors can arise naturally from the explanation.",
+      "understanding_targets": [
+        "grammatical cohesion",
+        "reference",
+        "linking",
+        "functional language"
+      ],
+      "avoid": [
+        "Technical sonar terminology beyond B2 needs.",
+        "Invented scientific discoveries.",
+        "Claiming underwater maps are exact photographs.",
+        "Turning the text into a history of ocean exploration."
+      ],
+      "generic_filler_risks": [
+        "Repeated statements that the ocean is mysterious."
+      ],
+      "likely_cliches": [
+        "“We know more about space than the sea.”"
+      ],
+      "potential_incoherences": [
+        "Saying visibility is impossible everywhere underwater."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Oversimplifying how mapping systems work."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "indirect_exploration",
+        "progression_pattern": "paradox→mechanism→interpretation→example",
+        "tension_tag": "seeing_vs_inference",
+        "opening_mechanism": "apparent_contradiction",
+        "ending_mechanism": "broadened_definition",
+        "protagonist_type": "explorers",
+        "setting_tag": "underwater",
+        "style_card_id": "SC-01"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-009",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E02",
+      "part": "Part 3",
+      "brief_version": "1.0",
+      "topic_id": "TB-048",
+      "main_topic_id": "MT-03",
+      "main_topic": "Entertainment",
+      "subtopic_1_id": "ST-052",
+      "subtopic_1": "Music",
+      "subtopic_2_id": "ST-016",
+      "subtopic_2": "Creativity",
+      "style_card_id": "SC-04",
+      "style_card_version": "v1.0",
+      "style_card_name": "Narrative Story",
+      "working_title": "The first song I played for someone else",
+      "content_angle": "A compressed biographical-style narrative about an adult beginner who starts learning an instrument privately, nearly stops because progress feels slow, then agrees to play a simple accompaniment at a small community event and discovers a different reason to continue.",
+      "central_question": "What can turn a private, frustrating hobby into a creative activity that feels worth continuing?",
+      "central_idea": "The turning point is not sudden technical success but using a modest skill for a real shared purpose, which changes how the learner judges progress.",
+      "reader_takeaway": "Creative satisfaction can come from what a skill allows someone to do, not only from reaching an impressive level.",
+      "main_tension_or_contrast": "Private perfectionism versus shared practical enjoyment.",
+      "reader_interest_hook": "The learner has practised alone for months but is asked to play in front of people before feeling “ready”.",
+      "content_purpose": "narrate",
+      "required_details": [
+        [
+          "RD-01",
+          "Adult learner begins the instrument for personal interest and expects visible progress quickly.",
+          "Sets motivation and expectation.",
+          "biographical_style_fiction"
+        ],
+        [
+          "RD-02",
+          "A period of repetitive practice makes the learner consider giving up.",
+          "Creates obstacle.",
+          "biographical_style_fiction"
+        ],
+        [
+          "RD-03",
+          "Someone at a small community event asks for a simple accompaniment, not a solo performance.",
+          "Creates realistic turning point.",
+          "biographical_style_fiction"
+        ],
+        [
+          "RD-04",
+          "The learner makes a small mistake but notices that the music still helps the group/event.",
+          "Reframes success.",
+          "biographical_style_fiction"
+        ],
+        [
+          "RD-05",
+          "Afterwards, practice continues with a more practical creative goal rather than a vague ambition to become “good”.",
+          "Shows consequence.",
+          "biographical_style_fiction"
+        ]
+      ],
+      "optional_supporting_details": [
+        "One physical detail about the instrument that initially felt awkward but later becomes familiar."
+      ],
+      "protagonist_case_setting": "Adult beginner musician; small community event; fictional/plausible.",
+      "opening_strategy": "Enter at the moment the learner is asked to play for others, then briefly establish why that feels premature.",
+      "content_progression": [
+        "Unexpected request.",
+        "Backstory of slow private practice.",
+        "Decision to accept limited role.",
+        "Performance with minor mistake.",
+        "Changed reason to continue."
+      ],
+      "closing_function": "End on a concrete new practice goal linked to making music with others, not a triumphant performance.",
+      "tone_and_voice": "Concrete, economical, lightly self-aware narrative.",
+      "point_of_view": "first_person",
+      "factuality_mode": "biographical_style_fiction",
+      "fact_safety_notes": [],
+      "why_this_fits_the_part": "A compact narrative with clear event progression and evaluative language gives natural word-family contexts while remaining suitable for Part 3 length.",
+      "examinable_potential": "The narrative can support varied noun/adjective/adverb/verb derivations around confidence, preparation, enjoyment, performance and improvement.",
+      "understanding_targets": [
+        "word formation context",
+        "narrative cohesion",
+        "attitude",
+        "semantic precision"
+      ],
+      "avoid": [
+        "Instant talent transformation.",
+        "Overdramatic stage fright.",
+        "Generic message that age does not matter.",
+        "Detailed music theory."
+      ],
+      "generic_filler_risks": [
+        "Long description of lessons or practice routine."
+      ],
+      "likely_cliches": [
+        "“It’s never too late.”"
+      ],
+      "potential_incoherences": [
+        "Describing the learner as unable to play at all but then performing a complex piece."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "shared_purpose_changes_progress",
+        "progression_pattern": "request→frustration_backstory→attempt→reframing",
+        "tension_tag": "perfection_vs_usefulness",
+        "opening_mechanism": "in_medias_res_request",
+        "ending_mechanism": "new_concrete_goal",
+        "protagonist_type": "adult_learner",
+        "setting_tag": "community_music_event",
+        "style_card_id": "SC-04"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-010",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E02",
+      "part": "Part 5",
+      "brief_version": "1.0",
+      "topic_id": "TB-034",
+      "main_topic_id": "MT-04",
+      "main_topic": "Environment",
+      "subtopic_1_id": "ST-070",
+      "subtopic_1": "Sustainability",
+      "subtopic_2_id": "ST-012",
+      "subtopic_2": "Cities",
+      "style_card_id": "SC-02",
+      "style_card_version": "v1.0",
+      "style_card_name": "Trend & Social Report",
+      "working_title": "What happens when rooftops become shared spaces",
+      "content_angle": "A magazine report about apartment and community buildings turning underused rooftops into shared growing and meeting spaces, focusing on the practical changes this creates for residents rather than claiming large environmental effects.",
+      "central_question": "Why do some shared rooftop projects succeed as community spaces while others become difficult to maintain?",
+      "central_idea": "The value of a greener shared rooftop depends less on the idea itself than on ordinary decisions about responsibility, access, maintenance and what residents actually want to use the space for.",
+      "reader_takeaway": "Urban sustainability projects become meaningful through practical social arrangements, not just through attractive design.",
+      "main_tension_or_contrast": "Shared environmental ambition versus everyday responsibility and competing uses.",
+      "reader_interest_hook": "A rooftop may look like wasted space from the street, but turning it into something shared creates questions that are as social as they are environmental.",
+      "content_purpose": "report",
+      "required_details": [
+        [
+          "RD-01",
+          "Introduce a plausible building/community where a previously unused rooftop is converted into a modest shared green space.",
+          "Establishes trend at human scale.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "Show two different resident expectations: e.g. quiet gardening versus social use.",
+          "Creates internal tension.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "Include a practical issue such as watering, access times, shared tools or responsibility when volunteers are away.",
+          "Adds concrete operational substance.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "Show one adjustment to the project rules/design made after early problems.",
+          "Demonstrates adaptation.",
+          "plausible_case"
+        ],
+        [
+          "RD-05",
+          "Include a resident who was initially uninterested but later values a specific practical/social benefit, without implying universal approval.",
+          "Adds attitude/inference material.",
+          "plausible_case"
+        ],
+        [
+          "RD-06",
+          "Acknowledge that not every building or resident group will want or be able to manage the same model.",
+          "Creates qualified conclusion.",
+          "general_factual"
+        ]
+      ],
+      "optional_supporting_details": [
+        "Contrast between what designers imagined and what residents actually use most."
+      ],
+      "protagonist_case_setting": "Plausible apartment/community building; unnamed city.",
+      "opening_strategy": "Open with a concrete change visible on a once-empty rooftop, then widen to the social/practical questions the change creates.",
+      "content_progression": [
+        "Establish emerging use of rooftop.",
+        "Different resident expectations.",
+        "Practical maintenance challenge.",
+        "Adjustment after early friction.",
+        "Unexpected benefit for one sceptical resident.",
+        "Qualified wider implication."
+      ],
+      "closing_function": "End on the idea that greener city spaces work when they fit real routines, not simply because the concept sounds attractive.",
+      "tone_and_voice": "Balanced, current-feeling magazine/reporting voice; non-promotional.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not quantify environmental benefits.",
+        "Do not cite invented city policies, schemes or surveys."
+      ],
+      "why_this_fits_the_part": "The topic provides connected viewpoints, attitude shifts, purposes and cause/effect development suitable for the depth of Part 5.",
+      "examinable_potential": "Supports inference, attitude, purpose, reference and main-idea questions through competing expectations, adjustments and qualified conclusions.",
+      "understanding_targets": [
+        "inference",
+        "attitude",
+        "purpose",
+        "reference",
+        "idea development"
+      ],
+      "avoid": [
+        "Green-city promotional copy.",
+        "Claims that rooftop gardens solve climate problems.",
+        "One-sided “community is always positive” framing.",
+        "Technical architecture detail."
+      ],
+      "generic_filler_risks": [
+        "Generic “cities need more green space” paragraphs."
+      ],
+      "likely_cliches": [
+        "“A breath of fresh air in the concrete jungle.”"
+      ],
+      "potential_incoherences": [
+        "Calling the space communal while later implying one resident controls access entirely."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Unverified environmental-effect claims."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "shared_space_governance",
+        "progression_pattern": "trend→expectations→friction→adaptation→qualification",
+        "tension_tag": "ideal_vs_maintenance",
+        "opening_mechanism": "visible_change",
+        "ending_mechanism": "practical_implication",
+        "protagonist_type": "residents",
+        "setting_tag": "urban_rooftop",
+        "style_card_id": "SC-02"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-011",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E02",
+      "part": "Part 6",
+      "brief_version": "1.0",
+      "topic_id": "TB-019",
+      "main_topic_id": "MT-05",
+      "main_topic": "Health",
+      "subtopic_1_id": "ST-066",
+      "subtopic_1": "Sleep",
+      "subtopic_2_id": "ST-048",
+      "subtopic_2": "Lifestyle",
+      "style_card_id": "SC-03",
+      "style_card_version": "v1.0",
+      "style_card_name": "Personal Reflective Experience",
+      "working_title": "The evening routine that was really a work problem",
+      "content_angle": "A first-person reflective article about someone who tries to improve their evenings because they feel tired, then realises the main issue is not a perfect bedtime routine but carrying unfinished work mentally into the night. The change is practical and personal, not medical advice.",
+      "central_question": "What can a person learn when an attempted sleep routine exposes a different everyday habit that is keeping the evening mentally busy?",
+      "central_idea": "The narrator’s useful discovery is not a universal sleep formula, but that creating a clear end to the working day changes how the evening feels.",
+      "reader_takeaway": "A personal routine can reveal which part of daily life is actually causing friction, even when the first explanation turns out to be incomplete.",
+      "main_tension_or_contrast": "Trying to control sleep directly versus changing the boundary between work and personal time.",
+      "reader_interest_hook": "The narrator buys into the idea of a perfect evening routine, but every carefully chosen habit fails for the same unnoticed reason.",
+      "content_purpose": "reflect",
+      "required_details": [
+        [
+          "RD-01",
+          "Narrator starts from repeated tired evenings and decides to experiment with a more deliberate routine.",
+          "Sets problem without medical claim.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "They try several harmless routine changes, but continue checking unfinished work/messages mentally or practically.",
+          "Shows first explanation failing.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "A specific evening interruption makes them notice that work has no clear stopping point.",
+          "Creates discovery.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "They introduce a simple end-of-work action such as writing tomorrow’s first task and physically putting work materials away.",
+          "Provides concrete adaptation.",
+          "plausible_case"
+        ],
+        [
+          "RD-05",
+          "The narrator notices the evening feels less occupied by work, while explicitly avoiding claims about guaranteed sleep improvement.",
+          "Shows measured outcome.",
+          "plausible_case"
+        ]
+      ],
+      "optional_supporting_details": [
+        "Mild humour about carefully arranging “relaxing” activities while still thinking about a spreadsheet/email."
+      ],
+      "protagonist_case_setting": "First-person office/remote worker; home evening routine; plausible case.",
+      "opening_strategy": "Open with the narrator assembling an over-planned “perfect” evening and noticing that it does not feel relaxing at all.",
+      "content_progression": [
+        "P1: Over-planned evening and unresolved tiredness.",
+        "P2: Earlier attempts to change surface habits.",
+        "P3: Concrete interruption reveals unfinished work is still mentally active.",
+        "P4: Narrator tests a clear work-closing ritual.",
+        "P5: Early resistance/temptation to reopen work.",
+        "P6: Evening attention begins to shift to non-work activities.",
+        "P7: Reflection: the useful change was a boundary, not a sleep formula."
+      ],
+      "closing_function": "End with a modest personal conclusion about ending work, explicitly not with advice about how everyone should sleep.",
+      "tone_and_voice": "Natural first-person magazine voice; reflective, practical, lightly self-deprecating, non-therapeutic.",
+      "point_of_view": "first_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not make medical claims about insomnia, sleep duration, hormones or health outcomes.",
+        "Do not present the routine as treatment or universal advice."
+      ],
+      "why_this_fits_the_part": "The evolving explanation, repeated references to the same unfinished-work problem and ordered discovery/adaptation make paragraph and sentence placement meaningful.",
+      "examinable_potential": "Supports cohesion through time shifts, contrast between attempted solutions, referents (“that habit”, “this boundary”) and cause/effect.",
+      "understanding_targets": [
+        "cohesion",
+        "reference",
+        "sequencing",
+        "contrast",
+        "reflection"
+      ],
+      "avoid": [
+        "Medicalising ordinary tiredness.",
+        "Giving a list of sleep tips.",
+        "Claiming the change “cures” poor sleep.",
+        "Generic self-care message."
+      ],
+      "generic_filler_risks": [
+        "Long catalogue of bedtime habits.",
+        "Repeated statements about being tired."
+      ],
+      "likely_cliches": [
+        "“Switch off to switch off.”"
+      ],
+      "potential_incoherences": [
+        "Saying the narrator never works at home but later making unfinished home work central."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Health advice or causal claims about sleep quality."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "work_boundary_discovery",
+        "progression_pattern": "surface_solution→failed_attempts→cause_discovery→boundary_test→reflection",
+        "tension_tag": "routine_control_vs_root_habit",
+        "opening_mechanism": "personal_admission",
+        "ending_mechanism": "specific_reframing",
+        "protagonist_type": "worker",
+        "setting_tag": "home_evening",
+        "style_card_id": "SC-03"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "part_specific": {
+        "paragraph_functions": [
+          "P1 establish over-planned evening and dissatisfaction",
+          "P2 summarise harmless surface changes already tried",
+          "P3 reveal unfinished work through a concrete interruption",
+          "P4 introduce deliberate end-of-work action",
+          "P5 show temptation to break new boundary",
+          "P6 show shift in evening attention without medical claim",
+          "P7 reflect on what the experiment actually revealed"
+        ],
+        "discourse_links": [
+          "“Even after all that” links P1–P2.",
+          "A concrete message/file in P3 refers back to the work implied in P2.",
+          "“That was when…” marks discovery leading to P4.",
+          "The new ritual introduced in P4 becomes “the rule” challenged in P5.",
+          "P6 depends on maintaining that boundary.",
+          "P7 contrasts the original sleep-focused explanation with the final work-boundary insight."
+        ],
+        "reference_chain_plan": [
+          "the routine → all that → those changes",
+          "unfinished work → it → that task",
+          "the new rule/boundary → it → this separation"
+        ],
+        "sequencing_logic": "The boundary solution only makes sense after the narrator notices unfinished work; the reflection only makes sense after testing the boundary.",
+        "removable_sentence_opportunities": [
+          "Reference sentence contrasting “all those changes” with continuing work thoughts.",
+          "Sentence introducing the specific interruption that exposes the pattern.",
+          "Sentence referring to “that rule” after the work-closing ritual.",
+          "Final contrast sentence between trying to control sleep and ending work."
+        ],
+        "interchangeability_risk": "Low: discovery and testing create clear temporal and causal dependencies."
+      },
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Health factuality needs careful human review because the Main Topic is Health.",
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    },
+    {
+      "brief_id": "CB-PILOT-012",
+      "batch_id": "RUOE-PILOT-01",
+      "exam_id": "RUOE-PILOT-E02",
+      "part": "Part 7",
+      "brief_version": "1.0",
+      "topic_id": "TB-036",
+      "main_topic_id": "MT-10",
+      "main_topic": "Work",
+      "subtopic_1_id": "ST-082",
+      "subtopic_1": "Workplace",
+      "subtopic_2_id": "ST-065",
+      "subtopic_2": "Psychology",
+      "style_card_id": "SC-06",
+      "style_card_version": "v1.0",
+      "style_card_name": "Multiple Profiles & Testimonies",
+      "working_title": "Small changes that made work feel better",
+      "content_angle": "Four people describe one workplace change that improved their daily experience for different reasons: protected focus time, greater control over scheduling, mentoring a newer colleague, and regular problem-solving sessions. The emphasis is on individual experience, not psychological claims.",
+      "central_question": "Why can different people value very different changes in the way their work is organised?",
+      "central_idea": "Feeling better at work can come from different sources—concentration, autonomy, usefulness to others or shared problem-solving—so the same workplace policy will not matter equally to everyone.",
+      "reader_takeaway": "Work satisfaction is presented through concrete experiences and trade-offs rather than a single formula for a “happy workplace”.",
+      "main_tension_or_contrast": "Individual needs versus one-size-fits-all workplace solutions.",
+      "reader_interest_hook": "All four people say work improved, but none of them points to the same benefit.",
+      "content_purpose": "compare",
+      "required_details": [
+        [
+          "RD-01",
+          "Each profile must describe one specific workplace change and the situation before it.",
+          "Creates comparable before/after evidence.",
+          "plausible_case"
+        ],
+        [
+          "RD-02",
+          "Each profile must include one limitation or trade-off so no change is presented as universally positive.",
+          "Adds nuance.",
+          "plausible_case"
+        ],
+        [
+          "RD-03",
+          "At least two profiles must value greater control in different forms, and at least two must value interaction with others for different reasons.",
+          "Creates controlled overlap.",
+          "plausible_case"
+        ],
+        [
+          "RD-04",
+          "Each profile ends with a distinct judgement about what now matters most to them at work.",
+          "Supports differentiated matching.",
+          "plausible_case"
+        ]
+      ],
+      "optional_supporting_details": [
+        "Brief reference to role type without naming real employers."
+      ],
+      "protagonist_case_setting": "Four plausible workers in different roles/workplaces; no named companies.",
+      "opening_strategy": "Brief shared frame, then varied profile openings through a frustration, unexpected opportunity, new responsibility or routine change.",
+      "content_progression": [
+        "Four mini-arcs with different orderings of problem, change, benefit, limitation and reflection."
+      ],
+      "closing_function": "Distinct final judgements, not a shared claim that the workplace is now “happy”.",
+      "tone_and_voice": "Natural, differentiated first-person voices; practical and psychologically modest.",
+      "point_of_view": "multi_profile",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not make clinical or general psychological claims.",
+        "Do not claim productivity or retention improvements without evidence."
+      ],
+      "why_this_fits_the_part": "The four profiles share a clear comparison domain while offering overlapping and exclusive evidence needed for multiple matching.",
+      "examinable_potential": "Supports 10+ paraphrasable claims across autonomy, concentration, mentoring, teamwork, trade-offs, initial reactions and current priorities.",
+      "understanding_targets": [
+        "comparison",
+        "attitude",
+        "detail matching",
+        "paraphrase",
+        "inference"
+      ],
+      "avoid": [
+        "Treating workplace happiness as measurable from one anecdote.",
+        "Four identical before/after success stories.",
+        "Obvious keyword matching.",
+        "Management-advice tone."
+      ],
+      "generic_filler_risks": [
+        "Vague “good communication is important” claims."
+      ],
+      "likely_cliches": [
+        "“A happy worker is a productive worker.”"
+      ],
+      "potential_incoherences": [
+        "A profile praising autonomy while describing no actual increase in control."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Unverified claims about wellbeing/productivity."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "different_work_needs",
+        "progression_pattern": "four_profile_comparison",
+        "tension_tag": "individual_needs_vs_uniform_policy",
+        "opening_mechanism": "varied_profile_entry",
+        "ending_mechanism": "distinct_priority",
+        "protagonist_type": "workers",
+        "setting_tag": "mixed_workplaces",
+        "style_card_id": "SC-06"
+      },
+      "history_notes": [
+        "First pilot batch; no prior generated/approved DRALO brief usage recorded."
+      ],
+      "part_specific": {
+        "shared_frame": "All four people describe a change in work organisation that improved their own daily experience, but the valued benefit differs.",
+        "profiles": {
+          "A": {
+            "role": "Designer/analyst with concentration-heavy tasks",
+            "trigger": "Constant small interruptions made it difficult to finish complex work.",
+            "motivation": "Wanted uninterrupted time rather than fewer responsibilities.",
+            "difficulty": "Protected focus periods can make quick collaboration less convenient.",
+            "key_details": [
+              "Team introduces agreed no-meeting focus blocks",
+              "Person plans questions for later instead of messaging immediately",
+              "Values finishing one demanding task without switching attention"
+            ],
+            "result_current_position": "Would keep the focus blocks but not use them for the whole day.",
+            "reflection_attitude": "Values concentration and clear boundaries, not isolation."
+          },
+          "B": {
+            "role": "Worker with caring/personal scheduling constraints",
+            "trigger": "Fixed start times created avoidable daily stress.",
+            "motivation": "Wanted control over when work begins/ends within agreed limits.",
+            "difficulty": "Flexibility requires clearer handovers with colleagues on different schedules.",
+            "key_details": [
+              "Chooses from a permitted time range",
+              "Uses shared status notes for handovers",
+              "Appreciates control more than working fewer hours"
+            ],
+            "result_current_position": "Sees predictability plus choice as more important than total freedom.",
+            "reflection_attitude": "Practical, autonomy-focused, aware of team coordination."
+          },
+          "C": {
+            "role": "Experienced employee asked to mentor a newcomer",
+            "trigger": "Initially saw mentoring as extra work.",
+            "motivation": "None at first; accepted because the team needed help.",
+            "difficulty": "Explaining familiar tasks takes patience and exposes habits the mentor never questioned.",
+            "key_details": [
+              "Learns to explain reasons, not just procedures",
+              "Gets satisfaction from the newcomer becoming independent",
+              "Also improves own understanding of the role"
+            ],
+            "result_current_position": "Values feeling useful to another person more than expected.",
+            "reflection_attitude": "Initially reluctant, later quietly proud."
+          },
+          "D": {
+            "role": "Member of a team handling recurring operational problems",
+            "trigger": "People complained about the same issues separately without solving them.",
+            "motivation": "Wanted problems discussed where everyone affected could contribute.",
+            "difficulty": "Regular sessions can become repetitive if there is no decision or follow-up.",
+            "key_details": [
+              "Short scheduled problem-solving meeting",
+              "Rotating person brings one issue",
+              "Team records one agreed next action"
+            ],
+            "result_current_position": "Values shared responsibility but only when discussion leads to action.",
+            "reflection_attitude": "Collaborative but impatient with empty meetings."
+          }
+        },
+        "comparison_dimensions": [
+          "control/autonomy",
+          "interaction with colleagues",
+          "initial resistance",
+          "trade-off",
+          "sense of usefulness",
+          "concentration",
+          "coordination",
+          "current priority"
+        ],
+        "controlled_overlap": [
+          "A and B both value control, but A controls attention/time blocks while B controls schedule.",
+          "C and D both value interaction, but C values one-to-one development while D values collective problem-solving.",
+          "B and D both mention coordination as the price of the benefit."
+        ],
+        "exclusive_details": [
+          "A: protected focus blocks",
+          "B: flexible start/end within agreed range",
+          "C: mentoring a newcomer",
+          "D: structured problem-solving meetings"
+        ],
+        "voice_differentiation": "A concise and analytical; B practical and measured; C initially sceptical then warm; D energetic and action-oriented.",
+        "potential_answer_distribution": "Aim for 2–3 questions per profile with overlap spread across A/B and C/D; avoid any four-question concentration.",
+        "questionability_notes": "At least 12 paraphrasable claims exist across motivation, resistance, autonomy, collaboration, trade-offs and changed judgement."
+      },
+      "editorial_status": "Approved",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human review should confirm that “psychology” remains experiential rather than clinical.",
+        "Human review still required before approval."
+      ],
+      "review_feedback": [
+        {
+          "action": "Keep",
+          "comment": "Approved for pilot generation after human review of the 12-brief set."
+        }
+      ],
+      "regeneration_history": [],
+      "lifecycle_state": "Active"
+    }
+  ]
+}

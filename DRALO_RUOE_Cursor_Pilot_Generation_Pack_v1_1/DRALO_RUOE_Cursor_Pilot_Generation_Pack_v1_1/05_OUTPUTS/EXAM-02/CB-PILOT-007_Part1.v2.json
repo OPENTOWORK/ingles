@@ -1,0 +1,160 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:46:36.750Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-007",
+  "brief_version": "1.0",
+  "style_card_id": "SC-05",
+  "style_card_version": "v1.0",
+  "working_title": "The place you reach after the road ends",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3385,
+    "completion_tokens": 1024,
+    "total_tokens": 4409
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 206 outside 150–180"
+    ],
+    "warnings": [],
+    "word_count": 206
+  },
+  "exercise": {
+    "part_title": "Part 1: Multiple-choice Cloze",
+    "instructions": "For questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap.",
+    "text_title": "The place you reach after the road ends",
+    "passage_with_gaps": "The journey to this coastal destination is an adventure in itself. The road (0) ___ to an end, and travellers must transfer to a small ferry or continue on foot. This change of pace is not just a practical necessity but a part of the experience. Visitors soon realise they must plan their movements around the limited transport options, which (1) ___ them to explore at a slower pace.\n\nAs they walk, they notice the small details of local life that might otherwise be (2) ___. A boat arrives with the day's deliveries, and residents greet each other as they pass by. It's a simple routine, yet it (3) ___ a sense of community that is often missing in busier places.\n\nOne visitor, initially frustrated by the lack of convenience, comes to (4) ___ that this very inconvenience is what makes the place unique. Without the constant (5) ___ of cars and buses, the destination retains its charm and distinctive character.\n\nIn the end, the journey does not just bring visitors to a place; it (6) ___ how they perceive it. The slower travel, the limited choices, and the local rhythm all (7) ___ to a more attentive and meaningful experience. This destination, reached only after the road ends, offers a reminder that sometimes the journey itself is as important as the (8) ___.",
+    "example": {
+      "number": 0,
+      "options": {
+        "A": "comes",
+        "B": "makes",
+        "C": "reaches",
+        "D": "goes"
+      },
+      "answer": "C",
+      "explanation": "\"Reaches\" is the only option that naturally fits the context of a road coming to an end."
+    },
+    "questions": [
+      {
+        "number": 1,
+        "options": {
+          "A": "allows",
+          "B": "forces",
+          "C": "lets",
+          "D": "permits"
+        },
+        "answer": "B",
+        "lexical_focus": "forces",
+        "rationale": "\"Forces\" is the correct choice as it implies necessity due to limited transport options, fitting the context of the sentence."
+      },
+      {
+        "number": 2,
+        "options": {
+          "A": "missed",
+          "B": "ignored",
+          "C": "overlooked",
+          "D": "avoided"
+        },
+        "answer": "C",
+        "lexical_focus": "overlooked",
+        "rationale": "\"Overlooked\" is the correct choice as it means not noticed, which fits the context of observing small details."
+      },
+      {
+        "number": 3,
+        "options": {
+          "A": "contributes",
+          "B": "adds",
+          "C": "provides",
+          "D": "offers"
+        },
+        "answer": "A",
+        "lexical_focus": "contributes",
+        "rationale": "\"Contributes\" is the correct choice as it implies that the routine is part of creating a sense of community."
+      },
+      {
+        "number": 4,
+        "options": {
+          "A": "understand",
+          "B": "realise",
+          "C": "discover",
+          "D": "notice"
+        },
+        "answer": "B",
+        "lexical_focus": "realise",
+        "rationale": "\"Realise\" is the correct choice as it indicates a moment of understanding or awareness about the inconvenience."
+      },
+      {
+        "number": 5,
+        "options": {
+          "A": "noise",
+          "B": "sound",
+          "C": "rush",
+          "D": "traffic"
+        },
+        "answer": "D",
+        "lexical_focus": "traffic",
+        "rationale": "\"Traffic\" is the correct choice as it refers to the movement of vehicles, which is absent in this context."
+      },
+      {
+        "number": 6,
+        "options": {
+          "A": "changes",
+          "B": "alters",
+          "C": "modifies",
+          "D": "shifts"
+        },
+        "answer": "A",
+        "lexical_focus": "changes",
+        "rationale": "\"Changes\" is the correct choice as it indicates a transformation in perception."
+      },
+      {
+        "number": 7,
+        "options": {
+          "A": "lead",
+          "B": "result",
+          "C": "contribute",
+          "D": "add"
+        },
+        "answer": "C",
+        "lexical_focus": "contribute",
+        "rationale": "\"Contribute\" is the correct choice as it suggests that these factors help create a meaningful experience."
+      },
+      {
+        "number": 8,
+        "options": {
+          "A": "goal",
+          "B": "destination",
+          "C": "objective",
+          "D": "target"
+        },
+        "answer": "B",
+        "lexical_focus": "destination",
+        "rationale": "\"Destination\" is the correct choice as it refers to the place being reached, fitting the context of travel."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise adheres to the content brief by focusing on a coastal destination reached by ferry or foot, highlighting how access shapes the visitor experience.",
+      "style_card_notes": "The style is consistent with the Culture, Travel & Community Feature card, using a warm and observant tone.",
+      "british_english_notes": "British English is consistently used throughout the text.",
+      "factuality_notes": "The text maintains plausible fiction by not attributing specific details to real locations.",
+      "answer_validity_notes": "Each question has a single, defendable answer with plausible distractors.",
+      "self_check_flags": [
+        "Ensure lexical variety is maintained.",
+        "Check that the text length is within the required range."
+      ]
+    },
+    "_word_count": 206
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

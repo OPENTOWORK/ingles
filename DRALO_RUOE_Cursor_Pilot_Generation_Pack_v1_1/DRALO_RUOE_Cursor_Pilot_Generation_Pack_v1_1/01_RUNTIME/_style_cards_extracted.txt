@@ -1,0 +1,584 @@
+DRALO
+
+RUOE STYLE CARDS
+
+B2 Reading and Use of English · Content Engine
+
+Version 1.0 · 10 August 2026
+
+Purpose
+
+Define reusable editorial families for generation of Content Briefs and RUOE texts.
+
+Source corpus
+
+RUOE CambridgeOne sample texts supplied for style analysis.
+
+Current status
+
+Six cards written and referenced; ready for practical pilot validation.
+
+
+
+1. Operating principles
+
+These cards describe recurring editorial mechanisms observed across authentic B2 RUOE samples. They are not templates to copy and they do not replace the structural prompt of any Part.
+
+• The Topic Bank decides the thematic raw material; the Style Card decides how that material can be shaped editorially; the Content Brief makes the specific editorial decisions for one exercise.
+
+• A Style Card must remain reusable across topics. It should define opening logic, progression, substance, voice, closing function and typical risks—not fixed facts or fixed storylines.
+
+• Parts 1, 2, 3, 5 and 6 can share a style family, but the structural prompt still controls length, item type, numbering and exam mechanics.
+
+• Part 7 uses the dedicated Multiple Profiles & Testimonies family because its content must be distributed across four comparable but distinct voices/profiles.
+
+• Part 4 does not use Style Cards.
+
+• References are evidence for mechanisms only. Wording, named people, statistics and narrative details must never be copied into generated content.
+
+Card fields
+
+Each card contains the approved minimum fields: Name; What content it suits; Compatible Parts; Typical opening; Content progression; What gives it real substance; Tone/voice; Typical ending; Avoid; References used.
+
+Status logic
+
+The six cards below are complete enough to enter the pilot. They should be treated as Ready for pilot validation—not yet as empirically validated—until they have generated new Content Briefs/texts and passed human review.
+
+
+
+SC-01  ·  STYLE CARD
+
+Curiosity & Explanatory Article
+
+STATUSReady for pilot validation
+
+LANGUAGEBritish English
+
+LEVELCEFR B2
+
+What content it suits
+
+Questions, phenomena, behaviours, natural/scientific curiosities and everyday mechanisms that can be explained clearly without becoming academic.
+
+Compatible Parts
+
+Parts 1, 2, 3, 5 and 6.
+
+Typical opening
+
+• Begin with a familiar observation, surprising fact, accessible question or apparent contradiction.
+
+• Create an immediate knowledge gap: the reader should understand what is interesting before receiving the explanation.
+
+• Avoid opening with a dry definition unless the definition itself is surprising or necessary.
+
+Content progression
+
+• Move from the familiar phenomenon to the underlying explanation.
+
+• Introduce one or more concrete examples, mechanisms, observations or pieces of evidence.
+
+• Where useful, present an initial assumption and then refine, complicate or correct it.
+
+• Build paragraphs so each one answers a new part of the reader’s implicit question rather than restating the same idea.
+
+• For short Parts 1–3, compress this into a miniature arc: hook → explanation → one concrete development → meaningful closing point.
+
+What gives it real substance
+
+• A precise phenomenon rather than a broad theme.
+
+• Specific mechanisms, causes, consequences or contrasts.
+
+• Concrete examples that make the explanation memorable.
+
+• Careful factuality: plausible general explanations are acceptable, but invented studies, institutions, statistics or quotations are not.
+
+Tone / voice
+
+Accessible, intelligent and curious. Neutral-to-engaged rather than textbook-like. The writer sounds interested in explaining something to a general reader, not lecturing them.
+
+Typical ending
+
+• Close by resolving the initial curiosity, revealing a wider implication, or showing why the phenomenon matters.
+
+• An effective final sentence may slightly broaden the perspective, but should not become generic advice or a moral.
+
+Avoid
+
+• Encyclopaedia-style lists of facts with no progression.
+
+• Overloading the text with technical terminology.
+
+• Generic openings such as 'Nowadays, X is very important'.
+
+• Unsupported claims presented as research findings.
+
+• Repeating the same explanatory point in different wording.
+
+• Turning an explanation into self-help.
+
+References used
+
+5.2 — Birth order – does it make any difference?. Strong model of question-led explanation, competing ideas, evidence and a conclusion that remains intellectually open rather than simplistic.
+
+2.2 — Amazing fungi!. Compact curiosity-led explanation: familiar object → hidden reality → striking example → current area of interest.
+
+3.2 — The grass-eating shark. Uses a surprising natural phenomenon, competing explanations and concrete biological detail to sustain curiosity.
+
+ENGINE NOTE  Use the card to shape the editorial arc only. Any statistics, studies or factual claims in a generated brief must be verifiable or deliberately framed as non-specific/plausible rather than invented.
+
+
+
+SC-02  ·  STYLE CARD
+
+Trend & Social Report
+
+STATUSReady for pilot validation
+
+LANGUAGEBritish English
+
+LEVELCEFR B2
+
+What content it suits
+
+Changes in habits, technology, work, education, environment, leisure or social behaviour where the interest comes from what is changing, why it is changing and what effects or tensions follow.
+
+Compatible Parts
+
+Parts 1, 2, 3, 5 and 6.
+
+Typical opening
+
+• Start from a recognisable change, emerging practice, new concern or contrast between past and present.
+
+• Show the social relevance immediately: what people are doing differently, what is becoming common, or what problem is attracting attention.
+
+• The opening can use a concrete scene or example before widening to the trend.
+
+Content progression
+
+• Establish the trend or change clearly.
+
+• Explain drivers, motivations or conditions behind it.
+
+• Develop consequences, benefits, drawbacks or different reactions.
+
+• Add one or two concrete cases, settings or stakeholder perspectives to prevent abstraction.
+
+• End with an implication, unresolved tension or realistic direction of travel rather than a sweeping prediction.
+
+What gives it real substance
+
+• Observable change over time or contrast between groups/contexts.
+
+• Specific behaviours and consequences, not vague claims about 'society'.
+
+• Balanced tensions: convenience vs cost, innovation vs unintended effect, popularity vs drawback, etc.
+
+• Concrete examples that make the trend visible at human scale.
+
+Tone / voice
+
+Magazine/reporting voice: informed, current-feeling and readable. Balanced rather than promotional or alarmist. May include mild interpretive commentary while remaining grounded.
+
+Typical ending
+
+• Close on what the trend means in practice, what remains uncertain, or how people/institutions are adapting.
+
+• Avoid absolute predictions. A small unresolved question or tension often works better.
+
+Avoid
+
+• Invented percentages or surveys merely to make the text sound authoritative.
+
+• Technology-is-good / technology-is-bad simplifications.
+
+• Trend pieces with no people, settings or consequences.
+
+• Overusing 'more and more people' without showing what has actually changed.
+
+• Journalistic sensationalism or moral panic.
+
+References used
+
+6.2 — Mini forests. A social/environmental innovation presented through concept, practical implementation, community relevance and wider benefits.
+
+5.2 — Birth order – does it make any difference?. Useful for showing how established social beliefs can be tested and revised through newer evidence.
+
+1.2 — Breaking bad habits. Compact social/behavioural explanation built around a common assumption, expert perspective and practical implication.
+
+ENGINE NOTE  The card does not require 'news'. A trend can be long-running or emerging; what matters is a clear pattern of change plus consequences. The Topic Bank supplies the domain; the Content Brief decides the specific angle.
+
+
+
+SC-03  ·  STYLE CARD
+
+Personal Reflective Experience
+
+STATUSReady for pilot validation
+
+LANGUAGEBritish English
+
+LEVELCEFR B2
+
+What content it suits
+
+First-person experiences in which the value comes from a change in understanding, a decision, an unexpected difficulty, a discovered preference or a personal reinterpretation of something familiar.
+
+Compatible Parts
+
+Parts 1, 2, 3, 5 and 6.
+
+Typical opening
+
+• Open from a personal situation, habit, expectation or decision that gives the reader a concrete starting point.
+
+• Signal the narrator’s attitude early, but leave room for that attitude to change.
+
+• Small personal details are preferable to a generic autobiographical introduction.
+
+Content progression
+
+• Set up the narrator’s initial expectation or normal behaviour.
+
+• Introduce an experience, obstacle, discovery or contradiction.
+
+• Show the narrator reacting, adapting or reassessing.
+
+• Use concrete episodes rather than summarising the whole experience abstractly.
+
+• Finish with what changed in the narrator’s view, behaviour or sense of value.
+
+What gives it real substance
+
+• Specific moments, choices, frustrations, surprises and sensory or situational detail.
+
+• A clear before/after contrast in perspective.
+
+• Self-awareness: the narrator can admit uncertainty, embarrassment, mistaken assumptions or mixed feelings.
+
+• Reflection should grow out of events; it should not be pasted on as a life lesson.
+
+Tone / voice
+
+Natural first-person magazine voice. Conversational but controlled; reflective without sounding therapeutic. Light humour, self-deprecation and small asides are welcome when natural.
+
+Typical ending
+
+• Close on a changed perspective, earned satisfaction, lingering question or concrete intention.
+
+• The ending should feel specific to the experience, not like a universal motivational slogan.
+
+Avoid
+
+• Generic 'this taught me to never give up' morals.
+
+• Chronological diary-style listing with no change in perspective.
+
+• Overdramatic emotional language.
+
+• Perfect narrators who never make mistakes or reconsider anything.
+
+• Reflection that is not supported by concrete events.
+
+References used
+
+5.1 — My book collection. Excellent reflective arc: attachment → embarrassment/problem → attempted solution → rediscovery → more nuanced understanding of self and others.
+
+5.5 — My first summer job. Expectation versus reality, several concrete episodes, adaptation and a final moment where the narrator discovers a genuine strength.
+
+6.6 — The wild attraction of competitive fell running. Personal entry point, remembered first encounter, development into commitment and an explicit but experience-based explanation of why the activity matters.
+
+ENGINE NOTE  For Parts 1–3, keep the narrator and change-of-perspective mechanism but reduce the number of episodes. For Part 6, the progression must also provide strong discourse links between paragraphs for the structural prompt to exploit.
+
+
+
+SC-04  ·  STYLE CARD
+
+Narrative Story
+
+STATUSReady for pilot validation
+
+LANGUAGEBritish English
+
+LEVELCEFR B2
+
+What content it suits
+
+Character-centred stories, biographical episodes and narrative extracts where events reveal personality, conflict, motivation or change. The emphasis is on scene, action and consequence rather than explanation.
+
+Compatible Parts
+
+Parts 1, 2, 3, 5 and 6.
+
+Typical opening
+
+• Enter through a scene, action, concrete setting or character detail rather than background exposition.
+
+• Establish who matters, where we are and what kind of tension or desire is present.
+
+• Use selective detail that hints at character before explaining it explicitly.
+
+Content progression
+
+• Move through causally connected events rather than a list of facts.
+
+• Reveal character through decisions, reactions, dialogue, objects and contrasts.
+
+• Introduce a complication, obstacle, discovery or turning point.
+
+• Allow earlier details to acquire significance later.
+
+• End with consequence, changed situation, revealing reaction or a meaningful unresolved note.
+
+What gives it real substance
+
+• Specific physical setting and purposeful details.
+
+• Character motivation and viewpoint.
+
+• Cause-and-effect between events.
+
+• Small tensions, contrasts or setbacks that create forward movement.
+
+• For biographical narrative, select only episodes that contribute to the central arc.
+
+Tone / voice
+
+Immersive but B2-accessible. Concrete, economical and observant. Dialogue or interior judgement can be used sparingly. Description supports character/action rather than becoming ornamental.
+
+Typical ending
+
+• Close on a consequence or character-revealing moment rather than summarising the story.
+
+• In shorter narrative-biographical texts, the ending can show the resulting career/state, provided the route to it has been developed.
+
+Avoid
+
+• Backstory dumps before anything happens.
+
+• Too many named characters or subplots.
+
+• Artificial cliffhangers.
+
+• Decorative description with no narrative function.
+
+• Events that happen randomly without affecting the character.
+
+• Highly literary C1/C2 prose or difficult figurative density.
+
+References used
+
+5.3 — Roy Mason / beach-hut novel extract. Strong scene-led narrative voice: setting, objects and reactions reveal Roy’s values without explanatory exposition.
+
+1.4 — Adriano Spano’s story. Compressed biographical narrative built around desire, training, career movement and fulfilment of a long-held ambition.
+
+3.6 — A happy and successful chef. First-person career narrative with early motivation, obstacles, resourcefulness and a concrete outcome.
+
+ENGINE NOTE  This family is not an invitation to create fiction in every Part. It covers both fictional narrative and factual/plausible biographical storytelling. The Content Brief determines the factuality level.
+
+
+
+SC-05  ·  STYLE CARD
+
+Culture, Travel & Community Feature
+
+STATUSReady for pilot validation
+
+LANGUAGEBritish English
+
+LEVELCEFR B2
+
+What content it suits
+
+Places, local practices, cultural activities, heritage, travel experiences, communities and outdoor pursuits where the setting is an active part of the content rather than a decorative backdrop.
+
+Compatible Parts
+
+Parts 1, 2, 3, 5 and 6.
+
+Typical opening
+
+• Anchor the reader quickly in a place, local activity, landmark or distinctive community practice.
+
+• Use one concrete feature—landscape, ritual, object, event or local behaviour—to make the setting immediate.
+
+• Where personal voice is used, connect the narrator’s reason for being there to the place itself.
+
+Content progression
+
+• Move from orientation to discovery: where/what → distinctive features → people or activity → meaning/impact.
+
+• Let the physical or cultural setting shape what happens rather than merely hosting unrelated content.
+
+• Combine descriptive detail with explanation, experience or community context.
+
+• Where appropriate, contrast visitor expectation with local reality or past with present.
+
+What gives it real substance
+
+• Place-specific details that could not simply be transplanted to any location.
+
+• Local practices, landscape, heritage, community relationships or practical constraints.
+
+• A human reason to care: identity, belonging, discovery, preservation, challenge, enjoyment or change.
+
+• Concrete details over tourist-brochure adjectives.
+
+Tone / voice
+
+Warm, observant feature-writing. Curious and respectful. Can be first-person or third-person. Descriptive passages remain controlled and functional at B2.
+
+Typical ending
+
+• Close by returning to the value of the place/activity, a changed perception, a community implication or a vivid final experience.
+
+• Avoid generic 'everyone should visit' conclusions.
+
+Avoid
+
+• Tourist-brochure language and strings of superlatives.
+
+• Generic travel descriptions that could describe anywhere.
+
+• Reducing cultures or communities to stereotypes.
+
+• Inventing heritage claims or local facts.
+
+• Description without progression or human relevance.
+
+References used
+
+6.1 — Touring round artworks – by bike!. Integrates travel/activity, landscape and public art so each location changes the experience and the writer’s interpretation.
+
+6.6 — The wild attraction of competitive fell running. The activity is inseparable from northern English landscape, local tradition, weather and community organisation.
+
+2.6 — A famous landmark in Australia / Uluru. Compact place-based text combining location, physical features, indigenous significance and current visitor behaviour.
+
+ENGINE NOTE  A culture/travel/community brief should specify what makes the setting functionally important. If the same text would work unchanged after swapping the place name, the brief is too generic.
+
+
+
+SC-06  ·  STYLE CARD
+
+Multiple Profiles & Testimonies
+
+STATUSReady for pilot validation
+
+LANGUAGEBritish English
+
+LEVELCEFR B2
+
+What content it suits
+
+Part 7 content built from four people/profiles who share a common theme but differ in experience, attitude, motivation, difficulty, response or outcome.
+
+Compatible Parts
+
+Part 7.
+
+Typical opening
+
+• Use a concise shared frame or title that makes the comparison domain clear.
+
+• Each profile should enter quickly through a distinctive personal fact, attitude, episode or problem rather than repeating the shared topic.
+
+• Profiles do not need identical openings; controlled variation helps voice differentiation.
+
+Content progression
+
+• Give each profile a self-contained mini-arc with 2–4 comparable dimensions.
+
+• Distribute overlapping concepts across profiles so questions require discrimination rather than keyword spotting.
+
+• Make some profiles share surface similarities while differing in cause, attitude, timing, motivation or consequence.
+
+• Ensure every profile contains multiple examinable ideas and that no single profile becomes obviously richer than the others.
+
+• Across the set, vary the order in which comparable dimensions appear.
+
+What gives it real substance
+
+• Concrete episodes and decisions unique to each person.
+
+• Distinctive attitude and evaluative language.
+
+• Comparable dimensions: expectations, obstacles, reactions, benefits, regrets, motivation, change, advice, relationships or outcomes.
+
+• Paraphrasable evidence: the question wording should not merely repeat the profile’s key words.
+
+Tone / voice
+
+Natural, differentiated voices. First person works especially well, but third-person mini-profiles are also valid. Each person should sound plausible without exaggerated dialect or caricature.
+
+Typical ending
+
+• Each profile should end on its own meaningful state: outcome, current view, consequence, reflection or next step.
+
+• Avoid giving all four profiles the same rhetorical ending or identical 'now I...' structure.
+
+Avoid
+
+• Four versions of the same story with names changed.
+
+• One profile containing nearly all the strong examinable material.
+
+• Obvious lexical matching between question and answer.
+
+• Artificially forcing every profile through the same paragraph template.
+
+• Voices differentiated only by superficial hobbies or demographic labels.
+
+• Contradictory or insufficient evidence for the matching questions.
+
+References used
+
+7.1 — Four people describe how they turned their hobbies into new careers. Excellent comparison set: common transformation theme, but different triggers, obstacles, confidence levels, commercial decisions and skill development.
+
+7.6 — What was university like for you?. Strong differentiated voices with overlapping dimensions—money, study, career, identity and mistakes—distributed in different combinations.
+
+7.5 — Four rising stars. Demonstrates third-person/quoted mini-profiles with distinct developmental paths, setbacks, expectations and chance opportunities.
+
+ENGINE NOTE  Part 7 requires this family because the content itself must be architected for cross-profile matching. The Content Brief should explicitly plan comparable dimensions and differentiation before the structural prompt writes the ten questions.
+
+
+
+8. Pilot validation checklist
+
+These cards are now written and referenced. The remaining step is practical validation with new DRALO content—not further theoretical expansion.
+
+• Generate at least two new Content Briefs from each Style Card using different Topic Bank entries.
+
+• Check whether the generated briefs are recognisably different across Style Cards even when topics are similar.
+
+• Check whether each card creates enough substance without forcing invented facts.
+
+• Check whether Parts 1–3 can compress the style naturally without sounding formulaic.
+
+• Check whether Parts 5–6 retain strong paragraph progression and support the construct of the Part.
+
+• For SC-06, verify that four profiles are differentiated yet comparable and that matching questions can be paraphrased without keyword dependence.
+
+• Record Keep / Change / Add / Remove / Do not feedback and revise only where the pilot exposes a repeatable problem.
+
+Recommended status after this document
+
+Structure of Style Cards
+
+Approved
+
+Six initial families
+
+Approved
+
+Card wording + references
+
+Completed in v1.0
+
+Practical validation
+
+Pending pilot
+
+Source corpus: RUOE CAMBRIDGEONE - samples for style cards.docx. References are used to identify editorial mechanisms only; no source wording should be reproduced in generated DRALO content.
+

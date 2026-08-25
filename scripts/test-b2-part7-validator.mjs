@@ -78,13 +78,13 @@ addCase('3 sections fails', (g) => {
 addCase('section under 120 fails', (g) => {
   g.sections[0].text = 'Too short to be a Part 7 person text.';
   return g;
-}, /minimum is 120/);
+}, /minimum is 100/);
 addCase('section over 150 fails', (g) => {
   const filler =
     ' Extra commentary about routines, weekends, neighbours, transport, hobbies, budgets, weather, and long-term plans appears again without changing the tested ideas.';
-  while (countWords(g.sections[1].text) <= 150) g.sections[1].text += filler;
+  while (countWords(g.sections[1].text) <= 170) g.sections[1].text += filler;
   return g;
-}, /maximum is 150/);
+}, /maximum is 170/);
 addCase('answer letter used 6+ times fails', (g) => {
   const answers = ['A', 'A', 'A', 'A', 'A', 'A', 'B', 'C', 'D', 'B'];
   g.modelAnswers = answers.map((answer, i) => ({

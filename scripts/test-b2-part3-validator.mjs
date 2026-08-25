@@ -23,9 +23,9 @@ function makeValidPart3() {
     'confidence',
     'relaxation',
     'responsibility',
-    'compete',
+    'competitors',
     'healthier',
-    'active',
+    'actively',
   ];
   const passage = `Finding balance outdoors
 Many people today are rediscovering the (0) ___ (NATURE) benefits of regular outdoor activity after long hours indoors at desks and screens. Doctors argue that consistent movement improves overall (17) ___ (FIT) and helps maintain (18) ___ (STRONG) muscles throughout adulthood without extreme training plans. Team sports also build (19) ___ (CONFIDENT), while gentle stretching encourages (20) ___ (RELAX) after stressful days at work or college. Coaches insist that (21) ___ (RESPONSIBLE) behaviour matters as much as talent, especially when athletes (22) ___ (COMPETE) in regional events at weekends. Nutrition plays a role too: balanced meals support long-term (23) ___ (HEALTH) and keep teenagers (24) ___ (ACTIVE) without extreme diets or risky supplements. Schools that promote these habits report fewer absences and better concentration in class, although changing routines requires patience from families as well as teachers over several months of practice. Local parks and quiet riverside paths make it easier for busy adults to start small and keep going. Even twenty minutes outdoors most days can improve mood, focus and long-term wellbeing for people of all ages.`;
@@ -125,7 +125,7 @@ addCase('passage over 200 words fails', (g) => {
     ' Extra commentary about parks, trails, weekend clubs, workplace walking groups, school gardens, outdoor festivals, community sports, cycling routes, weekend markets, and riverside benches appears again without adding new formation gaps.';
   g.passage = `${g.passage}${filler}${filler}${filler}${filler}`;
   return g;
-}, /maximum is 200/);
+}, /maximum is 180/);
 addCase('baseWord alias accepted on question', (g) => {
   g.questions[0] = { ...g.questions[0], baseWord: 'FIT' };
   delete g.questions[0].stem;

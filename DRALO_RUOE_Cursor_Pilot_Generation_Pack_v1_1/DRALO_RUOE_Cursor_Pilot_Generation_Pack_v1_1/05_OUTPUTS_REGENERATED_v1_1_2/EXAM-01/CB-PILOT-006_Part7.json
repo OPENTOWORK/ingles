@@ -1,0 +1,199 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:24:03.210Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-006",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-06",
+  "working_title": "Keeping local history alive in different ways",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[TEST-P7-WORD-MATCH] Q50: Question wording overlaps heavily with a single profile (literal word matching).",
+      "[TEST-P7-WORD-MATCH] Q50: Question wording overlaps heavily with a single profile (literal word matching)."
+    ],
+    "warnings": [
+      "Part 7 question 50: may be solvable by keyword matching in section C.",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 2,
+    "warning_count": 2
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [
+    {
+      "rule_id": "TEST-P7-WORD-MATCH",
+      "severity": "QUALITY_FAIL",
+      "location": "Q50",
+      "evidence": "Who feels most pleased when various pieces of information come together to solve a historical puzzle",
+      "reason": "Question wording overlaps heavily with a single profile (literal word matching).",
+      "recommended_local_action": "Paraphrase the question; require discrimination of attitude/motivation."
+    }
+  ],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 7: Multiple matching",
+    "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+    "matchingIntro": "Which person…? The people may be chosen more than once.",
+    "sections": [
+      {
+        "letter": "A",
+        "name": "Maya, oral-history volunteer",
+        "text": "Initially, I got involved after listening to an elderly neighbour sharing stories from decades ago and realising that countless personal memories were never documented. My aim has always been to preserve these individual experiences before they fade away completely. I conduct interviews with local residents, focusing on open-ended questions that encourage detailed recollections. However, it can be challenging because many people drift away from exact dates and facts, blending memories with feelings. Since then, I have learned to carefully cross-check basic facts to distinguish between what actually happened and what might be remembered inaccurately. I now value everyday stories equally, even more than big historical events, but I try to remain patient and cautious to avoid mixing emotion with verified information."
+      },
+      {
+        "letter": "B",
+        "name": "Tom, cinema restoration volunteer",
+        "text": "I joined the project after noticing the old community cinema closed down and left to deteriorate, which felt like losing a shared cultural space. My motivation was to protect this building, which holds meaning for many locals. Getting my hands dirty cleaning and fixing parts of the place has been rewarding, especially working alongside others in the team. Yet, the restoration has taken much longer than I expected and is less exciting than I hoped — a lot of the work involves tedious repairs. I've also had to accept that some modern adaptations are necessary for it to be usable again, even if they affect the original look. Despite that, I’m now realistic about balancing preservation with practical use, and I’m happy the cinema might reopen in a different, functioning form."
+      },
+      {
+        "letter": "C",
+        "name": "Luca, digital photo archive creator",
+        "text": "My interest began when I came across several boxes of old photos from families and streets around town, but most lacked labels or dates. It seemed important to organise and digitise these images to make them more accessible and searchable for anyone interested. To solve the problem of many photos being unidentified, I invite neighbours to help me tag the people and places they recognise. Still, it’s often unclear who or what is in some pictures, so I make sure to mark uncertain information clearly rather than guessing. I enjoy the process of combining small hints from various contributors to solve these historical puzzles. Currently, I feel most satisfaction when different pieces come together to reveal a photo’s story, knowing that I’ve built something collaborative and methodical."
+      },
+      {
+        "letter": "D",
+        "name": "Olivia, local walking-tour organiser",
+        "text": "Friends frequently asked me about the unusual buildings visible on everyday walks, which made me realise people often overlook the history around them. I decided to create guided walks to highlight these places, hoping to encourage locals to observe their neighbourhood more closely. Designing tours means organising routes based on visible features while keeping groups interested throughout the tour by varying pace and length. A big challenge is avoiding presenting unverified stories as facts, so I deliberately leave out legends or uncertain anecdotes. I believe it’s better to nurture curiosity while maintaining trust. Nowadays, I focus heavily on providing accurate information in a lively way, adjusting my delivery to suit various audiences, and I find the experience rewarding and energising."
+      }
+    ],
+    "questions": [
+      {
+        "id": "q43",
+        "number": 43,
+        "prompt": "Who began their work because they discovered stories were at risk of disappearing completely?"
+      },
+      {
+        "id": "q44",
+        "number": 44,
+        "prompt": "Who talks about needing to find a compromise between keeping things original and adapting for modern requirements?"
+      },
+      {
+        "id": "q45",
+        "number": 45,
+        "prompt": "Who regularly involves others in helping to identify unclear historical information?"
+      },
+      {
+        "id": "q46",
+        "number": 46,
+        "prompt": "Who emphasises tailoring their approach during activities to maintain the group’s interest?"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "prompt": "Who has found that emotional memories can interfere with an accurate record of events?"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "prompt": "Who mentions initial enthusiasm fading due to the slower, less exciting nature of the work?"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "prompt": "Who values ordinary community stories more than widely known historical events?"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "prompt": "Who feels most pleased when various pieces of information come together to solve a historical puzzle?"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "prompt": "Who avoids sharing stories that cannot be fully supported by evidence to keep trust with their audience?"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "prompt": "Who views working with others as an important and enjoyable part of their contribution?"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q43",
+        "number": 43,
+        "answer": "A"
+      },
+      {
+        "id": "q44",
+        "number": 44,
+        "answer": "B"
+      },
+      {
+        "id": "q45",
+        "number": 45,
+        "answer": "C"
+      },
+      {
+        "id": "q46",
+        "number": 46,
+        "answer": "D"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "answer": "A"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "answer": "B"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "answer": "A"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "answer": "C"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "answer": "D"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "answer": "B"
+      }
+    ],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 7,
+    "audioClips": [],
+    "__editorialFindings": [
+      {
+        "rule_id": "TEST-P7-WORD-MATCH",
+        "severity": "QUALITY_FAIL",
+        "location": "Q50",
+        "evidence": "Who feels most pleased when various pieces of information come together to solve a historical puzzle",
+        "reason": "Question wording overlaps heavily with a single profile (literal word matching).",
+        "recommended_local_action": "Paraphrase the question; require discrimination of attitude/motivation."
+      }
+    ]
+  },
+  "enunciado_preview": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.\nWhich person…? The people may be chosen more than once.\n43 Who began their work because they discovered stories were at risk of disappearing completely?\n44 Who talks about needing to find a compromise between keeping things original and adapting for modern requirements?\n45 Who regularly involves others in helping to identify unclear historical information?\n46 Who emphasises tailoring their approach during activities to maintain the group’s interest?\n47 Who has found that emotional memories can interfere with an accurate record of events?\n48 Who mentions initial enthusiasm fading due to the slower, less exciting nature of the work?\n49 Who values ordinary community stories more than widely known historical events?\n50 Who feels most pleased when various pieces of information come together to solve a historical puzzle?\n51 Who avoids sharing stories that cannot be fully supported by evidence to keep trust with their audience?\n52 Who views working with others as an important and enjoyable part of their contribution?\n________________________________________\nTexts\nA – Maya, oral-history volunteer\nInitially, I got involved after listening to an elderly neighbour sharing stories from decades ago and realising that countless personal memories were never documented. My aim has always been to preserve these individual experiences before they fade away completely. I conduct interviews with local residents, focusing on open-ended questions that encourage detailed recollections. However, it can be challenging because many people drift away from exact dates and facts, blending memories with feelings. Since then, I have learned to carefully cross-check basic facts to distinguish between what actually happened and what might be remembered inaccurately. I now value everyday stories equally, even more than big historical events, but I try to remain patient and cautious to avoid mixing emotion with verified information.\n________________________________________\nB – Tom, cinema restoration volunteer\nI joined the project after noticing the old community cinema closed down and left to deteriorate, which felt like losing a shared cultural space. My motivation was to protect this building, which holds meaning for many locals. Getting my hands dirty cleaning and fixing parts of the place has been rewarding, especially working alongside others in the team. Yet, the restoration has taken much longer than I expected and is less exciting than I hoped — a lot of the work involves tedious repairs. I've also had to accept that some modern adaptations are necessary for it to be usable again, even if they affect the original look. Despite that, I’m now realistic about balancing preservation with practical use, and I’m happy the cinema might reopen in a different, functioning form.\n________________________________________\nC – Luca, digital photo archive creator\nMy interest began when I came across several boxes of old photos from families and streets around town, but most lacked labels or dates. It seemed important to organise and digitise these images to make them more accessible and searchable for anyone interested. To solve the problem of many photos being unidentified, I invite neighbours to help me tag the people and places they recognise. Still, it’s often unclear who or what is in some pictures, so I make sure to mark uncertain information clearly rather than guessing. I enjoy the process of combining small hints from various contributors to solve these historical puzzles. Currently, I feel most satisfaction when different pieces come together to reveal a photo’s story, knowing that I’ve built something collaborative and methodical.\n________________________________________\nD – Olivia, local walking-tour organiser\nFriends frequently asked me about the unusual buildings visible on everyday walks, which made me realise people often overlook the history around them. I decided to create guided walks to highlight these places, hoping to encourage locals to observe their neighbourhood more closely. Designing tours means organising routes based on visible features while keeping groups interested throughout the tour by varying pace and length. A big challenge is avoiding presenting unverified stories as facts, so I deliberately leave out legends or uncertain anecdotes. I believe it’s better to nurture curiosity while maintaining trust. Nowadays, I focus heavily on providing accurate information in a lively way, adjusting my delivery to suit various audiences, and I find the experience rewarding and energising.\n________________________________________",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

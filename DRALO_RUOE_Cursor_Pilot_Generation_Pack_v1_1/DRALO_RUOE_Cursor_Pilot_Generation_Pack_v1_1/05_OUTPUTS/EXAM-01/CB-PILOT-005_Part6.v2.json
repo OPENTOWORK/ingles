@@ -1,0 +1,100 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:44:57.291Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-005",
+  "brief_version": "1.0",
+  "style_card_id": "SC-04",
+  "style_card_version": "v1.0",
+  "working_title": "The boxes I thought I needed",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3994,
+    "completion_tokens": 1002,
+    "total_tokens": 4996
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 215 outside 500–600"
+    ],
+    "warnings": [],
+    "word_count": 215
+  },
+  "exercise": {
+    "part_title": "Part 6",
+    "instructions": "You are going to read an article about moving to a smaller home and dealing with possessions. Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap (37–42). There is one extra sentence which you do not need to use.",
+    "text_title": "The boxes I thought I needed",
+    "passage_with_gaps": "Moving into a smaller home was supposed to be a fresh start. As I sat surrounded by boxes, I realised that keeping everything was no longer an option. (37) I had labelled each box with 'keep', but now I couldn't even recall what half of them contained.\n\nOne box in particular caught my attention. It was filled with items I had kept 'just in case'. (38) This reluctance to let go had cluttered my life for years.\n\nThen I heard about a local swap and repair event. Instead of throwing these things away, I could take them there. (39) It seemed like a chance to find new homes for the objects I no longer needed.\n\nAt the event, I was surprised. One item I thought nobody would want was eagerly taken by another person. (40) Meanwhile, an old photo frame that I had considered giving away ended up coming back home with me.\n\nBack in my flat, I began to think more carefully about what deserved space. (41) However, I still kept a few items that held sentimental value, even if they weren't particularly useful.\n\nThe next day, I placed a small vase on the windowsill. It was one of the few things I had decided to keep. (42) This time, it felt like a deliberate choice rather than a habit.",
+    "sentence_pool": {
+      "A": "I realised that I had been holding onto things out of habit rather than need.",
+      "B": "That was different from the photo frame, which held personal memories.",
+      "C": "I had to navigate around them just to reach the kitchen.",
+      "D": "It was a reminder that some things are worth keeping for their stories.",
+      "E": "This event was a chance to re-evaluate what I truly needed.",
+      "F": "It was a relief to see it find a new purpose with someone else.",
+      "G": "I decided to create a rule for what could stay."
+    },
+    "questions": [
+      {
+        "number": 37,
+        "answer": "C",
+        "cohesion_focus": "Physical box references and immediate problem.",
+        "rationale": "The sentence 'I had to navigate around them just to reach the kitchen.' logically follows the description of being surrounded by boxes, emphasizing the immediate physical obstacle."
+      },
+      {
+        "number": 38,
+        "answer": "A",
+        "cohesion_focus": "Habitual keeping revealed through one object.",
+        "rationale": "The sentence 'I realised that I had been holding onto things out of habit rather than need.' fits as it reflects the narrator's realisation about the unnecessary retention of items, linking back to the 'just in case' objects."
+      },
+      {
+        "number": 39,
+        "answer": "E",
+        "cohesion_focus": "Introduction of the event as an alternative action.",
+        "rationale": "The sentence 'This event was a chance to re-evaluate what I truly needed.' introduces the swap event as an opportunity to reconsider possessions, aligning with the narrator's decision to take items there."
+      },
+      {
+        "number": 40,
+        "answer": "F",
+        "cohesion_focus": "Contrast between unwanted object finding a use and personal value.",
+        "rationale": "The sentence 'It was a relief to see it find a new purpose with someone else.' follows the surprise of an item being taken, contrasting with the narrator's expectations."
+      },
+      {
+        "number": 41,
+        "answer": "G",
+        "cohesion_focus": "Formulation of a practical criterion for keeping items.",
+        "rationale": "The sentence 'I decided to create a rule for what could stay.' aligns with the narrator's reflection on what deserves space, indicating a shift towards deliberate decision-making."
+      },
+      {
+        "number": 42,
+        "answer": "D",
+        "cohesion_focus": "Concrete choice showing changed behaviour and personal value.",
+        "rationale": "The sentence 'It was a reminder that some things are worth keeping for their stories.' concludes the narrative with a focus on the sentimental value of the vase, reflecting the narrator's evolved perspective."
+      }
+    ],
+    "unused_sentence": "B",
+    "validation_notes": {
+      "brief_fidelity_notes": "The passage follows the approved content brief, focusing on the narrative of moving to a smaller home and dealing with possessions.",
+      "style_card_notes": "The narrative style is consistent with the 'Narrative Story' style card, using a first-person perspective and a sequence of events to reveal character and change.",
+      "british_english_notes": "British English conventions are maintained throughout the passage.",
+      "factuality_notes": "The narrative adheres to the plausible case mode, avoiding unsupported claims about environmental impact.",
+      "answer_validity_notes": "Each gap has one defendable answer based on cohesion, reference, and logical sequencing.",
+      "self_check_flags": [
+        "passage_word_count_check",
+        "unique_answer_check",
+        "unused_sentence_check"
+      ]
+    },
+    "_word_count": 215
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

@@ -3,11 +3,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { B2_EXAM_SLOT_MAX } from '@/utils/b2ResolveExam';
 import { buildExamModeProgressBySlot } from '@/utils/examModeSession';
+import { useUserRole } from '@/context/UserRoleContext';
 
 /**
  * Progreso del selector de exámenes en exam mode (sesiones locales por slot).
  */
 export function useExamModePickerProgress({ slug, userId, availableSlots }) {
+  const { userRole } = useUserRole();
   const [progressBySlot, setProgressBySlot] = useState({});
 
   const refreshProgress = useCallback(() => {
@@ -15,8 +17,8 @@ export function useExamModePickerProgress({ slug, userId, availableSlots }) {
       availableSlots?.length > 0
         ? availableSlots
         : Array.from({ length: B2_EXAM_SLOT_MAX }, (_, i) => i + 1);
-    setProgressBySlot(buildExamModeProgressBySlot(slug, userId, slots));
-  }, [slug, userId, availableSlots]);
+    setProgressBySlot(buildExamModeProgressBySlot(slug, userId, slots, userRole));
+  }, [slug, userId, availableSlots, userRole]);
 
   useEffect(() => {
     refreshProgress();

@@ -1,0 +1,123 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:23:42.294Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 6",
+  "part_number": 6,
+  "brief_id": "CB-PILOT-005",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-04",
+  "working_title": "The boxes I thought I needed",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[TEST-P6-MULTIFIT] option A: Option may fully fit multiple gaps (heuristic cohesion score).",
+      "[P6-H07] gap (38): Correct option shows weak backward/forward cohesion clues (heuristic)."
+    ],
+    "warnings": [
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 2,
+    "warning_count": 1
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 6: Gapped text",
+    "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+    "title": "The boxes I thought I needed",
+    "passage": "Moving into a smaller flat was supposed to be a straightforward step: fewer rooms to clean, lower bills, and hopefully, a fresh start. But as I sat on the bare floor, surrounded by towering boxes that seemed to fill every available corner, the reality hit me. These boxes, each carefully labelled ‘keep’, blocked any real sense of space or order. (37) Many weren’t even full; just a collection of odds and ends accumulated over years, boxes filled out of habit rather than intention. I realised that keeping everything wasn’t just impractical — it was impossible.\n\nAmong the jumble was a box that puzzled me more than most. Inside, I found a small old umbrella, a gift from years ago, never opened, never used. It had been saved ‘just in case’ it might come in handy one day, but as I held it, I couldn’t recall when or why I thought that day would come. (38) This object became a symbol of the many possessions stored not for their use but for an undefined future, making it harder to make decisions when space was so limited.\n\nWhile sorting through these items, I heard about a local swap and repair event happening nearby. It wasn’t just about throwing things away — it promised to give unwanted belongings a second chance, either to be reused by someone else or fixed if broken. (39) This idea felt more hopeful, a practical alternative to simply discarding decades of material habits.\n\nAt the event, I nervously carried a bag of assorted objects — a chipped mug, a worn-out scarf, and an old lamp I assumed no one else would want. To my surprise, the lamp was quickly snapped up by another visitor who said it was just what she needed for her study. (40) That was different from my expectation — it made me reconsider what I thought was useless or sentimental, highlighting that others could value items in ways I hadn’t imagined.\n\nI also brought along a small, hand-knitted blanket that reminded me of my grandmother. It had little practical use and took up valuable space, yet it seemed impossible to let go. (41) I decided it was a rare exception, a piece kept not for function but for emotional connection, a deliberate choice rather than a mere consequence of habit.\n\nReturning home from the event, I started to form a clearer rule for judging what deserved space in the smaller flat. It wasn’t about emptying shelves or adopting minimalism blindly, but about recognising when something had a definite purpose or personal meaning. (42) This approach wasn’t quick or easy, but it gave me a way to live more deliberately within the limitations of my new home.\n\nLater that evening, I placed a small box on a newly cleared shelf, filled only with items that earned their place by this standard. It wasn’t perfect — there were still pieces whose exact value was uncertain, but that was alright. (37) Instead of aiming for a completely clutter-free life, I found a balance between practical needs and the imperfections that make a home feel lived in.",
+    "passageWordCount": 564,
+    "sentencePool": [
+      "A) I realised that many of these belongings had no clear reason to be kept other than habit and a vague hope for future usefulness.",
+      "B) This new perspective helped me accept that some possessions will always remain a little mysterious in their value.",
+      "C) The event offered an unexpected chance to see my possessions differently and connected me with a community focused on reuse rather than waste.",
+      "D) Suddenly, the problem of sorting possessions felt less like a loss and more like an opportunity for meaningful decisions.",
+      "E) That was different from most other items I’d brought, which no one showed interest in, and it made me think differently about what counts as useful or precious.",
+      "F) I recognised that keeping a few personal items, despite their impracticality, was a valid outcome of these choices rather than a failure of the process.",
+      "G) Despite the promise of a fresh start, the boxes remained a symbol of an immense challenge rather than a clear solution."
+    ],
+    "questions": [
+      {
+        "id": "q37",
+        "number": 37
+      },
+      {
+        "id": "q38",
+        "number": 38
+      },
+      {
+        "id": "q39",
+        "number": 39
+      },
+      {
+        "id": "q40",
+        "number": 40
+      },
+      {
+        "id": "q41",
+        "number": 41
+      },
+      {
+        "id": "q42",
+        "number": 42
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q37",
+        "number": 37,
+        "answer": "A"
+      },
+      {
+        "id": "q38",
+        "number": 38,
+        "answer": "G"
+      },
+      {
+        "id": "q39",
+        "number": 39,
+        "answer": "C"
+      },
+      {
+        "id": "q40",
+        "number": 40,
+        "answer": "E"
+      },
+      {
+        "id": "q41",
+        "number": 41,
+        "answer": "F"
+      },
+      {
+        "id": "q42",
+        "number": 42,
+        "answer": "B"
+      }
+    ],
+    "sections": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 6,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.\nText\nThe boxes I thought I needed\nMoving into a smaller flat was supposed to be a straightforward step: fewer rooms to clean, lower bills, and hopefully, a fresh start. But as I sat on the bare floor, surrounded by towering boxes that seemed to fill every available corner, the reality hit me. These boxes, each carefully labelled ‘keep’, blocked any real sense of space or order. (37) Many weren’t even full; just a collection of odds and ends accumulated over years, boxes filled out of habit rather than intention. I realised that keeping everything wasn’t just impractical — it was impossible.\nAmong the jumble was a box that puzzled me more than most. Inside, I found a small old umbrella, a gift from years ago, never opened, never used. It had been saved ‘just in case’ it might come in handy one day, but as I held it, I couldn’t recall when or why I thought that day would come. (38) This object became a symbol of the many possessions stored not for their use but for an undefined future, making it harder to make decisions when space was so limited.\nWhile sorting through these items, I heard about a local swap and repair event happening nearby. It wasn’t just about throwing things away — it promised to give unwanted belongings a second chance, either to be reused by someone else or fixed if broken. (39) This idea felt more hopeful, a practical alternative to simply discarding decades of material habits.\nAt the event, I nervously carried a bag of assorted objects — a chipped mug, a worn-out scarf, and an old lamp I assumed no one else would want. To my surprise, the lamp was quickly snapped up by another visitor who said it was just what she needed for her study. (40) That was different from my expectation — it made me reconsider what I thought was useless or sentimental, highlighting that others could value items in ways I hadn’t imagined.\nI also brought along a small, hand-knitted blanket that reminded me of my grandmother. It had little practical use and took up valuable space, yet it seemed impossible to let go. (41) I decided it was a rare exception, a piece kept not for function but for emotional connection, a deliberate choice rather than a mere consequence of habit.\nReturning home from the event, I started to form a clearer rule for judging what deserved space in the smaller flat. It wasn’t about emptying shelves or adopting minimalism blindly, but about recognising when something had a definite purpose or personal meaning. (42) This approach wasn’t quick or easy, but it gave me a way to live more deliberately within the limitations of my new home.\nLater that evening, I placed a small box on a newly cleared shelf, filled only with items that earned their place by this standard. It wasn’t perfect — there were still pieces whose exact value was uncertain, but that was alright. (37) Instead of aiming for a completely clutter-free life, I found a balance between practical needs and the imperfections that make a home feel lived in.\n\nSentences\nA I realised that many of these belongings had no clear reason to be kept other than habit and a vague hope for future usefulness.\nB This new perspective helped me accept that some possessions will always remain a little mysterious in their value.\nC The event offered an unexpected chance to see my possessions differently and connected me with a community focused on reuse rather than waste.\nD Suddenly, the problem of sorting possessions felt less like a loss and more like an opportunity for meaningful decisions.\nE That was different from most other items I’d brought, which no one showed interest in, and it made me think differently about what counts as useful or precious.\nF I recognised that keeping a few personal items, despite their impracticality, was a valid outcome of these choices rather than a failure of the process.\nG Despite the promise of a fresh start, the boxes remained a symbol of an immense challenge rather than a clear solution.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

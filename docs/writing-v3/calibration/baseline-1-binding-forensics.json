@@ -1,0 +1,711 @@
+{
+  "generated_at": "2026-08-12T09:35:43.429Z",
+  "source_artefacts": [
+    "docs/writing-v3/calibration/baseline-1.json",
+    "src/features/writing/calibration/fixtures/G-*.json"
+  ],
+  "known_limitations": [
+    "Baseline 1 did not persist raw assessment payloads (text_evidence[].quote / occurrence_index).",
+    "assessment.service throws on the first unbound evidence item, so only one failed quote per case was recorded.",
+    "Error message collapses quote_not_found and occurrence_out_of_range into the same \"not present\" string.",
+    "failures[] binding.reason was not copied into baseline case_results."
+  ],
+  "rows": [
+    {
+      "case_id": "G-01",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "First of all a huge damage to the environment brings a transport.",
+      "intended_candidate_substring": "First of all a huge damage to the environment brings a transport.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 252,
+        "span_end": 317
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"Use clear paragraphing and logical connectors to guide the reader through the argument.\""
+      ]
+    },
+    {
+      "case_id": "G-02",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "We have big problems with transport because there are too much cars in our country.",
+      "intended_candidate_substring": "We have big problems with transport because there are too much cars in our country.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 132,
+        "span_end": 215
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": []
+    },
+    {
+      "case_id": "G-03",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "Investing on electrical transport would benefit the environment a lot.",
+      "intended_candidate_substring": "Investing on electrical transport would benefit the environment a lot.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 507,
+        "span_end": 577
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"Expand on each point with specific examples or data. For instance, explain how electric transport reduces emissions, provide examples of successful river clean-up projects, or suggest specific actions individuals can take to reduce waste.\""
+      ]
+    },
+    {
+      "case_id": "G-04",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "the prince rejected it and decided to leave the palace instead.",
+      "intended_candidate_substring": "the prince rejected it and decided to leave the palace instead.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 722,
+        "span_end": 785
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"facilities\""
+      ]
+    },
+    {
+      "case_id": "G-05",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "The most useful thing i have learned is surely speaking English.",
+      "intended_candidate_substring": "The most useful thing i have learned is surely speaking English.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 42,
+        "span_end": 106
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"Separate the text into clear paragraphs, each focusing on a specific point or idea.\""
+      ]
+    },
+    {
+      "case_id": "G-06",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "My area includes also beautiful Baltic Sea which many tourist visit especially in summer.",
+      "intended_candidate_substring": "My area includes also beautiful Baltic Sea which many tourist visit especially in summer.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 274,
+        "span_end": 363
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": []
+    },
+    {
+      "case_id": "G-07",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "the appearance of the person is more important than the person itself.",
+      "intended_candidate_substring": "the appearance of the person is more important than the person itself.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 560,
+        "span_end": 630
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": []
+    },
+    {
+      "case_id": "G-08",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "We shouldn’t judge people for its appearance, because that is not important.",
+      "intended_candidate_substring": "We shouldn’t judge people for its appearance, because that is not important.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 799,
+        "span_end": 875
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"Use clear paragraphing and transitions to separate and connect ideas logically.\""
+      ]
+    },
+    {
+      "case_id": "G-09",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+      "intended_candidate_substring": "people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 911,
+        "span_end": 1049
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"Expand on each content point with specific examples or arguments. For instance, discuss how societal pressure on appearance affects individuals or provide examples of how high clothing prices impact different demographics.\""
+      ]
+    },
+    {
+      "case_id": "G-10",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "The majority of the people claimed that the best thing were computers and interactive boards.",
+      "intended_candidate_substring": "The majority of the people claimed that the best thing were computers and interactive boards.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 329,
+        "span_end": 422
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"Ensure all headings and the title follow a consistent capitalization style, such as capitalizing the first letter of each major word.\""
+      ]
+    },
+    {
+      "case_id": "G-11",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "When the bus is taking me to school I listen to the music so I could wake up.",
+      "intended_candidate_substring": "When the bus is taking me to school I listen to the music so I could wake up.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 143,
+        "span_end": 220
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": [
+        "observation: a suggested change would alter the learner's meaning: \"Organise the text into clear paragraphs, each focusing on a specific aspect of music listening habits.\""
+      ]
+    },
+    {
+      "case_id": "G-12",
+      "criterion": "content",
+      "failed_validator_rule_id": "assessment.service buildCriterionRecord/bindQuote (pre-V-EV-03; validateAssessment never reached)",
+      "equivalent_validator_id_if_assembled": "V-EV-03",
+      "model_produced_evidence_quote": "The most interesting thing that I learned was how to prepare a theater play, and it was fantastic.",
+      "intended_candidate_substring": "The most interesting thing that I learned was how to prepare a theater play, and it was fantastic.",
+      "exact_substring_exists": true,
+      "normalized_matching_would_succeed": true,
+      "offsets_if_occ0": {
+        "span_start": 482,
+        "span_end": 580
+      },
+      "bind_occ0": "bound",
+      "bind_occ1": "occurrence_out_of_range:n=1",
+      "binding_failed_reason_if_occ0": null,
+      "binding_failed_reason_if_occ1": "occurrence_out_of_range",
+      "specific_reason_binding_reported_failed": "Baseline message: \"not present in the candidate response\" (does not distinguish quote_not_found vs occurrence_out_of_range)",
+      "category": "C",
+      "category_label": "BINDING IMPLEMENTATION BUG / DIAGNOSTIC COLLAPSE",
+      "reason": "Quote EXISTS exactly in golden candidate_response and bindQuote(..., 0) succeeds now. bindQuote(..., 1) fails with occurrence_out_of_range (n=1). AssessmentValidationError always says \"not present\" for BOTH quote_not_found and occurrence_out_of_range, and Baseline 1 did not persist occurrence_index or binding.reason. Most likely shared root cause: model emitted occurrence_index=1 (1-based) OR error details were dropped so a solvable binding miss was reported as missing quote. Not a paraphrase.",
+      "other_validation_notes": []
+    }
+  ],
+  "aggregate": {
+    "recorded_failed_evidence_references": 12,
+    "lower_bound_note": "12 recorded failures is a lower bound on total failed evidence items across all criteria.",
+    "failures_by_category": {
+      "A": 0,
+      "B": 0,
+      "C": 12,
+      "D": 0,
+      "E": 0
+    },
+    "failures_by_criterion_among_recorded": {
+      "content": 12
+    },
+    "assessments_that_would_otherwise_pass_if_first_quote_bound": "UNKNOWN without full payloads — later evidence items and post-assembly validators were never reached after the first throw.",
+    "common_root_cause": "ONE engineering/diagnostic issue repeated across all 12 cases — NOT 12 unrelated paraphrase failures. Every recorded failing quote is an exact substring of the golden candidate_response and binds at occurrence_index=0 today. Dominant hypothesis: occurrence_index off-by-one (model used 1) and/or error reporting that hides occurrence_out_of_range. Secondary defect: calibration harness did not persist raw assessment JSON needed to confirm.",
+    "primary_bucket": "C (binder/diagnostics path) with likely model occurrence_index contribution; NOT classic A paraphrase; NOT B transcription."
+  },
+  "scoring_matrix": [
+    {
+      "case_id": "G-01",
+      "content": {
+        "expected": 4,
+        "actual": 4,
+        "delta": 0
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "organisation": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "language": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "total": {
+        "expected": 13,
+        "actual": 13,
+        "delta": 0
+      }
+    },
+    {
+      "case_id": "G-02",
+      "content": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 2,
+        "delta": -1
+      },
+      "organisation": {
+        "expected": 3,
+        "actual": 2,
+        "delta": -1
+      },
+      "language": {
+        "expected": 3,
+        "actual": 2,
+        "delta": -1
+      },
+      "total": {
+        "expected": 12,
+        "actual": 9,
+        "delta": -3
+      }
+    },
+    {
+      "case_id": "G-03",
+      "content": {
+        "expected": 5,
+        "actual": 5,
+        "delta": 0
+      },
+      "communicative_achievement": {
+        "expected": 5,
+        "actual": 4,
+        "delta": -1
+      },
+      "organisation": {
+        "expected": 4,
+        "actual": 4,
+        "delta": 0
+      },
+      "language": {
+        "expected": 5,
+        "actual": 4,
+        "delta": -1
+      },
+      "total": {
+        "expected": 19,
+        "actual": 17,
+        "delta": -2
+      }
+    },
+    {
+      "case_id": "G-04",
+      "content": {
+        "expected": 5,
+        "actual": 5,
+        "delta": 0
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 4,
+        "delta": 1
+      },
+      "organisation": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "language": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "total": {
+        "expected": 14,
+        "actual": 15,
+        "delta": 1
+      }
+    },
+    {
+      "case_id": "G-05",
+      "content": {
+        "expected": 5,
+        "actual": 5,
+        "delta": 0
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "organisation": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "language": {
+        "expected": 3,
+        "actual": 2,
+        "delta": -1
+      },
+      "total": {
+        "expected": 14,
+        "actual": 13,
+        "delta": -1
+      }
+    },
+    {
+      "case_id": "G-06",
+      "content": {
+        "expected": 5,
+        "actual": 5,
+        "delta": 0
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "organisation": {
+        "expected": 4,
+        "actual": 3,
+        "delta": -1
+      },
+      "language": {
+        "expected": 3,
+        "actual": 2,
+        "delta": -1
+      },
+      "total": {
+        "expected": 15,
+        "actual": 13,
+        "delta": -2
+      }
+    },
+    {
+      "case_id": "G-07",
+      "content": {
+        "expected": 5,
+        "actual": 3,
+        "delta": -2
+      },
+      "communicative_achievement": {
+        "expected": 2,
+        "actual": 3,
+        "delta": 1
+      },
+      "organisation": {
+        "expected": 2,
+        "actual": 2,
+        "delta": 0
+      },
+      "language": {
+        "expected": 2,
+        "actual": 2,
+        "delta": 0
+      },
+      "total": {
+        "expected": 11,
+        "actual": 10,
+        "delta": -1
+      }
+    },
+    {
+      "case_id": "G-08",
+      "content": {
+        "expected": 5,
+        "actual": 4,
+        "delta": -1
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "organisation": {
+        "expected": 4,
+        "actual": 3,
+        "delta": -1
+      },
+      "language": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "total": {
+        "expected": 15,
+        "actual": 13,
+        "delta": -2
+      }
+    },
+    {
+      "case_id": "G-09",
+      "content": {
+        "expected": 5,
+        "actual": 4,
+        "delta": -1
+      },
+      "communicative_achievement": {
+        "expected": 5,
+        "actual": 3,
+        "delta": -2
+      },
+      "organisation": {
+        "expected": 5,
+        "actual": 3,
+        "delta": -2
+      },
+      "language": {
+        "expected": 5,
+        "actual": 3,
+        "delta": -2
+      },
+      "total": {
+        "expected": 20,
+        "actual": 13,
+        "delta": -7
+      }
+    },
+    {
+      "case_id": "G-10",
+      "content": {
+        "expected": 5,
+        "actual": 5,
+        "delta": 0
+      },
+      "communicative_achievement": {
+        "expected": 4,
+        "actual": 4,
+        "delta": 0
+      },
+      "organisation": {
+        "expected": 4,
+        "actual": 4,
+        "delta": 0
+      },
+      "language": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "total": {
+        "expected": 16,
+        "actual": 16,
+        "delta": 0
+      }
+    },
+    {
+      "case_id": "G-11",
+      "content": {
+        "expected": 4,
+        "actual": 3,
+        "delta": -1
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "organisation": {
+        "expected": 2,
+        "actual": 2,
+        "delta": 0
+      },
+      "language": {
+        "expected": 2,
+        "actual": 2,
+        "delta": 0
+      },
+      "total": {
+        "expected": 11,
+        "actual": 10,
+        "delta": -1
+      }
+    },
+    {
+      "case_id": "G-12",
+      "content": {
+        "expected": 5,
+        "actual": 4,
+        "delta": -1
+      },
+      "communicative_achievement": {
+        "expected": 3,
+        "actual": 3,
+        "delta": 0
+      },
+      "organisation": {
+        "expected": 4,
+        "actual": 3,
+        "delta": -1
+      },
+      "language": {
+        "expected": 3,
+        "actual": 2,
+        "delta": -1
+      },
+      "total": {
+        "expected": 15,
+        "actual": 12,
+        "delta": -3
+      }
+    }
+  ],
+  "delta_distribution": {
+    "overall": {
+      "exact_marks_over_48": 27,
+      "within_1_over_48": 44,
+      "gt1_over_48": 4
+    },
+    "by_criterion": {
+      "content": {
+        "exact": 7,
+        "within_1": 11,
+        "gt1": 1,
+        "mean_signed_delta": -0.5,
+        "mean_absolute_delta": 0.5,
+        "under_scoring_count": 5,
+        "over_scoring_count": 0
+      },
+      "communicative_achievement": {
+        "exact": 7,
+        "within_1": 11,
+        "gt1": 1,
+        "mean_signed_delta": -0.167,
+        "mean_absolute_delta": 0.5,
+        "under_scoring_count": 3,
+        "over_scoring_count": 2
+      },
+      "organisation": {
+        "exact": 7,
+        "within_1": 11,
+        "gt1": 1,
+        "mean_signed_delta": -0.5,
+        "mean_absolute_delta": 0.5,
+        "under_scoring_count": 5,
+        "over_scoring_count": 0
+      },
+      "language": {
+        "exact": 6,
+        "within_1": 11,
+        "gt1": 1,
+        "mean_signed_delta": -0.583,
+        "mean_absolute_delta": 0.583,
+        "under_scoring_count": 6,
+        "over_scoring_count": 0
+      }
+    }
+  },
+  "recommended_next_action_not_applied": [
+    "Do NOT tune assessment.prompt.ts for scores.",
+    "Smallest deterministic engineering fix to propose: (1) persist raw assessment lastPayload + binding.reason on failure; (2) make AssessmentValidationError distinguish quote_not_found vs occurrence_out_of_range and include occurrence_index + occurrences_found; (3) only after confirming occ off-by-one from saved payloads, decide whether to add a narrow retry hint or keep failing with a clear message — do not silently remap indices without evidence."
+  ]
+}

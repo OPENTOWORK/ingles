@@ -1,0 +1,453 @@
+{
+  "generated_at": "2026-08-12T11:07:25.603Z",
+  "ok": true,
+  "engine": "v3",
+  "model": {
+    "model": "gpt-4o-2024-08-06",
+    "snapshot_id": "gpt-4o-2024-08-06",
+    "temperature": 0,
+    "response_format": "json_schema"
+  },
+  "persistence": "supabase_prod",
+  "global_rollout": true,
+  "kill_switch_default": "ON",
+  "submission_id": "1e862ce1-bc26-427f-a0fb-46b7e60c15de",
+  "execution_id": "93485a11-0aab-406e-bc1e-d9827b689398",
+  "usage_summary": {
+    "token_source": "provider_reported",
+    "input_tokens": 13933,
+    "output_tokens": 3049,
+    "total_tokens": 16982,
+    "actual_models": {
+      "task_analysis": "gpt-4o-2024-08-06",
+      "observation": "gpt-4o-2024-08-06",
+      "assessment": "gpt-4o-2024-08-06",
+      "feedback_composition": "gpt-4o-2024-08-06"
+    },
+    "usage_by_stage": {
+      "task_analysis:1": {
+        "requested_model": "gpt-4o-2024-08-06",
+        "actual_model": "gpt-4o-2024-08-06",
+        "prompt_version": "1.0.0",
+        "input_tokens": 756,
+        "output_tokens": 225,
+        "total_tokens": 981,
+        "latency_ms": 2564,
+        "retry": false,
+        "provider_metadata": {
+          "id": "chatcmpl-EC15PGSEfjKynJYsiWIWF4Nxjbz8e",
+          "system_fingerprint": "fp_684acb85fd",
+          "finish_reason": "stop"
+        },
+        "cost_usd": 0.00414
+      },
+      "observation:1": {
+        "requested_model": "gpt-4o-2024-08-06",
+        "actual_model": "gpt-4o-2024-08-06",
+        "prompt_version": "1.0.0",
+        "input_tokens": 3295,
+        "output_tokens": 1066,
+        "total_tokens": 4361,
+        "latency_ms": 8943,
+        "retry": false,
+        "provider_metadata": {
+          "id": "chatcmpl-EC15SG12XLxKLsQGzbTYQcNuS2y5G",
+          "system_fingerprint": "fp_f73b165a23",
+          "finish_reason": "stop"
+        },
+        "cost_usd": 0.0188975
+      },
+      "assessment:1": {
+        "requested_model": "gpt-4o-2024-08-06",
+        "actual_model": "gpt-4o-2024-08-06",
+        "prompt_version": "1.0.0",
+        "input_tokens": 6531,
+        "output_tokens": 1143,
+        "total_tokens": 7674,
+        "latency_ms": 8620,
+        "retry": false,
+        "provider_metadata": {
+          "id": "chatcmpl-EC15bfHmnvKeBSBEFj1SqSBENIBj2",
+          "system_fingerprint": "fp_d5ebb74607",
+          "finish_reason": "stop"
+        },
+        "cost_usd": 0.0277575
+      },
+      "feedback_composition:1": {
+        "requested_model": "gpt-4o-2024-08-06",
+        "actual_model": "gpt-4o-2024-08-06",
+        "prompt_version": "1.0.0",
+        "input_tokens": 3351,
+        "output_tokens": 615,
+        "total_tokens": 3966,
+        "latency_ms": 5970,
+        "retry": false,
+        "provider_metadata": {
+          "id": "chatcmpl-EC15k22T8O66EklAjOnReQ1mG4vMY",
+          "system_fingerprint": "fp_17e3c4f467",
+          "finish_reason": "stop"
+        },
+        "cost_usd": 0.014527499999999999
+      }
+    },
+    "latency_ms": 26097,
+    "latency_by_stage": {
+      "task_analysis:1": 2564,
+      "observation:1": 8943,
+      "assessment:1": 8620,
+      "feedback_composition:1": 5970
+    },
+    "cost_usd": 0.0653225,
+    "cost_basis": {
+      "token_source": "provider_reported",
+      "stages": [
+        {
+          "stage": "task_analysis",
+          "attempt": 1,
+          "pricing_source": "openai_list_price_usd_per_1m_tokens",
+          "model_key": "gpt-4o-2024-08-06",
+          "input_usd_per_1m": 2.5,
+          "output_usd_per_1m": 10,
+          "token_source": "provider_reported",
+          "cost_usd": 0.00414
+        },
+        {
+          "stage": "observation",
+          "attempt": 1,
+          "pricing_source": "openai_list_price_usd_per_1m_tokens",
+          "model_key": "gpt-4o-2024-08-06",
+          "input_usd_per_1m": 2.5,
+          "output_usd_per_1m": 10,
+          "token_source": "provider_reported",
+          "cost_usd": 0.0188975
+        },
+        {
+          "stage": "assessment",
+          "attempt": 1,
+          "pricing_source": "openai_list_price_usd_per_1m_tokens",
+          "model_key": "gpt-4o-2024-08-06",
+          "input_usd_per_1m": 2.5,
+          "output_usd_per_1m": 10,
+          "token_source": "provider_reported",
+          "cost_usd": 0.0277575
+        },
+        {
+          "stage": "feedback_composition",
+          "attempt": 1,
+          "pricing_source": "openai_list_price_usd_per_1m_tokens",
+          "model_key": "gpt-4o-2024-08-06",
+          "input_usd_per_1m": 2.5,
+          "output_usd_per_1m": 10,
+          "token_source": "provider_reported",
+          "cost_usd": 0.014527499999999999
+        }
+      ]
+    }
+  },
+  "usage": [
+    {
+      "execution_id": "93485a11-0aab-406e-bc1e-d9827b689398",
+      "stage": "task_analysis",
+      "attempt": 1,
+      "requested_model": "gpt-4o-2024-08-06",
+      "actual_model": "gpt-4o-2024-08-06",
+      "prompt_version": "1.0.0",
+      "input_tokens": 756,
+      "output_tokens": 225,
+      "total_tokens": 981,
+      "latency_ms": 2564,
+      "retry": false,
+      "provider_metadata": {
+        "id": "chatcmpl-EC15PGSEfjKynJYsiWIWF4Nxjbz8e",
+        "system_fingerprint": "fp_684acb85fd",
+        "finish_reason": "stop"
+      },
+      "cost_usd": 0.00414,
+      "cost_basis": {
+        "pricing_source": "openai_list_price_usd_per_1m_tokens",
+        "model_key": "gpt-4o-2024-08-06",
+        "input_usd_per_1m": 2.5,
+        "output_usd_per_1m": 10,
+        "token_source": "provider_reported"
+      }
+    },
+    {
+      "execution_id": "93485a11-0aab-406e-bc1e-d9827b689398",
+      "stage": "observation",
+      "attempt": 1,
+      "requested_model": "gpt-4o-2024-08-06",
+      "actual_model": "gpt-4o-2024-08-06",
+      "prompt_version": "1.0.0",
+      "input_tokens": 3295,
+      "output_tokens": 1066,
+      "total_tokens": 4361,
+      "latency_ms": 8943,
+      "retry": false,
+      "provider_metadata": {
+        "id": "chatcmpl-EC15SG12XLxKLsQGzbTYQcNuS2y5G",
+        "system_fingerprint": "fp_f73b165a23",
+        "finish_reason": "stop"
+      },
+      "cost_usd": 0.0188975,
+      "cost_basis": {
+        "pricing_source": "openai_list_price_usd_per_1m_tokens",
+        "model_key": "gpt-4o-2024-08-06",
+        "input_usd_per_1m": 2.5,
+        "output_usd_per_1m": 10,
+        "token_source": "provider_reported"
+      }
+    },
+    {
+      "execution_id": "93485a11-0aab-406e-bc1e-d9827b689398",
+      "stage": "assessment",
+      "attempt": 1,
+      "requested_model": "gpt-4o-2024-08-06",
+      "actual_model": "gpt-4o-2024-08-06",
+      "prompt_version": "1.0.0",
+      "input_tokens": 6531,
+      "output_tokens": 1143,
+      "total_tokens": 7674,
+      "latency_ms": 8620,
+      "retry": false,
+      "provider_metadata": {
+        "id": "chatcmpl-EC15bfHmnvKeBSBEFj1SqSBENIBj2",
+        "system_fingerprint": "fp_d5ebb74607",
+        "finish_reason": "stop"
+      },
+      "cost_usd": 0.0277575,
+      "cost_basis": {
+        "pricing_source": "openai_list_price_usd_per_1m_tokens",
+        "model_key": "gpt-4o-2024-08-06",
+        "input_usd_per_1m": 2.5,
+        "output_usd_per_1m": 10,
+        "token_source": "provider_reported"
+      }
+    },
+    {
+      "execution_id": "93485a11-0aab-406e-bc1e-d9827b689398",
+      "stage": "feedback_composition",
+      "attempt": 1,
+      "requested_model": "gpt-4o-2024-08-06",
+      "actual_model": "gpt-4o-2024-08-06",
+      "prompt_version": "1.0.0",
+      "input_tokens": 3351,
+      "output_tokens": 615,
+      "total_tokens": 3966,
+      "latency_ms": 5970,
+      "retry": false,
+      "provider_metadata": {
+        "id": "chatcmpl-EC15k22T8O66EklAjOnReQ1mG4vMY",
+        "system_fingerprint": "fp_17e3c4f467",
+        "finish_reason": "stop"
+      },
+      "cost_usd": 0.014527499999999999,
+      "cost_basis": {
+        "pricing_source": "openai_list_price_usd_per_1m_tokens",
+        "model_key": "gpt-4o-2024-08-06",
+        "input_usd_per_1m": 2.5,
+        "output_usd_per_1m": 10,
+        "token_source": "provider_reported"
+      }
+    }
+  ],
+  "error": null,
+  "code": null,
+  "candidate_response": "Technology is everywhere today and many people believe it makes life easier. In my opinion, technology helps us in many ways, but it also creates some problems.\n\nFirstly, communication is faster than ever. We can send messages to friends in other countries in seconds, and video calls let families stay in contact. This saves time and money.\n\nSecondly, technology is useful for work. People can work from home, share documents online and find information quickly. For students, online dictionaries and translation tools are also helpful.\n\nHowever, technology can make us lazy. Some people spend too many hours looking at screens and forget about exercise or meeting friends face to face. Also, when systems fail, people do not know what to do.\n\nIn conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time.",
+  "task_prompt_snapshot": "Write an essay in 140–190 words.\n\nIn your English class you have been talking about technology.\nNow your English teacher has asked you to write an essay.\n\nWrite an essay using all the notes and give reasons for your point of view.\n\nNotes\nWrite about:\n1. communication\n2. work\n3. ................... (your own idea)\n\nEssay question: Is technology making our lives easier?",
+  "feedback_payload": {
+    "engine_version": "3.0.0",
+    "schema_version": "1.0.0",
+    "provenance": {
+      "engine_version": "3.0.0",
+      "schema_version": "1.0.0",
+      "doc_versions": {
+        "task_requirements": "1.0",
+        "teacher_dna": "1.0",
+        "cambridge_assessment": "1.0",
+        "feedback_ux": "1.0",
+        "technical_handoff": "1.0",
+        "acceptance_validation": "1.0"
+      },
+      "prompt_versions": {
+        "task_analysis": "1.0.0",
+        "observation_assessment": "1.0.0",
+        "cambridge_assessment": "1.0.0",
+        "feedback_composition": "1.0.0"
+      },
+      "model_config": {
+        "model": "gpt-4o-2024-08-06",
+        "snapshot_id": "gpt-4o-2024-08-06",
+        "temperature": 0,
+        "response_format": "json_schema"
+      }
+    },
+    "global_result": {
+      "criteria": {
+        "content": 3,
+        "communicative_achievement": 3,
+        "organisation": 3,
+        "language": 3
+      },
+      "raw_total": 12,
+      "max_total": 20,
+      "level_indicator": null,
+      "single_task_scale_claim_allowed": false,
+      "disclaimer": "This is a DRALO correction based on the Cambridge B2 First assessment criteria. It is not an official Cambridge result."
+    },
+    "criterion_feedback": [
+      {
+        "criterion": "content",
+        "mark": 3,
+        "summary": "The essay addresses the task but lacks depth and specific examples.",
+        "expanded": {
+          "what_worked": "You successfully addressed the impact of technology on communication and work, and you included your own idea about technology making people lazy. This ensures that all parts of the task were covered.",
+          "what_limited_the_band": "The essay lacks depth and specific examples in discussing the impact of technology on communication, work, and your own idea, leaving the reader with a real information gap.",
+          "evidence": [
+            {
+              "quote": "Firstly, communication is faster than ever.",
+              "occurrence_index": 0,
+              "span_start": 162,
+              "span_end": 205,
+              "bound_text": "Firstly, communication is faster than ever."
+            },
+            {
+              "quote": "Secondly, technology is useful for work.",
+              "occurrence_index": 0,
+              "span_start": 343,
+              "span_end": 383,
+              "bound_text": "Secondly, technology is useful for work."
+            },
+            {
+              "quote": "In conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time.",
+              "occurrence_index": 0,
+              "span_start": 745,
+              "span_end": 864,
+              "bound_text": "In conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time."
+            }
+          ],
+          "next_focus": "Focus on developing your ideas with more specific examples and detailed explanations to strengthen your arguments."
+        }
+      },
+      {
+        "criterion": "communicative_achievement",
+        "mark": 3,
+        "summary": "The essay communicates straightforward ideas effectively.",
+        "expanded": {
+          "what_worked": "You maintained a neutral to semi-formal register appropriate for an English class essay and presented a clear point of view.",
+          "what_limited_the_band": "The essay relies mainly on straightforward ideas and lacks complexity in its arguments, which limits the engagement level.",
+          "evidence": [
+            {
+              "quote": "In conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time.",
+              "occurrence_index": 0,
+              "span_start": 745,
+              "span_end": 864,
+              "bound_text": "In conclusion, technology makes many tasks easier, but we should use it carefully so it does not control our free time."
+            }
+          ],
+          "next_focus": "Work on incorporating more complex ideas and arguments to engage the reader more deeply."
+        }
+      },
+      {
+        "criterion": "organisation",
+        "mark": 3,
+        "summary": "The essay is generally well-organised with a clear structure.",
+        "expanded": {
+          "what_worked": "Your essay has a clear structure with an introduction, body, and conclusion, and you used basic transitional phrases to organize ideas.",
+          "what_limited_the_band": "The connections between points could be more explicit to enhance cohesion, and the use of basic transitional phrases limits the sophistication of the organisation.",
+          "evidence": [
+            {
+              "quote": "Firstly, communication is faster than ever.",
+              "occurrence_index": 0,
+              "span_start": 162,
+              "span_end": 205,
+              "bound_text": "Firstly, communication is faster than ever."
+            },
+            {
+              "quote": "Secondly, technology is useful for work.",
+              "occurrence_index": 0,
+              "span_start": 343,
+              "span_end": 383,
+              "bound_text": "Secondly, technology is useful for work."
+            },
+            {
+              "quote": "However, technology can make us lazy.",
+              "occurrence_index": 0,
+              "span_start": 539,
+              "span_end": 576,
+              "bound_text": "However, technology can make us lazy."
+            }
+          ],
+          "next_focus": "Practice using more sophisticated linking words and phrases to create clearer connections between your ideas."
+        }
+      },
+      {
+        "criterion": "language",
+        "mark": 3,
+        "summary": "The essay uses everyday vocabulary and simple grammatical forms with control.",
+        "expanded": {
+          "what_worked": "You used everyday vocabulary appropriately and controlled simple grammatical forms well, ensuring your meaning was clear.",
+          "what_limited_the_band": "The essay does not demonstrate a wide range of vocabulary or complex grammatical forms, which limits the expressiveness of your writing.",
+          "evidence": [
+            {
+              "quote": "Technology is everywhere today and many people believe it makes life easier.",
+              "occurrence_index": 0,
+              "span_start": 0,
+              "span_end": 76,
+              "bound_text": "Technology is everywhere today and many people believe it makes life easier."
+            },
+            {
+              "quote": "Firstly, communication is faster than ever.",
+              "occurrence_index": 0,
+              "span_start": 162,
+              "span_end": 205,
+              "bound_text": "Firstly, communication is faster than ever."
+            }
+          ],
+          "next_focus": "Expand your vocabulary and practice using more complex grammatical structures to add variety and depth to your writing."
+        }
+      }
+    ],
+    "opening_strengths": [
+      {
+        "strength_id": "str_1",
+        "observation_id": "obs_14a249793040",
+        "headline": "Effective Conclusion",
+        "explanation": "The conclusion effectively summarizes the main points and provides a balanced view on the use of technology, which helps to reinforce your argument and leaves the reader with a clear understanding of your perspective."
+      }
+    ],
+    "annotations": [],
+    "review_next": [
+      {
+        "review_id": "rev_1",
+        "concept": "content_development",
+        "reason": "Developing your ideas with more specific examples and detailed explanations will strengthen your arguments and provide clearer reasoning, which is crucial for a higher content score.",
+        "source": "observation",
+        "source_ids": [
+          "obs_66b72484ac4c"
+        ],
+        "resource_key": null
+      },
+      {
+        "review_id": "rev_2",
+        "concept": "organisation_cohesion",
+        "reason": "Using more sophisticated linking words and phrases will help create clearer connections between your ideas, enhancing the overall cohesion of your essay.",
+        "source": "observation",
+        "source_ids": [
+          "obs_b516e85f7670"
+        ],
+        "resource_key": null
+      }
+    ],
+    "final_cta": "Write another task",
+    "resource_key": null,
+    "learner_history_applied": false
+  },
+  "scores": {
+    "content": 3,
+    "communication": 3,
+    "organisation": 3,
+    "language": 3,
+    "total": 12,
+    "wordCount": 142
+  }
+}

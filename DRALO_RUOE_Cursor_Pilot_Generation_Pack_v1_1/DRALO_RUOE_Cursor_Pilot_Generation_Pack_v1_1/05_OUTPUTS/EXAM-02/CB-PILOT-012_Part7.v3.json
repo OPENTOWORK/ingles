@@ -1,0 +1,146 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 3,
+  "generated_at": "2026-08-12T15:50:13.451Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-012",
+  "brief_version": "1.0",
+  "style_card_id": "SC-06",
+  "style_card_version": "v1.0",
+  "working_title": "Small changes that made work feel better",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 4476,
+    "completion_tokens": 1171,
+    "total_tokens": 5647
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "section A word_count 89 severely off-range",
+      "section B word_count 78 severely off-range",
+      "section C word_count 79 severely off-range",
+      "section D word_count 72 severely off-range"
+    ],
+    "warnings": [
+      "section A word_count 89 outside target 120–150",
+      "section B word_count 78 outside target 120–150",
+      "section C word_count 79 outside target 120–150",
+      "section D word_count 72 outside target 120–150"
+    ],
+    "word_count": 318
+  },
+  "exercise": {
+    "part_title": "Small Changes that Made Work Feel Better",
+    "instructions": "You are going to read four profiles of people who describe a workplace change that improved their daily experience. For questions 43–52, choose from the profiles A–D. The profiles may be chosen more than once.",
+    "matching_intro": "All four people describe a change in work organisation that improved their own daily experience, but the valued benefit differs.",
+    "common_context_title": "Workplace Changes and Their Impact",
+    "sections": {
+      "A": {
+        "label": "A",
+        "text": "As a designer and analyst, my work requires deep concentration. However, constant small interruptions made it difficult to finish complex tasks. Our team introduced agreed no-meeting focus blocks, allowing me to plan my questions for later instead of messaging immediately. This change has been beneficial as I can now finish one demanding task without switching attention. However, these focus periods can make quick collaboration less convenient. While I would keep the focus blocks, I wouldn't use them for the whole day. I value concentration and clear boundaries, not isolation."
+      },
+      "B": {
+        "label": "B",
+        "text": "Fixed start times used to create avoidable daily stress for me, especially with my caring responsibilities. Now, I have the flexibility to choose when to start and end work within an agreed range. This requires clearer handovers with colleagues on different schedules, but I appreciate having control over my time more than working fewer hours. For me, predictability plus choice is more important than total freedom. I am practical and autonomy-focused, aware of the need for team coordination."
+      },
+      "C": {
+        "label": "C",
+        "text": "When I was asked to mentor a newcomer, I initially saw it as extra work. I accepted because the team needed help, but explaining familiar tasks took patience and exposed habits I never questioned. Over time, I learned to explain the reasons behind procedures, which improved my understanding of my role. I now find satisfaction in seeing the newcomer become independent. I value feeling useful to another person more than I expected. Initially reluctant, I am now quietly proud."
+      },
+      "D": {
+        "label": "D",
+        "text": "In my team, we often complained about recurring operational problems without solving them. We started having short scheduled problem-solving meetings where one person brings an issue, and we record one agreed next action. These sessions can become repetitive if there is no decision or follow-up, but I value shared responsibility when discussion leads to action. I am collaborative but impatient with empty meetings, and I appreciate when teamwork results in tangible solutions."
+      }
+    },
+    "questions": [
+      {
+        "number": 43,
+        "prompt": "Which person appreciates having control over their schedule?",
+        "answer": "B",
+        "evidence": "Now, I have the flexibility to choose when to start and end work within an agreed range.",
+        "rationale": "B describes having control over their work schedule, which they value more than working fewer hours."
+      },
+      {
+        "number": 44,
+        "prompt": "Who finds satisfaction in helping someone else become independent?",
+        "answer": "C",
+        "evidence": "I now find satisfaction in seeing the newcomer become independent.",
+        "rationale": "C finds satisfaction in mentoring a newcomer and helping them become independent."
+      },
+      {
+        "number": 45,
+        "prompt": "Which person values concentration and clear boundaries?",
+        "answer": "A",
+        "evidence": "I value concentration and clear boundaries, not isolation.",
+        "rationale": "A values concentration and clear boundaries due to the introduction of no-meeting focus blocks."
+      },
+      {
+        "number": 46,
+        "prompt": "Who mentions the need for clearer handovers with colleagues?",
+        "answer": "B",
+        "evidence": "This requires clearer handovers with colleagues on different schedules.",
+        "rationale": "B mentions that having flexible start and end times requires clearer handovers with colleagues."
+      },
+      {
+        "number": 47,
+        "prompt": "Which person initially saw a new responsibility as extra work?",
+        "answer": "C",
+        "evidence": "When I was asked to mentor a newcomer, I initially saw it as extra work.",
+        "rationale": "C initially viewed mentoring a newcomer as extra work."
+      },
+      {
+        "number": 48,
+        "prompt": "Who finds regular meetings can become repetitive?",
+        "answer": "D",
+        "evidence": "These sessions can become repetitive if there is no decision or follow-up.",
+        "rationale": "D finds problem-solving meetings can become repetitive without decisions or follow-up."
+      },
+      {
+        "number": 49,
+        "prompt": "Which person values shared responsibility in problem-solving?",
+        "answer": "D",
+        "evidence": "I value shared responsibility when discussion leads to action.",
+        "rationale": "D values shared responsibility in problem-solving meetings when they lead to action."
+      },
+      {
+        "number": 50,
+        "prompt": "Who appreciates predictability plus choice in their work schedule?",
+        "answer": "B",
+        "evidence": "For me, predictability plus choice is more important than total freedom.",
+        "rationale": "B appreciates having both predictability and choice in their work schedule."
+      },
+      {
+        "number": 51,
+        "prompt": "Which person learned to explain the reasons behind procedures?",
+        "answer": "C",
+        "evidence": "Over time, I learned to explain the reasons behind procedures.",
+        "rationale": "C learned to explain the reasons behind procedures while mentoring a newcomer."
+      },
+      {
+        "number": 52,
+        "prompt": "Who values finishing one demanding task without switching attention?",
+        "answer": "A",
+        "evidence": "I can now finish one demanding task without switching attention.",
+        "rationale": "A values the ability to concentrate on and finish one demanding task without interruptions."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise aligns with the Content Brief by presenting four distinct profiles with different workplace changes and experiences.",
+      "style_card_notes": "The style card is followed by providing differentiated voices and experiences across the profiles.",
+      "british_english_notes": "British English is used throughout the exercise, adhering to the CEFR B2 level.",
+      "factuality_notes": "No unverified claims about productivity or wellbeing are made; the focus is on personal experiences.",
+      "answer_validity_notes": "Each question has a single, defendable answer based on the profiles provided.",
+      "self_check_flags": []
+    },
+    "_word_count": 318
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

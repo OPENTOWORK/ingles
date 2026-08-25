@@ -1,0 +1,181 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E03",
+  "ruoe_exam_id": "RUOE-PILOT-E03",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-016",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-01",
+  "style_card_version": "v1.1",
+  "working_title": "The tool nobody was asked to design",
+  "final_title": "Designed for one job, kept for another",
+  "title_candidates": [
+    "Designed for one job, kept for another",
+    "Cheap enough to waste",
+    "The strip of plastic in every drawer"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q33 sits close to the explicit wording of the paragraph and may read as detail rather than inference for a strong candidate."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Blind-solve agreed with the key on 6/6. Answer letters are C, A, D, B, C, A: four letters used, no consecutive repetition.",
+    "repairs_applied": [
+      "Q31 option D regenerated during drafting: the earlier distractor (“to avoid drawing attention to a particular manufacturer”) was defensible, since the article does avoid brand names.",
+      "Q33 option A regenerated during drafting: the earlier version (“variations on the original job”) was arguably true of tying a stem to a cane."
+    ],
+    "teacher_attention_items": [
+      33
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 5",
+    "directions": "Part 5: Multiple choice\nYou are going to read an article. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.",
+    "partNumber": 5,
+    "title": "Designed for one job, kept for another",
+    "titlePatternFamily": "juxtaposition_title",
+    "passage": "There is an object in most kitchen drawers that almost nobody buys on purpose. It is a narrow strip of toothed plastic, perhaps twenty centimetres long, with a small square head at one end. Thread the tail through the head and it will slide one way and lock the other, tightening around whatever it has been wrapped about. It costs almost nothing, it cannot be undone without scissors, and it is used every day by people who could not say where they got it.\n\nIt was not made for kitchens. It was made for factories, and specifically for the problem of holding several dozen wires together inside a machine while somebody else worked around them. The bundles had to be tidy, they had to be quick to fasten, and they had to be cheap, because a single machine might need hundreds of them. Everything about the design answers that one narrow question. Nothing about it anticipates a greenhouse.\n\nYet greenhouses are where a great many of them now end up. Gardeners use them to tie a young stem to a cane, because the tail can be pulled just far enough and no further. Cyclists use them to hold a lamp to a frame that was never drilled for one. In workshops they close bags, label cables, hold a broken hinge together until a proper repair can be made, and hang tools on the wall of a shed. None of these uses was suggested by anybody. They were arrived at separately, by people who happened to have a handful of the things and a problem in front of them.\n\nWhat made that possible has less to do with cleverness than with cost. Three ordinary properties recur in objects that spread this way. The first is that they are cheap enough to waste: nobody agonises over a decision that can be reversed for a few pence. The second is that they can be understood at a glance. Someone picking one up for the first time can see, without being told, what it will do and roughly how hard it will pull. The third, and the one most often overlooked, is that they fail harmlessly. When the plastic snaps, nothing else breaks; the experiment simply ends, and the person tries something else.\n\nTogether, those three properties lower the cost of trying, and lowering the cost of trying is what allows strangers to do the inventing. The designer’s imagination stops at the factory door. Everybody else’s begins there.\n\nIt is worth looking at an object that did not travel. A reusable metal version of the same fastening was made and sold in the same period: better engineered, adjustable, capable of being opened and closed for years. By almost any measure it was the superior product, and it never left the industries it was built for. It cost roughly forty times as much, it needed a small tool to release it, and losing one mattered. Nobody was going to keep a box of them in a kitchen drawer for the sake of an occasional bag of frozen peas. The very qualities that made it good — durability, precision, reusability — made it something to be looked after rather than something to be tried.\n\nThat comparison suggests a different question to ask of any new design. Not what it was intended for, and not even how well it performs the job it was made to do, but what it makes cheap and safe for other people to attempt. Judged that way, some objects turn out to have been badly designed and enormously useful, which is an uncomfortable thing for a designer to hear.",
+    "passageWordCount": 607,
+    "questions": [
+      {
+        "id": "q31",
+        "number": 31,
+        "questionType": "purpose",
+        "prompt": "Why does the writer describe the object rather than name it in the first paragraph?",
+        "options": [
+          "A) To suggest that the object is more complicated than it appears.",
+          "B) To imply that the object is difficult to describe accurately.",
+          "C) To make something entirely familiar worth looking at again.",
+          "D) To show that most people use the object incorrectly."
+        ],
+        "evidence": "‘almost nobody buys on purpose … used every day by people who could not say where they got it.’",
+        "rationale": "The paragraph withholds the name and describes the mechanism instead, so that a reader who owns dozens of them has to look at one properly."
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "questionType": "detail",
+        "prompt": "According to the second paragraph, the object’s original design was shaped by",
+        "options": [
+          "A) the need to hold many wires at once as cheaply as possible.",
+          "B) requests from the people who later found other uses for it.",
+          "C) a wish to make it as easy as possible to undo.",
+          "D) the difficulty of finding a material that would last."
+        ],
+        "evidence": "‘holding several dozen wires together … they had to be cheap, because a single machine might need hundreds of them.’",
+        "rationale": "B reverses the chronology, C contradicts “cannot be undone without scissors”, and D is never mentioned."
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "questionType": "inference",
+        "prompt": "What point is the writer making about the later uses listed in the third paragraph?",
+        "options": [
+          "A) They show that the object works better outside factories than inside them.",
+          "B) They were encouraged by the people who originally manufactured it.",
+          "C) They became common only after the object was sold in ordinary shops.",
+          "D) They were arrived at separately by people with their own problems to solve."
+        ],
+        "evidence": "‘None of these uses was suggested by anybody. They were arrived at separately …’",
+        "rationale": "The list exists to establish independent discovery, which the fourth paragraph then explains. A overstates, B contradicts, C is unsupported."
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "questionType": "detail",
+        "prompt": "The writer suggests that failing harmlessly matters because",
+        "options": [
+          "A) it prevents the object from being used in dangerous situations.",
+          "B) an unsuccessful attempt leaves the user no worse off.",
+          "C) it makes the object last longer than costlier alternatives.",
+          "D) it allows the object to be repaired rather than replaced."
+        ],
+        "evidence": "‘When the plastic snaps, nothing else breaks; the experiment simply ends …’",
+        "rationale": "The property is presented as removing the penalty for a failed experiment, not as a safety feature (A) or a durability claim (C, D)."
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "questionType": "inference",
+        "prompt": "What does the writer imply about the reusable metal version?",
+        "options": [
+          "A) It was less well made than the plastic strip.",
+          "B) It was withdrawn once industries stopped ordering it.",
+          "C) Its very strengths made people unwilling to experiment with it.",
+          "D) It would have spread if more people had known about it."
+        ],
+        "evidence": "‘The very qualities that made it good … made it something to be looked after rather than something to be tried.’",
+        "rationale": "A contradicts “better engineered”, B is not stated, and D is the opposite of the argument: awareness was never the obstacle."
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "questionType": "global purpose",
+        "prompt": "In the final paragraph, the writer’s main purpose is to",
+        "options": [
+          "A) recommend a different test for judging a design.",
+          "B) criticise designers for ignoring how people really behave.",
+          "C) predict which sorts of object will spread in future.",
+          "D) explain why cheap products usually outsell expensive ones."
+        ],
+        "evidence": "‘That comparison suggests a different question to ask of any new design.’",
+        "rationale": "The paragraph proposes a criterion. B is too hostile for the tone, C makes no prediction, and D generalises about sales, which the article never discusses."
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q31",
+        "number": 31,
+        "answer": "C"
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "answer": "A"
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "answer": "D"
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "answer": "B"
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "answer": "C"
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "answer": "A"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

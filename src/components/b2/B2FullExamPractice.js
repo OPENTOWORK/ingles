@@ -15,6 +15,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { getCachedB2Level, getCachedB2ExamNamesBySlot } from '@/utils/b2LevelCache';
 import { getB2PartScoring, starsFromApprovedPartsCount } from '@/utils/levelsB2PartScoring';
 import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
+import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
@@ -108,14 +109,20 @@ function B2FullExamPracticeInner() {
     },
   });
 
+  const planGating = useExamSlotPlanGating(scoring.progressBySlot);
+
   const handleSelectExamSlot = useMemo(
-    () => createAdminExamSelectHandler(adminFlow, (slot) => scoring.handleSelectExam(selectExamSlot, slot)),
-    [adminFlow, scoring, selectExamSlot],
+    () =>
+      createAdminExamSelectHandler(adminFlow, (slot) =>
+        planGating.wrapSelectHandler((s) => scoring.handleSelectExam(selectExamSlot, s))(slot),
+      ),
+    [adminFlow, scoring, selectExamSlot, planGating],
   );
   const examSlotPickerProps = buildExamSlotPickerProps({
     examenIdBySlot: scoring.examenIdBySlot,
     adminFlow,
-    onSelectSlot: (slot) => scoring.handleSelectExam(selectExamSlot, slot),
+    onSelectSlot: (slot) =>
+      planGating.wrapSelectHandler((s) => scoring.handleSelectExam(selectExamSlot, s))(slot),
   });
 
   useEffect(() => {
@@ -170,6 +177,8 @@ function B2FullExamPracticeInner() {
         progressBySlot={scoring.progressBySlot}
         partsInPaper={B2_FULL_EXAM_PARTS_COUNT}
         examLabelsBySlot={examNamesBySlot}
+        lockedSlots={planGating.lockedSlots}
+        onLockedSlotClick={planGating.onLockedSlotClick}
         {...examSlotPickerProps}
       />
 
@@ -339,6 +348,7 @@ function B2FullExamPracticeInner() {
           ← Volver a B2
         </Link>
       </div>
+      {planGating.planUpgradeModal}
     </B2ExamPracticeLayout>
   );
 }

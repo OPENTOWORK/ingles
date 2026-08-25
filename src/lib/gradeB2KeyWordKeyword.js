@@ -32,9 +32,41 @@ export function resolveKeywordSpec(keyword) {
   return null;
 }
 
+/** Cambridge contractions whose expanded form begins with the keyword token (e.g. needn't → need not). */
+const KEYWORD_EMBEDDING_CONTRACTION_STEMS = Object.freeze({
+  "don't": 'do',
+  "doesn't": 'does',
+  "didn't": 'did',
+  "won't": 'will',
+  "wouldn't": 'would',
+  "couldn't": 'could',
+  "shouldn't": 'should',
+  "mustn't": 'must',
+  "needn't": 'need',
+  "mightn't": 'might',
+  "isn't": 'is',
+  "aren't": 'are',
+  "wasn't": 'was',
+  "weren't": 'were',
+  "haven't": 'have',
+  "hasn't": 'has',
+  "hadn't": 'had',
+});
+
 /**
- * Exact token matches for keyword text (case-insensitive).
- * Multi-token keywords count non-overlapping contiguous sequences.
+ * @param {string} keywordText normalized single-token keyword
+ * @param {string} token lowercased answer token
+ */
+function isKeywordEmbeddingContraction(keywordText, token) {
+  const kw = keywordText.toLowerCase();
+  const stem = KEYWORD_EMBEDDING_CONTRACTION_STEMS[token];
+  if (stem && stem === kw) return true;
+  if (token === "can't" && kw === 'can') return true;
+  if (token === 'cannot' && kw === 'can') return true;
+  return false;
+}
+
+/**
  * @param {string} keywordText
  * @param {string[]} tokens
  */
@@ -45,7 +77,16 @@ export function countKeywordTokenMatches(keywordText, tokens) {
 
   if (kwTokens.length === 1) {
     const target = kwTokens[0];
-    return tokens.filter((token) => token.toLowerCase() === target).length;
+    let count = 0;
+    for (const token of tokens) {
+      const lower = token.toLowerCase();
+      if (lower === target) {
+        count += 1;
+      } else if (isKeywordEmbeddingContraction(target, lower)) {
+        count += 1;
+      }
+    }
+    return count;
   }
 
   let count = 0;
@@ -91,6 +132,7 @@ export function evaluateB2KeyWordKeywordStatus(keywordSpec, tokens) {
     for (const token of tokens) {
       const lower = token.toLowerCase();
       if (lower === target) continue;
+      if (isKeywordEmbeddingContraction(target, lower)) continue;
       if (lower.startsWith(target) && lower.length > target.length) {
         modified = true;
       }

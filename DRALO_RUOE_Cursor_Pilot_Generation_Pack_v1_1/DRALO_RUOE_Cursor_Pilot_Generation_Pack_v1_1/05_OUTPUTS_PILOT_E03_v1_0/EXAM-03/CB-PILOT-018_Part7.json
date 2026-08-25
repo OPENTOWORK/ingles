@@ -1,0 +1,203 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E03",
+  "ruoe_exam_id": "RUOE-PILOT-E03",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-018",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-06",
+  "style_card_version": "v1.1",
+  "working_title": "Four ways of learning to speak",
+  "final_title": "Nobody is marking this",
+  "title_candidates": [
+    "Nobody is marking this",
+    "Four learners, four finishing lines",
+    "How do you know it is working?"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q50 and Q44 both touch on a gap between one setting and another. Q50 is topic-based (own field versus domestic arrangements, A) and Q44 is about the trigger (C); a reviewer should confirm the two remain clearly separate."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "All ten questions resolved to a single profile. Distribution A×3, B×2, C×3, D×2; letter sequence A, C, D, B, A, C, B, A, D, C shows no repeating cycle.",
+    "repairs_applied": [
+      "Profile C was given the line “I have never held a conversation in it that lasted five minutes” so that Q50 cannot be answered from C as well as A.",
+      "Profile C’s measure of progress was changed from the brief’s “how little he has to ask someone to repeat” to starting a task without checking, because the brief’s wording collided with profile B’s measure."
+    ],
+    "teacher_attention_items": [
+      44,
+      50
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 7",
+    "directions": "Part 7: Multiple matching\nYou are going to read an article in which four people talk about learning a language without attending a class. For questions 43–52, choose from the people (A–D). The people may be chosen more than once.",
+    "partNumber": 7,
+    "title": "Nobody is marking this",
+    "titlePatternFamily": "statement_title",
+    "matchingIntro": "Four adults are learning the same language without going to a class. Each of them has arrived at a different way of deciding whether it is working.",
+    "sections": [
+      {
+        "letter": "A",
+        "name": "Ruth",
+        "text": "I have eight months. That is not a boast, it is a deadline: the job moves in June and the family goes with it. So I meet the same person every Thursday in a café and we talk for an hour, half in each language. I prepare three subjects beforehand. I no longer write anything down during the hour, because the notebook was how I used to escape. My weakness is embarrassing. I can discuss my own work for twenty minutes and then fail completely to arrange a delivery or explain a leak to a plumber. If he corrects me in the middle of a sentence I lose the thread, and for the rest of the hour I avoid whatever caused it. A good Thursday is one where I said what I meant once and was understood.",
+        "wordCount": 137
+      },
+      {
+        "letter": "B",
+        "name": "Nadia",
+        "text": "It began with my husband’s mother, who has never had a conversation with me that somebody else was not translating. I listen on the train, forty minutes each way, and I have got into the habit of playing the same recordings over and over until there is nothing left in them that surprises me. That has made me a strange sort of learner. Sitting at their table I can follow two people perfectly well, and the moment a third and a fourth join in I lose all of it and go back to smiling. In two years I have not said more than a sentence to anyone outside the family, so I have no idea what I sound like to a stranger. What I count now is how much of an evening I can follow without anyone stopping to explain it to me afterwards.",
+        "wordCount": 144
+      },
+      {
+        "letter": "C",
+        "name": "Deniz",
+        "text": "I took the job because it paid better. Nobody mentioned that the kitchen ran in another language and that I would be the only one who did not have it. For the first fortnight I learned the instructions and nothing else: the words for pass me that, behind you, two minutes, start again. Grammar came a long way afterwards and some of it has still not arrived. I get corrected twenty times a shift and it does not trouble me in the slightest; on a Friday night nobody has time to be polite about it. Outside the building I am useless. I have never held a conversation in it that lasted five minutes. What I go by is whether I can be handed a job now and start it without checking that I have understood.",
+        "wordCount": 135
+      },
+      {
+        "letter": "D",
+        "name": "Gerald",
+        "text": "I set myself the challenge the week after I retired, and I have completed something every single day since — seven hundred and forty-one days, which I mention only because the number is the whole difficulty. I have a large vocabulary that has never once left my head. I can recognise a word instantly and produce nothing. Twice I arranged to meet a speaker for coffee, and twice, I am sorry to say, I cancelled the day before with a reason that was not entirely true. What I have done instead is start on a newspaper column, which at least resists me. I am beginning to suspect, though I have not yet acted on it, that what I have been measuring for two years is my consistency rather than my language.",
+        "wordCount": 131
+      }
+    ],
+    "questions": [
+      {
+        "id": "q43",
+        "number": 43,
+        "prompt": "Who was pushed into learning by a date that cannot be moved?"
+      },
+      {
+        "id": "q44",
+        "number": 44,
+        "prompt": "Who had no choice in the matter, because the people around them at work spoke nothing else?"
+      },
+      {
+        "id": "q45",
+        "number": 45,
+        "prompt": "Who admits to giving a dishonest reason for avoiding an arrangement?"
+      },
+      {
+        "id": "q46",
+        "number": 46,
+        "prompt": "Who has no sense of the impression they make on a listener?"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "prompt": "Who gave up a study habit after realising it had been a way of avoiding difficulty?"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "prompt": "Who learned how to carry out tasks before understanding how the language works?"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "prompt": "Who copes with a conversation only while the number of speakers stays low?"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "prompt": "Who can talk at length about their own field but not about practical everyday arrangements?"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "prompt": "Who has come to doubt that what they have been counting reflects real ability?"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "prompt": "Who judges progress by being able to begin work without confirming they have understood?"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q43",
+        "number": 43,
+        "answer": "A",
+        "evidence": "‘the job moves in June and the family goes with it’"
+      },
+      {
+        "id": "q44",
+        "number": 44,
+        "answer": "C",
+        "evidence": "‘Nobody mentioned that the kitchen ran in another language’"
+      },
+      {
+        "id": "q45",
+        "number": 45,
+        "answer": "D",
+        "evidence": "‘I cancelled the day before with a reason that was not entirely true’"
+      },
+      {
+        "id": "q46",
+        "number": 46,
+        "answer": "B",
+        "evidence": "‘I have no idea what I sound like to a stranger’"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "answer": "A",
+        "evidence": "‘I no longer write anything down … the notebook was how I used to escape’"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "answer": "C",
+        "evidence": "‘For the first fortnight I learned the instructions and nothing else … Grammar came a long way afterwards’"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "answer": "B",
+        "evidence": "‘I can follow two people perfectly well, and the moment a third and a fourth join in I lose all of it’"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "answer": "A",
+        "evidence": "‘I can discuss my own work for twenty minutes and then fail completely to arrange a delivery’"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "answer": "D",
+        "evidence": "‘what I have been measuring for two years is my consistency rather than my language’"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "answer": "C",
+        "evidence": "‘whether I can be handed a job now and start it without checking that I have understood’"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

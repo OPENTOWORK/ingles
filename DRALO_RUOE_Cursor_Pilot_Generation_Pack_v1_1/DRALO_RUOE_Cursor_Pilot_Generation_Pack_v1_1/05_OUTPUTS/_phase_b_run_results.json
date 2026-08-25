@@ -1,0 +1,177 @@
+{
+  "generated_at": "2026-08-12T23:03:25.509Z",
+  "phase_b": {
+    "status": "COMPLETE_READY_FOR_HUMAN_REVIEW",
+    "part4_task_count": 2,
+    "scored_transformations": 12,
+    "generation_version": "phase-b-v1.1-2026-08-13",
+    "model": "gpt-4o-2024-08-06",
+    "files": [
+      "05_OUTPUTS/EXAM-01/TBP-PILOT-EX01_Part4.json",
+      "05_OUTPUTS/EXAM-02/TBP-PILOT-EX02_Part4.json"
+    ],
+    "human_review": "05_OUTPUTS/HUMAN_REVIEW_PHASE_B.md",
+    "human_review_checklist": "04_REVIEW/DRALO_RUOE_Checklist_Revision_Part4_Piloto_v1_0.docx",
+    "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+    "tasks": [
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "ruoe_exam_id": "RUOE-PILOT-E01",
+        "status": "pass",
+        "fail_count": 0,
+        "warning_count": 0,
+        "repaired_items": [
+          "Q28",
+          "Q29",
+          "Q30",
+          "Q26",
+          "Q27"
+        ]
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "ruoe_exam_id": "RUOE-PILOT-E02",
+        "status": "pass",
+        "fail_count": 0,
+        "warning_count": 0,
+        "repaired_items": [
+          "Q26",
+          "Q28"
+        ]
+      }
+    ],
+    "counts": {
+      "pass": 12,
+      "pass_with_warnings": 0,
+      "fail": 0
+    },
+    "item_results": [
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": "example(0)",
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 25,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 26,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 2,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 27,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 6,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 28,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 9,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 29,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 3,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX01",
+        "question": 30,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 2,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": "example(0)",
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 25,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 26,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 3,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 27,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 28,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 9,
+        "repaired": true
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 29,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      },
+      {
+        "blueprint_id": "TBP-PILOT-EX02",
+        "question": 30,
+        "status": "pass",
+        "errors": [],
+        "warnings": [],
+        "attempt": 1,
+        "repaired": false
+      }
+    ]
+  }
+}

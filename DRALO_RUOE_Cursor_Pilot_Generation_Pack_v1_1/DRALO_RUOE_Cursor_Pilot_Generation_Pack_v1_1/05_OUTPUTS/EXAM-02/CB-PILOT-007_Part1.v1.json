@@ -1,0 +1,158 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:46:18.749Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-007",
+  "brief_version": "1.0",
+  "style_card_id": "SC-05",
+  "style_card_version": "v1.0",
+  "working_title": "The place you reach after the road ends",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3385,
+    "completion_tokens": 1016,
+    "total_tokens": 4401
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 207 outside 150–180",
+      "answer letter A appears more than 3 times"
+    ],
+    "warnings": [],
+    "word_count": 207
+  },
+  "exercise": {
+    "part_title": "Part 1",
+    "instructions": "For questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap.",
+    "text_title": "The place you reach after the road ends",
+    "passage_with_gaps": "When the road ends, travellers must transfer to a small ferry or continue on foot. This unique access (0) ___ sets the tone for the entire visit. The ferry (1) ___ across the water, offering a brief moment to take in the scenery before reaching the coastal destination. Upon arrival, visitors find themselves in a place where the lack of cars (2) ___ them to slow down and observe their surroundings more closely.\n\nThe limited transport options mean that people must plan their movements carefully, as they cannot simply (3) ___ off whenever they please. This slower pace allows visitors to notice the ordinary routines of the locals, such as the daily delivery of fresh produce to the small market or residents walking between the harbour and their homes.\n\nOne visitor (4) ___ that the inconvenience of limited access is precisely what makes the destination feel special. Unlike busier tourist spots, this place remains distinct and unspoiled, with its own rhythm and charm. The journey does not just (5) ___ them to a destination; it also changes how they (6) ___ the place. The absence of convenience (7) ___ a deeper connection, making the experience truly memorable. The road may have ended, but the journey continues in unexpected ways, shaping the perception of the place and leaving a lasting (8) ___ on all who visit.",
+    "example": {
+      "number": 0,
+      "options": {
+        "A": "actually",
+        "B": "really",
+        "C": "simply",
+        "D": "nearly"
+      },
+      "answer": "C",
+      "explanation": "The phrase 'simply sets the tone' is a fixed expression indicating that the access straightforwardly establishes the atmosphere of the visit."
+    },
+    "questions": [
+      {
+        "number": 1,
+        "options": {
+          "A": "drifts",
+          "B": "glides",
+          "C": "slides",
+          "D": "floats"
+        },
+        "answer": "B",
+        "lexical_focus": "glides",
+        "rationale": "'Glides' is the most appropriate verb to describe the smooth and effortless movement of the ferry across the water."
+      },
+      {
+        "number": 2,
+        "options": {
+          "A": "forces",
+          "B": "allows",
+          "C": "lets",
+          "D": "permits"
+        },
+        "answer": "B",
+        "lexical_focus": "allows",
+        "rationale": "'Allows' fits best as it suggests that the lack of cars gives visitors the opportunity to slow down and observe."
+      },
+      {
+        "number": 3,
+        "options": {
+          "A": "set",
+          "B": "take",
+          "C": "head",
+          "D": "go"
+        },
+        "answer": "C",
+        "lexical_focus": "head",
+        "rationale": "'Head off' is a phrasal verb meaning to begin a journey, which fits the context of planning movements carefully."
+      },
+      {
+        "number": 4,
+        "options": {
+          "A": "realises",
+          "B": "imagines",
+          "C": "thinks",
+          "D": "believes"
+        },
+        "answer": "A",
+        "lexical_focus": "realises",
+        "rationale": "'Realises' indicates a moment of understanding or insight, which is appropriate for the visitor's recognition of the destination's uniqueness."
+      },
+      {
+        "number": 5,
+        "options": {
+          "A": "bring",
+          "B": "deliver",
+          "C": "carry",
+          "D": "take"
+        },
+        "answer": "D",
+        "lexical_focus": "take",
+        "rationale": "'Take' is the correct verb here, as it refers to the act of transporting someone to a destination."
+      },
+      {
+        "number": 6,
+        "options": {
+          "A": "view",
+          "B": "see",
+          "C": "look",
+          "D": "watch"
+        },
+        "answer": "A",
+        "lexical_focus": "view",
+        "rationale": "'View' is used to describe the way someone perceives or regards something, which fits the context of how the place is experienced."
+      },
+      {
+        "number": 7,
+        "options": {
+          "A": "creates",
+          "B": "forms",
+          "C": "makes",
+          "D": "builds"
+        },
+        "answer": "A",
+        "lexical_focus": "creates",
+        "rationale": "'Creates' is the correct choice as it suggests that the absence of convenience leads to the development of a deeper connection."
+      },
+      {
+        "number": 8,
+        "options": {
+          "A": "impression",
+          "B": "mark",
+          "C": "effect",
+          "D": "impact"
+        },
+        "answer": "A",
+        "lexical_focus": "impression",
+        "rationale": "'Impression' is the most suitable word here, as it refers to the lasting effect or memory left on visitors."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The text adheres to the brief by focusing on the unique access and how it shapes the visitor experience.",
+      "style_card_notes": "The style card's emphasis on warm, observant feature-writing is followed, with a focus on the setting's impact on the visitor.",
+      "british_english_notes": "British English is consistently used throughout the text.",
+      "factuality_notes": "The text maintains plausible fiction without attributing real details to a specific location.",
+      "answer_validity_notes": "Each question has one clear, defendable answer based on lexical context.",
+      "self_check_flags": []
+    },
+    "_word_count": 207
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

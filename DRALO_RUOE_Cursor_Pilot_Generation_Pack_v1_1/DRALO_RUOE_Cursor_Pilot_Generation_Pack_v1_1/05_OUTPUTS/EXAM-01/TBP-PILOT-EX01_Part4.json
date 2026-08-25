@@ -1,0 +1,264 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "B",
+  "generation_version": "phase-b-v1.1-2026-08-13",
+  "generated_at": "2026-08-12T23:01:04.040Z",
+  "blueprint_id": "TBP-PILOT-EX01",
+  "blueprint_version": "1.0",
+  "exam_id": "PILOT-EXAM-01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 4",
+  "part_number": 4,
+  "model": "gpt-4o-2024-08-06",
+  "item_attempts": {
+    "example": 1,
+    "Q25": 1,
+    "Q26": 2,
+    "Q27": 6,
+    "Q28": 9,
+    "Q29": 3,
+    "Q30": 2
+  },
+  "repaired_items": [
+    "Q28",
+    "Q29",
+    "Q30",
+    "Q26",
+    "Q27"
+  ],
+  "item_checks": {
+    "example": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 3
+    },
+    "Q25": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 2
+    },
+    "Q26": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 4
+    },
+    "Q27": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 3
+    },
+    "Q28": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 3
+    },
+    "Q29": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 4
+    },
+    "Q30": {
+      "status": "pass",
+      "errors": [],
+      "warnings": [],
+      "word_count": 3
+    }
+  },
+  "self_check": {
+    "status": "pass",
+    "fail_count": 0,
+    "warning_count": 0,
+    "scored_items": 6
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "exercise": {
+    "part_title": "Part 4 — Key Word Transformations",
+    "instructions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. Here is an example (0).",
+    "example": {
+      "question_number": 0,
+      "sentence1": "She is too young to drive a car.",
+      "keyword": "ENOUGH",
+      "sentence2": "She is not ____ drive a car.",
+      "answer": "old enough to",
+      "accepted_variants": [
+        "old enough to"
+      ],
+      "marking_points": [
+        "old enough",
+        "to"
+      ],
+      "family_id": "TF-04",
+      "family_name": "Adjective + enough",
+      "target_structure": "Adjective + enough + to-infinitive",
+      "difficulty_band": "B2",
+      "semantic_equivalence_rationale": "The transformation maintains the meaning by using 'not old enough to' as an equivalent to 'too young to'.",
+      "alternative_route_check": "The transformation route is clear and controlled, with no alternative interpretations fitting the constraints.",
+      "naturalness_notes": "The transformed sentence is natural and typical for B2 level."
+    },
+    "questions": [
+      {
+        "question_number": 25,
+        "sentence1": "If you had studied harder, you would have passed the exam.",
+        "keyword": "HAD",
+        "sentence2": "You would have passed the exam if you ____ harder.",
+        "answer": "had studied",
+        "accepted_variants": [
+          "had studied"
+        ],
+        "marking_points": [
+          "had",
+          "studied"
+        ],
+        "family_id": "TF-02",
+        "family_name": "Conditionals & hypothetical meaning",
+        "target_structure": "third conditional / unreal past consequence",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "The transformation preserves the unreal past condition and its consequence by maintaining the third conditional structure.",
+        "alternative_route_check": "No alternative routes are possible as the sentence structure requires a conditional-perfect frame around 'HAD'.",
+        "naturalness_notes": "The sentence is natural and typical of B2-level conditional transformations.",
+        "slot_id": "TBP-PILOT-EX01-Q25",
+        "answer_shape": "modal/auxiliary conditional-perfect frame around HAD",
+        "marking_point_plan": "MP1: conditional auxiliary frame; MP2: past-participle/complement required for equivalent consequence",
+        "semantic_equivalence_goal": "Preserve the unreal past condition and its consequence."
+      },
+      {
+        "question_number": 26,
+        "sentence1": "I am going to ask the hairdresser to cut my hair.",
+        "keyword": "GET",
+        "sentence2": "I am going to ____ by the hairdresser.",
+        "answer": "get my hair cut",
+        "accepted_variants": [
+          "get my hair cut"
+        ],
+        "marking_points": [
+          "get",
+          "my hair cut"
+        ],
+        "family_id": "TF-08",
+        "family_name": "Causative & service structures",
+        "target_structure": "get something done",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "Both sentences express that a hairdresser will cut the speakers hair as a causative service arrangement.",
+        "alternative_route_check": "There is no alternative transformation that fits the constraints and maintains the original meaning with the keyword 'GET'.",
+        "naturalness_notes": "The sentence structure is natural and typical for the B2 level, using a common causative form.",
+        "slot_id": "TBP-PILOT-EX01-Q26",
+        "answer_shape": "GET + object + past participle within 2–5 words",
+        "marking_point_plan": "MP1: causative GET frame; MP2: object + past participle/service-action unit",
+        "semantic_equivalence_goal": "Preserve that another person/service performs an action for the subject."
+      },
+      {
+        "question_number": 27,
+        "sentence1": "This book is more interesting than that one.",
+        "keyword": "THAN",
+        "sentence2": "That book is not ____ this one.",
+        "answer": "more interesting than",
+        "accepted_variants": [
+          "more interesting than"
+        ],
+        "marking_points": [
+          "more interesting",
+          "than"
+        ],
+        "family_id": "TF-01",
+        "family_name": "Comparison & degree",
+        "target_structure": "comparative equivalence with THAN",
+        "difficulty_band": "B2-Core",
+        "semantic_equivalence_rationale": "The transformation maintains the comparative relationship between the two books, using 'more interesting' to establish the degree and 'than' to maintain the original comparative context.",
+        "alternative_route_check": "No alternative route is possible due to the specific requirement of using 'THAN' and maintaining the comparative structure.",
+        "naturalness_notes": "The transformation is natural and appropriate for B2 level, maintaining clarity and grammatical correctness.",
+        "slot_id": "TBP-PILOT-EX01-Q27",
+        "answer_shape": "comparative form + THAN + comparison complement",
+        "marking_point_plan": "MP1: comparative form; MP2: THAN + complement",
+        "semantic_equivalence_goal": "Preserve relative degree between two people/things."
+      },
+      {
+        "question_number": 28,
+        "sentence1": "\"Could you please close the window?\" Sarah said to John.",
+        "keyword": "ASKED",
+        "sentence2": "Sarah ____ close the window.",
+        "answer": "asked John to",
+        "accepted_variants": [
+          "asked John to"
+        ],
+        "marking_points": [
+          "asked John",
+          "to"
+        ],
+        "family_id": "TF-05",
+        "family_name": "Reported speech, requests & advice",
+        "target_structure": "reported request / ask someone to",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "The transformation accurately conveys Sarah's original request to John, converting it into reported speech while preserving the meaning and addressee.",
+        "alternative_route_check": "The only correct transformation involves using 'asked' followed by the object and a to-infinitive, which aligns with the specified structure.",
+        "naturalness_notes": "The sentence transformation is natural and appropriate for the B2 level, maintaining the original request's meaning and structure.",
+        "slot_id": "TBP-PILOT-EX01-Q28",
+        "answer_shape": "ASKED + object + to-infinitive frame",
+        "marking_point_plan": "MP1: ASKED + object; MP2: to-infinitive/complement",
+        "semantic_equivalence_goal": "Preserve the original request and addressee in indirect speech."
+      },
+      {
+        "question_number": 29,
+        "sentence1": "It is useless to argue with him about this.",
+        "keyword": "POINT",
+        "sentence2": "There is ____ with him about this.",
+        "answer": "no point in arguing",
+        "accepted_variants": [
+          "no point in arguing"
+        ],
+        "marking_points": [
+          "no point in",
+          "arguing"
+        ],
+        "family_id": "TF-09",
+        "family_name": "Verb patterns & complementation",
+        "target_structure": "there is no point in + gerund",
+        "difficulty_band": "B2-Standard",
+        "semantic_equivalence_rationale": "The transformation maintains the original meaning by expressing that arguing with him is not worthwhile, using the 'there is no point in + gerund' structure.",
+        "alternative_route_check": "The sentence avoids other structures like 'not worth' and uses 'POINT' as a noun within the specified frame, ensuring no alternative valid structures fit.",
+        "naturalness_notes": "The sentence is natural and typical for B2 level, using a common expression to convey futility.",
+        "slot_id": "TBP-PILOT-EX01-Q29",
+        "answer_shape": "POINT + in + gerund pattern",
+        "marking_point_plan": "MP1: POINT IN; MP2: gerund/complement",
+        "semantic_equivalence_goal": "Preserve the meaning that an action is useless/not worthwhile."
+      },
+      {
+        "question_number": 30,
+        "sentence1": "They said that John was responsible for breaking the window.",
+        "keyword": "ACCUSED",
+        "sentence2": "They ____ breaking the window.",
+        "answer": "accused John of",
+        "accepted_variants": [
+          "accused John of"
+        ],
+        "marking_points": [
+          "accused John",
+          "of"
+        ],
+        "family_id": "TF-12",
+        "family_name": "Dependent prepositions & lexical grammar",
+        "target_structure": "accuse someone of + gerund/noun",
+        "difficulty_band": "B2-Strong",
+        "semantic_equivalence_rationale": "The transformation retains the meaning that John was alleged to be responsible for the action of breaking the window, aligning with the semantic equivalence goal of preserving an allegation.",
+        "alternative_route_check": "The transformation route is controlled as 'accuse' is the only viable verb given the keyword constraint and sentence structure.",
+        "naturalness_notes": "The sentence transformation is natural and typical of B2-level English, using a common reporting structure with 'accuse' and a gerund.",
+        "slot_id": "TBP-PILOT-EX01-Q30",
+        "answer_shape": "ACCUSED + object + of + gerund/noun",
+        "marking_point_plan": "MP1: ACCUSED + object; MP2: OF + action/complement",
+        "semantic_equivalence_goal": "Preserve an allegation that a person was responsible for an action."
+      }
+    ]
+  },
+  "_relpath": "05_OUTPUTS/EXAM-01/TBP-PILOT-EX01_Part4.json",
+  "repair_pass": {
+    "at": "2026-08-12T23:02:26.429Z",
+    "kind": "marking_points_and_q26_tense_local"
+  }
+}

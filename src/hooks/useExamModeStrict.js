@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useUserRole } from '@/context/UserRoleContext';
+import { isExamModeSectionKeyBlockedForStudent } from '@/constants/studentFeatureAccess';
 import { useExamModeSession } from '@/hooks/useExamModeSession';
 import {
   buildExamModePracticeHref,
@@ -28,6 +30,7 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { userRole } = useUserRole();
   const examModeParam = searchParams.get('examMode');
   const reviewModeRequested = examModeParam === 'review';
   const examModeRequested = examModeParam === '1';
@@ -121,12 +124,21 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
   }, [forcePracticeByPart, examModeRequested, reviewModeRequested, pathname, router, searchParams]);
 
   useEffect(() => {
-    if (!examModeActive || !ready || !session || !sectionKey) return;
+    if (!ready || !session || !sectionKey) return;
+    if (!examModeRequested && !reviewModeRequested) return;
+
+    if (isExamModeSectionKeyBlockedForStudent(userRole, sectionKey) && !blockedRef.current) {
+      blockedRef.current = true;
+      router.replace(hubHref);
+      return;
+    }
+
+    if (!examModeActive && !reviewMode) return;
 
     const sec = getExamModeSection(session, sectionKey);
     if (!sec) return;
 
-    if (sec.status === 'locked' && !blockedRef.current) {
+    if ((sec.status === 'locked' || sec.status === 'blocked') && !blockedRef.current) {
       blockedRef.current = true;
       router.replace(hubHref);
       return;
@@ -142,15 +154,18 @@ export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
       touchSectionTimer(sectionKey);
     }
   }, [
-    examModeActive,
     ready,
     session,
     sectionKey,
+    examModeActive,
     reviewMode,
+    examModeRequested,
+    reviewModeRequested,
     repeatPartMode,
     router,
     hubHref,
     touchSectionTimer,
+    userRole,
   ]);
 
   const durationSeconds =

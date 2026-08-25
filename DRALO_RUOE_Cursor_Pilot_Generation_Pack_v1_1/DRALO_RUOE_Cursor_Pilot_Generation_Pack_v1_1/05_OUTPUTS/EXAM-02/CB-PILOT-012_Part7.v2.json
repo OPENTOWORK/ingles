@@ -1,0 +1,146 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:50:02.403Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-012",
+  "brief_version": "1.0",
+  "style_card_id": "SC-06",
+  "style_card_version": "v1.0",
+  "working_title": "Small changes that made work feel better",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 4476,
+    "completion_tokens": 1306,
+    "total_tokens": 5782
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "section A word_count 92 severely off-range",
+      "section B word_count 87 severely off-range",
+      "section C word_count 82 severely off-range",
+      "section D word_count 81 severely off-range"
+    ],
+    "warnings": [
+      "section A word_count 92 outside target 120–150",
+      "section B word_count 87 outside target 120–150",
+      "section C word_count 82 outside target 120–150",
+      "section D word_count 81 outside target 120–150"
+    ],
+    "word_count": 342
+  },
+  "exercise": {
+    "part_title": "Small Changes That Made Work Feel Better",
+    "instructions": "You are going to read four profiles about workplace changes that improved each person's daily experience. For questions 43–52, choose from the profiles A–D. The profiles may be chosen more than once.",
+    "matching_intro": "Which person describes each of the following experiences or attitudes?",
+    "common_context_title": "All four people describe a change in work organisation that improved their own daily experience, but the valued benefit differs.",
+    "sections": {
+      "A": {
+        "label": "A",
+        "text": "As a designer, my work requires deep concentration, but constant interruptions made it hard to complete complex tasks. Our team decided to introduce no-meeting focus blocks, allowing us to work without distractions. This change means I can now finish demanding projects without having to switch my attention constantly. However, it can be inconvenient when quick collaboration is needed. Despite this, I appreciate the clear boundaries it provides, as it helps me maintain concentration without feeling isolated. I wouldn't want to use these blocks all day, but they are invaluable for certain tasks."
+      },
+      "B": {
+        "label": "B",
+        "text": "Balancing work with personal commitments was challenging due to fixed start times. The stress was avoidable, so I advocated for flexible working hours. Now, I can choose when to start and finish within an agreed range. This flexibility means I need to coordinate more with colleagues, using shared notes for handovers. While it requires effort, having control over my schedule is more important to me than working fewer hours. I value the predictability and choice it offers, as it allows me to manage my responsibilities more effectively."
+      },
+      "C": {
+        "label": "C",
+        "text": "Initially, I was reluctant to mentor a newcomer, seeing it as extra work. However, as I started explaining tasks, I realised it improved my understanding of my own role. It required patience and made me question my habits, but seeing the newcomer grow independent was rewarding. I now value the feeling of being useful to someone else more than I expected. Although I was sceptical at first, this experience has left me quietly proud of the contribution I make to the team."
+      },
+      "D": {
+        "label": "D",
+        "text": "Our team was frustrated with recurring problems that were never resolved. We decided to hold regular problem-solving meetings where everyone could contribute. Each session, a different person presents an issue, and we agree on a next action. While these meetings can become repetitive without follow-up, they have fostered a sense of shared responsibility. I value the collaborative approach, but only when it leads to action. I'm impatient with discussions that go nowhere, but when they work, they make a real difference."
+      }
+    },
+    "questions": [
+      {
+        "number": 43,
+        "prompt": "Which person values the ability to focus without interruptions?",
+        "answer": "A",
+        "evidence": "Profile A describes the introduction of no-meeting focus blocks, allowing the person to work without distractions, which is highly valued for concentration.",
+        "rationale": "Profile A specifically mentions the benefit of being able to finish demanding projects without having to switch attention."
+      },
+      {
+        "number": 44,
+        "prompt": "Which person appreciates having control over their work schedule?",
+        "answer": "B",
+        "evidence": "Profile B discusses the importance of having flexible start and end times, highlighting the value of predictability and choice.",
+        "rationale": "Profile B clearly states that having control over the schedule is more important than working fewer hours."
+      },
+      {
+        "number": 45,
+        "prompt": "Which person finds satisfaction in helping a colleague become independent?",
+        "answer": "C",
+        "evidence": "Profile C describes mentoring a newcomer and the satisfaction gained from seeing them grow independent.",
+        "rationale": "Profile C specifically mentions the rewarding experience of helping the newcomer become independent."
+      },
+      {
+        "number": 46,
+        "prompt": "Which person mentions the challenge of coordinating with colleagues due to flexible hours?",
+        "answer": "B",
+        "evidence": "Profile B notes the need for clearer handovers with colleagues due to flexible working hours.",
+        "rationale": "Profile B highlights the challenge of coordination as a trade-off for having flexible hours."
+      },
+      {
+        "number": 47,
+        "prompt": "Which person was initially sceptical about the change but later found it rewarding?",
+        "answer": "C",
+        "evidence": "Profile C describes initial reluctance to mentor but later finds pride in the role.",
+        "rationale": "Profile C's initial scepticism about mentoring contrasts with the later satisfaction and pride."
+      },
+      {
+        "number": 48,
+        "prompt": "Which person values meetings that lead to actionable outcomes?",
+        "answer": "D",
+        "evidence": "Profile D emphasises the importance of meetings leading to action and expresses impatience with discussions that don't.",
+        "rationale": "Profile D values the collaborative approach only when it results in action, showing impatience with ineffective discussions."
+      },
+      {
+        "number": 49,
+        "prompt": "Which person appreciates the sense of shared responsibility in their team?",
+        "answer": "D",
+        "evidence": "Profile D mentions the sense of shared responsibility fostered by regular problem-solving meetings.",
+        "rationale": "Profile D discusses the collaborative nature and shared responsibility as a key benefit of the meetings."
+      },
+      {
+        "number": 50,
+        "prompt": "Which person finds that explaining tasks improved their own understanding?",
+        "answer": "C",
+        "evidence": "Profile C notes that explaining tasks to a newcomer improved their own understanding of the role.",
+        "rationale": "Profile C highlights the benefit of mentoring as improving their own role understanding."
+      },
+      {
+        "number": 51,
+        "prompt": "Which person values predictability in their work routine?",
+        "answer": "B",
+        "evidence": "Profile B appreciates the predictability and choice offered by flexible working hours.",
+        "rationale": "Profile B values the predictability that comes with the ability to choose start and end times."
+      },
+      {
+        "number": 52,
+        "prompt": "Which person had to adjust to a new way of working that initially seemed inconvenient?",
+        "answer": "A",
+        "evidence": "Profile A describes the inconvenience of focus blocks when quick collaboration is needed.",
+        "rationale": "Profile A mentions the initial inconvenience of focus blocks despite their overall benefit for concentration."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise follows the content brief closely, highlighting different workplace changes and personal experiences.",
+      "style_card_notes": "The profiles are distinct yet comparable, with natural and differentiated voices as per the style card.",
+      "british_english_notes": "British English is consistently used throughout the profiles and questions.",
+      "factuality_notes": "No factual inaccuracies are present, as the scenarios are plausible and do not make unverifiable claims.",
+      "answer_validity_notes": "Each question has a single, defendable answer based on the provided profiles.",
+      "self_check_flags": []
+    },
+    "_word_count": 342
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

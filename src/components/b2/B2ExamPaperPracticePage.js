@@ -1060,6 +1060,7 @@ function B2ExamPaperPracticePageInner({
       partNumber,
       progressBySlot: scoring.progressBySlot,
       bypassStarGating: skillNav.bypassStarGating,
+      maxExamSlot: skillNav.maxExamSlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -4745,6 +4746,7 @@ function B2ExamPaperPracticePageInner({
 
       {!(selectedPart && selectedQuestion && useListeningItemLayout) ? moduleNavEl : null}
       </PracticeChrome>
+      {skillNav.planUpgradeModal}
     </B2ExamPracticeLayout>
   );
 }

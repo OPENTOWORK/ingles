@@ -1,0 +1,161 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 8,
+  "generated_at": "2026-08-12T17:05:27.811Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-001",
+  "brief_version": "1.0",
+  "style_card_id": "SC-01",
+  "style_card_version": "v1.0",
+  "working_title": "When animals solve a new problem",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 4935,
+    "completion_tokens": 991,
+    "total_tokens": 5926
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 197 outside 150–180",
+      "answer letter A appears more than 3 times"
+    ],
+    "warnings": [],
+    "word_count": 197
+  },
+  "exercise": {
+    "part_title": "Part 1",
+    "instructions": "For questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap.",
+    "text_title": "When animals solve a new problem",
+    "passage_with_gaps": "Imagine a bird trying to reach a piece of food placed just out of its (0) ____. The bird might first try to stretch its neck, but when that fails, it may look around for a tool to help. This kind of behaviour is (1) ____ because it shows the bird is not just following an instinctive pattern but is instead adapting to a new situation.\n\nWhen animals encounter a problem, they often have to decide whether to repeat a familiar action or to (2) ____ their behaviour. For example, a monkey might try several different methods to open a container before it (3) ____ succeeds. This trial-and-error approach (4) ____ that the animal is learning from its environment and adjusting its actions accordingly.\n\nResearch into animal behaviour has shown that memory, attention to surroundings, and trial-and-error are all important (5) ____ in solving new problems. Animals that can (6) ____ these abilities tend to be more successful in overcoming challenges. Observers look for signs of flexible problem-solving, such as an animal (7) ____ a different approach after an initial failure.\n\nThis flexibility is what makes animal behaviour so fascinating to researchers. It suggests that animals are capable of more than just automatic responses, as they can (8) ____ their actions based on the situation.",
+    "example": {
+      "number": 0,
+      "options": {
+        "A": "reach",
+        "B": "hold",
+        "C": "grasp",
+        "D": "touch"
+      },
+      "answer": "A",
+      "explanation": "The phrase 'reach a piece of food' requires the word 'reach' to complete the idea of trying to get to something just out of reach."
+    },
+    "questions": [
+      {
+        "number": 1,
+        "options": {
+          "A": "remarkable",
+          "B": "ordinary",
+          "C": "predictable",
+          "D": "common"
+        },
+        "answer": "A",
+        "lexical_focus": "remarkable",
+        "rationale": "The word 'remarkable' fits because it highlights that the bird's behaviour is notable and not just routine."
+      },
+      {
+        "number": 2,
+        "options": {
+          "A": "alter",
+          "B": "maintain",
+          "C": "repeat",
+          "D": "copy"
+        },
+        "answer": "A",
+        "lexical_focus": "alter",
+        "rationale": "The context suggests the animal needs to change its behaviour, making 'alter' the appropriate choice."
+      },
+      {
+        "number": 3,
+        "options": {
+          "A": "eventually",
+          "B": "immediately",
+          "C": "quickly",
+          "D": "instantly"
+        },
+        "answer": "A",
+        "lexical_focus": "eventually",
+        "rationale": "The use of 'eventually' implies a process of trial-and-error before success, aligning with the context."
+      },
+      {
+        "number": 4,
+        "options": {
+          "A": "proves",
+          "B": "indicates",
+          "C": "denies",
+          "D": "ignores"
+        },
+        "answer": "B",
+        "lexical_focus": "indicates",
+        "rationale": "'Indicates' is suitable as it suggests the behaviour shows evidence of learning without claiming absolute proof."
+      },
+      {
+        "number": 5,
+        "options": {
+          "A": "factors",
+          "B": "elements",
+          "C": "aspects",
+          "D": "features"
+        },
+        "answer": "A",
+        "lexical_focus": "factors",
+        "rationale": "'Factors' is the most appropriate term for components that contribute to problem-solving."
+      },
+      {
+        "number": 6,
+        "options": {
+          "A": "combine",
+          "B": "separate",
+          "C": "isolate",
+          "D": "divide"
+        },
+        "answer": "A",
+        "lexical_focus": "combine",
+        "rationale": "'Combine' fits because it describes bringing together different abilities to solve a problem."
+      },
+      {
+        "number": 7,
+        "options": {
+          "A": "attempting",
+          "B": "avoiding",
+          "C": "ignoring",
+          "D": "rejecting"
+        },
+        "answer": "A",
+        "lexical_focus": "attempting",
+        "rationale": "'Attempting' is correct as it describes trying a new approach after a failure."
+      },
+      {
+        "number": 8,
+        "options": {
+          "A": "adjust",
+          "B": "predict",
+          "C": "imitate",
+          "D": "control"
+        },
+        "answer": "A",
+        "lexical_focus": "adjust",
+        "rationale": "'Adjust' is the best choice as it implies managing actions based on the situation."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The text follows the brief closely, explaining animal problem-solving with a focus on flexibility and adaptation.",
+      "style_card_notes": "The text aligns with the 'Curiosity & Explanatory Article' style, maintaining an accessible and engaging tone.",
+      "british_english_notes": "British English is consistently used throughout the text.",
+      "factuality_notes": "The text avoids specific claims about studies or results, adhering to the brief's factuality guidelines.",
+      "answer_validity_notes": "Each question has one clear, defendable answer, with plausible distractors.",
+      "self_check_flags": [
+        "answer letter A appears more than 3 times",
+        "word_count 197 outside 150–180"
+      ]
+    },
+    "_word_count": 197
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

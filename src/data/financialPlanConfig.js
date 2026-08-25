@@ -16,7 +16,7 @@ const STARTER_LEGACY_PLAN = {
   duracion_dias: 30,
   descripcionCorta: 'Para estudiantes que quieren progresar de forma constante.',
   descripcion:
-    'A2 y B1 completos, exámenes ilimitados en esos niveles, corrección Writing básica y 20 consultas Dralo AI al día.',
+    'A2 y B1 completos, exámenes ilimitados en esos niveles y 20 consultas Dralo Assistant al día.',
   badge: null,
   badgeVariant: null,
   recommended: false,
@@ -26,9 +26,7 @@ const STARTER_LEGACY_PLAN = {
   highlights: [
     'Acceso completo a A2 y B1',
     'Exámenes ilimitados A2 y B1',
-    'Corrección Writing básica',
-    '20 consultas Dralo AI al día',
-    'Placement Test',
+    '20 consultas Dralo Assistant al día',
   ],
   entitlements: {
     levels: ['a2', 'b1'],
@@ -39,6 +37,7 @@ const STARTER_LEGACY_PLAN = {
     speakingCoach: false,
     draloAiDaily: 20,
     writingCorrectionMonthly: 10,
+    speakingCorrectionMonthly: 1,
     speakingMissionsDaily: 10,
     progressTracking: 'basic',
     priorityAccess: false,
@@ -55,7 +54,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 36500,
     descripcionCorta: 'Empieza a aprender inglés gratis.',
     descripcion:
-      'Acceso a A2, B1 y B2, 1 examen mensual, Writing Correction (3/mes), Speaking Coach (5 misiones/día) y 3 consultas Dralo AI al día.',
+      'Nivel B2 disponible, 1 examen mensual, Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes. A2 y B1 próximamente.',
     badge: null,
     badgeVariant: null,
     recommended: false,
@@ -63,13 +62,13 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     orden: 0,
     activo: true,
     highlights: [
-      'Acceso completo a A2, B1 y B2',
+      'Nivel B2',
+      'A2 y B1: próximamente',
       '1 examen mensual',
-      'Writing Correction: 3/mes',
-      'Speaking Coach: 5 misiones/día',
-      '3 consultas Dralo AI al día',
-      'Placement Test',
-      'Seguimiento de progreso básico',
+      'Writing Correction: 1/mes',
+      'Speaking Correction: 1/mes',
+      '3 consultas Dralo Assistant al mes',
+      'Soporte prioritario: hasta 72h',
     ],
     entitlements: {
       levels: ['a2', 'b1', 'b2'],
@@ -77,11 +76,13 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       placementTest: true,
       writingBasic: true,
       writingAdvanced: false,
-      speakingCoach: true,
-      draloAiDaily: 3,
-      writingCorrectionMonthly: 3,
-      speakingMissionsDaily: 5,
-      progressTracking: 'basic',
+      speakingCoach: false,
+      draloAiDaily: null,
+      draloAiMonthly: 3,
+      writingCorrectionMonthly: 1,
+      speakingCorrectionMonthly: 1,
+      speakingMissionsDaily: 0,
+      progressTracking: 'none',
       priorityAccess: false,
       prioritySupport: false,
     },
@@ -89,12 +90,13 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   {
     slug: 'premium',
     nombre: 'PLUS',
-    precio: 9.99,
-    precioLabel: '9,99€/mes',
+    precio: 7.99,
+    precioLista: 9.99,
+    precioLabel: '7,99€/mes',
     duracion_dias: 30,
     descripcionCorta: 'La opción más popular para preparar exámenes y mejorar rápidamente.',
     descripcion:
-      'Todos los niveles A2–C2, 10 exámenes mensuales, Writing Correction (10/mes), Speaking Coach (10 misiones/día) y 30 consultas Dralo AI al día.',
+      'Nivel B2, 10 exámenes mensuales, Writing Correction (10/mes), Speaking Correction (10/mes), corrección Writing avanzada y 30 consultas Dralo Assistant al día. A2, B1, C1 y C2 próximamente.',
     badge: '🏆 MÁS POPULAR',
     badgeVariant: 'popular',
     recommended: true,
@@ -102,13 +104,15 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     orden: 1,
     activo: true,
     highlights: [
-      'Acceso completo a A2, B1, B2, C1 y C2',
+      'Nivel B2',
+      'A2, B1, C1 y C2: próximamente',
       '10 exámenes mensuales',
       'Writing Correction: 10/mes',
-      'Speaking Coach: 10 misiones/día',
-      'Corrección avanzada de Writing',
-      '30 consultas Dralo AI al día',
-      'Seguimiento de progreso avanzado',
+      'Speaking Correction: 10/mes',
+      'Corrección Writing avanzada',
+      '30 consultas Dralo Assistant al día',
+      'Seguimiento de progreso',
+      'Soporte prioritario: hasta 48h',
     ],
     entitlements: {
       levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
@@ -116,9 +120,10 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       placementTest: true,
       writingBasic: true,
       writingAdvanced: true,
-      speakingCoach: true,
+      speakingCoach: false,
       draloAiDaily: 30,
       writingCorrectionMonthly: 10,
+      speakingCorrectionMonthly: 10,
       speakingMissionsDaily: 10,
       progressTracking: 'advanced',
       priorityAccess: false,
@@ -129,11 +134,12 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     slug: 'pro',
     nombre: 'PREMIUM',
     precio: 14.99,
+    precioLista: 17.99,
     precioLabel: '14,99€/mes',
     duracion_dias: 30,
     descripcionCorta: 'La experiencia más completa para preparar exámenes al máximo nivel.',
     descripcion:
-      'Todo lo de Plus con más Writing Correction (20/mes), Speaking Coach (20 misiones/día), 60 consultas Dralo AI al día, exámenes ilimitados y soporte prioritario.',
+      'Todo lo de Plus con exámenes, Writing Correction, Speaking Correction y consultas Dralo Assistant incluidos sin límite, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h). Speaking Coach próximamente.',
     badge: '🚀 MEJOR VALOR',
     badgeVariant: 'value',
     recommended: false,
@@ -141,12 +147,17 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     orden: 2,
     activo: true,
     highlights: [
-      'Acceso completo a A2, B1, B2, C1 y C2',
-      'Exámenes ilimitados',
-      'Writing Correction: 20/mes',
-      'Speaking Coach: 20 misiones/día',
-      '60 consultas Dralo AI al día',
-      'Seguimiento avanzado y soporte prioritario',
+      'Nivel B2',
+      'A2, B1, C1 y C2: próximamente',
+      'Exámenes mensuales',
+      'Writing Correction',
+      'Speaking Correction',
+      'Corrección Writing avanzada',
+      'Speaking Coach: próximamente',
+      'Consultas Dralo Assistant',
+      'Acceso prioritario a nuevas funciones',
+      'Seguimiento de progreso',
+      'Soporte prioritario: hasta 24h',
     ],
     entitlements: {
       levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
@@ -155,8 +166,9 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       writingBasic: true,
       writingAdvanced: true,
       speakingCoach: true,
-      draloAiDaily: 60,
-      writingCorrectionMonthly: 20,
+      draloAiDaily: null,
+      writingCorrectionMonthly: null,
+      speakingCorrectionMonthly: null,
       speakingMissionsDaily: 20,
       progressTracking: 'advanced',
       priorityAccess: true,
@@ -165,20 +177,99 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   },
 ];
 
+/** Valor de celda para funciones anunciadas pero todavía no disponibles. */
+export const COMING_SOON = 'coming-soon';
+
+/** Descuento al facturar anualmente (mostrado en /precios y vista previa admin). */
+export const ANNUAL_BILLING_DISCOUNT_PERCENT = 25;
+
+/** @param {'monthly'|'annual'} billingCycle */
+export function getPlanMonthlyPrice(plan, billingCycle = 'monthly') {
+  const base = Number(plan?.precio) || 0;
+  if (base <= 0) return 0;
+  if (billingCycle === 'annual') {
+    return base * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
+  }
+  return base;
+}
+
+/** Precio de lista / futuro (tachado en marketing). null si no aplica. */
+export function getPlanListPrice(plan, billingCycle = 'monthly') {
+  const n = Number(plan?.precioLista);
+  if (!(n > 0)) return null;
+  if (billingCycle === 'annual') {
+    return n * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
+  }
+  return n;
+}
+
+/** % de descuento actual respecto al precio de lista (mismo ciclo de facturación). */
+export function getPlanListDiscountPercent(plan, billingCycle = 'monthly') {
+  const list = getPlanListPrice(plan, billingCycle);
+  const price = getPlanMonthlyPrice(plan, billingCycle);
+  if (!list || list <= price) return null;
+  return Math.round(((list - price) / list) * 100);
+}
+
+export function formatEuroAmount(amount) {
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+  }).format(Number(amount) || 0);
+}
+
+/** @param {'monthly'|'annual'} billingCycle */
+export function formatPlanPriceAmount(plan, billingCycle = 'monthly') {
+  const monthly = getPlanMonthlyPrice(plan, billingCycle);
+  if (monthly <= 0) return '0€';
+  return formatEuroAmount(monthly);
+}
+
+/** @param {'monthly'|'annual'} billingCycle */
+export function formatPlanPriceLabel(plan, billingCycle = 'monthly') {
+  const monthly = getPlanMonthlyPrice(plan, billingCycle);
+  if (monthly <= 0) return '0€';
+  return `${formatPlanPriceAmount(plan, billingCycle)}/mes`;
+}
+
+/** Total anual facturado de una vez (precio mensual con descuento × 12). */
+export function formatPlanAnnualTotal(plan) {
+  const total = getPlanMonthlyPrice(plan, 'annual') * 12;
+  return new Intl.NumberFormat('es-ES', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+  }).format(total);
+}
+
 /** Filas de la tabla comparativa (✅ / ❌ primero, luego texto). */
 export const PLAN_COMPARISON_ROWS = [
-  { id: 'price', label: 'Precio', type: 'text', values: { free: '0€', premium: '9,99€/mes', pro: '14,99€/mes' } },
-  { id: 'a2', label: 'Nivel A2', type: 'bool', values: { free: true, premium: true, pro: true } },
-  { id: 'b1', label: 'Nivel B1', type: 'bool', values: { free: true, premium: true, pro: true } },
-  { id: 'b2', label: 'Nivel B2', type: 'bool', values: { free: true, premium: true, pro: true } },
-  { id: 'c1', label: 'Nivel C1', type: 'bool', values: { free: false, premium: true, pro: true } },
-  { id: 'c2', label: 'Nivel C2', type: 'bool', values: { free: false, premium: true, pro: true } },
-  { id: 'placement', label: 'Placement Test', type: 'bool', values: { free: true, premium: true, pro: true } },
+  { id: 'price', label: 'Precio', type: 'text', values: { free: '0€', premium: '7,99€/mes', pro: '14,99€/mes' } },
   {
-    id: 'writing-basic',
-    label: 'Corrección Writing básica',
+    id: 'a2',
+    label: 'Nivel A2',
     type: 'bool',
-    values: { free: true, premium: true, pro: true },
+    values: { free: COMING_SOON, premium: COMING_SOON, pro: COMING_SOON },
+  },
+  {
+    id: 'b1',
+    label: 'Nivel B1',
+    type: 'bool',
+    values: { free: COMING_SOON, premium: COMING_SOON, pro: COMING_SOON },
+  },
+  { id: 'b2', label: 'Nivel B2', type: 'bool', values: { free: true, premium: true, pro: true } },
+  {
+    id: 'c1',
+    label: 'Nivel C1',
+    type: 'bool',
+    values: { free: false, premium: COMING_SOON, pro: COMING_SOON },
+  },
+  {
+    id: 'c2',
+    label: 'Nivel C2',
+    type: 'bool',
+    values: { free: false, premium: COMING_SOON, pro: COMING_SOON },
   },
   {
     id: 'writing-advanced',
@@ -195,38 +286,50 @@ export const PLAN_COMPARISON_ROWS = [
   {
     id: 'priority-support',
     label: 'Soporte prioritario',
-    type: 'bool',
-    values: { free: false, premium: false, pro: true },
+    type: 'text',
+    values: { free: 'Hasta 72h', premium: 'Hasta 48h', pro: 'Hasta 24h' },
   },
   {
     id: 'exams',
     label: 'Exámenes mensuales',
     type: 'text',
-    values: { free: '1', premium: '10 exámenes al mes', pro: 'Ilimitados' },
+    values: { free: '1', premium: '10 exámenes al mes', pro: true },
   },
   {
     id: 'writing-correction',
     label: 'Writing Correction',
     type: 'text',
-    values: { free: '3/mes', premium: '10/mes', pro: '20/mes' },
+    values: { free: '1/mes', premium: '10/mes', pro: true },
+  },
+  {
+    id: 'speaking-correction',
+    label: 'Speaking Correction',
+    type: 'text',
+    values: { free: '1/mes', premium: '10/mes', pro: true },
   },
   {
     id: 'speaking',
-    label: 'Speaking Coach',
+    label: 'Dralo AI',
     type: 'text',
-    values: { free: '5 misiones/día', premium: '10 misiones/día', pro: '20 misiones/día' },
+    values: { free: false, premium: false, pro: COMING_SOON },
+  },
+  {
+    id: 'exam-strategies',
+    label: 'Exam Strategies',
+    type: 'text',
+    values: { free: false, premium: false, pro: COMING_SOON },
   },
   {
     id: 'dralo-ai',
-    label: 'Consultas Dralo AI',
+    label: 'Consultas Dralo Assistant',
     type: 'text',
-    values: { free: '3/día', premium: '30/día', pro: '60/día' },
+    values: { free: '3/mes', premium: '30/día', pro: true },
   },
   {
     id: 'progress',
     label: 'Seguimiento de progreso',
     type: 'text',
-    values: { free: 'Básico', premium: 'Avanzado', pro: 'Avanzado' },
+    values: { free: false, premium: true, pro: true },
   },
 ];
 
@@ -281,13 +384,13 @@ const PROFILE_PLAN_DISPLAY = {
   free: {
     descripcionCorta: 'Start learning English for free.',
     highlights: [
-      'Full access to A2, B1 and B2',
+      'Level B2',
+      'A2 and B1: coming soon',
       '1 exam per month',
-      'Writing Correction: 3/month',
-      'Speaking Coach: 5 missions/day',
-      '3 Dralo AI queries per day',
-      'Placement Test',
-      'Basic progress tracking',
+      'Writing Correction: 1/month',
+      'Speaking Correction: 1/month',
+      '3 Dralo Assistant queries per month',
+      'Priority support: within 72h',
     ],
     badge: null,
   },
@@ -297,34 +400,41 @@ const PROFILE_PLAN_DISPLAY = {
       'Full access to A2 and B1',
       'Unlimited A2 and B1 exams',
       'Writing Correction: 10/month',
-      'Speaking Coach: 10 missions/day',
-      '20 Dralo AI queries per day',
-      'Placement Test',
+      'Speaking Correction: 1/month',
+      'Speaking Coach: coming soon',
+      '20 Dralo Assistant queries per day',
     ],
     badge: null,
   },
   premium: {
     descripcionCorta: 'The most popular option to prepare for exams and improve quickly.',
     highlights: [
-      'Full access to A2, B1, B2, C1 and C2',
+      'Level B2',
+      'A2, B1, C1 and C2: coming soon',
       '10 exams per month',
       'Writing Correction: 10/month',
-      'Speaking Coach: 10 missions/day',
+      'Speaking Correction: 10/month',
       'Advanced Writing correction',
-      '30 Dralo AI queries per day',
-      'Advanced progress tracking',
+      '30 Dralo Assistant queries per day',
+      'Progress tracking',
+      'Priority support: within 48h',
     ],
     badge: 'Most popular',
   },
   pro: {
     descripcionCorta: 'The most complete experience with the highest daily limits.',
     highlights: [
-      'Full access to A2, B1, B2, C1 and C2',
-      'Unlimited exams',
-      'Writing Correction: 20/month',
-      'Speaking Coach: 20 missions/day',
-      '60 Dralo AI queries per day',
-      'Advanced tracking and priority support',
+      'Level B2',
+      'A2, B1, C1 and C2: coming soon',
+      'Monthly exams',
+      'Writing Correction',
+      'Speaking Correction',
+      'Advanced Writing correction',
+      'Speaking Coach: coming soon',
+      'Dralo Assistant queries',
+      'Priority access to new features',
+      'Progress tracking',
+      'Priority support: within 24h',
     ],
     badge: 'Best value',
   },

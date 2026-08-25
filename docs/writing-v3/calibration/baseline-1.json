@@ -1,0 +1,2398 @@
+{
+  "baseline_id": "baseline-1",
+  "generated_at": "2026-08-11T18:25:27.871Z",
+  "engine_version": "3.0.0",
+  "schema_version": "1.0.0",
+  "prompt_versions": {
+    "task_analysis": "1.0.0",
+    "observation_assessment": "1.0.0",
+    "cambridge_assessment": "1.0.0",
+    "feedback_composition": "1.0.0"
+  },
+  "model_config": {
+    "model": "gpt-4o-2024-08-06",
+    "snapshot_id": "gpt-4o-2024-08-06",
+    "temperature": 0,
+    "response_format": "json_schema"
+  },
+  "status": "complete",
+  "missing_source_cases": [],
+  "runnable_cases": 12,
+  "case_results": [
+    {
+      "case_id": "G-01",
+      "label": "Environmental essay A",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate A examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-01",
+        "expected_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "expected_total": 13,
+        "actual_total": 13,
+        "exact_profile_match": true,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 4,
+            "actual": 4,
+            "match": true
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          }
+        ],
+        "exact_criteria_matched": 4
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Use clear paragraphing and logical connectors to guide the reader through the argument.\"",
+        "assessment: content: the evidence quote \"First of all a huge damage to the environment brings a transport.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 132100,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 765,
+          "output_tokens": 216,
+          "total_tokens": 981,
+          "latency_ms": 3575,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlSF9k4NXYcGgkhYIvUyENKF6fwP",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3340,
+          "output_tokens": 2380,
+          "total_tokens": 5720,
+          "latency_ms": 30486,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlSIXtGHIeuOhYe3YnjbGogqeAXB",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3340,
+          "output_tokens": 2187,
+          "total_tokens": 5527,
+          "latency_ms": 31998,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlSnbH1T1FfyIGmhMF891bXtEBPL",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3340,
+          "output_tokens": 2201,
+          "total_tokens": 5541,
+          "latency_ms": 29694,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlTJTPTFuRjt2IKH0BlM7hKjFwrk",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5872,
+          "output_tokens": 1411,
+          "total_tokens": 7283,
+          "latency_ms": 11758,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlTmJ4W58YNDVjWKI9CijwBUjcKc",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5872,
+          "output_tokens": 1501,
+          "total_tokens": 7373,
+          "latency_ms": 12422,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlTyfYx4O8cMUku8wDYyYNcwrgIN",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-01",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5872,
+          "output_tokens": 1463,
+          "total_tokens": 7335,
+          "latency_ms": 12135,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlUBp2q6LzM1OB5aSMuV7dWQKoU5",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [],
+      "error": "content: the evidence quote \"First of all a huge damage to the environment brings a transport.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-02",
+      "label": "Environmental essay B",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate B examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-02",
+        "expected_marks": {
+          "content": 3,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 3,
+          "communicative_achievement": 2,
+          "organisation": 2,
+          "language": 2
+        },
+        "expected_total": 12,
+        "actual_total": 9,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          },
+          {
+            "criterion": "organisation",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 1
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "assessment: content: the evidence quote \"We have big problems with transport because there are too much cars in our country.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 3,
+      "latency_ms": 83408,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-02",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 765,
+          "output_tokens": 220,
+          "total_tokens": 985,
+          "latency_ms": 2774,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlUNDzYBrAMOfnaxdwMcL62Wa3v7",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-02",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3413,
+          "output_tokens": 2236,
+          "total_tokens": 5649,
+          "latency_ms": 30586,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlUPMKAnlbKVnB5cP7kpHVXtoopj",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-02",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6841,
+          "output_tokens": 1573,
+          "total_tokens": 8414,
+          "latency_ms": 13723,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlUu13OmMScUT7r52e3R2542Ye1d",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-02",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6841,
+          "output_tokens": 1653,
+          "total_tokens": 8494,
+          "latency_ms": 21877,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlVH0Bxkj5JKbrfJDaVaZsJHXXH9",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-02",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6841,
+          "output_tokens": 1705,
+          "total_tokens": 8546,
+          "latency_ms": 14429,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlVUJJ7txwDWcBY3Nx4BI0xFT8BE",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-02",
+          "criterion": "communicative_achievement",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-02",
+          "criterion": "organisation",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-02",
+          "criterion": "language",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"We have big problems with transport because there are too much cars in our country.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-03",
+      "label": "Environmental essay C",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate C examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-03",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 5,
+          "organisation": 4,
+          "language": 5
+        },
+        "actual_marks": {
+          "content": 5,
+          "communicative_achievement": 4,
+          "organisation": 4,
+          "language": 4
+        },
+        "expected_total": 19,
+        "actual_total": 17,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 5,
+            "match": true
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 5,
+            "actual": 4,
+            "match": false
+          },
+          {
+            "criterion": "organisation",
+            "expected": 4,
+            "actual": 4,
+            "match": true
+          },
+          {
+            "criterion": "language",
+            "expected": 5,
+            "actual": 4,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 2
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Expand on each point with specific examples or data. For instance, explain how electric transport reduces emissions, provide examples of successful river clean-up projects, or suggest specific actions individuals can take to reduce waste.\"",
+        "assessment: content: the evidence quote \"Investing on electrical transport would benefit the environment a lot.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 106649,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-03",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 765,
+          "output_tokens": 218,
+          "total_tokens": 983,
+          "latency_ms": 3214,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlViiNVcnXIfg7roosUlnGsnpxun",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-03",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3364,
+          "output_tokens": 1424,
+          "total_tokens": 4788,
+          "latency_ms": 21400,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlVlEEjVkmIcsRO5Wfe3qDW7jbJY",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-03",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3364,
+          "output_tokens": 1357,
+          "total_tokens": 4721,
+          "latency_ms": 20021,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlW7qWKGQjM96ygxiT1YJckZwT5H",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-03",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3364,
+          "output_tokens": 1416,
+          "total_tokens": 4780,
+          "latency_ms": 19528,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlWREjkX6hcS4u7t89m1l6J39Kxz",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-03",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5896,
+          "output_tokens": 1573,
+          "total_tokens": 7469,
+          "latency_ms": 14188,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlWkPnibs4EknPriD7nFwBvhqnx2",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-03",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5896,
+          "output_tokens": 1497,
+          "total_tokens": 7393,
+          "latency_ms": 14123,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlWyWagloHn0h0EgP0zdNowRN0Ql",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-03",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5896,
+          "output_tokens": 1544,
+          "total_tokens": 7440,
+          "latency_ms": 14168,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlXDtAGDtPIKNUCEakQLLFarC9YF",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-03",
+          "criterion": "communicative_achievement",
+          "expected_mark": 5,
+          "actual_mark": 4,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-03",
+          "criterion": "language",
+          "expected_mark": 5,
+          "actual_mark": 4,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"Investing on electrical transport would benefit the environment a lot.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-04",
+      "label": "Book review D",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate D examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-04",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 5,
+          "communicative_achievement": 4,
+          "organisation": 3,
+          "language": 3
+        },
+        "expected_total": 14,
+        "actual_total": 15,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 5,
+            "match": true
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 4,
+            "match": false
+          },
+          {
+            "criterion": "organisation",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          }
+        ],
+        "exact_criteria_matched": 3
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"facilities\"",
+        "assessment: content: the evidence quote \"the prince rejected it and decided to leave the palace instead.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 111373,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-04",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 793,
+          "output_tokens": 272,
+          "total_tokens": 1065,
+          "latency_ms": 4998,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlXRWEFI6Mztdk0i5vTjShHeoszm",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-04",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3369,
+          "output_tokens": 1821,
+          "total_tokens": 5190,
+          "latency_ms": 23631,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlXWy7DzU9I6cfDmQnmajaBmcZPj",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-04",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3369,
+          "output_tokens": 1904,
+          "total_tokens": 5273,
+          "latency_ms": 30621,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlXuBKiKQWoiKybXpF3Qi3CtrkV1",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-04",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3369,
+          "output_tokens": 1770,
+          "total_tokens": 5139,
+          "latency_ms": 19734,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlYOqyzGBQCiyUtWCa4fIf3SpGqh",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-04",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5888,
+          "output_tokens": 1210,
+          "total_tokens": 7098,
+          "latency_ms": 10528,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlYiXRnCsPcMzpolwED9YLUEt1Eo",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-04",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5888,
+          "output_tokens": 1233,
+          "total_tokens": 7121,
+          "latency_ms": 9257,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlYsro64ZmLl67426bEGlwn9TF2N",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-04",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5888,
+          "output_tokens": 1187,
+          "total_tokens": 7075,
+          "latency_ms": 12595,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlZ1jlBszuczS8103Rc4rheWyviz",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-04",
+          "criterion": "communicative_achievement",
+          "expected_mark": 3,
+          "actual_mark": 4,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"the prince rejected it and decided to leave the palace instead.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-05",
+      "label": "Useful-thing article E",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate E examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-05",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 2
+        },
+        "expected_total": 14,
+        "actual_total": 13,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 5,
+            "match": true
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 3
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Separate the text into clear paragraphs, each focusing on a specific point or idea.\"",
+        "assessment: content: the evidence quote \"The most useful thing i have learned is surely speaking English.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 152864,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-05",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 757,
+          "output_tokens": 179,
+          "total_tokens": 936,
+          "latency_ms": 3233,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlZFfAF3kz1gkdJst0NwAA1aCNUQ",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-05",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3472,
+          "output_tokens": 2421,
+          "total_tokens": 5893,
+          "latency_ms": 36808,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlZIoUCGvXJu0sFIfYIZ7nmm74X0",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-05",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3472,
+          "output_tokens": 3281,
+          "total_tokens": 6753,
+          "latency_ms": 38502,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlZsogYYqGPEpQjNWYIU5PFWdS3E",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-05",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3472,
+          "output_tokens": 3074,
+          "total_tokens": 6546,
+          "latency_ms": 39064,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlaV7cFYgj4SHfnVqjCYCFUGxUEZ",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-05",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5989,
+          "output_tokens": 1368,
+          "total_tokens": 7357,
+          "latency_ms": 10903,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlb8tInjVAspBIMkAbSLuGaTt2FR",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-05",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5989,
+          "output_tokens": 1282,
+          "total_tokens": 7271,
+          "latency_ms": 10934,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlbJkcfoxFKiA2q7w9oh7vFJev0O",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-05",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5989,
+          "output_tokens": 1527,
+          "total_tokens": 7516,
+          "latency_ms": 13410,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlbUU6VYRwnRFnWwaZ1aNzSTgDie",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-05",
+          "criterion": "language",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"The most useful thing i have learned is surely speaking English.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-06",
+      "label": "Informal email F",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook digital Candidate F examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-06",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 4,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 2
+        },
+        "expected_total": 15,
+        "actual_total": 13,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 5,
+            "match": true
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 4,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 2
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "assessment: content: the evidence quote \"My area includes also beautiful Baltic Sea which many tourist visit especially in summer.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 3,
+      "latency_ms": 69414,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-06",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 780,
+          "output_tokens": 229,
+          "total_tokens": 1009,
+          "latency_ms": 3593,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlbhrmz1Z4aM2SlfJ13EbgYnUbY6",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-06",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3352,
+          "output_tokens": 2071,
+          "total_tokens": 5423,
+          "latency_ms": 23733,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlblibqkdyB97wOMSA5SjQ1NMw7P",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-06",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6430,
+          "output_tokens": 1207,
+          "total_tokens": 7637,
+          "latency_ms": 16955,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlc8kS2b1D8rMJRaPHr0runZodrX",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-06",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6430,
+          "output_tokens": 1256,
+          "total_tokens": 7686,
+          "latency_ms": 13587,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlcQmI4zCCEFgSekwbdy0B0HsdUE",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-06",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6430,
+          "output_tokens": 1214,
+          "total_tokens": 7644,
+          "latency_ms": 11535,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlcdzQ8WvvBDR1nr0w9XEUxPaNEO",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-06",
+          "criterion": "organisation",
+          "expected_mark": 4,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-06",
+          "criterion": "language",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"My area includes also beautiful Baltic Sea which many tourist visit especially in summer.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-07",
+      "label": "Fashion essay A",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook paper Candidate A examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-07",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 2,
+          "organisation": 2,
+          "language": 2
+        },
+        "actual_marks": {
+          "content": 3,
+          "communicative_achievement": 3,
+          "organisation": 2,
+          "language": 2
+        },
+        "expected_total": 11,
+        "actual_total": 10,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 2,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "organisation",
+            "expected": 2,
+            "actual": 2,
+            "match": true
+          },
+          {
+            "criterion": "language",
+            "expected": 2,
+            "actual": 2,
+            "match": true
+          }
+        ],
+        "exact_criteria_matched": 2
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "assessment: content: the evidence quote \"the appearance of the person is more important than the person itself.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 3,
+      "latency_ms": 73005,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-07",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 768,
+          "output_tokens": 201,
+          "total_tokens": 969,
+          "latency_ms": 4129,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlcoH9nGGtsLi1IjuA8fOGZvQJO4",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-07",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3255,
+          "output_tokens": 2064,
+          "total_tokens": 5319,
+          "latency_ms": 30042,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlcsid2U7BEA5BCJIFbA6MApW6ng",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-07",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6613,
+          "output_tokens": 1392,
+          "total_tokens": 8005,
+          "latency_ms": 13836,
+          "provider_metadata": {
+            "id": "chatcmpl-EBldNjx2jS3M2eLgFHqwDDHFhMVib",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-07",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6613,
+          "output_tokens": 1486,
+          "total_tokens": 8099,
+          "latency_ms": 14671,
+          "provider_metadata": {
+            "id": "chatcmpl-EBldaC0nlwUrYRe97xSMvaYpOZxBm",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-07",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6613,
+          "output_tokens": 1412,
+          "total_tokens": 8025,
+          "latency_ms": 10315,
+          "provider_metadata": {
+            "id": "chatcmpl-EBldpZoAki1BNFUH2xrRWmwtuFN0h",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-07",
+          "criterion": "content",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-07",
+          "criterion": "communicative_achievement",
+          "expected_mark": 2,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"the appearance of the person is more important than the person itself.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-08",
+      "label": "Fashion essay B",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook paper Candidate B examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-08",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 4,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "expected_total": 15,
+        "actual_total": 13,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 4,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 4,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          }
+        ],
+        "exact_criteria_matched": 2
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Use clear paragraphing and transitions to separate and connect ideas logically.\"",
+        "assessment: content: the evidence quote \"We shouldn’t judge people for its appearance, because that is not important.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 133960,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-08",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 768,
+          "output_tokens": 201,
+          "total_tokens": 969,
+          "latency_ms": 2873,
+          "provider_metadata": {
+            "id": "chatcmpl-EBldz5hjcRoRiqgufeW650Ta9ULEq",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-08",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3286,
+          "output_tokens": 2210,
+          "total_tokens": 5496,
+          "latency_ms": 29702,
+          "provider_metadata": {
+            "id": "chatcmpl-EBle3YqTbt2fPjpRpxcfC7xlnu2RI",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-08",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3286,
+          "output_tokens": 2453,
+          "total_tokens": 5739,
+          "latency_ms": 38961,
+          "provider_metadata": {
+            "id": "chatcmpl-EBleWuucBlTD1HjodaFylbWsNGqEc",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-08",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3286,
+          "output_tokens": 2465,
+          "total_tokens": 5751,
+          "latency_ms": 28552,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlf9Cr6xHrB1036rgi8lXmrzNglE",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-08",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5821,
+          "output_tokens": 1368,
+          "total_tokens": 7189,
+          "latency_ms": 10448,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlfbKcYlf1SoeROT2USb5avAan7R",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-08",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5821,
+          "output_tokens": 1365,
+          "total_tokens": 7186,
+          "latency_ms": 11851,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlfmG6Rcj6mbpoJTA1fHClZLBYaY",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-08",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5821,
+          "output_tokens": 1416,
+          "total_tokens": 7237,
+          "latency_ms": 11562,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlfytls1jh8ZCUHNERE6XiKCya0C",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-08",
+          "criterion": "content",
+          "expected_mark": 5,
+          "actual_mark": 4,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-08",
+          "criterion": "organisation",
+          "expected_mark": 4,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"We shouldn’t judge people for its appearance, because that is not important.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-09",
+      "label": "Fashion essay C",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook paper Candidate C examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-09",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 5,
+          "organisation": 5,
+          "language": 5
+        },
+        "actual_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 3
+        },
+        "expected_total": 20,
+        "actual_total": 13,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 4,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "organisation",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 5,
+            "actual": 3,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 0
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Expand on each content point with specific examples or arguments. For instance, discuss how societal pressure on appearance affects individuals or provide examples of how high clothing prices impact different demographics.\"",
+        "assessment: content: the evidence quote \"people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 122473,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 768,
+          "output_tokens": 201,
+          "total_tokens": 969,
+          "latency_ms": 3211,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlgA3p9wAzO21vrXHTuoDnjIYhLx",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3378,
+          "output_tokens": 1468,
+          "total_tokens": 4846,
+          "latency_ms": 22009,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlgDMMUbbG3x0Zvh0jgpQHFa6dds",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3378,
+          "output_tokens": 1458,
+          "total_tokens": 4836,
+          "latency_ms": 20534,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlgZPA7fpoxkhQCtEoEyBHSpNDly",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3378,
+          "output_tokens": 1998,
+          "total_tokens": 5376,
+          "latency_ms": 27109,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlgtgR38M3VZv05TpR2gEuvmJbLf",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5913,
+          "output_tokens": 1574,
+          "total_tokens": 7487,
+          "latency_ms": 18031,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlhKmLQZAmasmwVr9qxUUUV4EF2T",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5913,
+          "output_tokens": 1484,
+          "total_tokens": 7397,
+          "latency_ms": 16897,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlhcD1dLlFIEzswrxQA89HpNHfJ9",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-09",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5913,
+          "output_tokens": 1582,
+          "total_tokens": 7495,
+          "latency_ms": 14675,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlhtlxoPbkfBGlQQEjAo7rA09VwE",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-09",
+          "criterion": "content",
+          "expected_mark": 5,
+          "actual_mark": 4,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "communicative_achievement",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "organisation",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-09",
+          "criterion": "language",
+          "expected_mark": 5,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-10",
+      "label": "Technology report D",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook paper Candidate D examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-10",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 4,
+          "organisation": 4,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 5,
+          "communicative_achievement": 4,
+          "organisation": 4,
+          "language": 3
+        },
+        "expected_total": 16,
+        "actual_total": 16,
+        "exact_profile_match": true,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 5,
+            "match": true
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 4,
+            "actual": 4,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 4,
+            "actual": 4,
+            "match": true
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          }
+        ],
+        "exact_criteria_matched": 4
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Ensure all headings and the title follow a consistent capitalization style, such as capitalizing the first letter of each major word.\"",
+        "assessment: content: the evidence quote \"The majority of the people claimed that the best thing were computers and interactive boards.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 109149,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-10",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 806,
+          "output_tokens": 254,
+          "total_tokens": 1060,
+          "latency_ms": 3811,
+          "provider_metadata": {
+            "id": "chatcmpl-EBli8IKekfF9T4MPBOUV3nbqyY2zZ",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-10",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3400,
+          "output_tokens": 1579,
+          "total_tokens": 4979,
+          "latency_ms": 18011,
+          "provider_metadata": {
+            "id": "chatcmpl-EBliC7rfoeio7QRuHxikeif1RXCxm",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-10",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3400,
+          "output_tokens": 1726,
+          "total_tokens": 5126,
+          "latency_ms": 20004,
+          "provider_metadata": {
+            "id": "chatcmpl-EBliUWw0f8wM0rekxCYtZ02OhMurJ",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-10",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3400,
+          "output_tokens": 2070,
+          "total_tokens": 5470,
+          "latency_ms": 27460,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlioLtCigVjITAOoq2iUWEtSgAOO",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-10",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5918,
+          "output_tokens": 1390,
+          "total_tokens": 7308,
+          "latency_ms": 14666,
+          "provider_metadata": {
+            "id": "chatcmpl-EBljFpKpNzifcPctSAvEXM2oP6UF7",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-10",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5918,
+          "output_tokens": 1373,
+          "total_tokens": 7291,
+          "latency_ms": 13214,
+          "provider_metadata": {
+            "id": "chatcmpl-EBljUbOQ98hjSp6ZFFLfrHmsKPaIg",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-10",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5918,
+          "output_tokens": 1423,
+          "total_tokens": 7341,
+          "latency_ms": 11976,
+          "provider_metadata": {
+            "id": "chatcmpl-EBljhg8JUexG1RSdxMRvdoB8IQuWR",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [],
+      "error": "content: the evidence quote \"The majority of the people claimed that the best thing were computers and interactive boards.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-11",
+      "label": "Music article E",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "167791 handbook paper Candidate E examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-11",
+        "expected_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 2,
+          "language": 2
+        },
+        "actual_marks": {
+          "content": 3,
+          "communicative_achievement": 3,
+          "organisation": 2,
+          "language": 2
+        },
+        "expected_total": 11,
+        "actual_total": 10,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 4,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 2,
+            "actual": 2,
+            "match": true
+          },
+          {
+            "criterion": "language",
+            "expected": 2,
+            "actual": 2,
+            "match": true
+          }
+        ],
+        "exact_criteria_matched": 3
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "observation: a suggested change would alter the learner's meaning: \"Organise the text into clear paragraphs, each focusing on a specific aspect of music listening habits.\"",
+        "assessment: content: the evidence quote \"When the bus is taking me to school I listen to the music so I could wake up.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 6,
+      "latency_ms": 125242,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-11",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 750,
+          "output_tokens": 180,
+          "total_tokens": 930,
+          "latency_ms": 2369,
+          "provider_metadata": {
+            "id": "chatcmpl-EBljtcIv0yzAZIlpVdpktsty6n948",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-11",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3396,
+          "output_tokens": 2184,
+          "total_tokens": 5580,
+          "latency_ms": 25262,
+          "provider_metadata": {
+            "id": "chatcmpl-EBljwVfskiLpGjGxPTw8pGjyD3jOs",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-11",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3396,
+          "output_tokens": 2395,
+          "total_tokens": 5791,
+          "latency_ms": 27425,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlkLIdoOCqGPZN29xOO12cBLxwxf",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-11",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3396,
+          "output_tokens": 2339,
+          "total_tokens": 5735,
+          "latency_ms": 29470,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlkm2h8D4NlDnrThTpKiUcuD7QB0",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-11",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5904,
+          "output_tokens": 1421,
+          "total_tokens": 7325,
+          "latency_ms": 14540,
+          "provider_metadata": {
+            "id": "chatcmpl-EBllGWI0YEXD19cGQ22nMA7z9xiCL",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-11",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5904,
+          "output_tokens": 1395,
+          "total_tokens": 7299,
+          "latency_ms": 14095,
+          "provider_metadata": {
+            "id": "chatcmpl-EBllUAt1uaIsAg0vQqslkNyk1gp0X",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-11",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 5904,
+          "output_tokens": 1411,
+          "total_tokens": 7315,
+          "latency_ms": 12070,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlliwNmRf1DvrCjdEi9bAr4gO5xh",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-11",
+          "criterion": "content",
+          "expected_mark": 4,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"When the bus is taking me to school I listen to the music so I could wake up.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    },
+    {
+      "case_id": "G-12",
+      "label": "Course review F",
+      "runnable": true,
+      "source_verification": {
+        "task_prompt": "verified",
+        "candidate_response": "verified",
+        "marks_source": "182410 sample answers 2015 Question 4 Candidate F examiner marks"
+      },
+      "comparison": {
+        "case_id": "G-12",
+        "expected_marks": {
+          "content": 5,
+          "communicative_achievement": 3,
+          "organisation": 4,
+          "language": 3
+        },
+        "actual_marks": {
+          "content": 4,
+          "communicative_achievement": 3,
+          "organisation": 3,
+          "language": 2
+        },
+        "expected_total": 15,
+        "actual_total": 12,
+        "exact_profile_match": false,
+        "same_total_wrong_profile": false,
+        "criterion_comparisons": [
+          {
+            "criterion": "content",
+            "expected": 5,
+            "actual": 4,
+            "match": false
+          },
+          {
+            "criterion": "communicative_achievement",
+            "expected": 3,
+            "actual": 3,
+            "match": true
+          },
+          {
+            "criterion": "organisation",
+            "expected": 4,
+            "actual": 3,
+            "match": false
+          },
+          {
+            "criterion": "language",
+            "expected": 3,
+            "actual": 2,
+            "match": false
+          }
+        ],
+        "exact_criteria_matched": 1
+      },
+      "validation_status": "failed",
+      "validation_failures": [
+        "assessment: content: the evidence quote \"The most interesting thing that I learned was how to prepare a theater play, and it was fantastic.\" is not present in the candidate response"
+      ],
+      "assessment_confidence": null,
+      "retries": 3,
+      "latency_ms": 78166,
+      "usage": [
+        {
+          "stage": "task_analysis",
+          "case_id": "G-12",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 805,
+          "output_tokens": 194,
+          "total_tokens": 999,
+          "latency_ms": 3211,
+          "provider_metadata": {
+            "id": "chatcmpl-EBllvnQi49SrRoiGuXlJEDc7o5NPN",
+            "system_fingerprint": "fp_684acb85fd",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "observation",
+          "case_id": "G-12",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 3282,
+          "output_tokens": 3441,
+          "total_tokens": 6723,
+          "latency_ms": 39064,
+          "provider_metadata": {
+            "id": "chatcmpl-EBllx1DVi5mlUEGgZY8txJTTFuHRk",
+            "system_fingerprint": "fp_f73b165a23",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-12",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6784,
+          "output_tokens": 1239,
+          "total_tokens": 8023,
+          "latency_ms": 11698,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlmbvf0KOCKneDqzqeqgMP6T2mIi",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-12",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6784,
+          "output_tokens": 1326,
+          "total_tokens": 8110,
+          "latency_ms": 12114,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlmnW9rYT5zIh4OLJgulx3yMSb1g",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        },
+        {
+          "stage": "assessment",
+          "case_id": "G-12",
+          "attempt": 1,
+          "requested_model": "gpt-4o-2024-08-06",
+          "actual_model": "gpt-4o-2024-08-06",
+          "input_tokens": 6784,
+          "output_tokens": 1458,
+          "total_tokens": 8242,
+          "latency_ms": 12055,
+          "provider_metadata": {
+            "id": "chatcmpl-EBlmybQk7CelmYsp9HMg95XDPO2Rf",
+            "system_fingerprint": "fp_d5ebb74607",
+            "finish_reason": "stop"
+          }
+        }
+      ],
+      "diagnostics": [
+        {
+          "case_id": "G-12",
+          "criterion": "content",
+          "expected_mark": 5,
+          "actual_mark": 4,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-12",
+          "criterion": "organisation",
+          "expected_mark": 4,
+          "actual_mark": 3,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        },
+        {
+          "case_id": "G-12",
+          "criterion": "language",
+          "expected_mark": 3,
+          "actual_mark": 2,
+          "positive_evidence": [],
+          "limiting_evidence": [],
+          "why_not_higher": "(raw model marks; assessment record failed validation)",
+          "why_not_lower": "(raw model marks; assessment record failed validation)",
+          "source_rule_ids": [],
+          "evidence_quotes": [],
+          "task_analysis_appears_correct": null,
+          "mismatch_origin": "unknown"
+        }
+      ],
+      "error": "content: the evidence quote \"The most interesting thing that I learned was how to prepare a theater play, and it was fantastic.\" is not present in the candidate response",
+      "task_analysis_status": "complete",
+      "assessment_status": "incomplete"
+    }
+  ],
+  "aggregate": {
+    "exact_profiles_matched": 2,
+    "total_cases": 12,
+    "exact_criterion_marks_matched": 27,
+    "total_criterion_marks": 48,
+    "content_accuracy": 0.5833333333333334,
+    "communicative_achievement_accuracy": 0.5833333333333334,
+    "organisation_accuracy": 0.5833333333333334,
+    "language_accuracy": 0.5,
+    "mean_absolute_mark_deviation": {
+      "content": 0.5,
+      "communicative_achievement": 0.5,
+      "organisation": 0.5,
+      "language": 0.5833333333333334
+    },
+    "same_total_wrong_profile_cases": [],
+    "validation_failures": 12,
+    "retry_failures": 0
+  }
+}

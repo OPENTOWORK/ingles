@@ -1,0 +1,24 @@
+-- Writing Engine v3 (DRALO) — persistencia y procedencia. Fase 7 del Documento 07.
+--
+-- NO EJECUTAR TODAVÍA EN PRODUCCIÓN. Esta migración se revisa antes de aplicarse.
+-- Cuando se apruebe: ejecutar en el SQL Editor de Supabase (entorno de staging primero).
+--
+-- Reglas de oro de esta migración:
+--
+--  1. No toca ninguna tabla existente. No hay ALTER TABLE ni DROP TABLE sobre
+--     levels_puntuaciones, Levels_stars, levels_estadisticas, user_error_tracker,
+--     levels_preguntas ni ai_usage_logs. El rollback es DROP de las 8 tablas nuevas.
+--  2. Las 8 tablas writing_* son append-only: un reintento o una re-evaluación crea
+--     una EJECUCIÓN nueva; nunca se reescribe la anterior.
+--  3. Las escribe exclusivamente el servidor con service role key (que salta RLS).
+--     `authenticated` solo tiene SELECT de sus propias filas. Ningún cliente puede
+--     insertar notas Cambridge, falsear un user_id ni borrar historial de corrección.
+--  4. No hay columna de CEFR, ni de aprobado/pass, ni de readiness, ni de umbral 12/20.
+--     `validation_status` describe la SALIDA DEL MOTOR, nunca al alumno.
+--
+-- Referencias deliberadamente ausentes: las columnas pregunta_id / examen_id /
+-- parte_numero son uuid/smallint SIN foreign key a levels_preguntas. Una FK cambiaría
+-- el comportamiento de borrado de una tabla existente, y sobre todo el histórico debe
+-- sobrevivir a la edición o al borrado de la pregunta: por eso se guarda el SNAPSHOT
+-- del enunciado, no un puntero a él.
+

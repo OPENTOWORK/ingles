@@ -20,14 +20,28 @@ export {
 };
 
 export function getDraloAiDailyLimit(planSlug) {
-  const plan = getPlanBySlug(planSlug);
-  const n = plan.entitlements.draloAiDaily;
+  const e = getPlanBySlug(planSlug).entitlements;
+  if (e.draloAiDaily == null) {
+    // Planes con cupo mensual (p. ej. FREE) no tienen límite diario.
+    return e.draloAiMonthly != null ? 0 : Infinity;
+  }
+  return e.draloAiDaily;
+}
+
+export function getDraloAiMonthlyLimit(planSlug) {
+  const n = getPlanBySlug(planSlug).entitlements.draloAiMonthly;
   return n == null ? Infinity : n;
 }
 
 export function getWritingCorrectionMonthlyLimit(planSlug) {
   const plan = getPlanBySlug(planSlug);
   const n = plan.entitlements.writingCorrectionMonthly;
+  return n == null ? Infinity : n;
+}
+
+export function getSpeakingCorrectionMonthlyLimit(planSlug) {
+  const plan = getPlanBySlug(planSlug);
+  const n = plan.entitlements.speakingCorrectionMonthly;
   return n == null ? Infinity : n;
 }
 

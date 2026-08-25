@@ -1,0 +1,704 @@
+DRALO
+
+RUOE STYLE CARDS
+
+B2 Reading and Use of English · Consolidated pilot revision
+
+Version 1.1 · 14 August 2026
+
+
+
+1. Version 1.1 status
+
+Version 1.1 preserves the editorial mechanisms of v1.0 and incorporates repeatable findings from the first two pilot exams. The changes focus on naturalness, title quality, anti-filler behaviour and the separation between genre guidance and Part mechanics.
+
+Priority rule
+
+The global Editorial Quality Standard v1.0 applies to every card. If a valid Part mechanic conflicts with natural prose, redesign the item locally rather than forcing the prose.
+
+
+
+2. Global additions to all Style Cards
+
+• Natural British English means idiomatic, genre-appropriate wording, not merely grammatically possible wording.
+
+• Every paragraph must advance the text. Repeated conclusions and filler are not acceptable ways to reach length.
+
+• Exercise mechanics must remain invisible: the prose should still read naturally when gaps/questions are mentally removed.
+
+• Titles are generated editorially, not copied or lightly paraphrased from the Content Brief.
+
+• Generate at least three title candidates internally and avoid recently repeated title-pattern families.
+
+• Part-specific rules, including Part 6 sentence extraction, live in the Part prompt/validator layer rather than inside the Style Card.
+
+3. Cards
+
+
+
+SC-01 · Curiosity & Explanatory Article
+
+Field
+
+Value
+
+Status
+
+Pilot-revised · Ready for second validation
+
+Language
+
+British English
+
+Level
+
+CEFR B2
+
+Compatible Parts
+
+Parts 1, 2, 3, 5, 6
+
+
+
+Naturalness & editorial voice · v1.1
+
+• Explanations should use ordinary, precise verbs and concrete mechanisms; avoid pseudo-scientific abstraction.
+
+• Curiosity must come from the phenomenon, not from inflated wording.
+
+• Do not invent sophisticated metaphors merely to make the text sound advanced.
+
+Title strategy · v1.1
+
+Preferred title families: curiosity question; surprising observation; concrete phenomenon; short contrast.
+
+• Do not use the Content Brief working title as the final title by default.
+
+• Do not reveal the full conclusion of the text in the title.
+
+• Avoid repeating the same syntactic title frame across neighbouring exams.
+
+• Choose the final title only after the full text is stable.
+
+Existing v1.0 editorial mechanism · retained
+
+Typical opening
+
+• Begin with a familiar observation, surprising fact, accessible question or apparent contradiction.
+
+• Create an immediate knowledge gap: the reader should understand what is interesting before receiving the explanation.
+
+• Avoid opening with a dry definition unless the definition itself is surprising or necessary.
+
+Content progression
+
+• Move from the familiar phenomenon to the underlying explanation.
+
+• Introduce one or more concrete examples, mechanisms, observations or pieces of evidence.
+
+• Where useful, present an initial assumption and then refine, complicate or correct it.
+
+• Build paragraphs so each one answers a new part of the reader’s implicit question rather than restating the same idea.
+
+• For short Parts 1–3, compress this into a miniature arc: hook → explanation → one concrete development → meaningful closing point.
+
+What gives it real substance
+
+• A precise phenomenon rather than a broad theme.
+
+• Specific mechanisms, causes, consequences or contrasts.
+
+• Concrete examples that make the explanation memorable.
+
+• Careful factuality: plausible general explanations are acceptable, but invented studies, institutions, statistics or quotations are not.
+
+Tone / voice
+
+Accessible, intelligent and curious. Neutral-to-engaged rather than textbook-like. The writer sounds interested in explaining something to a general reader, not lecturing them.
+
+Typical ending
+
+• Close by resolving the initial curiosity, revealing a wider implication, or showing why the phenomenon matters.
+
+• An effective final sentence may slightly broaden the perspective, but should not become generic advice or a moral.
+
+Avoid
+
+• Encyclopaedia-style lists of facts with no progression.
+
+• Overloading the text with technical terminology.
+
+• Generic openings such as 'Nowadays, X is very important'.
+
+• Unsupported claims presented as research findings.
+
+• Repeating the same explanatory point in different wording.
+
+• Turning an explanation into self-help.
+
+References used
+
+5.2 — Birth order – does it make any difference?. Strong model of question-led explanation, competing ideas, evidence and a conclusion that remains intellectually open rather than simplistic.
+
+2.2 — Amazing fungi!. Compact curiosity-led explanation: familiar object → hidden reality → striking example → current area of interest.
+
+3.2 — The grass-eating shark. Uses a surprising natural phenomenon, competing explanations and concrete biological detail to sustain curiosity.
+
+
+
+SC-02 · Trend & Social Report
+
+Field
+
+Value
+
+Status
+
+Pilot-revised · Ready for second validation
+
+Language
+
+British English
+
+Level
+
+CEFR B2
+
+Compatible Parts
+
+Parts 1, 2, 3, 5, 6
+
+
+
+Naturalness & editorial voice · v1.1
+
+• Use clear magazine/reporting prose rather than institutional or corporate language.
+
+• Abstract trends must be grounded in people, actions, settings and practical consequences.
+
+• Prefer direct verbs over strings of nominalisations.
+
+Title strategy · v1.1
+
+Preferred title families: current observation; understated contrast; concrete social image; concise trend statement.
+
+• Do not use the Content Brief working title as the final title by default.
+
+• Do not reveal the full conclusion of the text in the title.
+
+• Avoid repeating the same syntactic title frame across neighbouring exams.
+
+• Choose the final title only after the full text is stable.
+
+Existing v1.0 editorial mechanism · retained
+
+Typical opening
+
+• Start from a recognisable change, emerging practice, new concern or contrast between past and present.
+
+• Show the social relevance immediately: what people are doing differently, what is becoming common, or what problem is attracting attention.
+
+• The opening can use a concrete scene or example before widening to the trend.
+
+Content progression
+
+• Establish the trend or change clearly.
+
+• Explain drivers, motivations or conditions behind it.
+
+• Develop consequences, benefits, drawbacks or different reactions.
+
+• Add one or two concrete cases, settings or stakeholder perspectives to prevent abstraction.
+
+• End with an implication, unresolved tension or realistic direction of travel rather than a sweeping prediction.
+
+What gives it real substance
+
+• Observable change over time or contrast between groups/contexts.
+
+• Specific behaviours and consequences, not vague claims about 'society'.
+
+• Balanced tensions: convenience vs cost, innovation vs unintended effect, popularity vs drawback, etc.
+
+• Concrete examples that make the trend visible at human scale.
+
+Tone / voice
+
+Magazine/reporting voice: informed, current-feeling and readable. Balanced rather than promotional or alarmist. May include mild interpretive commentary while remaining grounded.
+
+Typical ending
+
+• Close on what the trend means in practice, what remains uncertain, or how people/institutions are adapting.
+
+• Avoid absolute predictions. A small unresolved question or tension often works better.
+
+Avoid
+
+• Invented percentages or surveys merely to make the text sound authoritative.
+
+• Technology-is-good / technology-is-bad simplifications.
+
+• Trend pieces with no people, settings or consequences.
+
+• Overusing 'more and more people' without showing what has actually changed.
+
+• Journalistic sensationalism or moral panic.
+
+References used
+
+6.2 — Mini forests. A social/environmental innovation presented through concept, practical implementation, community relevance and wider benefits.
+
+5.2 — Birth order – does it make any difference?. Useful for showing how established social beliefs can be tested and revised through newer evidence.
+
+1.2 — Breaking bad habits. Compact social/behavioural explanation built around a common assumption, expert perspective and practical implication.
+
+
+
+SC-03 · Personal Reflective Experience
+
+Field
+
+Value
+
+Status
+
+Pilot-revised · Ready for second validation
+
+Language
+
+British English
+
+Level
+
+CEFR B2
+
+Compatible Parts
+
+Parts 1, 2, 3, 5, 6
+
+
+
+Naturalness & editorial voice · v1.1
+
+• First-person reflection should sound like a real person recounting an experience, not a management report or therapy summary.
+
+• Prefer natural everyday collocations; reflection must arise from concrete events.
+
+• Avoid repeated ‘I realised / this experience taught me / this made me see’ conclusions.
+
+Title strategy · v1.1
+
+Preferred title families: personal realisation; specific object/moment; understated contrast; short first-person hook.
+
+• Do not use the Content Brief working title as the final title by default.
+
+• Do not reveal the full conclusion of the text in the title.
+
+• Avoid repeating the same syntactic title frame across neighbouring exams.
+
+• Choose the final title only after the full text is stable.
+
+Existing v1.0 editorial mechanism · retained
+
+Typical opening
+
+• Open from a personal situation, habit, expectation or decision that gives the reader a concrete starting point.
+
+• Signal the narrator’s attitude early, but leave room for that attitude to change.
+
+• Small personal details are preferable to a generic autobiographical introduction.
+
+Content progression
+
+• Set up the narrator’s initial expectation or normal behaviour.
+
+• Introduce an experience, obstacle, discovery or contradiction.
+
+• Show the narrator reacting, adapting or reassessing.
+
+• Use concrete episodes rather than summarising the whole experience abstractly.
+
+• Finish with what changed in the narrator’s view, behaviour or sense of value.
+
+What gives it real substance
+
+• Specific moments, choices, frustrations, surprises and sensory or situational detail.
+
+• A clear before/after contrast in perspective.
+
+• Self-awareness: the narrator can admit uncertainty, embarrassment, mistaken assumptions or mixed feelings.
+
+• Reflection should grow out of events; it should not be pasted on as a life lesson.
+
+Tone / voice
+
+Natural first-person magazine voice. Conversational but controlled; reflective without sounding therapeutic. Light humour, self-deprecation and small asides are welcome when natural.
+
+Typical ending
+
+• Close on a changed perspective, earned satisfaction, lingering question or concrete intention.
+
+• The ending should feel specific to the experience, not like a universal motivational slogan.
+
+Avoid
+
+• Generic 'this taught me to never give up' morals.
+
+• Chronological diary-style listing with no change in perspective.
+
+• Overdramatic emotional language.
+
+• Perfect narrators who never make mistakes or reconsider anything.
+
+• Reflection that is not supported by concrete events.
+
+References used
+
+5.1 — My book collection. Excellent reflective arc: attachment → embarrassment/problem → attempted solution → rediscovery → more nuanced understanding of self and others.
+
+5.5 — My first summer job. Expectation versus reality, several concrete episodes, adaptation and a final moment where the narrator discovers a genuine strength.
+
+6.6 — The wild attraction of competitive fell running. Personal entry point, remembered first encounter, development into commitment and an explicit but experience-based explanation of why the activity matters.
+
+
+
+SC-04 · Narrative Story
+
+Field
+
+Value
+
+Status
+
+Pilot-revised · Ready for second validation
+
+Language
+
+British English
+
+Level
+
+CEFR B2
+
+Compatible Parts
+
+Parts 1, 2, 3, 5, 6
+
+
+
+Naturalness & editorial voice · v1.1
+
+• Keep narrative language concrete and economical; avoid literary-sounding phrasing that exceeds B2 or feels machine-generated.
+
+• Do not force a word-formation target or other item into a sentence if it damages natural narration.
+
+• Let actions and reactions carry meaning instead of explaining the moral repeatedly.
+
+Title strategy · v1.1
+
+Preferred title families: concrete object/place; turning-point hint; character-focused phrase; intriguing scene detail.
+
+• Do not use the Content Brief working title as the final title by default.
+
+• Do not reveal the full conclusion of the text in the title.
+
+• Avoid repeating the same syntactic title frame across neighbouring exams.
+
+• Choose the final title only after the full text is stable.
+
+Existing v1.0 editorial mechanism · retained
+
+Typical opening
+
+• Enter through a scene, action, concrete setting or character detail rather than background exposition.
+
+• Establish who matters, where we are and what kind of tension or desire is present.
+
+• Use selective detail that hints at character before explaining it explicitly.
+
+Content progression
+
+• Move through causally connected events rather than a list of facts.
+
+• Reveal character through decisions, reactions, dialogue, objects and contrasts.
+
+• Introduce a complication, obstacle, discovery or turning point.
+
+• Allow earlier details to acquire significance later.
+
+• End with consequence, changed situation, revealing reaction or a meaningful unresolved note.
+
+What gives it real substance
+
+• Specific physical setting and purposeful details.
+
+• Character motivation and viewpoint.
+
+• Cause-and-effect between events.
+
+• Small tensions, contrasts or setbacks that create forward movement.
+
+• For biographical narrative, select only episodes that contribute to the central arc.
+
+Tone / voice
+
+Immersive but B2-accessible. Concrete, economical and observant. Dialogue or interior judgement can be used sparingly. Description supports character/action rather than becoming ornamental.
+
+Typical ending
+
+• Close on a consequence or character-revealing moment rather than summarising the story.
+
+• In shorter narrative-biographical texts, the ending can show the resulting career/state, provided the route to it has been developed.
+
+Avoid
+
+• Backstory dumps before anything happens.
+
+• Too many named characters or subplots.
+
+• Artificial cliffhangers.
+
+• Decorative description with no narrative function.
+
+• Events that happen randomly without affecting the character.
+
+• Highly literary C1/C2 prose or difficult figurative density.
+
+References used
+
+5.3 — Roy Mason / beach-hut novel extract. Strong scene-led narrative voice: setting, objects and reactions reveal Roy’s values without explanatory exposition.
+
+1.4 — Adriano Spano’s story. Compressed biographical narrative built around desire, training, career movement and fulfilment of a long-held ambition.
+
+3.6 — A happy and successful chef. First-person career narrative with early motivation, obstacles, resourcefulness and a concrete outcome.
+
+
+
+SC-05 · Culture, Travel & Community Feature
+
+Field
+
+Value
+
+Status
+
+Pilot-revised · Ready for second validation
+
+Language
+
+British English
+
+Level
+
+CEFR B2
+
+Compatible Parts
+
+Parts 1, 2, 3, 5, 6
+
+
+
+Naturalness & editorial voice · v1.1
+
+• Use vivid but ordinary feature-writing; avoid logistics/corporate wording for travel and community experience.
+
+• Prefer specific sensory or practical detail to generic abstractions about atmosphere, culture or local life.
+
+• Do not use unnatural metaphors solely to raise apparent level.
+
+Title strategy · v1.1
+
+Preferred title families: place/detail hook; local image; unexpected contrast; experience-focused phrase.
+
+• Do not use the Content Brief working title as the final title by default.
+
+• Do not reveal the full conclusion of the text in the title.
+
+• Avoid repeating the same syntactic title frame across neighbouring exams.
+
+• Choose the final title only after the full text is stable.
+
+Existing v1.0 editorial mechanism · retained
+
+Typical opening
+
+• Anchor the reader quickly in a place, local activity, landmark or distinctive community practice.
+
+• Use one concrete feature—landscape, ritual, object, event or local behaviour—to make the setting immediate.
+
+• Where personal voice is used, connect the narrator’s reason for being there to the place itself.
+
+Content progression
+
+• Move from orientation to discovery: where/what → distinctive features → people or activity → meaning/impact.
+
+• Let the physical or cultural setting shape what happens rather than merely hosting unrelated content.
+
+• Combine descriptive detail with explanation, experience or community context.
+
+• Where appropriate, contrast visitor expectation with local reality or past with present.
+
+What gives it real substance
+
+• Place-specific details that could not simply be transplanted to any location.
+
+• Local practices, landscape, heritage, community relationships or practical constraints.
+
+• A human reason to care: identity, belonging, discovery, preservation, challenge, enjoyment or change.
+
+• Concrete details over tourist-brochure adjectives.
+
+Tone / voice
+
+Warm, observant feature-writing. Curious and respectful. Can be first-person or third-person. Descriptive passages remain controlled and functional at B2.
+
+Typical ending
+
+• Close by returning to the value of the place/activity, a changed perception, a community implication or a vivid final experience.
+
+• Avoid generic 'everyone should visit' conclusions.
+
+Avoid
+
+• Tourist-brochure language and strings of superlatives.
+
+• Generic travel descriptions that could describe anywhere.
+
+• Reducing cultures or communities to stereotypes.
+
+• Inventing heritage claims or local facts.
+
+• Description without progression or human relevance.
+
+References used
+
+6.1 — Touring round artworks – by bike!. Integrates travel/activity, landscape and public art so each location changes the experience and the writer’s interpretation.
+
+6.6 — The wild attraction of competitive fell running. The activity is inseparable from northern English landscape, local tradition, weather and community organisation.
+
+2.6 — A famous landmark in Australia / Uluru. Compact place-based text combining location, physical features, indigenous significance and current visitor behaviour.
+
+
+
+SC-06 · Multiple Profiles & Testimonies
+
+Field
+
+Value
+
+Status
+
+Pilot-revised · Ready for second validation
+
+Language
+
+British English
+
+Level
+
+CEFR B2
+
+Compatible Parts
+
+Part 7 only
+
+
+
+Naturalness & editorial voice · v1.1
+
+• Each voice should sound personally plausible rather than like four mini corporate case studies.
+
+• Questions must paraphrase evidence and should not repeat a decisive phrase from a profile.
+
+• Profiles may share vocabulary, but answerability must rely on meaning, attitude, cause, timing or consequence rather than word matching.
+
+Title strategy · v1.1
+
+Preferred title families: shared comparison frame; concise thematic phrase; question only when it genuinely aids comparison.
+
+• Do not use the Content Brief working title as the final title by default.
+
+• Do not reveal the full conclusion of the text in the title.
+
+• Avoid repeating the same syntactic title frame across neighbouring exams.
+
+• Choose the final title only after the full text is stable.
+
+Existing v1.0 editorial mechanism · retained
+
+Typical opening
+
+• Use a concise shared frame or title that makes the comparison domain clear.
+
+• Each profile should enter quickly through a distinctive personal fact, attitude, episode or problem rather than repeating the shared topic.
+
+• Profiles do not need identical openings; controlled variation helps voice differentiation.
+
+Content progression
+
+• Give each profile a self-contained mini-arc with 2–4 comparable dimensions.
+
+• Distribute overlapping concepts across profiles so questions require discrimination rather than keyword spotting.
+
+• Make some profiles share surface similarities while differing in cause, attitude, timing, motivation or consequence.
+
+• Ensure every profile contains multiple examinable ideas and that no single profile becomes obviously richer than the others.
+
+• Across the set, vary the order in which comparable dimensions appear.
+
+What gives it real substance
+
+• Concrete episodes and decisions unique to each person.
+
+• Distinctive attitude and evaluative language.
+
+• Comparable dimensions: expectations, obstacles, reactions, benefits, regrets, motivation, change, advice, relationships or outcomes.
+
+• Paraphrasable evidence: the question wording should not merely repeat the profile’s key words.
+
+Tone / voice
+
+Natural, differentiated voices. First person works especially well, but third-person mini-profiles are also valid. Each person should sound plausible without exaggerated dialect or caricature.
+
+Typical ending
+
+• Each profile should end on its own meaningful state: outcome, current view, consequence, reflection or next step.
+
+• Avoid giving all four profiles the same rhetorical ending or identical 'now I...' structure.
+
+Avoid
+
+• Four versions of the same story with names changed.
+
+• One profile containing nearly all the strong examinable material.
+
+• Obvious lexical matching between question and answer.
+
+• Artificially forcing every profile through the same paragraph template.
+
+• Voices differentiated only by superficial hobbies or demographic labels.
+
+• Contradictory or insufficient evidence for the matching questions.
+
+References used
+
+7.1 — Four people describe how they turned their hobbies into new careers. Excellent comparison set: common transformation theme, but different triggers, obstacles, confidence levels, commercial decisions and skill development.
+
+7.6 — What was university like for you?. Strong differentiated voices with overlapping dimensions—money, study, career, identity and mistakes—distributed in different combinations.
+
+7.5 — Four rising stars. Demonstrates third-person/quoted mini-profiles with distinct developmental paths, setbacks, expectations and chance opportunities.
+
+4. Pilot revalidation requirements
+
+• Regenerate a controlled pilot after the prompt/validator changes are implemented.
+
+• Check whether teachers still identify unnatural collocations or machine-like phrasing.
+
+• Check title variety across at least 6 new exercises, not one isolated example.
+
+• For Part 3, confirm natural language is not sacrificed to word formation.
+
+• For Parts 5 and 7, confirm questions require comprehension/paraphrase rather than literal matching.
+
+• For Part 6, evaluate the new Part 6 v2 architecture separately; its mechanics are not governed by the Style Card.
+

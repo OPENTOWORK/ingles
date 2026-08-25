@@ -61,16 +61,16 @@ export function getSkillExerciseNavState({
   partMax = null,
   progressBySlot = null,
   bypassStarGating = false,
+  maxExamSlot = 5,
 }) {
+  const unlockOpts = { bypassStarGating, maxExamSlot };
   const canGoPrevious = canGoToPreviousExercise(examSlot, examenIdBySlot);
   const nextSlot = getNextExamSlot(examSlot, examenIdBySlot);
   const pn = Number(partNumber);
   const hasPartRange = Number.isFinite(pn) && partMax != null && pn >= partMin;
 
   if (nextSlot != null) {
-    const unlocked = canGoToNextExercise(examSlot, examenIdBySlot, partNumber, progressBySlot, {
-      bypassStarGating,
-    });
+    const unlocked = canGoToNextExercise(examSlot, examenIdBySlot, partNumber, progressBySlot, unlockOpts);
     return {
       canGoPrevious,
       canGoNext: unlocked,
@@ -105,10 +105,12 @@ export function runKeepPracticingSkillFlow({
   partNumber = null,
   progressBySlot = null,
   bypassStarGating = false,
+  maxExamSlot = 5,
   onSelectExamSlot,
   onReturnToExercisePicker,
   onAdvanceToNextPart,
 }) {
+  const unlockOpts = { bypassStarGating, maxExamSlot };
   const nextSlot = getNextExamSlot(examSlot, examenIdBySlot);
   if (nextSlot != null) {
     const nextUnlocked = canGoToNextExercise(
@@ -116,7 +118,7 @@ export function runKeepPracticingSkillFlow({
       examenIdBySlot,
       partNumber,
       progressBySlot,
-      { bypassStarGating },
+      unlockOpts,
     );
     if (nextUnlocked) {
       onSelectExamSlot(nextSlot);

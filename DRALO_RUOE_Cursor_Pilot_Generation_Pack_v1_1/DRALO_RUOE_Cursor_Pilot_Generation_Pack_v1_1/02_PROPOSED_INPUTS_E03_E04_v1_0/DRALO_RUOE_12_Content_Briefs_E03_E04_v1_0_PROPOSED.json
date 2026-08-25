@@ -1,0 +1,1564 @@
+{
+  "batch_id": "RUOE-PILOT-02",
+  "status": "PROPOSED — AWAITING HUMAN APPROVAL",
+  "schema_source": "DRALO_RUOE_Content_Brief_System_v1_0",
+  "style_cards_version": "v1.1",
+  "topic_bank_version": "v1.1",
+  "distribution_rules_version": "v1.1",
+  "language": "British English",
+  "level": "B2",
+  "exams": ["RUOE-PILOT-E03", "RUOE-PILOT-E04"],
+  "generation_lock": "No Part may be generated from these briefs until editorial_status is 'Approved' for every brief and human approval is recorded (DR-20 HARD).",
+  "briefs": [
+    {
+      "brief_id": "CB-PILOT-013",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 1",
+      "brief_version": "1.0",
+      "topic_id": "TB-003",
+      "main_topic_id": "MT-08",
+      "main_topic": "Technology",
+      "subtopic_1_id": "ST-067",
+      "subtopic_1": "Social Media",
+      "subtopic_2_id": "ST-035",
+      "subtopic_2": "Health",
+      "style_card_id": "SC-02",
+      "style_card_version": "v1.1",
+      "style_card_name": "Trend & Social Report",
+      "working_title": "Fewer people, more often",
+      "content_angle": "A compact social report on a change in the way people manage social media: rather than leaving the platforms, many are narrowing them — muting accounts, moving conversations into small private groups, switching off notifications — and describing the result in terms of attention rather than wellbeing.",
+      "central_question": "What are people actually changing about the way they use social media, and what do they say they gain by it?",
+      "central_idea": "The visible shift is not withdrawal but a reduction of scale: users keep the tools and cut the audience, which changes what they see, how often they look and how they talk about the habit.",
+      "reader_takeaway": "This kind of habit change is about scale and control rather than about giving something up.",
+      "main_tension_or_contrast": "Wanting to stay in touch versus wanting to protect attention.",
+      "reader_interest_hook": "The people reducing their use are often the ones who post most confidently; the change is about audience, not enthusiasm.",
+      "content_purpose": "report",
+      "required_details": [
+        ["RD-01", "Open on one concrete small change a user has made: a notification switched off, a group conversation moved off a public feed.", "Makes the trend visible at human scale immediately.", "plausible_case"],
+        ["RD-02", "Name at least two distinct reasons people give for the change, such as interruption during work or discomfort with a wide audience, without attributing them to research.", "Explains why, not only what.", "general_factual"],
+        ["RD-03", "Show one observable consequence: checking less often, replying at greater length, forgetting to look for a day.", "Gives the report a measurable-sounding effect without inventing figures.", "plausible_case"],
+        ["RD-04", "Include one trade-off the same users admit to, such as missing an invitation or feeling out of touch with a wider circle.", "Prevents a one-sided report and creates lexical contrast.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "A brief contrast with how the same user behaved on the same platform a few years earlier."
+      ],
+      "protagonist_case_setting": "Unnamed general users in an ordinary British context; no named platforms, companies, organisations or public figures.",
+      "opening_strategy": "Begin with one specific action a user has taken. Do not open with a general statement about modern life or with the word 'Nowadays'.",
+      "content_progression": [
+        "Establish the change through one concrete behaviour.",
+        "Widen to the pattern: what is being reduced and what is deliberately kept.",
+        "Give the reasons users themselves offer.",
+        "Show what they say they notice as a result.",
+        "Close on what the change does not fix."
+      ],
+      "closing_function": "End on the limit of the change rather than on advice or a recommendation.",
+      "tone_and_voice": "Informed magazine reporting: observant, balanced, unhurried. No alarm and no advocacy.",
+      "point_of_view": "third_person",
+      "factuality_mode": "general_factual",
+      "fact_safety_notes": [
+        "Do not invent percentages, surveys, studies or expert quotations.",
+        "Do not name real platforms, companies or public figures.",
+        "Do not make clinical claims about mental health, adolescence or addiction."
+      ],
+      "why_this_fits_the_part": "Behaviour described in concrete verbs and prepositional phrases produces a short, natural text with dense lexical relationships at roughly 110–130 words, which is what Part 1 needs.",
+      "examinable_potential": "Supports collocation (cut down on, keep in touch with, take a break from), dependent prepositions (aware of, rely on, capable of), fixed expressions (in the long run, on purpose, at a time) and close semantic distinctions (notice / realise / observe; reduce / remove / avoid).",
+      "understanding_targets": [
+        "collocation",
+        "lexical meaning",
+        "dependent preposition",
+        "fixed expression",
+        "semantic distinction"
+      ],
+      "avoid": [
+        "Invented statistics or unattributed references to 'studies'.",
+        "A social-media-is-harmful argument.",
+        "Opening with 'Nowadays' or 'In today's world'.",
+        "Naming real platforms or applications.",
+        "Presenting the change as a wellness routine."
+      ],
+      "generic_filler_risks": [
+        "'More and more people are…' with no described behaviour.",
+        "Repeating that people spend too much time online."
+      ],
+      "likely_cliches": [
+        "'Digital detox'.",
+        "'Mindless scrolling'.",
+        "'Taking back control'."
+      ],
+      "potential_incoherences": [
+        "Describing users as having left the platforms while also describing what they now post there."
+      ],
+      "similarity_warnings": [
+        "Shares a technology-and-behaviour domain with CB-PILOT-020 (E04 Part 2). Angles are unrelated: managing an online audience versus provision of a physical transport service. Reviewed and accepted at map level."
+      ],
+      "factuality_risks": [
+        "Allowing plausible user reports to read as implied research findings."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "deliberate_platform_narrowing",
+        "progression_pattern": "change→drivers→effects→qualification",
+        "tension_tag": "connection_vs_attention",
+        "opening_mechanism": "specific_behaviour",
+        "ending_mechanism": "qualified_implication",
+        "protagonist_type": "general_users",
+        "setting_tag": "online",
+        "style_card_id": "SC-02"
+      },
+      "history_notes": [
+        "TB-003 unused in E01/E02. ST-067 and ST-035 both new to the system.",
+        "SC-02 has not previously been assigned to Part 1 (E01 SC-01, E02 SC-05)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Reviewer to confirm that the Social Media + Health pairing is acceptable under the pending Topic Bank sensitivity policy."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-014",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 2",
+      "brief_version": "1.0",
+      "topic_id": "TB-021",
+      "main_topic_id": "MT-10",
+      "main_topic": "Work",
+      "subtopic_1_id": "ST-009",
+      "subtopic_1": "Business",
+      "subtopic_2_id": "ST-023",
+      "subtopic_2": "Entrepreneurship",
+      "style_card_id": "SC-04",
+      "style_card_version": "v1.1",
+      "style_card_name": "Narrative Story",
+      "working_title": "The notebook with too many names in it",
+      "content_angle": "A compressed narrative in which a weekend favour — walking a neighbour's dog — has quietly become a round of eleven dogs, and the protagonist has to decide in a single afternoon whether to turn away a long-standing customer or bring somebody else in.",
+      "central_question": "What does the owner of a very small business lose at the moment it starts to need managing?",
+      "central_idea": "Growth arrives as a scheduling problem long before it arrives as an opportunity, and the real decision is how much of the original work the owner is prepared to stop doing herself.",
+      "reader_takeaway": "The turning point in a small venture is usually an ordinary administrative moment rather than a dramatic one.",
+      "main_tension_or_contrast": "Growing the round versus keeping control of the work itself.",
+      "reader_interest_hook": "She is good at the job and bad at saying no, and the notebook is the evidence.",
+      "content_purpose": "narrate",
+      "required_details": [
+        ["RD-01", "Open in scene on the notebook or diary and one specific countable clash: two walks written into the same hour.", "Gives an immediate concrete problem without exposition.", "plausible_fiction"],
+        ["RD-02", "Show one consequence that afternoon which follows directly from the clash.", "Creates cause and effect rather than a list of events.", "plausible_fiction"],
+        ["RD-03", "Include a short exchange with one customer that makes the choice unavoidable.", "Forces the decision through another person rather than through reflection.", "plausible_fiction"],
+        ["RD-04", "End on a decision that is acted on, not merely announced.", "Gives the narrative a consequence rather than a moral.", "plausible_fiction"]
+      ],
+      "optional_supporting_details": [
+        "One small physical detail that shows how long the round has existed, such as a worn lead or a route she no longer has to think about."
+      ],
+      "protagonist_case_setting": "An unnamed woman in her thirties in a British suburb; close third person; no company names or applications.",
+      "opening_strategy": "Enter on the physical object and the clash it reveals. Do not begin with how the business started.",
+      "content_progression": [
+        "The notebook and the double booking.",
+        "The afternoon goes wrong in one specific way.",
+        "The conversation with the customer.",
+        "The decision.",
+        "The first action that follows from it."
+      ],
+      "closing_function": "Close on the action taken, not on a reflection about running a business.",
+      "tone_and_voice": "Economical, observant and lightly wry; concrete British detail; dialogue used sparingly.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_fiction",
+      "fact_safety_notes": [
+        "Do not name real companies, booking applications or locations.",
+        "Do not give tax, licensing or insurance detail that would need to be accurate."
+      ],
+      "why_this_fits_the_part": "One protagonist, one afternoon and one chain of referents (the notebook, the round, the customer) produce strong grammatical cohesion — articles, pronouns, relatives, auxiliaries, linkers — inside 150–180 words.",
+      "examinable_potential": "The text naturally supplies contexts for prepositions, auxiliary and modal forms, relative words, determiners, comparative frames and fixed grammatical chunks, without the brief pre-designing any gap.",
+      "understanding_targets": [
+        "grammatical cohesion",
+        "reference",
+        "time relationships",
+        "functional linking"
+      ],
+      "avoid": [
+        "A business-advice or 'follow your dream' ending.",
+        "Backstory before anything happens.",
+        "A market-stall setting: already used in E01 Part 2.",
+        "A repair-and-reuse frame: already used in E01 Part 6.",
+        "An artificial crisis such as a lost or injured animal.",
+        "Naming a real application or company."
+      ],
+      "generic_filler_risks": [
+        "Listing the dogs.",
+        "Repeated statements that she is busy."
+      ],
+      "likely_cliches": [
+        "'She never looked back.'",
+        "'A leap of faith.'"
+      ],
+      "potential_incoherences": [
+        "Having her hire someone before the customer conversation that creates the need."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Implying specific legal or financial requirements for a small British business."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "growth_forces_a_choice",
+        "progression_pattern": "scene→pressure→turning_point→decision",
+        "tension_tag": "growth_vs_control",
+        "opening_mechanism": "scene_with_object",
+        "ending_mechanism": "decision_acted_on",
+        "protagonist_type": "small_business_owner",
+        "setting_tag": "suburban_neighbourhood",
+        "style_card_id": "SC-04"
+      },
+      "history_notes": [
+        "TB-021 unused in E01/E02. ST-009 and ST-023 both new to the system.",
+        "SC-04 has not previously been assigned to Part 2 (E01 SC-05, E02 SC-01)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human approval required before generation."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-015",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 3",
+      "brief_version": "1.0",
+      "topic_id": "TB-004",
+      "main_topic_id": "MT-06",
+      "main_topic": "Lifestyle",
+      "subtopic_1_id": "ST-038",
+      "subtopic_1": "Hobbies",
+      "subtopic_2_id": "ST-018",
+      "subtopic_2": "Daily Life",
+      "style_card_id": "SC-03",
+      "style_card_version": "v1.1",
+      "style_card_name": "Personal Reflective Experience",
+      "working_title": "Twenty minutes was the whole point",
+      "content_angle": "A first-person reflection on why an intended hobby — printmaking at a kitchen table — only survived once the narrator abandoned the two-hour version of it and accepted twenty minutes before work.",
+      "central_question": "Why do hobbies fail when there is nothing wrong with the hobby?",
+      "central_idea": "The obstacle was not time or interest but a private standard about what counted as properly doing it; shrinking the session changed the standard rather than the activity.",
+      "reader_takeaway": "An activity survives when its scale matches the day it actually has to live in.",
+      "main_tension_or_contrast": "Ambition for the activity versus the time genuinely available for it.",
+      "reader_interest_hook": "The equipment was never the problem, which did not stop the narrator buying more of it.",
+      "content_purpose": "reflect",
+      "required_details": [
+        ["RD-01", "Open on the unused equipment in its box, with one specific physical detail such as the smell of ink or a still-sealed packet of paper.", "Anchors the reflection in an object rather than a generalisation.", "plausible_case"],
+        ["RD-02", "State the narrator's original assumption about how long a session had to be, and where that assumption came from.", "Names the real obstacle explicitly.", "plausible_case"],
+        ["RD-03", "Describe the concrete occasion on which the shorter version happened by accident.", "Gives the change a cause instead of a resolution.", "plausible_case"],
+        ["RD-04", "Show one thing that genuinely improved and one thing that was genuinely given up.", "Keeps the reflection honest and creates contrast for derived forms.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "A short aside about how the narrator described the hobby to other people before and after the change."
+      ],
+      "protagonist_case_setting": "An unnamed narrator in a British flat; kitchen table and weekday mornings; first person throughout.",
+      "opening_strategy": "Begin with the abandoned object. Do not begin with a statement about busy modern lives.",
+      "content_progression": [
+        "The equipment in its box.",
+        "The assumed requirement: what a proper session was supposed to be.",
+        "Repeated failure to meet it.",
+        "The accidental short session.",
+        "What improved and what was lost.",
+        "The redefined standard."
+      ],
+      "closing_function": "End on the narrator's new measure of whether a session counted, not on advice to the reader.",
+      "tone_and_voice": "Natural first-person magazine voice; self-aware and lightly self-deprecating; controlled rather than confessional.",
+      "point_of_view": "first_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not present printmaking technique as instruction.",
+        "Do not name real suppliers, brands or courses."
+      ],
+      "why_this_fits_the_part": "Reflection on effort, standards and time produces nouns, adjectives, adverbs and negative forms in natural prose, so the passage can be written first and the derived forms selected from it afterwards.",
+      "examinable_potential": "Natural contexts for genuine derivational change across noun, adjective, adverb and verb, including at least one -ly adverb and one negative or prefixed form: unrealistic, unexpectedly, enjoyment, commitment, preparation, gradually, achievement, disappointment.",
+      "understanding_targets": [
+        "derivational morphology",
+        "word class",
+        "affixation",
+        "register control"
+      ],
+      "avoid": [
+        "A 'never give up' moral.",
+        "A productivity-hack tone or numbered advice.",
+        "Diary-style chronology with no change of perspective.",
+        "Forcing an abstract noun into a sentence that does not want one.",
+        "Any stem appearing in the passage in the same form as the answer."
+      ],
+      "generic_filler_risks": [
+        "Repeated statements that life is busy.",
+        "Listing materials."
+      ],
+      "likely_cliches": [
+        "'Making time for yourself.'",
+        "'Small steps.'"
+      ],
+      "potential_incoherences": [
+        "Claiming the narrator has no time while describing long evenings spent on something else."
+      ],
+      "similarity_warnings": [
+        "Adjacent in theme to CB-PILOT-009 (E02 Part 3, adult learner and a musical instrument). Differentiated deliberately: that brief is a narrative about performing for others; this one is a reflection about session length and private standards, with no audience and no performance."
+      ],
+      "factuality_risks": [],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "hobby_scaled_to_fit_time",
+        "progression_pattern": "assumption→failure→smaller_version→redefinition",
+        "tension_tag": "ambition_vs_available_time",
+        "opening_mechanism": "abandoned_object",
+        "ending_mechanism": "redefined_standard",
+        "protagonist_type": "hobbyist",
+        "setting_tag": "home_and_workday",
+        "style_card_id": "SC-03"
+      },
+      "history_notes": [
+        "TB-004 unused in E01/E02. ST-038 and ST-018 both new to the system.",
+        "SC-03 has not previously been assigned to Part 3 (E01 SC-02, E02 SC-04)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS_WITH_WARNINGS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Similarity warning recorded against CB-PILOT-009; reviewer to confirm the differentiation is sufficient."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-016",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 5",
+      "brief_version": "1.0",
+      "topic_id": "TB-026",
+      "main_topic_id": "MT-07",
+      "main_topic": "Science",
+      "subtopic_1_id": "ST-044",
+      "subtopic_1": "Inventions",
+      "subtopic_2_id": "ST-073",
+      "subtopic_2": "Technology",
+      "style_card_id": "SC-01",
+      "style_card_version": "v1.1",
+      "style_card_name": "Curiosity & Explanatory Article",
+      "working_title": "The tool nobody was asked to design",
+      "content_angle": "An explanatory article about why so many everyday tools end up doing work they were never designed for, built around one described-but-unnamed object that moved from a narrow industrial job into kitchens and workshops, and around one comparable object that never spread.",
+      "central_question": "Why do so many everyday objects end up doing a job nobody designed them for?",
+      "central_idea": "Wide adoption depends less on the inventor's intention than on three ordinary properties — the object is cheap, its working can be understood at a glance, and it fails harmlessly — because those properties let strangers experiment with it.",
+      "reader_takeaway": "The useful question about an invention is not what it was for, but what it made easy for other people to try.",
+      "main_tension_or_contrast": "Designed purpose versus actual use.",
+      "reader_interest_hook": "The objects we call well designed are often simply the ones that were safest to misuse.",
+      "content_purpose": "explain",
+      "required_details": [
+        ["RD-01", "Open by defamiliarising one ordinary object the reader will recognise, described by function and appearance rather than by brand or inventor.", "Creates a knowledge gap from something familiar.", "general_factual"],
+        ["RD-02", "Set out the narrow original problem the object was made to solve.", "Establishes the gap between intention and outcome.", "general_factual"],
+        ["RD-03", "Give two later uses in clearly different settings, with a concrete action in each.", "Shows transfer rather than asserting it.", "plausible_case"],
+        ["RD-04", "Identify the shared properties that made the transfer possible, and show how each one lowered the cost of trying.", "Supplies the explanatory mechanism.", "general_factual"],
+        ["RD-05", "Introduce one counter-case: a comparable, well-made object that did not spread, with a stated reason.", "Prevents a one-directional argument and grounds later distractors.", "plausible_case"],
+        ["RD-06", "Close by reframing what counts as a successful design.", "Completes the arc rather than summarising it.", "general_factual"]
+      ],
+      "optional_supporting_details": [
+        "A short observation about how the object's name changed as its use changed."
+      ],
+      "protagonist_case_setting": "No individual protagonist; makers and users described generically. Unnamed workshops, kitchens and small businesses in a British context.",
+      "opening_strategy": "Make a familiar object briefly unfamiliar by describing what it physically does. Do not open with a definition or with a claim that the object changed the world.",
+      "content_progression": [
+        "The familiar object, described by function.",
+        "Its narrow origin and the problem it was built for.",
+        "The first unexpected user and what they did with it.",
+        "A second use in a different setting.",
+        "The shared properties that made both transfers possible.",
+        "The counter-case: a good object that stayed where it was put.",
+        "A reframed conclusion about what success in design means."
+      ],
+      "closing_function": "Widen the implication from the single object to how adoption works, without offering advice or predicting the future.",
+      "tone_and_voice": "Accessible, curious and intelligent. Explanatory rather than lecturing; no technical vocabulary that a B2 reader would need defined.",
+      "point_of_view": "third_person",
+      "factuality_mode": "general_factual",
+      "fact_safety_notes": [
+        "Do not name real inventors, companies, patents, dates or products.",
+        "Do not invent studies, figures or institutional sources.",
+        "Keep the object recognisable by description without identifying a specific commercial product."
+      ],
+      "why_this_fits_the_part": "Five hundred to five hundred and fifty words of connected argument with an explicit counter-case gives the passage progression that Part 5 questions can follow, plus a genuine attitude on the writer's part.",
+      "examinable_potential": "Supports questions on detail, purpose, inference, attitude, reference and the meaning of a phrase in context. Distractors can be grounded in the counter-case and in the gap between the object's original purpose and its later uses, so that wrong options are plausible but locatably wrong.",
+      "understanding_targets": [
+        "detail",
+        "inference",
+        "purpose",
+        "attitude",
+        "reference",
+        "meaning in context"
+      ],
+      "avoid": [
+        "Naming real inventors, companies, products or dates.",
+        "A list of inventions with no argument.",
+        "'Changed the world' or 'revolutionised' claims.",
+        "Technology-worship or nostalgia.",
+        "Repeating the same explanatory point in different wording.",
+        "A global question whose answer restates the opening sentence."
+      ],
+      "generic_filler_risks": [
+        "Paragraphs that restate that the object is simple.",
+        "Generic praise for good design."
+      ],
+      "likely_cliches": [
+        "'Necessity is the mother of invention.'",
+        "'Hiding in plain sight.'"
+      ],
+      "potential_incoherences": [
+        "Presenting the counter-case as cheap, simple and safe while explaining that it failed for those reasons."
+      ],
+      "similarity_warnings": [
+        "Shares SC-01 with CB-PILOT-008 (E02 Part 2, indirect exploration). Different Part, different length and an unrelated central idea; no action required."
+      ],
+      "factuality_risks": [
+        "Drifting from a described object into an identifiable commercial product.",
+        "Presenting the three properties as an established framework rather than as the writer's explanation."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "unintended_use_drives_adoption",
+        "progression_pattern": "familiar_object→origin→unexpected_users→mechanism→counter_case→implication",
+        "tension_tag": "designed_purpose_vs_actual_use",
+        "opening_mechanism": "familiar_object_defamiliarised",
+        "ending_mechanism": "widened_implication",
+        "protagonist_type": "makers_and_users",
+        "setting_tag": "workshop_and_everyday",
+        "style_card_id": "SC-01"
+      },
+      "history_notes": [
+        "TB-026 unused in E01/E02. ST-044 new; ST-073 reused once inside batch RUOE-PILOT-02 at E04 Part 7, never inside the same exam.",
+        "SC-01 has not previously been assigned to Part 5 (E01 SC-03, E02 SC-02)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Generation must verify that the described object cannot be read as a specific commercial product."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-017",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 6",
+      "brief_version": "1.0",
+      "topic_id": "TB-045",
+      "main_topic_id": "MT-01",
+      "main_topic": "Culture",
+      "subtopic_1_id": "ST-029",
+      "subtopic_1": "Festivals",
+      "subtopic_2_id": "ST-076",
+      "subtopic_2": "Travel",
+      "style_card_id": "SC-05",
+      "style_card_version": "v1.1",
+      "style_card_name": "Culture, Travel & Community Feature",
+      "working_title": "The week the streets change shape",
+      "content_angle": "A community feature about a small town's annual festival written from the practical side: the months of preparation, the borrowed equipment, the argument about the route, so that the visible three days are explained by the invisible work that produces them.",
+      "central_question": "What does it actually take for a town to close its own streets for three days?",
+      "central_idea": "The festival survives because a small group has turned a collection of favours and borrowed resources into something repeatable, and because the town has accepted a specific amount of disruption as part of its year.",
+      "reader_takeaway": "The interesting part of a festival is the arrangement that makes it possible, not the spectacle it produces.",
+      "main_tension_or_contrast": "Spectacle versus the labour and disruption that produce it.",
+      "reader_interest_hook": "In February the festival is a spreadsheet and a shed full of barriers.",
+      "content_purpose": "feature",
+      "required_details": [
+        ["RD-01", "Open out of season, on one concrete stored object in the place it is kept.", "Establishes the practical frame before any celebration.", "plausible_case"],
+        ["RD-02", "Give one specific logistical constraint that shapes everything else: a road that must stay open, a hall booked a year ahead, a single generator.", "Creates a cause that later paragraphs depend on.", "plausible_case"],
+        ["RD-03", "Include a genuine disagreement inside the community about the route, the scale or the timing, with both positions stated fairly.", "Adds tension and gives the middle of the text something to resolve.", "plausible_case"],
+        ["RD-04", "Give one concrete moment from the event itself that visibly depends on a decision made earlier in the text.", "Binds the event section to the preparation section.", "plausible_case"],
+        ["RD-05", "Show what changes in the town after the festival ends, in practical terms.", "Provides a closing function distinct from the opening.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "A brief note on how visitors experience the same three days differently from residents."
+      ],
+      "protagonist_case_setting": "A plausible unnamed British market town; a small volunteer committee; third person with occasional reported comment. No real festival, town or organisation is named.",
+      "opening_strategy": "Open in the off-season store with a physical object. Do not open with the festival itself, with crowds or with a superlative.",
+      "content_progression": [
+        "The stored equipment out of season and who checks it.",
+        "Why the date cannot move.",
+        "The constraint that shapes the route.",
+        "The disagreement about scale, and how it is settled.",
+        "The event: one concrete moment that depends on an earlier decision.",
+        "The strain: what goes wrong or nearly does.",
+        "What is left in the town afterwards."
+      ],
+      "closing_function": "Close on a practical community consequence — what the town keeps or has to repair — rather than on a changed perception or an invitation to visit.",
+      "tone_and_voice": "Warm, observant feature writing; respectful of the volunteers without sentimentality; controlled description.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Keep the town and festival unnamed or clearly fictionalised.",
+        "Do not invent historical origins or heritage claims for the festival.",
+        "Do not attribute policies to real councils or authorities."
+      ],
+      "why_this_fits_the_part": "Festival preparation is inherently sequenced: the date, the constraint, the disagreement, the event and the aftermath cannot be reordered without breaking causation, which is exactly what Part 6 requires and what keeps interchangeability risk low.",
+      "examinable_potential": "Strong forward and backward cohesion through stored objects, the disputed route, the committee and the event day; several natural positions where a sentence can be removed and only one option will restore both the reference and the logic.",
+      "understanding_targets": [
+        "discourse cohesion",
+        "reference chains",
+        "logical sequencing",
+        "contrast and consequence",
+        "lexical progression"
+      ],
+      "avoid": [
+        "Tourist-brochure language or strings of superlatives.",
+        "A history-of-the-festival paragraph.",
+        "Paragraphs that could be swapped without loss.",
+        "'Everyone should visit' endings.",
+        "Reducing the volunteers to colourful local characters.",
+        "Writing the passage around pre-invented removable sentences."
+      ],
+      "generic_filler_risks": [
+        "Lists of stalls and attractions.",
+        "Repeated statements that the community works hard."
+      ],
+      "likely_cliches": [
+        "'A labour of love.'",
+        "'The whole town comes together.'"
+      ],
+      "potential_incoherences": [
+        "Settling the route disagreement before establishing the constraint that causes it."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Presenting an invented local tradition as a real one."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "festival_as_logistics",
+        "progression_pattern": "orientation→preparation→disagreement→event_day→strain→afterwards",
+        "tension_tag": "spectacle_vs_labour",
+        "opening_mechanism": "off_season_scene",
+        "ending_mechanism": "community_consequence",
+        "protagonist_type": "local_organisers",
+        "setting_tag": "small_town",
+        "style_card_id": "SC-05"
+      },
+      "history_notes": [
+        "TB-045 unused in E01/E02. ST-029 new; ST-076 reused once inside batch RUOE-PILOT-02 at E04 Part 2, never inside the same exam.",
+        "SC-05 has not previously been assigned to Part 6 (E01 SC-04, E02 SC-03)."
+      ],
+      "part_specific": {
+        "paragraph_functions": [
+          "P1 establish the off-season store and who is responsible for it",
+          "P2 explain why the date is fixed and what that forces",
+          "P3 introduce the physical constraint that shapes the route",
+          "P4 present the disagreement about scale and how it is settled",
+          "P5 move to the event and show one moment that depends on P3 or P4",
+          "P6 show the strain: what nearly failed and who absorbed it",
+          "P7 return to the town afterwards and to the store"
+        ],
+        "discourse_links": [
+          "The stored objects in P1 are referred back to in P2 as 'they' and reappear in P7.",
+          "The fixed date in P2 causes the constraint discussed in P3.",
+          "The constraint in P3 is the reason the disagreement in P4 exists.",
+          "The settlement reached in P4 is what makes the moment in P5 possible.",
+          "The strain in P6 is a direct consequence of the compromise in P4.",
+          "P7 closes the loop by returning to the store opened in P1, changed."
+        ],
+        "reference_chain_plan": [
+          "the barriers → they → the same barriers, now short of two",
+          "the committee → its four members → whoever is left on the Sunday night",
+          "the route → the short version → the one they settled on",
+          "the date → that weekend → the following Monday"
+        ],
+        "sequencing_logic": "Each paragraph depends on a fact or decision established earlier. The disagreement cannot precede the constraint that causes it; the event cannot precede the settlement that shapes it; the aftermath must follow the strain. Reordering breaks causation rather than merely style.",
+        "removable_sentence_opportunities": [
+          "A sentence after the constraint is stated that draws the practical consequence, referring back with 'that' or 'this'.",
+          "A sentence inside the disagreement paragraph giving the opposing position, signalled by a contrast link.",
+          "A sentence at the start of the event section that shifts time and refers to the settlement.",
+          "A sentence in the strain paragraph naming who absorbed the problem, referring back to a person introduced earlier.",
+          "A sentence in the closing paragraph that connects what is put away to what was taken out in P1.",
+          "A sentence between the fixed-date explanation and the constraint that makes the causal link explicit."
+        ],
+        "interchangeability_risk": "Low. Constraint, disagreement, settlement, event and aftermath form a single causal chain; no two paragraphs perform the same discourse function."
+      },
+      "editorial_status": "Draft",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Architecture v2 is mandatory: the complete article must be written first, and the six removed sentences selected from it afterwards."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-018",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 7",
+      "brief_version": "1.0",
+      "topic_id": "TB-025",
+      "main_topic_id": "MT-02",
+      "main_topic": "Education",
+      "subtopic_1_id": "ST-045",
+      "subtopic_1": "Languages",
+      "subtopic_2_id": "ST-047",
+      "subtopic_2": "Learning",
+      "style_card_id": "SC-06",
+      "style_card_version": "v1.1",
+      "style_card_name": "Multiple Profiles & Testimonies",
+      "working_title": "Four ways of learning to speak",
+      "content_angle": "Four people who are learning a language without attending a class describe how they do it, what has stalled and what they now count as progress; their methods overlap but their definitions of success do not.",
+      "central_question": "When there is no course and no examination, how do learners decide whether they are getting better?",
+      "central_idea": "Each learner has adopted a different measure of progress — being understood, understanding others, working faster, or producing evidence of effort — and each measure quietly determines what they practise and what they neglect.",
+      "reader_takeaway": "Informal language learning is shaped less by method than by the private standard the learner uses to judge it.",
+      "main_tension_or_contrast": "Accuracy versus communication, and measurable effort versus usable ability.",
+      "reader_interest_hook": "Two of them have been learning for the same length of time and would not recognise each other's idea of doing well.",
+      "content_purpose": "compare",
+      "required_details": [
+        ["RD-01", "Every profile must state a concrete trigger for starting, and no two triggers may be of the same kind.", "Creates comparable but discriminable motivation evidence.", "plausible_case"],
+        ["RD-02", "Every profile must include one specific thing that has stopped improving, described concretely.", "Provides the discriminating difficulty each question set needs.", "plausible_case"],
+        ["RD-03", "Every profile must state, in its own terms, what counts as progress.", "Supplies the central comparison dimension.", "plausible_case"],
+        ["RD-04", "At least three dimensions must overlap across pairs of profiles, with different causes or outcomes in each case.", "Forces paraphrase-based discrimination rather than keyword matching.", "plausible_case"],
+        ["RD-05", "No profile may contain more than a quarter of the strongest examinable material.", "Prevents one profile from dominating the answer key.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "Light, non-specific reference to the language being a widely taught European one, without naming it if naming adds nothing."
+      ],
+      "protagonist_case_setting": "Four plausible adult learners in different British settings: a café exchange, a commute, a workplace kitchen, a phone. First person, four clearly distinct voices.",
+      "opening_strategy": "A short shared frame naming the comparison domain, then four different entry points: a deadline, a relative, a job requirement, a private challenge.",
+      "content_progression": [
+        "Four independent mini-arcs, each with trigger, method, obstacle, current measure of progress and one thing they would change, presented in deliberately varied order."
+      ],
+      "closing_function": "Each profile closes on its own measure of success or its own next step; none closes with the same rhetorical move.",
+      "tone_and_voice": "Four natural and clearly differentiated first-person voices; practical, unpretentious, no caricature and no exaggerated regional or foreign accent.",
+      "point_of_view": "multi_profile",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not name real applications, schools, courses or teachers.",
+        "Do not make claims about how language acquisition works as though they were research findings.",
+        "Do not characterise any nationality or language as easy or difficult."
+      ],
+      "why_this_fits_the_part": "A shared domain with four genuinely different measures of success gives overlapping but separable evidence, which is the architecture Part 7 depends on.",
+      "examinable_potential": "Supports at least ten paraphrasable matching statements across trigger, method, obstacle, attitude to mistakes, role of other people, measure of progress and intended change.",
+      "understanding_targets": [
+        "comparison",
+        "attitude",
+        "detail matching",
+        "paraphrase",
+        "inference"
+      ],
+      "avoid": [
+        "Four versions of the same learner with names changed.",
+        "Questions answerable by spotting a repeated word.",
+        "One profile carrying most of the strong evidence.",
+        "A closing paragraph that draws a shared conclusion.",
+        "Advice about how to learn a language.",
+        "Naming a real application or platform."
+      ],
+      "generic_filler_risks": [
+        "Repeated statements that languages are useful.",
+        "Every profile mentioning practice without saying what they practise."
+      ],
+      "likely_cliches": [
+        "'Throw yourself in at the deep end.'",
+        "'Practice makes perfect.'",
+        "'It just clicked.'"
+      ],
+      "potential_incoherences": [
+        "A profile that claims not to care about mistakes while describing avoidance of speaking."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Turning a learner's opinion about method into an implied general truth."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "different_definitions_of_progress",
+        "progression_pattern": "four_profile_comparison",
+        "tension_tag": "accuracy_vs_communication",
+        "opening_mechanism": "varied_profile_entry",
+        "ending_mechanism": "distinct_measure_of_success",
+        "protagonist_type": "language_learners",
+        "setting_tag": "mixed_informal_settings",
+        "style_card_id": "SC-06"
+      },
+      "history_notes": [
+        "TB-025 unused in E01/E02. ST-045 and ST-047 both new to the system.",
+        "Part 7 domains so far: local history (E01), workplace change (E02). Informal language learning is unrelated to both."
+      ],
+      "part_specific": {
+        "shared_frame": "Four adults are learning the same language without attending a class, and each has arrived at a different way of deciding whether it is going well.",
+        "profiles": {
+          "A": {
+            "role": "Meets a language partner in a café once a week",
+            "trigger": "A confirmed move abroad in under a year.",
+            "motivation": "Wants to be able to handle ordinary transactions without preparing them in advance.",
+            "difficulty": "Freezes when corrected mid-sentence and then avoids the structure that caused it.",
+            "key_details": [
+              "Prepares three topics before each meeting",
+              "Has stopped writing anything down during the conversation",
+              "Notices she is fluent about work and helpless about anything domestic"
+            ],
+            "result_current_position": "Counts a session as good if she was understood without repeating herself.",
+            "reflection_attitude": "Pragmatic, deadline-driven, uncomfortable with correction."
+          },
+          "B": {
+            "role": "Listens on a long daily commute",
+            "trigger": "A partner's family who speak little English.",
+            "motivation": "Wants to follow a conversation at a table rather than have one explained to her afterwards.",
+            "difficulty": "Understands far more than she can produce, and has no regular occasion to speak.",
+            "key_details": [
+              "Relistens to the same recordings until nothing surprises her",
+              "Can follow two speakers but not four",
+              "Has never spoken to anyone outside the family"
+            ],
+            "result_current_position": "Counts progress as the number of things she no longer has to have repeated.",
+            "reflection_attitude": "Patient, receptive, quietly frustrated by her own silence."
+          },
+          "C": {
+            "role": "Learns at work, in a kitchen where the language is spoken",
+            "trigger": "Took a job where most of the team did not speak English.",
+            "motivation": "Needed to keep up on a busy service; there was no alternative.",
+            "difficulty": "His vocabulary is fast and confident inside the kitchen and almost useless outside it.",
+            "key_details": [
+              "Learned instructions before he learned any grammar",
+              "Is corrected constantly and does not mind",
+              "Cannot make a phone call in the language"
+            ],
+            "result_current_position": "Counts progress as how little he now has to ask someone to repeat during a shift.",
+            "reflection_attitude": "Direct, unbothered by mistakes, aware his range is narrow."
+          },
+          "D": {
+            "role": "Uses an app every day and has not missed a day in two years",
+            "trigger": "Set himself a personal challenge after retiring.",
+            "motivation": "Wanted something with visible daily evidence of effort.",
+            "difficulty": "The daily record keeps rising while conversation remains out of reach.",
+            "key_details": [
+              "Knows a large amount of vocabulary he has never said aloud",
+              "Has twice arranged to meet a speaker and twice cancelled",
+              "Has started reading a newspaper column instead"
+            ],
+            "result_current_position": "Has begun to suspect the record measures the habit rather than the language.",
+            "reflection_attitude": "Methodical, self-questioning, reluctant to give up the streak."
+          }
+        },
+        "comparison_dimensions": [
+          "trigger for starting",
+          "who else is involved",
+          "attitude to being corrected",
+          "gap between understanding and speaking",
+          "range versus depth of vocabulary",
+          "what counts as progress",
+          "what they intend to change"
+        ],
+        "controlled_overlap": [
+          "A and C both learn through unplanned interaction, but A chose it and C had no alternative.",
+          "B and D both learn alone and both have a gap between input and output, but B can understand and not speak while D can recognise and not use.",
+          "C and D both measure progress in countable units, but C counts repetitions avoided in real time and D counts consecutive days.",
+          "A and B both depend on one other person, but A meets a stranger by arrangement and B is surrounded by family without speaking."
+        ],
+        "exclusive_details": [
+          "A: prepares three topics in advance",
+          "B: relistens until nothing surprises her",
+          "C: learned instructions before grammar",
+          "D: cancelled two arranged meetings"
+        ],
+        "voice_differentiation": "A is clipped and deadline-aware; B is longer-breathed and reflective; C is blunt and practical with short sentences; D is precise and slightly formal, with a habit of qualifying his own claims.",
+        "potential_answer_distribution": "Evidence is planned so that each profile can support two or three of the ten questions, with no profile supporting more than three and none fewer than two."
+      },
+      "editorial_status": "Draft",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Question wording must be paraphrased away from profile wording; TEST-P7-WORD-MATCH accumulation is to be checked at generation."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-019",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 1",
+      "brief_version": "1.0",
+      "topic_id": "TB-011",
+      "main_topic_id": "MT-05",
+      "main_topic": "Health",
+      "subtopic_1_id": "ST-050",
+      "subtopic_1": "Mental Health",
+      "subtopic_2_id": "ST-018",
+      "subtopic_2": "Daily Life",
+      "style_card_id": "SC-03",
+      "style_card_version": "v1.1",
+      "style_card_name": "Personal Reflective Experience",
+      "working_title": "The decisions I stopped making before nine",
+      "content_angle": "A short first-person reflection in which the narrator counts the small choices she makes before leaving the house and concludes that what made her week feel heavy was the number of decisions in it, not the amount of work.",
+      "central_question": "What makes an ordinary week feel heavier than the work it actually contains?",
+      "central_idea": "The pressure came from a morning full of low-value choices; removing the choices rather than the tasks changed how the rest of the day felt.",
+      "reader_takeaway": "Reducing the number of decisions can matter more than reducing the workload.",
+      "main_tension_or_contrast": "Cutting tasks versus cutting choices.",
+      "reader_interest_hook": "She counted eleven decisions before she had left the flat, and none of them mattered.",
+      "content_purpose": "reflect",
+      "required_details": [
+        ["RD-01", "Open by counting a specific number of small decisions in one ordinary morning, with two of them named concretely.", "Gives an immediate, concrete and slightly surprising entry point.", "plausible_case"],
+        ["RD-02", "State the remedy the narrator had assumed would work and why it did not.", "Establishes the wrong diagnosis before the right one.", "plausible_case"],
+        ["RD-03", "Show the specific change made: a fixed set of choices settled the night before or removed entirely.", "Makes the solution concrete rather than attitudinal.", "plausible_case"],
+        ["RD-04", "Give one honest limit: something the change did not affect at all.", "Keeps the reflection credible and avoids a self-help ending.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "A single detail showing how somebody else reacted to the change."
+      ],
+      "protagonist_case_setting": "An unnamed narrator with an ordinary office job in a British city; first person; morning routine and commute.",
+      "opening_strategy": "Open on the count itself. Do not open with a statement about stress, modern life or wellbeing.",
+      "content_progression": [
+        "The count of small morning decisions.",
+        "The remedy she had assumed would help, and why it did not.",
+        "Noticing that the tiring part came before the work.",
+        "The change: choices settled in advance or removed.",
+        "What improved, and the one thing that did not."
+      ],
+      "closing_function": "Close on the limit of the change, not on advice or on a general claim about wellbeing.",
+      "tone_and_voice": "Natural first-person voice; dry, precise, faintly amused at herself; no therapeutic vocabulary.",
+      "point_of_view": "first_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not present the account as a treatment, a diagnosis or medical advice.",
+        "Do not cite research on decision fatigue or attribute the idea to an expert.",
+        "Keep the subject everyday workload pressure, not clinical illness."
+      ],
+      "why_this_fits_the_part": "Counting, choosing and noticing produce concrete verbs and prepositional phrases in a short compass, giving Part 1 the lexical density it needs at roughly 110–130 words.",
+      "examinable_potential": "Natural contexts for collocation (make a decision, take a moment, get through the morning), dependent prepositions (worry about, cope with, depend on), fixed expressions (in advance, on the whole, for a start) and semantic distinction (decide / choose / settle; tired / worn out / drained).",
+      "understanding_targets": [
+        "collocation",
+        "lexical meaning",
+        "dependent preposition",
+        "fixed expression",
+        "semantic distinction"
+      ],
+      "avoid": [
+        "Therapeutic or clinical vocabulary.",
+        "A life-changing transformation.",
+        "Numbered tips or a productivity-system tone.",
+        "An evening-routine or work-boundary frame: already used in E02 Part 6.",
+        "Opening with a general claim about stress."
+      ],
+      "generic_filler_risks": [
+        "Repeated statements that she was tired.",
+        "Listing tasks without showing choice."
+      ],
+      "likely_cliches": [
+        "'Running on empty.'",
+        "'Self-care.'",
+        "'Life admin.'"
+      ],
+      "potential_incoherences": [
+        "Claiming the workload was unchanged while describing tasks she stopped doing."
+      ],
+      "similarity_warnings": [
+        "Adjacent to CB-PILOT-011 (E02 Part 6, evening routine and work boundaries). Deliberately differentiated: that brief relocates the end of the working day; this one reduces the number of choices before it starts. Different time of day, different mechanism, different tension tag."
+      ],
+      "factuality_risks": [
+        "Implying a recognised psychological mechanism."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "decision_load_not_workload",
+        "progression_pattern": "count→wrong_remedy→discovery→simplification→limit",
+        "tension_tag": "tasks_vs_choices",
+        "opening_mechanism": "counted_detail",
+        "ending_mechanism": "honest_limit",
+        "protagonist_type": "office_worker",
+        "setting_tag": "morning_routine",
+        "style_card_id": "SC-03"
+      },
+      "history_notes": [
+        "TB-011 unused in E01/E02. ST-050 new; ST-018 reused once inside batch RUOE-PILOT-02 at E03 Part 3, never inside the same exam.",
+        "SC-03 has not previously been assigned to Part 1 (E01 SC-01, E02 SC-05, E03 SC-02)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS_WITH_WARNINGS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Similarity warning recorded against CB-PILOT-011; reviewer to confirm the differentiation is sufficient.",
+        "Reviewer to confirm the Mental Health subtopic framing under the pending Topic Bank sensitivity policy."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-020",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 2",
+      "brief_version": "1.0",
+      "topic_id": "TB-009",
+      "main_topic_id": "MT-08",
+      "main_topic": "Technology",
+      "subtopic_1_id": "ST-015",
+      "subtopic_1": "Transport",
+      "subtopic_2_id": "ST-076",
+      "subtopic_2": "Travel",
+      "style_card_id": "SC-02",
+      "style_card_version": "v1.1",
+      "style_card_name": "Trend & Social Report",
+      "working_title": "Buses that only run when asked",
+      "content_angle": "A compact report on small on-demand transport schemes replacing fixed timetables on quiet routes, and on how a service that arrives only when it is booked changes who it actually serves.",
+      "central_question": "What happens to a bus route when the timetable is replaced by a request?",
+      "central_idea": "Replacing a timetable with a booking makes the service viable on quiet routes but shifts the effort onto passengers, which suits irregular journeys and disadvantages anyone who cannot plan or book in advance.",
+      "reader_takeaway": "Flexibility is not free: somebody has to absorb the planning that the timetable used to do.",
+      "main_tension_or_contrast": "Flexibility versus reliability.",
+      "reader_interest_hook": "The empty timetable frame is still screwed to the post, and that is now the most useful information at the stop.",
+      "content_purpose": "report",
+      "required_details": [
+        ["RD-01", "Open on the physical absence of a timetable at a stop, described concretely.", "Makes an abstract change visible in one image.", "plausible_case"],
+        ["RD-02", "Explain in plain terms how the service is requested and how the route is assembled.", "Provides the mechanism the rest of the report depends on.", "general_factual"],
+        ["RD-03", "Name who benefits, with one specific journey type.", "Grounds the benefit in behaviour rather than in claims.", "plausible_case"],
+        ["RD-04", "Name who is disadvantaged, with one specific obstacle such as booking without a phone or travelling at short notice.", "Creates the balance the Style Card requires.", "plausible_case"],
+        ["RD-05", "Close on an unresolved practical limit rather than a prediction.", "Gives an ending distinct from the opening.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "A brief contrast with what the same route looked like when it ran four times a day."
+      ],
+      "protagonist_case_setting": "An unnamed rural or edge-of-town area in Britain; passengers described generically; no operator, council or application named.",
+      "opening_strategy": "Open on the stop and the missing timetable. Do not open with a claim about the future of transport.",
+      "content_progression": [
+        "The stop without a timetable.",
+        "How the service is actually requested.",
+        "Why the route was changed in the first place.",
+        "Who it works well for.",
+        "Who it works badly for.",
+        "The limit that has not been solved."
+      ],
+      "closing_function": "End on an honest limitation of the scheme, not on a prediction about driverless futures.",
+      "tone_and_voice": "Informed local reporting: specific, balanced, neither promotional nor nostalgic.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not name real operators, councils, applications or places.",
+        "Do not invent passenger numbers, funding figures or trial results.",
+        "Do not claim that vehicles are fully driverless unless the text keeps this hypothetical and clearly marked."
+      ],
+      "why_this_fits_the_part": "A service explained through conditions, consequences and comparisons produces dense functional grammar — prepositions, relatives, auxiliaries, determiners, linkers — inside 150–180 words of naturally cohesive prose.",
+      "examinable_potential": "The text supplies grammatical and functional relationships across time, condition, contrast and reference without the brief pre-designing any gap.",
+      "understanding_targets": [
+        "grammatical cohesion",
+        "reference",
+        "condition and consequence",
+        "contrast linking",
+        "prepositional relationships"
+      ],
+      "avoid": [
+        "Technology-will-save-us or technology-ruins-everything framing.",
+        "Invented figures or trial data.",
+        "A nostalgic lament for the old bus.",
+        "Naming real operators or applications.",
+        "Answers that are visible immediately next to their gap."
+      ],
+      "generic_filler_risks": [
+        "Repeating that rural transport is difficult.",
+        "'More and more areas are…' with no described change."
+      ],
+      "likely_cliches": [
+        "'The future of transport.'",
+        "'At the touch of a button.'"
+      ],
+      "potential_incoherences": [
+        "Describing the service as available on demand while also describing a fixed daily window, without explaining the restriction."
+      ],
+      "similarity_warnings": [
+        "Shares MT-08 Technology and SC-02 with CB-PILOT-013 (E03 Part 1) in the immediately preceding exam. Domains are unrelated: online audience management versus physical transport provision. Flagged SOFT at map level; reviewer may swap this topic if preferred."
+      ],
+      "factuality_risks": [
+        "Presenting a plausible scheme design as an existing documented service."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "service_shaped_by_demand",
+        "progression_pattern": "change→mechanism→who_benefits→who_loses→limit",
+        "tension_tag": "flexibility_vs_reliability",
+        "opening_mechanism": "absent_timetable",
+        "ending_mechanism": "honest_limitation",
+        "protagonist_type": "rural_passengers",
+        "setting_tag": "edge_of_town",
+        "style_card_id": "SC-02"
+      },
+      "history_notes": [
+        "TB-009 unused in E01/E02. ST-015 new; ST-076 reused once inside batch RUOE-PILOT-02 at E03 Part 6, never inside the same exam.",
+        "SC-02 has not previously been assigned to Part 2 (E01 SC-05, E02 SC-01, E03 SC-04)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS_WITH_WARNINGS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "DR-18 SOFT: same Main Topic and Style Card as E03 Part 1 in adjacent exams. Reviewer to accept or replace."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-021",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 3",
+      "brief_version": "1.0",
+      "topic_id": "TB-044",
+      "main_topic_id": "MT-03",
+      "main_topic": "Entertainment",
+      "subtopic_1_id": "ST-008",
+      "subtopic_1": "Books",
+      "subtopic_2_id": "ST-048",
+      "subtopic_2": "Lifestyle",
+      "style_card_id": "SC-05",
+      "style_card_version": "v1.1",
+      "style_card_name": "Culture, Travel & Community Feature",
+      "working_title": "The shop that lends more than it sells",
+      "content_angle": "A short community feature about a small-town bookshop whose real function is closer to a meeting point than a retailer, observed through what happens at the counter across one Saturday.",
+      "central_question": "What is a bookshop for in a town that could order everything it stocks more cheaply?",
+      "central_idea": "The shop survives because it does several things that are not selling — holding parcels, lending back copies, letting people sit — and those activities are what bring the buyers in.",
+      "reader_takeaway": "A shop can be economically marginal and socially central at the same time.",
+      "main_tension_or_contrast": "Commercial function versus community function.",
+      "reader_interest_hook": "Three of the first five people through the door on Saturday morning have no intention of buying anything.",
+      "content_purpose": "feature",
+      "required_details": [
+        ["RD-01", "Open on one concrete detail at the counter that is not about selling.", "Establishes the argument through an object rather than a statement.", "plausible_case"],
+        ["RD-02", "Describe two distinct non-commercial uses the shop is put to, each with a named action.", "Supplies the evidence for the central idea.", "plausible_case"],
+        ["RD-03", "Include the owner's own account of why this is tolerated, in practical terms.", "Adds a human perspective without sentimentality.", "plausible_case"],
+        ["RD-04", "Give one specific pressure on the shop: rent, hours, or a supplier's minimum order.", "Prevents the feature from becoming purely warm.", "plausible_case"],
+        ["RD-05", "Close on what the town would concretely lose.", "Provides a closing function distinct from the opening.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "One regular customer described by habit rather than by name."
+      ],
+      "protagonist_case_setting": "A plausible unnamed British market town; a single small shop and its owner; third person with brief reported comment.",
+      "opening_strategy": "Open on the counter detail. Do not open with a claim about the decline of the high street or the joy of reading.",
+      "content_progression": [
+        "The counter and the thing on it that is not for sale.",
+        "The first non-commercial use, shown in action.",
+        "The second, different use.",
+        "Why the owner allows it.",
+        "The pressure the shop is under.",
+        "What the town would lose."
+      ],
+      "closing_function": "Close on a concrete local consequence, not on a plea to support independent shops.",
+      "tone_and_voice": "Warm, observant feature writing; specific and unsentimental; controlled description at B2.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not name a real shop, town, publisher or author.",
+        "Do not invent trading figures or rent levels."
+      ],
+      "why_this_fits_the_part": "A place-and-people feature naturally generates nouns, adjectives, adverbs and verbs from the same lexical field, so derived forms can be selected from finished prose rather than engineered into it.",
+      "examinable_potential": "Natural contexts for derivational change including at least one -ly adverb and one negative or prefixed form: readership, arrangement, unexpectedly, reluctantly, encouragement, unusable, collection, weekly, owner, profitable.",
+      "understanding_targets": [
+        "derivational morphology",
+        "word class",
+        "affixation",
+        "register control"
+      ],
+      "avoid": [
+        "A save-the-high-street argument.",
+        "Nostalgia for the smell of paper.",
+        "Listing book titles or genres.",
+        "Any stem appearing in the passage in the same form as the answer.",
+        "Forcing an unnatural abstract noun to satisfy a variety counter."
+      ],
+      "generic_filler_risks": [
+        "Repeated statements that the shop has character.",
+        "Describing shelves without describing use."
+      ],
+      "likely_cliches": [
+        "'A treasure trove.'",
+        "'The heart of the community.'",
+        "'You can't get that online.'"
+      ],
+      "potential_incoherences": [
+        "Describing the shop as barely viable while also describing steady sales all morning."
+      ],
+      "similarity_warnings": [],
+      "factuality_risks": [
+        "Presenting invented local arrangements as documented practice."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "bookshop_as_meeting_point",
+        "progression_pattern": "place→use→people→pressure→value",
+        "tension_tag": "commerce_vs_community_function",
+        "opening_mechanism": "counter_detail",
+        "ending_mechanism": "local_consequence",
+        "protagonist_type": "shopkeeper_and_regulars",
+        "setting_tag": "high_street",
+        "style_card_id": "SC-05"
+      },
+      "history_notes": [
+        "TB-044 unused in E01/E02. ST-008 new; ST-048 Lifestyle previously used at E02 Part 6 (TB-019) — documented SOFT reuse at two exams' distance with an unrelated angle.",
+        "SC-05 has not previously been assigned to Part 3 (E01 SC-02, E02 SC-04, E03 SC-03)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS_WITH_WARNINGS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "DR-02 SOFT: ST-048 Lifestyle reused from E02 Part 6. Reviewer to accept or replace."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-022",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 5",
+      "brief_version": "1.0",
+      "topic_id": "TB-037",
+      "main_topic_id": "MT-02",
+      "main_topic": "Education",
+      "subtopic_1_id": "ST-081",
+      "subtopic_1": "Skills",
+      "subtopic_2_id": "ST-083",
+      "subtopic_2": "Work",
+      "style_card_id": "SC-04",
+      "style_card_version": "v1.1",
+      "style_card_name": "Narrative Story",
+      "working_title": "Learning to read a roof",
+      "content_angle": "A narrative about a woman in her forties who leaves an administrative job to train as a roofer, expecting the difficulty to be physical, and discovering over one winter that the skill she had not accounted for is judgement: knowing what to leave alone.",
+      "central_question": "What does someone actually have to learn when they change trade in middle age?",
+      "central_idea": "She had prepared for the part of the job that could be measured — strength, height, weather — and was unprepared for the part that cannot be taught in a week: deciding, on an unfamiliar roof, which problem is the real one.",
+      "reader_takeaway": "The hardest part of an unfamiliar skill is often the judgement it assumes rather than the technique it teaches.",
+      "main_tension_or_contrast": "Physical capability versus practical judgement.",
+      "reader_interest_hook": "She had trained for six months for the wrong difficulty, and the first person to tell her so was a customer.",
+      "content_purpose": "narrate",
+      "required_details": [
+        ["RD-01", "Open on the first day on a real roof, in scene, with one specific physical detail and one specific thing she does not know.", "Enters through action rather than exposition.", "plausible_fiction"],
+        ["RD-02", "Establish her assumption about what would be hard, and where it came from.", "Sets up the reversal that the narrative depends on.", "plausible_fiction"],
+        ["RD-03", "Show one concrete mistake with a consequence somebody else has to absorb.", "Creates cost and prevents a frictionless success story.", "plausible_fiction"],
+        ["RD-04", "Show her being taught the real skill indirectly — by watching, being contradicted, or being asked a question she cannot answer.", "Makes the learning dramatised rather than summarised.", "plausible_fiction"],
+        ["RD-05", "Include one moment where her previous office experience is genuinely useful, and one where it is a liability.", "Gives the character two-sided history rather than a clean break.", "plausible_fiction"],
+        ["RD-06", "Close on a concrete demonstration of the judgement she now has.", "Provides an earned outcome rather than a stated one.", "plausible_fiction"]
+      ],
+      "optional_supporting_details": [
+        "A brief, unsentimental note on how her former colleagues describe what she now does."
+      ],
+      "protagonist_case_setting": "An unnamed woman in her forties; a small roofing firm in a British town; close third person across one autumn and winter.",
+      "opening_strategy": "Enter on the roof, mid-task. Do not begin with the decision to change career or with background about the office job.",
+      "content_progression": [
+        "First day on a real roof and the thing she cannot judge.",
+        "The assumption she trained for.",
+        "The mistake and who absorbs it.",
+        "Being taught the real skill without being told it is being taught.",
+        "Where her old job helps and where it gets in the way.",
+        "A second, harder roof.",
+        "The closing demonstration of judgement."
+      ],
+      "closing_function": "Close on an action that shows the judgement, not on a summary of what she learned.",
+      "tone_and_voice": "Concrete, economical and observant; dialogue used sparingly and functionally; no heroic register.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_fiction",
+      "fact_safety_notes": [
+        "Do not give roofing technique in a way that would read as instruction.",
+        "Do not name real firms, training providers, qualifications or manufacturers.",
+        "Do not describe unsafe practice approvingly."
+      ],
+      "why_this_fits_the_part": "A five-hundred-word narrative with a mistaken assumption, a cost and an earned reversal supports Part 5 questions on attitude, inference, purpose, reference and the meaning of a phrase in context, and allows distractors grounded in what she wrongly believed.",
+      "examinable_potential": "Her stated expectations, her mistake and the indirect teaching give several places where a careless reader will select what she thought rather than what turned out to be true — plausible distractors with locatable evidence against them.",
+      "understanding_targets": [
+        "attitude",
+        "inference",
+        "detail",
+        "purpose",
+        "reference",
+        "meaning in context"
+      ],
+      "avoid": [
+        "A 'follow your passion' or 'never too late' moral.",
+        "A dramatic fall or injury.",
+        "Sentimentalising manual work.",
+        "A mentor who explains the lesson aloud.",
+        "Too many named characters.",
+        "Turning the ending into a summary of the theme."
+      ],
+      "generic_filler_risks": [
+        "Repeated statements that the work is hard.",
+        "Weather description with no narrative function."
+      ],
+      "likely_cliches": [
+        "'Learning the ropes.'",
+        "'Getting her hands dirty.'",
+        "'A steep learning curve.'"
+      ],
+      "potential_incoherences": [
+        "Having her demonstrate the judgement before the scene in which she acquires it."
+      ],
+      "similarity_warnings": [
+        "Shares a career-change frame with CB-PILOT-004 (E01 Part 5, volunteering and career preference). Differentiated: that brief is a first-person reflection about motive and self-knowledge; this is a third-person narrative about a technical misjudgement with a physical cost."
+      ],
+      "factuality_risks": [
+        "Implying specific safety regulations or qualification requirements."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "judgement_underestimated",
+        "progression_pattern": "career_switch→assumption→failure→indirect_teaching→earned_competence",
+        "tension_tag": "strength_vs_judgement",
+        "opening_mechanism": "first_day_on_site",
+        "ending_mechanism": "earned_competence",
+        "protagonist_type": "career_changer",
+        "setting_tag": "building_site",
+        "style_card_id": "SC-04"
+      },
+      "history_notes": [
+        "TB-037 unused in E01/E02. ST-081 and ST-083 both new to the system.",
+        "SC-04 has not previously been assigned to Part 5 (E01 SC-03, E02 SC-02, E03 SC-01)."
+      ],
+      "part_specific": null,
+      "editorial_status": "Draft",
+      "validator_status": "PASS_WITH_WARNINGS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Similarity warning recorded against CB-PILOT-004; reviewer to confirm the differentiation is sufficient."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-023",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 6",
+      "brief_version": "1.0",
+      "topic_id": "TB-012",
+      "main_topic_id": "MT-04",
+      "main_topic": "Environment",
+      "subtopic_1_id": "ST-080",
+      "subtopic_1": "Conservation",
+      "subtopic_2_id": "ST-006",
+      "subtopic_2": "Wildlife",
+      "style_card_id": "SC-01",
+      "style_card_version": "v1.1",
+      "style_card_name": "Curiosity & Explanatory Article",
+      "working_title": "Bringing back a river's summer",
+      "content_angle": "An explanatory article about a river-restoration scheme in which the measure the planners had ranked lowest — replanting shade along the banks — turned out to matter most, and about why lowering the water temperature changed what could survive in it.",
+      "central_question": "Why did the cheapest part of a river-restoration scheme turn out to be the part that worked?",
+      "central_idea": "The team treated the river as a problem of structure and flow, and the limiting factor was heat: shading the water in summer changed the amount of oxygen it could hold, which changed what could live there.",
+      "reader_takeaway": "Restoration often fails not because the work is wrong but because the limiting factor has been misidentified.",
+      "main_tension_or_contrast": "Engineering the channel versus changing the conditions in it.",
+      "reader_interest_hook": "They spent most of the budget on the riverbed and most of the benefit came from the trees on the bank.",
+      "content_purpose": "explain",
+      "required_details": [
+        ["RD-01", "Open on the counter-intuitive result stated plainly, before it is explained.", "Creates the knowledge gap the article then closes.", "plausible_case"],
+        ["RD-02", "Describe the original problem and the two measures that were expected to solve it.", "Establishes what the team believed.", "plausible_case"],
+        ["RD-03", "Show what those measures did and did not achieve, concretely.", "Supplies evidence rather than assertion.", "plausible_case"],
+        ["RD-04", "Introduce the overlooked variable and explain the mechanism in plain terms a B2 reader can follow.", "Delivers the explanation the opening promised.", "general_factual"],
+        ["RD-05", "Give one observable change that followed, described without figures.", "Grounds the mechanism in an outcome.", "plausible_case"],
+        ["RD-06", "State the revised priority and one condition under which it would not apply.", "Prevents a universal claim and closes distinctly.", "general_factual"]
+      ],
+      "optional_supporting_details": [
+        "A short note on how long the change took to become visible."
+      ],
+      "protagonist_case_setting": "An unnamed British river valley; a restoration team described generically; no organisation, charity, agency or place named.",
+      "opening_strategy": "State the surprising outcome first and withhold the explanation. Do not open with a general statement about the importance of rivers.",
+      "content_progression": [
+        "The counter-intuitive result.",
+        "The original problem and what the team expected to fix it.",
+        "The first measure and its partial effect.",
+        "The second measure and why it disappointed.",
+        "The overlooked variable and the mechanism behind it.",
+        "The observable change that followed.",
+        "The revised priority and its limits."
+      ],
+      "closing_function": "Close on a revised priority with a stated condition, not on an environmental appeal.",
+      "tone_and_voice": "Accessible, curious, explanatory; interested in the puzzle rather than in advocacy; no technical term left undefined by context.",
+      "point_of_view": "third_person",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not invent studies, monitoring figures, species counts or funding amounts.",
+        "Do not name organisations, agencies, rivers or places.",
+        "Keep the oxygen-and-temperature relationship at the level of general, uncontroversial explanation."
+      ],
+      "why_this_fits_the_part": "The chain — problem, attempted fix, disappointment, overlooked variable, mechanism, outcome, revised priority — is strictly causal, so paragraphs cannot be swapped and every gap has one logically and referentially correct filler.",
+      "examinable_potential": "Strong backward and forward cohesion through the two measures, the overlooked variable and the mechanism; several natural positions where a removed sentence is the only one that both resolves a reference and advances the causal chain.",
+      "understanding_targets": [
+        "discourse cohesion",
+        "reference chains",
+        "cause and effect",
+        "contrast and concession",
+        "lexical progression"
+      ],
+      "avoid": [
+        "An environmental call to action.",
+        "Invented statistics or named studies.",
+        "Paragraphs that restate the surprise without advancing it.",
+        "Interchangeable descriptive paragraphs about wildlife.",
+        "Writing the article around pre-invented removable sentences.",
+        "Technical vocabulary that a B2 reader could not infer."
+      ],
+      "generic_filler_risks": [
+        "Lists of species.",
+        "Repeated statements that nature is complex."
+      ],
+      "likely_cliches": [
+        "'Nature finds a way.'",
+        "'A ray of hope.'"
+      ],
+      "potential_incoherences": [
+        "Explaining the mechanism before establishing that the first two measures had disappointed."
+      ],
+      "similarity_warnings": [
+        "Shares SC-01 with CB-PILOT-016 (E03 Part 5) in the immediately preceding exam. Different Part, different length, different progression pattern and no shared idea; accepted at map level."
+      ],
+      "factuality_risks": [
+        "Allowing a plausible scheme to read as a documented case with real results."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "lowest_ranked_factor_mattered_most",
+        "progression_pattern": "problem→attempted_fix→disappointment→overlooked_variable→mechanism→revised_priority",
+        "tension_tag": "engineering_vs_ecology",
+        "opening_mechanism": "counter_intuitive_result",
+        "ending_mechanism": "revised_priority",
+        "protagonist_type": "restoration_team",
+        "setting_tag": "river_valley",
+        "style_card_id": "SC-01"
+      },
+      "history_notes": [
+        "TB-012 unused in E01/E02. ST-080 new; ST-006 Wildlife previously used at E01 Part 1 (TB-008) — documented SOFT reuse at three exams' distance with an unrelated angle.",
+        "SC-01 has not previously been assigned to Part 6 (E01 SC-04, E02 SC-03, E03 SC-05).",
+        "Selected partly to raise MT-04 Environment from one use in twenty-four briefs to two."
+      ],
+      "part_specific": {
+        "paragraph_functions": [
+          "P1 state the counter-intuitive result without explaining it",
+          "P2 describe the original problem and what the team expected to work",
+          "P3 report the first measure and its partial effect",
+          "P4 report the second measure and why it disappointed",
+          "P5 introduce the overlooked variable and explain the mechanism",
+          "P6 give the observable change that followed",
+          "P7 state the revised priority and the condition that limits it"
+        ],
+        "discourse_links": [
+          "P1's unexplained result is what P5 finally accounts for.",
+          "P2 establishes the two measures that P3 and P4 then evaluate in turn.",
+          "P4 ends in a disappointment that P5 answers with a contrast link.",
+          "The mechanism in P5 is the cause of the change reported in P6.",
+          "P7 generalises from P6 and immediately qualifies it.",
+          "The budget contrast introduced in P1 is picked up again in P7."
+        ],
+        "reference_chain_plan": [
+          "the scheme → it → the work on the channel",
+          "the two measures → the first → the second → neither of them",
+          "the overlooked variable → shade → the trees → they",
+          "the water → its temperature → the oxygen it could hold"
+        ],
+        "sequencing_logic": "The article withholds its explanation deliberately: the mechanism in P5 is meaningless before P3 and P4 have shown the two measures failing, and the revised priority in P7 has no force before the change in P6. The order is fixed by the argument, not by convention.",
+        "removable_sentence_opportunities": [
+          "A sentence in P2 that states what the team believed the limiting factor was, referring forward to 'both measures'.",
+          "A sentence at the end of P3 that qualifies the partial success with a concessive link.",
+          "A sentence opening P4 that contrasts the second measure with the first.",
+          "A sentence in P5 that states the mechanism plainly, referring back to 'neither of them'.",
+          "A sentence in P6 that gives the observable change, referring back to the mechanism with 'that'.",
+          "A sentence in P7 that supplies the limiting condition, signalled by a concessive or conditional link."
+        ],
+        "interchangeability_risk": "Low. The two measures are evaluated in a fixed order, the mechanism depends on both evaluations, and the outcome depends on the mechanism. No two paragraphs share a discourse function."
+      },
+      "editorial_status": "Draft",
+      "validator_status": "PASS_WITH_WARNINGS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "DR-02 SOFT: ST-006 Wildlife reused from E01 Part 1. Reviewer to accept or replace.",
+        "Architecture v2 is mandatory: the complete article must be written first, and the six removed sentences selected from it afterwards."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    },
+    {
+      "brief_id": "CB-PILOT-024",
+      "batch_id": "RUOE-PILOT-02",
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 7",
+      "brief_version": "1.0",
+      "topic_id": "TB-022",
+      "main_topic_id": "MT-09",
+      "main_topic": "Travel",
+      "subtopic_1_id": "ST-078",
+      "subtopic_1": "Accommodation",
+      "subtopic_2_id": "ST-073",
+      "subtopic_2": "Technology",
+      "style_card_id": "SC-06",
+      "style_card_version": "v1.1",
+      "style_card_name": "Multiple Profiles & Testimonies",
+      "working_title": "Four people who let out a room",
+      "content_angle": "Four people who let out accommodation describe how online booking changed what they offer, what they have automated and what they refuse to give up; they share a platform but not a set of limits.",
+      "central_question": "When guests book through a screen, what does a host decide to keep doing in person?",
+      "central_idea": "Each host has drawn a different line between what can be handled automatically and what has to remain personal, and each line reflects a different judgement about what they are actually selling.",
+      "reader_takeaway": "Hosts who look as though they do the same thing have made very different decisions about privacy, effort and control.",
+      "main_tension_or_contrast": "Income and convenience versus privacy and control.",
+      "reader_interest_hook": "One of them has automated everything except the welcome; another has automated nothing and still keeps a paper diary.",
+      "content_purpose": "compare",
+      "required_details": [
+        ["RD-01", "Every profile must give a concrete reason for starting, and no two reasons may be of the same kind.", "Creates comparable but discriminable motivation evidence.", "plausible_case"],
+        ["RD-02", "Every profile must name one thing they refuse to provide or change, with a reason.", "Provides the strongest discrimination dimension.", "plausible_case"],
+        ["RD-03", "Every profile must describe one concrete effect of reviews or online booking on their behaviour.", "Supplies the shared dimension the questions turn on.", "plausible_case"],
+        ["RD-04", "At least three dimensions must overlap across pairs of profiles, with different causes or outcomes in each case.", "Forces paraphrase-based discrimination.", "plausible_case"],
+        ["RD-05", "No profile may contain more than a quarter of the strongest examinable material.", "Prevents one profile from dominating the answer key.", "plausible_case"]
+      ],
+      "optional_supporting_details": [
+        "A brief mention of a season or a local event that affects demand, differently for each host."
+      ],
+      "protagonist_case_setting": "Four plausible hosts in different British settings: a city flat, a farm outbuilding, three managed flats and a large house near a coast path. First person, four clearly distinct voices. No platform, company or place is named.",
+      "opening_strategy": "A short shared frame naming the comparison domain, then four different entry points: a rent rise, an unused building, a business decision, and a long habit that predates the internet.",
+      "content_progression": [
+        "Four independent mini-arcs, each with reason for starting, what changed with online booking, one refusal, one difficulty and a current limit, presented in deliberately varied order."
+      ],
+      "closing_function": "Each profile closes on the specific boundary it has drawn; none closes with the same rhetorical move or with a general observation about tourism.",
+      "tone_and_voice": "Four natural, clearly differentiated first-person voices; practical and specific, without caricature or regional parody.",
+      "point_of_view": "multi_profile",
+      "factuality_mode": "plausible_case",
+      "fact_safety_notes": [
+        "Do not name real platforms, companies, towns or properties.",
+        "Do not state tax, licensing or planning requirements as fact.",
+        "Do not invent occupancy rates, prices or earnings."
+      ],
+      "why_this_fits_the_part": "A shared activity with four genuinely different boundaries produces overlapping but separable evidence, which is exactly the discrimination architecture Part 7 requires.",
+      "examinable_potential": "Supports at least ten paraphrasable matching statements across motivation, effect of reviews, degree of automation, contact with guests, refusals, difficulties and current limits.",
+      "understanding_targets": [
+        "comparison",
+        "attitude",
+        "detail matching",
+        "paraphrase",
+        "inference"
+      ],
+      "avoid": [
+        "Four versions of the same host with different properties.",
+        "Questions answerable by spotting a repeated word.",
+        "One profile carrying most of the strong evidence.",
+        "A shared conclusion about tourism or technology.",
+        "Naming a real platform.",
+        "Making any host a straightforward villain or hero."
+      ],
+      "generic_filler_risks": [
+        "Repeated statements that guests are unpredictable.",
+        "Describing rooms rather than decisions."
+      ],
+      "likely_cliches": [
+        "'Home from home.'",
+        "'Going the extra mile.'",
+        "'It's not about the money.'"
+      ],
+      "potential_incoherences": [
+        "A host who claims to have automated everything while describing daily conversations with guests."
+      ],
+      "similarity_warnings": [
+        "Part 7 domains so far are local history (E01), workplace change (E02) and informal language learning (E03). Hosting accommodation is unrelated to all three."
+      ],
+      "factuality_risks": [
+        "Presenting invented platform behaviour, such as specific review mechanics, as fact."
+      ],
+      "conceptual_fingerprint": {
+        "central_idea_tag": "hosting_reshaped_by_platforms",
+        "progression_pattern": "four_profile_comparison",
+        "tension_tag": "income_vs_privacy",
+        "opening_mechanism": "varied_profile_entry",
+        "ending_mechanism": "distinct_boundary_drawn",
+        "protagonist_type": "accommodation_hosts",
+        "setting_tag": "mixed_domestic_settings",
+        "style_card_id": "SC-06"
+      },
+      "history_notes": [
+        "TB-022 unused in E01/E02. ST-078 new; ST-073 reused once inside batch RUOE-PILOT-02 at E03 Part 5, never inside the same exam.",
+        "Fourth consecutive use of SC-06 at Part 7, which is structural and exempt under DR-12."
+      ],
+      "part_specific": {
+        "shared_frame": "Four people let out accommodation and take bookings online, but each has decided differently what to hand over to the system and what to keep doing themselves.",
+        "profiles": {
+          "A": {
+            "role": "Lets the spare room in a city flat she lives in",
+            "trigger": "A rent increase she could not otherwise absorb.",
+            "motivation": "Needed the income and assumed the arrangement would be temporary.",
+            "difficulty": "There is no separation between her home and the let; she has nowhere to be off duty.",
+            "key_details": [
+              "Accepts weekday bookings only, so that weekends are hers",
+              "Has stopped offering breakfast because it forced early conversation",
+              "Answers messages in two fixed windows a day"
+            ],
+            "result_current_position": "Has kept the income and rationed the contact; will not let the room at weekends whatever the demand.",
+            "reflection_attitude": "Guarded, practical, honest about doing it for the money."
+          },
+          "B": {
+            "role": "Lets a converted outbuilding on a working farm",
+            "trigger": "The building was standing empty and deteriorating.",
+            "motivation": "Wanted the building used and repaired rather than sold.",
+            "difficulty": "Reviews reward additions she does not want to make, and she has watched her rating drop for refusing them.",
+            "key_details": [
+              "Declines to install the facilities guests most often request",
+              "Writes a long note about the farm before arrival so expectations are set",
+              "Prefers guests who book for a week"
+            ],
+            "result_current_position": "Accepts fewer bookings at a lower rating rather than change what the place is.",
+            "reflection_attitude": "Stubborn, clear-sighted, unapologetic."
+          },
+          "C": {
+            "role": "Manages three flats for owners who live elsewhere",
+            "trigger": "Turned an occasional favour into a paid arrangement.",
+            "motivation": "Treats it straightforwardly as a job with a defined scope.",
+            "difficulty": "Guests want a person rather than a service, and complain about efficiency they cannot see.",
+            "key_details": [
+              "Has automated locks, messages, cleaning schedules and pricing",
+              "Meets every guest for ten minutes on arrival and nothing else",
+              "Keeps the three flats deliberately identical"
+            ],
+            "result_current_position": "Has automated everything except the welcome, and considers that the only part worth his time.",
+            "reflection_attitude": "Systematic, unsentimental, quietly proud of the arrangement."
+          },
+          "D": {
+            "role": "Lets rooms in a large old house near a coast path",
+            "trigger": "Has done it since long before anything was booked online.",
+            "motivation": "The house is too big for one person and the walkers were coming anyway.",
+            "difficulty": "Online booking created an expectation of instant replies that she cannot meet in the season.",
+            "key_details": [
+              "Still keeps a paper diary as the authoritative record",
+              "Has twice been double-booked by the system and honoured both",
+              "Will not take single-night bookings in winter"
+            ],
+            "result_current_position": "Uses the platform for reach and her diary for truth, and has stopped apologising for the delay in replying.",
+            "reflection_attitude": "Experienced, unhurried, mildly amused by the technology."
+          }
+        },
+        "comparison_dimensions": [
+          "reason for starting",
+          "degree of automation",
+          "effect of reviews or ratings",
+          "amount of contact with guests",
+          "what they refuse to provide",
+          "how they protect their own time",
+          "what has changed most since they began"
+        ],
+        "controlled_overlap": [
+          "A and C both restrict contact with guests, but A does it to protect her home and C because contact is not what he is paid for.",
+          "B and D both refuse to meet an expectation the platform encourages, but B refuses a facility and D refuses a response time.",
+          "A and D both ration their availability, but A by day of the week and D by length of stay.",
+          "C and D both rely on a system, but C trusts his and D keeps a paper record because she does not."
+        ],
+        "exclusive_details": [
+          "A: two fixed message windows a day",
+          "B: a long note sent before arrival",
+          "C: three deliberately identical flats",
+          "D: a paper diary kept as the authoritative record"
+        ],
+        "voice_differentiation": "A is short-sentenced and defensive; B is declarative and unapologetic; C is precise and faintly managerial; D is discursive, with long sentences and dry asides.",
+        "potential_answer_distribution": "Evidence is planned so that each profile can support two or three of the ten questions, with no profile supporting more than three and none fewer than two."
+      },
+      "editorial_status": "Draft",
+      "validator_status": "PASS",
+      "validator_warnings": [
+        "Human approval required before generation.",
+        "Question wording must be paraphrased away from profile wording; TEST-P7-WORD-MATCH accumulation is to be checked at generation."
+      ],
+      "review_feedback": [],
+      "regeneration_history": [],
+      "lifecycle_state": "Proposed"
+    }
+  ]
+}

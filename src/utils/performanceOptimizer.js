@@ -248,6 +248,8 @@ export class PerformanceOptimizer {
 
   // Setup service worker for caching
   setupServiceWorker() {
+    // En desarrollo el SW cachea los bundles y rompe el HMR de Next.
+    if (process.env.NODE_ENV !== 'production') return;
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then(registration => {

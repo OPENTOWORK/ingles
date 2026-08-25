@@ -1,0 +1,146 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:49:49.784Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-012",
+  "brief_version": "1.0",
+  "style_card_id": "SC-06",
+  "style_card_version": "v1.0",
+  "working_title": "Small changes that made work feel better",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 4476,
+    "completion_tokens": 1154,
+    "total_tokens": 5630
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "section A word_count 86 severely off-range",
+      "section B word_count 83 severely off-range",
+      "section C word_count 77 severely off-range",
+      "section D word_count 67 severely off-range"
+    ],
+    "warnings": [
+      "section A word_count 86 outside target 120–150",
+      "section B word_count 83 outside target 120–150",
+      "section C word_count 77 outside target 120–150",
+      "section D word_count 67 outside target 120–150"
+    ],
+    "word_count": 313
+  },
+  "exercise": {
+    "part_title": "Part 7: Small Changes That Made Work Feel Better",
+    "instructions": "You are going to read four profiles about workplace changes that improved people's daily experiences. For questions 43–52, choose from the profiles A–D. The profiles may be chosen more than once.",
+    "matching_intro": "All four people describe a change in work organisation that improved their own daily experience, but the valued benefit differs.",
+    "common_context_title": "Workplace Changes",
+    "sections": {
+      "A": {
+        "label": "A",
+        "text": "As a designer, my work requires deep concentration, but constant interruptions made it difficult to complete complex tasks. Our team decided to introduce no-meeting focus blocks, allowing us to work without distractions. I now plan my questions for later rather than messaging immediately. While this has made quick collaboration less convenient, I appreciate being able to finish demanding tasks without switching my attention. I would keep these focus blocks but not use them for the entire day, as I value concentration and clear boundaries, not isolation."
+      },
+      "B": {
+        "label": "B",
+        "text": "Working with personal scheduling constraints was stressful due to fixed start times. The change to a flexible schedule, where I can choose my start and end times within an agreed range, has been a relief. However, this flexibility requires clearer handovers with colleagues on different schedules. I use shared status notes for this purpose. I value the predictability and choice more than total freedom. This change has made me more practical and autonomy-focused, though I remain aware of the need for team coordination."
+      },
+      "C": {
+        "label": "C",
+        "text": "Initially, I saw mentoring a newcomer as extra work. I accepted because the team needed help. Explaining familiar tasks required patience and exposed habits I never questioned. Over time, I learned to explain the reasons behind procedures, which improved my understanding of my role. I find satisfaction in seeing the newcomer become independent. I now value feeling useful to another person more than I expected, though I was initially reluctant. This experience has made me quietly proud."
+      },
+      "D": {
+        "label": "D",
+        "text": "Our team faced recurring operational problems, with people complaining separately without solutions. We started having short, scheduled problem-solving meetings where one person brings an issue and the team agrees on a next action. While these sessions can become repetitive if no decision is made, I value the shared responsibility when discussions lead to action. I am collaborative but impatient with meetings that don't result in concrete outcomes."
+      }
+    },
+    "questions": [
+      {
+        "number": 43,
+        "prompt": "Who appreciates having uninterrupted time to complete complex tasks?",
+        "answer": "A",
+        "evidence": "Profile A describes the introduction of no-meeting focus blocks to allow for uninterrupted work on complex tasks.",
+        "rationale": "Profile A specifically mentions valuing the ability to finish demanding tasks without distractions."
+      },
+      {
+        "number": 44,
+        "prompt": "Who values predictability and choice in their work schedule?",
+        "answer": "B",
+        "evidence": "Profile B discusses the relief from stress due to a flexible schedule and values predictability and choice.",
+        "rationale": "Profile B highlights the importance of predictability and choice over total freedom."
+      },
+      {
+        "number": 45,
+        "prompt": "Who initially saw a new responsibility as extra work?",
+        "answer": "C",
+        "evidence": "Profile C describes initially viewing mentoring as extra work.",
+        "rationale": "Profile C mentions the initial perception of mentoring as an additional burden."
+      },
+      {
+        "number": 46,
+        "prompt": "Who finds satisfaction in helping a colleague become independent?",
+        "answer": "C",
+        "evidence": "Profile C finds satisfaction in seeing the newcomer become independent.",
+        "rationale": "Profile C reflects on the satisfaction gained from mentoring and helping a colleague grow."
+      },
+      {
+        "number": 47,
+        "prompt": "Who has to manage clearer handovers due to flexible working hours?",
+        "answer": "B",
+        "evidence": "Profile B mentions the need for clearer handovers with colleagues due to flexible scheduling.",
+        "rationale": "Profile B highlights the challenge of coordination with colleagues on different schedules."
+      },
+      {
+        "number": 48,
+        "prompt": "Who values discussions that lead to concrete outcomes?",
+        "answer": "D",
+        "evidence": "Profile D values shared responsibility when discussions in meetings lead to action.",
+        "rationale": "Profile D expresses impatience with meetings that do not result in concrete outcomes."
+      },
+      {
+        "number": 49,
+        "prompt": "Who appreciates the ability to focus on one task without switching attention?",
+        "answer": "A",
+        "evidence": "Profile A appreciates being able to finish demanding tasks without switching attention.",
+        "rationale": "Profile A specifically values the concentration enabled by focus blocks."
+      },
+      {
+        "number": 50,
+        "prompt": "Who has learned to explain the reasons behind procedures?",
+        "answer": "C",
+        "evidence": "Profile C learns to explain reasons, not just procedures, during mentoring.",
+        "rationale": "Profile C discusses the growth in understanding through explaining tasks."
+      },
+      {
+        "number": 51,
+        "prompt": "Who enjoys shared responsibility in problem-solving?",
+        "answer": "D",
+        "evidence": "Profile D values shared responsibility in problem-solving meetings.",
+        "rationale": "Profile D appreciates the collaborative aspect of team problem-solving."
+      },
+      {
+        "number": 52,
+        "prompt": "Who finds it important to maintain clear boundaries without feeling isolated?",
+        "answer": "A",
+        "evidence": "Profile A values concentration and clear boundaries, not isolation.",
+        "rationale": "Profile A discusses the balance between focus and not feeling isolated."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise adheres to the brief by presenting four distinct profiles with unique experiences and perspectives on workplace changes.",
+      "style_card_notes": "The style card requirements are met by providing differentiated voices and experiences across the profiles.",
+      "british_english_notes": "The text uses British English consistently throughout.",
+      "factuality_notes": "The scenarios are plausible and do not make unverifiable claims.",
+      "answer_validity_notes": "Each question has a single, defendable answer based on the content of the profiles.",
+      "self_check_flags": []
+    },
+    "_word_count": 313
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

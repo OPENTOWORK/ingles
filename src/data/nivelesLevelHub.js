@@ -569,8 +569,8 @@ export const NIVELES_LEVEL_HUB = {
         enabledForStudents: true,
       },
       { text: '✍️ Writing', href: '/niveles/b2/exam-writing', enabledForStudents: true },
-      { text: '🎧 Listening', href: '/niveles/b2/exam-listening', enabledForStudents: true },
-      { text: '🗣️ Speaking', href: '/niveles/b2/exam-speaking', enabledForStudents: true },
+      { text: '🎧 Listening', href: '/niveles/b2/exam-listening', enabledForStudents: false },
+      { text: '🗣️ Speaking', href: '/niveles/b2/exam-speaking', enabledForStudents: false },
     ],
   },
 
@@ -775,4 +775,45 @@ export const NIVELES_LEVEL_HUB = {
 
 export function getNivelesLevelHub(slug) {
   return NIVELES_LEVEL_HUB[String(slug || '').toLowerCase()] || null;
+}
+
+function pathMatchesBlockedExamSkill(path, href) {
+  const skillPath = String(href || '').toLowerCase();
+  if (!skillPath) return false;
+  if (path === skillPath || path.startsWith(`${skillPath}?`) || path.startsWith(`${skillPath}/`)) {
+    return true;
+  }
+
+  const tail = skillPath.split('/').pop() || '';
+  if (tail.includes('listening') && /\/listening(\/|$|\?)/.test(path)) return true;
+  if (tail.includes('speaking') && /\/speaking(\/|$|\?)/.test(path) && !path.includes('speaking-lab')) {
+    return true;
+  }
+
+  return false;
+}
+
+/** Skill practice blocked for students (from hub examLinks.enabledForStudents). */
+export function getStudentBlockedExamSkillFromPath(pathname) {
+  const path = String(pathname || '').toLowerCase();
+  const match = path.match(/^\/niveles\/([a-z0-9-]+)\//);
+  if (!match) return null;
+
+  const slug = match[1];
+  const hub = getNivelesLevelHub(slug);
+  if (!hub?.examLinks) return null;
+
+  for (const link of hub.examLinks) {
+    if (link.enabledForStudents !== false) continue;
+    if (!pathMatchesBlockedExamSkill(path, link.href)) continue;
+
+    return {
+      slug,
+      cefr: hub.cefr,
+      label: cleanSkillNavLabel(link.text),
+      backHref: `/niveles/${slug}`,
+    };
+  }
+
+  return null;
 }

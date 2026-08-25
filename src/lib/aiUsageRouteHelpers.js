@@ -12,6 +12,37 @@ import {
 import { estimateTokensFromText, estimateAiCost } from '@/lib/aiPricing';
 import { draloChatCompletionFull } from '@/lib/ai/draloAiEngine';
 import { LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
+import {
+  PLAN_USAGE_KEYS,
+  consumePlanUsage,
+  resolveUserPlanSlug,
+  shouldApplyPlanUsageLimits,
+} from '@/lib/planAccess';
+
+const ACTION_TO_PLAN_USAGE = {
+  [AI_ACTIONS.EXAM_WRITING_CORRECTION]: PLAN_USAGE_KEYS.WRITING_CORRECTION,
+  [AI_ACTIONS.EXAM_SPEAKING_FEEDBACK]: PLAN_USAGE_KEYS.SPEAKING_CORRECTION,
+};
+
+function planLimitMessage(action) {
+  if (action === AI_ACTIONS.EXAM_WRITING_CORRECTION) return LIMIT_REACHED.writing.en;
+  if (action === AI_ACTIONS.EXAM_SPEAKING_FEEDBACK) return LIMIT_REACHED.speaking.en;
+  return LIMIT_REACHED.generic.en;
+}
+
+function buildPlanUsageStatus(planResult, action) {
+  return {
+    unlimited: false,
+    limit: planResult.limit,
+    used: planResult.used,
+    remaining: planResult.limit != null && planResult.used != null
+      ? Math.max(0, planResult.limit - planResult.used)
+      : null,
+    atLimit: planResult.code === 'PLAN_LIMIT_REACHED',
+    periodType: planResult.periodType || 'month',
+    action,
+  };
+}
 
 /**
  * Standard AI API error JSON (spec format).
@@ -33,30 +64,50 @@ export async function runAiPreflight(userId, action, options = {}) {
     options.deferredExamMode === true && action === AI_ACTIONS.EXAM_WRITING_CORRECTION;
 
   let daily = skipDailyLimit ? { allowed: true, deferredExamMode: true } : null;
+  const userEmail = options.userEmail ?? '';
+  const planUsageKey = ACTION_TO_PLAN_USAGE[action];
+  const applyPlanLimits =
+    planUsageKey && (await shouldApplyPlanUsageLimits(userId, userEmail));
 
   if (!skipDailyLimit) {
-    daily = await consumeDailyAiLimit(userId, action, options);
-    if (!daily.allowed) {
-      const message =
-        action === AI_ACTIONS.EXAM_WRITING_CORRECTION
-          ? LIMIT_REACHED.writing.en
-          : action === AI_ACTIONS.EXAM_SPEAKING_FEEDBACK
-            ? LIMIT_REACHED.speaking.en
-            : LIMIT_REACHED.generic.en;
+    if (applyPlanLimits) {
+      const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null);
+      const planResult = await consumePlanUsage(userId, planUsageKey, planSlug);
+      if (!planResult.allowed) {
+        return {
+          ok: false,
+          response: aiErrorJson(
+            planResult.code || 'PLAN_LIMIT_REACHED',
+            planLimitMessage(action),
+            {
+              limit: planResult.limit,
+              used: planResult.used,
+              usage: buildPlanUsageStatus(planResult, action),
+            },
+            429,
+          ),
+        };
+      }
+      daily = { allowed: true, planUsage: planResult, planBased: true };
+    } else {
+      daily = await consumeDailyAiLimit(userId, action, options);
+      if (!daily.allowed) {
+        const message = planLimitMessage(action);
 
-      return {
-        ok: false,
-        response: aiErrorJson(
-          daily.code === 'DAILY_LIMIT_REACHED' ? 'DAILY_LIMIT_REACHED' : daily.code || 'DAILY_LIMIT_REACHED',
-          message,
-          {
-            limit: daily.limit,
-            used: daily.used,
-            usage: buildDailyUsageStatus(daily, action),
-          },
-          429,
-        ),
-      };
+        return {
+          ok: false,
+          response: aiErrorJson(
+            daily.code === 'DAILY_LIMIT_REACHED' ? 'DAILY_LIMIT_REACHED' : daily.code || 'DAILY_LIMIT_REACHED',
+            message,
+            {
+              limit: daily.limit,
+              used: daily.used,
+              usage: buildDailyUsageStatus(daily, action),
+            },
+            429,
+          ),
+        };
+      }
     }
   }
 
@@ -87,6 +138,7 @@ export async function recordAiUsageSuccess({
   model,
   usage,
   metadata = {},
+  planBased = false,
 }) {
   const input_tokens = usage?.input_tokens ?? 0;
   const output_tokens = usage?.output_tokens ?? 0;
@@ -110,7 +162,7 @@ export async function recordAiUsageSuccess({
 
   if (getDailyLimit(action) == null) {
     await incrementDailyAiUsage(userId, action, { userEmail });
-  } else {
+  } else if (!options.planBased) {
     await incrementDailyAiUsage(userId, action, {
       userEmail,
       skipIfPreflightConsumed: true,

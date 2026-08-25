@@ -14,6 +14,8 @@ import { loadEnvLocal } from './load-env-local.mjs';
 import { buildExamGeneratePrompt } from '../src/lib/draloAiExamPrompts.js';
 import { validateGeneratedExamPart } from '../src/lib/examPartValidation.js';
 import { countWords } from '../src/lib/b2RuoeExamQuality.js';
+import { repairPart7WordMatchQuestions } from '../src/lib/ruoeLocalItemRepair.js';
+import { validateRuoeEditorialQuality } from '../src/lib/ruoeEditorialQuality.js';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(root, 'scripts', 'generated', 'reviews');
@@ -229,6 +231,13 @@ function evaluateGenerated(generated) {
     },
     { name: 'No placeholders', ok: noPlaceholders },
     { name: 'No length padding', ok: true },
+    {
+      name: 'Word-match quality fails ≤1',
+      ok:
+        validateRuoeEditorialQuality(7, normalized).findings.filter(
+          (f) => f.rule_id === 'TEST-P7-WORD-MATCH',
+        ).length <= 1,
+    },
   ];
 
   return {
@@ -244,6 +253,7 @@ let attempt = 0;
 let lastEval = null;
 let lastGenerated = null;
 let lastSectionWcs = null;
+const localRepairs = [];
 const MAX_ATTEMPTS = 8;
 const attemptLog = [];
 
@@ -317,6 +327,15 @@ HARD REQUIREMENTS:
     process.exit(2);
   }
 
+  const editorialBefore = validateRuoeEditorialQuality(7, lastGenerated);
+  const wordMatchCount = editorialBefore.findings.filter((f) => f.rule_id === 'TEST-P7-WORD-MATCH').length;
+  if (wordMatchCount >= 2) {
+    console.error(`  ${wordMatchCount} TEST-P7-WORD-MATCH; local question repair…`);
+    const repaired = await repairPart7WordMatchQuestions(openai, lastGenerated, { minFlags: 2 });
+    lastGenerated = repaired.repaired;
+    if (repaired.repairs.length) localRepairs.push(...repaired.repairs);
+  }
+
   lastEval = evaluateGenerated(lastGenerated);
   lastSectionWcs = lastEval.sectionWordCounts;
   attemptLog.push({
@@ -344,6 +363,7 @@ const report = {
   generatedAt: new Date().toISOString(),
   model: modelName,
   attempts: attempt,
+  localRepairs,
   retried: attempt > 1,
   paddingApplied: false,
   lengthRepairViaModel: Boolean(lastAttemptMeta.lengthRepairViaModel),

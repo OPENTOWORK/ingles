@@ -1254,6 +1254,7 @@ function B2ReadingExamsPageInner() {
       partNumber: partNumberReading,
       progressBySlot: skillProgressForNav,
       bypassStarGating: skillNav.bypassStarGating,
+      maxExamSlot: skillNav.maxExamSlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -2651,6 +2652,7 @@ function B2ReadingExamsPageInner() {
       ) : null}
       </div>
       </ReadingPracticeChrome>
+      {skillNav.planUpgradeModal}
     </B2ExamPracticeLayout>
   );
 }

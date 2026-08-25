@@ -18,6 +18,7 @@ import {
   extractPoolLetter,
   extractPoolSentenceText,
 } from '../src/lib/b2RuoeExamQuality.js';
+import { analyzePart6PoolDevelopment } from '../src/lib/ruoePart6HardValidators.js';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(root, 'scripts', 'generated', 'reviews');
@@ -149,6 +150,11 @@ function evaluateGenerated(generated) {
     },
     { name: 'No placeholders', ok: noPlaceholders },
     { name: 'No length padding', ok: true },
+    {
+      name: 'Pool sufficiently developed',
+      ok: analyzePart6PoolDevelopment(pool).length === 0,
+      detail: `${analyzePart6PoolDevelopment(pool).length} short/generic option(s)`,
+    },
   ];
 
   return {

@@ -1,0 +1,38 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "human_approval_date": "2026-08-12",
+  "status": "READY_FOR_TWO_STAGE_PILOT",
+  "phase_a": {
+    "name": "CONTENT_BRIEF_PIPELINE",
+    "status": "AUTHORIZED",
+    "exercise_count": 12,
+    "parts": [
+      1,
+      2,
+      3,
+      5,
+      6,
+      7
+    ],
+    "approved_briefs": "02_APPROVED_INPUTS/DRALO_RUOE_12_Content_Briefs_Pilot_v1_0_APPROVED.json",
+    "review_checklist": "04_REVIEW/DRALO_RUOE_Checklist_Revision_Ejercicios_Piloto_v1_1.docx",
+    "stop_after": "12 exercises + self-check + human-review handoff"
+  },
+  "phase_b": {
+    "name": "PART4_BLUEPRINT_PIPELINE",
+    "status": "AUTHORIZED_AFTER_PHASE_A_HANDOFF",
+    "part": 4,
+    "part4_task_count": 2,
+    "scored_items_total": 12,
+    "approved_blueprints": "02_APPROVED_INPUTS/DRALO_RUOE_Transformation_Blueprints_Pilot_v1_0_APPROVED.json",
+    "review_checklist": "04_REVIEW/DRALO_RUOE_Checklist_Revision_Part4_Piloto_v1_0.docx",
+    "stop_after": "2 Part 4 tasks + self-check + human-review handoff"
+  },
+  "runtime_prompts": "01_RUNTIME/DRALO_RUOE_Pilot_Runtime_Prompts_v1_1.md",
+  "integration": {
+    "status": "NOT_AUTHORIZED_YET",
+    "action": "TEST_BOTH_PIPELINES_SEPARATELY_FIRST"
+  },
+  "total_part_outputs_when_both_phases_complete": 14
+}

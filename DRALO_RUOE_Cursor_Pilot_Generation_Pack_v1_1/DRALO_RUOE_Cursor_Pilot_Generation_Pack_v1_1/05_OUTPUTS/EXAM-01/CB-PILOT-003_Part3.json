@@ -1,0 +1,112 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 3,
+  "generated_at": "2026-08-12T15:43:16.546Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-003",
+  "brief_version": "1.0",
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.0",
+  "working_title": "Games that make practice feel different",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3211,
+    "completion_tokens": 866,
+    "total_tokens": 4077
+  },
+  "self_check": {
+    "status": "pass_with_warnings",
+    "errors": [],
+    "warnings": [
+      "word_count 178 outside target 160–170"
+    ],
+    "word_count": 178
+  },
+  "exercise": {
+    "part_title": "Part 3",
+    "instructions": "For questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line.",
+    "text_title": "Games that make practice feel different",
+    "passage_with_gaps": "In a classroom corner, a group of students is gathered around a board game, discussing their next move with the seriousness of a lesson task. This is not just for (0) **ENTERTAINMENT**; it's a part of a learning club where games are used to practice skills. The aim is not to replace traditional lessons but to provide (17) **REPEAT** opportunities to plan, explain, and respond to feedback.\n\nOne student, tasked with explaining their strategy, finds it (18) **CHALLENGE** to articulate their plan clearly. The group listens (19) **ATTENTIVE** and offers suggestions, highlighting the cooperative nature of the activity. However, their first attempt fails, and they quickly (20) **ADAPT** their approach, demonstrating the importance of feedback and (21) **PERSIST**.\n\nThis method works best when the game's demands align with the skills being practiced. For instance, a game requiring (22) **DECIDE** making can enhance critical thinking skills. Yet, it's crucial to remember that games alone don't teach; they must be part of a broader (23) **EDUCATE** strategy. When used correctly, games can make practice more (24) **ENGAGE**, but only if the activity and the skill are a genuine match.",
+    "example": {
+      "number": 0,
+      "stem": "ENTERTAINMENT",
+      "answer": "entertainment",
+      "explanation": "The word 'entertainment' is the base form and fits the context as it refers to the purpose of the activity."
+    },
+    "questions": [
+      {
+        "number": 17,
+        "stem": "REPEAT",
+        "answer": "repeated",
+        "transformation_type": "suffix change",
+        "rationale": "The adjective 'repeated' is needed to describe the opportunities provided by the games."
+      },
+      {
+        "number": 18,
+        "stem": "CHALLENGE",
+        "answer": "challenging",
+        "transformation_type": "noun→adjective",
+        "rationale": "The adjective 'challenging' describes the difficulty faced by the student in explaining their strategy."
+      },
+      {
+        "number": 19,
+        "stem": "ATTENTIVE",
+        "answer": "attentively",
+        "transformation_type": "adjective→adverb",
+        "rationale": "The adverb 'attentively' describes how the group listens to the student's explanation."
+      },
+      {
+        "number": 20,
+        "stem": "ADAPT",
+        "answer": "adapt",
+        "transformation_type": "verb→verb",
+        "rationale": "The verb 'adapt' fits the context as it describes the action of changing their approach."
+      },
+      {
+        "number": 21,
+        "stem": "PERSIST",
+        "answer": "persistence",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'persistence' refers to the quality needed to keep trying after failure."
+      },
+      {
+        "number": 22,
+        "stem": "DECIDE",
+        "answer": "decision",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'decision' is needed to refer to the skill of making choices."
+      },
+      {
+        "number": 23,
+        "stem": "EDUCATE",
+        "answer": "educational",
+        "transformation_type": "verb→adjective",
+        "rationale": "The adjective 'educational' describes the strategy that includes games as a part."
+      },
+      {
+        "number": 24,
+        "stem": "ENGAGE",
+        "answer": "engaging",
+        "transformation_type": "verb→adjective",
+        "rationale": "The adjective 'engaging' describes how practice can become more interesting with games."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise aligns with the brief by focusing on games as a tool for practice, not replacement of lessons, and includes a failed attempt and strategy change.",
+      "style_card_notes": "The tone is balanced and informative, fitting the 'Trend & Social Report' style card. It discusses the use of games in education without sensationalism.",
+      "british_english_notes": "British English conventions are maintained throughout the text.",
+      "factuality_notes": "The scenario is plausible and does not invent any statistics or studies.",
+      "answer_validity_notes": "Each gap has a single, defendable answer that fits grammatically and contextually.",
+      "self_check_flags": []
+    },
+    "_word_count": 178
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

@@ -1,0 +1,213 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E03",
+  "ruoe_exam_id": "RUOE-PILOT-E03",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-013",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.1",
+  "working_title": "Fewer people, more often",
+  "final_title": "Smaller rooms, same conversations",
+  "title_candidates": [
+    "Smaller rooms, same conversations",
+    "The audience gets shorter",
+    "Keeping the app, losing the crowd"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q2: a strong candidate might consider “divide into”, which is not offered; the four given options leave only “fall” defensible."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Blind-solve agreed with the key on 8/8. Q6 was the slowest item: “urge” was reached by elimination rather than immediately.",
+    "repairs_applied": [
+      "Q6 regenerated during drafting: the first version used “bothering/troubling to look”, where both were defensible in British English. Replaced with a noun-based item.",
+      "Q8 regenerated during drafting: the earlier ending gapped “reaches them”, which duplicated a semantic-distinction item already at Q7."
+    ],
+    "teacher_attention_items": [
+      2
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 1",
+    "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap. There is an example at the beginning (0).",
+    "partNumber": 1,
+    "title": "Smaller rooms, same conversations",
+    "titlePatternFamily": "juxtaposition_title",
+    "passage": "Somebody turns off notifications for a group chat they have belonged (0) ___ for years. It sounds like nothing, and it is happening everywhere. Instead of deleting their accounts, a good many users are quietly (1) ___ back the audience for everything they post, keeping the apps and shrinking the room.\n\nThe reasons they offer (2) ___ into two broad categories. Some resent being interrupted during the working day. Others are simply wary (3) ___ an audience they can no longer picture. Few of them describe it (4) ___ terms of health; the word they use is attention.\n\nWhat they notice afterwards is mainly a difference of pace. They look less often, they write at greater (5) ___ when they do, and the (6) ___ to check every few minutes has faded.\n\nThey are honest about the cost. Now and again an invitation is (7) ___ entirely, and news from the edge of their circle arrives late. None of it, they concede, has made much (8) ___ to the hours they spend on a screen.",
+    "example": {
+      "number": 0,
+      "options": [
+        "A) in",
+        "B) to",
+        "C) with",
+        "D) at"
+      ],
+      "answer": "B",
+      "explanation": "“Belong to” is the fixed dependent preposition."
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 1,
+        "type": "mcq",
+        "options": [
+          "A) scaling",
+          "B) holding",
+          "C) drawing",
+          "D) rolling"
+        ]
+      },
+      {
+        "id": "q2",
+        "number": 2,
+        "type": "mcq",
+        "options": [
+          "A) come",
+          "B) fall",
+          "C) turn",
+          "D) break"
+        ]
+      },
+      {
+        "id": "q3",
+        "number": 3,
+        "type": "mcq",
+        "options": [
+          "A) of",
+          "B) about",
+          "C) with",
+          "D) from"
+        ]
+      },
+      {
+        "id": "q4",
+        "number": 4,
+        "type": "mcq",
+        "options": [
+          "A) by",
+          "B) on",
+          "C) in",
+          "D) at"
+        ]
+      },
+      {
+        "id": "q5",
+        "number": 5,
+        "type": "mcq",
+        "options": [
+          "A) size",
+          "B) length",
+          "C) depth",
+          "D) width"
+        ]
+      },
+      {
+        "id": "q6",
+        "number": 6,
+        "type": "mcq",
+        "options": [
+          "A) urge",
+          "B) hurry",
+          "C) demand",
+          "D) request"
+        ]
+      },
+      {
+        "id": "q7",
+        "number": 7,
+        "type": "mcq",
+        "options": [
+          "A) lost",
+          "B) skipped",
+          "C) missed",
+          "D) dropped"
+        ]
+      },
+      {
+        "id": "q8",
+        "number": 8,
+        "type": "mcq",
+        "options": [
+          "A) change",
+          "B) effect",
+          "C) result",
+          "D) difference"
+        ]
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 1,
+        "answer": "A",
+        "category": "phrasal / verb combination"
+      },
+      {
+        "id": "q2",
+        "number": 2,
+        "answer": "B",
+        "category": "collocation"
+      },
+      {
+        "id": "q3",
+        "number": 3,
+        "answer": "A",
+        "category": "dependent preposition"
+      },
+      {
+        "id": "q4",
+        "number": 4,
+        "answer": "C",
+        "category": "fixed expression"
+      },
+      {
+        "id": "q5",
+        "number": 5,
+        "answer": "B",
+        "category": "fixed expression"
+      },
+      {
+        "id": "q6",
+        "number": 6,
+        "answer": "A",
+        "category": "lexical meaning"
+      },
+      {
+        "id": "q7",
+        "number": 7,
+        "answer": "C",
+        "category": "semantic distinction"
+      },
+      {
+        "id": "q8",
+        "number": 8,
+        "answer": "D",
+        "category": "collocation"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

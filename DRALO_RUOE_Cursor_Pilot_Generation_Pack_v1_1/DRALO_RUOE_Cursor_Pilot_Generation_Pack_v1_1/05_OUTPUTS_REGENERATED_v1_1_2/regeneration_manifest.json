@@ -1,0 +1,163 @@
+{
+  "version": "v1.1.2",
+  "generated_at": "2026-08-17T13:17:43.283Z",
+  "useCodePrompts": true,
+  "supabase_sync": false,
+  "production_write": false,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "model": "gpt-4o-mini",
+  "exams": [
+    {
+      "ruoe_exam_id": "RUOE-PILOT-E01",
+      "folder": "EXAM-01",
+      "parts": [
+        {
+          "part": 1,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-01\\CB-PILOT-001_Part1.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 0,
+          "warnings": 6,
+          "repairs": 0
+        },
+        {
+          "part": 2,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-01\\CB-PILOT-002_Part2.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 0,
+          "warnings": 6,
+          "repairs": 0
+        },
+        {
+          "part": 3,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-01\\CB-PILOT-003_Part3.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 0,
+          "warnings": 4,
+          "repairs": 0
+        },
+        {
+          "part": 5,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-01\\CB-PILOT-004_Part5.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 0,
+          "warnings": 4,
+          "repairs": 0
+        },
+        {
+          "part": 6,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-01\\CB-PILOT-005_Part6.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 2,
+          "warnings": 1,
+          "repairs": 0
+        },
+        {
+          "part": 7,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-01\\CB-PILOT-006_Part7.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 2,
+          "warnings": 2,
+          "repairs": 0
+        },
+        {
+          "part": 4,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-01\\TBP-PILOT-EX01_Part4.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 6,
+          "warnings": 1,
+          "repairs": 1
+        }
+      ]
+    },
+    {
+      "ruoe_exam_id": "RUOE-PILOT-E02",
+      "folder": "EXAM-02",
+      "parts": [
+        {
+          "part": 1,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-02\\CB-PILOT-007_Part1.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 1,
+          "quality": 0,
+          "warnings": 5,
+          "repairs": 0
+        },
+        {
+          "part": 2,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-02\\CB-PILOT-008_Part2.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 1,
+          "quality": 0,
+          "warnings": 3,
+          "repairs": 0
+        },
+        {
+          "part": 3,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-02\\CB-PILOT-009_Part3.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 0,
+          "warnings": 2,
+          "repairs": 0
+        },
+        {
+          "part": 5,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-02\\CB-PILOT-010_Part5.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 1,
+          "warnings": 4,
+          "repairs": 0
+        },
+        {
+          "part": 6,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-02\\CB-PILOT-011_Part6.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 2,
+          "warnings": 2,
+          "repairs": 0
+        },
+        {
+          "part": 7,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-02\\CB-PILOT-012_Part7.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 0,
+          "warnings": 2,
+          "repairs": 0
+        },
+        {
+          "part": 4,
+          "file": "05_OUTPUTS_REGENERATED_v1_1_2\\EXAM-02\\TBP-PILOT-EX02_Part4.json",
+          "validation_ok": true,
+          "hard": 0,
+          "quality_review_hard": 0,
+          "quality": 6,
+          "warnings": 0,
+          "repairs": 7
+        }
+      ]
+    }
+  ]
+}

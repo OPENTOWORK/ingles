@@ -1,0 +1,203 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E04",
+  "ruoe_exam_id": "RUOE-PILOT-E04",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-024",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-06",
+  "style_card_version": "v1.1",
+  "working_title": "Four people who let out a room",
+  "final_title": "Where each of them draws the line",
+  "title_candidates": [
+    "Where each of them draws the line",
+    "Four hosts, four sets of rules",
+    "What they will not hand over"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q47 and Q50 both concern a boundary the host has set. Q47 is about days of the week (A) and Q50 about response time (D); the two are separated by the wording, but a reviewer should confirm it."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "All ten questions resolved to a single profile. Distribution A×3, B×3, C×2, D×2; letter sequence B, A, D, C, A, B, C, D, A, B shows no repeating cycle.",
+    "repairs_applied": [
+      "Profile A’s message rule was left as a rule rather than an apology, so that Q50 selects D alone.",
+      "Profile D’s winter single-night refusal was removed during drafting because it duplicated the “restricted availability” dimension already carried by profile A at Q47."
+    ],
+    "teacher_attention_items": [
+      47,
+      50
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 7",
+    "directions": "Part 7: Multiple matching\nYou are going to read an article in which four people talk about letting out accommodation. For questions 43–52, choose from the people (A–D). The people may be chosen more than once.",
+    "partNumber": 7,
+    "title": "Where each of them draws the line",
+    "titlePatternFamily": "descriptive_title",
+    "matchingIntro": "Four people let out accommodation and take their bookings online. Each has decided differently what to hand over to the system and what to keep doing themselves.",
+    "sections": [
+      {
+        "letter": "A",
+        "name": "Priya",
+        "text": "The rent went up by two hundred a month and I had a spare room. That is the whole story, and I am not going to dress it up as anything else. What nobody warns you about is that there is no version of this where you finish for the day. My flat is the business. So I have made rules and I keep to them. I take bookings from Monday to Thursday and the weekend is mine, whatever anybody offers me for it. I used to do breakfast and I stopped, because breakfast means talking to a stranger at seven in the morning before I have decided who I am that day. I answer messages twice, once at eight and once at six, and anyone who needs a faster reply can book elsewhere.",
+        "wordCount": 134
+      },
+      {
+        "letter": "B",
+        "name": "Marged",
+        "text": "The building had stood empty for eleven years and the roof was going. I did the conversion because I would rather it was used than sold, and letting it was the only way to justify what that cost. Guests ask for things I am not going to provide. They want a hot tub, they want the yard lit at night, they want the cattle to be quieter than cattle are. I say no, my rating has come down for it, and I have decided I can live with that. What I do instead is write to people properly before they arrive and set out exactly what the place is: a working farm, with the hours and the mud that go with one. The ones who take it for a full week have understood by the third day.",
+        "wordCount": 137
+      },
+      {
+        "letter": "C",
+        "name": "Owen",
+        "text": "It started as a favour for a neighbour who had bought a flat and never lived in it. There are three now, and I treat it as what it is, which is a job with a defined scope. The locks are automatic, the messages are automatic, the cleaners work to a schedule I set in January, and the pricing adjusts itself. All of that took a year to build and it runs without me. The one thing I have never handed over is the arrival. I meet every guest, I give them ten minutes, and after that they do not see me. People occasionally complain that the whole thing feels impersonal. What they are objecting to is work they cannot see. The three flats are deliberately identical, and that is not laziness, it is the point.",
+        "wordCount": 136
+      },
+      {
+        "letter": "D",
+        "name": "Josephine",
+        "text": "I have been letting rooms since long before any of this happened on a screen. The walkers came past the gate, they needed a bed, and the house has nine of them and one of me. What changed was not the guests, who are much as they always were, but the speed everyone now expects. Somebody messages at half past ten at night and is put out that I have not replied by eleven; in August I am not going to reply by eleven, and I gave up apologising for that some years ago. I still keep the diary, the paper one, and where the diary and the system disagree the diary is right. It has been wrong twice, in fairness, and on both occasions I found the second party a bed here anyway.",
+        "wordCount": 134
+      }
+    ],
+    "questions": [
+      {
+        "id": "q43",
+        "number": 43,
+        "prompt": "Who began letting because a building would otherwise have been lost?"
+      },
+      {
+        "id": "q44",
+        "number": 44,
+        "prompt": "Who withdrew something they used to provide because of the conversation it forced?"
+      },
+      {
+        "id": "q45",
+        "number": 45,
+        "prompt": "Who absorbed the consequences of an error made by the booking system?"
+      },
+      {
+        "id": "q46",
+        "number": 46,
+        "prompt": "Who believes that complaints are really about effort the guest never sees?"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "prompt": "Who restricts the days on which guests may stay in order to keep part of the week private?"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "prompt": "Who has accepted a lower score rather than supply what visitors ask for?"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "prompt": "Who keeps the places they look after indistinguishable from one another on purpose?"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "prompt": "Who used to excuse themselves for replying slowly and has given that up?"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "prompt": "Who is direct about having started purely for the money?"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "prompt": "Who tells visitors in advance what the surroundings will actually be like?"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q43",
+        "number": 43,
+        "answer": "B",
+        "evidence": "‘The building had stood empty for eleven years and the roof was going … I would rather it was used than sold’"
+      },
+      {
+        "id": "q44",
+        "number": 44,
+        "answer": "A",
+        "evidence": "‘I used to do breakfast and I stopped, because breakfast means talking to a stranger at seven in the morning’"
+      },
+      {
+        "id": "q45",
+        "number": 45,
+        "answer": "D",
+        "evidence": "‘It has been wrong twice … on both occasions I found the second party a bed here anyway’"
+      },
+      {
+        "id": "q46",
+        "number": 46,
+        "answer": "C",
+        "evidence": "‘What they are objecting to is work they cannot see’"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "answer": "A",
+        "evidence": "‘I take bookings from Monday to Thursday and the weekend is mine’"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "answer": "B",
+        "evidence": "‘I say no, my rating has come down for it, and I have decided I can live with that’"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "answer": "C",
+        "evidence": "‘The three flats are deliberately identical, and that is not laziness, it is the point’"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "answer": "D",
+        "evidence": "‘I gave up apologising for that some years ago’"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "answer": "A",
+        "evidence": "‘The rent went up by two hundred a month … I am not going to dress it up as anything else’"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "answer": "B",
+        "evidence": "‘write to people properly before they arrive and set out exactly what the place is: a working farm’"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

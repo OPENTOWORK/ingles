@@ -1,0 +1,121 @@
+SC-06  ·  STYLE CARD
+
+Multiple Profiles & Testimonies
+
+STATUSReady for pilot validation
+
+LANGUAGEBritish English
+
+LEVELCEFR B2
+
+What content it suits
+
+Part 7 content built from four people/profiles who share a common theme but differ in experience, attitude, motivation, difficulty, response or outcome.
+
+Compatible Parts
+
+Part 7.
+
+Typical opening
+
+• Use a concise shared frame or title that makes the comparison domain clear.
+
+• Each profile should enter quickly through a distinctive personal fact, attitude, episode or problem rather than repeating the shared topic.
+
+• Profiles do not need identical openings; controlled variation helps voice differentiation.
+
+Content progression
+
+• Give each profile a self-contained mini-arc with 2–4 comparable dimensions.
+
+• Distribute overlapping concepts across profiles so questions require discrimination rather than keyword spotting.
+
+• Make some profiles share surface similarities while differing in cause, attitude, timing, motivation or consequence.
+
+• Ensure every profile contains multiple examinable ideas and that no single profile becomes obviously richer than the others.
+
+• Across the set, vary the order in which comparable dimensions appear.
+
+What gives it real substance
+
+• Concrete episodes and decisions unique to each person.
+
+• Distinctive attitude and evaluative language.
+
+• Comparable dimensions: expectations, obstacles, reactions, benefits, regrets, motivation, change, advice, relationships or outcomes.
+
+• Paraphrasable evidence: the question wording should not merely repeat the profile’s key words.
+
+Tone / voice
+
+Natural, differentiated voices. First person works especially well, but third-person mini-profiles are also valid. Each person should sound plausible without exaggerated dialect or caricature.
+
+Typical ending
+
+• Each profile should end on its own meaningful state: outcome, current view, consequence, reflection or next step.
+
+• Avoid giving all four profiles the same rhetorical ending or identical 'now I...' structure.
+
+Avoid
+
+• Four versions of the same story with names changed.
+
+• One profile containing nearly all the strong examinable material.
+
+• Obvious lexical matching between question and answer.
+
+• Artificially forcing every profile through the same paragraph template.
+
+• Voices differentiated only by superficial hobbies or demographic labels.
+
+• Contradictory or insufficient evidence for the matching questions.
+
+References used
+
+7.1 — Four people describe how they turned their hobbies into new careers. Excellent comparison set: common transformation theme, but different triggers, obstacles, confidence levels, commercial decisions and skill development.
+
+7.6 — What was university like for you?. Strong differentiated voices with overlapping dimensions—money, study, career, identity and mistakes—distributed in different combinations.
+
+7.5 — Four rising stars. Demonstrates third-person/quoted mini-profiles with distinct developmental paths, setbacks, expectations and chance opportunities.
+
+ENGINE NOTE  Part 7 requires this family because the content itself must be architected for cross-profile matching. The Content Brief should explicitly plan comparable dimensions and differentiation before the structural prompt writes the ten questions.
+
+
+
+8. Pilot validation checklist
+
+These cards are now written and referenced. The remaining step is practical validation with new DRALO content—not further theoretical expansion.
+
+• Generate at least two new Content Briefs from each Style Card using different Topic Bank entries.
+
+• Check whether the generated briefs are recognisably different across Style Cards even when topics are similar.
+
+• Check whether each card creates enough substance without forcing invented facts.
+
+• Check whether Parts 1–3 can compress the style naturally without sounding formulaic.
+
+• Check whether Parts 5–6 retain strong paragraph progression and support the construct of the Part.
+
+• For SC-06, verify that four profiles are differentiated yet comparable and that matching questions can be paraphrased without keyword dependence.
+
+• Record Keep / Change / Add / Remove / Do not feedback and revise only where the pilot exposes a repeatable problem.
+
+Recommended status after this document
+
+Structure of Style Cards
+
+Approved
+
+Six initial families
+
+Approved
+
+Card wording + references
+
+Completed in v1.0
+
+Practical validation
+
+Pending pilot
+
+Source corpus: RUOE CAMBRIDGEONE - samples for style cards.docx. References are used to identify editorial mechanisms only; no source wording should be reproduced in generated DRALO content.

@@ -20,6 +20,7 @@ import { ExamPracticeToolsProvider } from '@/context/ExamPracticeToolsContext';
 import { ExamPracticeSidebarSlotsProvider } from '@/context/ExamPracticeSidebarSlotsContext';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
+import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
@@ -210,6 +211,11 @@ export function B2ExamPracticeChrome({
   children,
 }) {
   const { userRole } = useUserRole();
+  const planGating = useExamSlotPlanGating(progressBySlot);
+  const handleSelectExamWithPlan = useCallback(
+    (slot) => planGating.wrapSelectHandler(onSelectExam)(slot),
+    [planGating, onSelectExam],
+  );
   const showPractice = practiceReady ?? examPracticeOpen;
   const effectiveShowRefresh = showRefresh && isAdminRole(userRole);
   const parsedTitle = parsePracticeChromeTitle(title);
@@ -491,7 +497,7 @@ export function B2ExamPracticeChrome({
         ? navigationOverride ?? (
         <B2ExamSlotProgressPicker
           value={examSlot}
-          onSelect={onSelectExam}
+          onSelect={handleSelectExamWithPlan}
           progressBySlot={progressBySlot}
           partsInPaper={partsInPaper}
           examLabelsBySlot={examLabelsBySlot}
@@ -502,6 +508,8 @@ export function B2ExamPracticeChrome({
           onRegenerateExam={onRegenerateExam}
           onDeleteExam={onDeleteExam}
           lang={lang}
+          lockedSlots={planGating.lockedSlots}
+          onLockedSlotClick={planGating.onLockedSlotClick}
         />
         )
         : null}
@@ -698,6 +706,7 @@ export function B2ExamPracticeChrome({
           </div>
         </div>
       )}
+      {planGating.planUpgradeModal}
     </>
   );
 }

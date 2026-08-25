@@ -1,0 +1,158 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:41:35.947Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 1",
+  "part_number": 1,
+  "brief_id": "CB-PILOT-001",
+  "brief_version": "1.0",
+  "style_card_id": "SC-01",
+  "style_card_version": "v1.0",
+  "working_title": "When animals solve a new problem",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3500,
+    "completion_tokens": 1031,
+    "total_tokens": 4531
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 260 outside 150–180",
+      "answer letter A appears more than 3 times"
+    ],
+    "warnings": [],
+    "word_count": 260
+  },
+  "exercise": {
+    "part_title": "Part 1: Multiple-choice cloze",
+    "instructions": "For questions 1–8, read the text below and decide which answer (A, B, C or D) best fits each gap.",
+    "text_title": "When animals solve a new problem",
+    "passage_with_gaps": "Imagine a bird trying to reach a piece of food that's placed just out of its reach. The bird might initially attempt to grab it directly, but if that doesn't work, it might try a different (0) ___. This is where the difference between a fixed instinct and a flexible response becomes clear. Animals that can adjust their behaviour when faced with a new challenge show a level of problem-solving that goes beyond mere repetition.\n\nFor instance, an animal might (1) ___ to push an obstacle out of the way or use a tool to get to the food. This is not just a matter of repeating a familiar action but involves trying different strategies until one (2) ___. Such behaviour suggests that the animal is not just acting on instinct but is capable of learning from its environment.\n\nMemory plays a crucial role here, as animals need to (3) ___ which methods were unsuccessful and which were not. Attention to their surroundings also helps them to (4) ___ new opportunities or obstacles. Furthermore, trial-and-error is a common method that animals use to (5) ___ new solutions to problems. This combination of skills allows them to adapt to changing circumstances.\n\nResearchers are interested in these behaviours because they (6) ___ light on how animals think and adapt. By observing these flexible responses, we can gain insight into the cognitive abilities of different species. It's this adaptability that makes animal behaviour so fascinating to study, as it reveals the (7) ___ of simple abilities working together. Ultimately, understanding these processes helps us to appreciate the complexity of animal intelligence and the ways in which it (8) ___ our own.",
+    "example": {
+      "number": 0,
+      "options": {
+        "A": "approach",
+        "B": "method",
+        "C": "plan",
+        "D": "strategy"
+      },
+      "answer": "A",
+      "explanation": "The word 'approach' fits best in the context of trying different ways to solve a problem."
+    },
+    "questions": [
+      {
+        "number": 1,
+        "options": {
+          "A": "attempt",
+          "B": "try",
+          "C": "effort",
+          "D": "trial"
+        },
+        "answer": "B",
+        "lexical_focus": "verb choice",
+        "rationale": "'Try' is the most natural verb to use when describing an animal experimenting with different actions."
+      },
+      {
+        "number": 2,
+        "options": {
+          "A": "succeeds",
+          "B": "wins",
+          "C": "achieves",
+          "D": "gains"
+        },
+        "answer": "A",
+        "lexical_focus": "verb choice",
+        "rationale": "'Succeeds' is the correct choice as it means to accomplish a goal, fitting the context of finding a successful strategy."
+      },
+      {
+        "number": 3,
+        "options": {
+          "A": "remember",
+          "B": "remind",
+          "C": "recall",
+          "D": "recollect"
+        },
+        "answer": "A",
+        "lexical_focus": "verb choice",
+        "rationale": "'Remember' is the most suitable verb for retaining information about past actions."
+      },
+      {
+        "number": 4,
+        "options": {
+          "A": "notice",
+          "B": "see",
+          "C": "observe",
+          "D": "watch"
+        },
+        "answer": "A",
+        "lexical_focus": "verb choice",
+        "rationale": "'Notice' implies becoming aware of new elements, which fits the context of identifying opportunities or obstacles."
+      },
+      {
+        "number": 5,
+        "options": {
+          "A": "create",
+          "B": "invent",
+          "C": "discover",
+          "D": "find"
+        },
+        "answer": "C",
+        "lexical_focus": "verb choice",
+        "rationale": "'Discover' is appropriate here as it involves finding new solutions through exploration and trial."
+      },
+      {
+        "number": 6,
+        "options": {
+          "A": "cast",
+          "B": "throw",
+          "C": "shed",
+          "D": "give"
+        },
+        "answer": "C",
+        "lexical_focus": "phrasal verb",
+        "rationale": "'Shed light on' is a fixed expression meaning to make something clearer, fitting the context of understanding animal behaviour."
+      },
+      {
+        "number": 7,
+        "options": {
+          "A": "combination",
+          "B": "mixture",
+          "C": "blend",
+          "D": "union"
+        },
+        "answer": "A",
+        "lexical_focus": "noun choice",
+        "rationale": "'Combination' is the correct term to describe the collaboration of different abilities."
+      },
+      {
+        "number": 8,
+        "options": {
+          "A": "resembles",
+          "B": "contrasts",
+          "C": "mirrors",
+          "D": "reflects"
+        },
+        "answer": "D",
+        "lexical_focus": "verb choice",
+        "rationale": "'Reflects' is the best choice as it means to show or demonstrate similarities, fitting the context of comparing animal and human intelligence."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The text follows the brief's direction, focusing on animal problem-solving and flexible responses.",
+      "style_card_notes": "The style is explanatory and curious, aligning with the assigned style card.",
+      "british_english_notes": "British English is consistently used throughout the text.",
+      "factuality_notes": "The text avoids making unsupported claims and does not invent studies or statistics.",
+      "answer_validity_notes": "Each question has a single, defendable correct answer, with plausible distractors.",
+      "self_check_flags": []
+    },
+    "_word_count": 260
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

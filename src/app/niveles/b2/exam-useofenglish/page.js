@@ -1,6 +1,7 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
+import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
@@ -283,14 +284,19 @@ function UseOfEnglishExamsPageInner() {
     [selectExamSlot],
   );
 
+  const planGating = useExamSlotPlanGating(progressBySlot);
+
   const handleSelectExam = useMemo(
-    () => createAdminExamSelectHandler(adminFlow, openExamSlot),
-    [adminFlow, openExamSlot],
+    () =>
+      createAdminExamSelectHandler(adminFlow, (slot) =>
+        planGating.wrapSelectHandler(openExamSlot)(slot),
+      ),
+    [adminFlow, openExamSlot, planGating],
   );
   const examSlotPickerProps = buildExamSlotPickerProps({
     examenIdBySlot,
     adminFlow,
-    onSelectSlot: openExamSlot,
+    onSelectSlot: (slot) => planGating.wrapSelectHandler(openExamSlot)(slot),
   });
 
   useEffect(() => {
@@ -1305,6 +1311,8 @@ function UseOfEnglishExamsPageInner() {
         onSelect={handleSelectExam}
         progressBySlot={progressBySlot}
         lang="en"
+        lockedSlots={planGating.lockedSlots}
+        onLockedSlotClick={planGating.onLockedSlotClick}
         {...examSlotPickerProps}
       />
       {!examPracticeOpen ? null : (
@@ -1643,6 +1651,7 @@ function UseOfEnglishExamsPageInner() {
       />
         </div>
       )}
+      {planGating.planUpgradeModal}
     </main>
   );
 }

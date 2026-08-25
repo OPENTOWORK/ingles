@@ -10,12 +10,18 @@ import {
   classifyPart3Derivation,
   countPart4AnswerWords,
   countWords as b2CountWords,
+  derivePart3TransformationFamily,
+  detectPart3StemForcing,
   findForbiddenCambridge,
   keywordInPart4Answer,
 } from '@/lib/b2RuoeExamQuality';
+import { classifyTitlePatternFamily } from '@/lib/ruoeStyleCardV11';
 import { countCambridgeKeyWordWords } from '@/lib/countCambridgeKeyWordWords';
 import { validateB2KeyWordAnswerKey } from '@/lib/validateB2KeyWordAnswerKey';
 import { gradeB2KeyWordTransformation } from '@/lib/gradeB2KeyWordTransformation';
+import { validatePart6HardRules } from '@/lib/ruoePart6HardValidators';
+import { validatePart4Quality } from '@/lib/ruoePart4Quality';
+import { validateRuoeEditorialQuality } from '@/lib/ruoeEditorialQuality';
 
 const WRITING_PART2_FORMATS = new Set(['article', 'email', 'letter', 'review', 'report']);
 
@@ -204,7 +210,10 @@ export function injectPart3StemsIntoPassage(gen) {
   if (!stemByNum.size) return gen;
 
   let passage = gen.passage;
-  passage = passage.replace(/\((\d{1,2})\)\s*(?:_+|\.{2,}|…+)(?!\s*\()/g, (full, n) => {
+  // `(?![_.…])` pins the blank run to its full length: without it the engine
+  // backtracks (`___` → `__`), satisfies `(?!\s*\()` against the leftover
+  // underscore and appends a second stem, producing `(0) ___ (STEM)_ (STEM)`.
+  passage = passage.replace(/\((\d{1,2})\)\s*(?:_+|\.{2,}|…+)(?![_.…])(?!\s*\()/g, (full, n) => {
     const stem = stemByNum.get(Number(n));
     return stem ? `(${n}) ___ (${stem})` : full;
   });
@@ -318,6 +327,12 @@ export function normalizeGeneratedExamPart(slug, partDef, generated) {
 
   if (partDef.mode !== 'writing') {
     gen.partNumber = partDef.partNumber;
+    if (levelLabel === 'B2' && gen.title) {
+      gen.titlePatternFamily = gen.titlePatternFamily || classifyTitlePatternFamily(gen.title);
+    }
+    if (levelLabel === 'B2' && partDef.partNumber === 3 && partDef.activity === 'word-formation') {
+      attachPart3TransformationMetadata(gen);
+    }
     if (
       levelLabel === 'B2' &&
       partDef.partNumber === 1 &&
@@ -932,11 +947,56 @@ function resolvePart3Stem(qOrExample) {
   return String(qOrExample?.stem || qOrExample?.baseWord || '').trim();
 }
 
+/** Attach transformationFamily metadata for longitudinal variety control (v1.1.1). */
+function attachPart3TransformationMetadata(gen) {
+  const modelAnswers = asArray(gen.modelAnswers).map((entry) =>
+    typeof entry === 'string' ? { answer: entry } : entry,
+  );
+  const answerById = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.id != null) answerById.set(String(entry.id), entry);
+  });
+  const answerByNumber = new Map();
+  modelAnswers.forEach((entry) => {
+    if (entry?.number != null) answerByNumber.set(Number(entry.number), entry);
+  });
+
+  gen.questions = asArray(gen.questions).map((q, i) => {
+    const stem = resolvePart3Stem(q);
+    const entry =
+      answerById.get(String(q?.id)) ??
+      answerByNumber.get(Number(q?.number)) ??
+      modelAnswers[i];
+    const answer = String(entry?.answer ?? '').trim();
+    const family = derivePart3TransformationFamily(stem, answer);
+    return { ...q, transformationFamily: family };
+  });
+
+  if (gen.example && typeof gen.example === 'object') {
+    const exStem = resolvePart3Stem(gen.example);
+    const exAnswer = String(gen.example.answer || '').trim();
+    gen.example = {
+      ...gen.example,
+      transformationFamily: derivePart3TransformationFamily(exStem, exAnswer),
+    };
+  }
+
+  gen.modelAnswers = modelAnswers.map((entry, i) => {
+    const q = gen.questions[i];
+    const stem = resolvePart3Stem(q || {});
+    const answer = String(entry?.answer ?? '').trim();
+    return {
+      ...entry,
+      transformationFamily: entry?.transformationFamily || derivePart3TransformationFamily(stem, answer),
+    };
+  });
+}
+
 /**
  * Strict checks for B2 Reading & Use of English Part 3 (word formation).
  * Any failure here blocks the save (errors, not warnings).
  */
-function validateB2Part3Strict(gen, errors, warnings) {
+function validateB2Part3Strict(gen, errors, warnings, qualityFails = []) {
   const questions = asArray(gen.questions);
   if (questions.length !== 8) {
     errors.push(`Part 3 must have exactly 8 questions (got ${questions.length}).`);
@@ -1052,6 +1112,9 @@ function validateB2Part3Strict(gen, errors, warnings) {
       answer: answer.toLowerCase(),
       tags: classifyPart3Derivation(stem, answer),
     });
+    if (stem && answer && stem.toLowerCase() === answer.toLowerCase()) {
+      errors.push(`${label}: stem identical to answer — no valid transformation (P3-NO-TRANSFORM).`);
+    }
   });
 
   const repeated = derivations.map((d) => d.answer).filter((w, idx, arr) => arr.indexOf(w) !== idx);
@@ -1090,6 +1153,20 @@ function validateB2Part3Strict(gen, errors, warnings) {
     const topSuffix = Object.entries(suffixHits).sort((a, b) => b[1] - a[1])[0];
     if (topSuffix && topSuffix[1] >= 5) {
       warnings.push(`Part 3 repeats suffix "-${topSuffix[0]}" on ${topSuffix[1]} answers — soft check.`);
+    }
+    const prefixCount = derivations.filter(
+      (d) => d.tags.includes('prefix') || /^(un|dis|mis|non)/i.test(d.answer),
+    ).length;
+    if (prefixCount === 0) {
+      warnings.push(
+        'Part 3 has no prefix/negative formation — variety target; include when natural (not forced).',
+      );
+    }
+    const families = new Set(derivations.map((d) => derivePart3TransformationFamily(d.stem, d.answer)));
+    if (families.size < 3) {
+      qualityFails.push(
+        `[P3-VARIETY] batch: low derivational variety (${families.size} families: ${[...families].join(', ')}) — quality target.`,
+      );
     }
   }
 
@@ -1140,6 +1217,16 @@ function validateB2Part3Strict(gen, errors, warnings) {
 
     const cambridge = findForbiddenCambridge(gen, 3);
     if (cambridge) errors.push(cambridge);
+
+    questions.forEach((q) => {
+      const num = Number(q?.number);
+      const stem = resolvePart3Stem(q);
+      if (stem && num && detectPart3StemForcing(passage, stem, num)) {
+        qualityFails.push(
+          `Part 3 question ${num}: CAPITAL stem appears forced next to gap (TEST-P3-FORCED-NATURALNESS).`,
+        );
+      }
+    });
   }
 }
 
@@ -1158,7 +1245,7 @@ function resolvePart4GradingMetadata(q, answerEntry) {
   );
 }
 
-function validateB2Part4Strict(gen, errors, warnings) {
+function validateB2Part4Strict(gen, errors, warnings, qualityFails = []) {
   const questions = asArray(gen.questions);
   if (questions.length !== 6) {
     errors.push(`Part 4 must have exactly 6 questions (got ${questions.length}).`);
@@ -1350,16 +1437,23 @@ function validateB2Part4Strict(gen, errors, warnings) {
       return answer ? countCambridgeKeyWordWords(answer) : 0;
     });
     const longCount = lengths.filter((n) => n >= 4).length;
-    const shortCount = lengths.filter((n) => n > 0 && n <= 3).length;
     if (longCount < 2) {
-      errors.push(
-        `Part 4: at least 2 of 6 answers must use 4–5 Cambridge words (got ${longCount} long / ${shortCount} short). Prefer near the 5-word limit; avoid almost only 2–3 word answers.`,
+      warnings.push(
+        `Part 4: only ${longCount}/6 answers use 4–5 words — aim for more variety near the Cambridge maximum (distribution quality check).`,
       );
     } else if (longCount < 3) {
       warnings.push(
         `Part 4: only ${longCount}/6 answers use 4–5 words — aim for at least 3 near the Cambridge maximum (soft check).`,
       );
     }
+  }
+
+  const part4Quality = validatePart4Quality(gen);
+  errors.push(...part4Quality.hardFails);
+  qualityFails.push(...part4Quality.qualityFails);
+  warnings.push(...part4Quality.warnings);
+  if (part4Quality.metrics) {
+    gen.part4QualityMetrics = part4Quality.metrics;
   }
 
   const cambridge = findForbiddenCambridge(gen, 4);
@@ -1371,7 +1465,7 @@ function validateB2Part4Strict(gen, errors, warnings) {
 }
 
 /** B2 Part 5 reading multiple choice — strict mechanical + heuristic checks. */
-function validateB2Part5Strict(gen, errors, warnings) {
+function validateB2Part5Strict(gen, errors, warnings, qualityFails = []) {
   const questions = asArray(gen.questions);
   if (questions.length !== 6) {
     errors.push(`Part 5 must have exactly 6 questions (got ${questions.length}).`);
@@ -1400,11 +1494,12 @@ function validateB2Part5Strict(gen, errors, warnings) {
 
   const analysis = analyzePart5Quality(gen);
   errors.push(...analysis.errors);
+  qualityFails.push(...analysis.qualityFails);
   warnings.push(...analysis.warnings);
 }
 
 /** B2 Part 6 gapped text — strict mechanical + heuristic checks. */
-function validateB2Part6Strict(gen, errors, warnings) {
+function validateB2Part6Strict(gen, errors, warnings, qualityFails = []) {
   const questions = asArray(gen.questions);
   if (questions.length !== 6) {
     errors.push(`Part 6 must have exactly 6 questions/gaps (got ${questions.length}).`);
@@ -1431,6 +1526,11 @@ function validateB2Part6Strict(gen, errors, warnings) {
   const analysis = analyzePart6Quality(gen);
   errors.push(...analysis.errors);
   warnings.push(...analysis.warnings);
+
+  const hard = validatePart6HardRules(gen);
+  errors.push(...hard.hardFails);
+  qualityFails.push(...hard.qualityFails);
+  warnings.push(...hard.warnings);
 }
 
 /** B2 Part 7 multiple matching — strict mechanical + heuristic checks. */
@@ -1780,6 +1880,7 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
   const key = String(slug || '').toLowerCase();
   const pn = Number(partNumber);
   const errors = [];
+  const qualityFails = [];
   const warnings = [];
 
   let partDef =
@@ -1788,7 +1889,7 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
       : getLevelExamPartDef(key, pn);
 
   if (!partDef) {
-    return { ok: false, errors: [`Unknown part: ${pn}`], warnings: [], normalized: generated };
+    return { ok: false, errors: [`Unknown part: ${pn}`], qualityFails: [], warnings: [], normalized: generated };
   }
 
   const normalized = normalizeGeneratedExamPart(key, partDef, generated);
@@ -1797,7 +1898,7 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
     if (!isA2GeneratedPartComplete(normalized, partDef)) {
       errors.push('Generated A2 part appears incomplete (questions, options, or script missing).');
     }
-    return { ok: errors.length === 0, errors, warnings, normalized };
+    return { ok: errors.length === 0, errors, qualityFails, warnings, normalized };
   }
 
   switch (partDef.mode) {
@@ -1819,16 +1920,16 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
         validateB2Part2Strict(normalized, errors, warnings);
       }
       if (key === 'b2' && partDef.partNumber === 3 && partDef.activity === 'word-formation') {
-        validateB2Part3Strict(normalized, errors, warnings);
+        validateB2Part3Strict(normalized, errors, warnings, qualityFails);
       }
       if (key === 'b2' && partDef.partNumber === 4 && partDef.activity === 'key-word') {
-        validateB2Part4Strict(normalized, errors, warnings);
+        validateB2Part4Strict(normalized, errors, warnings, qualityFails);
       }
       if (key === 'b2' && partDef.partNumber === 5 && partDef.activity === 'multiple-choice') {
-        validateB2Part5Strict(normalized, errors, warnings);
+        validateB2Part5Strict(normalized, errors, warnings, qualityFails);
       }
       if (key === 'b2' && partDef.partNumber === 6 && partDef.activity === 'gapped-text') {
-        validateB2Part6Strict(normalized, errors, warnings);
+        validateB2Part6Strict(normalized, errors, warnings, qualityFails);
       }
       if (key === 'b2' && partDef.partNumber === 7 && partDef.activity === 'multiple-matching') {
         validateB2Part7Strict(normalized, errors, warnings);
@@ -1842,9 +1943,23 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
     if (qCount < 1 && maCount < 1) errors.push('No scorable questions found.');
   }
 
+  if (key === 'b2' && [1, 2, 3, 5, 6, 7].includes(partDef.partNumber)) {
+    const editorial = validateRuoeEditorialQuality(partDef.partNumber, normalized, {
+      contentBriefWorkingTitle: normalized.contentBriefWorkingTitle || normalized.workingTitle,
+      styleCardId: normalized.styleCardId,
+    });
+    errors.push(...editorial.hardFails);
+    qualityFails.push(...editorial.qualityFails);
+    warnings.push(...editorial.warnings);
+    if (editorial.findings.length) {
+      normalized.__editorialFindings = editorial.findings;
+    }
+  }
+
   return {
     ok: errors.length === 0,
     errors,
+    qualityFails,
     warnings,
     normalized,
   };

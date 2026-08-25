@@ -11,6 +11,10 @@ import OpenAI from 'openai';
 import { loadEnvLocal } from './load-env-local.mjs';
 import { buildExamGeneratePrompt } from '../src/lib/draloAiExamPrompts.js';
 import { validateGeneratedExamPart } from '../src/lib/examPartValidation.js';
+import {
+  findPart3NoTransformItems,
+  repairPart3NoTransformItems,
+} from '../src/lib/ruoeLocalItemRepair.js';
 
 function countPart3Words(passage) {
   return String(passage || '')
@@ -82,6 +86,15 @@ function evaluateGenerated(generated) {
   const checks = [
     { name: 'JSON parses', ok: true },
     { name: 'Validator ok', ok: validation.ok },
+    {
+      name: 'No stem==answer',
+      ok: findPart3NoTransformItems(normalized).length === 0,
+      detail: `${findPart3NoTransformItems(normalized).length} item(s)`,
+    },
+    {
+      name: 'No forced-naturalness false positive',
+      ok: !(validation.qualityFails || []).some((m) => /FORCED-NATURALNESS/i.test(m)),
+    },
     { name: 'Exactly 8 questions', ok: questions.length === 8 },
     {
       name: 'Question numbers 17–24',
@@ -119,6 +132,7 @@ function evaluateGenerated(generated) {
 let attempt = 0;
 let lastEval = null;
 let lastGenerated = null;
+const localRepairs = [];
 const MAX_ATTEMPTS = 8;
 
 while (attempt < MAX_ATTEMPTS) {
@@ -157,6 +171,14 @@ HARD REQUIREMENTS:
     continue;
   }
 
+  const noTransform = findPart3NoTransformItems(lastGenerated);
+  if (noTransform.length) {
+    console.error(`  stem==answer on ${noTransform.length} item(s); local item repair…`);
+    const repaired = await repairPart3NoTransformItems(openai, lastGenerated);
+    lastGenerated = repaired.repaired;
+    if (repaired.repairs.length) localRepairs.push(...repaired.repairs);
+  }
+
   lastEval = evaluateGenerated(lastGenerated);
   console.error(
     `Attempt ${attempt}: ${lastEval.passageWordCount} words, ok=${lastEval.allChecksOk}`,
@@ -179,6 +201,7 @@ const report = {
   generatedAt: new Date().toISOString(),
   model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
   attempts: attempt,
+  localRepairs,
   promptSnippet: {
     mentionsQ17to24: /Q17–24|questions numbered 17–24/i.test(userPrompt),
     forbidsGap25: /gap \(25\)|Do NOT create gap \(25\)/i.test(userPrompt),

@@ -83,15 +83,23 @@ export function speakingLimitLabel(limit = 3, { lang = 'en', remaining, used } =
 
 export const LIMIT_REACHED = {
   writing: {
-    en: "You've reached today's alpha limit for exam writing corrections. Come back tomorrow to keep practising.",
-    es: 'Has alcanzado el límite alpha de hoy para correcciones de writing de examen. Vuelve mañana para seguir practicando.',
+    en: "You've reached your plan's monthly limit for writing corrections. Upgrade your plan or wait until next month.",
+    es: 'Has alcanzado el límite mensual de correcciones de writing de tu plan. Mejora tu plan o espera al próximo mes.',
   },
   speaking: {
-    en: "You've reached today's alpha limit for speaking exam feedbacks. Come back tomorrow to keep practising.",
-    es: 'Has alcanzado el límite alpha de hoy para feedbacks de speaking de examen. Vuelve mañana para seguir practicando.',
+    en: "You've reached your plan's monthly limit for speaking corrections. Upgrade your plan or wait until next month.",
+    es: 'Has alcanzado el límite mensual de correcciones de speaking de tu plan. Mejora tu plan o espera al próximo mes.',
+  },
+  draloAssistant: {
+    en: "You've reached your plan's limit for Dralo Assistant queries. Upgrade your plan for more.",
+    es: 'Has alcanzado el límite de consultas a Dralo Assistant de tu plan. Mejora tu plan para obtener más.',
+  },
+  exam: {
+    en: "You've reached your plan's monthly exam limit. Upgrade your plan or wait until next month.",
+    es: 'Has alcanzado el límite mensual de exámenes de tu plan. Mejora tu plan o espera al próximo mes.',
   },
   generic: {
-    en: "You've reached today's alpha limit. Come back tomorrow to keep practising.",
-    es: 'Has alcanzado el límite alpha de hoy. Vuelve mañana para seguir practicando.',
+    en: "You've reached your plan's usage limit. Upgrade your plan or try again later.",
+    es: 'Has alcanzado el límite de uso de tu plan. Mejora tu plan o inténtalo más tarde.',
   },
 };

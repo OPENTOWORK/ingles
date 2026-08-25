@@ -286,6 +286,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
       partNumber: skillNav.selectedPartNumber,
       progressBySlot: scoring.progressBySlot,
       bypassStarGating: skillNav.bypassStarGating,
+      maxExamSlot: skillNav.maxExamSlot,
       onSelectExamSlot: (slot) => {
         void scoring.refreshPuntuacionesProgress();
         handleSelectExamSlot(slot);
@@ -989,6 +990,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         ) : null}
       </div>
       </PracticeChrome>
+      {skillNav.planUpgradeModal}
     </B2ExamPracticeLayout>
   );
 }

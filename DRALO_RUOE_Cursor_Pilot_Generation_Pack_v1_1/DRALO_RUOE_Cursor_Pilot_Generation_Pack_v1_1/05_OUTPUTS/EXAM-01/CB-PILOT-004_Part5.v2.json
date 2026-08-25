@@ -1,0 +1,135 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:44:00.177Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-004",
+  "brief_version": "1.0",
+  "style_card_id": "SC-03",
+  "style_card_version": "v1.0",
+  "working_title": "The volunteer job I chose for the wrong reason",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3338,
+    "completion_tokens": 1363,
+    "total_tokens": 4701
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 402 outside 550–650",
+      "Part 5 answer letter run exceeds 2 at Q33"
+    ],
+    "warnings": [],
+    "word_count": 402
+  },
+  "exercise": {
+    "part_title": "Part 5",
+    "instructions": "Read the text and answer the questions below. For each question, choose the correct answer (A, B, C or D).",
+    "text_title": "The Volunteer Job I Chose for the Wrong Reason",
+    "article": "I first signed up for the community repair workshop with a rather selfish aim: to make my CV look more impressive. I had heard that volunteering could be a great way to gain skills that employers value, and I wanted to have something that stood out on my applications. I imagined myself learning to fix things, which seemed like a useful, practical skill to add to my repertoire.\n\nOn my first day, I arrived at the workshop full of enthusiasm, ready to dive into the world of repairs. However, things didn’t go quite as I had planned. Instead of being handed a toolbox, I was asked to greet visitors and find out how we could assist them. It was a role I hadn’t anticipated, and I felt slightly out of my depth. I had expected to be working with my hands, not my voice.\n\nMy initial disappointment soon gave way to curiosity. As I welcomed people, I noticed how nervous some were about asking for help. One visitor, in particular, stood out. He came in with a broken lamp and seemed embarrassed about not knowing how to fix it himself. I realised that my job was not just to help with repairs but also to ensure people didn’t feel foolish for needing assistance. I found myself explaining things in a way that was both informative and reassuring.\n\nAs the weeks went by, I began to enjoy this unexpected aspect of my role. I learned to coordinate tasks among volunteers, each with different skills, and found that I enjoyed this more than the actual repairing. It was satisfying to see everything come together smoothly, and I took pride in being part of a team that made it happen.\n\nWhen it came time to update my CV, I paused to reflect on what I had truly gained from the experience. I realised that the most valuable outcome wasn’t the line on my CV, but a new understanding of what I enjoyed in a work environment. I discovered that I was more interested in roles that involved interacting with people and organising tasks than I had previously thought.\n\nThis experience taught me that career insights can come from the most unexpected places. I had initially joined the workshop for the wrong reason, but what I learned about myself turned out to be far more important than any skill I could have listed on my CV.",
+    "questions": [
+      {
+        "number": 31,
+        "question_type": "main idea",
+        "prompt": "What is the main idea of the article?",
+        "options": {
+          "A": "Volunteering is essential for career success.",
+          "B": "The narrator found unexpected value in volunteering.",
+          "C": "Repair skills are crucial for job applications.",
+          "D": "Volunteering always leads to personal growth."
+        },
+        "answer": "B",
+        "evidence": "I realised that the most valuable outcome wasn’t the line on my CV, but a new understanding of what I enjoyed in a work environment.",
+        "rationale": "The article focuses on how the narrator discovered unexpected personal value in volunteering, rather than just enhancing their CV."
+      },
+      {
+        "number": 32,
+        "question_type": "attitude",
+        "prompt": "How did the narrator feel about their initial role at the workshop?",
+        "options": {
+          "A": "Excited to take on new challenges.",
+          "B": "Disappointed by the lack of practical work.",
+          "C": "Confident in their ability to help visitors.",
+          "D": "Indifferent about the tasks assigned."
+        },
+        "answer": "B",
+        "evidence": "It was a role I hadn’t anticipated, and I felt slightly out of my depth. I had expected to be working with my hands, not my voice.",
+        "rationale": "The narrator was initially disappointed because they expected to do practical repair work rather than interact with visitors."
+      },
+      {
+        "number": 33,
+        "question_type": "inference",
+        "prompt": "What can be inferred about the visitor with the broken lamp?",
+        "options": {
+          "A": "He was confident about fixing the lamp himself.",
+          "B": "He was embarrassed to ask for help.",
+          "C": "He was a regular visitor to the workshop.",
+          "D": "He was familiar with the narrator."
+        },
+        "answer": "B",
+        "evidence": "He came in with a broken lamp and seemed embarrassed about not knowing how to fix it himself.",
+        "rationale": "The text suggests that the visitor felt embarrassed, indicating he was not confident about fixing the lamp himself."
+      },
+      {
+        "number": 34,
+        "question_type": "purpose",
+        "prompt": "What was the narrator's original purpose for volunteering?",
+        "options": {
+          "A": "To gain practical repair skills.",
+          "B": "To meet new people.",
+          "C": "To help the community.",
+          "D": "To improve their CV."
+        },
+        "answer": "D",
+        "evidence": "I first signed up for the community repair workshop with a rather selfish aim: to make my CV look more impressive.",
+        "rationale": "The narrator explicitly states that their initial purpose was to enhance their CV."
+      },
+      {
+        "number": 35,
+        "question_type": "reference",
+        "prompt": "What does 'this unexpected aspect of my role' refer to?",
+        "options": {
+          "A": "Interacting with visitors.",
+          "B": "Repairing items.",
+          "C": "Updating the CV.",
+          "D": "Learning new skills."
+        },
+        "answer": "A",
+        "evidence": "As I welcomed people, I noticed how nervous some were about asking for help... I began to enjoy this unexpected aspect of my role.",
+        "rationale": "The 'unexpected aspect' refers to the interaction with visitors, which the narrator initially did not anticipate."
+      },
+      {
+        "number": 36,
+        "question_type": "interpretation of expression",
+        "prompt": "What does the narrator mean by 'career insights can come from the most unexpected places'?",
+        "options": {
+          "A": "Volunteering is always beneficial for career development.",
+          "B": "Unexpected experiences can reveal career preferences.",
+          "C": "Formal education is not necessary for career insights.",
+          "D": "Repair workshops are ideal for discovering career paths."
+        },
+        "answer": "B",
+        "evidence": "I discovered that I was more interested in roles that involved interacting with people and organising tasks than I had previously thought.",
+        "rationale": "The narrator learned about their career preferences through an unexpected volunteering experience, highlighting that insights can come from unanticipated sources."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The article follows the brief closely, focusing on the narrator's change in perspective about volunteering and its impact on their career preferences.",
+      "style_card_notes": "The article maintains a personal reflective tone, with a clear progression from initial expectation to a changed perspective.",
+      "british_english_notes": "British English is used consistently throughout the text.",
+      "factuality_notes": "The article avoids making any factual claims about the benefits of volunteering beyond the narrator's personal experience.",
+      "answer_validity_notes": "Each question has one clear, defendable answer supported by evidence from the text.",
+      "self_check_flags": []
+    },
+    "_word_count": 402
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

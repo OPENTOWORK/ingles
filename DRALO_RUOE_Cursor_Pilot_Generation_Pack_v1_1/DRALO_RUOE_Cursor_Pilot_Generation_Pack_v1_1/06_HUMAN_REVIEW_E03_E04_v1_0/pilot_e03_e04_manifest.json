@@ -1,0 +1,356 @@
+{
+  "manifest_version": "1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "batch_id": "RUOE-PILOT-02",
+  "exams": [
+    "RUOE-PILOT-E03",
+    "RUOE-PILOT-E04"
+  ],
+  "safety": {
+    "supabase_sync": false,
+    "production_write": false,
+    "published": false,
+    "historical_outputs_modified": false,
+    "e01_modified": false,
+    "e02_modified": false
+  },
+  "summary": {
+    "RUOE-PILOT-E03": {
+      "mechanical_pass": "7/7",
+      "active_blocking_hard": 0
+    },
+    "RUOE-PILOT-E04": {
+      "mechanical_pass": "7/7",
+      "active_blocking_hard": 0
+    }
+  },
+  "entries": [
+    {
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 1",
+      "part_number": 1,
+      "brief_or_blueprint_id": "CB-PILOT-013",
+      "source_type": "content_brief",
+      "style_card_id": "SC-02",
+      "topic": "Technology",
+      "subtopics": [
+        "Social Media",
+        "Health"
+      ],
+      "final_title": "Smaller rooms, same conversations",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E03_v1_0/EXAM-03/CB-PILOT-013_Part1.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        2
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 2",
+      "part_number": 2,
+      "brief_or_blueprint_id": "CB-PILOT-014",
+      "source_type": "content_brief",
+      "style_card_id": "SC-04",
+      "topic": "Work",
+      "subtopics": [
+        "Business",
+        "Entrepreneurship"
+      ],
+      "final_title": "Two walks in the same hour",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E03_v1_0/EXAM-03/CB-PILOT-014_Part2.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        9
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 3",
+      "part_number": 3,
+      "brief_or_blueprint_id": "CB-PILOT-015",
+      "source_type": "content_brief",
+      "style_card_id": "SC-03",
+      "topic": "Lifestyle",
+      "subtopics": [
+        "Hobbies",
+        "Daily Life"
+      ],
+      "final_title": "Ink before eight",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E03_v1_0/EXAM-03/CB-PILOT-015_Part3.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        22
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 4",
+      "part_number": 4,
+      "brief_or_blueprint_id": "TBP-PILOT-EX03",
+      "source_type": "transformation_blueprint",
+      "style_card_id": null,
+      "topic": null,
+      "subtopics": [],
+      "final_title": null,
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_Transformation_Blueprints_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E03_v1_0/EXAM-03/TBP-PILOT-EX03_Part4.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 5",
+      "part_number": 5,
+      "brief_or_blueprint_id": "CB-PILOT-016",
+      "source_type": "content_brief",
+      "style_card_id": "SC-01",
+      "topic": "Science",
+      "subtopics": [
+        "Inventions",
+        "Technology"
+      ],
+      "final_title": "Designed for one job, kept for another",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E03_v1_0/EXAM-03/CB-PILOT-016_Part5.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        33
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 6",
+      "part_number": 6,
+      "brief_or_blueprint_id": "CB-PILOT-017",
+      "source_type": "content_brief",
+      "style_card_id": "SC-05",
+      "topic": "Culture",
+      "subtopics": [
+        "Festivals",
+        "Travel"
+      ],
+      "final_title": "February is the busiest month",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E03_v1_0/EXAM-03/CB-PILOT-017_Part6.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E03",
+      "part": "Part 7",
+      "part_number": 7,
+      "brief_or_blueprint_id": "CB-PILOT-018",
+      "source_type": "content_brief",
+      "style_card_id": "SC-06",
+      "topic": "Education",
+      "subtopics": [
+        "Languages",
+        "Learning"
+      ],
+      "final_title": "Nobody is marking this",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E03_v1_0/EXAM-03/CB-PILOT-018_Part7.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        44,
+        50
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 1",
+      "part_number": 1,
+      "brief_or_blueprint_id": "CB-PILOT-019",
+      "source_type": "content_brief",
+      "style_card_id": "SC-03",
+      "topic": "Health",
+      "subtopics": [
+        "Mental Health",
+        "Daily Life"
+      ],
+      "final_title": "Eleven before I left the flat",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E04_v1_0/EXAM-04/CB-PILOT-019_Part1.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        4,
+        5
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 2",
+      "part_number": 2,
+      "brief_or_blueprint_id": "CB-PILOT-020",
+      "source_type": "content_brief",
+      "style_card_id": "SC-02",
+      "topic": "Technology",
+      "subtopics": [
+        "Transport",
+        "Travel"
+      ],
+      "final_title": "Nothing leaves until somebody asks",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E04_v1_0/EXAM-04/CB-PILOT-020_Part2.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 0,
+      "teacher_attention_items": [],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 3",
+      "part_number": 3,
+      "brief_or_blueprint_id": "CB-PILOT-021",
+      "source_type": "content_brief",
+      "style_card_id": "SC-05",
+      "topic": "Entertainment",
+      "subtopics": [
+        "Books",
+        "Lifestyle"
+      ],
+      "final_title": "The counter on a Saturday morning",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E04_v1_0/EXAM-04/CB-PILOT-021_Part3.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        19
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 4",
+      "part_number": 4,
+      "brief_or_blueprint_id": "TBP-PILOT-EX04",
+      "source_type": "transformation_blueprint",
+      "style_card_id": null,
+      "topic": null,
+      "subtopics": [],
+      "final_title": null,
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_Transformation_Blueprints_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E04_v1_0/EXAM-04/TBP-PILOT-EX04_Part4.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        26,
+        30
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 5",
+      "part_number": 5,
+      "brief_or_blueprint_id": "CB-PILOT-022",
+      "source_type": "content_brief",
+      "style_card_id": "SC-04",
+      "topic": "Education",
+      "subtopics": [
+        "Skills",
+        "Work"
+      ],
+      "final_title": "Knowing what to leave alone",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E04_v1_0/EXAM-04/CB-PILOT-022_Part5.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        36
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 6",
+      "part_number": 6,
+      "brief_or_blueprint_id": "CB-PILOT-023",
+      "source_type": "content_brief",
+      "style_card_id": "SC-01",
+      "topic": "Environment",
+      "subtopics": [
+        "Conservation",
+        "Wildlife"
+      ],
+      "final_title": "The cheapest thing they did",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E04_v1_0/EXAM-04/CB-PILOT-023_Part6.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    },
+    {
+      "exam_id": "RUOE-PILOT-E04",
+      "part": "Part 7",
+      "part_number": 7,
+      "brief_or_blueprint_id": "CB-PILOT-024",
+      "source_type": "content_brief",
+      "style_card_id": "SC-06",
+      "topic": "Travel",
+      "subtopics": [
+        "Accommodation",
+        "Technology"
+      ],
+      "final_title": "Where each of them draws the line",
+      "source_file": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+      "output_file": "05_OUTPUTS_PILOT_E04_v1_0/EXAM-04/CB-PILOT-024_Part7.json",
+      "validator_status": "PASS",
+      "blocking_hard_count": 0,
+      "quality_fail_count": 0,
+      "warning_count": 1,
+      "teacher_attention_items": [
+        47,
+        50
+      ],
+      "pedagogical_status": "PENDING_HUMAN_REVIEW"
+    }
+  ]
+}

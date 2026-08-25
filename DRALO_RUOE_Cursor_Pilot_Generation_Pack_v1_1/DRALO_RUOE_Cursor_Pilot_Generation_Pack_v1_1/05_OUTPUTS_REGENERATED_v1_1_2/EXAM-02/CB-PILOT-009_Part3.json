@@ -1,0 +1,168 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:47:08.005Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-009",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-04",
+  "working_title": "The first song I played for someone else",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 3 has no prefix/negative formation — variety target; include when natural (not forced).",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 2
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Part 3: Word Formation",
+    "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "stem": "PLAY",
+      "answer": "playing",
+      "transformationFamily": "adjective"
+    },
+    "title": "The first song I played for someone else",
+    "passage": "I still remember the moment when I was unexpectedly asked to provide music at a local gathering. I had only been (0) ___ (PLAY)_ (PLAY) the guitar alone for a few months and didn’t feel ready to perform in front of others. My initial (17) ___ (EXPECT)_ (EXPECT) had been quick progress, but repetitive practice made me doubt my ability. The instrument felt physically (18) ___ (AWKWARD)_ (AWKWARD) at first, and I struggled to find a rhythm. When the organiser requested a simple accompaniment, I hesitated but agreed. During the performance, I made a small mistake, yet the music’s (19) ___ (HELP)_ (HELP) to the atmosphere was clear. This experience changed my idea of success from perfection to practical (20) ___ (USE)_ (USE). After that day, my practice became more (21) ___ (FOCUS)_ (FOCUS), aiming to support others rather than impress. I realised that enjoyment came from the (22) ___ (CREATE)_ (CREATE) of music with the group, no longer just personal skill. This shift made me much more (23) ___ (WILL)_ (WILL) (WILLING) to continue playing, knowing my efforts could (24) ___ (STRENGTH)_ (STRENGTH) social connections.",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "EXPECT",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "type": "word-formation",
+        "stem": "AWKWARD",
+        "transformationFamily": "adverb"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "type": "word-formation",
+        "stem": "HELP",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "type": "word-formation",
+        "stem": "USE",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "type": "word-formation",
+        "stem": "FOCUS",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "CREATE",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "type": "word-formation",
+        "stem": "WILL",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "type": "word-formation",
+        "stem": "STRENGTH",
+        "transformationFamily": "verb"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 17,
+        "answer": "expectations",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "answer": "awkwardly",
+        "transformationFamily": "adverb"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "answer": "helpfulness",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "answer": "usefulness",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "answer": "focused",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "answer": "creation",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "answer": "willing",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "answer": "strengthen",
+        "transformationFamily": "verb"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 3,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Example:\n(0) ___ (PLAY)\nAnswer: 0 → playing\nText\nThe first song I played for someone else\nI still remember the moment when I was unexpectedly asked to provide music at a local gathering. I had only been (0) ___ (PLAY) the guitar alone for a few months and didn’t feel ready to perform in front of others. My initial (17) ___ (EXPECT) had been quick progress, but repetitive practice made me doubt my ability. The instrument felt physically (18) ___ (AWKWARD) at first, and I struggled to find a rhythm. When the organiser requested a simple accompaniment, I hesitated but agreed. During the performance, I made a small mistake, yet the music’s (19) ___ (HELP) to the atmosphere was clear. This experience changed my idea of success from perfection to practical (20) ___ (USE). After that day, my practice became more (21) ___ (FOCUS), aiming to support others rather than impress. I realised that enjoyment came from the (22) ___ (CREATE) of music with the group, no longer just personal skill. This shift made me much more (23) ___ (WILL) (WILLING) to continue playing, knowing my efforts could (24) ___ (STRENGTH) social connections.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

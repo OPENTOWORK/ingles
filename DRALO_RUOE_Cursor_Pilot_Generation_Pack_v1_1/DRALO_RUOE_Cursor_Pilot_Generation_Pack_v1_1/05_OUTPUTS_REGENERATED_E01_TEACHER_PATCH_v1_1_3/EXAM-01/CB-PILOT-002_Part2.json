@@ -1,0 +1,295 @@
+{
+  "pack_version": "1.1.3-e01-teacher-patch",
+  "generation_version": "pilot-patch-e01-teacher-feedback-v1.1.3",
+  "generated_at": "2026-08-17T11:14:28.289Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-002",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-05",
+  "working_title": "The market that teaches you how a town eats",
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 2 passage is 192 words; target is 150–180 (accepted up to 200 for generation).",
+      "[TQ-03] title: Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "[TQ-03] title: Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "Solver flagged Q12 as ambiguous (if/when): both are natural conditionals here with a subtle difference, both acceptable at B2.",
+      "Solver flagged Q13 as ambiguous (was/is): past or present tense can both suit, depending on context interpretation.",
+      "Solver flagged Q14 as ambiguous (best/how): both fit the meaning, 'best to store' or 'how to store'.",
+      "Solver flagged Q15 as ambiguous (in/for): both prepositions are commonly used with 'order to', slight difference in nuance.",
+      "Gaps 13, 15 look trivially easy for B2.",
+      "Weak item Q14: keyed answer 'best' can be challenged; 'how best' is an expression but 'best' alone may confuse less confident candidates"
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 0,
+    "warning_count": 9
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [
+    {
+      "rule_id": "TQ-03",
+      "severity": "WARNING",
+      "location": "title",
+      "evidence": "The market that teaches you how a town eats",
+      "reason": "Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+      "recommended_local_action": "Pick a more concrete or understated title pattern."
+    }
+  ],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": {
+    "ok": true,
+    "errors": [],
+    "warnings": [
+      "Solver flagged Q12 as ambiguous (if/when): both are natural conditionals here with a subtle difference, both acceptable at B2.",
+      "Solver flagged Q13 as ambiguous (was/is): past or present tense can both suit, depending on context interpretation.",
+      "Solver flagged Q14 as ambiguous (best/how): both fit the meaning, 'best to store' or 'how to store'.",
+      "Solver flagged Q15 as ambiguous (in/for): both prepositions are commonly used with 'order to', slight difference in nuance.",
+      "Gaps 13, 15 look trivially easy for B2.",
+      "Weak item Q14: keyed answer 'best' can be challenged; 'how best' is an expression but 'best' alone may confuse less confident candidates"
+    ],
+    "blindSolve": {
+      "mismatches": [],
+      "ambiguous": [
+        {
+          "number": 12,
+          "words": [
+            "if",
+            "when"
+          ],
+          "reason": "both are natural conditionals here with a subtle difference, both acceptable at B2"
+        },
+        {
+          "number": 13,
+          "words": [
+            "was",
+            "is"
+          ],
+          "reason": "past or present tense can both suit, depending on context interpretation"
+        },
+        {
+          "number": 14,
+          "words": [
+            "best",
+            "how"
+          ],
+          "reason": "both fit the meaning, 'best to store' or 'how to store'"
+        },
+        {
+          "number": 15,
+          "words": [
+            "in",
+            "for"
+          ],
+          "reason": "both prepositions are commonly used with 'order to', slight difference in nuance"
+        }
+      ],
+      "solvedCount": 8
+    },
+    "rubric": {
+      "cefrLevel": "B2",
+      "textNaturalness": 5,
+      "exampleValid": true,
+      "vocabularyStyleItems": [],
+      "multipleAnswerItems": [],
+      "tooObviousItems": [
+        13,
+        15
+      ],
+      "categoriesTested": [
+        "adverb",
+        "determiner",
+        "verb",
+        "relative adverb",
+        "conjunction",
+        "auxiliary verb",
+        "adjective",
+        "preposition",
+        "adverbial phrase"
+      ],
+      "weakItems": [
+        {
+          "number": 14,
+          "problem": "keyed answer 'best' can be challenged; 'how best' is an expression but 'best' alone may confuse less confident candidates"
+        }
+      ],
+      "realisticB2": true,
+      "issues": [
+        "gap 14 might prompt alternative insertions (e.g. 'to best', 'best way') but context supports single-word 'best'",
+        "gaps 13 and 15 are very straightforward for B1 level",
+        "no gaps test content vocabulary instead of grammar/function words",
+        "all keyed answers are supported clearly by grammar and context"
+      ],
+      "verdict": "pass"
+    }
+  },
+  "generated": {
+    "partTitle": "Part 2: Open cloze",
+    "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "answer": "just"
+    },
+    "title": "The market that teaches you how a town eats",
+    "passage": "At the heart of the town, a busy market bustles (0) ___ before sunrise, with vendors quickly arranging fresh fruit and vegetables on their stalls. I arrived expecting to find the town’s famous pie, but soon realised that the locals had very (9) ___ interest in such treats early in the morning. Instead, they carefully selected ordinary ingredients, like leafy greens and root vegetables that will (10) ___ into the day’s meals. One stallholder, noticing my curiosity, explained (11) ___ to prepare a sauce from the wild herbs displayed. Her advice was simple but revealing: (12) ___ you want the fullest flavour, it’s best to use these herbs fresh. As I watched regular customers chatting and exchanging tips with sellers, it became clear that the market (13) ___ not simply about buying food; it also helped to build community spirit. People shared advice about how (14) ___ to store food or combine flavours, often revisiting the same stalls for guidance. The market showed me that understanding a town’s eating habits means looking beyond tourist favourites (15) ___ order to observe local behaviour. By the time I left, my view of the place had changed; it wasn’t about finding something rare but about seeing how food brings people (16) ___.",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 9,
+        "type": "short"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "type": "short"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "type": "short"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "type": "short"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "type": "short"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "type": "short"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "type": "short"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "type": "short"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 9,
+        "answer": "little"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "answer": "go"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "answer": "how"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "answer": "if"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "answer": "was"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "answer": "best"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "answer": "in"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "answer": "together"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 2,
+    "audioClips": [],
+    "titlePatternFamily": "the_x_that",
+    "__editorialFindings": [
+      {
+        "rule_id": "TQ-03",
+        "severity": "WARNING",
+        "location": "title",
+        "evidence": "The market that teaches you how a town eats",
+        "reason": "Title uses a repeated template frame (\"The X that…\" / \"What happens when…\").",
+        "recommended_local_action": "Pick a more concrete or understated title pattern."
+      }
+    ]
+  },
+  "enunciado_preview": "Example:\nAnswer: 0 → just\nText\nThe market that teaches you how a town eats\nAt the heart of the town, a busy market bustles (0) ___ before sunrise, with vendors quickly arranging fresh fruit and vegetables on their stalls. I arrived expecting to find the town’s famous pie, but soon realised that the locals had very (9) ___ interest in such treats early in the morning. Instead, they carefully selected ordinary ingredients, like leafy greens and root vegetables that will (10) ___ into the day’s meals. One stallholder, noticing my curiosity, explained (11) ___ to prepare a sauce from the wild herbs displayed. Her advice was simple but revealing: (12) ___ you want the fullest flavour, it’s best to use these herbs fresh. As I watched regular customers chatting and exchanging tips with sellers, it became clear that the market (13) ___ not simply about buying food; it also helped to build community spirit. People shared advice about how (14) ___ to store food or combine flavours, often revisiting the same stalls for guidance. The market showed me that understanding a town’s eating habits means looking beyond tourist favourites (15) ___ order to observe local behaviour. By the time I left, my view of the place had changed; it wasn’t about finding something rare but about seeing how food brings people (16) ___.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "patched_at": "2026-08-21T13:14:14.562Z",
+  "patch_source": "Audit Pilot Test 1 .docx (second human review, Alicia + SR)",
+  "patch_kind": "controlled-local-patch",
+  "teacher_patch_changes": [
+    {
+      "locus": "Example (0) — passage",
+      "feedback": "Question 0: \"la respuesta just ya aparece en el texto\".",
+      "reason": "The leaked word after the gap was deleted so the example reads \"bustles just before sunrise\" only once the answer is supplied. The example answer itself is unchanged."
+    },
+    {
+      "locus": "Q9 — passage and key",
+      "feedback": "Q9: proposed rewrite \"but soon realised that the locals had (9) ___ interest…\", answer \"little\"; also the tense debate (\"had\" vs \"showed\"/\"show\").",
+      "reason": "Adopts the teacher rewrite, which settles the tense argument by fixing \"had\" in the text. \"very\" was added because the bare frame accepted both \"little\" and \"no\" as equally natural answers; \"very little\" leaves a single defensible key."
+    },
+    {
+      "locus": "Q12 — passage and key",
+      "feedback": "Q12: proposed rewrite \"Her advice was simple but revealing: (12) ___ you want the fullest flavour, it's best to use these herbs fresh\", answer \"if\".",
+      "reason": "Adopts the teacher rewrite verbatim. Note for review: \"when\" also reads naturally in this frame, so it is recorded as an accepted alternative pending the teacher’s decision."
+    },
+    {
+      "locus": "Q13 — passage and key",
+      "feedback": "Q13: proposed rewrite \"the market (13) ___ not simply about buying food; it also helped to build community connections\", answer \"was\"; plus \"community connections - this is not natural English. I would change it to community spirit\".",
+      "reason": "Adopts the teacher rewrite and her preferred noun phrase. The surrounding past narrative (\"it became clear\", \"it also helped\") now forces \"was\", so the key is unique."
+    },
+    {
+      "locus": "Q14 — passage",
+      "feedback": "Q14: \"best appears exactly before the gap where the answer is meant to be (like a typo)\".",
+      "reason": "Deleting the duplicated word leaves the fixed expression \"how best to do something\", which is a valid and non-trivial B2 open-cloze gap, so the key could stay unchanged."
+    },
+    {
+      "locus": "Q15 — passage and key",
+      "feedback": "Q15: \"the expression looking beyond is usually paired with and or to - in this case I would perhaps change the ending of the sentence to tourist favourites to observe local behaviour\".",
+      "reason": "The teacher ending removed the old gap, so a new gap was created in the same zone. \"in order to\" is a fixed expression with only one possible word, which keeps eight gaps (Q9–Q16) and adds a grammar category the validator reported as missing."
+    },
+    {
+      "locus": "Q16 — passage",
+      "feedback": "Q16: \"I would suggest changing this to seeing how food brings people together\".",
+      "reason": "\"brings people together\" is the natural collocation; \"ties people together\" is not idiomatic. The key is unchanged."
+    }
+  ],
+  "repairs_applied": []
+}

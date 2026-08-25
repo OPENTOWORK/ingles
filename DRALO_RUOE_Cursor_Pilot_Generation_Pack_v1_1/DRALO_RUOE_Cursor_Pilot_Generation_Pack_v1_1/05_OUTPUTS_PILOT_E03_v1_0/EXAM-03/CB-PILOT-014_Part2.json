@@ -1,0 +1,159 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E03",
+  "ruoe_exam_id": "RUOE-PILOT-E03",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-014",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-04",
+  "style_card_version": "v1.1",
+  "working_title": "The notebook with too many names in it",
+  "final_title": "Two walks in the same hour",
+  "title_candidates": [
+    "Two walks in the same hour",
+    "Eleven names, one afternoon",
+    "The Thursday she ran out of hours"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q9: a weaker candidate may try “that”. Only “which” is grammatical after the comma; the mark scheme accepts “which” alone."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Blind-solve produced a single answer for all eight gaps and matched the key on 8/8. No gap admitted a second natural one-word solution.",
+    "repairs_applied": [
+      "Gap 10 regenerated during drafting: the first version gapped “until/before six”, where both were defensible. Replaced with a past-perfect auxiliary.",
+      "Gap 12 regenerated during drafting: the first version gapped “ask whether/if Saturdays were possible”, an ambiguity of exactly the kind flagged in the E01 Part 2 teacher patch.",
+      "Gap 11 regenerated during drafting: the first version gapped the preposition in “pulled so hard on/at the lead”, where both are natural British English."
+    ],
+    "teacher_attention_items": [
+      9
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 2",
+    "directions": "Part 2: Open cloze\nFor questions 9–16, read the text below and think of the word which best fits each gap. Use only one word in each gap. There is an example at the beginning (0).",
+    "partNumber": 2,
+    "title": "Two walks in the same hour",
+    "titlePatternFamily": "descriptive_title",
+    "passage": "The notebook had been a joke (0) ___ begin with, a birthday present from her brother. Now it held eleven names, and on Thursday two of them had been written into the same hour.\n\nShe noticed at half past twelve, by (9) ___ time it was too late to ring anybody. The collie and the spaniel from the end of the road both had to be out by one. She took the two of them together, something she (10) ___ promised herself she would never do, and the collie pulled so hard (11) ___ her shoulder ached all evening.\n\nShe was still rubbing it when Mrs Ellery telephoned. Her two terriers had been on the round (12) ___ four years, and now she wanted Saturdays as well. There was (13) ___ version of Saturday in which she could take two more dogs and still do the job properly.\n\nShe did not say no. What she did (14) ___ was pin (15) ___ a card in the newsagent’s window, asking for somebody who could walk four dogs at the weekend. The round had grown faster (16) ___ she had.",
+    "example": {
+      "number": 0,
+      "answer": "to"
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 9,
+        "type": "short"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "type": "short"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "type": "short"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "type": "short"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "type": "short"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "type": "short"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "type": "short"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "type": "short"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 9,
+        "answer": "which",
+        "category": "relative pronoun in a prepositional frame"
+      },
+      {
+        "id": "q2",
+        "number": 10,
+        "answer": "had",
+        "category": "auxiliary — past perfect"
+      },
+      {
+        "id": "q3",
+        "number": 11,
+        "answer": "that",
+        "category": "result clause"
+      },
+      {
+        "id": "q4",
+        "number": 12,
+        "answer": "for",
+        "category": "preposition of duration"
+      },
+      {
+        "id": "q5",
+        "number": 13,
+        "answer": "no",
+        "category": "determiner"
+      },
+      {
+        "id": "q6",
+        "number": 14,
+        "answer": "instead",
+        "category": "linking adverb"
+      },
+      {
+        "id": "q7",
+        "number": 15,
+        "answer": "up",
+        "category": "phrasal-verb particle"
+      },
+      {
+        "id": "q8",
+        "number": 16,
+        "answer": "than",
+        "category": "comparative"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

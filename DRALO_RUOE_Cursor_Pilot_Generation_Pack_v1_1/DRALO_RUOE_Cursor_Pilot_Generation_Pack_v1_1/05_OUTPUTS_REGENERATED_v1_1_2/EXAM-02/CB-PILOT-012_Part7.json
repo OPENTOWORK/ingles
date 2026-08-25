@@ -1,0 +1,177 @@
+{
+  "pack_version": "1.1.2-regenerated",
+  "generation_version": "pilot-regen-v1.1.2-2026-08-17",
+  "generated_at": "2026-08-17T11:38:38.869Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E02",
+  "ruoe_exam_id": "RUOE-PILOT-E02",
+  "part": "Part 7",
+  "part_number": 7,
+  "brief_id": "CB-PILOT-012",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-06",
+  "working_title": "Small changes that made work feel better",
+  "repairs_applied": [],
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Part 7 section D is 110 words; target is 120–150 (accepted from 100 for generation).",
+      "Quality validator failed to run: Missing } in template expression"
+    ],
+    "hard_fail_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 2
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [],
+  "part_quality": null,
+  "generated": {
+    "partTitle": "Reading and Use of English Part 7: Multiple matching",
+    "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+    "matchingIntro": "Which person values a different small change that improved their work? The people may be chosen more than once.",
+    "sections": [
+      {
+        "letter": "A",
+        "name": "Liam, UX Designer and Data Analyst",
+        "text": "I used to find finishing demanding projects tough because there were constant interruptions, like messages or unexpected calls, breaking my concentration. Our team decided to set specific times in the day called 'focus blocks' when no one was allowed to interrupt or call meetings. At first, I hesitated to adopt this since emergencies do happen, but I started planning all my questions and communications outside these blocks. This helped me finish tasks much more effectively without switching focus. Although some quick chats became less convenient, I felt the trade-off was worthwhile. I definitely don’t want these blocks the entire day, but having clear time to concentrate without distractions has changed my work life. To me, it's all about maintaining my focus while keeping boundaries clear, not about being isolated."
+      },
+      {
+        "letter": "B",
+        "name": "Sophie, Customer Support Specialist",
+        "text": "Starting work at a fixed time every day used to stress me out because of family care duties in the mornings. Our manager introduced flexible start and end times within agreed limits, allowing me to choose when I begin and finish work as long as the team's core hours were covered. I sometimes find it tricky to hand over ongoing tasks to colleagues who are on different shifts, so we started using shared status notes to improve communication. I value this control over my schedule far more than doing fewer hours overall. While I don’t have absolute freedom, being able to decide the start and finish times depending on my needs makes my daily routine less stressful. Predictability combined with choice, rather than total flexibility, now feels essential to me."
+      },
+      {
+        "letter": "C",
+        "name": "David, Senior Technician and Mentor",
+        "text": "Being asked to mentor a new member of our team felt like just extra work initially, and I was reluctant. However, as I started explaining our tasks in detail, I realised it required patience and forced me to consider why we do things a certain way, not just how. This process also revealed habits I never thought about before. Over time, I found satisfaction in seeing the newcomer become more independent and confident. It has improved my own understanding of the role and given me a quiet sense of pride in being useful to someone else at work. Although mentoring added to my responsibilities, the sense of usefulness and the unexpected reward of personal growth have made this change worthwhile."
+      },
+      {
+        "letter": "D",
+        "name": "Harriet, Operations Team Member",
+        "text": "We had a problem where the same operational issues kept being raised separately, causing frustration. To solve this, we introduced short, regular meetings where we discuss one problem each time, brought by a different team member, and agree on a clear next step. This system helped share responsibility across the group and made the discussions more focused. Nonetheless, I sometimes find the sessions repetitive when no new decisions come out of them, which can be frustrating. Still, I value the collective effort because it encourages team collaboration, even if I wish we had better follow-ups. For me, the key is shared responsibility, but only if it leads to concrete results."
+      }
+    ],
+    "questions": [
+      {
+        "id": "q43",
+        "number": 43,
+        "prompt": "Who appreciated having specific uninterrupted periods to complete demanding tasks?"
+      },
+      {
+        "id": "q44",
+        "number": 44,
+        "prompt": "Who mentioned that mentoring someone unexpectedly enhanced their own skills?"
+      },
+      {
+        "id": "q45",
+        "number": 45,
+        "prompt": "Who found that a change reduced daily stress by allowing more influence over working hours?"
+      },
+      {
+        "id": "q46",
+        "number": 46,
+        "prompt": "Who warned that a new workplace practice might limit spontaneous immediate collaboration?"
+      },
+      {
+        "id": "q47",
+        "number": 47,
+        "prompt": "Who feels their improvement depends more on shared teamwork than on individual effort?"
+      },
+      {
+        "id": "q48",
+        "number": 48,
+        "prompt": "Who initially saw their new responsibility as a burden but later valued it for personal satisfaction?"
+      },
+      {
+        "id": "q49",
+        "number": 49,
+        "prompt": "Who highlighted the importance of planning and postponing questions to improve focus?"
+      },
+      {
+        "id": "q50",
+        "number": 50,
+        "prompt": "Who pointed out coordination challenges when colleagues work on different schedules?"
+      },
+      {
+        "id": "q51",
+        "number": 51,
+        "prompt": "Who stressed that too much flexibility without routine would not be beneficial to them?"
+      },
+      {
+        "id": "q52",
+        "number": 52,
+        "prompt": "Who mentioned that meetings can become tedious if they don’t always result in decisions?"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "ans43",
+        "number": 43,
+        "answer": "A"
+      },
+      {
+        "id": "ans44",
+        "number": 44,
+        "answer": "C"
+      },
+      {
+        "id": "ans45",
+        "number": 45,
+        "answer": "B"
+      },
+      {
+        "id": "ans46",
+        "number": 46,
+        "answer": "A"
+      },
+      {
+        "id": "ans47",
+        "number": 47,
+        "answer": "D"
+      },
+      {
+        "id": "ans48",
+        "number": 48,
+        "answer": "C"
+      },
+      {
+        "id": "ans49",
+        "number": 49,
+        "answer": "A"
+      },
+      {
+        "id": "ans50",
+        "number": 50,
+        "answer": "B"
+      },
+      {
+        "id": "ans51",
+        "number": 51,
+        "answer": "B"
+      },
+      {
+        "id": "ans52",
+        "number": 52,
+        "answer": "D"
+      }
+    ],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 7,
+    "audioClips": []
+  },
+  "enunciado_preview": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.\nWhich person values a different small change that improved their work? The people may be chosen more than once.\n43 Who appreciated having specific uninterrupted periods to complete demanding tasks?\n44 Who mentioned that mentoring someone unexpectedly enhanced their own skills?\n45 Who found that a change reduced daily stress by allowing more influence over working hours?\n46 Who warned that a new workplace practice might limit spontaneous immediate collaboration?\n47 Who feels their improvement depends more on shared teamwork than on individual effort?\n48 Who initially saw their new responsibility as a burden but later valued it for personal satisfaction?\n49 Who highlighted the importance of planning and postponing questions to improve focus?\n50 Who pointed out coordination challenges when colleagues work on different schedules?\n51 Who stressed that too much flexibility without routine would not be beneficial to them?\n52 Who mentioned that meetings can become tedious if they don’t always result in decisions?\n________________________________________\nTexts\nA – Liam, UX Designer and Data Analyst\nI used to find finishing demanding projects tough because there were constant interruptions, like messages or unexpected calls, breaking my concentration. Our team decided to set specific times in the day called 'focus blocks' when no one was allowed to interrupt or call meetings. At first, I hesitated to adopt this since emergencies do happen, but I started planning all my questions and communications outside these blocks. This helped me finish tasks much more effectively without switching focus. Although some quick chats became less convenient, I felt the trade-off was worthwhile. I definitely don’t want these blocks the entire day, but having clear time to concentrate without distractions has changed my work life. To me, it's all about maintaining my focus while keeping boundaries clear, not about being isolated.\n________________________________________\nB – Sophie, Customer Support Specialist\nStarting work at a fixed time every day used to stress me out because of family care duties in the mornings. Our manager introduced flexible start and end times within agreed limits, allowing me to choose when I begin and finish work as long as the team's core hours were covered. I sometimes find it tricky to hand over ongoing tasks to colleagues who are on different shifts, so we started using shared status notes to improve communication. I value this control over my schedule far more than doing fewer hours overall. While I don’t have absolute freedom, being able to decide the start and finish times depending on my needs makes my daily routine less stressful. Predictability combined with choice, rather than total flexibility, now feels essential to me.\n________________________________________\nC – David, Senior Technician and Mentor\nBeing asked to mentor a new member of our team felt like just extra work initially, and I was reluctant. However, as I started explaining our tasks in detail, I realised it required patience and forced me to consider why we do things a certain way, not just how. This process also revealed habits I never thought about before. Over time, I found satisfaction in seeing the newcomer become more independent and confident. It has improved my own understanding of the role and given me a quiet sense of pride in being useful to someone else at work. Although mentoring added to my responsibilities, the sense of usefulness and the unexpected reward of personal growth have made this change worthwhile.\n________________________________________\nD – Harriet, Operations Team Member\nWe had a problem where the same operational issues kept being raised separately, causing frustration. To solve this, we introduced short, regular meetings where we discuss one problem each time, brought by a different team member, and agree on a clear next step. This system helped share responsibility across the group and made the discussions more focused. Nonetheless, I sometimes find the sessions repetitive when no new decisions come out of them, which can be frustrating. Still, I value the collective effort because it encourages team collaboration, even if I wish we had better follow-ups. For me, the key is shared responsibility, but only if it leads to concrete results.\n________________________________________",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "initial_validation_ok": true
+}

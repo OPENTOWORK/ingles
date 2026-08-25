@@ -1,0 +1,367 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "B",
+  "exam_id": "RUOE-PILOT-E03",
+  "ruoe_exam_id": "RUOE-PILOT-E03",
+  "part": "Part 4",
+  "part_number": 4,
+  "brief_id": null,
+  "brief_version": null,
+  "blueprint_id": "TBP-PILOT-EX03",
+  "blueprint_version": "1.0",
+  "style_card_id": null,
+  "style_card_version": null,
+  "working_title": null,
+  "final_title": null,
+  "title_candidates": [],
+  "source_inputs": {
+    "content_briefs": null,
+    "transformation_blueprints": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_Transformation_Blueprints_E03_E04_v1_0_PROPOSED.json"
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Answer-length spread is 3/3/4/4/4/5, which meets the distribution check but leans on four-word answers."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Adversarial alternate-route check found no second defensible answer for any of the six items. Q30 was the item most at risk and was restructured to close the “do a favour for me” route.",
+    "repairs_applied": [
+      "Q30 regenerated during drafting: the first version allowed “do a favour for me” as a five-word alternative. Sentence 2 now ends in “for me”, which makes that route repeat itself and leaves the ditransitive as the only natural answer."
+    ],
+    "teacher_attention_items": []
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 4",
+    "directions": "Part 4: Key word transformations\nFor questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+    "partNumber": 4,
+    "example": {
+      "number": 0,
+      "sentence1": "A builder is repairing our roof next week.",
+      "keyword": "HAVING",
+      "sentence2Start": "We are __________________ next week.",
+      "answer": "having our roof repaired"
+    },
+    "questions": [
+      {
+        "id": "TBP-PILOT-EX03-Q25",
+        "number": 25,
+        "type": "transformation",
+        "sentence1": "Their second album was better than their first.",
+        "keyword": "AS",
+        "sentence2Start": "Their first album __________________ their second.",
+        "answer": "was not as good as",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "AS",
+          "family_id": "TF-01",
+          "target_structure": "negative equivalence with not as … as",
+          "difficulty_band": "B2-Core",
+          "transformation_distance": "syntactic_restructuring",
+          "fullAnswers": [
+            "was not as good as",
+            "wasn’t as good as"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "negative BE + AS + gradable adjective",
+              "accepted": [
+                "was not as good",
+                "wasn’t as good"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "second AS introducing the standard of comparison",
+              "accepted": [
+                "as"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q26",
+        "number": 26,
+        "type": "transformation",
+        "sentence1": "If the weather does not improve, the match will have to be called off.",
+        "keyword": "UNLESS",
+        "sentence2Start": "The match will have to be called off __________________.",
+        "answer": "unless the weather improves",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "UNLESS",
+          "family_id": "TF-02",
+          "target_structure": "negative condition expressed with UNLESS",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "grammatical_reformulation",
+          "fullAnswers": [
+            "unless the weather improves"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "UNLESS + subject",
+              "accepted": [
+                "unless the weather"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "affirmative present-simple verb required by the polarity change",
+              "accepted": [
+                "improves"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q27",
+        "number": 27,
+        "type": "transformation",
+        "sentence1": "‘You should book the tickets early,’ the guide said to us.",
+        "keyword": "ADVISED",
+        "sentence2Start": "The guide __________________ the tickets early.",
+        "answer": "advised us to book",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "ADVISED",
+          "family_id": "TF-05",
+          "target_structure": "reported advice with ADVISED + object + to-infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "fullAnswers": [
+            "advised us to book"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "ADVISED + object",
+              "accepted": [
+                "advised us"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "TO-infinitive carrying the advised action",
+              "accepted": [
+                "to book"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q28",
+        "number": 28,
+        "type": "transformation",
+        "sentence1": "It was hard for me to follow what the lecturer was saying.",
+        "keyword": "DIFFICULTY",
+        "sentence2Start": "I __________________ what the lecturer was saying.",
+        "answer": "had difficulty following",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "DIFFICULTY",
+          "family_id": "TF-09",
+          "target_structure": "have difficulty (in) + gerund",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "lexico_grammatical_restructuring",
+          "fullAnswers": [
+            "had difficulty following",
+            "had difficulty in following"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "correctly tensed HAVE + DIFFICULTY",
+              "accepted": [
+                "had difficulty"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "gerund carrying the action",
+              "accepted": [
+                "following",
+                "in following"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q29",
+        "number": 29,
+        "type": "transformation",
+        "sentence1": "A faulty heater caused the fire in the warehouse.",
+        "keyword": "RESPONSIBLE",
+        "sentence2Start": "A faulty heater __________________ the fire in the warehouse.",
+        "answer": "was responsible for",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "RESPONSIBLE",
+          "family_id": "TF-12",
+          "target_structure": "be responsible for + noun phrase",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "lexico_grammatical_restructuring",
+          "fullAnswers": [
+            "was responsible for"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "correctly tensed BE + RESPONSIBLE",
+              "accepted": [
+                "was responsible"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "dependent preposition FOR introducing the complement",
+              "accepted": [
+                "for"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q30",
+        "number": 30,
+        "type": "transformation",
+        "sentence1": "I would be grateful if you could take this parcel to the post office for me.",
+        "keyword": "FAVOUR",
+        "sentence2Start": "Could you __________________ and take this parcel to the post office for me?",
+        "answer": "do me a favour",
+        "grading_metadata": {
+          "type": "b2_key_word_transformation",
+          "version": 1,
+          "keyword": "FAVOUR",
+          "family_id": "TF-11",
+          "target_structure": "do somebody a favour",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "idiomatic_restructuring",
+          "fullAnswers": [
+            "do me a favour"
+          ],
+          "markingPoints": [
+            {
+              "id": 1,
+              "label": "DO + indirect object",
+              "accepted": [
+                "do me"
+              ]
+            },
+            {
+              "id": 2,
+              "label": "determiner A + FAVOUR as a fixed chunk",
+              "accepted": [
+                "a favour"
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "TBP-PILOT-EX03-Q25",
+        "number": 25,
+        "answer": "was not as good as"
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q26",
+        "number": 26,
+        "answer": "unless the weather improves"
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q27",
+        "number": 27,
+        "answer": "advised us to book"
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q28",
+        "number": 28,
+        "answer": "had difficulty following"
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q29",
+        "number": 29,
+        "answer": "was responsible for"
+      },
+      {
+        "id": "TBP-PILOT-EX03-Q30",
+        "number": 30,
+        "answer": "do me a favour"
+      }
+    ],
+    "part4QualityMetrics": {
+      "itemMeta": [
+        {
+          "number": 25,
+          "distance": "syntactic_restructuring",
+          "band": "B2-Core",
+          "family": "TF-01"
+        },
+        {
+          "number": 26,
+          "distance": "grammatical_reformulation",
+          "band": "B2-Standard",
+          "family": "TF-02"
+        },
+        {
+          "number": 27,
+          "distance": "syntactic_restructuring",
+          "band": "B2-Standard",
+          "family": "TF-05"
+        },
+        {
+          "number": 28,
+          "distance": "lexico_grammatical_restructuring",
+          "band": "B2-Standard",
+          "family": "TF-09"
+        },
+        {
+          "number": 29,
+          "distance": "lexico_grammatical_restructuring",
+          "band": "B2-Standard",
+          "family": "TF-12"
+        },
+        {
+          "number": 30,
+          "distance": "idiomatic_restructuring",
+          "band": "B2-Strong",
+          "family": "TF-11"
+        }
+      ],
+      "answerLengths": [
+        5,
+        4,
+        4,
+        3,
+        3,
+        4
+      ]
+    }
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

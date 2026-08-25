@@ -1,0 +1,168 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E03",
+  "ruoe_exam_id": "RUOE-PILOT-E03",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-015",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-03",
+  "style_card_version": "v1.1",
+  "working_title": "Twenty minutes was the whole point",
+  "final_title": "Ink before eight",
+  "title_candidates": [
+    "Ink before eight",
+    "The box under the table",
+    "What counted as a session"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q22 (USE → useless): “unusable” is a real derivation of the same stem. It is blocked here by “to me”, which selects “useless”; a teacher may still wish to confirm."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Blind-solve produced the keyed derivation on 8/8. Only Q22 required the collocation “useless to me” to discriminate.",
+    "repairs_applied": [
+      "“Anything shorter” in paragraph 1 was rewritten as “anything briefer” so that no form of the SHORT family appears in the passage alongside item 23.",
+      "The example stem was changed from EQUIP to ORIGIN because “equipment” occurs in the passage."
+    ],
+    "teacher_attention_items": [
+      22
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 3",
+    "directions": "Part 3: Word formation\nFor questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line. There is an example at the beginning (0).",
+    "partNumber": 3,
+    "title": "Ink before eight",
+    "titlePatternFamily": "time_marker_title",
+    "passage": "For most of a year the printing kit stayed in its box under the kitchen table, the paper still sealed. (0) ___ (ORIGIN) I had pictured long sessions: two clear hours and a tidy surface. My idea of what the hobby demanded had been (17) ___ (REAL) from the start, and anything briefer felt like (18) ___ (PREPARE) rather than the real thing.\n\nThen one Tuesday I had twenty minutes before I had to leave, and I used them. The first print was poor. I did it again the following morning, and (19) ___ (GRADUAL) those twenty minutes stopped being a compromise and became the practice. A small daily (20) ___ (ACHIEVE) turned out to fit inside a working week in a way the perfect session never had.\n\nThe mornings are genuinely (21) ___ (ENJOY), which the two-hour version never was; the prints are cruder, and half the equipment I bought is now (22) ___ (USE) to me. What changed was not my interest but my willingness to (23) ___ (SHORT) the session. If there is any (24) ___ (HONEST) in this, it is that I no longer measure a session by its length.",
+    "example": {
+      "number": 0,
+      "stem": "ORIGIN",
+      "answer": "Originally",
+      "transformation": "noun → adverb"
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "REAL"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "type": "word-formation",
+        "stem": "PREPARE"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "type": "word-formation",
+        "stem": "GRADUAL"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "type": "word-formation",
+        "stem": "ACHIEVE"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "type": "word-formation",
+        "stem": "ENJOY"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "USE"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "type": "word-formation",
+        "stem": "SHORT"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "type": "word-formation",
+        "stem": "HONEST"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 17,
+        "answer": "unrealistic",
+        "transformationFamily": "adjective → adjective (negative prefix + suffix)"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "answer": "preparation",
+        "transformationFamily": "verb → noun"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "answer": "gradually",
+        "transformationFamily": "adjective → adverb (-ly)"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "answer": "achievement",
+        "transformationFamily": "verb → noun"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "answer": "enjoyable",
+        "transformationFamily": "verb → adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "answer": "useless",
+        "transformationFamily": "verb/noun → adjective (negative suffix)"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "answer": "shorten",
+        "transformationFamily": "adjective → verb"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "answer": "honesty",
+        "transformationFamily": "adjective → noun"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

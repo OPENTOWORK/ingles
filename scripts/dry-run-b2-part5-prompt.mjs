@@ -12,6 +12,7 @@ import { loadEnvLocal } from './load-env-local.mjs';
 import { buildExamGeneratePrompt } from '../src/lib/draloAiExamPrompts.js';
 import { validateGeneratedExamPart } from '../src/lib/examPartValidation.js';
 import { countWords, extractMcqLetter, extractMcqOptionText } from '../src/lib/b2RuoeExamQuality.js';
+import { repairPart5PassageLength } from '../src/lib/ruoeLocalItemRepair.js';
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(root, 'scripts', 'generated', 'reviews');
@@ -170,6 +171,7 @@ function evaluateGenerated(generated) {
 let attempt = 0;
 let lastEval = null;
 let lastGenerated = null;
+const localRepairs = [];
 const MAX_ATTEMPTS = 8;
 
 while (attempt < MAX_ATTEMPTS) {
@@ -217,6 +219,14 @@ HARD REQUIREMENTS:
   }
 
   lastGenerated = trimToFourOptions(lastGenerated);
+  const wcBefore = countWords(lastGenerated.passage);
+  if (wcBefore < 550 || wcBefore > 650) {
+    console.error(`  passage ${wcBefore} words; local length repair…`);
+    const repaired = await repairPart5PassageLength(openai, lastGenerated);
+    lastGenerated = repaired.repaired;
+    if (repaired.repairs.length) localRepairs.push(...repaired.repairs);
+  }
+
   lastEval = evaluateGenerated(lastGenerated);
 
   const failedNames = lastEval.checks.filter((c) => !c.ok).map((c) => c.name);
@@ -250,6 +260,7 @@ const report = {
   generatedAt: new Date().toISOString(),
   model: process.env.OPENAI_MODEL || 'gpt-4o-mini',
   attempts: attempt,
+  localRepairs,
   promptSnippet: {
     mentionsQ31to36: /Q31–36|questions numbered 31–36/i.test(userPrompt),
     wordCountTarget: /550–650 words/i.test(userPrompt),

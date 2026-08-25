@@ -51,13 +51,14 @@ export function isExerciseSlotUnlocked(
   partNumber,
   examSlot,
   examenIdBySlotOrSlots = {},
-  { bypassStarGating = false } = {},
+  { bypassStarGating = false, maxExamSlot = 5 } = {},
 ) {
+  const slot = Number(examSlot);
+  if (Number.isFinite(maxExamSlot) && slot > maxExamSlot) return false;
   if (bypassStarGating) return true;
   const slots = Array.isArray(examenIdBySlotOrSlots)
     ? [...examenIdBySlotOrSlots].sort((a, b) => a - b)
     : getSortedExamSlots(examenIdBySlotOrSlots);
-  const slot = Number(examSlot);
   const idx = slots.indexOf(slot);
   if (idx <= 0) return true;
   const prevSlot = slots[idx - 1];

@@ -5,7 +5,10 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
-import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
+import {
+  ExamStrategiesComingSoonRibbon,
+  ExamStrategiesNavMenuItems,
+} from '@/components/layout/ExamStrategiesNavMenu';
 import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import {
@@ -15,9 +18,9 @@ import {
   NAV_LINKS_BEFORE_DRALO,
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
+  NAV_LINK_PROFILE,
   resolveNavItemHref,
 } from '@/config/appNavMenu';
-import { APP_ROUTES } from '@/config/appRoutes';
 
 function AppNavInner({ session, userRole, onLogout }) {
   const pathname = usePathname();
@@ -135,22 +138,41 @@ function AppNavInner({ session, userRole, onLogout }) {
                     {...bindDesktopHoverMenu('exam-strategies')}
                     {...(item.tourId ? { 'data-tour': item.tourId } : {})}
                   >
-                    <NavLink
-                      href={resolveNavItemHref(item.href, session)}
-                      className={`${desktopLinkClass(item.href)} app-nav__link--has-menu`}
-                      onClick={closeDesktopDropdowns}
-                    >
-                      {item.label}
-                      <span className="app-nav__chevron" aria-hidden>
-                        ▾
+                    {navModel.examStrategiesLocked ? (
+                      <span
+                        className={`${desktopLinkClass(item.href)} app-nav__link--has-menu app-nav__link--locked-preview`}
+                        aria-disabled="true"
+                      >
+                        {item.label}
+                        <span className="app-nav__chevron" aria-hidden>
+                          ▾
+                        </span>
                       </span>
-                    </NavLink>
-                    <div className="app-nav__dropdown app-nav__dropdown--hover" role="menu">
+                    ) : (
+                      <NavLink
+                        href={resolveNavItemHref(item.href, session)}
+                        className={`${desktopLinkClass(item.href)} app-nav__link--has-menu`}
+                        onClick={closeDesktopDropdowns}
+                      >
+                        {item.label}
+                        <span className="app-nav__chevron" aria-hidden>
+                          ▾
+                        </span>
+                      </NavLink>
+                    )}
+                    <div
+                      className={`app-nav__dropdown app-nav__dropdown--hover${
+                        navModel.examStrategiesLocked ? ' app-nav__dropdown--locked' : ''
+                      }`}
+                      role="menu"
+                    >
                       <ExamStrategiesNavMenuItems
+                        locked={navModel.examStrategiesLocked}
                         guestRequiresLogin={navModel.guest}
                         variant="desktop"
                         onNavigate={closeDesktopDropdowns}
                       />
+                      {navModel.examStrategiesLocked ? <ExamStrategiesComingSoonRibbon /> : null}
                     </div>
                   </div>
                 ) : (
@@ -226,6 +248,7 @@ function AppNavInner({ session, userRole, onLogout }) {
                 href={NAV_LINK_CONTACT.href}
                 className={desktopLinkClass(NAV_LINK_CONTACT.href)}
                 onClick={closeDesktopDropdowns}
+                {...(NAV_LINK_CONTACT.tourId ? { 'data-tour': NAV_LINK_CONTACT.tourId } : {})}
               >
                 {NAV_LINK_CONTACT.label}
               </NavLink>
@@ -267,15 +290,17 @@ function AppNavInner({ session, userRole, onLogout }) {
                 href={NAV_LINK_CONTACT.href}
                 className={desktopLinkClass(NAV_LINK_CONTACT.href)}
                 onClick={closeDesktopDropdowns}
+                {...(NAV_LINK_CONTACT.tourId ? { 'data-tour': NAV_LINK_CONTACT.tourId } : {})}
               >
                 {NAV_LINK_CONTACT.label}
               </NavLink>
               <NavLink
-                href={APP_ROUTES.profile}
-                className={desktopLinkClass(APP_ROUTES.profile)}
+                href={NAV_LINK_PROFILE.href}
+                className={desktopLinkClass(NAV_LINK_PROFILE.href)}
                 onClick={closeDesktopDropdowns}
+                {...(NAV_LINK_PROFILE.tourId ? { 'data-tour': NAV_LINK_PROFILE.tourId } : {})}
               >
-                Profile
+                {NAV_LINK_PROFILE.label}
               </NavLink>
               <button
                 type="button"

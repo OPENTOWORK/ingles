@@ -1,0 +1,124 @@
+[
+  {
+    "case": "G-01",
+    "quote": "First of all a huge damage to the environment brings a transport.",
+    "quote_len": 65,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@252-317",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "8864b466c0295a2269177719614998d616f4048ee1f5a1f2954f175c0d6057e5"
+  },
+  {
+    "case": "G-02",
+    "quote": "We have big problems with transport because there are too much cars in our country.",
+    "quote_len": 83,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@132-215",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "6c959b1eff06083e2c1938c940b6f2abfbe6873a2e7240daff4289d84be57fb4"
+  },
+  {
+    "case": "G-03",
+    "quote": "Investing on electrical transport would benefit the environment a lot.",
+    "quote_len": 70,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@507-577",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "7a3f91df0830bcb4dd80ae0f47a42810fc3abb32471ac2f1e8cd73c83991166f"
+  },
+  {
+    "case": "G-04",
+    "quote": "the prince rejected it and decided to leave the palace instead.",
+    "quote_len": 63,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@722-785",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "85949e2bd85bb9010257197d1b33ff1a47956f2cb45d6d2be88d6aa15bfd18e0"
+  },
+  {
+    "case": "G-05",
+    "quote": "The most useful thing i have learned is surely speaking English.",
+    "quote_len": 64,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@42-106",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "1d7c93976fa802005147b2217bb11565ab63e30a2ee6c70e7e399f0f89231297"
+  },
+  {
+    "case": "G-06",
+    "quote": "My area includes also beautiful Baltic Sea which many tourist visit especially in summer.",
+    "quote_len": 89,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@274-363",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "0354497f654b03f2851b61c495fa417742c0433b4b44232cbc997e7108f2b18e"
+  },
+  {
+    "case": "G-07",
+    "quote": "the appearance of the person is more important than the person itself.",
+    "quote_len": 70,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@560-630",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "0c14e7bc06c706a76d7b81ae8c41076e4fe18b50556d5f8ed9cccb4b01479162"
+  },
+  {
+    "case": "G-08",
+    "quote": "We shouldn’t judge people for its appearance, because that is not important.",
+    "quote_len": 76,
+    "non_ascii_in_quote": [
+      "’=U+2019"
+    ],
+    "exact_includes": true,
+    "occ0": "bound@799-875",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "d00c9caea7c9c187279250793b2d6bb32ae3b889789599d3139c0b49a814e409"
+  },
+  {
+    "case": "G-09",
+    "quote": "people place too much importance on appearance and the material, world, sadly true, and the fashion industry just spurs on such situation.",
+    "quote_len": 138,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@911-1049",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "94a8316bf7be9ca932838a198f98df863a453a58c47bc9c568cdd2cb53c09fe8"
+  },
+  {
+    "case": "G-10",
+    "quote": "The majority of the people claimed that the best thing were computers and interactive boards.",
+    "quote_len": 93,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@329-422",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "bd1dd550d8c7d69b172d4933edb1294b49797b7230efdfaafbbb1926fc23368a"
+  },
+  {
+    "case": "G-11",
+    "quote": "When the bus is taking me to school I listen to the music so I could wake up.",
+    "quote_len": 77,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@143-220",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "f89a616f62a63cb8b00e008ea08ac3dcc1d76ecb2865cee5ffd6f1060ab894f0"
+  },
+  {
+    "case": "G-12",
+    "quote": "The most interesting thing that I learned was how to prepare a theater play, and it was fantastic.",
+    "quote_len": 98,
+    "non_ascii_in_quote": [],
+    "exact_includes": true,
+    "occ0": "bound@482-580",
+    "occ1": "occurrence_out_of_range:n=1",
+    "fixture_checksum": "af63b794651638c15b4c2d3c8f71286e2a23604962a929f40bb6890ca413ebde"
+  }
+]

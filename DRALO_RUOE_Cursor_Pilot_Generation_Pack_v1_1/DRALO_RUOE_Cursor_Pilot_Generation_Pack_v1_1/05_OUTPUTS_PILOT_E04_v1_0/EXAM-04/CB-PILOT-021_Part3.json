@@ -1,0 +1,168 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E04",
+  "ruoe_exam_id": "RUOE-PILOT-E04",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-021",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-05",
+  "style_card_version": "v1.1",
+  "working_title": "The shop that lends more than it sells",
+  "final_title": "The counter on a Saturday morning",
+  "title_candidates": [
+    "The counter on a Saturday morning",
+    "Three of the first five",
+    "Not everything here is for sale"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q19 depends on the reader seeing that the customer wants to exchange the book, which is what forces the negative prefix."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Blind-solve produced the keyed derivation on 8/8.",
+    "repairs_applied": [
+      "Item 19 was originally USE → unusable, which admitted “useless” as a second valid derivation of the same stem. The stem was changed to SUIT.",
+      "“waiting to be collected” in paragraph one was rewritten as “waiting to be picked up” so that no form of the COLLECT family appears alongside item 20."
+    ],
+    "teacher_attention_items": [
+      19
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 3",
+    "directions": "Part 3: Word formation\nFor questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line. There is an example at the beginning (0).",
+    "partNumber": 3,
+    "title": "The counter on a Saturday morning",
+    "titlePatternFamily": "descriptive_title",
+    "passage": "Nothing on the counter is for sale. There is a tray of parcels waiting to be picked up, a jar of pens and a clipboard with a rota on it. The (0) ___ (OWN) took the shop on eleven years ago and has never questioned the (17) ___ (ARRANGE), which began as a favour and now runs itself.\n\nBy half past ten, three people have come in without buying anything. One leaves a parcel; another borrows a chair; a third asks (18) ___ (RELUCTANT) whether the book she bought last month can be exchanged, having found it (19) ___ (SUIT) for the course she is taking.\n\nNone of this reaches the (20) ___ (COLLECT) of figures the accountant wants each spring. The shop is barely (21) ___ (PROFIT), and the (22) ___ (WEEK) order from the wholesaler now carries a minimum it can only just meet. Asked why he tolerates the rest, he says that turning people away would hardly (23) ___ (WIDE) its appeal.\n\nIf it went, the (24) ___ (NEIGHBOUR) would lose its noticeboard, its parcel point and the only chair on the street that nobody pays to sit on.",
+    "example": {
+      "number": 0,
+      "stem": "OWN",
+      "answer": "owner",
+      "transformation": "verb → agent noun"
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "ARRANGE"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "type": "word-formation",
+        "stem": "RELUCTANT"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "type": "word-formation",
+        "stem": "SUIT"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "type": "word-formation",
+        "stem": "COLLECT"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "type": "word-formation",
+        "stem": "PROFIT"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "WEEK"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "type": "word-formation",
+        "stem": "WIDE"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "type": "word-formation",
+        "stem": "NEIGHBOUR"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 17,
+        "answer": "arrangement",
+        "transformationFamily": "verb → noun"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "answer": "reluctantly",
+        "transformationFamily": "adjective → adverb (-ly)"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "answer": "unsuitable",
+        "transformationFamily": "verb → adjective (negative prefix)"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "answer": "collection",
+        "transformationFamily": "verb → noun"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "answer": "profitable",
+        "transformationFamily": "noun → adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "answer": "weekly",
+        "transformationFamily": "noun → adjective"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "answer": "widen",
+        "transformationFamily": "adjective → verb"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "answer": "neighbourhood",
+        "transformationFamily": "noun → noun (British spelling)"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}

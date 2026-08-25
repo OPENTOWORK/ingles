@@ -1,0 +1,275 @@
+{
+  "pack_version": "1.1.3-e01-teacher-patch",
+  "generation_version": "pilot-patch-e01-teacher-feedback-v1.1.3",
+  "generated_at": "2026-08-17T11:16:25.291Z",
+  "phase": "A-regen",
+  "exam_id": "RUOE-PILOT-E01",
+  "ruoe_exam_id": "RUOE-PILOT-E01",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-003",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "style_card_id": "SC-02",
+  "working_title": "Games that make practice feel different",
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [
+      "[P3-FORCED-NATURALNESS] Q17: COMMUNICATION is the natural noun form here, 'communication' fits better than a forced adjectival form like 'communicative'",
+      "[P3-UNNATURAL-ANSWER] Q18: FRUSTRATION is the correct noun form; 'frustrate' is a verb. Using any other derived word would be unnatural."
+    ],
+    "warnings": [],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_review_hard_count": 0,
+    "quality_review_hard_findings": [],
+    "quality_fail_count": 2,
+    "warning_count": 0
+  },
+  "part4_quality_metrics": null,
+  "editorial_findings": [],
+  "part4_findings": [],
+  "adversarial_findings": [
+    {
+      "rule_id": "P3-FORCED-NATURALNESS",
+      "severity": "QUALITY_FAIL",
+      "location": "Q17",
+      "evidence": "COMMUNICATION is the natural noun form here, 'communication' fits better than a forced adjectival form like 'communicative'",
+      "reason": "COMMUNICATION is the natural noun form here, 'communication' fits better than a forced adjectival form like 'communicative'",
+      "recommended_local_action": "Rewrite gap context or choose a more natural derivation.",
+      "source": "ai_adversarial"
+    },
+    {
+      "rule_id": "P3-UNNATURAL-ANSWER",
+      "severity": "QUALITY_FAIL",
+      "location": "Q18",
+      "evidence": "FRUSTRATION is the correct noun form; 'frustrate' is a verb. Using any other derived word would be unnatural.",
+      "reason": "FRUSTRATION is the correct noun form; 'frustrate' is a verb. Using any other derived word would be unnatural.",
+      "recommended_local_action": "Regenerate item with idiomatic derived word.",
+      "source": "ai_adversarial"
+    }
+  ],
+  "part_quality": {
+    "findings": [
+      {
+        "rule_id": "P3-FORCED-NATURALNESS",
+        "severity": "QUALITY_FAIL",
+        "location": "Q17",
+        "evidence": "COMMUNICATION is the natural noun form here, 'communication' fits better than a forced adjectival form like 'communicative'",
+        "reason": "COMMUNICATION is the natural noun form here, 'communication' fits better than a forced adjectival form like 'communicative'",
+        "recommended_local_action": "Rewrite gap context or choose a more natural derivation.",
+        "source": "ai_adversarial"
+      },
+      {
+        "rule_id": "P3-UNNATURAL-ANSWER",
+        "severity": "QUALITY_FAIL",
+        "location": "Q18",
+        "evidence": "FRUSTRATION is the correct noun form; 'frustrate' is a verb. Using any other derived word would be unnatural.",
+        "reason": "FRUSTRATION is the correct noun form; 'frustrate' is a verb. Using any other derived word would be unnatural.",
+        "recommended_local_action": "Regenerate item with idiomatic derived word.",
+        "source": "ai_adversarial"
+      }
+    ],
+    "qualityFails": [
+      "[P3-FORCED-NATURALNESS] Q17: COMMUNICATION is the natural noun form here, 'communication' fits better than a forced adjectival form like 'communicative'",
+      "[P3-UNNATURAL-ANSWER] Q18: FRUSTRATION is the correct noun form; 'frustrate' is a verb. Using any other derived word would be unnatural."
+    ],
+    "warnings": [],
+    "rubric": {
+      "forcedItems": [
+        {
+          "number": 17,
+          "reason": "COMMUNICATION is the natural noun form here, 'communication' fits better than a forced adjectival form like 'communicative'"
+        }
+      ],
+      "unnaturalAnswers": [
+        {
+          "number": 18,
+          "reason": "FRUSTRATION is the correct noun form; 'frustrate' is a verb. Using any other derived word would be unnatural."
+        }
+      ],
+      "varietyOk": true,
+      "issues": [
+        "Item 17: stem 'communicate' forced; use 'communication' instead",
+        "Item 18: noun should be 'frustration', not verb form or other derivations"
+      ],
+      "verdict": "revise"
+    }
+  },
+  "generated": {
+    "partTitle": "Reading and Use of English Part 3: Word formation",
+    "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+    "example": {
+      "number": 0,
+      "stem": "PRACTICE",
+      "answer": "practise",
+      "transformationFamily": "verb"
+    },
+    "title": "Games that make practice feel different",
+    "passage": "In an informal learning club, a group gathers to take part in a cooperative activity designed to encourage everyone to (0) ___ (PRACTICE) specific skills. Instead of focusing on winning, participants must explain a strategy clearly to their teammates, which demands real (17) ___ (COMMUNICATE) and planning. When one learner suggests a flawed move, the group experiences the (18) ___ (FRUSTRATE) of failing quickly, leading them to adjust their approach immediately. This instant feedback creates a chance for rapid (19) ___ (LEARN), which keeps participants engaged. In fact, the teacher intervenes only (20) ___ (OCCASION), stepping back to let participants explore solutions. However, it is important to remember that the value of the exercise depends on matching the activity to the specific skill being practised. Without such careful (21) ___ (MATCH), the activity could be (22) ___ (HELP) or distracting. Rather than replacing traditional lessons, this method offers a (23) ___ (DIFFER) way to approach practical exercises, making repetition less monotonous and more appealing. Ultimately, enjoyment and purposeful skill development must be (24) ___ (BALANCE) to make the best use of such activities in learning.",
+    "questions": [
+      {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "COMMUNICATE",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "type": "word-formation",
+        "stem": "FRUSTRATE",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "type": "word-formation",
+        "stem": "LEARN",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "type": "word-formation",
+        "stem": "OCCASION",
+        "transformationFamily": "adverb"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "type": "word-formation",
+        "stem": "MATCH",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "HELP",
+        "transformationFamily": "prefix"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "type": "word-formation",
+        "stem": "DIFFER",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "type": "word-formation",
+        "stem": "BALANCE",
+        "transformationFamily": "adjective"
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q1",
+        "number": 17,
+        "answer": "communication",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q2",
+        "number": 18,
+        "answer": "frustration",
+        "transformationFamily": "noun"
+      },
+      {
+        "id": "q3",
+        "number": 19,
+        "answer": "learning",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q4",
+        "number": 20,
+        "answer": "occasionally",
+        "transformationFamily": "adverb"
+      },
+      {
+        "id": "q5",
+        "number": 21,
+        "answer": "matching",
+        "transformationFamily": "adjective"
+      },
+      {
+        "id": "q6",
+        "number": 22,
+        "answer": "unhelpful",
+        "transformationFamily": "prefix"
+      },
+      {
+        "id": "q7",
+        "number": 23,
+        "answer": "different",
+        "transformationFamily": "other"
+      },
+      {
+        "id": "q8",
+        "number": 24,
+        "answer": "balanced",
+        "transformationFamily": "adjective"
+      }
+    ],
+    "sections": [],
+    "sentencePool": [],
+    "optionPool": [],
+    "matchingAnswers": [],
+    "speakingPrompts": [],
+    "collaborativePrompts": [],
+    "discussionQuestions": [],
+    "bulletPoints": [],
+    "partNumber": 3,
+    "audioClips": [],
+    "titlePatternFamily": "descriptive_title"
+  },
+  "enunciado_preview": "Example:\n(0) ___ (PRACTICE)\nAnswer: 0 → practise\nText\nGames that make practice feel different\nIn an informal learning club, a group gathers to take part in a cooperative activity designed to encourage everyone to (0) ___ (PRACTICE) specific skills. Instead of focusing on winning, participants must explain a strategy clearly to their teammates, which demands real (17) ___ (COMMUNICATE) and planning. When one learner suggests a flawed move, the group experiences the (18) ___ (FRUSTRATE) of failing quickly, leading them to adjust their approach immediately. This instant feedback creates a chance for rapid (19) ___ (LEARN), which keeps participants engaged. In fact, the teacher intervenes only (20) ___ (OCCASION), stepping back to let participants explore solutions. However, it is important to remember that the value of the exercise depends on matching the activity to the specific skill being practised. Without such careful (21) ___ (MATCH), the activity could be (22) ___ (HELP) or distracting. Rather than replacing traditional lessons, this method offers a (23) ___ (DIFFER) way to approach practical exercises, making repetition less monotonous and more appealing. Ultimately, enjoyment and purposeful skill development must be (24) ___ (BALANCE) to make the best use of such activities in learning.",
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "patched_at": "2026-08-21T13:14:30.349Z",
+  "patch_source": "Audit Pilot Test 1 .docx (second human review, Alicia + SR)",
+  "patch_kind": "controlled-local-patch",
+  "teacher_patch_changes": [
+    {
+      "locus": "Opening sentence and example (0)",
+      "feedback": "Example: \"I would change this to In an informal learning club, a group gathers to take part in a cooperative activity - I would avoid the use of the word game as this B2 is not for schools\"; \"I also question the structure of the answer… I would change this to something like designed to encourage specific skill practice or designed to encourage the practice of specific skills\".",
+      "reason": "Removes the school-ish framing, deletes the duplicated (PRACTICE) marker, and makes the example a real transformation: PRACTICE → practise is a genuine noun-to-verb derivation and a British English spelling point, which the previous no-transform example lacked."
+    },
+    {
+      "locus": "Terminology — \"players\"",
+      "feedback": "L2/L6: \"players - I would use the word participants\".",
+      "reason": "Applies the requested adult-register terminology at both occurrences."
+    },
+    {
+      "locus": "Collocation — matching",
+      "feedback": "\"matching the activity with the specific skill being practised - in the context I think matching the activity to is better suited\".",
+      "reason": "\"match A to B\" is the natural collocation for pairing an activity with its purpose."
+    },
+    {
+      "locus": "Practice wording",
+      "feedback": "\"way to repeat practice exercises - perhaps practical exercises\".",
+      "reason": "Adopts the suggested wording; \"approach\" replaces \"repeat\" so the phrase reads naturally, and the following clause still carries the repetition idea."
+    },
+    {
+      "locus": "Q20 — stem and answer (-ly adverb)",
+      "feedback": "\"there is no answer with a prefix or -ly\".",
+      "reason": "Supplies the missing -ly adverb transformation through a two-step derivation (occasion → occasional → occasionally) while keeping the original pedagogical point that the teacher steps back."
+    },
+    {
+      "locus": "Q22 — stem and answer (prefix/negative)",
+      "feedback": "\"there is no answer with a prefix or -ly\".",
+      "reason": "Supplies the missing genuine prefix/negative formation. \"the activity could be unhelpful or distracting\" keeps the original meaning of the sentence."
+    },
+    {
+      "locus": "Register consistency — \"game\"",
+      "feedback": "Consequence of \"I would avoid the use of the word game as this B2 is not for schools\".",
+      "reason": "Required for coherence once the opening was changed to \"a cooperative activity\"; leaving \"game\" elsewhere would have contradicted the reworked example and re-introduced the register problem."
+    }
+  ],
+  "repairs_applied": []
+}

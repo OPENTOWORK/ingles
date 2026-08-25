@@ -1,0 +1,136 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 4,
+  "generated_at": "2026-08-12T17:06:14.231Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-004",
+  "brief_version": "1.0",
+  "style_card_id": "SC-03",
+  "style_card_version": "v1.0",
+  "working_title": "The volunteer job I chose for the wrong reason",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 5116,
+    "completion_tokens": 1408,
+    "total_tokens": 6524
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 482 outside 550–650",
+      "Part 5 answer letter run exceeds 2 at Q33",
+      "Part 5 answer letter run exceeds 2 at Q34"
+    ],
+    "warnings": [],
+    "word_count": 482
+  },
+  "exercise": {
+    "part_title": "Part 5",
+    "instructions": "Read the article and answer the questions. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.",
+    "text_title": "The Volunteer Job I Chose for the Wrong Reason",
+    "article": "I first signed up to volunteer at the community repair workshop because I thought it would look impressive on my CV. I imagined future employers nodding approvingly at my commitment to community service. At the time, I didn’t see it as something particularly meaningful or enjoyable. It was, quite simply, a strategic move.\n\nOn my first day, I arrived with a sense of purpose, ready to dive into practical repair tasks. I was eager to prove my worth by fixing broken appliances and gadgets. However, I was surprised when the workshop coordinator asked me to greet visitors and find out what help they needed. This wasn’t what I had in mind. I had envisioned myself as a fixer, not a friendly face at the door.\n\nDespite my initial disappointment, I soon found myself enjoying the role. One particular interaction stands out in my memory. A gentleman came in, visibly embarrassed about not understanding how to fix his toaster. I could see his discomfort, and I realised it was up to me to make him feel at ease. As I explained the repair process, I was careful not to make him feel foolish. To my surprise, I found satisfaction in helping him understand the simple steps involved.\n\nAs the weeks went by, I began to take on more responsibilities. I started organising tasks among the volunteers, matching people with different skills to the right projects. I discovered that I enjoyed this coordination role far more than the actual repair work. It was rewarding to see how my efforts helped the workshop run more smoothly.\n\nOne day, I made a small mistake while assigning tasks, which led to a bit of confusion. However, this turned into a learning opportunity. I realised that even small errors could teach me valuable lessons about communication and teamwork. This experience only deepened my appreciation for the coordination aspect of the work.\n\nWhen it came time to update my CV, I realised that the most valuable aspect of my volunteering experience wasn’t the line I could add to my resume. Instead, it was the insight I’d gained into what I truly enjoyed doing. I had always thought that I needed to focus on developing technical skills for a serious career, but this experience taught me otherwise. I found that I was more drawn to roles that involved working with people and organising tasks.\n\nReflecting on my time at the workshop, I realised that my initial motivation for volunteering had been misguided. The experience had changed my perspective on what I valued in a job. It wasn’t just about the skills I could list on paper, but about finding work that was personally fulfilling. Now, when I look at my CV, I see more than just a list of experiences. I see a journey of self-discovery and a clearer understanding of the kind of work that truly appeals to me.",
+    "questions": [
+      {
+        "number": 31,
+        "question_type": "main idea",
+        "prompt": "What was the narrator's initial reason for volunteering at the community repair workshop?",
+        "options": {
+          "A": "To gain practical repair skills.",
+          "B": "To enhance their CV.",
+          "C": "To help the community.",
+          "D": "To meet new people."
+        },
+        "answer": "B",
+        "evidence": "I first signed up to volunteer at the community repair workshop because I thought it would look impressive on my CV.",
+        "rationale": "The narrator explicitly states that their initial motivation for volunteering was to enhance their CV."
+      },
+      {
+        "number": 32,
+        "question_type": "attitude",
+        "prompt": "How did the narrator feel about being asked to greet visitors instead of doing repairs?",
+        "options": {
+          "A": "Relieved",
+          "B": "Disappointed",
+          "C": "Indifferent",
+          "D": "Excited"
+        },
+        "answer": "B",
+        "evidence": "I was surprised when the workshop coordinator asked me to greet visitors... This wasn’t what I had in mind.",
+        "rationale": "The narrator's surprise and statement about it not being what they had in mind indicate disappointment."
+      },
+      {
+        "number": 33,
+        "question_type": "inference",
+        "prompt": "What did the narrator learn from helping the embarrassed visitor with his toaster?",
+        "options": {
+          "A": "Technical repair skills are more important than communication.",
+          "B": "Making someone feel comfortable can be rewarding.",
+          "C": "Visitors often feel foolish when asking for help.",
+          "D": "Repairing appliances is straightforward."
+        },
+        "answer": "B",
+        "evidence": "I found satisfaction in helping him understand the simple steps involved.",
+        "rationale": "The narrator finds satisfaction in making the visitor feel comfortable, suggesting they learned the value of communication."
+      },
+      {
+        "number": 34,
+        "question_type": "purpose",
+        "prompt": "Why does the narrator mention organising tasks among volunteers?",
+        "options": {
+          "A": "To highlight their leadership skills.",
+          "B": "To show a preference for coordination over repair.",
+          "C": "To demonstrate the complexity of the workshop.",
+          "D": "To explain the workshop's structure."
+        },
+        "answer": "B",
+        "evidence": "I discovered that I enjoyed this coordination role far more than the actual repair work.",
+        "rationale": "The narrator mentions organising tasks to illustrate their preference for coordination roles."
+      },
+      {
+        "number": 35,
+        "question_type": "interpretation of expression",
+        "prompt": "What does the narrator mean by 'the line matters less than what the experience revealed about the work they want'?",
+        "options": {
+          "A": "The experience was more important than the CV entry.",
+          "B": "The CV entry was more impressive than expected.",
+          "C": "The experience was not beneficial at all.",
+          "D": "The CV entry was the only important outcome."
+        },
+        "answer": "A",
+        "evidence": "...the most valuable aspect of my volunteering experience wasn’t the line I could add to my resume.",
+        "rationale": "The narrator reflects that the personal insight gained was more valuable than the CV entry itself."
+      },
+      {
+        "number": 36,
+        "question_type": "reference",
+        "prompt": "What does 'this experience taught me otherwise' refer to?",
+        "options": {
+          "A": "The importance of technical skills.",
+          "B": "The need for formal work experience.",
+          "C": "The value of people-facing roles.",
+          "D": "The benefits of volunteering."
+        },
+        "answer": "C",
+        "evidence": "I found that I was more drawn to roles that involved working with people and organising tasks.",
+        "rationale": "The narrator's experience taught them that they valued people-facing roles, contrary to their previous belief about technical skills."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "All required details and content progression from the brief are included. The narrative aligns with the brief's central idea and purpose.",
+      "style_card_notes": "The article follows the Personal Reflective Experience style card, with a first-person narrative and reflective tone.",
+      "british_english_notes": "British English conventions are used throughout the text.",
+      "factuality_notes": "No factual claims about career benefits of volunteering are made.",
+      "answer_validity_notes": "Each question has one clear answer supported by evidence from the text.",
+      "self_check_flags": []
+    },
+    "_word_count": 482
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

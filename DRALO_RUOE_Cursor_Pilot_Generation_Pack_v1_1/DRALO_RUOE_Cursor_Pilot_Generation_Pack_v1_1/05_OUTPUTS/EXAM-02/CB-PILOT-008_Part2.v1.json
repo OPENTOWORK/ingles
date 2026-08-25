@@ -1,0 +1,103 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 1,
+  "generated_at": "2026-08-12T15:47:07.646Z",
+  "exam_id": "RUOE-PILOT-E02",
+  "part": "Part 2",
+  "part_number": 2,
+  "brief_id": "CB-PILOT-008",
+  "brief_version": "1.0",
+  "style_card_id": "SC-01",
+  "style_card_version": "v1.0",
+  "working_title": "Exploring a place you cannot see clearly",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3163,
+    "completion_tokens": 799,
+    "total_tokens": 3962
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 196 outside 150–180"
+    ],
+    "warnings": [],
+    "word_count": 196
+  },
+  "exercise": {
+    "part_title": "Part 2: Open Cloze",
+    "instructions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only one word in each gap.",
+    "text_title": "Exploring a place you cannot see clearly",
+    "passage_with_gaps": "Exploring underwater environments presents a unique set of challenges, primarily because visibility (0) **can** be severely limited. Light does not penetrate water as easily (9) **as** it does air, making it difficult to rely on sight alone. This is (10) **why** explorers often depend on other methods to understand their surroundings.\n\nOne such method involves using sound. Sound waves travel well through water and can bounce (11) **off** objects, returning signals that help indicate distance and shape. For example, by sending out a sound wave and measuring (12) **how** long it takes to return, explorers can determine the location of a seafloor feature or an object.\n\nHowever, interpreting these signals is not always straightforward. A map or instrument display provides information (13) **that** requires careful analysis. It does not automatically offer a perfect picture; instead, it presents clues (14) **which** must be pieced together to form a coherent understanding.\n\nConsider an exploration scenario where a slope is detected. The sound waves might reveal its presence, (15) **but** the exact nature of the slope—its steepness or composition—requires further investigation. Thus, underwater exploration often involves combining these indirect signals (16) **into** a complete picture, demonstrating that \"seeing\" is about more than just using one's eyes.",
+    "example": {
+      "number": 0,
+      "answer": "can",
+      "explanation": "The word 'can' is used to express the possibility or ability of visibility being limited underwater."
+    },
+    "questions": [
+      {
+        "number": 9,
+        "answer": "as",
+        "grammar_focus": "comparison",
+        "rationale": "The word 'as' is used to compare the ease with which light penetrates water versus air."
+      },
+      {
+        "number": 10,
+        "answer": "why",
+        "grammar_focus": "relative pronoun",
+        "rationale": "The word 'why' introduces a clause explaining the reason explorers use other methods."
+      },
+      {
+        "number": 11,
+        "answer": "off",
+        "grammar_focus": "phrasal verb particle",
+        "rationale": "The word 'off' is part of the phrasal verb 'bounce off', describing how sound waves reflect."
+      },
+      {
+        "number": 12,
+        "answer": "how",
+        "grammar_focus": "question word",
+        "rationale": "The word 'how' is used to describe the method of measuring the time it takes for sound to return."
+      },
+      {
+        "number": 13,
+        "answer": "that",
+        "grammar_focus": "relative pronoun",
+        "rationale": "The word 'that' introduces a clause providing additional information about the map or display."
+      },
+      {
+        "number": 14,
+        "answer": "which",
+        "grammar_focus": "relative pronoun",
+        "rationale": "The word 'which' introduces a non-defining relative clause, adding information about the clues."
+      },
+      {
+        "number": 15,
+        "answer": "but",
+        "grammar_focus": "contrast conjunction",
+        "rationale": "The word 'but' is used to contrast the detection of the slope with the need for further investigation."
+      },
+      {
+        "number": 16,
+        "answer": "into",
+        "grammar_focus": "preposition",
+        "rationale": "The word 'into' indicates the process of combining signals to form a complete picture."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The text adheres to the brief by explaining underwater exploration using indirect methods when visibility is poor.",
+      "style_card_notes": "The text follows the style card by maintaining a curious, explanatory tone and providing a clear progression from problem to solution.",
+      "british_english_notes": "The text uses British English vocabulary and grammar.",
+      "factuality_notes": "The text maintains factual accuracy by explaining general principles of underwater exploration without specific claims.",
+      "answer_validity_notes": "Each gap has a single, defendable answer that fits grammatically and contextually.",
+      "self_check_flags": []
+    },
+    "_word_count": 196
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

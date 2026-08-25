@@ -1,0 +1,112 @@
+{
+  "pack_version": "1.1",
+  "batch_id": "RUOE-PILOT-01",
+  "phase": "A",
+  "generation_version": "phase-a-v1.1-2026-08-12",
+  "attempt": 2,
+  "generated_at": "2026-08-12T15:43:00.190Z",
+  "exam_id": "RUOE-PILOT-E01",
+  "part": "Part 3",
+  "part_number": 3,
+  "brief_id": "CB-PILOT-003",
+  "brief_version": "1.0",
+  "style_card_id": "SC-02",
+  "style_card_version": "v1.0",
+  "working_title": "Games that make practice feel different",
+  "editorial_status_input": "Approved",
+  "provider_usage": {
+    "model": "gpt-4o-2024-08-06",
+    "prompt_tokens": 3211,
+    "completion_tokens": 942,
+    "total_tokens": 4153
+  },
+  "self_check": {
+    "status": "fail",
+    "errors": [
+      "word_count 225 outside 150–180"
+    ],
+    "warnings": [],
+    "word_count": 225
+  },
+  "exercise": {
+    "part_title": "Part 3: Word Formation",
+    "instructions": "For questions 17–24, read the text below. Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line.",
+    "text_title": "Games that make practice feel different",
+    "passage_with_gaps": "In a small classroom, a group of learners is gathered around a table, discussing their next move in a cooperative game. This scene might seem unusual, but it is becoming increasingly popular as a method of informal learning. The game requires players to work together to achieve a shared goal, which is an effective way to practise skills like planning and communication. \n\nOne learner, tasked with explaining the strategy to the group, finds it challenging but ultimately rewarding. This process of (0) **EXPLAIN** helps develop their ability to articulate thoughts clearly. After a failed attempt, the group quickly adjusts their approach, demonstrating the importance of (17) **RESPOND** to feedback and adapting strategies. \n\nGames like these are not just about (18) **ENTERTAIN**; they provide a platform for meaningful practice. However, it's crucial that the game aligns with the skill being practised. Without this (19) **ALIGN**, the educational value diminishes. \n\nThe facilitator observes from a distance, allowing the learners to take (20) **OWN** of their learning process. This autonomy encourages (21) **INVOLVE** and active participation. The repeated attempts and immediate consequences in the game make the practice more engaging and (22) **EFFECT**. \n\nWhile games can support learning, they are not a (23) **REPLACE** for traditional teaching methods. They work best as a supplementary tool when the activity and the skill genuinely match. The (24) **ENJOY** of the game is secondary to the purposeful practice it offers.",
+    "example": {
+      "number": 0,
+      "stem": "EXPLAIN",
+      "answer": "explanation",
+      "explanation": "The word 'explanation' is the noun form derived from the verb 'explain', fitting the context of the sentence."
+    },
+    "questions": [
+      {
+        "number": 17,
+        "stem": "RESPOND",
+        "answer": "response",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'response' is derived from the verb 'respond', fitting the context of adapting strategies based on feedback."
+      },
+      {
+        "number": 18,
+        "stem": "ENTERTAIN",
+        "answer": "entertainment",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'entertainment' is derived from the verb 'entertain', contrasting the game's purpose with mere fun."
+      },
+      {
+        "number": 19,
+        "stem": "ALIGN",
+        "answer": "alignment",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'alignment' is derived from the verb 'align', indicating the necessity of matching the game with the skill."
+      },
+      {
+        "number": 20,
+        "stem": "OWN",
+        "answer": "ownership",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'ownership' is derived from the verb 'own', highlighting the learners' control over their learning."
+      },
+      {
+        "number": 21,
+        "stem": "INVOLVE",
+        "answer": "involvement",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'involvement' is derived from the verb 'involve', indicating active participation."
+      },
+      {
+        "number": 22,
+        "stem": "EFFECT",
+        "answer": "effective",
+        "transformation_type": "noun→adjective",
+        "rationale": "The adjective 'effective' is derived from the noun 'effect', describing the engaging nature of the practice."
+      },
+      {
+        "number": 23,
+        "stem": "REPLACE",
+        "answer": "replacement",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'replacement' is derived from the verb 'replace', indicating that games are not a substitute for teaching."
+      },
+      {
+        "number": 24,
+        "stem": "ENJOY",
+        "answer": "enjoyment",
+        "transformation_type": "verb→noun",
+        "rationale": "The noun 'enjoyment' is derived from the verb 'enjoy', referring to the secondary role of fun in purposeful practice."
+      }
+    ],
+    "validation_notes": {
+      "brief_fidelity_notes": "The exercise aligns well with the brief by focusing on the educational potential of games in a learning environment.",
+      "style_card_notes": "The style is consistent with a Trend & Social Report, providing a balanced view on the use of games in education.",
+      "british_english_notes": "The text uses British English vocabulary and spelling.",
+      "factuality_notes": "The scenario is plausible and does not invent any statistics or studies.",
+      "answer_validity_notes": "Each gap has a single valid answer that fits grammatically and contextually.",
+      "self_check_flags": []
+    },
+    "_word_count": 225
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW"
+}

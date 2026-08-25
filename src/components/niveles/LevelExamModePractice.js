@@ -23,6 +23,7 @@ import { clearExamSlotPuntuaciones } from '@/lib/fetchExamModeSlotStats';
 import { shouldClearExamSlotPuntuacionesOnRepeat } from '@/lib/b2ScoringV2FeatureFlag';
 import { useLevelsExamAdminFlow, buildExamSlotPickerProps, getAvailableExamSlots } from '@/hooks/useLevelsExamAdminFlow';
 import { useExamModePickerProgress } from '@/hooks/useExamModePickerProgress';
+import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
@@ -30,6 +31,8 @@ import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
 import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 import { PASS_THRESHOLD } from '@/utils/examModeStats';
+import { useUserRole } from '@/context/UserRoleContext';
+import { isExamModeSectionKeyBlockedForStudent } from '@/constants/studentFeatureAccess';
 
 function formatMinutes(m) {
   const h = Math.floor(m / 60);
@@ -62,6 +65,7 @@ function LevelExamModePracticeInner({ slug }) {
   const config = getNivelesLevelHub(slug);
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { userRole } = useUserRole();
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const { session, ready, repeatExam, userId, resetExam } = useExamModeSession(slug, examSlot);
   const [examNamesBySlot, setExamNamesBySlot] = useState({});
@@ -77,12 +81,29 @@ function LevelExamModePracticeInner({ slug }) {
   const autoOpenedRef = useRef(false);
 
   const sections = useMemo(() => getLevelFullExamSections(slug), [slug]);
+  const playableSectionCount = useMemo(
+    () => sections.filter((section) => !isExamModeSectionKeyBlockedForStudent(userRole, section.key)).length,
+    [sections, userRole],
+  );
   const availableSlots = useMemo(() => getAvailableExamSlots(examenIdBySlot), [examenIdBySlot]);
   const { progressBySlot, refreshProgress } = useExamModePickerProgress({
     slug,
     userId,
     availableSlots,
   });
+  const planGating = useExamSlotPlanGating(progressBySlot);
+  const lockedSlots = planGating.lockedSlots;
+  const handleLockedSlotClick = planGating.onLockedSlotClick;
+
+  const handlePickExam = useCallback(
+    (n) => {
+      planGating.wrapSelectHandler((slot) => {
+        selectExamSlot(slot);
+        setPickedSlot(true);
+      })(n);
+    },
+    [planGating, selectExamSlot],
+  );
 
   useEffect(() => {
     refreshProgress();
@@ -92,9 +113,8 @@ function LevelExamModePracticeInner({ slug }) {
     const q = searchParams.get('examen');
     if (!q || autoOpenedRef.current) return;
     autoOpenedRef.current = true;
-    selectExamSlot(Number(q));
-    setPickedSlot(true);
-  }, [searchParams, selectExamSlot]);
+    void handlePickExam(Number(q));
+  }, [searchParams, handlePickExam]);
 
   const loadExamCatalog = useCallback(async () => {
     try {
@@ -126,18 +146,9 @@ function LevelExamModePracticeInner({ slug }) {
     examenIdBySlot,
     adminFlow,
     onSelectSlot: (slot) => {
-      selectExamSlot(slot);
-      setPickedSlot(true);
+      void handlePickExam(slot);
     },
   });
-
-  const handlePickExam = useCallback(
-    (n) => {
-      selectExamSlot(n);
-      setPickedSlot(true);
-    },
-    [selectExamSlot],
-  );
 
   const handleViewStatistics = useCallback(
     (slot) => {
@@ -156,7 +167,7 @@ function LevelExamModePracticeInner({ slug }) {
       if (userId && examenId && shouldClearExamSlotPuntuacionesOnRepeat(slug)) {
         await clearExamSlotPuntuaciones(supabase, { userId, examenId });
       }
-      resetExamModeSession(slug, slot, userId);
+      resetExamModeSession(slug, slot, userId, userRole);
       if (slot === examSlot) {
         resetExam();
       }
@@ -165,14 +176,14 @@ function LevelExamModePracticeInner({ slug }) {
       setPickedSlot(true);
       router.push(`/niveles/${slug}/exam-mode?examen=${slot}`);
     },
-    [slug, userId, examSlot, examenIdBySlot, resetExam, selectExamSlot, router, refreshProgress],
+    [slug, userId, examSlot, examenIdBySlot, resetExam, selectExamSlot, router, refreshProgress, userRole],
   );
 
   const repeatCurrentExam = useCallback(() => {
     void repeatExam({ examenId: examenIdBySlot[examSlot] });
   }, [repeatExam, examenIdBySlot, examSlot]);
 
-  const examComplete = session ? isExamModeComplete(session) : false;
+  const examComplete = session ? isExamModeComplete(session, userRole) : false;
   const statsHref = `/niveles/${slug}/exam-mode/results?examen=${examSlot}`;
   const examLabel = examNamesBySlot[examSlot] || formatExamSlotDisplayLabel(null, examSlot);
 
@@ -181,6 +192,7 @@ function LevelExamModePracticeInner({ slug }) {
     let correct = 0;
     let total = 0;
     for (const sec of session.sections) {
+      if (isExamModeSectionKeyBlockedForStudent(userRole, sec.key)) continue;
       if (sec.status !== 'completed' || !sec.scores) continue;
       const display = resolveSectionScoreDisplay(sec.scores);
       correct += display.correct;
@@ -191,26 +203,34 @@ function LevelExamModePracticeInner({ slug }) {
       total,
       stars: starsFromLevelsEarnedMax(correct, total),
     };
-  }, [session]);
+  }, [session, userRole]);
 
   const examPassed = useMemo(() => {
     if (!session?.sections?.length) return false;
-    const allComplete = session.sections.every((sec) => sec.status === 'completed');
+    const playable = session.sections.filter(
+      (sec) => !isExamModeSectionKeyBlockedForStudent(userRole, sec.key),
+    );
+    const allComplete = playable.every((sec) => sec.status === 'completed');
     if (!allComplete) return false;
-    return session.sections.every((sec) => {
+    return playable.every((sec) => {
       const { correct, total } = resolveSectionScoreDisplay(sec.scores);
       if (total <= 0) return false;
       return Math.round((correct / total) * 100) >= PASS_THRESHOLD;
     });
-  }, [session]);
+  }, [session, userRole]);
 
   const completedSections = useMemo(() => {
     if (!session?.sections?.length) return 0;
-    return session.sections.filter((sec) => sec.status === 'completed').length;
-  }, [session]);
+    return session.sections.filter(
+      (sec) =>
+        sec.status === 'completed' && !isExamModeSectionKeyBlockedForStudent(userRole, sec.key),
+    ).length;
+  }, [session, userRole]);
 
   const sectionProgressPct =
-    sections.length > 0 ? Math.round((completedSections / sections.length) * 100) : 0;
+    playableSectionCount > 0
+      ? Math.round((completedSections / playableSectionCount) * 100)
+      : 0;
 
   if (!config) {
     return (
@@ -275,14 +295,16 @@ function LevelExamModePracticeInner({ slug }) {
 
           <B2ExamSlotProgressPicker
             value={examSlot}
-            onSelect={handlePickExam}
+            onSelect={(n) => void handlePickExam(n)}
             progressBySlot={progressBySlot}
-            partsInPaper={sections.length}
+            partsInPaper={playableSectionCount || sections.length}
             examLabelsBySlot={examNamesBySlot}
             lang="en"
             className="levels-b2-exam-picker--exam-mode"
             onViewStatistics={handleViewStatistics}
             onRepeatExam={handleRepeatExamSlot}
+            lockedSlots={lockedSlots}
+            onLockedSlotClick={handleLockedSlotClick}
             {...examSlotPickerProps}
           />
 
@@ -327,7 +349,7 @@ function LevelExamModePracticeInner({ slug }) {
                 <div className="exam-mode-session__progress-label">
                   <span>Sections completed</span>
                   <strong>
-                    {completedSections}/{sections.length}
+                    {completedSections}/{playableSectionCount || sections.length}
                   </strong>
                 </div>
                 <div
@@ -383,13 +405,21 @@ function LevelExamModePracticeInner({ slug }) {
               (sec, idx) => {
                 const mins = getCambridgeSectionDurationMinutes(slug, sec.title);
                 const status = sec.status || (idx === 0 ? 'active' : 'locked');
-                const isLocked = status === 'locked';
-                const isDone = status === 'completed';
-                const isActive = status === 'active';
+                const isBlocked =
+                  status === 'blocked' || isExamModeSectionKeyBlockedForStudent(userRole, sec.key);
+                const isLocked = !isBlocked && status === 'locked';
+                const isDone = !isBlocked && status === 'completed';
+                const isActive = !isBlocked && status === 'active';
                 const href = buildExamModePracticeHref(sec.href, examSlot);
                 const sectionScore = resolveSectionScoreDisplay(sec.scores);
                 const sectionStars = isDone ? resolveSectionStars(sec.scores) : 0;
-                const cardState = isActive ? 'active' : isDone ? 'completed' : 'locked';
+                const cardState = isBlocked
+                  ? 'blocked'
+                  : isActive
+                    ? 'active'
+                    : isDone
+                      ? 'completed'
+                      : 'locked';
 
                 return (
                   <li
@@ -417,7 +447,11 @@ function LevelExamModePracticeInner({ slug }) {
                         ) : null}
                       </div>
                       <div className="exam-mode-session__aside">
-                        {isLocked ? (
+                        {isBlocked ? (
+                          <span className="exam-mode-session__status exam-mode-session__status--blocked">
+                            Coming soon
+                          </span>
+                        ) : isLocked ? (
                           <span className="exam-mode-session__status exam-mode-session__status--locked">
                             Locked
                           </span>
@@ -461,6 +495,7 @@ function LevelExamModePracticeInner({ slug }) {
           </footer>
         </div>
       )}
+      {planGating.planUpgradeModal}
     </B2ExamPracticeLayout>
   );
 }

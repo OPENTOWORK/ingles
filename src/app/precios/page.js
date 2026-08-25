@@ -63,6 +63,7 @@ function PreciosContent() {
         selectedSlug={selected}
         title="Compara y elige"
         showCta
+        enableCheckout
       />
     </main>
   );

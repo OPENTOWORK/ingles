@@ -1,0 +1,178 @@
+{
+  "pack_version": "1.1.4-e03-e04-pilot",
+  "generation_version": "pilot-e03-e04-v1.0",
+  "generated_at": "2026-08-24T12:07:33.827Z",
+  "phase": "A",
+  "exam_id": "RUOE-PILOT-E04",
+  "ruoe_exam_id": "RUOE-PILOT-E04",
+  "part": "Part 5",
+  "part_number": 5,
+  "brief_id": "CB-PILOT-022",
+  "brief_version": "1.0",
+  "blueprint_id": null,
+  "blueprint_version": null,
+  "style_card_id": "SC-04",
+  "style_card_version": "v1.1",
+  "working_title": "Learning to read a roof",
+  "final_title": "Knowing what to leave alone",
+  "title_candidates": [
+    "Knowing what to leave alone",
+    "The difficulty she had trained for",
+    "Eight or nine things wrong"
+  ],
+  "source_inputs": {
+    "content_briefs": "02_PROPOSED_INPUTS_E03_E04_v1_0/DRALO_RUOE_12_Content_Briefs_E03_E04_v1_0_PROPOSED.json",
+    "transformation_blueprints": null
+  },
+  "validation": {
+    "ok": true,
+    "errors": [],
+    "qualityFails": [],
+    "warnings": [
+      "Q36 option A is defensible as a description of what happens in the scene; the stem asks what it shows about what she has learned, which selects C."
+    ],
+    "hard_fail_count": 0,
+    "blocking_hard_count": 0,
+    "quality_fail_count": 0,
+    "warning_count": 1
+  },
+  "part_quality": {
+    "blindSolve": "Blind-solve agreed with the key on 6/6. Answer letters B, C, D, A, B, C: four letters used, no consecutive repetition.",
+    "repairs_applied": [],
+    "teacher_attention_items": [
+      36
+    ]
+  },
+  "british_english_review": "PASS — spelling, collocation and idiom checked against British usage.",
+  "generated": {
+    "partTitle": "Reading and Use of English Part 5",
+    "directions": "Part 5: Multiple choice\nYou are going to read an article. For questions 31–36, choose the answer (A, B, C or D) which you think fits best according to the text.",
+    "partNumber": 5,
+    "title": "Knowing what to leave alone",
+    "titlePatternFamily": "gerund_title",
+    "passage": "The first roof she went up alone was a small terrace in the older part of town, and the problem, she had been told, was a leak above the back bedroom. She found the slipped slate within a minute. What she could not work out, kneeling on the boards with the wind coming off the hill, was whether the slate had slipped because of the nail or because the batten underneath it had gone soft. Nobody had covered that in six months of training, because it was not a thing anybody could cover.\n\nShe was forty-three. For nineteen years she had run a scheduling office for a haulage firm, and when it closed she had spent most of the redundancy money on a course, boots and a van. What she had prepared for was the physical part. She had expected to be cold, to ache, to fear the height and to be slower than men fifteen years younger. All of that turned out to be true and none of it turned out to matter much. She was cold and she got used to it. She was slower and she got faster.\n\nThe thing she had not accounted for was judgement. A roof does not present a single fault. It presents eight or nine things that are wrong, of which one is causing the damage, three will cause damage within five years, and the rest have been wrong since 1962 and will outlast everybody. Deciding which is which, from a ladder, in November, with a customer standing in the garden asking what it will come to, is the job. Nobody had said so.\n\nShe got it wrong in her third week. On a bungalow with a flat extension she found a soft patch, decided it was the source of the water inside, and cut it out. It was not the source. The water had been running along a joist from a cracked outlet fifteen feet away, and she had opened two square metres of roof in the last week of October for nothing. Terry, who owned the firm and had said almost nothing to her since she started, went back next morning, made it watertight and did not charge. He mentioned it once, six weeks later, only to say he had done the same thing on a school in 1998.\n\nHer old job was no use at all in the moments that mattered and unexpectedly useful in the ones that did not. She could not read a roof, but she could read a diary. Within a month she had rebuilt the way the firm booked its work, and Terry, who had been quoting jobs on the backs of delivery notes, let her. On site, though, the office habit was a liability. She wanted to establish the facts before acting, and there are days in December when the facts arrive at the same speed as the rain.\n\nWhat taught her was watching. Terry would go up a ladder, stand for a while, and come down without touching anything. The first few times she assumed he had found nothing. Then she began to notice what he looked at, and in what order, and she started asking why he left things alone rather than why he did them.\n\nIn February she was sent to a farmhouse with three separate problems and a budget for one. She was on the roof for twenty minutes. She came down, told the owner that two of them could wait until the spring after next, and explained which one could not and why. The owner argued. She did not move, because she had looked at the same thing Terry would have looked at, and she had seen it.",
+    "passageWordCount": 619,
+    "questions": [
+      {
+        "id": "q31",
+        "number": 31,
+        "questionType": "detail",
+        "prompt": "What was the difficulty on the first roof she worked on alone?",
+        "options": [
+          "A) She could not find where the water was getting in.",
+          "B) She could not decide what had caused the slate to move.",
+          "C) The weather made it impossible to finish the repair.",
+          "D) She had never been shown how to replace a slate."
+        ],
+        "evidence": "‘whether the slate had slipped because of the nail or because the batten underneath it had gone soft.’",
+        "rationale": "She located the fault “within a minute”, which rules out A; C and D are not in the text."
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "questionType": "attitude",
+        "prompt": "How are her expectations before starting presented?",
+        "options": [
+          "A) As unrealistic about how much she could physically manage.",
+          "B) As shaped by advice other roofers had given her.",
+          "C) As accurate but concerned with the wrong part of the job.",
+          "D) As something she abandoned as soon as the work began."
+        ],
+        "evidence": "‘All of that turned out to be true and none of it turned out to matter much.’",
+        "rationale": "The sentence confirms the expectations were correct and simultaneously beside the point, which is exactly C and rules out A and D."
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "questionType": "purpose",
+        "prompt": "The description of the eight or nine things wrong with a roof is included in order to show",
+        "options": [
+          "A) that most houses in the town were in poor repair.",
+          "B) why customers are often unwilling to pay for the work.",
+          "C) how much technical knowledge the trade really demands.",
+          "D) that the real skill lies in choosing what to act on."
+        ],
+        "evidence": "‘Deciding which is which … is the job.’",
+        "rationale": "The list exists to make the case for judgement over technique, which C misreads as knowledge."
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "questionType": "inference",
+        "prompt": "What does Terry’s response to her mistake suggest?",
+        "options": [
+          "A) He regarded it as a normal part of learning the trade.",
+          "B) He was worried about the effect on the firm’s reputation.",
+          "C) He had decided she should not work unsupervised again.",
+          "D) He had not understood how much the error had cost."
+        ],
+        "evidence": "‘He mentioned it once, six weeks later, and only to say that he had done the same thing on a school in 1998.’",
+        "rationale": "He repairs it, does not charge, and refers to his own identical error. Nothing supports B, C or D."
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "questionType": "detail",
+        "prompt": "In what way was her previous job a disadvantage on site?",
+        "options": [
+          "A) It had left her unfit for sustained physical work.",
+          "B) It made her want to be certain before she acted.",
+          "C) It had given her habits her colleagues objected to.",
+          "D) It meant she spent too long on the firm’s paperwork."
+        ],
+        "evidence": "‘She wanted to establish the facts before acting, and there are days in December when the facts arrive at the same speed as the rain.’",
+        "rationale": "The paragraph separates where the old job helped, the diary and the booking, from where it hindered, which is the wish for certainty."
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "questionType": "global inference",
+        "prompt": "What does the closing scene show about what she has learned?",
+        "options": [
+          "A) That she is now prepared to disagree with a customer.",
+          "B) That she has become as quick on a roof as her employer.",
+          "C) That she can now judge what does not need attention.",
+          "D) That she would rather work on her own than with Terry."
+        ],
+        "evidence": "‘told the owner that two of them could wait until the spring after next, and explained which one could not and why.’",
+        "rationale": "A describes the surface of the scene rather than the skill; the point is the decision about what to leave, which the title also carries."
+      }
+    ],
+    "modelAnswers": [
+      {
+        "id": "q31",
+        "number": 31,
+        "answer": "B"
+      },
+      {
+        "id": "q32",
+        "number": 32,
+        "answer": "C"
+      },
+      {
+        "id": "q33",
+        "number": 33,
+        "answer": "D"
+      },
+      {
+        "id": "q34",
+        "number": 34,
+        "answer": "A"
+      },
+      {
+        "id": "q35",
+        "number": 35,
+        "answer": "B"
+      },
+      {
+        "id": "q36",
+        "number": 36,
+        "answer": "C"
+      }
+    ]
+  },
+  "human_review_required": true,
+  "pedagogical_approval": "PENDING_HUMAN_REVIEW",
+  "supabase_sync": false,
+  "published": false
+}
