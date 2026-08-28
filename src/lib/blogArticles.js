@@ -393,7 +393,7 @@ export function mapClientFormToPayload(form) {
     seoTitle: form.seoTitle,
     seoDescription: form.seoDescription,
     contentType: normalizeBlogContentType(form.contentType),
-    publishMode: form.publishMode || PUBLISH_MODE_DRAFT,
+    publishMode: form.publishMode || PUBLISH_MODE_NOW,
     scheduledPublishAt: form.scheduledPublishAt || null,
     scheduleDate: form.scheduleDate || '',
     scheduleTime: form.scheduleTime || '09:00',

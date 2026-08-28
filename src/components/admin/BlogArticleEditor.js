@@ -80,6 +80,8 @@ export default function BlogArticleEditor({
   const isNews = contentType === BLOG_TYPE_NEWS;
   const publishMode = form.publishMode || PUBLISH_MODE_NOW;
   const isScheduleMode = publishMode === PUBLISH_MODE_SCHEDULE;
+  const isDraftArticle =
+    Boolean(form.id) && !form.published && !isScheduleMode && !isFutureSchedule(form.scheduledPublishAt);
   const schedulePreviewIso = combineScheduleInputs(form.scheduleDate, form.scheduleTime);
   const schedulePresets = getScheduleQuickPresets();
 
@@ -332,8 +334,9 @@ export default function BlogArticleEditor({
               Publicación
             </h3>
             <p className={styles.sectionHint}>
-              El recuadro verde es solo una vista previa. Debes pulsar «
-              {isScheduleMode ? 'Programar publicación' : meta.publishActionLabel}» para guardarlo.
+              {isDraftArticle
+                ? 'Este contenido está en borrador. Con «Publicar ahora» activo, pulsa el botón de publicar abajo para hacerlo visible en /blog.'
+                : `El recuadro verde es solo una vista previa. Debes pulsar «${isScheduleMode ? 'Programar publicación' : meta.publishActionLabel}» para guardarlo.`}
             </p>
 
             <div className={styles.publishToggle} role="tablist" aria-label="Modo de publicación">

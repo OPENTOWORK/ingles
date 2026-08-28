@@ -72,6 +72,12 @@ function nextMonday(from = new Date()) {
   return date;
 }
 
+export function normalizeSubmitPublishMode(form, { asDraft = false } = {}) {
+  if (asDraft) return PUBLISH_MODE_DRAFT;
+  if (form?.publishMode === PUBLISH_MODE_SCHEDULE) return PUBLISH_MODE_SCHEDULE;
+  return PUBLISH_MODE_NOW;
+}
+
 export function getScheduleQuickPresets() {
   const tomorrow = startOfDay(new Date());
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -92,5 +98,7 @@ export function getScheduleQuickPresets() {
 export function resolvePublishModeFromArticle(article) {
   if (article?.published) return PUBLISH_MODE_NOW;
   if (isFutureSchedule(article?.scheduled_publish_at)) return PUBLISH_MODE_SCHEDULE;
-  return PUBLISH_MODE_DRAFT;
+  // Borradores: la UI solo tiene «Publicar ahora» / «Programar».
+  // «Guardar borrador» es un botón aparte; al editar un borrador, publicar = ahora.
+  return PUBLISH_MODE_NOW;
 }

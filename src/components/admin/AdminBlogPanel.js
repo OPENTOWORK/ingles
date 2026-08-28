@@ -23,7 +23,7 @@ import {
   blogTypeMeta,
   normalizeBlogContentType,
 } from '@/lib/blogContentTypes';
-import { PUBLISH_MODE_DRAFT, PUBLISH_MODE_SCHEDULE, formatScheduledDateTime } from '@/lib/blogSchedule';
+import { PUBLISH_MODE_DRAFT, PUBLISH_MODE_NOW, PUBLISH_MODE_SCHEDULE, formatScheduledDateTime, normalizeSubmitPublishMode } from '@/lib/blogSchedule';
 import {
   clearBlogEditorDraft,
   loadBlogEditorDraft,
@@ -237,7 +237,7 @@ export default function AdminBlogPanel() {
     setError('');
     setSuccess('');
     const meta = blogTypeMeta(form.contentType);
-    const payload = asDraft ? { ...form, publishMode: PUBLISH_MODE_DRAFT } : form;
+    const payload = { ...form, publishMode: normalizeSubmitPublishMode(form, { asDraft }) };
     try {
       const headers = await getAdminFetchHeaders();
       const isEdit = Boolean(form.id);
@@ -258,6 +258,8 @@ export default function AdminBlogPanel() {
         successMessage += ` Programado para ${formatScheduledDateTime(saved.scheduledPublishAt)}.`;
       } else if (saved.published) {
         successMessage += ' Ya es visible en /blog.';
+      } else if (!asDraft && payload.publishMode === PUBLISH_MODE_NOW) {
+        successMessage += ' No se pudo confirmar la publicación. Revisa el estado o contacta con soporte.';
       }
 
       setSuccess(successMessage);
