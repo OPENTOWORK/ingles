@@ -9,7 +9,7 @@ const SiteAssistantWidget = dynamic(() => import('@/components/chat/SiteAssistan
 });
 
 function SiteAssistantDeferred() {
-  const ready = useDeferredMount(800);
+  const ready = useDeferredMount(3000);
   if (!ready) return null;
   return <SiteAssistantWidget defaultOpen={false} />;
 }

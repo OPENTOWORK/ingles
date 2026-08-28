@@ -69,7 +69,6 @@ function sectionIconKey(title) {
 
 const SECTION_ICONS = {
   'dralo-ia-experience': Sparkles,
-  'general-statistics': ClipboardList,
   'exam-statistics': FileText,
   'study-activity': Calendar,
   'practice-times': Timer,

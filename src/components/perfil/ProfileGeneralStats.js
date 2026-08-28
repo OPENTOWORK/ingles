@@ -111,16 +111,21 @@ function EpicClockIcon() {
   );
 }
 
-function StatIcon({ icon, tone }) {
+function StatIcon({ icon, tone, compact = false }) {
   const wrapClass = `${styles.iconWrap} ${styles[`iconWrap--${tone}`]} ${
     icon === 'flame' ? styles.iconWrapEpicFlame : styles.iconWrapEpicClock
-  }`;
+  }${compact ? ` ${styles.iconWrapCompact}` : ''}`;
 
   return (
     <div className={wrapClass} aria-hidden>
       {icon === 'flame' ? <EpicFlameIcon /> : <EpicClockIcon />}
     </div>
   );
+}
+
+/** Icono decorativo para racha (flame) o tiempo de estudio (clock). */
+export function ProfileStatIcon({ icon, tone = 'amber', compact = false }) {
+  return <StatIcon icon={icon} tone={tone} compact={compact} />;
 }
 
 function formatValue(key, value, format) {

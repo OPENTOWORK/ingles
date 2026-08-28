@@ -1,5 +1,6 @@
 'use client';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
+import { deferUntilIdle } from '@/lib/deferUntilIdle';
 
 // Accessibility Context
 const AccessibilityContext = createContext();
@@ -31,6 +32,7 @@ export const AccessibilityProvider = ({ children }) => {
   });
 
   const [isLoaded, setIsLoaded] = useState(false);
+  const initialApplyDoneRef = useRef(false);
 
   // Load settings from localStorage on mount
   useEffect(() => {
@@ -48,10 +50,17 @@ export const AccessibilityProvider = ({ children }) => {
 
   // Save settings to localStorage when they change
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem('accessibilitySettings', JSON.stringify(accessibilitySettings));
-      applyAccessibilitySettings();
+    if (!isLoaded) return undefined;
+
+    localStorage.setItem('accessibilitySettings', JSON.stringify(accessibilitySettings));
+
+    if (!initialApplyDoneRef.current) {
+      initialApplyDoneRef.current = true;
+      return deferUntilIdle(() => applyAccessibilitySettings(), 1500);
     }
+
+    applyAccessibilitySettings();
+    return undefined;
   }, [accessibilitySettings, isLoaded]);
 
   // Apply accessibility settings to the DOM

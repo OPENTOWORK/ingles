@@ -17,6 +17,7 @@ const nextConfig = {
       'react-hot-toast',
       '@supabase/supabase-js',
       '@supabase/ssr',
+      'date-fns',
     ],
   },
   // Solo en build de producción: Turbopack (`next dev --turbo`) no admite compiler.removeConsole.

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useDraloXpOptional } from '@/context/DraloXpContext';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import { trackWritingErrors } from '@/lib/errorTracker';
 
 const WRITING_TYPES = [
@@ -266,6 +267,8 @@ export default function LevelsWritingCorrectionPanel({
           {loading ? 'Correcting…' : 'Check with Dralo'}
         </button>
       </div>
+
+      {loading ? <DraloThinking size={120} label="Dralo is marking your writing" /> : null}
 
       {result ? (
         <div className={feedbackWrapClass}>

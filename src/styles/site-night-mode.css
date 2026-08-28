@@ -38,6 +38,10 @@ body.reading-night-mode .route-loading__spinner {
   border-top-color: #38bdf8;
 }
 
+body.reading-night-mode .dralo-thinking {
+  color: #cbd5e1;
+}
+
 /* ——— Home ——— */
 body.reading-night-mode .home-page {
   background: linear-gradient(160deg, #0f172a 0%, #1e293b 45%, #1e1b4b 100%);

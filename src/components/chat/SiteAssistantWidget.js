@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import { useUserRole } from '@/context/UserRoleContext';
 import {
   getSiteAssistantPlaceholder,
@@ -159,7 +160,7 @@ export default function SiteAssistantWidget({ defaultOpen = false } = {}) {
                 </div>
               );
             })}
-            {loading && <div className="site-assistant-typing">Typing…</div>}
+            {loading && <DraloThinking variant="inline" size={44} />}
             {messages.length === 1 && !loading && (
               <div className="site-assistant-starters">
                 <p className="site-assistant-starters__title">Quick topics</p>

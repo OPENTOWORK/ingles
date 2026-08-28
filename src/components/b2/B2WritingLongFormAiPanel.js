@@ -8,6 +8,7 @@ import { callExamWritingCorrection,
 } from '@/lib/ai/draloAiClient';
 import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
 import WritingFeedbackPage from '@/components/writing/v3/WritingFeedbackPage';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import { trackWritingErrors } from '@/lib/errorTracker';
 import { writingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
 
@@ -340,6 +341,16 @@ export default function B2WritingLongFormAiPanel({
           </button>
         </div>
       )}
+
+      {!examMode && loading ? (
+        <DraloThinking
+          lang={lang}
+          size={120}
+          label={
+            isEn ? 'Dralo is marking your writing' : 'Dralo está corrigiendo tu writing'
+          }
+        />
+      ) : null}
 
       {!examMode && lastError ? (
         <p className="levels-b2-writing-panel__error" role="alert">

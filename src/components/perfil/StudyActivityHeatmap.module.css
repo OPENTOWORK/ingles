@@ -23,6 +23,20 @@
   min-width: 100px;
 }
 
+.statWithIcon {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.statText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
 .statValue {
   font-size: 1.25rem;
   font-weight: 700;

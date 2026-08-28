@@ -9,20 +9,41 @@ const supabaseUrl = getSupabaseUrl();
 const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
 
 const WINDOW_MS = 60 * 60 * 1000;
-const MAX_PER_IP = 8;
+const MAX_PER_IP = 40;
+const MAX_BUCKETS = 5000;
+/** Espera máxima por el correo de bienvenida: nunca debe tumbar el registro. */
+const WELCOME_EMAIL_TIMEOUT_MS = 5000;
 
 /** @type {Map<string, { n: number, reset: number }>} */
 const ipBuckets = new Map();
 
 function clientIp(req) {
   const xf = req.headers.get('x-forwarded-for');
-  if (xf) return xf.split(',')[0].trim().slice(0, 64) || 'unknown';
-  return req.headers.get('x-real-ip')?.trim().slice(0, 64) || 'unknown';
+  if (xf) {
+    const first = xf.split(',')[0].trim().slice(0, 64);
+    if (first) return first;
+  }
+  return req.headers.get('x-real-ip')?.trim().slice(0, 64) || '';
 }
 
-/** Reserva un intento; false si se superó el máximo por IP. */
+function pruneBuckets(now) {
+  for (const [key, bucket] of ipBuckets) {
+    if (now > bucket.reset) ipBuckets.delete(key);
+  }
+  if (ipBuckets.size > MAX_BUCKETS) ipBuckets.clear();
+}
+
+/**
+ * Reserva un intento; false si se superó el máximo por IP.
+ * Sin IP identificable no se limita: colegios y redes con NAT compartirían un
+ * único cubo y bloquearían a todo el mundo.
+ */
 function tryConsumeRate(ip) {
+  if (!ip) return true;
+
   const now = Date.now();
+  pruneBuckets(now);
+
   let b = ipBuckets.get(ip);
   if (!b || now > b.reset) {
     b = { n: 0, reset: now + WINDOW_MS };
@@ -31,6 +52,43 @@ function tryConsumeRate(ip) {
   if (b.n >= MAX_PER_IP) return false;
   b.n += 1;
   return true;
+}
+
+/** Devuelve el intento al cubo cuando el fallo no es culpa de quien se registra. */
+function refundRate(ip) {
+  if (!ip) return;
+  const b = ipBuckets.get(ip);
+  if (b && b.n > 0) b.n -= 1;
+}
+
+function isDuplicateEmailError(error) {
+  if (!error) return false;
+  const msg = String(error.message || '').toLowerCase();
+  return (
+    error.code === 'email_exists' ||
+    error.code === 'user_already_exists' ||
+    msg.includes('already been registered') ||
+    msg.includes('already exists') ||
+    msg.includes('already registered')
+  );
+}
+
+/** Traduce los errores de Supabase Auth para que el usuario sepa qué corregir. */
+function translateAuthError(error) {
+  const msg = String(error?.message || '').toLowerCase();
+  if (msg.includes('password') && (msg.includes('short') || msg.includes('least'))) {
+    return 'La contraseña es demasiado corta. Usa al menos 8 caracteres, con una mayúscula, una minúscula y un número.';
+  }
+  if (msg.includes('password')) {
+    return 'La contraseña no cumple los requisitos de seguridad. Usa al menos 8 caracteres, con una mayúscula, una minúscula y un número.';
+  }
+  if (msg.includes('invalid') && msg.includes('email')) {
+    return 'El email no es válido. Revisa que esté bien escrito.';
+  }
+  if (msg.includes('rate limit') || msg.includes('too many')) {
+    return 'Hemos recibido demasiadas peticiones seguidas. Espera un minuto y vuelve a intentarlo.';
+  }
+  return error?.message || 'No se pudo crear la cuenta.';
 }
 
 const isValidEmail = (value) =>
@@ -115,6 +173,7 @@ export async function POST(req) {
 
     const email = String(body?.email || '').trim().toLowerCase();
     const password = String(body?.password || '');
+    const nombre = String(body?.nombre || body?.name || '').trim().slice(0, 120);
     const acceptedTerms = Boolean(body?.acceptedTerms);
     const acceptedDataProtection = Boolean(body?.acceptedDataProtection);
     const acceptedMarketing = Boolean(body?.acceptedMarketing);
@@ -163,68 +222,117 @@ export async function POST(req) {
       accepted_at: new Date().toISOString(),
     };
 
-    const { data: created, error: createError } = await adminClient.auth.admin.createUser({
-      email,
-      password,
-      email_confirm: true,
-      user_metadata: {
-        role: 'student',
-        legal_acceptance,
-      },
-    });
+    let created;
+    let createError;
+    try {
+      ({ data: created, error: createError } = await adminClient.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: {
+          role: 'student',
+          ...(nombre ? { name: nombre } : {}),
+          legal_acceptance,
+        },
+      }));
+    } catch (err) {
+      console.error('api/auth/register createUser threw:', err);
+      refundRate(ip);
+      return NextResponse.json(
+        { error: 'No se pudo contactar con el servicio de cuentas. Inténtalo de nuevo.' },
+        { status: 503 }
+      );
+    }
 
     if (createError || !created?.user?.id) {
-      const msg = (createError?.message || '').toLowerCase();
-      if (msg.includes('already been registered') || msg.includes('already exists')) {
+      if (isDuplicateEmailError(createError)) {
         return NextResponse.json(
-          { error: 'Ya existe una cuenta con este email. Inicia sesión o recupera la contraseña.' },
+          {
+            error:
+              'Ya existe una cuenta con este email. Inicia sesión o usa "¿Has olvidado tu contraseña?".',
+            code: 'EMAIL_EXISTS',
+          },
           { status: 409 }
         );
       }
-      return NextResponse.json(
-        { error: createError?.message || 'No se pudo crear la cuenta.' },
-        { status: 400 }
-      );
+      refundRate(ip);
+      return NextResponse.json({ error: translateAuthError(createError) }, { status: 400 });
     }
 
     const userId = created.user.id;
-    const rolId = await resolveStudentRoleId(adminClient);
 
-    if (rolId) {
-      await adminClient.from('Usuarios_y_Perfil_users').upsert(
-        {
-          id: userId,
-          email,
-          rol_id: rolId,
-          activo: true,
-        },
-        { onConflict: 'id' }
-      );
+    // A partir de aquí la cuenta ya existe: ningún fallo posterior puede
+    // devolver error, o el usuario quedaría sin poder registrarse ni entrar.
+    let welcomeEmailSent = false;
+
+    try {
+      // Un trigger de auth.users ya crea la fila de aplicación y el perfil.
+      // Aquí solo rellenamos lo que el trigger no sabe, sin pisar sus valores.
+      const rolId = await resolveStudentRoleId(adminClient);
+
+      const appUserRow = { id: userId, email, activo: true };
+      if (nombre) appUserRow.nombre = nombre;
+      if (rolId) appUserRow.rol_id = rolId;
+
+      const { error: appUserError } = await adminClient
+        .from('Usuarios_y_Perfil_users')
+        .upsert(appUserRow, { onConflict: 'id' });
+      if (appUserError) {
+        console.error('api/auth/register app user row:', appUserError);
+      }
+
+      await persistMarketingConsent(adminClient, userId, email, acceptedMarketing);
+
+      const { data: profileRow } = await adminClient
+        .from('Usuarios_y_Perfil_profiles')
+        .select('mascot_variant, idioma_preferido')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      const profilePatch = {};
+      if (profileRow?.mascot_variant == null) {
+        profilePatch.mascot_variant = pickRandomMascotVariant();
+      }
+      if (!profileRow?.idioma_preferido) {
+        profilePatch.idioma_preferido = 'es';
+      }
+
+      if (Object.keys(profilePatch).length) {
+        await adminClient
+          .from('Usuarios_y_Perfil_profiles')
+          .upsert({ user_id: userId, ...profilePatch }, { onConflict: 'user_id' });
+      }
+    } catch (err) {
+      console.error('api/auth/register post-creación:', err);
     }
 
-    await persistMarketingConsent(adminClient, userId, email, acceptedMarketing);
+    try {
+      // El correo de bienvenida sale por SMTP/Resend y puede tardar; nunca debe
+      // agotar el tiempo de la función y dejar la cuenta creada sin respuesta.
+      const dispatch = dispatchAutomatedEmail({
+        adminClient,
+        triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
+        to: email,
+        variables: { email, nombre },
+      }).catch((err) => {
+        console.error('api/auth/register welcome email:', err);
+        return { sent: false, queued: false };
+      });
 
-    const mascotVariant = pickRandomMascotVariant();
-    await adminClient.from('Usuarios_y_Perfil_profiles').upsert(
-      {
-        user_id: userId,
-        idioma_preferido: 'es',
-        mascot_variant: mascotVariant,
-      },
-      { onConflict: 'user_id', ignoreDuplicates: true },
-    );
+      const welcomeMail = await Promise.race([
+        dispatch,
+        new Promise((resolve) => setTimeout(() => resolve(null), WELCOME_EMAIL_TIMEOUT_MS)),
+      ]);
 
-    const welcomeMail = await dispatchAutomatedEmail({
-      adminClient,
-      triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
-      to: email,
-      variables: { email },
-    });
+      welcomeEmailSent = Boolean(welcomeMail?.sent || welcomeMail?.queued);
+    } catch (err) {
+      console.error('api/auth/register welcome email:', err);
+    }
 
     return NextResponse.json({
       ok: true,
       userId,
-      welcomeEmailSent: welcomeMail.sent || welcomeMail.queued,
+      welcomeEmailSent,
       message: 'Cuenta creada. Ya puedes iniciar sesión con tu email y contraseña.',
     });
   } catch (err) {

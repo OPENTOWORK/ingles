@@ -5,6 +5,7 @@ import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import SiteMascot from '@/components/SiteMascot';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import { callDraloAi } from '@/lib/ai/draloAiClient';
 import { SPEAKING_MISSIONS, getMissionBackground } from '@/data/speakingMissions';
 import {
@@ -819,14 +820,7 @@ function ConversationBody({
         )}
 
         {loading && loadingAction !== 'finish' ? (
-          <div className="dralo-ai-loading">
-            <span>Dralo is thinking</span>
-            <span className="dralo-ai-loading__dots" aria-hidden>
-              <span>.</span>
-              <span>.</span>
-              <span>.</span>
-            </span>
-          </div>
+          <DraloThinking variant="inline" size={56} />
         ) : null}
       </div>
 

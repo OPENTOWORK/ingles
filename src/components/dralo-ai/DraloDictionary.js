@@ -5,6 +5,7 @@ import PageHero from '@/components/PageHero';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import DictionarySavedPanel, { useDictionarySavedWords } from '@/components/dralo-ai/DictionarySavedPanel';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import {
   DEFAULT_DICTIONARY_LANGUAGE,
   DICTIONARY_TARGET_LANGUAGES,
@@ -500,8 +501,15 @@ export default function DraloDictionary() {
                       className="dralo-ai-btn dralo-ai-btn--primary"
                       disabled={askLoading}
                     >
-                      {askLoading ? 'Dralo is thinking…' : 'Send'}
+                      Send
                     </button>
+                    {askLoading ? (
+                      <DraloThinking
+                        variant="inline"
+                        size={44}
+                        className="dralo-thinking--tight"
+                      />
+                    ) : null}
                     {askAnswer ? (
                       <div className="dralo-dict__ask-answer">
                         <p className="dralo-dict__ask-answer-label">Dralo</p>
@@ -592,8 +600,15 @@ export default function DraloDictionary() {
                       className="dralo-ai-btn dralo-ai-btn--primary"
                       disabled={askLoading}
                     >
-                      {askLoading ? 'Dralo is thinking…' : 'Send'}
+                      Send
                     </button>
+                    {askLoading ? (
+                      <DraloThinking
+                        variant="inline"
+                        size={44}
+                        className="dralo-thinking--tight"
+                      />
+                    ) : null}
                     {askAnswer ? (
                       <div className="dralo-dict__ask-answer">
                         <p className="dralo-dict__ask-answer-label">Dralo</p>

@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import BlogArticleContent from '@/components/blog/BlogArticleContent';
 import BlogArticleJsonLd from '@/components/blog/BlogArticleJsonLd';
 import BlogAdminEditLink from '@/components/blog/BlogAdminEditLink';
+import BlogCommentsSection from '@/components/blog/BlogCommentsSection';
 import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
 import { blogOgImage, blogSeoDescription, blogSeoTitle } from '@/lib/blogContent';
 import { blogTypeMeta, normalizeBlogContentType } from '@/lib/blogContentTypes';
@@ -103,6 +104,8 @@ export default async function BlogArticlePage({ params }) {
         </header>
 
         <BlogArticleContent html={article.content} />
+
+        <BlogCommentsSection articleId={article.id} articleSlug={article.slug} />
 
         <BlogDraloBrand variant="article" />
       </article>

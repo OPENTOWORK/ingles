@@ -2,6 +2,7 @@ import {
   isAdminRole,
   isCoordinatorRole,
   isItRole,
+  isMarketingRole,
   isStudentRole,
   isSupportRole,
   isTeacherRole,
@@ -197,7 +198,7 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Dictionary', href: '/dralo-ai/dictionary' },
 ];
 
-/** Dralo AI bloqueado (visible + Coming soon) para estudiantes y visitantes sin rol staff. */
+/** Dralo AI desbloqueado para staff pedagógico y Resp.marketing (bloqueado solo para alumnos). */
 export function isDraloAiLockedForRole(userRole) {
   const role = normalizeRoleName(userRole);
   if (
@@ -205,7 +206,8 @@ export function isDraloAiLockedForRole(userRole) {
     isTeacherRole(role) ||
     isCoordinatorRole(role) ||
     isSupportRole(role) ||
-    isItRole(role)
+    isItRole(role) ||
+    isMarketingRole(role)
   ) {
     return false;
   }
@@ -292,6 +294,7 @@ const STAFF_PANEL_BY_KEY = {
  * Paneles visibles en el menú según rol:
  * - admin: todos
  * - coordinador: profesor, coordinador, plan de objetivos, blog
+ * - marketing: buzón/reuniones + blog
  * - profesor: panel de profesor + buzón + tareas
  * - soporte / informático: su panel + buzón + tareas
  * - centro/empresa, clases/grupos: su panel + buzón + tareas
@@ -300,6 +303,9 @@ const STAFF_PANEL_BY_KEY = {
 export function getStaffPanelMenuItemsForRole(roleName = '') {
   if (isAdminRole(roleName)) {
     return getAdminPanelMenuItems();
+  }
+  if (isMarketingRole(roleName)) {
+    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.blog];
   }
   if (isCoordinatorRole(roleName)) {
     return [
@@ -336,6 +342,10 @@ export function getStaffPanelMenuItemsForRole(roleName = '') {
     ];
   }
   return [];
+}
+
+export function canAccessStaffPanelsHub(roleName = '') {
+  return getStaffPanelMenuItemsForRole(roleName).length > 0;
 }
 
 export function getStaffPanelMenuLabel(roleName = '') {

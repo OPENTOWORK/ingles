@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import { canViewPlacementAndTraining } from '@/config/appNavMenu';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import { usePlacementAccess } from '@/context/PlacementAccessContext';
 import SiteMascot from '@/components/SiteMascot';
 import StudyPlanSurvey from '@/components/plan-objetivos/StudyPlanSurvey';
@@ -689,7 +690,7 @@ export default function PlacementTestPage() {
             </p>
           </div>
           {submitted && evaluatingWriting && (
-            <p className="text-sm text-indigo-600">Evaluating your writing with AI…</p>
+            <DraloThinking size={110} label="Dralo is evaluating your writing" />
           )}
           {submitted && writingEvalError && (
             <p className="text-sm text-red-600">{writingEvalError}</p>
@@ -1126,7 +1127,7 @@ export default function PlacementTestPage() {
                   Total score: <span className="font-semibold">{score}</span> / {total}
                 </p>
                 {evaluatingWriting && (
-                  <p className="text-sm text-indigo-600 mt-1">Evaluating writing with AI…</p>
+                  <DraloThinking variant="inline" size={44} label="Dralo is evaluating your writing" />
                 )}
                 {savingPlacement && (
                   <p className="text-sm text-indigo-600 mt-1">Guardando tu nivel en la plataforma…</p>

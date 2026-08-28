@@ -74,3 +74,16 @@ export async function requireStaffBuzonAccess(req) {
 
   return { ok: true, user, token, db, adminClient, userClient };
 }
+
+/** Mismo contrato que authenticateStaffTasksRequest, pero para buzón/reuniones (incl. marketing). */
+export async function authenticateStaffMeetingsRequest(req) {
+  const result = await requireStaffBuzonAccess(req);
+  if (!result.ok) {
+    return { error: result.error, status: result.status };
+  }
+  return {
+    user: result.user,
+    token: result.token,
+    db: result.db,
+  };
+}

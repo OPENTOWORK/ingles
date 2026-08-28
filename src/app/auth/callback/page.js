@@ -22,10 +22,17 @@ function AuthCallbackInner() {
         }
 
         // Flujo PKCE: Supabase devuelve ?code=... que hay que canjear por sesión.
+        // El cliente de navegador ya canjea el código automáticamente al
+        // detectarlo en la URL, así que este intento suele fallar por verifier
+        // consumido. No es un error real: solo cuenta si al final no hay sesión.
         const code = searchParams.get('code');
+        let exchangeError = null;
         if (code) {
           const { error } = await supabase.auth.exchangeCodeForSession(code);
-          if (error) throw error;
+          if (error) {
+            exchangeError = error;
+            console.warn('[auth/callback] canje PKCE no necesario o ya realizado:', error.message);
+          }
         }
 
         // Flujo implicit: el token llega en el hash (#access_token=...).
@@ -43,10 +50,16 @@ function AuthCallbackInner() {
         }
 
         if (!session) {
-          throw new Error('No se pudo recuperar la sesión tras el login.');
+          throw exchangeError || new Error('No se pudo recuperar la sesión tras el login.');
         }
 
         const user = session.user;
+
+        // Quien entra por Google no pasa por /registro, así que su fila de
+        // aplicación puede no existir todavía.
+        const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
+        await ensureAppUserProfile().catch(() => {});
+
         const redirectPath = await getRedirectPathByUserId(user?.id, user?.email);
 
         if (cancelled) return;

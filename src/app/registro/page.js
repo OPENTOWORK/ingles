@@ -9,14 +9,29 @@ import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 
+const PASSWORD_RULES = [
+  { id: 'length', label: 'Al menos 8 caracteres', test: (p) => p.length >= 8 },
+  { id: 'upper', label: 'Una letra mayúscula', test: (p) => /[A-Z]/.test(p) },
+  { id: 'lower', label: 'Una letra minúscula', test: (p) => /[a-z]/.test(p) },
+  { id: 'digit', label: 'Un número', test: (p) => /\d/.test(p) },
+];
+
 export default function RegistroPage() {
+  const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [acceptedDataProtection, setAcceptedDataProtection] = useState(false);
   const [acceptedMarketing, setAcceptedMarketing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showPasswordRules, setShowPasswordRules] = useState(false);
   const router = useRouter();
+
+  const passwordChecks = PASSWORD_RULES.map((rule) => ({
+    ...rule,
+    passed: rule.test(password),
+  }));
+  const passwordIsStrong = passwordChecks.every((rule) => rule.passed);
 
   const persistMarketingConsent = async (userId, userEmail, marketingAccepted) => {
     if (!userId) return;
@@ -70,6 +85,12 @@ export default function RegistroPage() {
   const handleRegister = async (e) => {
     e.preventDefault();
     const normalizedEmail = normalizeEmail(email);
+    const normalizedNombre = nombre.trim();
+
+    if (!normalizedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      toast.error('Introduce un email válido.');
+      return;
+    }
 
     if (!acceptedTerms || !acceptedDataProtection) {
       toast.error('Debes aceptar Términos y condiciones y Protección de datos para registrarte.');
@@ -77,13 +98,8 @@ export default function RegistroPage() {
     }
 
     // Supabase cifra/hash de forma segura la password, pero reforzamos validación mínima.
-    const passwordIsStrong =
-      password.length >= 8 &&
-      /[A-Z]/.test(password) &&
-      /[a-z]/.test(password) &&
-      /\d/.test(password);
-
     if (!passwordIsStrong) {
+      setShowPasswordRules(true);
       toast.error('La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
       return;
     }
@@ -107,6 +123,7 @@ export default function RegistroPage() {
           body: JSON.stringify({
             email: normalizedEmail,
             password,
+            nombre: normalizedNombre,
             acceptedTerms: true,
             acceptedDataProtection: true,
             acceptedMarketing,
@@ -142,6 +159,7 @@ export default function RegistroPage() {
         options: {
           data: {
             role: 'student',
+            ...(normalizedNombre ? { name: normalizedNombre } : {}),
             legal_acceptance,
           },
         },
@@ -204,9 +222,18 @@ export default function RegistroPage() {
         return;
       }
 
-      toast.error(server.data?.error || 'No se pudo registrar.');
+      if (server.data?.code === 'EMAIL_EXISTS') {
+        toast.error(server.data.error, { duration: 6000 });
+        router.push('/login');
+        return;
+      }
+
+      toast.error(server.data?.error || 'No se pudo registrar.', { duration: 6000 });
     } catch {
-      toast.error('Error de red. Intenta de nuevo.');
+      toast.error(
+        'Se ha perdido la conexión al crear la cuenta. Prueba a iniciar sesión: si no funciona, vuelve a registrarte.',
+        { duration: 8000 },
+      );
     } finally {
       toast.dismiss(loadingToast);
       setSubmitting(false);
@@ -220,24 +247,68 @@ export default function RegistroPage() {
       </div>
       <h2 style={authHeadingStyle}>Crear cuenta</h2>
 
-      <form onSubmit={handleRegister}>
-        <label style={authLabelStyle}>Email</label>
+      <form onSubmit={handleRegister} noValidate>
+        <label htmlFor="registro-nombre" style={authLabelStyle}>
+          Nombre <span style={optionalTagStyle}>(opcional)</span>
+        </label>
         <input
+          id="registro-nombre"
+          type="text"
+          autoComplete="given-name"
+          placeholder="Tu nombre"
+          maxLength={120}
+          style={authInputStyle}
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
+        />
+
+        <label htmlFor="registro-email" style={{ ...authLabelStyle, margin: '1rem 0 0.5rem' }}>
+          Email
+        </label>
+        <input
+          id="registro-email"
           type="email"
+          autoComplete="email"
+          inputMode="email"
           placeholder="you@example.com"
           style={authInputStyle}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label style={{ ...authLabelStyle, margin: '1rem 0 0.5rem' }}>Password</label>
+        <label htmlFor="registro-password" style={{ ...authLabelStyle, margin: '1rem 0 0.5rem' }}>
+          Password
+        </label>
         <PasswordInput
+          id="registro-password"
           placeholder="••••••••"
           style={authInputStyle}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onFocus={() => setShowPasswordRules(true)}
           autoComplete="new-password"
         />
+
+        {showPasswordRules || password ? (
+          <ul style={passwordRulesStyle}>
+            {passwordChecks.map((rule) => (
+              <li
+                key={rule.id}
+                style={{
+                  ...passwordRuleItemStyle,
+                  color: rule.passed ? '#15803d' : '#64748b',
+                }}
+              >
+                <span aria-hidden="true">{rule.passed ? '✓' : '•'}</span>
+                <span>{rule.label}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p style={passwordHintStyle}>
+            Mínimo 8 caracteres, con una mayúscula, una minúscula y un número.
+          </p>
+        )}
 
         <button
           type="submit"
@@ -348,6 +419,33 @@ const authButtonStyle = {
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
+};
+
+const optionalTagStyle = {
+  color: '#94a3b8',
+  fontWeight: 400,
+  fontSize: '0.85rem',
+};
+
+const passwordHintStyle = {
+  margin: '0.5rem 0 0',
+  fontSize: '0.82rem',
+  color: '#64748b',
+};
+
+const passwordRulesStyle = {
+  listStyle: 'none',
+  margin: '0.6rem 0 0',
+  padding: 0,
+  display: 'grid',
+  gap: '0.25rem',
+};
+
+const passwordRuleItemStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.4rem',
+  fontSize: '0.82rem',
 };
 
 const checkboxLabelStyle = {

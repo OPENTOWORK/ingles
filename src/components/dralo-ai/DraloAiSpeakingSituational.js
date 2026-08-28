@@ -174,8 +174,17 @@ export default function DraloAiSpeakingSituational() {
 
         <div className="dralo-ai-roleplay">
           <div className="dralo-ai-roleplay__coach">
-            <div className={`dralo-ai-roleplay__avatar${isSpeaking ? ' is-speaking' : ''}`}>
-              <img src={withBase('/dralo-coach.png')} alt="Dralo coach" width={120} height={120} />
+            <div
+              className={`dralo-ai-roleplay__avatar${isSpeaking ? ' is-speaking' : ''}${
+                busy ? ' is-thinking' : ''
+              }`}
+            >
+              <img
+                src={withBase(busy ? '/dralo-thinking.png' : '/dralo-coach.png')}
+                alt={busy ? 'Dralo thinking' : 'Dralo coach'}
+                width={120}
+                height={120}
+              />
             </div>
             <p className="dralo-ai-roleplay__status">
               {busy ? 'Thinking…' : isSpeaking ? 'Speaking…' : isListening ? 'Listening…' : 'Ready'}

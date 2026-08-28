@@ -30,6 +30,10 @@ export const ROLE_ROUTE_MAP = {
   group: '/clases-grupos',
   coordinador: '/coordinador',
   coordinator: '/coordinador',
+  'resp.marketing': '/perfil',
+  resp_marketing: '/perfil',
+  responsable_marketing: '/perfil',
+  marketing: '/perfil',
 };
 
 export const getRedirectPathByRoleName = (roleName = '') => {
@@ -52,6 +56,18 @@ export function isCoordinatorRole(roleName = '') {
   return normalized === 'coordinador' || normalized === 'coordinator';
 }
 
+/** Responsable de marketing: blog + buzón/reuniones, sin paneles operativos. */
+export function isMarketingRole(roleName = '') {
+  const normalized = normalizeRoleName(roleName);
+  return (
+    normalized === 'resp.marketing' ||
+    normalized === 'resp_marketing' ||
+    normalized === 'responsable_marketing' ||
+    normalized === 'responsable_de_marketing' ||
+    normalized === 'marketing'
+  );
+}
+
 export function isSupportRole(roleName = '') {
   const normalized = normalizeRoleName(roleName);
   return normalized === 'soporte' || normalized === 'support';
@@ -70,7 +86,7 @@ export function canAccessPlanObjetivosAdminPanel(roleName = '') {
 }
 
 export function canAccessBlogAdminPanel(roleName = '') {
-  return isAdminRole(roleName) || isCoordinatorRole(roleName);
+  return isAdminRole(roleName) || isCoordinatorRole(roleName) || isMarketingRole(roleName);
 }
 
 /** Prompts de generación de partes de examen (lectura/edición). */
@@ -101,14 +117,16 @@ export function canAccessItPanel(roleName = '') {
   return isAdminRole(roleName) || isItRole(roleName);
 }
 
-/** Buzón interno: mensajería instantánea — todo el staff excepto estudiantes. */
+/** Buzón interno: mensajería instantánea — staff con acceso al buzón (incl. marketing). */
 export function canAccessStaffBuzon(roleName = '') {
+  if (isMarketingRole(roleName)) return true;
   return canAccessStaffTasks(roleName);
 }
 
-/** Tareas de profesor/alumnos: todo el staff excepto estudiantes. */
+/** Tareas de profesor/alumnos: todo el staff excepto estudiantes y marketing. */
 export function canAccessStaffTasks(roleName = '') {
   const role = normalizeRoleName(roleName);
+  if (isMarketingRole(roleName)) return false;
   return role !== 'student' && role !== 'alumno' && Boolean(role);
 }
 

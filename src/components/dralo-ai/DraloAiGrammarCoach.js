@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import DraloThinking from '@/components/dralo/DraloThinking';
 
 const ACCENT_SOLID = {
   lime: '#65a30d',
@@ -230,14 +231,7 @@ export default function DraloAiGrammarCoach({ config }) {
               {loading && !streaming ? (
                 <div className="dralo-ai-coach-bubble dralo-ai-coach-bubble--assistant">
                   <span className="dralo-ai-coach-bubble__label">Dralo</span>
-                  <div className="dralo-ai-loading">
-                    <span>Dralo is thinking</span>
-                    <span className="dralo-ai-loading__dots" aria-hidden>
-                      <span>.</span>
-                      <span>.</span>
-                      <span>.</span>
-                    </span>
-                  </div>
+                  <DraloThinking variant="inline" size={56} />
                 </div>
               ) : null}
             </div>

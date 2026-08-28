@@ -1,5 +1,7 @@
 'use client';
 
+import DraloThinking from '@/components/dralo/DraloThinking';
+
 /**
  * @param {{ hint?: { loading?: boolean, error?: string | null, text?: string | null } }} props
  */
@@ -8,9 +10,12 @@ export default function LevelsAnswerJustification({ hint }) {
 
   if (hint.loading) {
     return (
-      <p style={{ margin: '0.55rem 0 0', fontSize: '0.92rem', color: '#718096', fontStyle: 'italic' }}>
-        Generating explanation...
-      </p>
+      <DraloThinking
+        variant="inline"
+        size={40}
+        label="Dralo is writing the explanation"
+        className="dralo-thinking--tight"
+      />
     );
   }
 

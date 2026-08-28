@@ -38,7 +38,7 @@ function getDb() {
   return getSubscriptionsDb() || getSupabaseAdmin();
 }
 
-/** ¿Aplicar límites de plan? Solo estudiante/alumno; staff (admin, profesor, IT, coordinador) sin límites. */
+/** ¿Aplicar límites de plan? Solo estudiante/alumno; staff sin límites (incl. Resp.marketing). */
 export async function shouldApplyPlanUsageLimits(userId, userEmail = '') {
   if (!userId) return false;
   if (normalizeEmail(userEmail) === normalizeEmail(ADMIN_EMAIL)) return false;

@@ -90,9 +90,12 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   {
     slug: 'premium',
     nombre: 'PLUS',
-    precio: 7.99,
+    precio: 3.99,
+    precioRegular: 7.99,
     precioLista: 9.99,
-    precioLabel: '7,99€/mes',
+    precioAnualLanzamiento: 1.99,
+    precioAnualRegular: 5.99,
+    precioLabel: '3,99€/mes',
     duracion_dias: 30,
     descripcionCorta: 'La opción más popular para preparar exámenes y mejorar rápidamente.',
     descripcion:
@@ -133,9 +136,12 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   {
     slug: 'pro',
     nombre: 'PREMIUM',
-    precio: 14.99,
+    precio: 8.99,
+    precioRegular: 14.99,
     precioLista: 17.99,
-    precioLabel: '14,99€/mes',
+    precioAnualLanzamiento: 4.99,
+    precioAnualRegular: 11.24,
+    precioLabel: '8,99€/mes',
     duracion_dias: 30,
     descripcionCorta: 'La experiencia más completa para preparar exámenes al máximo nivel.',
     descripcion:
@@ -183,24 +189,54 @@ export const COMING_SOON = 'coming-soon';
 /** Descuento al facturar anualmente (mostrado en /precios y vista previa admin). */
 export const ANNUAL_BILLING_DISCOUNT_PERCENT = 25;
 
+/** Etiqueta de marketing para precios promocionales de lanzamiento. */
+export const LAUNCH_PRICE_LABEL = 'Precio exclusivo de lanzamiento';
+
+export function planHasLaunchPricing(plan) {
+  return Number(plan?.precioRegular) > 0;
+}
+
 /** @param {'monthly'|'annual'} billingCycle */
 export function getPlanMonthlyPrice(plan, billingCycle = 'monthly') {
   const base = Number(plan?.precio) || 0;
   if (base <= 0) return 0;
   if (billingCycle === 'annual') {
+    const annualLaunch = Number(plan?.precioAnualLanzamiento);
+    if (annualLaunch > 0) return annualLaunch;
     return base * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
   }
   return base;
 }
 
-/** Precio de lista / futuro (tachado en marketing). null si no aplica. */
-export function getPlanListPrice(plan, billingCycle = 'monthly') {
-  const n = Number(plan?.precioLista);
-  if (!(n > 0)) return null;
+/** Precios tachados (de mayor a menor) antes del precio de lanzamiento. */
+export function getPlanCrossedPrices(plan, billingCycle = 'monthly') {
+  const list = Number(plan?.precioLista);
+  const regular = Number(plan?.precioRegular);
+  if (!(list > 0) || !(regular > 0)) return [];
+
   if (billingCycle === 'annual') {
-    return n * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
+    const annualList = list * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
+    const annualRegular =
+      Number(plan?.precioAnualRegular) > 0
+        ? Number(plan.precioAnualRegular)
+        : regular * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
+    return [annualList, annualRegular].filter((n) => n > 0);
   }
-  return n;
+
+  return [list, regular];
+}
+
+/** Precio tachado principal (el más reciente antes del lanzamiento). */
+export function getPlanListPrice(plan, billingCycle = 'monthly') {
+  const crossed = getPlanCrossedPrices(plan, billingCycle);
+  if (crossed.length > 0) return crossed[crossed.length - 1];
+
+  const list = Number(plan?.precioLista);
+  if (!(list > 0)) return null;
+  if (billingCycle === 'annual') {
+    return list * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
+  }
+  return list;
 }
 
 /** % de descuento actual respecto al precio de lista (mismo ciclo de facturación). */
@@ -209,6 +245,17 @@ export function getPlanListDiscountPercent(plan, billingCycle = 'monthly') {
   const price = getPlanMonthlyPrice(plan, billingCycle);
   if (!list || list <= price) return null;
   return Math.round(((list - price) / list) * 100);
+}
+
+/** % de descuento de lanzamiento respecto al precio original más alto (precioLista). */
+export function getPlanLaunchDiscountPercent(plan, billingCycle = 'monthly') {
+  if (!planHasLaunchPricing(plan)) return null;
+  const crossed = getPlanCrossedPrices(plan, billingCycle);
+  if (!crossed.length) return null;
+  const referenceTotal = crossed[0];
+  const price = getPlanMonthlyPrice(plan, billingCycle);
+  if (!referenceTotal || referenceTotal <= price) return null;
+  return Math.round(((referenceTotal - price) / referenceTotal) * 100);
 }
 
 export function formatEuroAmount(amount) {
@@ -245,7 +292,7 @@ export function formatPlanAnnualTotal(plan) {
 
 /** Filas de la tabla comparativa (✅ / ❌ primero, luego texto). */
 export const PLAN_COMPARISON_ROWS = [
-  { id: 'price', label: 'Precio', type: 'text', values: { free: '0€', premium: '7,99€/mes', pro: '14,99€/mes' } },
+  { id: 'price', label: 'Precio', type: 'text', values: { free: '0€', premium: '3,99€/mes', pro: '8,99€/mes' } },
   {
     id: 'a2',
     label: 'Nivel A2',

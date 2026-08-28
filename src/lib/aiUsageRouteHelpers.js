@@ -162,7 +162,7 @@ export async function recordAiUsageSuccess({
 
   if (getDailyLimit(action) == null) {
     await incrementDailyAiUsage(userId, action, { userEmail });
-  } else if (!options.planBased) {
+  } else if (!planBased) {
     await incrementDailyAiUsage(userId, action, {
       userEmail,
       skipIfPreflightConsumed: true,

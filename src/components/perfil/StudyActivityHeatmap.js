@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { ProfileStatIcon } from '@/components/perfil/ProfileGeneralStats';
 import styles from './StudyActivityHeatmap.module.css';
 
 function formatTooltip(day) {
@@ -75,9 +76,12 @@ export default function StudyActivityHeatmap({ accessToken }) {
   return (
     <div className={styles.wrap}>
       <div className={styles.summary}>
-        <div className={styles.stat}>
-          <span className={styles.statValue}>{summary?.streak ?? 0}</span>
-          <span className={styles.statLabel}>Current streak</span>
+        <div className={`${styles.stat} ${styles.statWithIcon}`}>
+          <ProfileStatIcon icon="flame" tone="amber" compact />
+          <div className={styles.statText}>
+            <span className={styles.statValue}>{summary?.streak ?? 0}</span>
+            <span className={styles.statLabel}>Current streak</span>
+          </div>
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>{summary?.activeDays ?? 0}</span>
@@ -87,9 +91,12 @@ export default function StudyActivityHeatmap({ accessToken }) {
           <span className={styles.statValue}>{summary?.last7MinutesLabel ?? '0 min'}</span>
           <span className={styles.statLabel}>This week</span>
         </div>
-        <div className={styles.stat}>
-          <span className={styles.statValue}>{summary?.last90MinutesLabel ?? '0 min'}</span>
-          <span className={styles.statLabel}>Last 90 days</span>
+        <div className={`${styles.stat} ${styles.statWithIcon}`}>
+          <ProfileStatIcon icon="clock" tone="cyan" compact />
+          <div className={styles.statText}>
+            <span className={styles.statValue}>{summary?.last90MinutesLabel ?? '0 min'}</span>
+            <span className={styles.statLabel}>Last 90 days</span>
+          </div>
         </div>
       </div>
 

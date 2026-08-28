@@ -6,10 +6,11 @@ import {
   canAccessSupportPanel,
   isAdminRole,
   isItRole,
+  isMarketingRole,
   isTeacherRole,
   normalizeRoleName,
 } from '@/utils/authRoles';
-import { canViewPlacementAndTraining } from '@/config/appNavMenu';
+import { canViewPlacementAndTraining, canAccessStaffPanelsHub } from '@/config/appNavMenu';
 import { canViewPricing } from '@/utils/pricingAccess';
 import { isPublicPath } from '@/utils/publicRoutes';
 import {
@@ -28,24 +29,25 @@ export const IT_PREVIEW_ROLE_OPTIONS = [
   { id: 'coordinator', label: 'Coordinador', roleName: 'coordinador', simulatesSession: true },
   { id: 'support', label: 'Soporte', roleName: 'soporte', simulatesSession: true },
   { id: 'informatico', label: 'Informático', roleName: 'informatico', simulatesSession: true },
+  { id: 'marketing', label: 'Resp. marketing', roleName: 'Resp.marketing', simulatesSession: true },
   { id: 'admin', label: 'Administrador', roleName: 'admin', simulatesSession: true },
 ];
 
 const PRESET_ROUTES = [
   { label: 'Inicio', path: '/', roles: ['guest', 'student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
   { label: 'Login', path: '/login', roles: ['guest'] },
-  { label: 'Perfil', path: '/profile', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'Exam Strategies', path: '/exam-strategies', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'B2 — Hub exámenes', path: '/exam-practice/b2', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'B2 — Modo examen', path: '/exam-practice/b2/exam-mode', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'B2 — Reading', path: '/exam-practice/b2/exam-reading', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'B2 — Writing', path: '/exam-practice/b2/exam-writing', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'B2 — Listening', path: '/exam-practice/b2/exam-listening', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'B2 — Speaking', path: '/exam-practice/b2/exam-speaking', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
+  { label: 'Perfil', path: '/profile', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'Exam Strategies', path: '/exam-strategies', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'B2 — Hub exámenes', path: '/exam-practice/b2', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'B2 — Modo examen', path: '/exam-practice/b2/exam-mode', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'B2 — Reading', path: '/exam-practice/b2/exam-reading', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'B2 — Writing', path: '/exam-practice/b2/exam-writing', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'B2 — Listening', path: '/exam-practice/b2/exam-listening', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'B2 — Speaking', path: '/exam-practice/b2/exam-speaking', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Placement Test', path: '/prueba-nivel', roles: ['admin'] },
   { label: 'Training', path: '/training', roles: ['admin'] },
   { label: 'Planes / Pricing', path: '/precios', roles: ['admin'] },
-  { label: 'Dralo AI', path: '/dralo-ai', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
+  { label: 'Dralo AI', path: '/dralo-ai', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Contacto', path: '/contact', roles: ['guest', 'student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
   { label: 'Panel profesor', path: '/teacher', roles: ['teacher'] },
   { label: 'Panel profesor (admin)', path: '/admin/profesor', roles: ['admin', 'coordinator'] },
@@ -53,7 +55,9 @@ const PRESET_ROUTES = [
   { label: 'Panel soporte', path: '/soporte', roles: ['support', 'admin'] },
   { label: 'Panel informático', path: '/informatico', roles: ['informatico', 'admin'] },
   { label: 'Panel tareas', path: '/tareas', roles: ['teacher', 'coordinator', 'support', 'informatico', 'admin'] },
-  { label: 'Hub paneles', path: '/paneles', roles: ['teacher', 'coordinator', 'support', 'informatico', 'admin'] },
+  { label: 'Buzón y reuniones', path: '/buzon', roles: ['teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'Blog (admin)', path: '/admin/blog', roles: ['coordinator', 'marketing', 'admin'] },
+  { label: 'Hub paneles', path: '/paneles', roles: ['teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Panel administración', path: '/admin', roles: ['admin'] },
 ];
 
@@ -111,7 +115,7 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
     if (roleId === 'coordinator' && pathname === '/admin/profesor') return true;
     if (roleId === 'coordinador' && pathname.startsWith('/admin/plan-objetivos')) return true;
     if (
-      (roleId === 'coordinator' || roleId === 'coordinador') &&
+      (roleId === 'coordinator' || roleId === 'coordinador' || roleId === 'marketing' || isMarketingRole(roleId)) &&
       pathname.startsWith('/admin/blog')
     ) {
       return true;
@@ -120,7 +124,7 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
   }
 
   if (pathname === '/tareas' && !canAccessStaffTasks(roleId)) return false;
-  if (pathname === '/paneles' && !canAccessStaffTasks(roleId)) return false;
+  if (pathname === '/paneles' && !canAccessStaffPanelsHub(roleId)) return false;
   if (pathname === '/buzon' && !canAccessStaffBuzon(roleId)) return false;
   if (pathname === '/teacher' && !isTeacherRole(roleId)) return false;
   if (pathname === '/coordinador' && !canAccessCoordinatorPanel(roleId)) return false;

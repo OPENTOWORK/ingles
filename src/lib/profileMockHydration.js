@@ -71,6 +71,11 @@ export function hydrateProfileMockData(tabId, setters) {
       break;
 
     case 'analytics':
+      setAchievementProgress({
+        'Grammar Guru': { current: 45, target: 50, description: 'Complete 50 grammar exercises' },
+        'Speed Demon': { current: 2, target: 5, description: 'Complete 5 exams under 30 minutes' },
+        'Perfectionist': { current: 0, target: 1, description: 'Get 100% on any exam' },
+      });
       setAiInsights([
         { id: 1, type: 'performance', title: 'Peak Performance Time', description: 'You perform best between 10 AM - 12 PM', confidence: 85 },
         { id: 2, type: 'weakness', title: 'Grammar Focus Needed', description: 'Spend 20% more time on grammar exercises', confidence: 92 },

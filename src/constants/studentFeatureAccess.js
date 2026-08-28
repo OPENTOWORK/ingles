@@ -3,6 +3,7 @@ import {
   isAdminRole,
   isCoordinatorRole,
   isItRole,
+  isMarketingRole,
   isTeacherRole,
   normalizeEmail,
   normalizeRoleName,
@@ -27,13 +28,15 @@ export function isStudentRole(userRole = '') {
 
 /**
  * Alumno y coordinador: misma experiencia de contenido (coming soon, locks, perfil, etc.).
- * Admin, profesor e informático: acceso completo al contenido pedagógico.
+ * Admin, profesor, informático y Resp.marketing: acceso completo a Exam Practice,
+ * Exam Strategies y Dralo AI (sin restricciones de alumno ni límites de plan).
  */
 export function hasFullNivelesLevelAccess(userRole = '', email = '') {
   if (normalizeEmail(email) === normalizeEmail(ADMIN_EMAIL)) return true;
   if (isAdminRole(userRole)) return true;
   if (isTeacherRole(userRole)) return true;
   if (isItRole(userRole)) return true;
+  if (isMarketingRole(userRole)) return true;
   return false;
 }
 

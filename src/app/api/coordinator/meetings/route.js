@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
-import { authenticateStaffTasksRequest } from '@/lib/staffTasksAccess';
+import { authenticateStaffMeetingsRequest } from '@/lib/staffBuzonAccess';
 import { broadcastMeetingToStaffBuzon } from '@/lib/staffBuzonMeetingsBroadcast';
 import { loadProfilesByIds } from '@/lib/staffTasksServer';
 import {
@@ -63,7 +63,7 @@ function validateMeetingBody(body = {}) {
 
 export async function GET(req) {
   try {
-    const auth = await authenticateStaffTasksRequest(req);
+    const auth = await authenticateStaffMeetingsRequest(req);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -109,7 +109,7 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const auth = await authenticateStaffTasksRequest(req);
+    const auth = await authenticateStaffMeetingsRequest(req);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

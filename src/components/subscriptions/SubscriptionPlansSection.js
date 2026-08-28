@@ -10,8 +10,12 @@ import {
   formatPlanAnnualTotal,
   formatPlanPriceAmount,
   formatPlanPriceLabel,
+  getPlanCrossedPrices,
+  getPlanLaunchDiscountPercent,
   getPlanListDiscountPercent,
   getPlanListPrice,
+  LAUNCH_PRICE_LABEL,
+  planHasLaunchPricing,
   PLAN_COMPARISON_ROWS,
 } from '@/data/financialPlanConfig';
 import { examsLimitLabel } from '@/lib/subscriptionPlans';
@@ -26,13 +30,15 @@ function comparisonCellValue(row, planSlug, billingCycle) {
   if (row.id === 'price') {
     const plan = DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === planSlug);
     if (!plan) return row.values[planSlug];
-    const list = getPlanListPrice(plan, billingCycle);
-    const discount = getPlanListDiscountPercent(plan, billingCycle);
+    const crossed = getPlanCrossedPrices(plan, billingCycle);
+    const discount = getPlanLaunchDiscountPercent(plan, billingCycle) ?? getPlanListDiscountPercent(plan, billingCycle);
     return {
       kind: 'price',
-      list: list ? formatEuroAmount(list) : null,
+      crossed: crossed.map((amount) => formatEuroAmount(amount)),
+      list: crossed.length ? formatEuroAmount(crossed[crossed.length - 1]) : null,
       current: formatPlanPriceLabel(plan, billingCycle),
       discount,
+      launch: planHasLaunchPricing(plan),
     };
   }
   return row.values[planSlug];
@@ -60,12 +66,23 @@ function CellValue({ value, type }) {
   if (value && typeof value === 'object' && value.kind === 'price') {
     return (
       <span className={styles.cellPrice}>
-        {value.list ? (
-          <span className={styles.cellPriceWas} aria-label="Precio futuro">
+        {value.crossed?.length ? (
+          <span className={styles.cellPriceCrossedRow}>
+            {value.crossed.map((amount) => (
+              <span key={amount} className={styles.cellPriceWas} aria-label="Precio anterior">
+                {amount}
+              </span>
+            ))}
+          </span>
+        ) : value.list ? (
+          <span className={styles.cellPriceWas} aria-label="Precio anterior">
             {value.list}
           </span>
         ) : null}
         <span className={styles.cellPriceCurrent}>{value.current}</span>
+        {value.launch ? (
+          <span className={styles.cellPriceLaunch}>{LAUNCH_PRICE_LABEL}</span>
+        ) : null}
         {value.discount ? (
           <span className={styles.cellPriceDiscount}>-{value.discount}%</span>
         ) : null}
@@ -163,7 +180,10 @@ export default function SubscriptionPlansSection({
           const isPremium = plan.recommended;
           const hasPaidPlan = plan.precio > 0;
           const listPrice = getPlanListPrice(plan, billingCycle);
+          const crossedPrices = getPlanCrossedPrices(plan, billingCycle);
           const listDiscount = getPlanListDiscountPercent(plan, billingCycle);
+          const launchDiscount = getPlanLaunchDiscountPercent(plan, billingCycle);
+          const showLaunchLabel = hasPaidPlan && planHasLaunchPricing(plan);
           return (
             <article
               key={plan.slug}
@@ -185,24 +205,38 @@ export default function SubscriptionPlansSection({
               <p className={styles.cardPrice}>
                 {hasPaidPlan ? (
                   <>
+                    {showLaunchLabel && crossedPrices.length > 0 ? (
+                      <span className={styles.cardPriceWasRow}>
+                        {crossedPrices.map((amount) => (
+                          <span
+                            key={amount}
+                            className={styles.cardPriceWas}
+                            aria-label="Precio anterior"
+                          >
+                            {formatEuroAmount(amount)}
+                          </span>
+                        ))}
+                      </span>
+                    ) : null}
                     <span className={styles.cardPriceRow}>
-                      {listPrice ? (
-                        <span className={styles.cardPriceWas} aria-label="Precio futuro">
+                      {!showLaunchLabel && listPrice ? (
+                        <span className={styles.cardPriceWas} aria-label="Precio habitual">
                           {formatEuroAmount(listPrice)}
-                        </span>
-                      ) : isAnnual ? (
-                        <span className={styles.cardPriceWas} aria-hidden>
-                          {formatPlanPriceAmount(plan, 'monthly')}
                         </span>
                       ) : null}
                       <span className={styles.cardPriceAmount}>
                         {formatPlanPriceAmount(plan, billingCycle)}
                       </span>
                       <span className={styles.cardPricePeriod}>/mes</span>
-                      {listDiscount ? (
+                      {showLaunchLabel && launchDiscount ? (
+                        <span className={styles.cardPriceDiscount}>-{launchDiscount}%</span>
+                      ) : listDiscount && !showLaunchLabel ? (
                         <span className={styles.cardPriceDiscount}>-{listDiscount}%</span>
                       ) : null}
                     </span>
+                    {showLaunchLabel ? (
+                      <span className={styles.cardPriceLaunch}>{LAUNCH_PRICE_LABEL}</span>
+                    ) : null}
                     {isAnnual ? (
                       <span className={styles.cardPriceAnnual}>
                         {formatPlanAnnualTotal(plan)} facturados al año

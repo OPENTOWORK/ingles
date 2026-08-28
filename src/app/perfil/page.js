@@ -42,6 +42,7 @@ import {
 } from '@/lib/profileDefaultAvatar';
 import { authMetadataPlanSlug, getPlanBySlug, getPlanProfileDisplay } from '@/data/financialPlanConfig';
 import { canViewPricing } from '@/utils/pricingAccess';
+import { getPersonalizedRecommendations } from '@/utils/adaptiveLearning';
 
 const ProfileExamDatesPanel = dynamic(
   () => import('@/components/perfil/ProfileExamDatesPanel').then((mod) => mod.default),
@@ -65,10 +66,6 @@ const StudyActivityHeatmap = dynamic(
       </div>
     ),
   },
-);
-
-const ProfileGeneralStats = dynamicImport(
-  () => import('@/components/perfil/ProfileGeneralStats'),
 );
 
 const UserErrorTrackerPanel = dynamicImport(
@@ -143,6 +140,7 @@ export default function ProfilePage() {
   const [studyHistory, setStudyHistory] = useState([]);
   const [weeklyChallenges, setWeeklyChallenges] = useState([]);
   const [studyRecommendations, setStudyRecommendations] = useState([]);
+  const [recommendationsLoading, setRecommendationsLoading] = useState(false);
   const [progressComparison, setProgressComparison] = useState({});
   const [studyGroups, setStudyGroups] = useState([]);
   const [achievementProgress, setAchievementProgress] = useState({});
@@ -185,6 +183,7 @@ export default function ProfilePage() {
   }, [isStudent, activeTab]);
 
   const integratedStatsLoadedRef = useRef(false);
+  const recommendationsLoadedRef = useRef(false);
   const mockHydratedTabsRef = useRef(new Set());
   const statsFetchedRef = useRef(false);
 
@@ -333,6 +332,37 @@ export default function ProfilePage() {
   }, [user?.id, activeTab, loading]);
 
   useEffect(() => {
+    if (!layoutSession?.access_token || !showProgressTracking || activeTab !== 'overview') {
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch('/api/perfil/estadisticas-generales', {
+          headers: { Authorization: `Bearer ${layoutSession.access_token}` },
+        });
+        const json = await res.json();
+        if (cancelled || !res.ok || !json?.summary) return;
+        setStats((prev) => ({
+          ...(prev || { exams: [], training: [], theory: [], stats: {} }),
+          stats: {
+            ...(prev?.stats || {}),
+            ...json.summary,
+          },
+        }));
+      } catch {
+        /* optional background sync */
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [layoutSession?.access_token, showProgressTracking, activeTab]);
+
+  useEffect(() => {
     if (!user?.id || loading || activeTab !== 'integrated') return;
     if (integratedStatsLoadedRef.current) return;
     integratedStatsLoadedRef.current = true;
@@ -365,6 +395,30 @@ export default function ProfilePage() {
       setStudyLeaderboard,
     });
   }, [activeTab, user, loading]);
+
+  useEffect(() => {
+    if (!user?.id || loading || activeTab !== 'analytics') return undefined;
+    if (recommendationsLoadedRef.current) return undefined;
+
+    let cancelled = false;
+    recommendationsLoadedRef.current = true;
+    setRecommendationsLoading(true);
+
+    (async () => {
+      try {
+        const recs = await getPersonalizedRecommendations(user.id);
+        if (!cancelled) setStudyRecommendations(Array.isArray(recs) ? recs : []);
+      } catch {
+        if (!cancelled) setStudyRecommendations([]);
+      } finally {
+        if (!cancelled) setRecommendationsLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [user?.id, activeTab, loading]);
 
   const handleSaveProfileName = async () => {
     const trimmed = (fullName || '').trim();
@@ -838,28 +892,6 @@ export default function ProfilePage() {
               />
             </ProfileCollapsibleSection>
           ) : null}
-
-          <ProfileCollapsibleSection title="General statistics">
-            {showProgressTracking ? (
-              <ProfileGeneralStats
-                accessToken={layoutSession?.access_token}
-                onSummaryLoaded={(summary) => {
-                  setStats((prev) => ({
-                    ...(prev || { exams: [], training: [], theory: [], stats: {} }),
-                    stats: {
-                      ...(prev?.stats || {}),
-                      ...summary,
-                    },
-                  }));
-                }}
-              />
-            ) : (
-              <p className="profile-plan-upgrade-hint">
-                Progress tracking is included in Plus and Premium plans.{' '}
-                <Link href="/precios">View plans</Link>
-              </p>
-            )}
-          </ProfileCollapsibleSection>
 
           {showProgressTracking ? (
             <>
@@ -1403,14 +1435,22 @@ export default function ProfilePage() {
           {/* Recomendaciones Inteligentes */}
           <ProfileCollapsibleSection title="Smart recommendations">
 <div className="recommendations-grid">
-              {studyRecommendations.map((rec, index) => (
+              {recommendationsLoading ? (
+                <p className="section-desc">Loading your personalised recommendations…</p>
+              ) : studyRecommendations.length === 0 ? (
+                <p className="section-desc">
+                  Complete a few practice sessions and we&apos;ll suggest what to study next.
+                </p>
+              ) : (
+                studyRecommendations.map((rec, index) => (
                 <div key={index} className={`recommendation-card priority-${rec.priority}`}>
                   <div className="recommendation-type">{rec.type}</div>
-                  <div className="recommendation-skill">{rec.skill}</div>
+                  {rec.skill ? <div className="recommendation-skill">{rec.skill}</div> : null}
                   <div className="recommendation-message">{rec.message}</div>
                   <div className="recommendation-priority">Priority: {rec.priority}</div>
                 </div>
-              ))}
+              ))
+              )}
             </div>
 </ProfileCollapsibleSection>
 

@@ -1,8 +1,8 @@
 'use client';
 
 import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
-import AppNav from '@/components/layout/AppNav';
 import ItPreviewRoleBanner from '@/components/layout/ItPreviewRoleBanner';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
@@ -12,6 +12,11 @@ import { GuidedTourProvider } from '@/context/GuidedTourContext';
 import { PlacementAccessProvider } from '@/context/PlacementAccessContext';
 import { useItPreviewRole } from '@/hooks/useItPreviewRole';
 import { useItPreviewAdminBuzonLayout } from '@/hooks/useItPreviewAdminBuzonLayout';
+
+const AppNav = dynamic(() => import('@/components/layout/AppNav'), {
+  ssr: true,
+  loading: () => <div className="site-header__nav site-header__nav--loading" aria-hidden="true" />,
+});
 
 function SiteHeaderBrand({ nav = null }) {
   return (

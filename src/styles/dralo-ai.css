@@ -2385,6 +2385,14 @@
   object-fit: cover;
 }
 
+/* La pose pensativa es vertical: se muestra entera en vez de recortada. */
+.dralo-ai-roleplay__avatar.is-thinking img {
+  object-fit: contain;
+  padding: 6px;
+  box-sizing: border-box;
+  animation: dralo-thinking-float 2.8s ease-in-out infinite;
+}
+
 .dralo-ai-roleplay__status {
   margin: 0;
   font-size: 0.9rem;

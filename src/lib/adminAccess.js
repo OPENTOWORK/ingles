@@ -3,6 +3,7 @@ import {
   ADMIN_EMAIL,
   canAccessExamPartPrompts,
   isCoordinatorRole,
+  isMarketingRole,
   isTeacherRole,
   normalizeEmail,
   normalizeRoleName,
@@ -86,7 +87,7 @@ export async function authenticatePlanObjetivosAdminRequest(req) {
   return { user: auth.user, token, db, isAdmin, isCoordinator };
 }
 
-/** Admin o coordinador (gestión del blog). */
+/** Admin, coordinador o responsable de marketing (gestión del blog). */
 export async function authenticateBlogAdminRequest(req) {
   const auth = await getSupabaseUserFromRequest(req);
   if (!auth?.user) {
@@ -113,12 +114,13 @@ export async function authenticateBlogAdminRequest(req) {
   const isAdmin = await userIsAdmin(auth.user, db);
   const roleName = await getUserRoleNameServer(auth.user.id, db);
   const isCoordinator = isCoordinatorRole(roleName);
+  const isMarketing = isMarketingRole(roleName);
 
-  if (!isAdmin && !isCoordinator) {
+  if (!isAdmin && !isCoordinator && !isMarketing) {
     return { error: 'Sin permiso.', status: 403 };
   }
 
-  return { user: auth.user, token, db, isAdmin, isCoordinator };
+  return { user: auth.user, token, db, isAdmin, isCoordinator, isMarketing };
 }
 
 /** Admin, coordinador o profesor (ver/editar prompts de generación de partes). */

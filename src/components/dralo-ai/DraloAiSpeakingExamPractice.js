@@ -7,6 +7,7 @@ import {
 } from '@/features/speaking/domain/b2-speaking-exam-parts';
 import { useMediaRecorder } from '@/features/speaking/ui/hooks/useMediaRecorder';
 import ExaminerVoiceVisualizer from '@/components/b2/ExaminerVoiceVisualizer';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import { FeedbackCards } from '@/features/speaking/ui/components/FeedbackCards';
 import { playExaminerAudio, stopExaminerAudio } from '@/utils/playExaminerAudio';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
@@ -483,15 +484,18 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
             {media.isRecording ? 'Stop & send' : 'Speak'}
           </button>
         ) : null}
-        <span className="dralo-ai-speaking-practice__status">
-          {photosLoading
-            ? 'Creating photographs…'
-            : loading
-              ? 'Dralo is thinking…'
-              : media.isRecording
-                ? 'Listening…'
-                : 'Ready'}
-        </span>
+        {photosLoading || loading ? (
+          <DraloThinking
+            variant="inline"
+            size={38}
+            label={photosLoading ? 'Dralo is creating photographs' : 'Dralo is thinking'}
+            className="dralo-thinking--tight"
+          />
+        ) : (
+          <span className="dralo-ai-speaking-practice__status">
+            {media.isRecording ? 'Listening…' : 'Ready'}
+          </span>
+        )}
       </div>
 
       <div className="dralo-ai-speaking-practice__type-row">

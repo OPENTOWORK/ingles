@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 
 /** Wait until initial navigation has settled before background sync work. */
-const BACKFILL_DEFER_MS = 8000;
+const BACKFILL_DEFER_MS = 15000;
 
 /**
  * Once per browser session: backfill Levels_stars from puntuaciones + sync exam-mode local sessions.

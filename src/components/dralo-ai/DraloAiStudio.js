@@ -13,6 +13,7 @@ import {
   rememberExerciseFingerprint,
 } from '@/lib/draloAiExerciseVariety';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import LevelsWritingCorrectionPanel from '@/components/niveles/LevelsWritingCorrectionPanel';
 import { DRALO_AI_SITUATIONAL_EYEBROW } from '@/data/draloAiSituationalConfig';
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
@@ -46,16 +47,7 @@ function countWords(text) {
 }
 
 function LoadingDralo() {
-  return (
-    <div className="dralo-ai-loading">
-      <span>Dralo is thinking</span>
-      <span className="dralo-ai-loading__dots" aria-hidden>
-        <span>.</span>
-        <span>.</span>
-        <span>.</span>
-      </span>
-    </div>
-  );
+  return <DraloThinking size={120} />;
 }
 
 export default function DraloAiStudio({

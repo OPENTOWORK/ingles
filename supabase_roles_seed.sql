@@ -20,7 +20,8 @@ values
   ('teacher', 'profesor', 'Usuario encargado de guiar, evaluar y gestionar alumnos.'),
   ('it', 'informatico', 'Perfil tecnico encargado del mantenimiento del sistema.'),
   ('support', 'soporte', 'Equipo encargado de resolver incidencias y ayudar a los usuarios.'),
-  ('coordinator', 'coordinador', 'Coordina al equipo de profesores: asignación de alumnos y seguimiento por docente.')
+  ('coordinator', 'coordinador', 'Coordina al equipo de profesores: asignación de alumnos y seguimiento por docente.'),
+  ('marketing', 'Resp.marketing', 'Responsable de marketing: artículos, noticias, buzón y reuniones.')
 on conflict (code) do update
 set
   nombre = excluded.nombre,

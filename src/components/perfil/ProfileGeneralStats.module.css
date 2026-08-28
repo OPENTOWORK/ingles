@@ -40,6 +40,18 @@
   overflow: visible;
 }
 
+.iconWrapCompact {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+}
+
+.iconWrapCompact .epicFlame,
+.iconWrapCompact .epicClock {
+  width: 28px;
+  height: 28px;
+}
+
 .iconWrap--amber {
   background: linear-gradient(145deg, #fff7ed 0%, #ffedd5 100%);
   color: #ea580c;

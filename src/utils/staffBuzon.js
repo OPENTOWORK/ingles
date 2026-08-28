@@ -40,6 +40,10 @@ export function getStaffRoleLabel(roleName = '') {
     'centro/empresa': 'Centro / empresa',
     clases_grupos: 'Clases / grupos',
     'clases/grupos': 'Clases / grupos',
+    'resp.marketing': 'Resp. marketing',
+    resp_marketing: 'Resp. marketing',
+    responsable_marketing: 'Resp. marketing',
+    marketing: 'Resp. marketing',
   };
   return labels[role] || roleName || 'Staff';
 }

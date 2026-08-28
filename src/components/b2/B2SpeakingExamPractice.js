@@ -20,6 +20,7 @@ import { withBasePath } from '@/lib/base-path';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { playExaminerAudio, stopExaminerAudio, pauseExaminerAudio, resumeExaminerAudio, isExaminerAudioPaused } from '@/utils/playExaminerAudio';
 import ExaminerVoiceVisualizer from '@/components/b2/ExaminerVoiceVisualizer';
+import DraloThinking from '@/components/dralo/DraloThinking';
 import SpeakingExerciseControls from '@/components/b2/SpeakingExerciseControls';
 import { partInfo as b2SpeakingPartInfo } from '@/data/part-info/b2-speaking';
 import {
@@ -2122,6 +2123,18 @@ function B2SpeakingPartSession({
                         : 'Feedback con Dralo'}
                 </button>
               </div>
+
+              {feedbackLoading ? (
+                <DraloThinking
+                  lang={lang}
+                  size={110}
+                  label={
+                    isEn
+                      ? 'Dralo is reviewing your answers'
+                      : 'Dralo está revisando tus respuestas'
+                  }
+                />
+              ) : null}
 
               {feedbackError ? (
                 <p className="levels-b2-writing-panel__error" role="alert">
