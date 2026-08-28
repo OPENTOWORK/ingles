@@ -18,11 +18,17 @@ const TABLE = 'blog_articles';
 const PUBLIC_LIST_FIELDS =
   'id, slug, title, excerpt, cover_image_url, content_type, created_at, updated_at, published_at';
 
-const PUBLIC_DETAIL_FIELDS =
-  'id, slug, title, excerpt, content, cover_image_url, og_image_url, seo_title, seo_description, content_type, faq_items, created_at, updated_at, published_at';
+const ADMIN_FIELDS_BASE =
+  'id, slug, title, excerpt, content, cover_image_url, og_image_url, seo_title, seo_description, content_type, published, author_id, created_at, updated_at, published_at';
 
-const ADMIN_FIELDS =
-  'id, slug, title, excerpt, content, cover_image_url, og_image_url, seo_title, seo_description, content_type, published, author_id, scheduled_publish_at, faq_items, created_at, updated_at, published_at';
+const ADMIN_FIELDS = `${ADMIN_FIELDS_BASE}, scheduled_publish_at, faq_items`;
+
+const LEGACY_ADMIN_FIELDS = ADMIN_FIELDS_BASE;
+
+const PUBLIC_DETAIL_FIELDS_BASE =
+  'id, slug, title, excerpt, content, cover_image_url, og_image_url, seo_title, seo_description, content_type, created_at, updated_at, published_at';
+
+const PUBLIC_DETAIL_FIELDS = `${PUBLIC_DETAIL_FIELDS_BASE}, faq_items`;
 
 export function slugifyBlogTitle(title = '') {
   return String(title)
@@ -85,6 +91,64 @@ async function tryPublishDueScheduledArticles() {
   } catch (err) {
     console.error('[blogArticles] publishDueScheduledArticles:', err);
   }
+}
+
+function isSchemaCacheColumnError(error) {
+  const msg = String(error?.message || error?.code || '').toLowerCase();
+  return (
+    error?.code === 'PGRST204' ||
+    error?.code === 'PGRST205' ||
+    msg.includes('schema cache') ||
+    msg.includes('faq_items') ||
+    msg.includes('scheduled_publish_at')
+  );
+}
+
+function stripOptionalBlogColumns(row) {
+  const next = { ...row };
+  delete next.faq_items;
+  delete next.scheduled_publish_at;
+  return next;
+}
+
+/** @param {import('@supabase/supabase-js').SupabaseClient} db */
+async function insertBlogArticleRow(db, row, selectFields = ADMIN_FIELDS) {
+  let attempt = row;
+  let fields = selectFields;
+
+  for (let i = 0; i < 2; i += 1) {
+    const { data, error } = await db.from(TABLE).insert(attempt).select(fields).single();
+    if (!error) return data;
+    if (i === 0 && isSchemaCacheColumnError(error)) {
+      attempt = stripOptionalBlogColumns(attempt);
+      fields = LEGACY_ADMIN_FIELDS;
+      console.warn('[blogArticles] reintentando insert sin faq_items/scheduled_publish_at');
+      continue;
+    }
+    throw new Error(error.message);
+  }
+
+  throw new Error('No se pudo guardar el artículo.');
+}
+
+/** @param {import('@supabase/supabase-js').SupabaseClient} db */
+async function updateBlogArticleRow(db, id, patch, selectFields = ADMIN_FIELDS) {
+  let attempt = patch;
+  let fields = selectFields;
+
+  for (let i = 0; i < 2; i += 1) {
+    const { data, error } = await db.from(TABLE).update(attempt).eq('id', id).select(fields).single();
+    if (!error) return data;
+    if (i === 0 && isSchemaCacheColumnError(error)) {
+      attempt = stripOptionalBlogColumns(attempt);
+      fields = LEGACY_ADMIN_FIELDS;
+      console.warn('[blogArticles] reintentando update sin faq_items/scheduled_publish_at');
+      continue;
+    }
+    throw new Error(error.message);
+  }
+
+  throw new Error('No se pudo actualizar el artículo.');
 }
 
 function resolvePublicationPatch(payload) {
@@ -204,12 +268,21 @@ export async function fetchPublishedBlogArticleBySlug(slug) {
   await tryPublishDueScheduledArticles();
   const db = getPublicDb();
 
-  const { data, error } = await db
+  let { data, error } = await db
     .from(TABLE)
     .select(PUBLIC_DETAIL_FIELDS)
     .eq('slug', slug)
     .eq('published', true)
     .maybeSingle();
+
+  if (error && isSchemaCacheColumnError(error)) {
+    ({ data, error } = await db
+      .from(TABLE)
+      .select(PUBLIC_DETAIL_FIELDS_BASE)
+      .eq('slug', slug)
+      .eq('published', true)
+      .maybeSingle());
+  }
 
   if (error) throw new Error(error.message);
   return data;
@@ -219,10 +292,18 @@ export async function fetchPublishedBlogArticleBySlug(slug) {
 export async function fetchAllBlogArticles(adminDb) {
   await tryPublishDueScheduledArticles();
   const db = getBlogAdminDb(adminDb);
-  const { data, error } = await db
+
+  let { data, error } = await db
     .from(TABLE)
     .select(ADMIN_FIELDS)
     .order('created_at', { ascending: false });
+
+  if (error && isSchemaCacheColumnError(error)) {
+    ({ data, error } = await db
+      .from(TABLE)
+      .select(LEGACY_ADMIN_FIELDS)
+      .order('created_at', { ascending: false }));
+  }
 
   if (error) throw new Error(error.message);
   return data || [];
@@ -236,9 +317,7 @@ export async function createBlogArticle(adminDb, payload) {
   row.author_id = payload.authorId || null;
   if (row.published) row.published_at = new Date().toISOString();
 
-  const { data, error } = await db.from(TABLE).insert(row).select(ADMIN_FIELDS).single();
-  if (error) throw new Error(error.message);
-  return data;
+  return insertBlogArticleRow(db, row);
 }
 
 /** @param {import('@supabase/supabase-js').SupabaseClient} adminDb */
@@ -257,9 +336,7 @@ export async function updateBlogArticle(adminDb, id, payload) {
 
   if (!Object.keys(patch).length) throw new Error('Nada que actualizar.');
 
-  const { data, error } = await db.from(TABLE).update(patch).eq('id', id).select(ADMIN_FIELDS).single();
-  if (error) throw new Error(error.message);
-  return data;
+  return updateBlogArticleRow(db, id, patch);
 }
 
 /** @param {import('@supabase/supabase-js').SupabaseClient} adminDb */

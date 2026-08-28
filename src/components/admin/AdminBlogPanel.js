@@ -24,6 +24,11 @@ import {
   normalizeBlogContentType,
 } from '@/lib/blogContentTypes';
 import { PUBLISH_MODE_DRAFT, PUBLISH_MODE_SCHEDULE, formatScheduledDateTime } from '@/lib/blogSchedule';
+import {
+  clearBlogEditorDraft,
+  loadBlogEditorDraft,
+  saveBlogEditorDraft,
+} from '@/lib/blogEditorDraft';
 import styles from './AdminBlogPanel.module.css';
 
 async function getAdminFetchHeaders() {
@@ -64,6 +69,7 @@ export default function AdminBlogPanel() {
   const [activeType, setActiveType] = useState(BLOG_TYPE_ARTICLE);
   const [form, setForm] = useState(emptyFormForType(BLOG_TYPE_ARTICLE));
   const [slugTouched, setSlugTouched] = useState(false);
+  const [draftRestore, setDraftRestore] = useState(null);
   const editorRef = useRef(null);
   const handledCreateParam = useRef(false);
   const handledIdParam = useRef('');
@@ -104,6 +110,17 @@ export default function AdminBlogPanel() {
       cancelled = true;
     };
   }, [router, load]);
+
+  useEffect(() => {
+    const id = searchParams.get('id');
+    if (id || form.id) return;
+    const saved = loadBlogEditorDraft();
+    if (saved?.form) setDraftRestore(saved);
+  }, [searchParams, form.id]);
+
+  useEffect(() => {
+    if (!form.id) saveBlogEditorDraft(form);
+  }, [form, form.id]);
 
   useEffect(() => {
     const id = searchParams.get('id');
@@ -151,6 +168,22 @@ export default function AdminBlogPanel() {
 
   const patchForm = (patch) => setForm((prev) => ({ ...prev, ...patch }));
 
+  const restoreDraft = () => {
+    if (!draftRestore?.form) return;
+    const mapped = { ...emptyFormForType(draftRestore.form.contentType), ...draftRestore.form };
+    setForm(mapped);
+    setActiveType(mapped.contentType);
+    setSlugTouched(Boolean(mapped.slug));
+    setDraftRestore(null);
+    setSuccess('Borrador recuperado. Revisa el contenido y vuelve a guardar.');
+    setError('');
+  };
+
+  const discardDraft = () => {
+    clearBlogEditorDraft();
+    setDraftRestore(null);
+  };
+
   const startCreate = (contentType) => {
     const nextType = normalizeBlogContentType(contentType);
     setActiveType(nextType);
@@ -158,6 +191,8 @@ export default function AdminBlogPanel() {
     setSlugTouched(false);
     setSuccess('');
     setError('');
+    clearBlogEditorDraft();
+    setDraftRestore(null);
     requestAnimationFrame(() => {
       editorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
@@ -226,6 +261,8 @@ export default function AdminBlogPanel() {
       }
 
       setSuccess(successMessage);
+      clearBlogEditorDraft();
+      setDraftRestore(null);
       if (!isEdit && json.article) {
         const mapped = mapArticleToClientForm(json.article);
         setForm(mapped);
@@ -236,7 +273,9 @@ export default function AdminBlogPanel() {
       }
       await load();
     } catch (e) {
-      setError(e.message || 'Error al guardar');
+      setError(
+        `${e.message || 'Error al guardar'} Tu contenido sigue en el editor; no se ha borrado.`,
+      );
     } finally {
       setSaving(false);
     }
@@ -353,6 +392,22 @@ export default function AdminBlogPanel() {
         <p className={styles.success} role="status">
           {success}
         </p>
+      ) : null}
+      {draftRestore?.form ? (
+        <div className={styles.draftRestore} role="status">
+          <p>
+            Tienes un borrador sin guardar
+            {draftRestore.form.title ? `: «${draftRestore.form.title}»` : ''}. ¿Quieres recuperarlo?
+          </p>
+          <div className={styles.draftRestoreActions}>
+            <button type="button" className={styles.primaryBtn} onClick={restoreDraft}>
+              Recuperar borrador
+            </button>
+            <button type="button" className={styles.secondaryBtn} onClick={discardDraft}>
+              Descartar
+            </button>
+          </div>
+        </div>
       ) : null}
 
       <div className={styles.layout}>

@@ -90,6 +90,32 @@
   margin-bottom: 1rem;
 }
 
+.draftRestore {
+  color: #9a3412;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.draftRestore p {
+  margin: 0 0 0.75rem;
+  line-height: 1.45;
+}
+
+.draftRestoreActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.draftRestoreActions .primaryBtn,
+.draftRestoreActions .secondaryBtn {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+}
+
 .layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);

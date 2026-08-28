@@ -54,7 +54,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 36500,
     descripcionCorta: 'Empieza a aprender inglés gratis.',
     descripcion:
-      'Nivel B2 disponible, 1 examen mensual, Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes. A2 y B1 próximamente.',
+      'Nivel B2 disponible, 1 examen de prueba, Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes. A2 y B1 próximamente.',
     badge: null,
     badgeVariant: null,
     recommended: false,
@@ -64,7 +64,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     highlights: [
       'Nivel B2',
       'A2 y B1: próximamente',
-      '1 examen mensual',
+      '1 examen de prueba',
       'Writing Correction: 1/mes',
       'Speaking Correction: 1/mes',
       '3 consultas Dralo Assistant al mes',
