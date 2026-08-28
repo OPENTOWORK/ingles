@@ -11,6 +11,7 @@ import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import BlogArticleEditor, { BLOG_EMPTY_FORM } from '@/components/admin/BlogArticleEditor';
 import {
   formatBlogDate,
+  getBlogArticleStatusLabel,
   mapArticleToClientForm,
   slugifyBlogTitle,
 } from '@/lib/blogArticles';
@@ -22,6 +23,7 @@ import {
   blogTypeMeta,
   normalizeBlogContentType,
 } from '@/lib/blogContentTypes';
+import { PUBLISH_MODE_DRAFT, PUBLISH_MODE_SCHEDULE, formatScheduledDateTime } from '@/lib/blogSchedule';
 import styles from './AdminBlogPanel.module.css';
 
 async function getAdminFetchHeaders() {
@@ -46,7 +48,6 @@ function emptyFormForType(contentType) {
   return {
     ...BLOG_EMPTY_FORM,
     contentType: type,
-    published: type === BLOG_TYPE_NEWS,
   };
 }
 
@@ -195,36 +196,43 @@ export default function AdminBlogPanel() {
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, { asDraft = false } = {}) => {
     event.preventDefault();
     setSaving(true);
     setError('');
     setSuccess('');
     const meta = blogTypeMeta(form.contentType);
+    const payload = asDraft ? { ...form, publishMode: PUBLISH_MODE_DRAFT } : form;
     try {
       const headers = await getAdminFetchHeaders();
       const isEdit = Boolean(form.id);
       const res = await fetch('/api/admin/blog', {
         method: isEdit ? 'PATCH' : 'POST',
         headers,
-        body: JSON.stringify(form),
+        body: JSON.stringify(isEdit ? { ...payload, id: form.id } : payload),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error || `No se pudo guardar el ${meta.label.toLowerCase()}.`);
 
-      const saved = json.article ? mapArticleToClientForm(json.article) : form;
-      setSuccess(
-        `${isEdit ? meta.updatedLabel : meta.createdLabel}${
-          saved.published
-            ? ' Ya es visible en /blog.'
-            : ' Guardada como borrador: no aparecerá en /blog hasta que marques «Publicar».'
-        }`,
-      );
+      const saved = json.article ? mapArticleToClientForm(json.article) : payload;
+      let successMessage = isEdit ? meta.updatedLabel : meta.createdLabel;
+
+      if (asDraft) {
+        successMessage += ' Guardado como borrador.';
+      } else if (saved.publishMode === PUBLISH_MODE_SCHEDULE && saved.scheduledPublishAt) {
+        successMessage += ` Programado para ${formatScheduledDateTime(saved.scheduledPublishAt)}.`;
+      } else if (saved.published) {
+        successMessage += ' Ya es visible en /blog.';
+      }
+
+      setSuccess(successMessage);
       if (!isEdit && json.article) {
         const mapped = mapArticleToClientForm(json.article);
         setForm(mapped);
         setActiveType(mapped.contentType);
         setSlugTouched(true);
+      } else if (isEdit && json.article) {
+        setForm(mapArticleToClientForm(json.article));
       }
       await load();
     } catch (e) {
@@ -275,6 +283,12 @@ export default function AdminBlogPanel() {
 
   const activeMeta = blogTypeMeta(activeType);
   const formMeta = blogTypeMeta(form.contentType);
+  const isScheduleMode = form.publishMode === PUBLISH_MODE_SCHEDULE;
+  const submitLabel = isScheduleMode
+    ? formMeta.scheduleActionLabel
+    : form.id
+      ? `Guardar y ${formMeta.publishActionLabel.toLowerCase()}`
+      : formMeta.publishActionLabel;
   const filteredItems = articles.filter(
     (item) => normalizeBlogContentType(item.content_type) === activeType,
   );
@@ -355,7 +369,15 @@ export default function AdminBlogPanel() {
 
           <div className={styles.actions}>
             <button type="submit" className={styles.primaryBtn} disabled={saving || uploading}>
-              {saving ? 'Guardando…' : form.id ? 'Guardar cambios' : formMeta.createLabel}
+              {saving ? 'Guardando…' : submitLabel}
+            </button>
+            <button
+              type="button"
+              className={styles.secondaryBtn}
+              disabled={saving || uploading}
+              onClick={(event) => handleSubmit(event, { asDraft: true })}
+            >
+              Guardar borrador
             </button>
             {form.id ? (
               <>
@@ -417,7 +439,10 @@ export default function AdminBlogPanel() {
                       <span className={styles.sidebarMeta}>
                         {formatBlogDate(article.created_at)}
                         {' · '}
-                        {article.published ? 'Publicado' : 'Borrador'}
+                        {getBlogArticleStatusLabel(article)}
+                        {article.scheduled_publish_at && !article.published
+                          ? ` · ${formatScheduledDateTime(article.scheduled_publish_at)}`
+                          : ''}
                       </span>
                     </span>
                   </button>

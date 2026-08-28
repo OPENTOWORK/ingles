@@ -328,3 +328,204 @@
   font-size: 0.9rem;
   line-height: 1.45;
 }
+
+.sectionTitle {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: #0f172a;
+}
+
+.sectionHint {
+  margin: 0 0 0.85rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.publicationCard,
+.faqCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1rem 1.05rem;
+  background: #fff;
+}
+
+.publishToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  padding: 0.2rem;
+  border-radius: 999px;
+  background: #fdf2f4;
+  border: 1px solid #f5c2cb;
+  margin-bottom: 0.9rem;
+}
+
+.publishToggleBtn,
+.publishToggleActive {
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.publishToggleActive {
+  background: #fff;
+  color: #be123c;
+  box-shadow: 0 1px 4px rgba(190, 18, 60, 0.12);
+}
+
+.schedulePanel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.scheduleRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 560px) {
+  .scheduleRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scheduleField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.quickAccess {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.quickAccessLabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.quickAccessBtns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.quickAccessBtn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fdf2f4;
+  color: #be123c;
+}
+
+.quickAccessBtn:hover {
+  background: #fce7f3;
+}
+
+.schedulePreview {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  background: #ecfdf5;
+  border: 1px solid #86efac;
+  color: #166534;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.schedulePreviewWarn {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  font-size: 0.88rem;
+}
+
+.publishNowHint {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.faqEmpty {
+  margin: 0 0 0.75rem;
+  color: #94a3b8;
+  font-size: 0.9rem;
+}
+
+.faqList {
+  list-style: none;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.faqItem {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.faqItemHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.faqItemHead strong {
+  font-size: 0.88rem;
+  color: #334155;
+}
+
+.faqRemoveBtn {
+  border: none;
+  background: transparent;
+  color: #be123c;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addFaqBtn {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fdf2f4;
+  color: #be123c;
+}
+
+.addFaqBtn:hover {
+  background: #fce7f3;
+}

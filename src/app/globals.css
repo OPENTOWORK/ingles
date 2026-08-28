@@ -18901,6 +18901,72 @@ body.dark .profile-collapse--open .profile-collapse__head {
   margin: 0 0 1.25rem;
 }
 
+/* Blog — preguntas frecuentes */
+.blog-faq {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.blog-faq__header h2 {
+  margin: 0 0 1rem;
+  font-size: 1.45rem;
+  color: #0f172a;
+}
+
+.blog-faq__list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.blog-faq__item {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.blog-faq__question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border: none;
+  background: #f8fafc;
+  font: inherit;
+  font-weight: 600;
+  color: #0f172a;
+  text-align: left;
+  cursor: pointer;
+}
+
+.blog-faq__icon {
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4f46e5;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.blog-faq__answer {
+  padding: 0 1.1rem 1rem;
+  color: #334155;
+  line-height: 1.65;
+}
+
+.blog-faq__answer p {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
 /* Blog — comentarios de usuarios */
 .blog-comments {
   margin-top: 3rem;

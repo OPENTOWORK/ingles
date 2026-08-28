@@ -3,6 +3,15 @@
 import { useRef, useState } from 'react';
 import BlogRichTextEditor from '@/components/admin/BlogRichTextEditor';
 import { upsertBlogSlotImage } from '@/lib/blogContent';
+import { createEmptyFaqItem } from '@/lib/blogFaq';
+import {
+  PUBLISH_MODE_NOW,
+  PUBLISH_MODE_SCHEDULE,
+  combineScheduleInputs,
+  formatScheduledDateTime,
+  getScheduleQuickPresets,
+  isFutureSchedule,
+} from '@/lib/blogSchedule';
 import {
   BLOG_TYPE_ARTICLE,
   BLOG_TYPE_NEWS,
@@ -23,6 +32,11 @@ const EMPTY_FORM = {
   seoDescription: '',
   contentType: BLOG_TYPE_ARTICLE,
   published: false,
+  publishMode: PUBLISH_MODE_NOW,
+  scheduledPublishAt: '',
+  scheduleDate: '',
+  scheduleTime: '09:00',
+  faqItems: [],
 };
 
 function CharCount({ value, max, label }) {
@@ -64,6 +78,40 @@ export default function BlogArticleEditor({
   const meta = blogTypeMeta(contentType);
   const isArticle = contentType === BLOG_TYPE_ARTICLE;
   const isNews = contentType === BLOG_TYPE_NEWS;
+  const publishMode = form.publishMode || PUBLISH_MODE_NOW;
+  const isScheduleMode = publishMode === PUBLISH_MODE_SCHEDULE;
+  const schedulePreviewIso = combineScheduleInputs(form.scheduleDate, form.scheduleTime);
+  const schedulePresets = getScheduleQuickPresets();
+
+  const updateFaqItem = (id, patch) => {
+    onChange({
+      faqItems: (form.faqItems || []).map((item) =>
+        item.id === id ? { ...item, ...patch } : item,
+      ),
+    });
+  };
+
+  const removeFaqItem = (id) => {
+    onChange({
+      faqItems: (form.faqItems || []).filter((item) => item.id !== id),
+    });
+  };
+
+  const addFaqItem = () => {
+    onChange({
+      faqItems: [...(form.faqItems || []), createEmptyFaqItem()],
+    });
+  };
+
+  const applySchedulePreset = (iso) => {
+    const date = new Date(iso);
+    onChange({
+      publishMode: PUBLISH_MODE_SCHEDULE,
+      scheduledPublishAt: iso,
+      scheduleDate: `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`,
+      scheduleTime: `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`,
+    });
+  };
 
   const handleInlineImagePick = () => {
     inlineImageInputRef.current?.click();
@@ -279,20 +327,162 @@ export default function BlogArticleEditor({
             />
           </div>
 
-          <label className={styles.checkbox}>
-            <input
-              type="checkbox"
-              checked={form.published}
-              onChange={(e) => onChange({ published: e.target.checked })}
-            />
-            {meta.publishLabel}
-          </label>
-          {!form.published ? (
-            <p className={styles.draftNotice} role="status">
-              Borrador: esta {meta.label.toLowerCase()} no se mostrará en /blog hasta que actives esta casilla y
-              guardes.
+          <section className={styles.publicationCard} aria-labelledby="blog-publication-title">
+            <h3 id="blog-publication-title" className={styles.sectionTitle}>
+              Publicación
+            </h3>
+            <p className={styles.sectionHint}>
+              El recuadro verde es solo una vista previa. Debes pulsar «
+              {isScheduleMode ? 'Programar publicación' : meta.publishActionLabel}» para guardarlo.
             </p>
-          ) : null}
+
+            <div className={styles.publishToggle} role="tablist" aria-label="Modo de publicación">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={!isScheduleMode}
+                className={!isScheduleMode ? styles.publishToggleActive : styles.publishToggleBtn}
+                onClick={() => onChange({ publishMode: PUBLISH_MODE_NOW })}
+              >
+                Publicar ahora
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={isScheduleMode}
+                className={isScheduleMode ? styles.publishToggleActive : styles.publishToggleBtn}
+                onClick={() => onChange({ publishMode: PUBLISH_MODE_SCHEDULE })}
+              >
+                Programar
+              </button>
+            </div>
+
+            {isScheduleMode ? (
+              <div className={styles.schedulePanel}>
+                <div className={styles.scheduleRow}>
+                  <label className={styles.scheduleField}>
+                    <span>Fecha</span>
+                    <input
+                      type="date"
+                      className={styles.input}
+                      value={form.scheduleDate || ''}
+                      onChange={(e) =>
+                        onChange({
+                          scheduleDate: e.target.value,
+                          scheduledPublishAt: combineScheduleInputs(
+                            e.target.value,
+                            form.scheduleTime || '09:00',
+                          ),
+                        })
+                      }
+                    />
+                  </label>
+                  <label className={styles.scheduleField}>
+                    <span>Hora</span>
+                    <input
+                      type="time"
+                      className={styles.input}
+                      value={form.scheduleTime || '09:00'}
+                      onChange={(e) =>
+                        onChange({
+                          scheduleTime: e.target.value,
+                          scheduledPublishAt: combineScheduleInputs(
+                            form.scheduleDate,
+                            e.target.value,
+                          ),
+                        })
+                      }
+                    />
+                  </label>
+                </div>
+
+                <div className={styles.quickAccess}>
+                  <span className={styles.quickAccessLabel}>Accesos rápidos</span>
+                  <div className={styles.quickAccessBtns}>
+                    {schedulePresets.map((preset) => (
+                      <button
+                        key={preset.id}
+                        type="button"
+                        className={styles.quickAccessBtn}
+                        onClick={() => applySchedulePreset(preset.iso)}
+                      >
+                        {preset.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {schedulePreviewIso && isFutureSchedule(schedulePreviewIso) ? (
+                  <p className={styles.schedulePreview} role="status">
+                    Programado para: {formatScheduledDateTime(schedulePreviewIso)}
+                  </p>
+                ) : (
+                  <p className={styles.schedulePreviewWarn} role="status">
+                    Elige una fecha y hora futuras para programar la publicación.
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className={styles.publishNowHint}>
+                Al guardar, el {meta.label.toLowerCase()} se publicará de inmediato en /blog.
+              </p>
+            )}
+          </section>
+
+          <section className={styles.faqCard} aria-labelledby="blog-faq-title">
+            <h3 id="blog-faq-title" className={styles.sectionTitle}>
+              Preguntas frecuentes
+            </h3>
+            <p className={styles.sectionHint}>
+              Opcional. Se muestran al final del {meta.label.toLowerCase()}, antes de los comentarios.
+              Si no añades ninguna, la sección no aparece.
+            </p>
+
+            {(form.faqItems || []).length === 0 ? (
+              <p className={styles.faqEmpty}>Todavía no hay preguntas frecuentes.</p>
+            ) : (
+              <ul className={styles.faqList}>
+                {(form.faqItems || []).map((item, index) => (
+                  <li key={item.id} className={styles.faqItem}>
+                    <div className={styles.faqItemHead}>
+                      <strong>Pregunta {index + 1}</strong>
+                      <button
+                        type="button"
+                        className={styles.faqRemoveBtn}
+                        onClick={() => removeFaqItem(item.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                    <label className={styles.label}>
+                      Pregunta
+                      <input
+                        type="text"
+                        className={styles.input}
+                        value={item.question}
+                        onChange={(e) => updateFaqItem(item.id, { question: e.target.value })}
+                        placeholder="¿Cómo puedo empezar a practicar con Dralo?"
+                      />
+                    </label>
+                    <label className={styles.label}>
+                      Respuesta
+                      <textarea
+                        rows={3}
+                        className={styles.textarea}
+                        value={item.answer}
+                        onChange={(e) => updateFaqItem(item.id, { answer: e.target.value })}
+                        placeholder="Escribe aquí la respuesta…"
+                      />
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <button type="button" className={styles.addFaqBtn} onClick={addFaqItem}>
+              + Añadir pregunta
+            </button>
+          </section>
         </div>
       ) : (
         <div className={styles.panel}>
