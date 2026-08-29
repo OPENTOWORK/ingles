@@ -63,7 +63,9 @@ function LoginPageInner() {
 
   useEffect(() => {
     const linkError = searchParams.get('error');
-    if (linkError) toast.error(LINK_ERRORS[linkError] || LINK_ERRORS.link_invalid);
+    if (linkError && linkError !== 'null') {
+      toast.error(LINK_ERRORS[linkError] || LINK_ERRORS.link_invalid);
+    }
   }, [searchParams]);
 
   useEffect(() => {

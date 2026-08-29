@@ -22,7 +22,9 @@ function ResetPasswordInner() {
 
   useEffect(() => {
     const linkError = searchParams.get('error');
-    if (linkError) setError(LINK_ERRORS[linkError] || LINK_ERRORS.link_invalid);
+    if (linkError && linkError !== 'null') {
+      setError(LINK_ERRORS[linkError] || LINK_ERRORS.link_invalid);
+    }
   }, [searchParams]);
 
   /** Correo nativo de Supabase: red de seguridad si nuestro envío no está disponible. */

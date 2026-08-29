@@ -48,6 +48,17 @@ export async function GET(request) {
     return redirect(failurePath(type, 'link_invalid'));
   }
 
+  // Recuperación de contraseña: el formulario llama a updateUser() en el
+  // navegador, que necesita una sesión accesible al SDK (no solo cookies
+  // httpOnly del servidor). Pasamos el token a /update-password para que el
+  // cliente lo canjee ahí.
+  if (tokenHash && type === 'recovery') {
+    const dest = new URL('/update-password', origin);
+    dest.searchParams.set('token_hash', tokenHash);
+    dest.searchParams.set('type', 'recovery');
+    return NextResponse.redirect(dest);
+  }
+
   /** @type {Array<{ name: string, value: string, options?: object }>} */
   const pendingCookies = [];
 
