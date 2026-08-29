@@ -198,7 +198,10 @@ export default function RegistroPage() {
       const server = await tryServerRegister();
 
       if (server.ok) {
-        toast.success(server.data?.message || 'Cuenta creada. Ya puedes iniciar sesión.');
+        toast.success(
+          server.data?.message ||
+            'Cuenta creada. Confirma tu email desde el correo que te hemos enviado para poder entrar.',
+        );
         router.push('/login');
         return;
       }

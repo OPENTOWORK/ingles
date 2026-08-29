@@ -38,17 +38,6 @@ function describeLinkError(code, description) {
   return 'El enlace no es válido o ha caducado. Pide uno nuevo desde «¿Has olvidado tu contraseña?».';
 }
 
-async function hasServerRecoverySession() {
-  try {
-    const res = await fetch('/api/auth/recovery-status', { credentials: 'include' });
-    if (!res.ok) return false;
-    const data = await res.json().catch(() => ({}));
-    return Boolean(data.hasSession);
-  } catch {
-    return false;
-  }
-}
-
 export default function UpdatePasswordPage() {
   const [newPassword, setNewPassword] = useState('');
   const [status, setStatus] = useState('checking');
@@ -56,16 +45,13 @@ export default function UpdatePasswordPage() {
   const [saving, setSaving] = useState(false);
   const router = useRouter();
   const resolvedRef = useRef(false);
-  /** Si la sesión solo vive en cookies httpOnly del servidor (enlaces antiguos). */
-  const serverSessionRef = useRef(false);
 
   const passwordChecks = PASSWORD_RULES.map((rule) => ({ ...rule, passed: rule.test(newPassword) }));
   const passwordIsStrong = passwordChecks.every((rule) => rule.passed);
 
-  const markReady = useCallback(({ serverBacked = false } = {}) => {
+  const markReady = useCallback(() => {
     if (resolvedRef.current) return;
     resolvedRef.current = true;
-    serverSessionRef.current = serverBacked;
     setStatus('ready');
     setError('');
     // Quitamos el token de la URL para que no quede en historial ni capturas.
@@ -111,20 +97,13 @@ export default function UpdatePasswordPage() {
       for (let attempt = 0; attempt < 20 && !cancelled && !resolvedRef.current; attempt += 1) {
         const { data } = await supabase.auth.getSession();
         if (data?.session) {
-          markReady({ serverBacked: false });
+          markReady();
           return;
         }
         await new Promise((resolve) => setTimeout(resolve, 150));
       }
 
       if (cancelled || resolvedRef.current) return;
-
-      // Enlaces antiguos: /auth/confirm ya canjeó el token en el servidor.
-      if (await hasServerRecoverySession()) {
-        markReady({ serverBacked: true });
-        return;
-      }
-
       resolvedRef.current = true;
       setStatus('invalid');
       setError(describeLinkError('', ''));
@@ -149,61 +128,25 @@ export default function UpdatePasswordPage() {
     setSaving(true);
 
     try {
-      if (serverSessionRef.current) {
-        const res = await fetch('/api/auth/update-password', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ password: newPassword }),
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) {
-          setError(
-            data.error ||
-              'No se pudo actualizar la contraseña. Pide un enlace nuevo e inténtalo otra vez.',
-          );
-          return;
-        }
-      } else {
-        const { data: sessionData } = await supabase.auth.getSession();
-        if (!sessionData?.session) {
-          if (await hasServerRecoverySession()) {
-            serverSessionRef.current = true;
-            const res = await fetch('/api/auth/update-password', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include',
-              body: JSON.stringify({ password: newPassword }),
-            });
-            const data = await res.json().catch(() => ({}));
-            if (!res.ok) {
-              setError(
-                data.error ||
-                  'No se pudo actualizar la contraseña. Pide un enlace nuevo e inténtalo otra vez.',
-              );
-              return;
-            }
-          } else {
-            setError(
-              'La sesión de recuperación ha caducado. Pide un enlace nuevo y ábrelo de inmediato.',
-            );
-            return;
-          }
-        } else {
-          const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
-          if (updateError) {
-            setError(
-              formatAuthError(
-                updateError,
-                'No se pudo actualizar la contraseña. Pide un enlace nuevo e inténtalo otra vez.',
-              ),
-            );
-            return;
-          }
-          await supabase.auth.signOut().catch(() => {});
-        }
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData?.session) {
+        setError('La sesión de recuperación ha caducado. Pide un enlace nuevo y ábrelo de inmediato.');
+        return;
       }
 
+      const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+      if (updateError) {
+        setError(
+          formatAuthError(
+            updateError,
+            'No se pudo actualizar la contraseña. Pide un enlace nuevo e inténtalo otra vez.',
+          ),
+        );
+        return;
+      }
+
+      // Cerramos la sesión de recuperación para que entren con la nueva contraseña.
+      await supabase.auth.signOut().catch(() => {});
       setStatus('updated');
       setTimeout(() => router.push('/login'), 2000);
     } finally {

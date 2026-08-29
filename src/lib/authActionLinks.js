@@ -70,40 +70,87 @@ export function buildAuthConfirmUrl({ origin, tokenHash, type, next }) {
   return url.toString();
 }
 
+/** El email ya tiene una cuenta confirmada (solo aplica a `type: 'signup'`). */
+export function isEmailAlreadyRegistered(error) {
+  if (!error) return false;
+  const message = String(error.message || error).toLowerCase();
+  return (
+    error.code === 'email_exists' ||
+    error.code === 'user_already_exists' ||
+    message.includes('already been registered') ||
+    message.includes('already exists') ||
+    message.includes('already registered')
+  );
+}
+
 /**
  * Genera un enlace de acción y lo devuelve apuntando a /auth/confirm.
  * `generateLink` no envía ningún correo: solo crea el token.
  *
+ * Con `type: 'signup'` además crea la cuenta sin confirmar. Si se omite
+ * `password`, sirve para reenviar la confirmación sin tocar la contraseña.
+ *
  * @param {import('@supabase/supabase-js').SupabaseClient} adminClient
- * @param {{ type: string, email: string, origin: string, next?: string }} params
- * @returns {Promise<{ url: string | null, error: string | null, userExists: boolean }>}
+ * @param {{ type: string, email: string, origin: string, next?: string, password?: string, data?: object }} params
+ * @returns {Promise<{ url: string | null, error: string | null, userExists: boolean, alreadyRegistered: boolean, user: object | null, rawError: object | null }>}
  */
-export async function generateAuthActionLink(adminClient, { type, email, origin, next }) {
+export async function generateAuthActionLink(
+  adminClient,
+  { type, email, origin, next, password, data: userMetadata },
+) {
+  const basePayload = {
+    type,
+    email,
+    ...(password ? { password } : {}),
+  };
+  const withMetadata = userMetadata ? { data: userMetadata } : {};
+
+  const fail = (error, extra = {}) => {
+    const message = String(error?.message || '').toLowerCase();
+    return {
+      url: null,
+      error: error?.message || 'No se pudo generar el enlace.',
+      userExists: !(
+        message.includes('user not found') || message.includes('no user') || error?.status === 404
+      ),
+      alreadyRegistered: isEmailAlreadyRegistered(error),
+      user: null,
+      rawError: error || null,
+      ...extra,
+    };
+  };
+
   try {
     let { data, error } = await adminClient.auth.admin.generateLink({
-      type,
-      email,
-      options: { redirectTo: new URL(sanitizeNextPath(next), origin).toString() },
+      ...basePayload,
+      options: {
+        ...withMetadata,
+        redirectTo: new URL(sanitizeNextPath(next), origin).toString(),
+      },
     });
 
     // Si la URL no está en la lista de «Redirect URLs» de Supabase, GoTrue
     // rechaza la petición. Nosotros construimos el enlace a mano desde el token,
     // así que reintentamos sin redirectTo antes de darlo por perdido.
     if (error && /redirect/i.test(String(error.message || ''))) {
-      ({ data, error } = await adminClient.auth.admin.generateLink({ type, email }));
+      ({ data, error } = await adminClient.auth.admin.generateLink({
+        ...basePayload,
+        options: withMetadata,
+      }));
     }
 
-    if (error) {
-      const message = String(error.message || '').toLowerCase();
-      const userExists = !(
-        message.includes('user not found') || message.includes('no user') || error.status === 404
-      );
-      return { url: null, error: error.message || 'No se pudo generar el enlace.', userExists };
-    }
+    if (error) return fail(error);
 
     const tokenHash = data?.properties?.hashed_token;
     if (tokenHash) {
-      return { url: buildAuthConfirmUrl({ origin, tokenHash, type, next }), error: null, userExists: true };
+      return {
+        url: buildAuthConfirmUrl({ origin, tokenHash, type, next }),
+        error: null,
+        userExists: true,
+        alreadyRegistered: false,
+        user: data?.user || null,
+        rawError: null,
+      };
     }
 
     // Sin `hashed_token` (versiones antiguas de GoTrue) queda el enlace nativo.
@@ -111,12 +158,11 @@ export async function generateAuthActionLink(adminClient, { type, email, origin,
       url: data?.properties?.action_link || null,
       error: data?.properties?.action_link ? null : 'El enlace generado no es válido.',
       userExists: true,
+      alreadyRegistered: false,
+      user: data?.user || null,
+      rawError: null,
     };
   } catch (err) {
-    return {
-      url: null,
-      error: err?.message || 'No se pudo contactar con el servicio de cuentas.',
-      userExists: true,
-    };
+    return fail(err);
   }
 }

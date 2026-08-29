@@ -71,18 +71,6 @@ function refundRate(ip) {
   if (b && b.n > 0) b.n -= 1;
 }
 
-function isDuplicateEmailError(error) {
-  if (!error) return false;
-  const msg = String(error.message || '').toLowerCase();
-  return (
-    error.code === 'email_exists' ||
-    error.code === 'user_already_exists' ||
-    msg.includes('already been registered') ||
-    msg.includes('already exists') ||
-    msg.includes('already registered')
-  );
-}
-
 /** Traduce los errores de Supabase Auth para que el usuario sepa qué corregir. */
 function translateAuthError(error) {
   const msg = String(error?.message || '').toLowerCase();
@@ -232,30 +220,24 @@ export async function POST(req) {
       accepted_at: new Date().toISOString(),
     };
 
-    let created;
-    let createError;
-    try {
-      ({ data: created, error: createError } = await adminClient.auth.admin.createUser({
-        email,
-        password,
-        email_confirm: true,
-        user_metadata: {
-          role: 'student',
-          ...(nombre ? { name: nombre } : {}),
-          legal_acceptance,
-        },
-      }));
-    } catch (err) {
-      console.error('api/auth/register createUser threw:', err);
-      refundRate(ip);
-      return NextResponse.json(
-        { error: 'No se pudo contactar con el servicio de cuentas. Inténtalo de nuevo.' },
-        { status: 503 }
-      );
-    }
+    // `generateLink` de tipo signup crea la cuenta SIN confirmar y devuelve el
+    // token en la misma llamada: nadie entra sin verificar antes su correo.
+    const origin = getSiteOrigin(req);
+    const signup = await generateAuthActionLink(adminClient, {
+      type: 'signup',
+      email,
+      password,
+      origin,
+      next: CONFIRMATION_NEXT_PATH,
+      data: {
+        role: 'student',
+        ...(nombre ? { name: nombre } : {}),
+        legal_acceptance,
+      },
+    });
 
-    if (createError || !created?.user?.id) {
-      if (isDuplicateEmailError(createError)) {
+    if (!signup.user?.id) {
+      if (signup.alreadyRegistered) {
         return NextResponse.json(
           {
             error:
@@ -266,10 +248,10 @@ export async function POST(req) {
         );
       }
       refundRate(ip);
-      return NextResponse.json({ error: translateAuthError(createError) }, { status: 400 });
+      return NextResponse.json({ error: translateAuthError(signup.rawError) }, { status: 400 });
     }
 
-    const userId = created.user.id;
+    const userId = signup.user.id;
 
     // A partir de aquí la cuenta ya existe: ningún fallo posterior puede
     // devolver error, o el usuario quedaría sin poder registrarse ni entrar.
@@ -281,7 +263,12 @@ export async function POST(req) {
       // Aquí solo rellenamos lo que el trigger no sabe, sin pisar sus valores.
       const rolId = await resolveStudentRoleId(adminClient);
 
-      const appUserRow = { id: userId, email, activo: true };
+      const appUserRow = {
+        id: userId,
+        email,
+        activo: true,
+        consentimiento_comercial: acceptedMarketing,
+      };
       if (nombre) appUserRow.nombre = nombre;
       if (rolId) appUserRow.rol_id = rolId;
 
@@ -318,21 +305,6 @@ export async function POST(req) {
     }
 
     try {
-      // La cuenta se crea ya confirmada para que nadie se quede fuera si el
-      // correo falla; el enlace de confirmación sirve para verificar el buzón
-      // y, de paso, entrar sin escribir la contraseña.
-      const origin = getSiteOrigin(req);
-      const confirmationLink = await generateAuthActionLink(adminClient, {
-        type: 'magiclink',
-        email,
-        origin,
-        next: CONFIRMATION_NEXT_PATH,
-      });
-
-      if (!confirmationLink.url) {
-        console.error('api/auth/register confirmation link:', confirmationLink.error);
-      }
-
       const dispatch = (triggerEvent, variables) =>
         withTimeout(
           dispatchAutomatedEmail({ adminClient, triggerEvent, to: email, variables }).catch((err) => {
@@ -344,13 +316,11 @@ export async function POST(req) {
 
       const [welcomeMail, confirmationMail] = await Promise.all([
         dispatch(AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED, { email, nombre }),
-        confirmationLink.url
-          ? dispatch(AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION, {
-              email,
-              nombre,
-              action_url: confirmationLink.url,
-            })
-          : Promise.resolve(null),
+        dispatch(AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION, {
+          email,
+          nombre,
+          action_url: signup.url,
+        }),
       ]);
 
       welcomeEmailSent = Boolean(welcomeMail?.sent || welcomeMail?.queued);
@@ -369,9 +339,10 @@ export async function POST(req) {
       userId,
       welcomeEmailSent,
       confirmationEmailSent,
+      requiresEmailConfirmation: true,
       message: confirmationEmailSent
-        ? 'Cuenta creada. Te hemos enviado un correo de bienvenida y otro para confirmar tu email. Ya puedes iniciar sesión.'
-        : 'Cuenta creada. Ya puedes iniciar sesión con tu email y contraseña.',
+        ? 'Cuenta creada. Te hemos enviado un correo para confirmar tu email: ábrelo antes de iniciar sesión.'
+        : 'Cuenta creada, pero no hemos podido enviar el correo de confirmación. Usa «Reenviar confirmación» en la pantalla de acceso.',
     });
   } catch (err) {
     console.error('api/auth/register:', err);
