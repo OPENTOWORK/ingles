@@ -164,8 +164,9 @@ export default function ProfilePage() {
   const router = useRouter();
   const { userRole, session: layoutSession } = useUserRole();
   const isStudent = usesStudentContentRestrictions(userRole);
-  const { applyLimits, progressTracking } = usePlanEntitlements();
+  const { applyLimits, progressTracking, loading: planLoading, planSlug } = usePlanEntitlements();
   const showProgressTracking = !applyLimits || progressTracking;
+  const showFreePlanUpgrade = !planLoading && applyLimits && !progressTracking;
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -884,6 +885,24 @@ export default function ProfilePage() {
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
         <div className="profile-tab-panels">
+          {showFreePlanUpgrade ? (
+            <section className="profile-plan-upgrade-card" aria-labelledby="profile-plan-upgrade-title">
+              <span className="profile-plan-upgrade-card__badge">
+                {(subscriptionPlan?.nombre || planSlug || 'free').toUpperCase()} plan
+              </span>
+              <h2 id="profile-plan-upgrade-title" className="profile-plan-upgrade-card__title">
+                Upgrade to unlock your full profile
+              </h2>
+              <p className="profile-plan-upgrade-card__text">
+                You&apos;re on the Free plan. Progress tracking, exam statistics and detailed
+                analytics are included in Plus and Premium.
+              </p>
+              <Link href="/precios" className="profile-plan-upgrade-card__cta">
+                View plans
+              </Link>
+            </section>
+          ) : null}
+
           {!isStudent ? (
             <ProfileCollapsibleSection title="Dralo IA — Experience">
               <DraloLevelProgressSection
@@ -910,6 +929,13 @@ export default function ProfilePage() {
                 <LevelsPartTimePerformancePanel userId={user?.id} />
               </ProfileCollapsibleSection>
             </>
+          ) : showFreePlanUpgrade ? (
+            <ProfileCollapsibleSection title="Progress tracking">
+              <p className="profile-plan-upgrade-hint">
+                Progress tracking is included in Plus and Premium plans.{' '}
+                <Link href="/precios">View plans</Link>
+              </p>
+            </ProfileCollapsibleSection>
           ) : null}
         </div>
       )}
@@ -1855,6 +1881,12 @@ function GlobalStyles() {
       .profile-plan-upgrade-hint{margin:0;padding:14px 16px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:0.9rem;line-height:1.5}
       .profile-plan-upgrade-hint a{color:#2563eb;font-weight:600;text-decoration:none}
       .profile-plan-upgrade-hint a:hover{text-decoration:underline}
+      .profile-plan-upgrade-card{margin:0 0 20px;padding:22px 24px;border-radius:16px;background:linear-gradient(135deg,#eff6ff 0%,#f5f3ff 100%);border:1px solid #c7d2fe;box-shadow:0 8px 24px rgba(79,70,229,.08)}
+      .profile-plan-upgrade-card__badge{display:inline-block;margin-bottom:10px;padding:4px 10px;border-radius:999px;background:#1e293b;color:#f8fafc;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+      .profile-plan-upgrade-card__title{margin:0 0 8px;font-size:1.35rem;line-height:1.3;color:#0f172a}
+      .profile-plan-upgrade-card__text{margin:0 0 16px;max-width:52ch;color:#475569;font-size:0.95rem;line-height:1.55}
+      .profile-plan-upgrade-card__cta{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:10px;background:linear-gradient(135deg,#2563eb 0%,#4f46e5 100%);color:#fff;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(37,99,235,.28)}
+      .profile-plan-upgrade-card__cta:hover{text-decoration:none;filter:brightness(1.05)}
       .form-hint{margin:0 0 12px;font-size:14px}
       .form-hint--error{color:#dc2626}
       .form-hint--success{color:#16a34a}
