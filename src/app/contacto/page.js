@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import { Clock3, Headphones, LifeBuoy, MessageSquareText } from 'lucide-react';
 import { supabase } from '@/utils/supabaseClient';
 import {
   formatActiveDuration,
@@ -16,6 +17,19 @@ import {
 } from '@/utils/contactModuleConfig';
 import PageHero from '@/components/PageHero';
 import InternalMessagesSection from '@/components/contact/InternalMessagesSection';
+
+function ticketStatusClass(status) {
+  switch (status) {
+    case 'Respondido':
+      return 'contact-status contact-status--answered';
+    case 'Cerrado':
+      return 'contact-status contact-status--closed';
+    case 'Sin responder':
+      return 'contact-status contact-status--pending';
+    default:
+      return 'contact-status contact-status--open';
+  }
+}
 
 export default function ContactPage() {
   const [session, setSession] = useState(null);
@@ -148,92 +162,172 @@ export default function ContactPage() {
       <PageHero
         eyebrow="Support & messaging"
         title="Contact"
-        description="Get in touch with support, send internal messages, or open a ticket — we're here to help with questions, issues, and platform guidance."
+        description="Get in touch with our support team, track your requests, or browse the FAQ for quick answers about accounts, exams, and billing."
         mascotVariant={8}
         mascotWidth={140}
-        accent="rose"
+        accent="ocean"
         stats={[
-          { value: '24/7', label: 'Ticket system' },
+          { value: '48h', label: 'Response time' },
           { value: 'FAQ', label: 'Self-service' },
         ]}
       />
 
       <InternalMessagesSection session={session} />
 
-      <section id="support-ticket-form" className="contact-section">
-        <h2>Support</h2>
-        <p>
-          Help desk and issue tracking so you can follow up on questions or problems reported
-          within the platform.
-        </p>
+      <section id="support-ticket-form" className="contact-section contact-section--support">
+        <div className="contact-section__head">
+          <div className="contact-section__icon" aria-hidden>
+            <Headphones size={22} strokeWidth={2} />
+          </div>
+          <div className="contact-section__copy">
+            <h2>Support</h2>
+            <p>
+              Open a ticket for questions, technical issues, or account help. We reply by email and
+              you can track progress here.
+            </p>
+          </div>
+        </div>
+
+        <div className="contact-meta">
+          <span className="contact-meta__item">
+            <Clock3 size={15} aria-hidden />
+            Typical reply within 48 hours
+          </span>
+          <span className="contact-meta__item">
+            <LifeBuoy size={15} aria-hidden />
+            Ticket tracking included
+          </span>
+        </div>
 
         <form onSubmit={handleTicketSubmit} className="contact-form">
           <div className="two-cols">
             <div className="form-group">
-              <label>Name</label>
-              <input className="form-input" name="name" value={ticketForm.name} onChange={handleTicketChange} required />
+              <label htmlFor="ticket-name">Name</label>
+              <input
+                id="ticket-name"
+                className="form-input"
+                name="name"
+                value={ticketForm.name}
+                onChange={handleTicketChange}
+                required
+                autoComplete="name"
+              />
             </div>
             <div className="form-group">
-              <label>Email</label>
-              <input className="form-input" type="email" name="email" value={ticketForm.email} onChange={handleTicketChange} required />
+              <label htmlFor="ticket-email">Email</label>
+              <input
+                id="ticket-email"
+                className="form-input"
+                type="email"
+                name="email"
+                value={ticketForm.email}
+                onChange={handleTicketChange}
+                required
+                autoComplete="email"
+              />
             </div>
           </div>
 
           <div className="form-group">
-            <label>Topic</label>
-            <select className="form-input" name="topic" value={ticketForm.topic} onChange={handleTicketChange}>
+            <label htmlFor="ticket-topic">Topic</label>
+            <select
+              id="ticket-topic"
+              className="form-input"
+              name="topic"
+              value={ticketForm.topic}
+              onChange={handleTicketChange}
+            >
               {FAQ_TOPICS.map((topic) => (
-                <option key={topic} value={topic}>{topic}</option>
+                <option key={topic} value={topic}>
+                  {topic}
+                </option>
               ))}
             </select>
           </div>
 
           <div className="form-group">
-            <input className="form-input" name="subject" value={ticketForm.subject} onChange={handleTicketChange} placeholder="Subject" required />
+            <label htmlFor="ticket-subject">Subject</label>
+            <input
+              id="ticket-subject"
+              className="form-input"
+              name="subject"
+              value={ticketForm.subject}
+              onChange={handleTicketChange}
+              placeholder="Brief summary of your request"
+              required
+            />
           </div>
+
           <div className="form-group">
-            <textarea className="form-textarea" name="message" value={ticketForm.message} onChange={handleTicketChange} placeholder="Describe your question or issue" rows={5} required />
+            <label htmlFor="ticket-message">Message</label>
+            <textarea
+              id="ticket-message"
+              className="form-textarea"
+              name="message"
+              value={ticketForm.message}
+              onChange={handleTicketChange}
+              placeholder="Describe your question or issue in as much detail as you can."
+              rows={6}
+              required
+            />
           </div>
+
           <button type="submit" className="submit-btn" disabled={ticketLoading}>
             {ticketLoading ? 'Sending…' : 'Open support ticket'}
           </button>
         </form>
 
         {session?.user?.id && (
-          <div className="tickets-table-wrap">
-            <h3>My tickets</h3>
-            <table className="tickets-table">
-              <thead>
-                <tr>
-                  <th className="tickets-table__col-id">Ticket #</th>
-                  <th>Subject</th>
-                  <th>Status</th>
-                  <th>Time open</th>
-                  <th>Created</th>
-                </tr>
-              </thead>
-              <tbody>
-                {myTickets.length === 0 ? (
-                  <tr>
-                    <td colSpan={5}>No tickets yet.</td>
-                  </tr>
-                ) : (
-                  myTickets.map((ticket) => (
-                    <tr key={ticket.id}>
-                      <td className="tickets-table__col-id">
-                        <span className="tickets-table__ticket-ref" title={ticket.id}>
-                          {formatTicketNumber(ticket.id)}
-                        </span>
-                      </td>
-                      <td>{ticket.asunto}</td>
-                      <td>{TICKET_STATUS_LABELS_EN[ticket.estado] || ticket.estado}</td>
-                      <td>{formatActiveDuration(ticket.creado_en, ticket.cerrado_en)}</td>
-                      <td>{formatTicketDateTime(ticket.creado_en, 'en-GB')}</td>
+          <div className="tickets-panel">
+            <div className="tickets-panel__head">
+              <h3>My tickets</h3>
+              <p>Track the status of your recent support requests.</p>
+            </div>
+
+            {myTickets.length === 0 ? (
+              <div className="tickets-empty" role="status">
+                <MessageSquareText size={28} strokeWidth={1.75} aria-hidden />
+                <strong>No tickets yet</strong>
+                <p>When you open a support ticket, it will appear here with its current status.</p>
+              </div>
+            ) : (
+              <div className="tickets-table-wrap">
+                <table className="tickets-table">
+                  <thead>
+                    <tr>
+                      <th className="tickets-table__col-id">Ticket #</th>
+                      <th>Subject</th>
+                      <th>Status</th>
+                      <th>Time open</th>
+                      <th>Created</th>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+                  </thead>
+                  <tbody>
+                    {myTickets.map((ticket) => (
+                      <tr key={ticket.id}>
+                        <td className="tickets-table__col-id">
+                          <span className="tickets-table__ticket-ref" title={ticket.id}>
+                            {formatTicketNumber(ticket.id)}
+                          </span>
+                        </td>
+                        <td className="tickets-table__subject">{ticket.asunto}</td>
+                        <td>
+                          <span className={ticketStatusClass(ticket.estado)}>
+                            {TICKET_STATUS_LABELS_EN[ticket.estado] || ticket.estado}
+                          </span>
+                        </td>
+                        <td className="tickets-table__muted">
+                          {formatActiveDuration(ticket.creado_en, ticket.cerrado_en)}
+                        </td>
+                        <td className="tickets-table__muted">
+                          {formatTicketDateTime(ticket.creado_en, 'en-GB')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
       </section>
@@ -266,42 +360,341 @@ function GlobalStyles() {
         color: var(--text);
         min-height: 100vh;
       }
-      .shell{min-height:100svh;max-width:1100px;margin:0 auto;padding:32px 20px}
-      .center{display:grid;place-items:center}
-      .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
-      .header p{margin:0;color:#666}
-      .header--mascot{display:flex;flex-wrap:wrap;align-items:center;gap:20px 32px;margin-bottom:8px}
-      .header__copy{flex:1 1 240px;min-width:0}
-      .header__mascot{flex:0 0 auto;line-height:0;filter:drop-shadow(0 8px 18px rgba(0,0,0,.12))}
-      h2{margin:0 0 8px}
-      h3{margin:0 0 12px}
-      .contact-section{margin:22px 0;padding:24px;border:1px solid #eaeaea;border-radius:16px;background:var(--card);box-shadow:0 2px 6px rgba(0,0,0,0.1)}
-      .contact-form{display:flex;flex-direction:column;gap:20px}
-      .two-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-      .inline-list{margin:8px 0 0 18px;padding:0;display:grid;gap:6px}
-      .form-group{display:flex;flex-direction:column}
-      .form-group label{font-size:14px;color:#444;margin-bottom:6px}
-      .form-input,.form-textarea{padding:12px 16px;font-size:16px;border:1px solid #eaeaea;border-radius:12px;background:white;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s}
-      .form-input:focus,.form-textarea:focus{border-color:#0070f3;box-shadow:0 0 0 6px rgba(0,112,243,.35)}
-      .form-textarea{resize:vertical;min-height:120px;font-family:inherit}
-      .tickets-table-wrap{margin-top:18px}
-      .tickets-table{width:100%;border-collapse:collapse}
-      .tickets-table th,.tickets-table td{border:1px solid #eaeaea;padding:10px;text-align:left;font-size:14px;vertical-align:middle}
-      .tickets-table th{background:#fafafa;font-weight:600}
-      .tickets-table__col-id{width:1%;white-space:nowrap}
-      .tickets-table__ticket-ref{display:inline-block;padding:4px 10px;border-radius:8px;background:#f1f5f9;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;font-weight:600;letter-spacing:0.04em;color:#334155}
-      .contact-faq-entry{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px 24px;margin:22px 0;padding:22px 24px;border:1px solid #dbeafe;border-radius:16px;background:linear-gradient(135deg,#eff6ff 0%,#fff 55%,#f8fafc 100%);box-shadow:0 4px 18px rgba(37,99,235,.08)}
-      .contact-faq-entry__copy{flex:1 1 240px;min-width:0}
-      .contact-faq-entry h2{margin:0 0 6px;font-size:1.25rem}
-      .contact-faq-entry p{margin:0;color:#64748b;font-size:0.92rem;line-height:1.5;max-width:36rem}
-      .contact-faq-entry__btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;background:#2563eb;color:#fff;font-size:0.95rem;font-weight:700;text-decoration:none;box-shadow:0 10px 24px rgba(37,99,235,.28);transition:transform .2s,box-shadow .2s}
-      .contact-faq-entry__btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(37,99,235,.35)}
-      .submit-btn{padding:14px 20px;background:#0070f3;color:white;font-weight:600;border:none;border-radius:12px;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 10px 24px rgba(0,112,243,.35)}
-      .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,112,243,.4)}
-      .submit-btn:disabled{opacity:0.7;cursor:not-allowed;transform:none}
-      .loader{width:48px;height:48px;border-radius:50%;border:3px solid rgba(0,112,243,.2);border-top-color:#0070f3;animation:spin 1s linear infinite}
-      @media (max-width: 768px){.two-cols{grid-template-columns:1fr}}
-      @keyframes spin{to{transform:rotate(360deg)}}
+      .shell {
+        min-height: 100svh;
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+      .center {
+        display: grid;
+        place-items: center;
+      }
+      .contact-section {
+        margin: 24px 0;
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+      }
+      .contact-section--support {
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      }
+      .contact-section__head {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .contact-section__icon {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+        color: #2563eb;
+        flex-shrink: 0;
+      }
+      .contact-section__copy h2 {
+        margin: 0 0 6px;
+        font-size: 1.45rem;
+        letter-spacing: -0.02em;
+        color: #0f172a;
+      }
+      .contact-section__copy p {
+        margin: 0;
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        max-width: 52rem;
+      }
+      .contact-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 14px;
+        margin-bottom: 22px;
+      }
+      .contact-meta__item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        color: #475569;
+        font-size: 0.82rem;
+        font-weight: 600;
+      }
+      .contact-form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 22px;
+        border-radius: 16px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+      }
+      .two-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .form-group label {
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: #64748b;
+      }
+      .form-input,
+      .form-textarea {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        background: #fff;
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .form-input:focus,
+      .form-textarea:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      }
+      .form-textarea {
+        resize: vertical;
+        min-height: 140px;
+        font-family: inherit;
+        line-height: 1.55;
+      }
+      .submit-btn {
+        align-self: flex-start;
+        min-width: 220px;
+        padding: 13px 22px;
+        background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+        color: #fff;
+        font-size: 0.95rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+      }
+      .submit-btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+        filter: brightness(1.03);
+        box-shadow: 0 14px 30px rgba(37, 99, 235, 0.34);
+      }
+      .submit-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none;
+      }
+      .tickets-panel {
+        margin-top: 24px;
+        padding-top: 22px;
+        border-top: 1px solid #e2e8f0;
+      }
+      .tickets-panel__head h3 {
+        margin: 0 0 4px;
+        font-size: 1.1rem;
+        color: #0f172a;
+      }
+      .tickets-panel__head p {
+        margin: 0 0 16px;
+        color: #64748b;
+        font-size: 0.9rem;
+      }
+      .tickets-empty {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 28px 20px;
+        border-radius: 14px;
+        border: 1px dashed #cbd5e1;
+        background: #f8fafc;
+        text-align: center;
+        color: #64748b;
+      }
+      .tickets-empty strong {
+        color: #334155;
+        font-size: 0.98rem;
+      }
+      .tickets-empty p {
+        margin: 0;
+        max-width: 28rem;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+      .tickets-table-wrap {
+        overflow-x: auto;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        background: #fff;
+      }
+      .tickets-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .tickets-table th,
+      .tickets-table td {
+        padding: 12px 14px;
+        text-align: left;
+        font-size: 0.88rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      .tickets-table th {
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      .tickets-table tbody tr:last-child td {
+        border-bottom: none;
+      }
+      .tickets-table tbody tr:hover {
+        background: #fafbff;
+      }
+      .tickets-table__col-id {
+        width: 1%;
+        white-space: nowrap;
+      }
+      .tickets-table__subject {
+        font-weight: 600;
+        color: #0f172a;
+      }
+      .tickets-table__muted {
+        color: #64748b;
+        white-space: nowrap;
+      }
+      .tickets-table__ticket-ref {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 8px;
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: #1d4ed8;
+      }
+      .contact-status {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        white-space: nowrap;
+      }
+      .contact-status--open {
+        background: #eff6ff;
+        color: #1d4ed8;
+      }
+      .contact-status--pending {
+        background: #fff7ed;
+        color: #c2410c;
+      }
+      .contact-status--answered {
+        background: #ecfdf5;
+        color: #047857;
+      }
+      .contact-status--closed {
+        background: #f1f5f9;
+        color: #475569;
+      }
+      .contact-faq-entry {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px 24px;
+        margin: 24px 0 0;
+        padding: 24px 26px;
+        border: 1px solid #dbeafe;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #eff6ff 0%, #fff 55%, #f8fafc 100%);
+        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+      }
+      .contact-faq-entry__copy {
+        flex: 1 1 240px;
+        min-width: 0;
+      }
+      .contact-faq-entry h2 {
+        margin: 0 0 6px;
+        font-size: 1.2rem;
+        color: #0f172a;
+      }
+      .contact-faq-entry p {
+        margin: 0;
+        color: #64748b;
+        font-size: 0.92rem;
+        line-height: 1.55;
+        max-width: 36rem;
+      }
+      .contact-faq-entry__btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 12px;
+        background: #2563eb;
+        color: #fff;
+        font-size: 0.92rem;
+        font-weight: 700;
+        text-decoration: none;
+        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .contact-faq-entry__btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 14px 30px rgba(37, 99, 235, 0.3);
+      }
+      .loader {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 3px solid rgba(37, 99, 235, 0.2);
+        border-top-color: #2563eb;
+        animation: spin 1s linear infinite;
+      }
+      @media (max-width: 768px) {
+        .two-cols {
+          grid-template-columns: 1fr;
+        }
+        .contact-section {
+          padding: 20px;
+        }
+        .contact-form {
+          padding: 16px;
+        }
+        .submit-btn {
+          width: 100%;
+          min-width: 0;
+        }
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     `}</style>
   );
 }
