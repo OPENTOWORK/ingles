@@ -929,13 +929,6 @@ export default function ProfilePage() {
                 <LevelsPartTimePerformancePanel userId={user?.id} />
               </ProfileCollapsibleSection>
             </>
-          ) : showFreePlanUpgrade ? (
-            <ProfileCollapsibleSection title="Progress tracking">
-              <p className="profile-plan-upgrade-hint">
-                Progress tracking is included in Plus and Premium plans.{' '}
-                <Link href="/precios">View plans</Link>
-              </p>
-            </ProfileCollapsibleSection>
           ) : null}
         </div>
       )}
@@ -1878,9 +1871,6 @@ function GlobalStyles() {
       .header h1{font-size:44px;margin:0 0 6px;color:var(--text)}
       .header p{margin:0;color:#666}
       .section-desc{margin:-8px 0 16px;color:#64748b;font-size:15px;line-height:1.5}
-      .profile-plan-upgrade-hint{margin:0;padding:14px 16px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;color:#475569;font-size:0.9rem;line-height:1.5}
-      .profile-plan-upgrade-hint a{color:#2563eb;font-weight:600;text-decoration:none}
-      .profile-plan-upgrade-hint a:hover{text-decoration:underline}
       .profile-plan-upgrade-card{margin:0 0 20px;padding:22px 24px;border-radius:16px;background:linear-gradient(135deg,#eff6ff 0%,#f5f3ff 100%);border:1px solid #c7d2fe;box-shadow:0 8px 24px rgba(79,70,229,.08)}
       .profile-plan-upgrade-card__badge{display:inline-block;margin-bottom:10px;padding:4px 10px;border-radius:999px;background:#1e293b;color:#f8fafc;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
       .profile-plan-upgrade-card__title{margin:0 0 8px;font-size:1.35rem;line-height:1.3;color:#0f172a}
