@@ -6,7 +6,7 @@ import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 
 /**
  * Server-side auth gate — same rules on mobile, tablet and desktop.
- * Only home, contact and login are public; everything else requires a session.
+ * Only home, contact, login and registration are public; everything else requires a session.
  */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;

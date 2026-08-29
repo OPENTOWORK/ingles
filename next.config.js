@@ -224,6 +224,11 @@ const nextConfig = {
       ...canonicalSectionRedirects,
       ...legacyLevelRedirects,
       {
+        source: '/register',
+        destination: '/registro/',
+        permanent: true,
+      },
+      {
         source: '/niveles/:cefr(a2|b1|b2|c1|c2)/speaking-lab/:path*',
         destination: '/exam-practice/speaking-lab/:cefr/:path*',
         permanent: true,
