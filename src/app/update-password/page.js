@@ -1,75 +1,202 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../utils/supabaseClient';
 import PasswordInput from '@/components/PasswordInput';
 
+const PASSWORD_RULES = [
+  { id: 'length', label: 'Al menos 8 caracteres', test: (p) => p.length >= 8 },
+  { id: 'upper', label: 'Una letra mayúscula', test: (p) => /[A-Z]/.test(p) },
+  { id: 'lower', label: 'Una letra minúscula', test: (p) => /[a-z]/.test(p) },
+  { id: 'digit', label: 'Un número', test: (p) => /\d/.test(p) },
+];
+
+/** Supabase manda los errores en la query o en el hash según el flujo. */
+function readLinkParams() {
+  if (typeof window === 'undefined') return { get: () => null };
+  const query = new URLSearchParams(window.location.search);
+  const hash = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+  return { get: (key) => query.get(key) || hash.get(key) };
+}
+
+function describeLinkError(code, description) {
+  const raw = `${code || ''} ${description || ''}`.toLowerCase();
+  if (raw.includes('expired')) {
+    return 'El enlace ha caducado. Los enlaces duran 1 hora; pide uno nuevo y ábrelo cuanto antes.';
+  }
+  if (raw.includes('already') || raw.includes('used')) {
+    return 'Ese enlace ya se había usado. Pide uno nuevo para crear tu contraseña.';
+  }
+  return 'El enlace no es válido o ha caducado. Pide uno nuevo desde «¿Has olvidado tu contraseña?».';
+}
+
 export default function UpdatePasswordPage() {
   const [newPassword, setNewPassword] = useState('');
-  const [updated, setUpdated] = useState(false);
-  const [canUpdatePassword, setCanUpdatePassword] = useState(true);
+  const [status, setStatus] = useState('checking');
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
   const router = useRouter();
+  const resolvedRef = useRef(false);
+
+  const passwordChecks = PASSWORD_RULES.map((rule) => ({ ...rule, passed: rule.test(newPassword) }));
+  const passwordIsStrong = passwordChecks.every((rule) => rule.passed);
+
+  const markReady = useCallback(() => {
+    if (resolvedRef.current) return;
+    resolvedRef.current = true;
+    setStatus('ready');
+    setError('');
+    // El token no debe quedarse en la barra de direcciones ni en el historial.
+    window.history.replaceState({}, '', '/update-password');
+  }, []);
 
   useEffect(() => {
-    const checkRecoverySession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setCanUpdatePassword(Boolean(session));
+    let cancelled = false;
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session && (event === 'PASSWORD_RECOVERY' || event === 'SIGNED_IN')) markReady();
+    });
+
+    const establishSession = async () => {
+      const { get } = readLinkParams();
+
+      const errorCode = get('error_code') || get('error');
+      if (errorCode) {
+        resolvedRef.current = true;
+        setStatus('invalid');
+        setError(describeLinkError(errorCode, get('error_description')));
+        return;
+      }
+
+      // /auth/confirm ya deja la sesión en cookies antes de redirigir aquí.
+      const { data: existing } = await supabase.auth.getSession();
+      if (existing?.session) {
+        markReady();
+        return;
+      }
+
+      const tokenHash = get('token_hash');
+      if (tokenHash) {
+        const { error: verifyError } = await supabase.auth.verifyOtp({
+          token_hash: tokenHash,
+          type: get('type') || 'recovery',
+        });
+        if (!cancelled && verifyError) {
+          resolvedRef.current = true;
+          setStatus('invalid');
+          setError(describeLinkError(verifyError.message, verifyError.message));
+          return;
+        }
+      }
+
+      const code = get('code');
+      if (code) {
+        // El cliente de navegador suele canjearlo solo; si ya lo hizo, esto falla
+        // sin consecuencias y el bucle de abajo encuentra la sesión igualmente.
+        await supabase.auth.exchangeCodeForSession(code).catch(() => {});
+      }
+
+      for (let attempt = 0; attempt < 20 && !cancelled && !resolvedRef.current; attempt += 1) {
+        const { data } = await supabase.auth.getSession();
+        if (data?.session) {
+          markReady();
+          return;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 150));
+      }
+
+      if (cancelled || resolvedRef.current) return;
+      resolvedRef.current = true;
+      setStatus('invalid');
+      setError(describeLinkError('', ''));
     };
-    checkRecoverySession();
-  }, []);
+
+    establishSession();
+
+    return () => {
+      cancelled = true;
+      listener?.subscription?.unsubscribe();
+    };
+  }, [markReady]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    if (!canUpdatePassword) {
-      alert('El enlace de recuperación no es válido o ha expirado. Solicita uno nuevo.');
-      return;
-    }
-
-    const passwordIsStrong =
-      newPassword.length >= 8 &&
-      /[A-Z]/.test(newPassword) &&
-      /[a-z]/.test(newPassword) &&
-      /\d/.test(newPassword);
+    setError('');
 
     if (!passwordIsStrong) {
-      alert('La nueva contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.');
+      setError('La contraseña debe cumplir los cuatro requisitos de abajo.');
       return;
     }
 
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword,
-    });
+    setSaving(true);
+    const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+    setSaving(false);
 
-    if (error) {
-      alert(error.message);
-    } else {
-      setUpdated(true);
-      setTimeout(() => router.push('/login'), 2000);
+    if (updateError) {
+      setError(updateError.message || 'No se pudo actualizar la contraseña.');
+      return;
     }
+
+    setStatus('updated');
+    // Cerramos la sesión de recuperación para que entren con la contraseña nueva.
+    await supabase.auth.signOut().catch(() => {});
+    setTimeout(() => router.push('/login'), 2000);
   };
 
   return (
     <main className="login-page" style={authMainStyle}>
       <h2 style={authHeadingStyle}>Nueva contraseña</h2>
 
-      {!updated ? (
+      {status === 'checking' && (
+        <p style={{ textAlign: 'center', color: '#64748b' }}>Comprobando el enlace…</p>
+      )}
+
+      {status === 'invalid' && (
+        <div>
+          <p className="login-page__error" style={errorStyle}>{error}</p>
+          <Link href="/reset-password" style={linkButtonStyle}>
+            Pedir un enlace nuevo
+          </Link>
+        </div>
+      )}
+
+      {status === 'ready' && (
         <form onSubmit={handleUpdate}>
-          {!canUpdatePassword && (
-            <p className="login-page__error" style={{ marginBottom: '1rem' }}>
-              Este enlace no es válido o ha expirado. Solicita uno nuevo desde &quot;¿Has olvidado tu contraseña?&quot;.
-            </p>
-          )}
-          <label style={authLabelStyle}>Introduce tu nueva contraseña</label>
+          {error && <p className="login-page__error" style={errorStyle}>{error}</p>}
+          <label htmlFor="new-password" style={authLabelStyle}>
+            Introduce tu nueva contraseña
+          </label>
           <PasswordInput
+            id="new-password"
             placeholder="••••••••"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             style={authInputStyle}
             autoComplete="new-password"
           />
-          <button type="submit" style={authButtonStyle}>Actualizar contraseña</button>
+          <ul style={rulesListStyle}>
+            {passwordChecks.map((rule) => (
+              <li key={rule.id} style={{ color: rule.passed ? '#15803d' : '#64748b' }}>
+                {rule.passed ? '✓' : '·'} {rule.label}
+              </li>
+            ))}
+          </ul>
+          <button
+            type="submit"
+            style={{
+              ...authButtonStyle,
+              backgroundColor: saving ? '#94a3b8' : authButtonStyle.backgroundColor,
+              cursor: saving ? 'not-allowed' : 'pointer',
+            }}
+            disabled={saving}
+          >
+            {saving ? 'Guardando…' : 'Actualizar contraseña'}
+          </button>
         </form>
-      ) : (
+      )}
+
+      {status === 'updated' && (
         <p className="login-page__success" style={{ textAlign: 'center' }}>
           Contraseña actualizada. Redirigiendo al login...
         </p>
@@ -117,4 +244,34 @@ const authButtonStyle = {
   border: 'none',
   borderRadius: '4px',
   cursor: 'pointer',
+};
+
+const errorStyle = {
+  marginBottom: '1rem',
+  padding: '0.75rem',
+  background: '#fef2f2',
+  border: '1px solid #fecaca',
+  borderRadius: '6px',
+  color: '#b91c1c',
+  fontSize: '0.9rem',
+  lineHeight: 1.5,
+};
+
+const linkButtonStyle = {
+  display: 'block',
+  textAlign: 'center',
+  padding: '0.75rem',
+  backgroundColor: '#0070f3',
+  color: 'white',
+  fontWeight: 'bold',
+  borderRadius: '4px',
+  textDecoration: 'none',
+};
+
+const rulesListStyle = {
+  listStyle: 'none',
+  padding: 0,
+  margin: '0.75rem 0 0',
+  fontSize: '0.85rem',
+  lineHeight: 1.7,
 };

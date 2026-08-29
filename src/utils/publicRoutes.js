@@ -11,6 +11,7 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/blog',
   /** OAuth / enlaces de recuperación de contraseña (no son contenido de la app). */
   '/auth/callback',
+  '/auth/confirm',
   '/reset-password',
   '/update-password',
 ];

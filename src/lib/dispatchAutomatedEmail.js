@@ -7,6 +7,14 @@ import {
   renderEmailTemplate,
 } from '@/lib/renderEmailTemplate';
 
+const CTA_LABEL_BY_TRIGGER = {
+  friend_invited: 'Aceptar invitación',
+  admin_user_created: 'Iniciar sesión',
+  staff_task_assigned: 'Ver tareas',
+  user_email_confirmation: 'Confirmar mi email',
+  password_reset_requested: 'Crear nueva contraseña',
+};
+
 const TABLE = 'soporte_correos_automaticos';
 const QUEUE_TABLE = 'soporte_correos_cola';
 const LOG_TABLE = 'soporte_correos_log';
@@ -77,14 +85,7 @@ async function sendNow(template, to, variables, adminClient, replyTo) {
   const text = renderEmailTemplate(template.cuerpo, merged).trim();
   const { html } = buildBrandedEmailFromPlainText(text, {
     preheader: subject,
-    ctaLabel:
-      template.trigger_event === 'friend_invited'
-        ? 'Aceptar invitación'
-        : template.trigger_event === 'admin_user_created'
-          ? 'Iniciar sesión'
-          : template.trigger_event === 'staff_task_assigned'
-            ? 'Ver tareas'
-            : 'Empezar a practicar',
+    ctaLabel: CTA_LABEL_BY_TRIGGER[template.trigger_event] || 'Empezar a practicar',
   });
 
   const result = await deliverTransactionalEmail({ to, subject, text, html, replyTo });

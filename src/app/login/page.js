@@ -30,6 +30,13 @@ async function resolvePostLoginPath(user, searchParams) {
   return getRedirectPathByUserId(user.id, user.email);
 }
 
+/** Mensajes de /auth/confirm cuando un enlace de correo no se puede canjear. */
+const LINK_ERRORS = {
+  link_expired: 'El enlace del correo ha caducado. Inicia sesión con tu contraseña o pide uno nuevo.',
+  link_used: 'Ese enlace ya se había usado. Inicia sesión con tu email y contraseña.',
+  link_invalid: 'El enlace del correo no es válido. Inicia sesión con tu email y contraseña.',
+};
+
 function LoginPageInner() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -53,6 +60,11 @@ function LoginPageInner() {
       cancelled = true;
     };
   }, [router, searchParams]);
+
+  useEffect(() => {
+    const linkError = searchParams.get('error');
+    if (linkError) toast.error(LINK_ERRORS[linkError] || LINK_ERRORS.link_invalid);
+  }, [searchParams]);
 
   useEffect(() => {
     if (lockoutUntil && Date.now() >= lockoutUntil) {

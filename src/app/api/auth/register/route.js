@@ -4,6 +4,9 @@ import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
+import { generateAuthActionLink, getSiteOrigin } from '@/lib/authActionLinks';
+
+export const maxDuration = 30;
 
 const supabaseUrl = getSupabaseUrl();
 const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
@@ -11,8 +14,15 @@ const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
 const MAX_BUCKETS = 5000;
-/** Espera máxima por el correo de bienvenida: nunca debe tumbar el registro. */
-const WELCOME_EMAIL_TIMEOUT_MS = 5000;
+/** Espera máxima por los correos: nunca deben tumbar el registro. */
+const SIGNUP_EMAIL_TIMEOUT_MS = 15000;
+/** Dónde aterriza quien pulsa el enlace de confirmación. */
+const CONFIRMATION_NEXT_PATH = '/perfil';
+
+/** El envío se hace dentro de la petición: en serverless nada sobrevive a la respuesta. */
+function withTimeout(promise, ms) {
+  return Promise.race([promise, new Promise((resolve) => setTimeout(() => resolve(null), ms))]);
+}
 
 /** @type {Map<string, { n: number, reset: number }>} */
 const ipBuckets = new Map();
@@ -264,6 +274,7 @@ export async function POST(req) {
     // A partir de aquí la cuenta ya existe: ningún fallo posterior puede
     // devolver error, o el usuario quedaría sin poder registrarse ni entrar.
     let welcomeEmailSent = false;
+    let confirmationEmailSent = false;
 
     try {
       // Un trigger de auth.users ya crea la fila de aplicación y el perfil.
@@ -307,33 +318,60 @@ export async function POST(req) {
     }
 
     try {
-      // El correo de bienvenida sale por SMTP/Resend y puede tardar; nunca debe
-      // agotar el tiempo de la función y dejar la cuenta creada sin respuesta.
-      const dispatch = dispatchAutomatedEmail({
-        adminClient,
-        triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
-        to: email,
-        variables: { email, nombre },
-      }).catch((err) => {
-        console.error('api/auth/register welcome email:', err);
-        return { sent: false, queued: false };
+      // La cuenta se crea ya confirmada para que nadie se quede fuera si el
+      // correo falla; el enlace de confirmación sirve para verificar el buzón
+      // y, de paso, entrar sin escribir la contraseña.
+      const origin = getSiteOrigin(req);
+      const confirmationLink = await generateAuthActionLink(adminClient, {
+        type: 'magiclink',
+        email,
+        origin,
+        next: CONFIRMATION_NEXT_PATH,
       });
 
-      const welcomeMail = await Promise.race([
-        dispatch,
-        new Promise((resolve) => setTimeout(() => resolve(null), WELCOME_EMAIL_TIMEOUT_MS)),
+      if (!confirmationLink.url) {
+        console.error('api/auth/register confirmation link:', confirmationLink.error);
+      }
+
+      const dispatch = (triggerEvent, variables) =>
+        withTimeout(
+          dispatchAutomatedEmail({ adminClient, triggerEvent, to: email, variables }).catch((err) => {
+            console.error(`api/auth/register ${triggerEvent}:`, err);
+            return null;
+          }),
+          SIGNUP_EMAIL_TIMEOUT_MS,
+        );
+
+      const [welcomeMail, confirmationMail] = await Promise.all([
+        dispatch(AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED, { email, nombre }),
+        confirmationLink.url
+          ? dispatch(AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION, {
+              email,
+              nombre,
+              action_url: confirmationLink.url,
+            })
+          : Promise.resolve(null),
       ]);
 
       welcomeEmailSent = Boolean(welcomeMail?.sent || welcomeMail?.queued);
+      confirmationEmailSent = Boolean(confirmationMail?.sent || confirmationMail?.queued);
+
+      if (!welcomeEmailSent) console.error('api/auth/register welcome email:', welcomeMail?.error);
+      if (!confirmationEmailSent) {
+        console.error('api/auth/register confirmation email:', confirmationMail?.error);
+      }
     } catch (err) {
-      console.error('api/auth/register welcome email:', err);
+      console.error('api/auth/register signup emails:', err);
     }
 
     return NextResponse.json({
       ok: true,
       userId,
       welcomeEmailSent,
-      message: 'Cuenta creada. Ya puedes iniciar sesión con tu email y contraseña.',
+      confirmationEmailSent,
+      message: confirmationEmailSent
+        ? 'Cuenta creada. Te hemos enviado un correo de bienvenida y otro para confirmar tu email. Ya puedes iniciar sesión.'
+        : 'Cuenta creada. Ya puedes iniciar sesión con tu email y contraseña.',
     });
   } catch (err) {
     console.error('api/auth/register:', err);

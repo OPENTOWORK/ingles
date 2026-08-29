@@ -42,9 +42,11 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
     const url = extractUrl(block);
     if (url) {
       ctaUrl = url;
-      if (/invita|invit/i.test(text)) ctaLabel = 'Aceptar invitación';
-      else if (/contraseña|cuenta ha sido creada/i.test(text)) ctaLabel = 'Iniciar sesión';
-      else if (/registr/i.test(text)) ctaLabel = 'Empezar a practicar';
+      if (!options.ctaLabel) {
+        if (/invita|invit/i.test(text)) ctaLabel = 'Aceptar invitación';
+        else if (/contraseña|cuenta ha sido creada/i.test(text)) ctaLabel = 'Iniciar sesión';
+        else if (/registr/i.test(text)) ctaLabel = 'Empezar a practicar';
+      }
       continue;
     }
 
