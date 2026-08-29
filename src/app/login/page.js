@@ -173,7 +173,14 @@ function LoginPageInner() {
 
       if (!res.ok) {
         setResendState('idle');
-        toast.error(data.error || 'No se pudo reenviar el correo. Inténtalo en unos minutos.');
+        if (res.status === 429 || data.code === 'RATE_LIMIT') {
+          toast.error(
+            data.error ||
+              'Has pedido demasiados correos seguidos. Espera unos minutos y revisa spam.',
+          );
+        } else {
+          toast.error(data.error || 'No se pudo reenviar el correo. Inténtalo en unos minutos.');
+        }
         return;
       }
 
@@ -237,6 +244,10 @@ function LoginPageInner() {
           <p style={{ margin: '0 0 0.75rem' }}>
             Enviamos un enlace de confirmación a <strong>{unconfirmedEmail}</strong>. Ábrelo y
             podrás iniciar sesión. Mira también en spam o promociones.
+          </p>
+          <p style={{ margin: '0 0 0.75rem', fontSize: '0.85rem' }}>
+            Si ya abriste el enlace, pulsa <strong>Login</strong> de nuevo: no hace falta reenviar
+            el correo.
           </p>
           <button
             type="button"
