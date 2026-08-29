@@ -4,7 +4,7 @@ import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
-import { generateAuthActionLink, getSiteOrigin } from '@/lib/authActionLinks';
+import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
 
 export const maxDuration = 30;
 
@@ -222,7 +222,7 @@ export async function POST(req) {
 
     // `generateLink` de tipo signup crea la cuenta SIN confirmar y devuelve el
     // token en la misma llamada: nadie entra sin verificar antes su correo.
-    const origin = getSiteOrigin(req);
+    const origin = getPublicSiteOrigin(req);
     const signup = await generateAuthActionLink(adminClient, {
       type: 'signup',
       email,

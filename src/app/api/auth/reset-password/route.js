@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
-import { generateAuthActionLink, getSiteOrigin } from '@/lib/authActionLinks';
+import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 
@@ -89,7 +89,7 @@ export async function POST(req) {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  const origin = getSiteOrigin(req);
+  const origin = getPublicSiteOrigin(req);
   const link = await generateAuthActionLink(adminClient, {
     type: 'recovery',
     email,

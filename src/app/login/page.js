@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId, getRedirectPathByRoleName, peekCachedRoleName } from '@/utils/authRoles';
 import { completeSignIn } from '@/utils/completeSignIn';
+import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { clearLogoutPending } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import toast from 'react-hot-toast';
@@ -154,9 +155,7 @@ function LoginPageInner() {
 
     const [path] = await Promise.all([
       resolvePostLoginPath(result.user, searchParams),
-      import('@/utils/ensureAppUserProfile').then(({ ensureAppUserProfile }) =>
-        ensureAppUserProfile().catch(() => {}),
-      ),
+      ensureAppUserProfile().catch(() => {}),
     ]);
 
     window.location.replace(path);

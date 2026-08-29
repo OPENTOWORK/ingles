@@ -3,6 +3,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId } from '@/utils/authRoles';
+import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import toast from 'react-hot-toast';
 
 function AuthCallbackInner() {
@@ -57,7 +58,6 @@ function AuthCallbackInner() {
 
         // Quien entra por Google no pasa por /registro, así que su fila de
         // aplicación puede no existir todavía.
-        const { ensureAppUserProfile } = await import('@/utils/ensureAppUserProfile');
         await ensureAppUserProfile().catch(() => {});
 
         const redirectPath = await getRedirectPathByUserId(user?.id, user?.email);

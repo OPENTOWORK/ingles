@@ -19,12 +19,24 @@ export const AUTH_CONFIRM_TYPES = [
 
 const FALLBACK_SITE_URL = 'https://www.dralo.es';
 
+function isPrivateHost(hostname) {
+  const host = String(hostname || '').toLowerCase();
+  return (
+    !host ||
+    host === 'localhost' ||
+    host === '127.0.0.1' ||
+    host === '0.0.0.0' ||
+    host.endsWith('.local')
+  );
+}
+
 function normalizeOrigin(value) {
   const trimmed = String(value || '').trim().replace(/\/+$/, '');
   if (!trimmed) return '';
   try {
     const url = new URL(trimmed);
     if (url.protocol !== 'http:' && url.protocol !== 'https:') return '';
+    if (isPrivateHost(url.hostname)) return '';
     return url.origin;
   } catch {
     return '';
@@ -51,6 +63,31 @@ export function getSiteOrigin(req) {
   return (
     normalizeOrigin(process.env.NEXT_PUBLIC_APP_URL) ||
     normalizeOrigin(process.env.NEXT_PUBLIC_SITE_URL) ||
+    FALLBACK_SITE_URL
+  );
+}
+
+/**
+ * Origen para enlaces que van dentro de un correo.
+ *
+ * Nunca debe ser localhost: el alumno abre el mail desde el móvil y ese host
+ * apunta a su propio dispositivo, no a tu máquina de desarrollo.
+ * @param {Request} [req]
+ */
+export function getPublicSiteOrigin(req) {
+  const forwardedHost = req?.headers?.get?.('x-forwarded-host') || req?.headers?.get?.('host') || '';
+  let fromRequest = '';
+  if (forwardedHost) {
+    const proto = req?.headers?.get?.('x-forwarded-proto') || 'https';
+    fromRequest = normalizeOrigin(
+      `${proto.split(',')[0].trim()}://${forwardedHost.split(',')[0].trim()}`,
+    );
+  }
+
+  return (
+    normalizeOrigin(process.env.NEXT_PUBLIC_APP_URL) ||
+    normalizeOrigin(process.env.NEXT_PUBLIC_SITE_URL) ||
+    fromRequest ||
     FALLBACK_SITE_URL
   );
 }
