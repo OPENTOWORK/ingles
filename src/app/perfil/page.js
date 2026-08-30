@@ -123,6 +123,8 @@ export default function ProfilePage() {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteMessage, setInviteMessage] = useState('');
   const [invitingFriend, setInvitingFriend] = useState(false);
+  const [referralInvitations, setReferralInvitations] = useState([]);
+  const [loadingReferrals, setLoadingReferrals] = useState(false);
   const [deleteCode, setDeleteCode] = useState('');
   const [deleteFlowActive, setDeleteFlowActive] = useState(false);
   const [deleteCodeSentAt, setDeleteCodeSentAt] = useState(null);
@@ -656,6 +658,44 @@ export default function ProfilePage() {
     setSaving(false);
   };
 
+  const loadReferralInvitations = async () => {
+    if (!user?.id) return;
+    setLoadingReferrals(true);
+    try {
+      const accessToken =
+        layoutSession?.access_token ||
+        (await supabase.auth.getSession()).data?.session?.access_token;
+      if (!accessToken) return;
+
+      const response = await fetch('/api/referrals', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (!response.ok) return;
+      const payload = await response.json();
+      setReferralInvitations(Array.isArray(payload?.invitations) ? payload.invitations : []);
+    } catch (error) {
+      console.error('Error loading referral invitations:', error);
+    } finally {
+      setLoadingReferrals(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!user?.id) return;
+    loadReferralInvitations();
+  }, [user?.id, layoutSession?.access_token]);
+
+  const referralStatusLabel = (status) => {
+    switch (status) {
+      case 'paid':
+        return 'Paid plan';
+      case 'registered':
+        return 'Registered';
+      default:
+        return 'Invitation sent';
+    }
+  };
+
   const handleInviteFriend = async () => {
     const recipient = inviteEmail.trim().toLowerCase();
     if (!recipient || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
@@ -718,6 +758,7 @@ export default function ProfilePage() {
       }
       setInviteEmail('');
       setInviteMessage('');
+      await loadReferralInvitations();
     } catch (error) {
       console.error('Error inviting friend:', error);
       alert(error.message || 'Error sending invitation.');
@@ -1294,6 +1335,47 @@ export default function ProfilePage() {
             <button type="button" onClick={handleInviteFriend} className="action-btn" disabled={invitingFriend}>
               {invitingFriend ? 'Sending invitation...' : 'Send invitation'}
             </button>
+
+            <div className="profile-referrals">
+              <h4 className="profile-referrals__title">Your invitations</h4>
+              {loadingReferrals ? (
+                <p className="profile-referrals__empty">Loading invitations…</p>
+              ) : referralInvitations.length === 0 ? (
+                <p className="profile-referrals__empty">
+                  You have not invited anyone yet. When a friend registers and joins a paid plan, it will appear here.
+                </p>
+              ) : (
+                <ul className="profile-referrals__list">
+                  {referralInvitations.map((invitation) => (
+                    <li key={invitation.id} className="profile-referrals__item">
+                      <div className="profile-referrals__main">
+                        <span className="profile-referrals__email">{invitation.email}</span>
+                        <span
+                          className={`profile-referrals__status profile-referrals__status--${invitation.status}`}
+                        >
+                          {referralStatusLabel(invitation.status)}
+                        </span>
+                      </div>
+                      {invitation.paidAt ? (
+                        <p className="profile-referrals__meta">
+                          Joined a paid plan
+                          {invitation.paidPlan ? ` (${invitation.paidPlan.toUpperCase()})` : ''} on{' '}
+                          {new Date(invitation.paidAt).toLocaleDateString()}
+                        </p>
+                      ) : invitation.registeredAt ? (
+                        <p className="profile-referrals__meta">
+                          Registered on {new Date(invitation.registeredAt).toLocaleDateString()} — waiting for paid plan
+                        </p>
+                      ) : invitation.sentAt ? (
+                        <p className="profile-referrals__meta">
+                          Invited on {new Date(invitation.sentAt).toLocaleDateString()}
+                        </p>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection

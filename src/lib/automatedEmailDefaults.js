@@ -157,7 +157,7 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
       '',
       '{{invite_message}}',
       '',
-      '{{app_url}}',
+      '{{invite_url}}',
       '',
       'Empieza con Exam practice, explora Dralo AI para writing y speaking, y sigue tu progreso desde tu perfil.',
       '',

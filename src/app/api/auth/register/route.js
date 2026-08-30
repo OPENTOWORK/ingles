@@ -5,6 +5,7 @@ import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
+import { markReferralRegistered } from '@/lib/referrals';
 
 export const maxDuration = 30;
 
@@ -175,6 +176,7 @@ export async function POST(req) {
     const acceptedTerms = Boolean(body?.acceptedTerms);
     const acceptedDataProtection = Boolean(body?.acceptedDataProtection);
     const acceptedMarketing = Boolean(body?.acceptedMarketing);
+    const referralToken = String(body?.referralToken || body?.ref || '').trim();
 
     if (!acceptedTerms || !acceptedDataProtection) {
       return NextResponse.json(
@@ -302,6 +304,16 @@ export async function POST(req) {
       }
     } catch (err) {
       console.error('api/auth/register post-creación:', err);
+    }
+
+    try {
+      await markReferralRegistered({
+        userId,
+        email,
+        referralToken: referralToken || undefined,
+      });
+    } catch (err) {
+      console.error('api/auth/register referral:', err);
     }
 
     try {

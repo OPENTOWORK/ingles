@@ -14,6 +14,7 @@ import {
   subscriptionPeriodEndIso,
   subscriptionPriceId,
 } from './server';
+import { isPaidPlanSlug, markReferralPaid } from '@/lib/referrals';
 
 export const SUBSCRIPTIONS_TABLE = 'suscripciones';
 
@@ -133,6 +134,14 @@ export async function syncSubscriptionFromStripe(subscription, { userId: knownUs
   if (error) throw error;
 
   await syncAuthPlanMetadata(db, userId, active && planSlug ? planSlug : 'free');
+
+  if (active && isPaidPlanSlug(planSlug)) {
+    try {
+      await markReferralPaid({ userId, planSlug });
+    } catch (err) {
+      console.error('[subscriptions] referral paid', err);
+    }
+  }
 
   return { userId, planSlug: row.plan_id, status, active };
 }

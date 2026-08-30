@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
+import { getPublicSiteOrigin } from '@/lib/authActionLinks';
+import { recordReferralInvitation } from '@/lib/referrals';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const supabaseUrl = getSupabaseUrl();
@@ -46,10 +48,16 @@ export async function POST(req) {
       authData.user.email?.split('@')[0] ||
       'Un amigo';
     const senderEmail = authData.user.email?.trim() || undefined;
-    const appUrl =
-      process.env.NEXT_PUBLIC_APP_URL?.trim() ||
-      process.env.NEXT_PUBLIC_SITE_URL?.trim() ||
-      'https://dralo.es';
+    const origin = getPublicSiteOrigin(req);
+
+    const referral = await recordReferralInvitation({
+      inviterUserId: authData.user.id,
+      inviteeEmail: to,
+      customMessage,
+      origin,
+    });
+
+    const inviteUrl = referral.inviteUrl || `${origin.replace(/\/$/, '')}/registro`;
 
     const adminClient = supabaseServiceRoleKey
       ? createClient(supabaseUrl, supabaseServiceRoleKey)
@@ -62,7 +70,8 @@ export async function POST(req) {
       replyTo: senderEmail,
       variables: {
         sender_name: senderName,
-        app_url: appUrl.replace(/\/$/, ''),
+        app_url: origin.replace(/\/$/, ''),
+        invite_url: inviteUrl,
         invite_message: customMessage ? `Mensaje personal: ${customMessage}` : '',
       },
     });

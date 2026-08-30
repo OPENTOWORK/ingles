@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
@@ -26,6 +26,17 @@ export default function RegistroPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showPasswordRules, setShowPasswordRules] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const ref = new URLSearchParams(window.location.search).get('ref')?.trim();
+    if (!ref) return;
+    try {
+      sessionStorage.setItem('dralo_referral_token', ref);
+    } catch {
+      /* ignore */
+    }
+  }, []);
 
   const passwordChecks = PASSWORD_RULES.map((rule) => ({
     ...rule,
@@ -115,6 +126,13 @@ export default function RegistroPage() {
     };
 
     const tryServerRegister = async () => {
+      const storedRef =
+        (typeof window !== 'undefined'
+          ? new URLSearchParams(window.location.search).get('ref')?.trim() ||
+            sessionStorage.getItem('dralo_referral_token')?.trim() ||
+            ''
+          : '');
+
       let res;
       try {
         res = await fetch('/api/auth/register', {
@@ -127,6 +145,7 @@ export default function RegistroPage() {
             acceptedTerms: true,
             acceptedDataProtection: true,
             acceptedMarketing,
+            referralToken: storedRef || undefined,
           }),
         });
       } catch {

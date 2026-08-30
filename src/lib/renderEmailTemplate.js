@@ -32,6 +32,7 @@ export function buildDefaultEmailVariables(extra = {}) {
     message: '',
     sender_name: '',
     invite_message: '',
+    invite_url: loginUrl ? `${loginUrl}/registro` : '',
     creator_name: '',
     task_titulo: '',
     task_prioridad: '',
