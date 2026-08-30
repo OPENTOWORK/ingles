@@ -1,77 +1,42 @@
 /**
- * Sincroniza STRIPE_PRICE_* y STRIPE_PORTAL_CONFIGURATION_ID de .env.local a Vercel.
+ * Sincroniza todas las variables Stripe de .env.local a Vercel (production).
  * Uso: npm run stripe:sync-vercel
  */
-import fs from 'fs';
-import path from 'path';
-import { spawnSync } from 'child_process';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT = path.join(__dirname, '..');
-const ENV_FILE = path.join(ROOT, '.env.local');
-
-const KEYS = [
-  'STRIPE_PRICE_PREMIUM_MONTHLY',
-  'STRIPE_PRICE_PREMIUM_YEARLY',
-  'STRIPE_PRICE_PRO_MONTHLY',
-  'STRIPE_PRICE_PRO_YEARLY',
-  'STRIPE_PORTAL_CONFIGURATION_ID',
-];
-
-function loadEnvLocal() {
-  if (!fs.existsSync(ENV_FILE)) return {};
-  const out = {};
-  for (const line of fs.readFileSync(ENV_FILE, 'utf8').split('\n')) {
-    const t = line.trim();
-    if (!t || t.startsWith('#')) continue;
-    const m = t.match(/^([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/);
-    if (!m) continue;
-    out[m[1]] = m[2].trim().replace(/^["']|["']$/g, '');
-  }
-  return out;
-}
-
-function addEnv(name, value, env = 'production') {
-  const child = spawnSync(
-    'npx',
-    ['vercel@latest', 'env', 'add', name, env, '--force', '--yes'],
-    {
-      cwd: ROOT,
-      input: value,
-      encoding: 'utf8',
-      stdio: ['pipe', 'pipe', 'pipe'],
-      shell: true,
-    },
-  );
-  if (child.status === 0) {
-    console.log(`OK  ${name} → ${env}`);
-    return true;
-  }
-  const err = (child.stderr || child.stdout || '').trim();
-  console.error(`FAIL ${name}:`, err.slice(0, 300));
-  return false;
-}
+import {
+  STRIPE_VERCEL_KEYS,
+  addVercelEnv,
+  assertLiveStripeKey,
+  loadEnvLocal,
+} from './stripe-vercel-env.mjs';
 
 const local = loadEnvLocal();
-const stripeKey = local.STRIPE_SECRET_KEY?.trim() || '';
-if (stripeKey.startsWith('sk_test_')) {
+assertLiveStripeKey(local.STRIPE_SECRET_KEY);
+
+const publishable = local.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY?.trim() || '';
+if (!publishable.startsWith('pk_live_')) {
   console.error(
-    'ABORTADO: .env.local usa STRIPE_SECRET_KEY de TEST (sk_test_).\n' +
-      'Para producción, pon temporalmente la clave LIVE (sk_live_) en .env.local,\n' +
-      'ejecuta npm run stripe:setup y luego npm run stripe:sync-vercel.',
+    'ABORTADO: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY debe ser pk_live_... en .env.local.',
+  );
+  process.exit(1);
+}
+
+if (!local.STRIPE_WEBHOOK_SECRET?.trim().startsWith('whsec_')) {
+  console.error(
+    'ABORTADO: falta STRIPE_WEBHOOK_SECRET (whsec_...) en .env.local.\n' +
+      'Ejecuta npm run stripe:setup para crear el webhook live, o cópialo del dashboard.',
   );
   process.exit(1);
 }
 
 let ok = 0;
-for (const key of KEYS) {
+for (const key of STRIPE_VERCEL_KEYS) {
   const val = local[key]?.trim();
   if (!val) {
     console.log(`—   ${key} no está en .env.local`);
     continue;
   }
-  if (addEnv(key, val, 'production')) ok += 1;
+  if (addVercelEnv(key, val, 'production')) ok += 1;
 }
 
-console.log(`\n${ok} variable(s) sincronizadas con Vercel production.`);
+console.log(`\n${ok} variable(s) Stripe sincronizadas con Vercel production.`);
+console.log('Redeploy recomendado: npm run stripe:deploy');

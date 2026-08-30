@@ -12,6 +12,7 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadEnvLocal } from './load-env-local.mjs';
+import { upsertEnvLocalLine } from './stripe-vercel-env.mjs';
 import {
   DRALO_SUBSCRIPTION_PLANS,
   getPlanMonthlyPrice,
@@ -24,6 +25,18 @@ const ENV_LOCAL = path.join(ROOT, '.env.local');
 
 const CURRENCY = 'eur';
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.dralo.es').replace(/\/$/, '');
+const WEBHOOK_URL = `${SITE_URL}/api/stripe/webhook/`;
+
+const WEBHOOK_EVENTS = [
+  'checkout.session.completed',
+  'customer.subscription.created',
+  'customer.subscription.updated',
+  'customer.subscription.deleted',
+  'customer.subscription.paused',
+  'customer.subscription.resumed',
+  'invoice.payment_succeeded',
+  'invoice.payment_failed',
+];
 
 const PLANS = DRALO_SUBSCRIPTION_PLANS.filter(
   (plan) => plan.activo !== false && Number(plan.precio) > 0,
@@ -200,10 +213,44 @@ async function main() {
   console.log('Copia esto en .env.local y en las variables de entorno de Vercel:\n');
   console.log(envLines.join('\n'));
   upsertEnvLocal(envLines);
-  console.log('\nDespués crea el webhook apuntando a:');
-  console.log(`  ${SITE_URL}/api/stripe/webhook/`);
-  console.log('y guarda su signing secret en STRIPE_WEBHOOK_SECRET.');
-  console.log('\nPara subir las variables a Vercel: npm run stripe:sync-vercel');
+
+  const webhookSecret = await ensureWebhookEndpoint();
+  if (webhookSecret) {
+    upsertEnvLocalLine('STRIPE_WEBHOOK_SECRET', webhookSecret);
+    console.log('\nSTRIPE_WEBHOOK_SECRET guardado en .env.local');
+  } else if (!(process.env.STRIPE_WEBHOOK_SECRET || '').trim().startsWith('whsec_')) {
+    console.log('\nAñade STRIPE_WEBHOOK_SECRET en .env.local (whsec_ del dashboard live).');
+    console.log(`  Webhook URL: ${WEBHOOK_URL}`);
+  }
+
+  console.log('\nPara subir todo a Vercel: npm run stripe:sync-vercel');
+  console.log('O el flujo completo: npm run stripe:go-live');
+}
+
+async function ensureWebhookEndpoint() {
+  const existingSecret = (process.env.STRIPE_WEBHOOK_SECRET || '').trim();
+  const endpoints = await stripe.webhookEndpoints.list({ limit: 100 });
+  const match = endpoints.data.find((endpoint) => endpoint.url === WEBHOOK_URL);
+
+  if (match) {
+    console.log(`\nWebhook existente: ${match.id} → ${WEBHOOK_URL}`);
+    if (existingSecret.startsWith('whsec_')) {
+      console.log('Se reutiliza STRIPE_WEBHOOK_SECRET de .env.local');
+      return null;
+    }
+    console.warn(
+      'No hay STRIPE_WEBHOOK_SECRET en .env.local. Cópialo del dashboard o elimina el endpoint y vuelve a ejecutar.',
+    );
+    return null;
+  }
+
+  const created = await stripe.webhookEndpoints.create({
+    url: WEBHOOK_URL,
+    enabled_events: WEBHOOK_EVENTS,
+    description: 'Dralo producción — suscripciones',
+  });
+  console.log(`\nWebhook creado: ${created.id} → ${WEBHOOK_URL}`);
+  return created.secret || null;
 }
 
 main().catch((err) => {
