@@ -634,8 +634,39 @@ body {
 
 .invite-promo-banner {
   width: 100%;
-  padding: 0 clamp(12px, 2.5vw, 24px) 10px;
   box-sizing: border-box;
+}
+
+.invite-promo-banner--home {
+  margin: 0;
+  padding: 0;
+}
+
+.invite-promo-banner--folded {
+  display: flex;
+  justify-content: center;
+}
+
+.invite-promo-banner__fold-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 2px solid rgba(251, 191, 36, 0.85);
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255, 251, 235, 0.96) 0%, rgba(254, 243, 199, 0.96) 100%);
+  color: #92400e;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.invite-promo-banner__fold-trigger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.22);
 }
 
 .invite-promo-banner__inner {
@@ -732,6 +763,8 @@ body {
     flex-wrap: wrap;
     align-items: flex-start;
     padding: 12px;
+    position: relative;
+    padding-right: 44px;
   }
 
   .invite-promo-banner__text strong {
@@ -754,11 +787,6 @@ body {
     position: absolute;
     top: 12px;
     right: 12px;
-  }
-
-  .invite-promo-banner__inner {
-    position: relative;
-    padding-right: 44px;
   }
 }
 

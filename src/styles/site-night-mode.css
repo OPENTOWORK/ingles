@@ -609,6 +609,12 @@ body.reading-night-mode .profile-invite-promo__text {
   color: #fde68a;
 }
 
+body.reading-night-mode .invite-promo-banner__fold-trigger {
+  background: linear-gradient(135deg, #422006 0%, #78350f 100%);
+  border-color: #f59e0b;
+  color: #fde68a;
+}
+
 body.reading-night-mode .invite-promo-banner__inner {
   border-color: #f59e0b;
   background: linear-gradient(135deg, #422006 0%, #78350f 55%, #92400e 100%);

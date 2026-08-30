@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import ItPreviewRoleBanner from '@/components/layout/ItPreviewRoleBanner';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
-import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
 import ExamNavigationGuard from '@/components/ExamNavigationGuard';
 import { UserRoleProvider } from '@/context/UserRoleContext';
 import { GuidedTourProvider } from '@/context/GuidedTourContext';
@@ -47,7 +46,6 @@ function AuthenticatedAppShellInner({ session, userRole, onLogout, children }) {
       />
 
       <UserRoleProvider userRole={preview.userRole} session={preview.session}>
-        <InviteFriendPromoBanner />
         <GuidedTourProvider>
           <PlacementAccessProvider session={preview.session} userRole={preview.userRole}>
             <PlacementTestNotice />

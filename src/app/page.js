@@ -6,6 +6,7 @@ import DraloTagline from '@/components/DraloTagline';
 import HomeHowItWorks from '@/components/home/HomeHowItWorks';
 import HomeInstallAppButton from '@/components/home/HomeInstallAppButton';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
+import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isStudentRole } from '@/utils/authRoles';
@@ -24,6 +25,8 @@ export default function Home() {
   return (
     <main className="home-page">
       <div className="home-page__inner">
+        {isRegistered ? <InviteFriendPromoBanner /> : null}
+
         <section className="home-hero" aria-labelledby="home-title">
           <HomeInstallAppButton />
 
