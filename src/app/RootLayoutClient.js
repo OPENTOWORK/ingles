@@ -8,6 +8,8 @@ import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/ut
 import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
+
+const AUTH_FLOW_PATH_PREFIXES = ['/auth/callback', '/auth/confirm'];
 import Link from 'next/link';
 import DraloTagline from '@/components/DraloTagline';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
@@ -64,6 +66,9 @@ export default function RootLayoutClient({ children }) {
   const lastAccessTokenRef = useRef(null);
 
   const isPublic = isPublicPath(pathname);
+  const isAuthFlow = AUTH_FLOW_PATH_PREFIXES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
   /** Superficie interna de Writing v3: solo existe fuera de producción (Fase 8). */
   const allowWithoutAuth = isPublic || isWritingV3PreviewPath(pathname);
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
@@ -232,6 +237,16 @@ export default function RootLayoutClient({ children }) {
       window.location.reload();
     });
   }, []);
+
+  if (isAuthFlow) {
+    return (
+      <>
+        <SiteNightModeInit />
+        <Toaster position="top-center" reverseOrder={false} />
+        <main className="page-content">{children}</main>
+      </>
+    );
+  }
 
   if (!allowWithoutAuth && authPending) {
     return (

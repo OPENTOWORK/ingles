@@ -61,10 +61,12 @@ function AuthCallbackInner() {
         await ensureAppUserProfile().catch(() => {});
 
         const redirectPath = await getRedirectPathByUserId(user?.id, user?.email);
+        const destination =
+          redirectPath?.replace(/\/profile\/?$/i, '/perfil') || '/perfil';
 
         if (cancelled) return;
         toast.success('Sesión iniciada correctamente');
-        window.location.replace(redirectPath || '/perfil');
+        router.replace(destination.startsWith('/') ? destination : '/perfil');
       } catch (err) {
         console.error('Error en /auth/callback:', err);
         if (cancelled) return;

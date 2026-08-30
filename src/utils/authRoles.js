@@ -16,8 +16,8 @@ export const ROLE_ROUTE_MAP = {
   administrador: '/admin',
   teacher: '/teacher',
   profesor: '/teacher',
-  student: APP_ROUTES.profile,
-  alumno: APP_ROUTES.profile,
+  student: '/perfil',
+  alumno: '/perfil',
   soporte: '/soporte',
   support: '/soporte',
   informatico: '/informatico',
@@ -38,7 +38,7 @@ export const ROLE_ROUTE_MAP = {
 
 export const getRedirectPathByRoleName = (roleName = '') => {
   const normalized = normalizeRoleName(roleName);
-  return ROLE_ROUTE_MAP[normalized] || APP_ROUTES.profile;
+  return ROLE_ROUTE_MAP[normalized] || '/perfil';
 };
 
 export function isAdminRole(roleName = '') {

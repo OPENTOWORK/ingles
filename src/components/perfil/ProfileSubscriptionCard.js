@@ -2,7 +2,7 @@
 
 import { Check, PenLine, Mic, ClipboardList, Bot, Sparkles, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getPlanBySlug, getPlanProfileDisplay } from '@/data/financialPlanConfig';
 import { useSubscription } from '@/hooks/useSubscription';
@@ -117,7 +117,15 @@ function PlanUsagePanel({ items, loading }) {
   );
 }
 
-export default function ProfileSubscriptionCard({
+export default function ProfileSubscriptionCard(props) {
+  return (
+    <Suspense fallback={<p className="section-desc">Loading subscription…</p>}>
+      <ProfileSubscriptionCardInner {...props} />
+    </Suspense>
+  );
+}
+
+function ProfileSubscriptionCardInner({
   plan,
   description,
   highlights = [],
