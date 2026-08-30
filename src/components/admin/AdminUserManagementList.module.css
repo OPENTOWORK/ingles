@@ -1,0 +1,386 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.viewToggle {
+  display: inline-flex;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #fff;
+}
+
+.viewBtn {
+  border: none;
+  background: transparent;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  color: #475569;
+  cursor: pointer;
+}
+
+.viewBtnActive {
+  background: #eef2ff;
+  color: #3730a3;
+  font-weight: 600;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.85rem;
+}
+
+.userCard {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #fff;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.userCard:hover {
+  border-color: #c7d2fe;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.08);
+}
+
+.userCardStarred {
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+
+.cardTop {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.cardIdentity {
+  flex: 1;
+  min-width: 0;
+}
+
+.cardName {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+.cardEmail {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.badgeOnline {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badgeOffline {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.badgePlan {
+  background: #eef2ff;
+  color: #4338ca;
+}
+
+.cardMeta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  color: #475569;
+}
+
+.cardMeta dt {
+  margin: 0;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.cardMeta dd {
+  margin: 0;
+  font-weight: 600;
+  color: #334155;
+}
+
+.cardActions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.15rem;
+}
+
+.openBtn {
+  flex: 1;
+  border: none;
+  border-radius: 0.5rem;
+  background: #4f46e5;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.65rem;
+  cursor: pointer;
+}
+
+.openBtn:hover {
+  background: #4338ca;
+}
+
+.starBtn {
+  border: none;
+  background: transparent;
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.drawerBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  z-index: 60;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 70;
+  width: min(100%, 480px);
+  height: 100%;
+  background: #fff;
+  box-shadow: -8px 0 32px rgba(15, 23, 42, 0.18);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.2s ease;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.drawerTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.drawerSubtitle {
+  margin: 0.2rem 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  word-break: break-word;
+}
+
+.closeBtn {
+  border: none;
+  background: #e2e8f0;
+  color: #334155;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.drawerBody {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.65rem;
+  padding: 0.85rem;
+  background: #fff;
+}
+
+.sectionTitle {
+  margin: 0 0 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.65rem;
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.field select {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  padding: 0.45rem 0.55rem;
+  font-size: 0.85rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.75rem;
+}
+
+.infoItem {
+  font-size: 0.82rem;
+}
+
+.infoLabel {
+  display: block;
+  color: #94a3b8;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.15rem;
+}
+
+.infoValue {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.drawerActions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.actionBtn {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actionWarn {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.actionDanger {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.actionMail {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.actionMail:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fullLink {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.fullLink:hover {
+  text-decoration: underline;
+}
+
+.stripeNote {
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  color: #047857;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.compactTable th,
+.compactTable td {
+  padding: 0.55rem 0.65rem;
+  font-size: 0.82rem;
+}
+
+.compactTable th {
+  white-space: nowrap;
+}

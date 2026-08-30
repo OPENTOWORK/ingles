@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { authenticateTeacherRequest } from '@/lib/teacherAccess';
 import { isValidEmail, sendBulkTransactionalEmail } from '@/lib/sendTransactionalEmail';
+import { buildBrandedManualMessageEmail } from '@/lib/emailBrandedLayout';
 
 export async function POST(req) {
   try {
@@ -40,11 +41,17 @@ export async function POST(req) {
     const senderName =
       user.user_metadata?.name || user.email?.split('@')[0] || 'Tu profesor Dralo';
 
-    const text = [message, '', '—', `${senderName} · Dralo English`].join('\n');
+    const { text } = buildBrandedManualMessageEmail({
+      message,
+      subject,
+      senderName,
+    });
     const { sent, failed, errors } = await sendBulkTransactionalEmail({
       recipients: emails,
       subject,
       text,
+      branded: true,
+      preheader: message.slice(0, 140),
     });
 
     if (sent === 0) {

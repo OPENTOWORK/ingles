@@ -106,22 +106,26 @@ function buildConfigError() {
 }
 
 /**
- * SMTP (env) → Resend (dominio o sandbox) → error claro.
+ * Resend (dominio verificado) → SMTP Gmail (respaldo).
+ * Resend mejora la entregabilidad; Gmail SMTP puede provocar rebotes "Message blocked"
+ * en dominios corporativos aunque la app reporte envío correcto.
  * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string }} params
  */
 export async function deliverTransactionalEmail({ to, subject, text, html, replyTo }) {
+  if (await canUseResend()) {
+    const resend = await sendEmailViaResend({ to, subject, text, html, replyTo });
+    if (resend.ok) return resend;
+    if (!isSupportSmtpReady()) {
+      return { ok: false, error: resend.error || 'Error Resend' };
+    }
+  }
+
   if (isSupportSmtpReady()) {
     const smtp = await sendSupportTicketViaSmtp({ to, subject, text, html, replyTo });
     if (smtp.sent) return { ok: true, channel: 'smtp' };
     if (!smtp.skipped) {
       return { ok: false, error: smtp.error || 'Error SMTP' };
     }
-  }
-
-  if (await canUseResend()) {
-    const resend = await sendEmailViaResend({ to, subject, text, html, replyTo });
-    if (resend.ok) return resend;
-    return { ok: false, error: resend.error || 'Error Resend' };
   }
 
   return { ok: false, error: buildConfigError() };

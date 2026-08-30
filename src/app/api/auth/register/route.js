@@ -270,6 +270,7 @@ export async function POST(req) {
         email,
         activo: true,
         consentimiento_comercial: acceptedMarketing,
+        plan_id: 'free',
       };
       if (nombre) appUserRow.nombre = nombre;
       if (rolId) appUserRow.rol_id = rolId;

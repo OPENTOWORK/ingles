@@ -2,12 +2,15 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
 import { formatSessionDuration } from '@/lib/userActivity';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
+import { ADMIN_ASSIGNABLE_PLAN_OPTIONS } from '@/data/financialPlanConfig';
+import AdminUserManagementList from '@/components/admin/AdminUserManagementList';
+import AdminOverviewStats from '@/components/admin/AdminOverviewStats';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
@@ -16,7 +19,11 @@ const AdminAnalyticsPanels = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="admin-analytics-loading" role="status" aria-label="Cargando analíticas">
+      <div
+        className="mb-8 rounded-xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500"
+        role="status"
+        aria-label="Cargando analíticas"
+      >
         Cargando gráficos…
       </div>
     ),
@@ -85,12 +92,17 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [roles, setRoles] = useState([]);
   const [users, setUsers] = useState([]);
+  const [plansByUser, setPlansByUser] = useState({});
   const [placementByUser, setPlacementByUser] = useState({});
   const [savingByUser, setSavingByUser] = useState({});
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [teamStarFilter, setTeamStarFilter] = useState('all');
+  const [planFilter, setPlanFilter] = useState('all');
+  const [connectionFilter, setConnectionFilter] = useState('all');
+  const [placementFilter, setPlacementFilter] = useState('all');
+  const [marketingFilter, setMarketingFilter] = useState('all');
   const [selectedUserIds, setSelectedUserIds] = useState([]);
   const [mailSubject, setMailSubject] = useState('');
   const [mailMessage, setMailMessage] = useState('');
@@ -162,7 +174,7 @@ export default function AdminDashboard() {
       }
 
       setUser(currentUser);
-      await Promise.all([loadRoles(), loadUsers(), loadPlacementByUser()]);
+      await Promise.all([loadRoles(), loadUsers(), loadPlacementByUser(), loadUserPlans()]);
       await Promise.all([loadAnalytics(), loadUserActivity(currentUser)]);
     } catch (error) {
       console.error('Error checking user:', error);
@@ -236,6 +248,34 @@ export default function AdminDashboard() {
     });
 
     setUsers(normalizedUsers);
+  };
+
+  const loadUserPlans = async () => {
+    try {
+      const res = await fetch('/api/admin/users/plans', {
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'No se pudieron cargar los planes.');
+      }
+      setPlansByUser(payload.plansByUser || {});
+    } catch (error) {
+      console.error('Error loading user plans:', error);
+      setPlansByUser({});
+    }
+  };
+
+  const getPlanLabel = (planSlug) => {
+    const option = ADMIN_ASSIGNABLE_PLAN_OPTIONS.find((item) => item.slug === planSlug);
+    return option?.label || 'Plan FREE';
+  };
+
+  const getUserPlanSlug = (userId, fallbackPlanId) => {
+    const fromApi = plansByUser[userId]?.planSlug;
+    if (fromApi) return fromApi;
+    return String(fallbackPlanId || 'free').toLowerCase();
   };
 
   const loadPlacementByUser = async () => {
@@ -466,6 +506,42 @@ export default function AdminDashboard() {
     return role?.nombre || 'sin_rol';
   };
 
+  const handlePlanChange = async (targetUserId, newPlanSlug) => {
+    setSavingByUser((prev) => ({ ...prev, [targetUserId]: true }));
+    try {
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(targetUserId)}/plan`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+        body: JSON.stringify({ planSlug: newPlanSlug }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'No se pudo cambiar el plan.');
+      }
+      setPlansByUser((prev) => ({
+        ...prev,
+        [targetUserId]: {
+          planSlug: payload.planSlug,
+          assignedPlanSlug: payload.assignedPlanSlug,
+          source: payload.source,
+          stripeStatus: payload.stripeStatus || null,
+        },
+      }));
+      setUsers((prev) =>
+        prev.map((item) =>
+          item.id === targetUserId ? { ...item, plan_id: payload.assignedPlanSlug || newPlanSlug } : item,
+        ),
+      );
+    } catch (error) {
+      console.error('Error changing user plan:', error);
+      toast.error(error.message || 'No se pudo cambiar el plan.');
+      await loadUserPlans();
+    } finally {
+      setSavingByUser((prev) => ({ ...prev, [targetUserId]: false }));
+    }
+  };
+
   const handleRoleChange = async (targetUserId, newRoleId) => {
     setSavingByUser((prev) => ({ ...prev, [targetUserId]: true }));
     try {
@@ -478,7 +554,7 @@ export default function AdminDashboard() {
       await Promise.all([loadUsers(), loadPlacementByUser()]);
     } catch (error) {
       console.error('Error changing user role:', error);
-      alert('No se pudo cambiar el rol. Revisa permisos RLS del admin.');
+      toast.error('No se pudo cambiar el rol. Revisa permisos RLS del admin.');
     } finally {
       setSavingByUser((prev) => ({ ...prev, [targetUserId]: false }));
     }
@@ -509,7 +585,7 @@ export default function AdminDashboard() {
       );
     } catch (error) {
       console.error('Error toggling team star:', error);
-      alert(error.message || 'No se pudo actualizar la estrella del equipo.');
+      toast.error(error.message || 'No se pudo actualizar la estrella del equipo.');
     } finally {
       setSavingByUser((prev) => ({ ...prev, [targetUserId]: false }));
     }
@@ -527,7 +603,7 @@ export default function AdminDashboard() {
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
       console.error('Error toggling user active state:', error);
-      alert('No se pudo cambiar el estado de la cuenta.');
+      toast.error('No se pudo cambiar el estado de la cuenta.');
     } finally {
       setSavingByUser((prev) => ({ ...prev, [targetUser.id]: false }));
     }
@@ -535,7 +611,7 @@ export default function AdminDashboard() {
 
   const deleteUserAccount = async (targetUser) => {
     if (targetUser.id === user?.id) {
-      alert('No puedes eliminar tu propia cuenta de administrador.');
+      toast.error('No puedes eliminar tu propia cuenta de administrador.');
       return;
     }
 
@@ -544,16 +620,18 @@ export default function AdminDashboard() {
 
     setSavingByUser((prev) => ({ ...prev, [targetUser.id]: true }));
     try {
-      const { error } = await supabase
-        .from('user_profiles')
-        .delete()
-        .eq('id', targetUser.id);
-
-      if (error) throw error;
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(targetUser.id)}`, {
+        method: 'DELETE',
+        headers: await getAdminFetchHeaders(),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'No se pudo eliminar la cuenta.');
+      }
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
       console.error('Error deleting user account:', error);
-      alert('No se pudo eliminar la cuenta.');
+      toast.error(error.message || 'No se pudo eliminar la cuenta.');
     } finally {
       setSavingByUser((prev) => ({ ...prev, [targetUser.id]: false }));
     }
@@ -564,7 +642,7 @@ export default function AdminDashboard() {
   const bulkSetUsersActive = async (active) => {
     const targets = getBulkActionTargets();
     if (!targets.length) {
-      alert('Selecciona al menos un usuario distinto de tu cuenta de administrador.');
+      toast.error('Selecciona al menos un usuario distinto de tu cuenta de administrador.');
       return;
     }
 
@@ -580,10 +658,10 @@ export default function AdminDashboard() {
       const { error } = await supabase.from('user_profiles').update({ activo: active }).in('id', ids);
       if (error) throw error;
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
-      alert(`${active ? 'Reactivadas' : 'Pausadas'} ${targets.length} cuenta(s).`);
+      toast.success(`${active ? 'Reactivadas' : 'Pausadas'} ${targets.length} cuenta(s).`);
     } catch (error) {
       console.error(`Error bulk ${verb} users:`, error);
-      alert(`No se pudieron ${active ? 'reactivar' : 'pausar'} las cuentas seleccionadas.`);
+      toast.error(`No se pudieron ${active ? 'reactivar' : 'pausar'} las cuentas seleccionadas.`);
     } finally {
       setBulkProcessing(false);
     }
@@ -592,7 +670,7 @@ export default function AdminDashboard() {
   const bulkDeleteUsers = async () => {
     const targets = getBulkActionTargets();
     if (!targets.length) {
-      alert('Selecciona al menos un usuario distinto de tu cuenta de administrador.');
+      toast.error('Selecciona al menos un usuario distinto de tu cuenta de administrador.');
       return;
     }
 
@@ -604,14 +682,32 @@ export default function AdminDashboard() {
     setBulkProcessing(true);
     const ids = targets.map((item) => item.id);
     try {
-      const { error } = await supabase.from('user_profiles').delete().in('id', ids);
-      if (error) throw error;
-      setSelectedUserIds((prev) => prev.filter((id) => !ids.includes(id)));
+      const headers = await getAdminFetchHeaders();
+      const results = await Promise.all(
+        ids.map(async (id) => {
+          const res = await fetch(`/api/admin/users/${encodeURIComponent(id)}`, {
+            method: 'DELETE',
+            headers,
+          });
+          const payload = await res.json().catch(() => ({}));
+          return { id, ok: res.ok, error: payload.error || null };
+        }),
+      );
+      const failed = results.filter((item) => !item.ok);
+      if (failed.length === results.length) {
+        throw new Error(failed[0]?.error || 'No se pudieron eliminar las cuentas seleccionadas.');
+      }
+      const deletedIds = results.filter((item) => item.ok).map((item) => item.id);
+      setSelectedUserIds((prev) => prev.filter((id) => !deletedIds.includes(id)));
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
-      alert(`Eliminadas ${targets.length} cuenta(s).`);
+      if (failed.length) {
+        toast.success(`Eliminadas ${deletedIds.length} cuenta(s). ${failed.length} no se pudieron eliminar.`);
+      } else {
+        toast.success(`Eliminadas ${deletedIds.length} cuenta(s).`);
+      }
     } catch (error) {
       console.error('Error bulk deleting users:', error);
-      alert('No se pudieron eliminar las cuentas seleccionadas.');
+      toast.error(error.message || 'No se pudieron eliminar las cuentas seleccionadas.');
     } finally {
       setBulkProcessing(false);
     }
@@ -649,8 +745,39 @@ export default function AdminDashboard() {
             : item.activo === false;
       const matchesTeamStar =
         teamStarFilter === 'all' ? true : Boolean(item.destacado_equipo);
+      const planSlug = getUserPlanSlug(item.id, item.plan_id);
+      const matchesPlan = planFilter === 'all' ? true : planSlug === planFilter;
+      const isOnline = Boolean(userActivityByUser[item.id]?.online);
+      const matchesConnection =
+        connectionFilter === 'all'
+          ? true
+          : connectionFilter === 'online'
+            ? isOnline
+            : !isOnline;
+      const placement = placementByUser[item.id];
+      const matchesPlacement =
+        placementFilter === 'all'
+          ? true
+          : placementFilter === 'done'
+            ? Boolean(placement?.done)
+            : !placement?.done;
+      const matchesMarketing =
+        marketingFilter === 'all'
+          ? true
+          : marketingFilter === 'yes'
+            ? Boolean(item.marketingAccepted)
+            : !item.marketingAccepted;
 
-      return matchesSearch && matchesRole && matchesStatus && matchesTeamStar;
+      return (
+        matchesSearch &&
+        matchesRole &&
+        matchesStatus &&
+        matchesTeamStar &&
+        matchesPlan &&
+        matchesConnection &&
+        matchesPlacement &&
+        matchesMarketing
+      );
     })
     .sort((a, b) => {
       const aStar = a.destacado_equipo ? 0 : 1;
@@ -662,6 +789,58 @@ export default function AdminDashboard() {
     });
 
   const starredTeamCount = users.filter((item) => item.destacado_equipo).length;
+
+  const filterCounts = users.reduce(
+    (acc, item) => {
+      const planSlug = getUserPlanSlug(item.id, item.plan_id);
+      if (planSlug === 'free') acc.planFree += 1;
+      if (planSlug === 'premium') acc.planPlus += 1;
+      if (planSlug === 'pro') acc.planPremium += 1;
+
+      if (userActivityByUser[item.id]?.online) acc.online += 1;
+      else acc.offline += 1;
+
+      if (placementByUser[item.id]?.done) acc.placementDone += 1;
+      else acc.placementPending += 1;
+
+      if (item.marketingAccepted) acc.marketingYes += 1;
+      else acc.marketingNo += 1;
+
+      return acc;
+    },
+    {
+      planFree: 0,
+      planPlus: 0,
+      planPremium: 0,
+      online: 0,
+      offline: 0,
+      placementDone: 0,
+      placementPending: 0,
+      marketingYes: 0,
+      marketingNo: 0,
+    },
+  );
+
+  const hasActiveUserFilters =
+    Boolean(searchTerm.trim()) ||
+    roleFilter !== 'all' ||
+    statusFilter !== 'all' ||
+    teamStarFilter !== 'all' ||
+    planFilter !== 'all' ||
+    connectionFilter !== 'all' ||
+    placementFilter !== 'all' ||
+    marketingFilter !== 'all';
+
+  const clearUserFilters = () => {
+    setSearchTerm('');
+    setRoleFilter('all');
+    setStatusFilter('all');
+    setTeamStarFilter('all');
+    setPlanFilter('all');
+    setConnectionFilter('all');
+    setPlacementFilter('all');
+    setMarketingFilter('all');
+  };
 
   const selectedUsers = filteredUsers.filter((u) => selectedUserIds.includes(u.id));
   const allFilteredSelected = filteredUsers.length > 0 && filteredUsers.every((u) => selectedUserIds.includes(u.id));
@@ -695,6 +874,7 @@ export default function AdminDashboard() {
         placement_test: placement?.done ? 'Si' : 'No',
         nivel_placement: placement?.level || '—',
         rol: getRoleNameById(item.rol_id),
+        plan: getPlanLabel(getUserPlanSlug(item.id, item.plan_id)),
         equipo_destacado: item.destacado_equipo ? 'Si' : 'No',
         acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
         conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
@@ -724,6 +904,7 @@ export default function AdminDashboard() {
         placement_test: placement?.done ? 'Si' : 'No',
         nivel_placement: placement?.level || '—',
         rol: getRoleNameById(item.rol_id),
+        plan: getPlanLabel(getUserPlanSlug(item.id, item.plan_id)),
         equipo_destacado: item.destacado_equipo ? 'Si' : 'No',
         acepta_comercial: item.marketingAccepted ? 'Si' : 'No',
         conectado: userActivityByUser[item.id]?.online ? 'Si' : 'No',
@@ -739,15 +920,18 @@ export default function AdminDashboard() {
 
   const sendMail = async (emails, subject, message) => {
     if (!emails.length) {
-      alert('Selecciona al menos un usuario con email válido.');
+      toast.error('Selecciona al menos un usuario con email válido.');
       return;
     }
     if (!subject.trim() || !message.trim()) {
-      alert('Debes completar asunto y mensaje.');
+      toast.error('Debes completar asunto y mensaje.');
       return;
     }
 
     setMailing(true);
+    const loadingToast = toast.loading(
+      emails.length === 1 ? 'Enviando correo…' : `Enviando correo a ${emails.length} usuarios…`,
+    );
     try {
       const mailUrl =
         (typeof process !== 'undefined' &&
@@ -778,13 +962,25 @@ export default function AdminDashboard() {
       }
       if (!res.ok) throw new Error(payload?.error || 'No se pudo enviar el correo.');
 
-      alert(`Correo enviado correctamente a ${payload.sent || emails.length} usuario(s).`);
+      const sentCount = payload.sent || emails.length;
+      const failedCount = payload.failed || 0;
+      if (failedCount > 0) {
+        toast.success(`Enviado a ${sentCount} usuario(s). ${failedCount} fallaron al enviar.`, {
+          duration: 6000,
+        });
+      } else {
+        toast.success(
+          `Correo enviado a ${sentCount} usuario(s). Si no llega, puede estar en spam o bloqueado por el servidor del destinatario.`,
+          { duration: 7000 },
+        );
+      }
       setMailSubject('');
       setMailMessage('');
     } catch (error) {
       console.error('Error sending mail:', error);
-      alert(error.message || 'Error enviando correos.');
+      toast.error(error.message || 'Error enviando correos.', { duration: 6000 });
     } finally {
+      toast.dismiss(loadingToast);
       setMailing(false);
     }
   };
@@ -796,7 +992,7 @@ export default function AdminDashboard() {
 
   const handleSingleMail = async (targetUser) => {
     if (!targetUser?.email) {
-      alert('Este usuario no tiene email válido.');
+      toast.error('Este usuario no tiene email válido.');
       return;
     }
     await sendMail([targetUser.email], mailSubject, mailMessage);
@@ -810,11 +1006,11 @@ export default function AdminDashboard() {
   const handleCreateUser = async () => {
     const email = newUserEmail.trim().toLowerCase();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      alert('Introduce un email válido para el nuevo usuario.');
+      toast.error('Introduce un email válido para el nuevo usuario.');
       return;
     }
     if (!newUserRoleId) {
-      alert('Selecciona un rol para el nuevo usuario.');
+      toast.error('Selecciona un rol para el nuevo usuario.');
       return;
     }
 
@@ -855,14 +1051,16 @@ export default function AdminDashboard() {
         throw new Error(payload?.error || 'No se pudo crear el usuario.');
       }
 
-      alert(`Usuario creado correctamente: ${email}. Se envió email de acceso.`);
+      toast.success(`Usuario creado correctamente: ${email}. Se envió email de acceso.`, {
+        duration: 6000,
+      });
       setNewUserEmail('');
       setNewUserName('');
       setNewUserRoleId('');
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
       console.error('Error creating user:', error);
-      alert(error.message || 'Error creando usuario.');
+      toast.error(error.message || 'Error creando usuario.');
     } finally {
       setCreatingUser(false);
     }
@@ -881,26 +1079,46 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm font-medium text-gray-600">Total usuarios</p>
-            <p className="text-2xl font-semibold text-gray-900">{users.length}</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm font-medium text-gray-600">Roles disponibles</p>
-            <p className="text-2xl font-semibold text-gray-900">{roles.length}</p>
-          </div>
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-sm font-medium text-gray-600">Distribucion por rol</p>
-            <div className="mt-2 text-sm text-gray-700 space-y-1">
-              {Object.entries(roleStats).map(([role, count]) => (
-                <p key={role}>
-                  {role}: {count}
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
+        <AdminOverviewStats
+          totalUsers={users.length}
+          activeUsers={users.filter((item) => item.activo !== false).length}
+          onlineUsers={users.filter((item) => Boolean(userActivityByUser[item.id]?.online)).length}
+          placementDone={Object.keys(placementByUser).length}
+          loginSuccessRate={analytics.patrones.tasaExito}
+          roleStats={roleStats}
+        />
+
+        <AdminAnalyticsPanels
+          period={period}
+          setPeriod={setPeriod}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          analytics={analytics}
+          chartPeriod={chartPeriod}
+          setChartPeriod={setChartPeriod}
+          chartStartDate={chartStartDate}
+          setChartStartDate={setChartStartDate}
+          chartEndDate={chartEndDate}
+          setChartEndDate={setChartEndDate}
+          sessionChart={sessionChart}
+          connectionAnalytics={connectionAnalytics}
+          connectionActiveUsers={connectionActiveUsers}
+          connectionRoleFilter={connectionRoleFilter}
+          setConnectionRoleFilter={setConnectionRoleFilter}
+          connectionUserIdFilter={connectionUserIdFilter}
+          setConnectionUserIdFilter={setConnectionUserIdFilter}
+          appliedConnectionRoleFilter={appliedConnectionRoleFilter}
+          appliedConnectionUserIdFilter={appliedConnectionUserIdFilter}
+          onRunConnectionQuery={runConnectionQuery}
+          onLoadConnectionUserPages={loadConnectionUserPages}
+          connectionQueryKey={`${connectionQuery.period}|${connectionQuery.startDate}|${connectionQuery.endDate}|${connectionQuery.roleId}|${connectionQuery.userId}`}
+          connectionQueryLoading={connectionQueryLoading}
+          roles={roles}
+        />
+
+        <AdminClarityPanel />
 
         <div className="bg-white rounded-lg shadow mb-8">
           <div className="px-6 py-4 border-b border-gray-200">
@@ -980,7 +1198,7 @@ export default function AdminDashboard() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1">Buscar usuario</label>
                 <input
@@ -1029,6 +1247,69 @@ export default function AdminDashboard() {
                   <option value="starred">Solo con estrella ({starredTeamCount})</option>
                 </select>
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Filtrar por plan</label>
+                <select
+                  value={planFilter}
+                  onChange={(e) => setPlanFilter(e.target.value)}
+                  className="w-full border rounded px-3 py-2 text-sm"
+                >
+                  <option value="all">Todos los planes ({users.length})</option>
+                  <option value="free">Plan FREE ({filterCounts.planFree})</option>
+                  <option value="premium">Plan PLUS ({filterCounts.planPlus})</option>
+                  <option value="pro">Plan PREMIUM ({filterCounts.planPremium})</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Conexión</label>
+                <select
+                  value={connectionFilter}
+                  onChange={(e) => setConnectionFilter(e.target.value)}
+                  className="w-full border rounded px-3 py-2 text-sm"
+                >
+                  <option value="all">Todos ({users.length})</option>
+                  <option value="online">Conectados ({filterCounts.online})</option>
+                  <option value="offline">Desconectados ({filterCounts.offline})</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Placement test</label>
+                <select
+                  value={placementFilter}
+                  onChange={(e) => setPlacementFilter(e.target.value)}
+                  className="w-full border rounded px-3 py-2 text-sm"
+                >
+                  <option value="all">Todos ({users.length})</option>
+                  <option value="done">Realizado ({filterCounts.placementDone})</option>
+                  <option value="pending">Pendiente ({filterCounts.placementPending})</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Comercial</label>
+                <select
+                  value={marketingFilter}
+                  onChange={(e) => setMarketingFilter(e.target.value)}
+                  className="w-full border rounded px-3 py-2 text-sm"
+                >
+                  <option value="all">Todos ({users.length})</option>
+                  <option value="yes">Acepta (V) ({filterCounts.marketingYes})</option>
+                  <option value="no">No acepta (X) ({filterCounts.marketingNo})</option>
+                </select>
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 mb-4">
+              {hasActiveUserFilters ? (
+                <button
+                  type="button"
+                  onClick={clearUserFilters}
+                  className="px-3 py-2 rounded bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm"
+                >
+                  Limpiar filtros
+                </button>
+              ) : null}
+              <span className="text-sm text-gray-600">
+                Mostrando <strong>{filteredUsers.length}</strong> de {users.length} usuarios
+              </span>
             </div>
             <div className="flex flex-wrap gap-3 mb-4">
               <button
@@ -1088,221 +1369,32 @@ export default function AdminDashboard() {
               </div>
             ) : null}
 
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      <input
-                        type="checkbox"
-                        checked={allFilteredSelected}
-                        onChange={toggleSelectAllFiltered}
-                        aria-label="Seleccionar todos"
-                      />
-                    </th>
-                    <th className="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      ★
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usuario</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cambiar rol</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Conexión</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tiempo sesión</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha registro</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Placement test</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nivel placement</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rol actual</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Comercial</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {filteredUsers.map((item) => {
-                    const placement = placementByUser[item.id];
-                    return (
-                    <tr key={item.id} className={item.destacado_equipo ? 'bg-amber-50/60' : undefined}>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        <input
-                          type="checkbox"
-                          checked={selectedUserIds.includes(item.id)}
-                          onChange={() => toggleSelectUser(item.id)}
-                          aria-label={`Seleccionar ${item.email}`}
-                        />
-                      </td>
-                      <td className="px-3 py-4 text-sm text-center">
-                        <button
-                          type="button"
-                          onClick={() => handleTeamStarToggle(item)}
-                          disabled={Boolean(savingByUser[item.id])}
-                          className={`text-xl leading-none transition-colors ${
-                            item.destacado_equipo
-                              ? 'text-amber-500 hover:text-amber-600'
-                              : 'text-gray-300 hover:text-amber-400'
-                          }`}
-                          aria-label={
-                            item.destacado_equipo
-                              ? 'Quitar de equipo destacado'
-                              : 'Marcar en equipo destacado'
-                          }
-                          title={
-                            item.destacado_equipo
-                              ? 'Quitar de equipo destacado'
-                              : 'Marcar en equipo destacado'
-                          }
-                        >
-                          {item.destacado_equipo ? '★' : '☆'}
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        <Link
-                          href={`/admin/usuarios/${item.id}`}
-                          className="font-medium text-indigo-700 hover:text-indigo-900 hover:underline"
-                        >
-                          {item.nombre || 'Sin nombre'}
-                        </Link>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        <select
-                          defaultValue={item.rol_id || ''}
-                          onChange={(event) => handleRoleChange(item.id, event.target.value)}
-                          disabled={Boolean(savingByUser[item.id])}
-                          className="border rounded px-3 py-2 text-sm"
-                        >
-                          <option value="" disabled>
-                            Selecciona rol
-                          </option>
-                          {roles.map((role) => (
-                            <option key={role.id} value={role.id}>
-                              {role.nombre}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        {userActivityByUser[item.id]?.online ? (
-                          <span className="inline-flex items-center gap-2 text-green-700 font-medium">
-                            <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" aria-hidden />
-                            Conectado
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center gap-2 text-gray-500">
-                            <span className="w-2.5 h-2.5 rounded-full bg-gray-300" aria-hidden />
-                            Desconectado
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                        {userActivityByUser[item.id]?.totalSessionLabel ||
-                          formatSessionDuration(0)}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">{item.email}</td>
-                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                        {formatRegistrationDate(item.creado_en)}
-                      </td>
-                      <td className="px-6 py-4 text-sm">
-                        {placement?.done ? (
-                          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700 font-bold">
-                            Sí
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-gray-100 text-gray-600 font-bold">
-                            No
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
-                        {placement?.done ? (
-                          <span className="inline-flex items-center rounded-full bg-indigo-50 px-2.5 py-0.5 font-semibold text-indigo-800">
-                            {placement.level}
-                          </span>
-                        ) : (
-                          <span className="text-gray-400">—</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">{getRoleNameById(item.rol_id)}</td>
-                      <td className="px-6 py-4 text-sm">
-                        {item.marketingAccepted ? (
-                          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-green-100 text-green-700 font-bold">
-                            V
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-red-100 text-red-700 font-bold">
-                            X
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => toggleUserActive(item)}
-                            disabled={Boolean(savingByUser[item.id])}
-                            className="px-3 py-2 rounded bg-yellow-100 text-yellow-800 hover:bg-yellow-200"
-                          >
-                            {item.activo === false ? 'Reactivar' : 'Pausar'}
-                          </button>
-                          <button
-                            onClick={() => deleteUserAccount(item)}
-                            disabled={Boolean(savingByUser[item.id])}
-                            className="px-3 py-2 rounded bg-red-100 text-red-800 hover:bg-red-200"
-                          >
-                            Eliminar
-                          </button>
-                          <button
-                            onClick={() => handleSingleMail(item)}
-                            disabled={mailing || !mailSubject.trim() || !mailMessage.trim()}
-                            className="px-3 py-2 rounded bg-blue-100 text-blue-800 hover:bg-blue-200 disabled:opacity-50"
-                          >
-                            Enviar mail
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                  })}
-                  {filteredUsers.length === 0 && (
-                    <tr>
-                      <td colSpan={12} className="px-6 py-6 text-center text-sm text-gray-500">
-                        No hay usuarios que coincidan con los filtros.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+            <AdminUserManagementList
+              users={filteredUsers}
+              roles={roles}
+              plansByUser={plansByUser}
+              placementByUser={placementByUser}
+              userActivityByUser={userActivityByUser}
+              selectedUserIds={selectedUserIds}
+              savingByUser={savingByUser}
+              mailing={mailing}
+              mailReady={Boolean(mailSubject.trim() && mailMessage.trim())}
+              allFilteredSelected={allFilteredSelected}
+              getRoleNameById={getRoleNameById}
+              getPlanLabel={getPlanLabel}
+              getUserPlanSlug={getUserPlanSlug}
+              formatRegistrationDate={formatRegistrationDate}
+              onToggleSelectAll={toggleSelectAllFiltered}
+              onToggleSelectUser={toggleSelectUser}
+              onRoleChange={handleRoleChange}
+              onPlanChange={handlePlanChange}
+              onTeamStarToggle={handleTeamStarToggle}
+              onToggleActive={toggleUserActive}
+              onDelete={deleteUserAccount}
+              onSendMail={handleSingleMail}
+            />
           </div>
         </div>
-
-        <AdminAnalyticsPanels
-          period={period}
-          setPeriod={setPeriod}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          analytics={analytics}
-          chartPeriod={chartPeriod}
-          setChartPeriod={setChartPeriod}
-          chartStartDate={chartStartDate}
-          setChartStartDate={setChartStartDate}
-          chartEndDate={chartEndDate}
-          setChartEndDate={setChartEndDate}
-          sessionChart={sessionChart}
-          connectionAnalytics={connectionAnalytics}
-          connectionActiveUsers={connectionActiveUsers}
-          connectionRoleFilter={connectionRoleFilter}
-          setConnectionRoleFilter={setConnectionRoleFilter}
-          connectionUserIdFilter={connectionUserIdFilter}
-          setConnectionUserIdFilter={setConnectionUserIdFilter}
-          appliedConnectionRoleFilter={appliedConnectionRoleFilter}
-          appliedConnectionUserIdFilter={appliedConnectionUserIdFilter}
-          onRunConnectionQuery={runConnectionQuery}
-          onLoadConnectionUserPages={loadConnectionUserPages}
-          connectionQueryKey={`${connectionQuery.period}|${connectionQuery.startDate}|${connectionQuery.endDate}|${connectionQuery.roleId}|${connectionQuery.userId}`}
-          connectionQueryLoading={connectionQueryLoading}
-          roles={roles}
-        />
-
-        <AdminClarityPanel />
       </div>
     </div>
   );

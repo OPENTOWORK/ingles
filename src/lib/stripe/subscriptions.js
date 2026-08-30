@@ -133,6 +133,10 @@ export async function syncSubscriptionFromStripe(subscription, { userId: knownUs
   const { error } = await db.from(SUBSCRIPTIONS_TABLE).upsert(row, { onConflict: 'user_id' });
   if (error) throw error;
 
+  if (active && planSlug) {
+    await db.from('Usuarios_y_Perfil_users').update({ plan_id: planSlug }).eq('id', userId);
+  }
+
   await syncAuthPlanMetadata(db, userId, active && planSlug ? planSlug : 'free');
 
   if (active && isPaidPlanSlug(planSlug)) {

@@ -5,6 +5,20 @@
 
 export const PLAN_SLUGS = ['free', 'starter', 'premium', 'pro'];
 
+/** Planes que el admin puede asignar manualmente (sin cobro). */
+export const ADMIN_ASSIGNABLE_PLAN_SLUGS = ['free', 'premium', 'pro'];
+
+export const ADMIN_ASSIGNABLE_PLAN_OPTIONS = [
+  { slug: 'free', label: 'Plan FREE' },
+  { slug: 'premium', label: 'Plan PLUS' },
+  { slug: 'pro', label: 'Plan PREMIUM' },
+];
+
+export function normalizeAdminAssignablePlanSlug(slug) {
+  const raw = String(slug || 'free').toLowerCase();
+  return ADMIN_ASSIGNABLE_PLAN_SLUGS.includes(raw) ? raw : 'free';
+}
+
 /** @typedef {'free'|'starter'|'premium'|'pro'} PlanSlug */
 
 /** Plan STARTER retirado del catálogo; conservado solo para suscripciones legacy. */
@@ -433,7 +447,7 @@ const PROFILE_PLAN_DISPLAY = {
     highlights: [
       'Level B2',
       'A2 and B1: coming soon',
-      '1 exam per month',
+      '1 trial exam',
       'Writing Correction: 1/month',
       'Speaking Correction: 1/month',
       '3 Dralo Assistant queries per month',

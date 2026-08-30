@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
+import { getSupabaseServiceRoleKey } from '@/lib/supabaseEnv';
 import { getPageTitleForPath } from '@/lib/pageViewLabels';
 import { isSchemaNotReadyError } from '@/lib/teacherAccess';
 import {
@@ -35,6 +36,83 @@ async function loadProfile(db, userId) {
 
   if (error) throw error;
   return data;
+}
+
+async function deleteAppUserRows(db, userId) {
+  const cleanupTables = [
+  { table: 'DraloIA_nivel_usuario', column: 'id_usuario' },
+  { table: 'Usuarios_y_Perfil_profiles', column: 'user_id' },
+  ];
+
+  for (const { table, column } of cleanupTables) {
+    const { error } = await db.from(table).delete().eq(column, userId);
+    if (error && !String(error.message || '').includes('does not exist')) {
+      console.warn(`[admin/users DELETE] cleanup ${table}:`, error.message);
+    }
+  }
+
+  const deleteAttempts = [
+    () => db.from('Usuarios_y_Perfil_users').delete().eq('id', userId),
+    () => db.from('user_profiles').delete().eq('id', userId),
+  ];
+
+  for (const run of deleteAttempts) {
+    const { error } = await run();
+    if (!error) return;
+    if (!String(error.message || '').includes('does not exist')) {
+      console.warn('[admin/users DELETE] app user row:', error.message);
+    }
+  }
+}
+
+export async function DELETE(req, { params }) {
+  try {
+    const auth = await authenticateAdminRequest(req);
+    if (auth.error) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status });
+    }
+
+    const userId = String((await params)?.userId || '').trim();
+    if (!userId) {
+      return NextResponse.json({ error: 'Usuario no válido.' }, { status: 400 });
+    }
+
+    if (userId === auth.user.id) {
+      return NextResponse.json(
+        { error: 'No puedes eliminar tu propia cuenta de administrador.' },
+        { status: 400 },
+      );
+    }
+
+    if (!getSupabaseServiceRoleKey()?.trim()) {
+      return NextResponse.json(
+        { error: 'Eliminación completa no configurada (falta service role).' },
+        { status: 503 },
+      );
+    }
+
+    const { db } = auth;
+    await deleteAppUserRows(db, userId);
+
+    const { error: authDeleteError } = await db.auth.admin.deleteUser(userId);
+    if (authDeleteError) {
+      const msg = String(authDeleteError.message || '').toLowerCase();
+      const notFound =
+        msg.includes('not found') || msg.includes('user not found') || authDeleteError.status === 404;
+      if (!notFound) {
+        console.error('[admin/users DELETE] auth:', authDeleteError);
+        return NextResponse.json(
+          { error: authDeleteError.message || 'No se pudo eliminar la cuenta de autenticación.' },
+          { status: 500 },
+        );
+      }
+    }
+
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    console.error('[admin/users/[userId] DELETE]', err);
+    return NextResponse.json({ error: 'Error interno.' }, { status: 500 });
+  }
 }
 
 export async function GET(req, { params }) {

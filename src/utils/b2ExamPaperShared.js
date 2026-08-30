@@ -693,7 +693,11 @@ function buildCorrectLetterMapFromRespuestas(respuestas, pattern) {
   const map = new Map();
   for (const row of respuestas || []) {
     if (row?.correcta !== true) continue;
-    const m = String(row.respuesta || '').trim().match(pattern);
+    const t = String(row.respuesta || '').trim();
+    let m = t.match(pattern);
+    if (!m) {
+      m = t.match(/^(\d{1,2})\s+([A-G])\b\s*\)?\s*/i);
+    }
     if (m) map.set(Number(m[1]), m[2].toUpperCase());
   }
   return map;
@@ -713,7 +717,7 @@ export function buildReadingSyntheticMcqGroups(
 
   const readingCorrectLetterByQuestion = buildCorrectLetterMapFromRespuestas(
     respuestas,
-    /^(\d{1,2})\s+([A-G])\s*$/i,
+    /^(\d{1,2})\s+([A-G])\b/i,
   );
 
   if (partNumber === 5) {
@@ -812,7 +816,7 @@ export function buildPart6McqGroupsFromGroupedAnswers(
 
   const readingCorrectLetterByQuestion = buildCorrectLetterMapFromRespuestas(
     respuestas,
-    /^(\d{1,2})\s+([A-G])\s*$/i,
+    /^(\d{1,2})\s+([A-G])\b/i,
   );
   const pool = resolveReadingPart6SentencePool(rawEnunciado, passageText);
   const letters = [...'ABCDEFG'];

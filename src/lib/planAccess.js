@@ -4,6 +4,7 @@
 import {
   authMetadataPlanSlug,
   getPlanBySlug,
+  normalizeAdminAssignablePlanSlug,
 } from '@/data/financialPlanConfig';
 import {
   getDraloAiDailyLimit,
@@ -12,8 +13,8 @@ import {
   getWritingCorrectionMonthlyLimit,
   hasEntitlement,
 } from '@/lib/subscriptionPlans';
-import { getSubscriptionsDb, findSubscriptionByUserId } from '@/lib/stripe/subscriptions';
 import { subscriptionGrantsAccess } from '@/lib/stripe/server';
+import { getSubscriptionsDb, findSubscriptionByUserId } from '@/lib/stripe/subscriptions';
 import { getSupabaseAdmin } from '@/lib/aiUsage';
 import { getUserRoleNameServer } from '@/lib/userRoleServer';
 import {
@@ -51,13 +52,23 @@ export async function shouldApplyPlanUsageLimits(userId, userEmail = '') {
   return isStudentRole(role);
 }
 
-/** Plan activo: suscripción Stripe viva → metadata JWT → free. */
+/** Plan activo: suscripción Stripe viva → plan asignado en perfil → metadata JWT → free. */
 export async function resolveUserPlanSlug(userId, userMetadata = null) {
   const db = getDb();
   if (db && userId) {
     const row = await findSubscriptionByUserId(db, userId);
     if (row && subscriptionGrantsAccess(row.status) && row.plan_id) {
-      return String(row.plan_id).toLowerCase();
+      return normalizeAdminAssignablePlanSlug(row.plan_id);
+    }
+
+    const { data: profileRow } = await db
+      .from('Usuarios_y_Perfil_users')
+      .select('plan_id')
+      .eq('id', userId)
+      .maybeSingle();
+
+    if (profileRow?.plan_id) {
+      return normalizeAdminAssignablePlanSlug(profileRow.plan_id);
     }
   }
   return authMetadataPlanSlug(userMetadata?.subscription_plan);

@@ -5,8 +5,8 @@ import '@/styles/staff-panels-night-mode.css';
 import './globals.css';
 import '@/styles/mascot.css';
 import Script from 'next/script';
-import RootLayoutClient from './RootLayoutClient';
-import { ExamProvider } from '@/context/ExamContext';
+import { Suspense } from 'react';
+import ClientAppProviders from './ClientAppProviders';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 import { SEO_PAGE_META } from '@/lib/siteSeo';
 import {
@@ -76,9 +76,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <AccessibilityProvider>
-          <ExamProvider>
-            <RootLayoutClient>{children}</RootLayoutClient>
-          </ExamProvider>
+          <Suspense fallback={null}>
+            <ClientAppProviders>{children}</ClientAppProviders>
+          </Suspense>
         </AccessibilityProvider>
       </body>
     </html>

@@ -30,6 +30,30 @@ import AuthenticatedAppShell from '@/components/layout/AuthenticatedAppShell';
 import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
 import { useLevelsStarsBackfill } from '@/hooks/useLevelsStarsBackfill';
 
+const TOAST_OPTIONS = {
+  duration: 4500,
+  style: {
+    borderRadius: '14px',
+    background: '#0f172a',
+    color: '#f8fafc',
+    padding: '14px 18px',
+    fontSize: '14px',
+    lineHeight: 1.5,
+    boxShadow: '0 16px 40px rgba(15, 23, 42, 0.22)',
+    border: '1px solid rgba(148, 163, 184, 0.18)',
+  },
+  success: {
+    iconTheme: { primary: '#34d399', secondary: '#0f172a' },
+  },
+  error: {
+    duration: 6000,
+    iconTheme: { primary: '#f87171', secondary: '#0f172a' },
+  },
+  loading: {
+    iconTheme: { primary: '#818cf8', secondary: '#0f172a' },
+  },
+};
+
 function SiteHeaderBrand({ nav = null }) {
   return (
     <header className="site-header">
@@ -242,7 +266,7 @@ export default function RootLayoutClient({ children }) {
     return (
       <>
         <SiteNightModeInit />
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
         <main className="page-content">{children}</main>
       </>
     );
@@ -252,7 +276,7 @@ export default function RootLayoutClient({ children }) {
     return (
       <>
         <SiteNightModeInit />
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
         <SiteHeaderBrand />
         <main className="page-content">
           <RouteLoadingMascot label="Cargando" variant={3} />
@@ -265,7 +289,7 @@ export default function RootLayoutClient({ children }) {
     return (
       <>
         <SiteNightModeInit />
-        <Toaster position="top-center" reverseOrder={false} />
+        <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
         <SiteHeaderBrand />
         <main className="page-content">
           <RouteLoadingMascot label="Redirigiendo al login" variant={3} />
@@ -322,7 +346,7 @@ export default function RootLayoutClient({ children }) {
   return (
     <>
       <SiteNightModeInit />
-      <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
       <MicrosoftClarity enabled={clarityAnalyticsEnabled} projectId={clarityProjectId} />
       <GoogleAnalytics enabled={googleAnalyticsEnabled} measurementId={gaMeasurementId} />
       <MetaPixel enabled={metaPixelEnabled} pixelId={metaPixelId} />

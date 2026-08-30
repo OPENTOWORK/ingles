@@ -85,6 +85,7 @@ async function sendNow(template, to, variables, adminClient, replyTo) {
   const text = renderEmailTemplate(template.cuerpo, merged).trim();
   const { html } = buildBrandedEmailFromPlainText(text, {
     preheader: subject,
+    headline: subject,
     ctaLabel: CTA_LABEL_BY_TRIGGER[template.trigger_event] || 'Empezar a practicar',
   });
 

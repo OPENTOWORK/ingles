@@ -119,6 +119,7 @@ export async function POST(req) {
         nombre: name || null,
         rol_id: roleId,
         activo: true,
+        plan_id: 'free',
       },
       { onConflict: 'id' },
     );

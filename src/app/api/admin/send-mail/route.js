@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { deliverTransactionalEmail } from '@/lib/emailDelivery';
+import { buildBrandedManualMessageEmail } from '@/lib/emailBrandedLayout';
 
 const isValidEmail = (value) =>
   /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || '').trim().toLowerCase());
@@ -34,18 +35,17 @@ export async function POST(req) {
       auth.user.email?.split('@')[0] ||
       'Administración Dralo';
 
-    const text = [
+    const { html, text } = buildBrandedManualMessageEmail({
       message,
-      '',
-      '—',
-      `${adminName} · Dralo English`,
-    ].join('\n');
+      subject,
+      senderName: adminName,
+    });
 
     let sent = 0;
     const errors = [];
 
     for (const to of recipients) {
-      const result = await deliverTransactionalEmail({ to, subject, text });
+      const result = await deliverTransactionalEmail({ to, subject, text, html });
       if (result.ok) {
         sent += 1;
       } else {
@@ -69,7 +69,12 @@ export async function POST(req) {
       success: true,
       sent,
       failed: recipients.length - sent,
+      channel: sent > 0 ? 'resend-or-smtp' : undefined,
       errors: errors.length ? errors : undefined,
+      notice:
+        sent > 0
+          ? 'Si un destinatario no lo recibe, puede estar en spam o su servidor puede haber bloqueado el mensaje (rebote aparte).'
+          : undefined,
     });
   } catch (err) {
     console.error('[admin/send-mail]', err);
