@@ -16937,6 +16937,15 @@ body.reading-night-mode .levels-writing-strategy__check-item {
   font-size: 15px;
 }
 
+.profile-settings-panel__intro--promo {
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+  border: 1px solid #c7d2fe;
+  color: #1e293b;
+  font-weight: 500;
+}
+
 .profile-settings-panel .profile-collapse--danger {
   margin-top: 10px;
   border-color: rgba(239, 68, 68, 0.32);

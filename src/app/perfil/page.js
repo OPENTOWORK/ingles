@@ -1248,9 +1248,10 @@ export default function ProfilePage() {
             </button>
           </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title="Invite friends">
-            <p className="profile-settings-panel__intro">
-              Send an email invitation so friends can join you to practise.
+          <ProfileCollapsibleSection title="Invite a friend — get 2 months free">
+            <p className="profile-settings-panel__intro profile-settings-panel__intro--promo">
+              Invite a friend and get 2 months free when they sign up. Send them an email
+              invitation to join you and practise on Dralo.
             </p>
             <div className="form-group">
               <label className="form-label">Friend's email</label>
