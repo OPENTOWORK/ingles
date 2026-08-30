@@ -169,7 +169,9 @@ export default function SubscriptionPlansSection({
         </div>
         {isAnnual ? (
           <p className={styles.billingToggleHint}>
-            Ahorra un {ANNUAL_BILLING_DISCOUNT_PERCENT}% pagando el año completo de una vez.
+            {DRALO_SUBSCRIPTION_PLANS.some((plan) => planHasLaunchPricing(plan))
+              ? 'Precio de lanzamiento al pagar el año completo de una vez.'
+              : `Ahorra un ${ANNUAL_BILLING_DISCOUNT_PERCENT}% pagando el año completo de una vez.`}
           </p>
         ) : null}
       </div>

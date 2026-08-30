@@ -4,37 +4,36 @@
  *
  *   npm run stripe:setup
  *
- * Es idempotente: los precios se buscan por `lookup_key`, así que puedes
- * ejecutarlo las veces que quieras sin duplicar nada. Ejecútalo una vez con la
- * clave de test y otra con la de producción.
- *
- * Las suscripciones se cobran al instante (sin periodo de prueba).
+ * Los importes salen de src/data/financialPlanConfig.js (precios de lanzamiento).
+ * Es idempotente: los precios se buscan por `lookup_key`.
  */
 import Stripe from 'stripe';
+import { existsSync, readFileSync, writeFileSync } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { loadEnvLocal } from './load-env-local.mjs';
+import {
+  DRALO_SUBSCRIPTION_PLANS,
+  getPlanMonthlyPrice,
+} from '../src/data/financialPlanConfig.js';
 
 loadEnvLocal();
 
-// Espejo de DRALO_SUBSCRIPTION_PLANS y ANNUAL_BILLING_DISCOUNT_PERCENT en
-// src/data/financialPlanConfig.js (ese fichero es ESM y este proyecto es CJS).
-const ANNUAL_DISCOUNT_PERCENT = 25;
-const PLANS = [
-  {
-    slug: 'premium',
-    name: 'Dralo PLUS',
-    description: 'Acceso completo a A2–C2, 10 exámenes al mes y corrección avanzada de Writing.',
-    monthly: 7.99,
-  },
-  {
-    slug: 'pro',
-    name: 'Dralo PREMIUM',
-    description: 'Exámenes ilimitados, Writing 20/mes, Speaking 20/día y soporte prioritario.',
-    monthly: 14.99,
-  },
-];
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const ENV_LOCAL = path.join(ROOT, '.env.local');
 
 const CURRENCY = 'eur';
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.dralo.es').replace(/\/$/, '');
+
+const PLANS = DRALO_SUBSCRIPTION_PLANS.filter(
+  (plan) => plan.activo !== false && Number(plan.precio) > 0,
+).map((plan) => ({
+  slug: plan.slug,
+  name: `Dralo ${plan.nombre}`,
+  description: plan.descripcionCorta || plan.descripcion,
+  getAmountEuros: (interval) =>
+    getPlanMonthlyPrice(plan, interval === 'year' ? 'annual' : 'monthly'),
+}));
 
 const secretKey = (process.env.STRIPE_SECRET_KEY || '').trim();
 if (!secretKey.startsWith('sk_')) {
@@ -46,11 +45,15 @@ const stripe = new Stripe(secretKey);
 const isLive = secretKey.startsWith('sk_live_');
 
 function centsFor(plan, interval) {
+  const monthlyEuros = plan.getAmountEuros(interval);
   if (interval === 'year') {
-    const discounted = plan.monthly * (1 - ANNUAL_DISCOUNT_PERCENT / 100);
-    return Math.round(discounted * 12 * 100);
+    return Math.round(monthlyEuros * 12 * 100);
   }
-  return Math.round(plan.monthly * 100);
+  return Math.round(monthlyEuros * 100);
+}
+
+function formatEuros(cents) {
+  return `${(cents / 100).toFixed(2)} €`;
 }
 
 async function findPriceByLookupKey(lookupKey) {
@@ -75,13 +78,10 @@ async function ensurePrice(plan, interval, productId) {
   const existing = await findPriceByLookupKey(lookupKey);
 
   if (existing && existing.unit_amount === target && existing.currency === CURRENCY) {
-    console.log(`  ${lookupKey}: correcto (${existing.id}, ${(target / 100).toFixed(2)} €)`);
+    console.log(`  ${lookupKey}: correcto (${existing.id}, ${formatEuros(target)})`);
     return existing;
   }
 
-  // En Stripe el importe de un precio es inmutable: cambiarlo implica crear uno
-  // nuevo, llevarse la lookup_key y archivar el viejo. Quien ya esté suscrito
-  // sigue en el precio antiguo hasta que cambie de plan desde el portal.
   const price = await stripe.prices.create({
     product: productId,
     currency: CURRENCY,
@@ -89,17 +89,21 @@ async function ensurePrice(plan, interval, productId) {
     recurring: { interval },
     lookup_key: lookupKey,
     transfer_lookup_key: Boolean(existing),
-    metadata: { dralo_plan_slug: plan.slug, dralo_interval: interval },
+    metadata: {
+      dralo_plan_slug: plan.slug,
+      dralo_interval: interval,
+      dralo_launch_pricing: 'true',
+    },
   });
 
   if (existing) {
     await stripe.prices.update(existing.id, { active: false });
     console.log(
-      `  ${lookupKey}: ${(existing.unit_amount / 100).toFixed(2)} € → ${(target / 100).toFixed(2)} € ` +
+      `  ${lookupKey}: ${formatEuros(existing.unit_amount)} → ${formatEuros(target)} ` +
         `(nuevo ${price.id}, archivado ${existing.id})`,
     );
   } else {
-    console.log(`  ${lookupKey}: creado (${price.id}, ${(target / 100).toFixed(2)} €)`);
+    console.log(`  ${lookupKey}: creado (${price.id}, ${formatEuros(target)})`);
   }
   return price;
 }
@@ -108,17 +112,36 @@ function productIdOf(price) {
   return typeof price.product === 'string' ? price.product : price.product?.id || null;
 }
 
+function upsertEnvLocal(lines) {
+  if (!existsSync(ENV_LOCAL)) return;
+  const keys = new Set(lines.map((line) => line.split('=')[0]));
+  const current = readFileSync(ENV_LOCAL, 'utf8').split(/\r?\n/);
+  const kept = current.filter((line) => {
+    const key = line.trim().split('=')[0];
+    return !keys.has(key);
+  });
+  const next = [...kept.filter((line, index, arr) => !(line === '' && index === arr.length - 1)), ...lines, ''];
+  writeFileSync(ENV_LOCAL, next.join('\n'), 'utf8');
+  console.log('\nActualizado .env.local con los nuevos STRIPE_PRICE_*.');
+}
+
 async function main() {
   console.log(`Stripe en modo ${isLive ? 'LIVE (dinero real)' : 'TEST'}\n`);
+  console.log('Precios de lanzamiento (financialPlanConfig.js):\n');
 
   const envLines = [];
   const portalProducts = [];
 
   for (const plan of PLANS) {
-    console.log(`Plan ${plan.slug} (${plan.name})`);
+    const monthlyEuros = plan.getAmountEuros('month');
+    const annualMonthlyEuros = plan.getAmountEuros('year');
+    console.log(
+      `Plan ${plan.slug} (${plan.name}) — mensual ${monthlyEuros.toFixed(2)} €/mes · ` +
+        `anual ${annualMonthlyEuros.toFixed(2)} €/mes (${(annualMonthlyEuros * 12).toFixed(2)} €/año)`,
+    );
 
-    // Si ya existe alguno de los dos precios, reutilizamos su producto.
-    const already = (await findPriceByLookupKey(`dralo_${plan.slug}_month`)) ||
+    const already =
+      (await findPriceByLookupKey(`dralo_${plan.slug}_month`)) ||
       (await findPriceByLookupKey(`dralo_${plan.slug}_year`));
     const productId = await ensureProduct(plan, already ? productIdOf(already) : null);
 
@@ -152,8 +175,6 @@ async function main() {
     },
   };
 
-  // Reutilizamos la configuración existente: crear una nueva en cada ejecución
-  // iría dejando configuraciones huérfanas apuntando a precios archivados.
   let portalConfigurationId = (process.env.STRIPE_PORTAL_CONFIGURATION_ID || '').trim();
   try {
     if (portalConfigurationId) {
@@ -178,9 +199,11 @@ async function main() {
 
   console.log('Copia esto en .env.local y en las variables de entorno de Vercel:\n');
   console.log(envLines.join('\n'));
+  upsertEnvLocal(envLines);
   console.log('\nDespués crea el webhook apuntando a:');
   console.log(`  ${SITE_URL}/api/stripe/webhook/`);
   console.log('y guarda su signing secret en STRIPE_WEBHOOK_SECRET.');
+  console.log('\nPara subir las variables a Vercel: npm run stripe:sync-vercel');
 }
 
 main().catch((err) => {
