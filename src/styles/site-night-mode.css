@@ -609,6 +609,31 @@ body.reading-night-mode .profile-invite-promo__text {
   color: #fde68a;
 }
 
+body.reading-night-mode .invite-promo-banner__inner {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #422006 0%, #78350f 55%, #92400e 100%);
+  box-shadow:
+    0 0 0 4px rgba(245, 158, 11, 0.1),
+    0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+body.reading-night-mode .invite-promo-banner__text {
+  color: #fde68a;
+}
+
+body.reading-night-mode .invite-promo-banner__text strong {
+  color: #fef3c7;
+}
+
+body.reading-night-mode .invite-promo-banner__detail {
+  color: #fcd34d;
+}
+
+body.reading-night-mode .invite-promo-banner__close {
+  background: rgba(251, 191, 36, 0.14);
+  color: #fde68a;
+}
+
 body.reading-night-mode .profile-settings-panel .profile-collapse--danger {
   background: linear-gradient(180deg, #2a1518 0%, #1f1214 100%);
   border-color: rgba(248, 113, 113, 0.28);

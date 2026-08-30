@@ -133,6 +133,7 @@ export default function ProfilePage() {
   const [nameSaveError, setNameSaveError] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [openInviteFromUrl, setOpenInviteFromUrl] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [notifications, setNotifications] = useState({ email: true, push: true });
   const [theme, setTheme] = useState('light');
@@ -170,7 +171,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const tab = new URLSearchParams(window.location.search).get('tab');
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get('tab');
+    const invite = params.get('invite') === '1';
+    if (invite) setOpenInviteFromUrl(true);
     if (tab) {
       const valid = PROFILE_TABS.find((t) => t.id === tab);
       if (valid && !(isStudent && isStudentHiddenProfileTab(tab, true))) {
@@ -1248,7 +1252,10 @@ export default function ProfilePage() {
             </button>
           </ProfileCollapsibleSection>
 
-          <ProfileCollapsibleSection title="Invite a friend — get 2 months free">
+          <ProfileCollapsibleSection
+            title="Invite a friend — get 2 months free"
+            defaultOpen={openInviteFromUrl}
+          >
             <div className="profile-invite-promo" role="note">
               <div className="profile-invite-promo__icon" aria-hidden>
                 <Gift size={26} strokeWidth={2} />

@@ -632,6 +632,136 @@ body {
   object-position: center;
 }
 
+.invite-promo-banner {
+  width: 100%;
+  padding: 0 clamp(12px, 2.5vw, 24px) 10px;
+  box-sizing: border-box;
+}
+
+.invite-promo-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 14px 12px 16px;
+  border-radius: 14px;
+  border: 2px solid #f59e0b;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 45%, #fde68a 100%);
+  box-shadow:
+    0 0 0 4px rgba(245, 158, 11, 0.12),
+    0 10px 24px rgba(217, 119, 6, 0.16);
+}
+
+.invite-promo-banner__icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(217, 119, 6, 0.3);
+}
+
+.invite-promo-banner__text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: #78350f;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.invite-promo-banner__text strong {
+  display: block;
+  font-size: 1rem;
+  color: #92400e;
+}
+
+.invite-promo-banner__detail {
+  display: inline;
+  margin-left: 0.35rem;
+  color: #b45309;
+  font-weight: 600;
+}
+
+.invite-promo-banner__cta {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-decoration: none;
+  white-space: nowrap;
+  box-shadow: 0 6px 16px rgba(180, 83, 9, 0.28);
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.invite-promo-banner__cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  text-decoration: none;
+}
+
+.invite-promo-banner__close {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  margin-left: 2px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(146, 64, 14, 0.1);
+  color: #92400e;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.invite-promo-banner__close:hover {
+  background: rgba(146, 64, 14, 0.18);
+  color: #78350f;
+}
+
+@media (max-width: 720px) {
+  .invite-promo-banner__inner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 12px;
+  }
+
+  .invite-promo-banner__text strong {
+    font-size: 0.95rem;
+  }
+
+  .invite-promo-banner__detail {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+  }
+
+  .invite-promo-banner__cta {
+    width: calc(100% - 46px);
+    margin-left: 52px;
+    text-align: center;
+  }
+
+  .invite-promo-banner__close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+  }
+
+  .invite-promo-banner__inner {
+    position: relative;
+    padding-right: 44px;
+  }
+}
+
 .app-nav__toggle {
   display: none;
   flex-direction: column;
