@@ -584,6 +584,31 @@ body.reading-night-mode .profile-settings-panel__intro {
   color: #cbd5e1;
 }
 
+body.reading-night-mode .profile-invite-promo {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, #422006 0%, #78350f 55%, #92400e 100%);
+  box-shadow:
+    0 0 0 4px rgba(245, 158, 11, 0.12),
+    0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+body.reading-night-mode .profile-invite-promo__badge {
+  background: #fbbf24;
+  color: #422006;
+}
+
+body.reading-night-mode .profile-invite-promo__headline {
+  color: #fef3c7;
+}
+
+body.reading-night-mode .profile-invite-promo__headline strong {
+  color: #fcd34d;
+}
+
+body.reading-night-mode .profile-invite-promo__text {
+  color: #fde68a;
+}
+
 body.reading-night-mode .profile-settings-panel .profile-collapse--danger {
   background: linear-gradient(180deg, #2a1518 0%, #1f1214 100%);
   border-color: rgba(248, 113, 113, 0.28);

@@ -95,7 +95,7 @@ const DraloLevelProgressSection = dynamic(
   },
 );
 import SiteMascot from '@/components/SiteMascot';
-import { TrendingUp } from 'lucide-react';
+import { Gift, TrendingUp } from 'lucide-react';
 import PasswordInput from '@/components/PasswordInput';
 import {
   hydrateProfileMockData,
@@ -1249,10 +1249,21 @@ export default function ProfilePage() {
           </ProfileCollapsibleSection>
 
           <ProfileCollapsibleSection title="Invite a friend — get 2 months free">
-            <p className="profile-settings-panel__intro profile-settings-panel__intro--promo">
-              Invite a friend and get 2 months free when they sign up. Send them an email
-              invitation to join you and practise on Dralo.
-            </p>
+            <div className="profile-invite-promo" role="note">
+              <div className="profile-invite-promo__icon" aria-hidden>
+                <Gift size={26} strokeWidth={2} />
+              </div>
+              <div className="profile-invite-promo__copy">
+                <span className="profile-invite-promo__badge">Referral reward</span>
+                <p className="profile-invite-promo__headline">
+                  Invite a friend and get <strong>2 months free</strong>
+                </p>
+                <p className="profile-invite-promo__text">
+                  When your friend joins a paid plan, you get 2 months free on Dralo. Send them
+                  an email invitation to start practising together.
+                </p>
+              </div>
+            </div>
             <div className="form-group">
               <label className="form-label">Friend's email</label>
               <input
