@@ -3,6 +3,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId, getRedirectPathByRoleName, peekCachedRoleName } from '@/utils/authRoles';
+import { normalizePostAuthPath } from '@/utils/postAuthNavigation';
 import { completeSignIn } from '@/utils/completeSignIn';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { clearLogoutPending } from '@/utils/logout';
@@ -21,14 +22,14 @@ function getSafeNextPath(searchParams) {
 
 async function resolvePostLoginPath(user, searchParams) {
   const nextPath = getSafeNextPath(searchParams);
-  if (nextPath) return nextPath;
+  if (nextPath) return normalizePostAuthPath(nextPath);
 
   const cachedRole = peekCachedRoleName(user.id);
   if (cachedRole) {
-    return getRedirectPathByRoleName(cachedRole);
+    return normalizePostAuthPath(getRedirectPathByRoleName(cachedRole));
   }
 
-  return getRedirectPathByUserId(user.id, user.email);
+  return normalizePostAuthPath(await getRedirectPathByUserId(user.id, user.email));
 }
 
 /** Mensajes de /auth/confirm cuando un enlace de correo no se puede canjear. */
@@ -158,7 +159,7 @@ function LoginPageInner() {
       ensureAppUserProfile().catch(() => {}),
     ]);
 
-    window.location.replace(path);
+    router.replace(path);
   };
 
   const handleResendConfirmation = async () => {

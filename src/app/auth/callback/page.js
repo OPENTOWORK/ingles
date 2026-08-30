@@ -3,6 +3,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId } from '@/utils/authRoles';
+import { normalizePostAuthPath } from '@/utils/postAuthNavigation';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import toast from 'react-hot-toast';
 
@@ -61,12 +62,11 @@ function AuthCallbackInner() {
         await ensureAppUserProfile().catch(() => {});
 
         const redirectPath = await getRedirectPathByUserId(user?.id, user?.email);
-        const destination =
-          redirectPath?.replace(/\/profile\/?$/i, '/perfil') || '/perfil';
+        const destination = normalizePostAuthPath(redirectPath);
 
         if (cancelled) return;
         toast.success('Sesión iniciada correctamente');
-        router.replace(destination.startsWith('/') ? destination : '/perfil');
+        router.replace(destination);
       } catch (err) {
         console.error('Error en /auth/callback:', err);
         if (cancelled) return;

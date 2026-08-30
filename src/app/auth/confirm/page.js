@@ -1,7 +1,10 @@
 'use client';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
+import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
+import { normalizePostAuthPath } from '@/utils/postAuthNavigation';
 import SiteMascot from '@/components/SiteMascot';
 
 /**
@@ -26,9 +29,7 @@ const DEFAULT_NEXT_BY_TYPE = {
 
 function safeNext(value, type) {
   const fallback = DEFAULT_NEXT_BY_TYPE[type] || '/perfil';
-  const raw = String(value || '').trim();
-  if (!raw.startsWith('/') || raw.startsWith('//')) return fallback;
-  return raw;
+  return normalizePostAuthPath(String(value || '').trim() || fallback);
 }
 
 function readParams() {
@@ -59,6 +60,7 @@ function describeError(rawMessage, type) {
 }
 
 function AuthConfirmInner() {
+  const router = useRouter();
   const [error, setError] = useState('');
   const [type, setType] = useState('magiclink');
   const startedRef = useRef(false);
@@ -114,8 +116,11 @@ function AuthConfirmInner() {
         }
       }
 
-      // replace() para que el botón «atrás» no vuelva a un token ya gastado.
-      window.location.replace(next);
+      if (linkType === 'signup' || linkType === 'email' || linkType === 'invite') {
+        await ensureAppUserProfile().catch(() => {});
+      }
+
+      router.replace(next);
     };
 
     run().catch((err) => {
