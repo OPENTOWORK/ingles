@@ -98,7 +98,7 @@ export default function InviteFriendPromoBanner() {
         </span>
         <p className="invite-promo-banner__text">
           <strong>Invite a friend and get 2 months free</strong>
-          <span className="invite-promo-banner__detail">when they join a paid plan.</span>
+          <span className="invite-promo-banner__detail">when they join a paid plan — you get 2 months free on PLUS.</span>
         </p>
         <Link href="/perfil?tab=settings&invite=1" className="invite-promo-banner__cta">
           Invite now

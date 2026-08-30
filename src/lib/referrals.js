@@ -1,6 +1,7 @@
 import { randomBytes } from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
+import { grantReferralReward } from '@/lib/stripe/referralRewards';
 
 export const REFERRAL_INVITATIONS_TABLE = 'referral_invitations';
 
@@ -163,7 +164,7 @@ export async function markReferralRegistered({ userId, email, referralToken }) {
 }
 
 /**
- * Marca la invitación como pagada cuando el invitado activa un plan de pago.
+ * Marca la invitación como pagada y concede 2 meses gratis de PLUS al referidor.
  */
 export async function markReferralPaid({ userId, planSlug }) {
   const db = getReferralsDb();
@@ -171,7 +172,7 @@ export async function markReferralPaid({ userId, planSlug }) {
 
   const { data: invitation } = await db
     .from(REFERRAL_INVITATIONS_TABLE)
-    .select('id, status, inviter_user_id')
+    .select('id, status, inviter_user_id, reward_granted_at')
     .eq('invited_user_id', userId)
     .in('status', [REFERRAL_STATUS.REGISTERED, REFERRAL_STATUS.PAID])
     .order('registered_at', { ascending: false })
@@ -179,24 +180,58 @@ export async function markReferralPaid({ userId, planSlug }) {
     .maybeSingle();
 
   if (!invitation) return { ok: false, reason: 'no_invitation' };
-  if (invitation.status === REFERRAL_STATUS.PAID) return { ok: true, alreadyPaid: true };
 
-  const { error } = await db
-    .from(REFERRAL_INVITATIONS_TABLE)
-    .update({
-      status: REFERRAL_STATUS.PAID,
-      paid_plan_slug: planSlug,
-      paid_at: new Date().toISOString(),
-    })
-    .eq('id', invitation.id)
-    .eq('status', REFERRAL_STATUS.REGISTERED);
+  const now = new Date().toISOString();
+  const needsStatusUpdate = invitation.status === REFERRAL_STATUS.REGISTERED;
 
-  if (error) {
-    console.error('[referrals] mark paid', error);
-    return { ok: false, error: error.message };
+  if (needsStatusUpdate) {
+    const { error } = await db
+      .from(REFERRAL_INVITATIONS_TABLE)
+      .update({
+        status: REFERRAL_STATUS.PAID,
+        paid_plan_slug: planSlug,
+        paid_at: now,
+      })
+      .eq('id', invitation.id)
+      .eq('status', REFERRAL_STATUS.REGISTERED);
+
+    if (error) {
+      console.error('[referrals] mark paid', error);
+      return { ok: false, error: error.message };
+    }
   }
 
-  return { ok: true, invitationId: invitation.id, inviterUserId: invitation.inviter_user_id };
+  if (invitation.reward_granted_at) {
+    return {
+      ok: true,
+      invitationId: invitation.id,
+      inviterUserId: invitation.inviter_user_id,
+      rewardAlreadyGranted: true,
+    };
+  }
+
+  const reward = await grantReferralReward({
+    inviterUserId: invitation.inviter_user_id,
+    invitationId: invitation.id,
+  });
+
+  if (reward.ok) {
+    await db
+      .from(REFERRAL_INVITATIONS_TABLE)
+      .update({ reward_granted_at: now })
+      .eq('id', invitation.id)
+      .is('reward_granted_at', null);
+  } else {
+    console.error('[referrals] reward not granted', invitation.id, reward);
+  }
+
+  return {
+    ok: true,
+    invitationId: invitation.id,
+    inviterUserId: invitation.inviter_user_id,
+    rewardGranted: reward.ok,
+    reward,
+  };
 }
 
 export async function listReferralsForUser(userId) {
@@ -213,7 +248,7 @@ export async function listReferralsForUser(userId) {
   const { data, error } = await db
     .from(REFERRAL_INVITATIONS_TABLE)
     .select(
-      'id, invitee_email, status, email_sent_at, registered_at, paid_at, paid_plan_slug, custom_message',
+      'id, invitee_email, status, email_sent_at, registered_at, paid_at, paid_plan_slug, reward_granted_at, custom_message',
     )
     .eq('inviter_user_id', userId)
     .order('created_at', { ascending: false });

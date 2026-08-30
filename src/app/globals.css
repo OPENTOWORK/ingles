@@ -17250,6 +17250,11 @@ body.reading-night-mode .levels-writing-strategy__check-item {
   color: #64748b;
 }
 
+.profile-referrals__meta--reward {
+  color: #15803d;
+  font-weight: 600;
+}
+
 .profile-settings-panel .profile-collapse--danger {
   margin-top: 10px;
   border-color: rgba(239, 68, 68, 0.32);

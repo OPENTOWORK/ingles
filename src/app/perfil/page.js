@@ -1307,8 +1307,8 @@ export default function ProfilePage() {
                   Invite a friend and get <strong>2 months free</strong>
                 </p>
                 <p className="profile-invite-promo__text">
-                  When your friend joins a paid plan, you get 2 months free on Dralo. Send them
-                  an email invitation to start practising together.
+                  When your friend joins a paid plan, you get <strong>2 months free on PLUS</strong>.
+                  Send them an email invitation to start practising together.
                 </p>
               </div>
             </div>
@@ -1356,7 +1356,11 @@ export default function ProfilePage() {
                           {referralStatusLabel(invitation.status)}
                         </span>
                       </div>
-                      {invitation.paidAt ? (
+                      {invitation.rewardGrantedAt ? (
+                        <p className="profile-referrals__meta profile-referrals__meta--reward">
+                          You earned 2 months free on PLUS
+                        </p>
+                      ) : invitation.paidAt ? (
                         <p className="profile-referrals__meta">
                           Joined a paid plan
                           {invitation.paidPlan ? ` (${invitation.paidPlan.toUpperCase()})` : ''} on{' '}

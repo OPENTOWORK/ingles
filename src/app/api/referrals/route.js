@@ -35,6 +35,7 @@ export async function GET(req) {
         registeredAt: row.registered_at,
         paidAt: row.paid_at,
         paidPlan: row.paid_plan_slug,
+        rewardGrantedAt: row.reward_granted_at,
       })),
     });
   } catch (err) {
