@@ -23,7 +23,7 @@ function slotHasPriorProgress(progressBySlot, slot) {
  * @param {{ lang?: 'en' | 'es' }} [options]
  */
 export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {}) {
-  const { applyLimits, maxExamSlot, isExamSlotLocked, refresh } = usePlanEntitlements();
+  const { applyLimits, maxExamSlot, isExamSlotLocked, refresh, planSlug } = usePlanEntitlements();
   const [modalState, setModalState] = useState({
     open: false,
     variant: 'locked_slot',
@@ -54,8 +54,8 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
   }, []);
 
   const onLockedSlotClick = useCallback(
-    (slot) => {
-      showPlanUpgradeModal({ variant: 'locked_slot', slot: slot ?? null });
+    (slot, message = null) => {
+      showPlanUpgradeModal({ variant: 'locked_slot', slot: slot ?? null, message });
     },
     [showPlanUpgradeModal],
   );
@@ -66,7 +66,13 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
       if (!Number.isFinite(n) || n < 1) return false;
 
       if (applyLimits && isExamSlotLocked(n)) {
-        onLockedSlotClick(n);
+        const isPlus = planSlug === 'premium';
+        const message = isPlus
+          ? lang === 'es'
+            ? `Con Plus tienes desbloqueados los exámenes 1–${maxExamSlot}. Cada mes se desbloquean 10 nuevos hasta completar el catálogo. El examen ${n} estará disponible pronto.`
+            : `Your Plus plan includes Exams 1–${maxExamSlot}. Ten new exams unlock each month until the full catalogue is available. Exam ${n} will be available soon.`
+          : null;
+        onLockedSlotClick(n, message);
         return false;
       }
 
@@ -95,7 +101,10 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
     [
       applyLimits,
       isExamSlotLocked,
+      lang,
+      maxExamSlot,
       onLockedSlotClick,
+      planSlug,
       progressBySlot,
       refresh,
       showPlanUpgradeModal,

@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import {
-  getMaxExamSlotForPlan,
   getStudentPlanContext,
   getStudentPlanUsageBundle,
 } from '@/lib/planAccess';
@@ -29,7 +28,9 @@ export async function GET(req) {
     {
       planSlug: ctx.planSlug,
       applyLimits: ctx.applyLimits,
-      maxExamSlot: getMaxExamSlotForPlan(ctx.planSlug),
+      maxExamSlot: ctx.maxExamSlot,
+      subscriptionMonths: ctx.subscriptionMonths,
+      plusExamUnlock: ctx.plusExamUnlock,
       entitlements: ctx.entitlements,
       progressTracking: ctx.progressTracking,
       writingAdvanced: ctx.writingAdvanced,

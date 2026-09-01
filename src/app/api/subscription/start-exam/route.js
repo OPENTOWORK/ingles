@@ -43,14 +43,17 @@ export async function POST(req) {
     return NextResponse.json({ allowed: true, bypass: true });
   }
 
-  if (!canAccessExamSlot(ctx.planSlug, examSlot)) {
+  if (!canAccessExamSlot(ctx.planSlug, examSlot, { maxExamSlot: ctx.maxExamSlot })) {
+    const isPlus = String(ctx.planSlug).toLowerCase() === 'premium';
     return NextResponse.json(
       {
         allowed: false,
         code: 'EXAM_SLOT_LOCKED',
-        message:
-          'Este examen requiere un plan superior. El plan gratuito incluye solo el Test 1.',
+        message: isPlus
+          ? `Este examen se desbloqueará en el próximo mes de tu plan Plus. Ahora tienes acceso a los exámenes 1–${ctx.maxExamSlot}.`
+          : 'Este examen requiere un plan superior. El plan gratuito incluye solo el Test 1.',
         maxExamSlot: ctx.maxExamSlot,
+        plusExamUnlock: ctx.plusExamUnlock,
       },
       { status: 403 },
     );

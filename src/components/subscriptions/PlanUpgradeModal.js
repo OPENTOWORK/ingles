@@ -14,10 +14,10 @@ const COPY = {
           ? `Exam ${slot} is not included in your current plan.`
           : 'This exam is not included in your current plan.',
       message:
-        'Your Free plan includes Exam 1 only. Upgrade to Plus or Premium to access Exams 2–6 and additional monthly attempts.',
+        'Your Free plan includes Exam 1 only. Upgrade to Plus to unlock 10 new exams each month, or Premium for the full catalogue from day one.',
       benefits: [
-        'Access Exams 2–6 on B2',
-        'More full exam attempts each month',
+        'Plus: 10 new exams unlocked every month',
+        'Premium: full B2 exam catalogue',
         'Writing & Speaking corrections included',
       ],
       cta: 'View plans',
@@ -53,10 +53,10 @@ const COPY = {
           ? `El examen ${slot} no está incluido en tu plan actual.`
           : 'Este examen no está incluido en tu plan actual.',
       message:
-        'Tu plan gratuito incluye solo el Test 1. Mejora a Plus o Premium para acceder a los exámenes 2–6 y más intentos mensuales.',
+        'Tu plan gratuito incluye solo el Test 1. Con Plus se desbloquean 10 exámenes nuevos cada mes; con Premium tienes todo el catálogo desde el primer día.',
       benefits: [
-        'Acceso a exámenes 2–6 en B2',
-        'Más simulacros completos al mes',
+        'Plus: 10 exámenes nuevos cada mes',
+        'Premium: catálogo completo B2',
         'Correcciones de Writing y Speaking incluidas',
       ],
       cta: 'Ver planes',

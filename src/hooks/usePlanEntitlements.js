@@ -68,6 +68,8 @@ export function usePlanEntitlements() {
     planSlug: data?.planSlug ?? 'free',
     applyLimits,
     maxExamSlot,
+    subscriptionMonths: data?.subscriptionMonths ?? null,
+    plusExamUnlock: data?.plusExamUnlock ?? null,
     entitlements: data?.entitlements ?? null,
     usage: data?.usage ?? null,
     progressTracking: Boolean(data?.progressTracking),

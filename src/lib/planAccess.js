@@ -21,10 +21,16 @@ import {
   hasFullNivelesLevelAccess,
   isStudentRole,
 } from '@/constants/studentFeatureAccess';
-import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { ADMIN_EMAIL, normalizeEmail } from '@/utils/authRoles';
+import {
+  getMaxExamSlotForPlan as resolveMaxExamSlotForPlan,
+  getPlusUnlockProgress,
+  getSubscriptionTenureMonths,
+} from '@/lib/plusExamUnlock';
 
 import { PLAN_USAGE_KEYS } from '@/lib/planUsageKeys';
+
+export { getMaxExamSlotForPlan } from '@/lib/plusExamUnlock';
 
 export { PLAN_USAGE_KEYS };
 
@@ -83,6 +89,8 @@ export function getPlanUsageLimit(planSlug, usageKey) {
     case PLAN_USAGE_KEYS.SPEAKING_CORRECTION:
       return getSpeakingCorrectionMonthlyLimit(slug);
     case PLAN_USAGE_KEYS.EXAM_SESSION: {
+      // PLUS: el cupo lo marca el desbloqueo progresivo de slots, no intentos mensuales.
+      if (slug === 'premium' || slug === 'pro') return Infinity;
       const n = getPlanBySlug(slug).entitlements.examsPerMonth;
       return n == null ? Infinity : n;
     }
@@ -101,16 +109,35 @@ export function getPlanUsageLimit(planSlug, usageKey) {
   }
 }
 
-/** Máximo slot de examen accesible (FREE = solo Test 1; planes de pago = catálogo B2 completo). */
-export function getMaxExamSlotForPlan(planSlug) {
+async function resolvePlusSubscriptionAnchor(userId, planSlug) {
   const slug = String(planSlug || 'free').toLowerCase();
-  if (slug === 'free') return 1;
-  return B2_EXAM_SLOT_MAX;
+  if (slug !== 'premium') return null;
+
+  const db = getDb();
+  if (!db || !userId) return null;
+
+  const sub = await findSubscriptionByUserId(db, userId);
+  if (sub?.created_at && subscriptionGrantsAccess(sub.status)) {
+    return sub.created_at;
+  }
+
+  const { data: profileRow } = await db
+    .from('Usuarios_y_Perfil_users')
+    .select('creado_en, updated_at, plan_id')
+    .eq('id', userId)
+    .maybeSingle();
+
+  if (normalizeAdminAssignablePlanSlug(profileRow?.plan_id) === 'premium') {
+    return profileRow?.updated_at || profileRow?.creado_en || null;
+  }
+
+  return null;
 }
 
-export function canAccessExamSlot(planSlug, examSlot) {
+export function canAccessExamSlot(planSlug, examSlot, { maxExamSlot } = {}) {
   const slot = Number(examSlot) || 1;
-  return slot >= 1 && slot <= getMaxExamSlotForPlan(planSlug);
+  const cap = maxExamSlot ?? resolveMaxExamSlotForPlan(planSlug);
+  return slot >= 1 && slot <= cap;
 }
 
 async function readUsageCount(db, userId, usageKey, periodType, periodKey) {
@@ -271,11 +298,21 @@ export async function getPlanUsageSnapshot(userId, usageKey, planSlug) {
 export async function getStudentPlanContext(userId, userEmail = '', userMetadata = null) {
   const planSlug = await resolveUserPlanSlug(userId, userMetadata);
   const applyLimits = await shouldApplyPlanUsageLimits(userId, userEmail);
+  const subscriptionAnchor = await resolvePlusSubscriptionAnchor(userId, planSlug);
+  const subscriptionMonths = getSubscriptionTenureMonths(subscriptionAnchor);
+  const maxExamSlot = resolveMaxExamSlotForPlan(planSlug, { subscriptionMonths });
+  const plusExamUnlock =
+    String(planSlug).toLowerCase() === 'premium'
+      ? getPlusUnlockProgress(subscriptionMonths)
+      : null;
+
   return {
     planSlug,
     applyLimits,
     entitlements: getPlanBySlug(planSlug).entitlements,
-    maxExamSlot: getMaxExamSlotForPlan(planSlug),
+    maxExamSlot,
+    subscriptionMonths: String(planSlug).toLowerCase() === 'premium' ? subscriptionMonths : null,
+    plusExamUnlock,
     progressTracking: getPlanBySlug(planSlug).entitlements.progressTracking === 'advanced',
     writingAdvanced: hasEntitlement(planSlug, 'writingAdvanced'),
     speakingCoach: hasEntitlement(planSlug, 'speakingCoach'),
