@@ -9,7 +9,7 @@ import {
   getSkillExerciseNavState,
   runBackExerciseSkillFlow,
 } from '@/utils/skillPracticeNavigation';
-import { buildProgressBySlotWithLiveOverlay, formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import { buildProgressBySlotWithLiveOverlay } from '@/utils/skillPartFirstProgress';
 import { getModuleNavPartLabel } from '@/utils/formatLevelsPartDisplayName';
 import { buildExamModePracticeHref } from '@/utils/examModeSession';
 import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
@@ -165,21 +165,6 @@ export default function B2ExamPracticeModuleNav({
   const showPreviousExercise = effectiveSkillPractice && typeof onSelectExamSlot === 'function';
   const previousExerciseLabel = isEn ? 'Previous test' : 'Test anterior';
   const canGoPreviousExercise = skillExerciseNav?.canGoPrevious ?? false;
-  const showNextExerciseHint =
-    effectiveSkillPractice &&
-    skillExerciseNav?.nextBlockedReason === 'need_star' &&
-    !skillExerciseNav?.canGoNext;
-  const nextExerciseHint = showNextExerciseHint
-    ? isEn
-      ? `Get at least 1 star on this test to unlock ${formatSkillExerciseLabel(
-          skillExerciseNav.pendingNextSlot,
-          'en',
-        )}.`
-      : `Consigue al menos 1 estrella en este test para desbloquear ${formatSkillExerciseLabel(
-          skillExerciseNav.pendingNextSlot,
-          'es',
-        )}.`
-    : '';
 
   const useBalancedLayout = effectiveSkillPractice || showCheckAnswersButton;
 
@@ -315,7 +300,13 @@ export default function B2ExamPracticeModuleNav({
               disabled={
                 effectiveSkillPractice && skillExerciseNav ? !skillExerciseNav.canGoNext : false
               }
-              aria-describedby={showNextExerciseHint ? 'skill-next-exercise-hint' : undefined}
+              aria-describedby={
+                effectiveSkillPractice &&
+                skillExerciseNav?.nextBlockedReason === 'need_star' &&
+                !skillExerciseNav?.canGoNext
+                  ? 'skill-next-exercise-hint'
+                  : undefined
+              }
             >
               <span className="levels-exam-module-nav__label">{continueLabel}</span>
               <NavChevron direction="forward" />
@@ -331,9 +322,7 @@ export default function B2ExamPracticeModuleNav({
         effectiveSkillPractice ? ' levels-exam-module-nav--skill' : ''
       }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}${
         useBalancedLayout ? ' levels-exam-module-nav--balanced' : ''
-      }${useCenteredPartNav ? ' levels-exam-module-nav--centered-parts' : ''}${
-        showNextExerciseHint ? ' levels-exam-module-nav--next-hint' : ''
-      }`}
+      }${useCenteredPartNav ? ' levels-exam-module-nav--centered-parts' : ''}`}
       data-skill-theme={effectiveSkillPractice && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
@@ -376,15 +365,6 @@ export default function B2ExamPracticeModuleNav({
 
       <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--forward">
         {useBalancedLayout && checkAnswersButton ? checkAnswersButton : null}
-        {showNextExerciseHint ? (
-          <p
-            id="skill-next-exercise-hint"
-            className="levels-exam-module-nav__next-exercise-hint"
-            role="status"
-          >
-            {nextExerciseHint}
-          </p>
-        ) : null}
 
         {!useCenteredPartNav &&
         !useBalancedLayout &&

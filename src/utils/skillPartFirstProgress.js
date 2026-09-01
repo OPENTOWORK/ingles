@@ -9,6 +9,21 @@ export function formatSkillExerciseLabel(examSlot, lang = 'en') {
   return `Test ${slot}`;
 }
 
+/** Banner copy when the next test is locked behind a star on the current test. */
+export function getSkillNextExerciseUnlockHint(skillExerciseNav, { lang = 'en' } = {}) {
+  if (
+    !skillExerciseNav ||
+    skillExerciseNav.nextBlockedReason !== 'need_star' ||
+    skillExerciseNav.canGoNext
+  ) {
+    return null;
+  }
+  const label = formatSkillExerciseLabel(skillExerciseNav.pendingNextSlot, lang === 'es' ? 'es' : 'en');
+  return lang === 'es'
+    ? `Completa este test con al menos 1 estrella para acceder a ${label}.`
+    : `Complete this test with at least 1 star to access ${label}.`;
+}
+
 /** Tema visual de skill practice (no exam mode). */
 export function getSkillPracticeThemeKey(skillRoute) {
   const route = String(skillRoute || '').toLowerCase();

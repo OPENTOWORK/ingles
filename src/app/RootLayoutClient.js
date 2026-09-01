@@ -7,6 +7,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
 import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
+import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 
 const AUTH_FLOW_PATH_PREFIXES = ['/auth/callback', '/auth/confirm'];
@@ -15,9 +16,15 @@ import DraloTagline from '@/components/DraloTagline';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
-import MicrosoftClarity from '@/components/analytics/MicrosoftClarity';
-import GoogleAnalytics from '@/components/analytics/GoogleAnalytics';
-import MetaPixel from '@/components/analytics/MetaPixel';
+const MicrosoftClarity = dynamic(() => import('@/components/analytics/MicrosoftClarity'), {
+  ssr: false,
+});
+const GoogleAnalytics = dynamic(() => import('@/components/analytics/GoogleAnalytics'), {
+  ssr: false,
+});
+const MetaPixel = dynamic(() => import('@/components/analytics/MetaPixel'), {
+  ssr: false,
+});
 import { isClarityExcludedPath } from '@/lib/clarity';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
@@ -85,11 +92,14 @@ function RootLayoutClientInner({ children }) {
   const [authPending, setAuthPending] = useState(() => {
     if (typeof window === 'undefined') return true;
     const path = window.location.pathname;
-    return !isPublicPath(path) && !isWritingV3PreviewPath(path);
+    if (isPublicPath(path) || isWritingV3PreviewPath(path)) return false;
+    return !hasStoredSupabaseSession();
   });
   const [session, setSession] = useState(null);
   const [userRole, setUserRole] = useState('student');
   const [cookieConsent, setCookieConsent] = useState(null);
+  /** Evita renderizar el banner en SSR (LinkedIn y otros crawlers leían los botones como título). */
+  const [cookieConsentHydrated, setCookieConsentHydrated] = useState(false);
   const [showCookieSettings, setShowCookieSettings] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState({
     necessary: true,
@@ -234,18 +244,21 @@ function RootLayoutClientInner({ children }) {
   useEffect(() => {
     try {
       const saved = localStorage.getItem('dralo_cookie_consent');
-      if (!saved) return;
-      const parsed = JSON.parse(saved);
-      if (parsed?.preferences) {
-        setCookiePreferences({
-          necessary: true,
-          analytics: Boolean(parsed.preferences.analytics),
-          personalization: Boolean(parsed.preferences.personalization),
-        });
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed?.preferences) {
+          setCookiePreferences({
+            necessary: true,
+            analytics: Boolean(parsed.preferences.analytics),
+            personalization: Boolean(parsed.preferences.personalization),
+          });
+        }
+        setCookieConsent(parsed);
       }
-      setCookieConsent(parsed);
     } catch (_error) {
       setCookieConsent(null);
+    } finally {
+      setCookieConsentHydrated(true);
     }
   }, []);
 
@@ -369,8 +382,13 @@ function RootLayoutClientInner({ children }) {
 
       <DeferredSiteAssistant enabled={Boolean(session)} />
 
-      {!cookieConsent && (
-        <div className="cookie-banner" role="dialog" aria-label="Configuracion de cookies">
+      {cookieConsentHydrated && !cookieConsent && (
+        <div
+          className="cookie-banner"
+          role="dialog"
+          aria-label="Configuracion de cookies"
+          data-nosnippet
+        >
           <div className="cookie-banner-content">
             <p>
               Este sitio web utiliza cookies y herramientas relacionadas.

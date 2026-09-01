@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import BlogAdminEditLink from '@/components/blog/BlogAdminEditLink';
 import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
-import { formatBlogDate } from '@/lib/blogArticles';
+import { formatBlogDate, blogPostHref } from '@/lib/blogArticles';
 import { blogTypeMeta, normalizeBlogContentType } from '@/lib/blogContentTypes';
 
 /**
@@ -30,7 +30,7 @@ export default function BlogFeaturedHero({ post }) {
 
   return (
     <section className="blog-mag__featured" aria-label="Artículo destacado">
-      <Link href={`/blog/${post.slug}`} className="blog-mag__featured-visual">
+      <Link href={blogPostHref(post.slug)} className="blog-mag__featured-visual">
         {post.cover_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={post.cover_image_url} alt="" loading="eager" />
@@ -46,11 +46,11 @@ export default function BlogFeaturedHero({ post }) {
           </time>
         </div>
         <h2 className="blog-mag__featured-title">
-          <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+          <Link href={blogPostHref(post.slug)}>{post.title}</Link>
         </h2>
         {post.excerpt ? <p className="blog-mag__featured-excerpt">{post.excerpt}</p> : null}
         <div className="blog-mag__featured-actions">
-          <Link href={`/blog/${post.slug}`} className="blog-mag__featured-cta">
+          <Link href={blogPostHref(post.slug)} className="blog-mag__featured-cta">
             {meta.readCta}
           </Link>
           <BlogAdminEditLink

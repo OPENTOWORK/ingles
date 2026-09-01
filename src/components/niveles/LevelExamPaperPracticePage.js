@@ -1,8 +1,21 @@
 'use client';
 
-import B2ExamPaperPracticePage from '@/components/b2/B2ExamPaperPracticePage';
+import dynamic from 'next/dynamic';
+import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import { getExamSkillPartRange, getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import { getLevelExamSkillRoute, getNivelesLevelHub } from '@/data/nivelesLevelHub';
+
+const B2ExamPaperPracticePage = dynamic(
+  () => import('@/components/b2/B2ExamPaperPracticePage'),
+  {
+    ssr: false,
+    loading: () => (
+      <main className="levels-exam-practice-root" style={{ padding: '2rem', textAlign: 'center' }}>
+        <RouteLoadingMascot label="Loading practice…" variant={3} />
+      </main>
+    ),
+  },
+);
 
 function formatPartsLabelEn(partMin, partMax) {
   if (partMin === partMax) return `Part ${partMin}`;

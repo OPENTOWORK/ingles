@@ -9,15 +9,25 @@ export default function SkillPartPracticeHeader({
   subtitle = null,
   exerciseLabel = null,
   titleActions = null,
+  unlockHint = null,
 }) {
-  if (!title && !subtitle && !exerciseLabel && !titleActions) return null;
+  if (!title && !subtitle && !exerciseLabel && !titleActions && !unlockHint) return null;
 
   return (
     <div className="levels-exam-split-card__title-row levels-exam-split-card__title-row--title-mode">
-      {title || subtitle ? (
+      {title || subtitle || unlockHint ? (
         <div className="levels-exam-split-card__part-title-block">
           {title ? (
             <p className="levels-exam-split-card__part-title-category">{title}</p>
+          ) : null}
+          {unlockHint ? (
+            <p
+              id="skill-next-exercise-hint"
+              className="levels-exam-split-card__unlock-hint"
+              role="status"
+            >
+              {unlockHint}
+            </p>
           ) : null}
           {subtitle ? (
             <h1 className="levels-exam-split-card__part-title">{subtitle}</h1>

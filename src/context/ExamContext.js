@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useRef, Suspense } from "react";
+import { createContext, useContext, useState, useEffect, useRef, Suspense, useCallback, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { initializeExamData } from "@/utils/clearCorruptedData";
 
@@ -212,7 +212,7 @@ function ExamProviderInner({ children }) {
   }, [pathname]);
 
   // 📝 Actualizar una respuesta
-  const updateAnswer = (examId, part, questionId, value) => {
+  const updateAnswer = useCallback((examId, part, questionId, value) => {
     setAnswers((prev) => ({
       ...prev,
       [examId]: {
@@ -223,9 +223,9 @@ function ExamProviderInner({ children }) {
         },
       },
     }));
-  };
+  }, []);
 
-  const clearAllAnswers = () => {
+  const clearAllAnswers = useCallback(() => {
     setAnswers({});
     localStorage.removeItem("examAnswers");
     setGlobalStart(null);
@@ -237,16 +237,18 @@ function ExamProviderInner({ children }) {
       speaking: 0,
     });
     localStorage.removeItem("examSectionTimers");
-  };
+  }, []);
 
-  const clearExamAnswers = (examId) => {
-    const updated = { ...answers };
-    delete updated[examId];
-    setAnswers(updated);
-    localStorage.setItem("examAnswers", JSON.stringify(updated));
-  };
+  const clearExamAnswers = useCallback((examId) => {
+    setAnswers((prev) => {
+      const updated = { ...prev };
+      delete updated[examId];
+      localStorage.setItem("examAnswers", JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
 
-  const calculateScore = (examId, examData) => {
+  const calculateScore = useCallback((examId, examData) => {
     const examAnswers = answers[examId];
     let total = 0;
     let correct = 0;
@@ -270,23 +272,36 @@ function ExamProviderInner({ children }) {
       percentage: total ? Math.round((correct / total) * 100) : 0,
       passed: correct >= Math.ceil(total * 0.6),
     };
-  };
+  }, [answers]);
+
+  const contextValue = useMemo(
+    () => ({
+      answers,
+      updateAnswer,
+      clearExamAnswers,
+      clearAllAnswers,
+      calculateScore,
+      globalStart,
+      setGlobalStart,
+      sectionTimers,
+      lastSaved,
+      isSaving,
+    }),
+    [
+      answers,
+      updateAnswer,
+      clearExamAnswers,
+      clearAllAnswers,
+      calculateScore,
+      globalStart,
+      sectionTimers,
+      lastSaved,
+      isSaving,
+    ],
+  );
 
   return (
-    <ExamContext.Provider
-      value={{
-        answers,
-        updateAnswer,
-        clearExamAnswers,
-        clearAllAnswers,
-        calculateScore,
-        globalStart,
-        setGlobalStart,
-        sectionTimers,
-        lastSaved,
-        isSaving,
-      }}
-    >
+    <ExamContext.Provider value={contextValue}>
       {children}
     </ExamContext.Provider>
   );

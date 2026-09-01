@@ -18,6 +18,7 @@ import {
   blogTypeMeta,
   normalizeBlogContentType,
 } from '@/lib/blogContentTypes';
+import { normalizeBlogSlug } from '@/lib/blogArticles';
 import styles from './BlogArticleEditor.module.css';
 
 const EMPTY_FORM = {
@@ -204,8 +205,7 @@ export default function BlogArticleEditor({
         ) : null}
       </div>
 
-      {tab === 'content' ? (
-        <div className={styles.panel}>
+      <div className={tab === 'content' ? styles.panel : `${styles.panel} ${styles.tabPanelHidden}`}>
           <label className={styles.label}>
             Título del {meta.label.toLowerCase()}
             <input
@@ -230,14 +230,16 @@ export default function BlogArticleEditor({
               value={form.slug}
               onChange={(e) => {
                 onSlugTouched();
-                onChange({ slug: e.target.value });
+                onChange({ slug: normalizeBlogSlug(e.target.value) });
               }}
               className={styles.input}
               placeholder={
                 isNews ? 'nueva-funcion-disponible' : '5-consejos-para-mejorar-tu-listening'
               }
             />
-            <span className={styles.hint}>Vista previa: /blog/{form.slug || '…'}</span>
+            <span className={styles.hint}>
+              Vista previa: /blog/{normalizeBlogSlug(form.slug) || '…'} (solo letras, números y guiones)
+            </span>
           </label>
 
           <label className={styles.label}>
@@ -487,8 +489,9 @@ export default function BlogArticleEditor({
             </button>
           </section>
         </div>
-      ) : (
-        <div className={styles.panel}>
+
+      {isArticle ? (
+        <div className={tab === 'seo' ? styles.panel : `${styles.panel} ${styles.tabPanelHidden}`}>
           <p className={styles.seoIntro}>
             Campos para el equipo de marketing. Si los dejas vacíos, se usarán el título y el
             extracto del artículo.
@@ -551,13 +554,15 @@ export default function BlogArticleEditor({
           <div className={styles.seoPreview}>
             <p className={styles.seoPreviewLabel}>Vista previa en Google</p>
             <p className={styles.seoPreviewTitle}>{form.seoTitle || form.title || 'Título del artículo'}</p>
-            <p className={styles.seoPreviewUrl}>www.dralo.es › blog › {form.slug || 'slug'}</p>
+            <p className={styles.seoPreviewUrl}>
+              www.dralo.es › blog › {normalizeBlogSlug(form.slug) || 'slug'}
+            </p>
             <p className={styles.seoPreviewDesc}>
               {form.seoDescription || form.excerpt || 'Descripción del artículo para resultados de búsqueda.'}
             </p>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

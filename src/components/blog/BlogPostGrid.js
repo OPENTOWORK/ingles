@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import BlogAdminEditLink from '@/components/blog/BlogAdminEditLink';
 import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
-import { formatBlogDate } from '@/lib/blogArticles';
+import { formatBlogDate, blogPostHref } from '@/lib/blogArticles';
 import { blogTypeMeta, normalizeBlogContentType } from '@/lib/blogContentTypes';
 
 /**
@@ -17,7 +17,7 @@ export default function BlogPostGrid({ items }) {
         return (
           <li key={item.id}>
             <article className="blog-card">
-              <Link href={`/blog/${item.slug}`} className="blog-card__media">
+              <Link href={blogPostHref(item.slug)} className="blog-card__media">
                 {item.cover_image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={item.cover_image_url} alt="" loading="lazy" />
@@ -35,11 +35,11 @@ export default function BlogPostGrid({ items }) {
                   </time>
                 </div>
                 <h2 className="blog-card__title">
-                  <Link href={`/blog/${item.slug}`}>{item.title}</Link>
+                  <Link href={blogPostHref(item.slug)}>{item.title}</Link>
                 </h2>
                 {item.excerpt ? <p className="blog-card__excerpt">{item.excerpt}</p> : null}
                 <div className="blog-card__actions">
-                  <Link href={`/blog/${item.slug}`} className="blog-card__cta">
+                  <Link href={blogPostHref(item.slug)} className="blog-card__cta">
                     {meta.readCta}
                   </Link>
                   <BlogAdminEditLink articleId={item.id} contentType={item.content_type} />

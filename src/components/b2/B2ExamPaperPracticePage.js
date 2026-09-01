@@ -8,6 +8,7 @@ import { useLevelExamPracticeSlot } from '@/hooks/useLevelExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { B2ExamPracticeContent, B2ExamQuestionItem, SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
+import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
@@ -1071,6 +1072,21 @@ function B2ExamPaperPracticePageInner({
       },
     });
   }, [examSlot, partNumber, scoring, handleSelectExamSlot, skillNav]);
+
+  const skillUnlockHint = useSkillExerciseUnlockHint(
+    isSkillPracticeSession
+      ? {
+          enabled: true,
+          examSlot,
+          examenIdBySlot: scoring.examenIdBySlot,
+          partNumber,
+          pagePartMin: partMin,
+          pagePartMax: partMax,
+          progressBySlot: scoring.progressBySlot,
+          lang: lang === 'es' ? 'es' : 'en',
+        }
+      : null,
+  );
 
   const categoryTimer = usePartPracticeTimer({
     practiceReady: !loading && !error && layoutPracticeOpen && Boolean(selectedPart?.id),
@@ -3744,6 +3760,7 @@ function B2ExamPaperPracticePageInner({
                 <SkillPartPracticeHeader
                   title={selectedPartTitleParts.heading}
                   subtitle={selectedPartTitleParts.subtitle}
+                  unlockHint={skillUnlockHint}
                   exerciseLabel={
                     isSkillPracticeSession && examSlot && !hideStandaloneExerciseLabel
                       ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
@@ -4258,6 +4275,20 @@ function B2ExamPaperPracticePageInner({
               <B2ExamPracticeContent
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
+                skillUnlock={
+                  isSkillPracticeSession
+                    ? {
+                        enabled: true,
+                        examSlot,
+                        examenIdBySlot: scoring.examenIdBySlot,
+                        partNumber,
+                        pagePartMin: partMin,
+                        pagePartMax: partMax,
+                        progressBySlot: scoring.progressBySlot,
+                        lang: lang === 'es' ? 'es' : 'en',
+                      }
+                    : null
+                }
                 showExerciseFavorite={showExerciseFavorite}
                 favoritePreguntaId={selectedQuestion?.preguntaId}
                 favoriteMeta={exerciseFavoriteMeta}

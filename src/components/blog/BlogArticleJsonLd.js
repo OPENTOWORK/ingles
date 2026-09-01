@@ -1,5 +1,6 @@
 import { SITE_URL } from '@/lib/siteSeo';
 import { blogOgImage, blogSeoDescription, blogSeoTitle } from '@/lib/blogContent';
+import { blogPostHref } from '@/lib/blogArticles';
 
 export default function BlogArticleJsonLd({ article }) {
   if (!article) return null;
@@ -14,7 +15,7 @@ export default function BlogArticleJsonLd({ article }) {
     dateModified: article.updated_at || article.created_at,
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `${SITE_URL}/blog/${article.slug}/`,
+      '@id': `${SITE_URL}${blogPostHref(article.slug)}/`,
     },
     publisher: {
       '@type': 'Organization',

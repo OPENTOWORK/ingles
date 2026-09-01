@@ -4313,6 +4313,18 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   color: color-mix(in srgb, var(--levels-split-ink, #0f172a) 58%, #64748b);
 }
 
+.levels-exam-split-card__unlock-hint {
+  margin: 0.4rem 0 0.55rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
 .levels-exam-split-card__part-title,
 .levels-exam-split-card__title-row h2 {
   display: block;
@@ -7295,10 +7307,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   margin: 0;
   font-size: 0.75rem;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1.35;
   color: #64748b;
   text-align: right;
-  white-space: nowrap;
+  max-width: 16rem;
   pointer-events: none;
 }
 
@@ -14997,6 +15009,12 @@ body.reading-night-mode .levels-exam-split-card__part-title-category {
   color: #94a3b8;
 }
 
+body.reading-night-mode .levels-exam-split-card__unlock-hint {
+  color: #cbd5e1;
+  background: #1e293b;
+  border-color: #475569;
+}
+
 body.reading-night-mode .exercise-favorite-btn {
   background: #1e293b;
   border-color: #475569;
@@ -19720,10 +19738,20 @@ body.dark .profile-collapse--open .profile-collapse__head {
 .blog-article-page__body--rich ol {
   margin: 0 0 1.2rem;
   padding-left: 1.4rem;
+  list-style-position: outside;
+}
+
+.blog-article-page__body--rich ul {
+  list-style-type: disc;
+}
+
+.blog-article-page__body--rich ol {
+  list-style-type: decimal;
 }
 
 .blog-article-page__body--rich li {
   margin-bottom: 0.45rem;
+  display: list-item;
 }
 
 .blog-article-page__body--rich a {

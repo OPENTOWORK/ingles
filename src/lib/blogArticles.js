@@ -40,6 +40,31 @@ export function slugifyBlogTitle(title = '') {
     .slice(0, 120);
 }
 
+/** Slug limpio para URLs: sin barras, sin espacios, minúsculas. */
+export function normalizeBlogSlug(slug = '') {
+  let value = String(slug).trim().replace(/^\/+|\/+$/g, '');
+  if (!value) return '';
+
+  if (value.includes('/')) {
+    const segments = value.split('/').filter(Boolean);
+    value = segments[segments.length - 1] || value;
+  }
+
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 120);
+}
+
+export function blogPostHref(slug = '') {
+  const normalized = normalizeBlogSlug(slug);
+  return normalized ? `/blog/${normalized}` : '/blog';
+}
+
 function getPublicDb() {
   return createClient(getSupabaseUrl(), getSupabaseAnonKey(), {
     auth: { autoRefreshToken: false, persistSession: false },
@@ -195,7 +220,7 @@ function buildArticleRow(payload, { isCreate = false } = {}) {
   }
 
   if (payload.slug != null || isCreate) {
-    let slug = String(payload.slug || '').trim();
+    let slug = normalizeBlogSlug(payload.slug || '');
     if (!slug && row.title) slug = slugifyBlogTitle(row.title);
     if (!slug) throw new Error('El slug es obligatorio.');
     row.slug = slug;
@@ -205,7 +230,10 @@ function buildArticleRow(payload, { isCreate = false } = {}) {
     row.excerpt = String(payload.excerpt || '').trim();
   }
   if (payload.content != null || isCreate) {
-    row.content = normalizeBlogContent(payload.content);
+    const content = normalizeBlogContent(payload.content);
+    if (isCreate || content.trim()) {
+      row.content = content;
+    }
   }
   if (payload.coverImageUrl != null || isCreate) {
     row.cover_image_url = String(payload.coverImageUrl || '').trim();
@@ -267,25 +295,31 @@ export async function fetchPublishedBlogArticles(limit = 50) {
 export async function fetchPublishedBlogArticleBySlug(slug) {
   await tryPublishDueScheduledArticles();
   const db = getPublicDb();
+  const normalizedSlug = normalizeBlogSlug(slug);
+  const slugCandidates = [...new Set([normalizedSlug, String(slug || '').trim()].filter(Boolean))];
 
-  let { data, error } = await db
-    .from(TABLE)
-    .select(PUBLIC_DETAIL_FIELDS)
-    .eq('slug', slug)
-    .eq('published', true)
-    .maybeSingle();
-
-  if (error && isSchemaCacheColumnError(error)) {
-    ({ data, error } = await db
+  for (const candidate of slugCandidates) {
+    let { data, error } = await db
       .from(TABLE)
-      .select(PUBLIC_DETAIL_FIELDS_BASE)
-      .eq('slug', slug)
+      .select(PUBLIC_DETAIL_FIELDS)
+      .eq('slug', candidate)
       .eq('published', true)
-      .maybeSingle());
+      .maybeSingle();
+
+    if (error && isSchemaCacheColumnError(error)) {
+      ({ data, error } = await db
+        .from(TABLE)
+        .select(PUBLIC_DETAIL_FIELDS_BASE)
+        .eq('slug', candidate)
+        .eq('published', true)
+        .maybeSingle());
+    }
+
+    if (error) throw new Error(error.message);
+    if (data) return data;
   }
 
-  if (error) throw new Error(error.message);
-  return data;
+  return null;
 }
 
 /** @param {import('@supabase/supabase-js').SupabaseClient} adminDb */
@@ -365,7 +399,7 @@ export function mapArticleToClientForm(article) {
   return {
     id: article?.id || '',
     title: article?.title || '',
-    slug: article?.slug || '',
+    slug: normalizeBlogSlug(article?.slug || '') || article?.slug || '',
     excerpt: article?.excerpt || '',
     content: article?.content || '',
     coverImageUrl: article?.cover_image_url || '',

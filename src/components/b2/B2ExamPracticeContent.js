@@ -2,6 +2,7 @@
 
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
+import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
 import { getFormattedEnunciado, omitPartTitleBlocks, omitExampleEnunciadoBlocks } from '@/utils/b2ExamPaperShared';
 
 const blockStyles = {
@@ -157,6 +158,7 @@ export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = []
  *   favoritePreguntaId?: string | null,
  *   favoriteMeta?: import('@/lib/exerciseFavoriteMeta').ExerciseFavoriteMeta | null,
  *   favoriteLang?: 'en' | 'es',
+ *   skillUnlock?: object | null,
  * }} props
  */
 export function B2ExamPracticeContent({
@@ -168,6 +170,7 @@ export function B2ExamPracticeContent({
   favoritePreguntaId = null,
   favoriteMeta = null,
   favoriteLang = 'en',
+  skillUnlock = null,
   directionsText = '',
   directionsLabel = 'Directions',
   textLabel = 'Text',
@@ -184,6 +187,7 @@ export function B2ExamPracticeContent({
   contentClassName = '',
   footer = null,
 }) {
+  const unlockHint = useSkillExerciseUnlockHint(skillUnlock);
   const hasPassage =
     showPassagePanel && (Boolean(passageText?.trim()) || Boolean(passage));
   const useSplit = split === 'auto' ? hasPassage && Boolean(questions) : Boolean(split);
@@ -202,6 +206,7 @@ export function B2ExamPracticeContent({
           title={title}
           subtitle={titleSubtitle}
           exerciseLabel={exerciseLabel}
+          unlockHint={unlockHint}
           titleActions={
             titleActions || showExerciseFavorite ? (
               <>

@@ -8,7 +8,7 @@ import BlogCommentsSection from '@/components/blog/BlogCommentsSection';
 import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
 import { blogOgImage, blogSeoDescription, blogSeoTitle } from '@/lib/blogContent';
 import { blogTypeMeta, normalizeBlogContentType } from '@/lib/blogContentTypes';
-import { fetchPublishedBlogArticleBySlug, formatBlogDate } from '@/lib/blogArticles';
+import { fetchPublishedBlogArticleBySlug, formatBlogDate, blogPostHref } from '@/lib/blogArticles';
 import { unstable_noStore as noStore } from 'next/cache';
 import { SITE_URL } from '@/lib/siteSeo';
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
     const title = blogSeoTitle(article);
     const description = blogSeoDescription(article);
     const image = blogOgImage(article);
-    const canonical = `/blog/${article.slug}/`;
+    const canonical = `${blogPostHref(article.slug)}/`;
 
     return {
       title: `${title} | Blog Dralo`,

@@ -41,6 +41,10 @@
   gap: 1rem;
 }
 
+.tabPanelHidden {
+  display: none;
+}
+
 .label {
   display: flex;
   flex-direction: column;

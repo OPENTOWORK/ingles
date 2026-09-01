@@ -28,9 +28,9 @@ export const SEO_PAGE_META = {
   },
 };
 
-/** Open Graph / LinkedIn / Twitter — título corto para tarjetas sociales. */
+/** Open Graph / LinkedIn / Twitter — mismo título que la home para evitar fallback al DOM. */
 export const SOCIAL_SHARE = {
-  title: 'Dralo Academy',
+  title: SEO_PAGE_META.home.title,
   description: SEO_PAGE_META.home.description,
   locale: 'es_ES',
   imageAlt: 'Dralo Academy — practica inglés con exámenes e IA',

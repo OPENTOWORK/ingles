@@ -14,6 +14,8 @@ import {
   getBlogArticleStatusLabel,
   mapArticleToClientForm,
   slugifyBlogTitle,
+  blogPostHref,
+  normalizeBlogSlug,
 } from '@/lib/blogArticles';
 import {
   BLOG_CONTENT_TYPE_META,
@@ -455,7 +457,7 @@ export default function AdminBlogPanel() {
                 </button>
                 {form.published ? (
                   <Link
-                    href={`/blog/${form.slug}`}
+                    href={blogPostHref(form.slug)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.viewLink}

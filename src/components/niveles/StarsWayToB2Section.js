@@ -151,7 +151,7 @@ function ExerciseNode({
         <div
           id={focusId}
           className={nodeClassName}
-          aria-label={`Test ${exerciseIndex} locked. Earn at least 1 star on the previous test to unlock.`}
+          aria-label={`Test ${exerciseIndex} locked. Complete the previous test with at least 1 star to access it.`}
           aria-disabled="true"
         >
           {nodeBody}
