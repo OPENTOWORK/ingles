@@ -53,7 +53,7 @@ export function usePlanEntitlements() {
     };
   }, [refresh]);
 
-  const maxExamSlot = data?.maxExamSlot ?? 5;
+  const maxExamSlot = data?.maxExamSlot ?? 1;
   const applyLimits = Boolean(data?.applyLimits);
 
   const isExamSlotLocked = useCallback(

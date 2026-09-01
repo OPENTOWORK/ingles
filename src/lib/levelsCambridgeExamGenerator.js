@@ -18,6 +18,7 @@ import {
   deleteExamenContent,
   deleteExamenFully,
   deletePartContentForExam,
+  findLevelExamenRowBySlot,
   resolveLevelExamenId,
 } from '@/lib/levelsExamPersist';
 import { validateGeneratedExamPart } from '@/lib/examPartValidation';
@@ -582,12 +583,7 @@ function isPartComplete(gen, partDef) {
 
 export async function ensureLevelExamenRow(db, levelSlug, levelId, slot) {
   const nombre = examenNameForLevel(levelSlug, slot);
-  const { data: existing } = await db
-    .from('levels_examenes')
-    .select('id, nombre')
-    .eq('level_id', levelId)
-    .ilike('nombre', `%Examen ${slot}%`)
-    .maybeSingle();
+  const existing = await findLevelExamenRowBySlot(db, levelId, slot);
 
   if (existing?.id) return existing.id;
 

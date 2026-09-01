@@ -21,6 +21,7 @@ import {
   hasFullNivelesLevelAccess,
   isStudentRole,
 } from '@/constants/studentFeatureAccess';
+import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { ADMIN_EMAIL, normalizeEmail } from '@/utils/authRoles';
 
 import { PLAN_USAGE_KEYS } from '@/lib/planUsageKeys';
@@ -100,11 +101,11 @@ export function getPlanUsageLimit(planSlug, usageKey) {
   }
 }
 
-/** Máximo slot de examen accesible (FREE = solo Test 1). */
+/** Máximo slot de examen accesible (FREE = solo Test 1; planes de pago = catálogo B2 completo). */
 export function getMaxExamSlotForPlan(planSlug) {
   const slug = String(planSlug || 'free').toLowerCase();
   if (slug === 'free') return 1;
-  return 5;
+  return B2_EXAM_SLOT_MAX;
 }
 
 export function canAccessExamSlot(planSlug, examSlot) {

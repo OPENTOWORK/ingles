@@ -131,7 +131,15 @@ export async function reviewB2Part5AdversarialQuality(generated) {
     `You are a Cambridge B2 First examiner reviewing Reading Part 5 (multiple choice).
 WITHOUT seeing any answer key:
 1) Solve each question (best letter).
-2) For each question, try to defend why each WRONG option could tempt a strong candidate.
+2) Privately consider how each WRONG option might tempt a strong candidate. This step is
+   your own reasoning: a distractor that plausibly tempts is doing its job, so it is NOT a
+   defect and must NOT be reported.
+
+Report ONLY genuine defects:
+- weakDistractors: the option has no grounding at all in the passage's ideas or vocabulary,
+  so no informed candidate could ever choose it.
+- undefendedWrong: the wrong options are so obviously wrong that the item is trivially easy.
+- literalSolveItems: the key can be found by matching words instead of understanding meaning.
 
 Return ONLY JSON:
 {
@@ -141,7 +149,9 @@ Return ONLY JSON:
  "literalSolveItems":[{"number":33,"reason":"solvable by copying passage words"}],
  "issues":["short issue"],
  "verdict":"pass"|"revise"
-}`,
+}
+Use empty arrays when there is nothing to report. Do not pad the lists: a well-built Part 5
+normally returns empty arrays and verdict "pass".`,
     `PASSAGE:\n${passage}\n\nQUESTIONS:\n${examLines}`,
   );
 
@@ -185,7 +195,11 @@ Return ONLY JSON:
  "weakCohesion":[{"gap":39,"reason":"correct sentence weakly linked"}],
  "issues":["short issue"],
  "verdict":"pass"|"revise"
-}`,
+}
+Report multifit only when the sentence genuinely completes both gaps coherently, and
+weakCohesion only when no lexical or referential link ties the sentence to its gap.
+Use empty arrays when there is nothing to report; a well-built Part 6 normally returns
+empty arrays and verdict "pass".`,
     `TITLE: ${generated?.title || ''}\n\nGAPPED PASSAGE:\n${passage}\n\nSENTENCE POOL:\n${poolLines}`,
   );
 
@@ -227,7 +241,10 @@ Return ONLY JSON:
  "literalMatchItems":[{"number":44,"section":"A","matchedWords":["overwhelmed","deadline"],"reason":"stem copies profile"}],
  "issues":["short issue"],
  "verdict":"pass"|"revise"
-}`,
+}
+Flag an item only when the shared wording alone gives the answer away. Paraphrase overlap
+that still requires understanding is correct Cambridge design, not a defect. Use empty
+arrays when there is nothing to report.`,
     `SECTIONS:\n${sectionLines}\n\nQUESTIONS:\n${questionLines}`,
   );
 

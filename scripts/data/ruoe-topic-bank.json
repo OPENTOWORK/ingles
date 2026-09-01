@@ -1,0 +1,431 @@
+{
+  "source": "DRALO_RUOE_Topic_Bank_v1_1_Machine_Ready.xlsx · Engine Export",
+  "usedByPilots": [
+    "TB-002",
+    "TB-003",
+    "TB-004",
+    "TB-008",
+    "TB-009",
+    "TB-011",
+    "TB-012",
+    "TB-013",
+    "TB-015",
+    "TB-017",
+    "TB-018",
+    "TB-019",
+    "TB-021",
+    "TB-022",
+    "TB-025",
+    "TB-026",
+    "TB-034",
+    "TB-036",
+    "TB-037",
+    "TB-040",
+    "TB-044",
+    "TB-045",
+    "TB-048",
+    "TB-049"
+  ],
+  "topics": [
+    {
+      "topicId": "TB-001",
+      "mainTopic": "Technology",
+      "subtopic1": "AI",
+      "subtopic2": "Work",
+      "exampleContext": "How AI is changing the workplace",
+      "combinationKey": "AI + Work"
+    },
+    {
+      "topicId": "TB-002",
+      "mainTopic": "Travel",
+      "subtopic1": "Adventure",
+      "subtopic2": "Destinations",
+      "exampleContext": "Exploring places out of the tourist trail",
+      "combinationKey": "Adventure + Destinations"
+    },
+    {
+      "topicId": "TB-003",
+      "mainTopic": "Technology",
+      "subtopic1": "Social Media",
+      "subtopic2": "Health",
+      "exampleContext": "The effects of social media on teenagers",
+      "combinationKey": "Social Media + Health"
+    },
+    {
+      "topicId": "TB-004",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Hobbies",
+      "subtopic2": "Daily Life",
+      "exampleContext": "How a hobby changed someone's life",
+      "combinationKey": "Hobbies + Daily Life"
+    },
+    {
+      "topicId": "TB-005",
+      "mainTopic": "Travel",
+      "subtopic1": "Holidays",
+      "subtopic2": "Lifestyle",
+      "exampleContext": "The experience of travelling alone",
+      "combinationKey": "Holidays + Lifestyle"
+    },
+    {
+      "topicId": "TB-006",
+      "mainTopic": "Technology",
+      "subtopic1": "Internet",
+      "subtopic2": "Lifestyle",
+      "exampleContext": "Taking a digital detox",
+      "combinationKey": "Internet + Lifestyle"
+    },
+    {
+      "topicId": "TB-007",
+      "mainTopic": "Work",
+      "subtopic1": "Careers",
+      "subtopic2": "Lifestyle",
+      "exampleContext": "Turning a hobby into a career",
+      "combinationKey": "Careers + Lifestyle"
+    },
+    {
+      "topicId": "TB-008",
+      "mainTopic": "Science",
+      "subtopic1": "Wildlife",
+      "subtopic2": "Research",
+      "exampleContext": "Animals with surprising abilities",
+      "combinationKey": "Wildlife + Research"
+    },
+    {
+      "topicId": "TB-009",
+      "mainTopic": "Technology",
+      "subtopic1": "Transport",
+      "subtopic2": "Travel",
+      "exampleContext": "The future of driverless transport",
+      "combinationKey": "Transport + Travel"
+    },
+    {
+      "topicId": "TB-010",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Sport",
+      "subtopic2": "Adventure",
+      "exampleContext": "Unusual sports becoming more popular",
+      "combinationKey": "Sport + Adventure"
+    },
+    {
+      "topicId": "TB-011",
+      "mainTopic": "Health",
+      "subtopic1": "Mental Health",
+      "subtopic2": "Daily Life",
+      "exampleContext": "Managing stress in everyday life",
+      "combinationKey": "Mental Health + Daily Life"
+    },
+    {
+      "topicId": "TB-012",
+      "mainTopic": "Environment",
+      "subtopic1": "Conservation",
+      "subtopic2": "Wildlife",
+      "exampleContext": "Protecting endangered species",
+      "combinationKey": "Conservation + Wildlife"
+    },
+    {
+      "topicId": "TB-013",
+      "mainTopic": "Entertainment",
+      "subtopic1": "Games",
+      "subtopic2": "Education",
+      "exampleContext": "Can video games help people learn?",
+      "combinationKey": "Games + Education"
+    },
+    {
+      "topicId": "TB-014",
+      "mainTopic": "Technology",
+      "subtopic1": "Gadgets",
+      "subtopic2": "Home",
+      "exampleContext": "Smart devices in everyday life",
+      "combinationKey": "Gadgets + Home"
+    },
+    {
+      "topicId": "TB-015",
+      "mainTopic": "Travel",
+      "subtopic1": "Culture",
+      "subtopic2": "Food",
+      "exampleContext": "Discovering a country through its food",
+      "combinationKey": "Culture + Food"
+    },
+    {
+      "topicId": "TB-016",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Daily Life",
+      "subtopic2": "Technology",
+      "exampleContext": "Living without a smartphone",
+      "combinationKey": "Daily Life + Technology"
+    },
+    {
+      "topicId": "TB-017",
+      "mainTopic": "Work",
+      "subtopic1": "Volunteering",
+      "subtopic2": "Careers",
+      "exampleContext": "How volunteering improves career prospects",
+      "combinationKey": "Volunteering + Careers"
+    },
+    {
+      "topicId": "TB-018",
+      "mainTopic": "Science",
+      "subtopic1": "Oceans",
+      "subtopic2": "Exploration",
+      "exampleContext": "Discoveries beneath the sea",
+      "combinationKey": "Oceans + Exploration"
+    },
+    {
+      "topicId": "TB-019",
+      "mainTopic": "Health",
+      "subtopic1": "Sleep",
+      "subtopic2": "Lifestyle",
+      "exampleContext": "Why good sleep matters",
+      "combinationKey": "Sleep + Lifestyle"
+    },
+    {
+      "topicId": "TB-020",
+      "mainTopic": "Environment",
+      "subtopic1": "Pollution",
+      "subtopic2": "Oceans",
+      "exampleContext": "The problem of plastic waste",
+      "combinationKey": "Pollution + Oceans"
+    },
+    {
+      "topicId": "TB-021",
+      "mainTopic": "Work",
+      "subtopic1": "Business",
+      "subtopic2": "Entrepreneurship",
+      "exampleContext": "Young people starting successful businesses",
+      "combinationKey": "Business + Entrepreneurship"
+    },
+    {
+      "topicId": "TB-022",
+      "mainTopic": "Travel",
+      "subtopic1": "Accommodation",
+      "subtopic2": "Technology",
+      "exampleContext": "Technology changing the hotel industry",
+      "combinationKey": "Accommodation + Technology"
+    },
+    {
+      "topicId": "TB-023",
+      "mainTopic": "Health",
+      "subtopic1": "Exercise",
+      "subtopic2": "Lifestyle",
+      "exampleContext": "Easy ways to stay fit",
+      "combinationKey": "Exercise + Lifestyle"
+    },
+    {
+      "topicId": "TB-024",
+      "mainTopic": "Technology",
+      "subtopic1": "Communication",
+      "subtopic2": "Society",
+      "exampleContext": "How technology has changed communication",
+      "combinationKey": "Communication + Society"
+    },
+    {
+      "topicId": "TB-025",
+      "mainTopic": "Education",
+      "subtopic1": "Languages",
+      "subtopic2": "Learning",
+      "exampleContext": "Learning languages outside the classroom",
+      "combinationKey": "Languages + Learning"
+    },
+    {
+      "topicId": "TB-026",
+      "mainTopic": "Science",
+      "subtopic1": "Inventions",
+      "subtopic2": "Technology",
+      "exampleContext": "Inventions that changed everyday life",
+      "combinationKey": "Inventions + Technology"
+    },
+    {
+      "topicId": "TB-027",
+      "mainTopic": "Environment",
+      "subtopic1": "Climate",
+      "subtopic2": "Society",
+      "exampleContext": "Everyday actions to fight climate change",
+      "combinationKey": "Climate + Society"
+    },
+    {
+      "topicId": "TB-028",
+      "mainTopic": "Work",
+      "subtopic1": "Workplace",
+      "subtopic2": "Technology",
+      "exampleContext": "The advantages and disadvantages of remote work",
+      "combinationKey": "Workplace + Technology"
+    },
+    {
+      "topicId": "TB-029",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Shopping",
+      "subtopic2": "Psychology",
+      "exampleContext": "Why people buy things they don't need",
+      "combinationKey": "Shopping + Psychology"
+    },
+    {
+      "topicId": "TB-030",
+      "mainTopic": "Health",
+      "subtopic1": "Nutrition",
+      "subtopic2": "Food",
+      "exampleContext": "Healthy eating on a budget",
+      "combinationKey": "Nutrition + Food"
+    },
+    {
+      "topicId": "TB-031",
+      "mainTopic": "Travel",
+      "subtopic1": "Tourism",
+      "subtopic2": "Environment",
+      "exampleContext": "The impact of tourism on local communities",
+      "combinationKey": "Tourism + Environment"
+    },
+    {
+      "topicId": "TB-032",
+      "mainTopic": "Entertainment",
+      "subtopic1": "Music",
+      "subtopic2": "Society",
+      "exampleContext": "Music bringing different generations together",
+      "combinationKey": "Music + Society"
+    },
+    {
+      "topicId": "TB-033",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Hobbies",
+      "subtopic2": "Technology",
+      "exampleContext": "Traditional hobbies in the digital age",
+      "combinationKey": "Hobbies + Technology"
+    },
+    {
+      "topicId": "TB-034",
+      "mainTopic": "Environment",
+      "subtopic1": "Sustainability",
+      "subtopic2": "Cities",
+      "exampleContext": "Creating greener cities",
+      "combinationKey": "Sustainability + Cities"
+    },
+    {
+      "topicId": "TB-035",
+      "mainTopic": "Science",
+      "subtopic1": "Space",
+      "subtopic2": "Exploration",
+      "exampleContext": "Life in future space missions",
+      "combinationKey": "Space + Exploration"
+    },
+    {
+      "topicId": "TB-036",
+      "mainTopic": "Work",
+      "subtopic1": "Workplace",
+      "subtopic2": "Psychology",
+      "exampleContext": "What makes employees happy at work?",
+      "combinationKey": "Workplace + Psychology"
+    },
+    {
+      "topicId": "TB-037",
+      "mainTopic": "Education",
+      "subtopic1": "Skills",
+      "subtopic2": "Work",
+      "exampleContext": "Skills needed for future careers",
+      "combinationKey": "Skills + Work"
+    },
+    {
+      "topicId": "TB-038",
+      "mainTopic": "Health",
+      "subtopic1": "Medicine",
+      "subtopic2": "Technology",
+      "exampleContext": "Medical innovations improving lives",
+      "combinationKey": "Medicine + Technology"
+    },
+    {
+      "topicId": "TB-039",
+      "mainTopic": "Travel",
+      "subtopic1": "Transport",
+      "subtopic2": "Environment",
+      "exampleContext": "Train travel versus air travel",
+      "combinationKey": "Transport + Environment"
+    },
+    {
+      "topicId": "TB-040",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Home",
+      "subtopic2": "Environment",
+      "exampleContext": "Living with fewer possessions",
+      "combinationKey": "Home + Environment"
+    },
+    {
+      "topicId": "TB-041",
+      "mainTopic": "Education",
+      "subtopic1": "Schools",
+      "subtopic2": "Sleep",
+      "exampleContext": "Should schools start later?",
+      "combinationKey": "Schools + Sleep"
+    },
+    {
+      "topicId": "TB-042",
+      "mainTopic": "Environment",
+      "subtopic1": "Recycling",
+      "subtopic2": "Sustainability",
+      "exampleContext": "Is recycling really effective?",
+      "combinationKey": "Recycling + Sustainability"
+    },
+    {
+      "topicId": "TB-043",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Food",
+      "subtopic2": "Home",
+      "exampleContext": "The return of home cooking",
+      "combinationKey": "Food + Home"
+    },
+    {
+      "topicId": "TB-044",
+      "mainTopic": "Entertainment",
+      "subtopic1": "Books",
+      "subtopic2": "Lifestyle",
+      "exampleContext": "Why reading is becoming popular again",
+      "combinationKey": "Books + Lifestyle"
+    },
+    {
+      "topicId": "TB-045",
+      "mainTopic": "Culture",
+      "subtopic1": "Festivals",
+      "subtopic2": "Travel",
+      "exampleContext": "Festivals worth travelling for",
+      "combinationKey": "Festivals + Travel"
+    },
+    {
+      "topicId": "TB-046",
+      "mainTopic": "Work",
+      "subtopic1": "Careers",
+      "subtopic2": "Education",
+      "exampleContext": "Choosing the right career path",
+      "combinationKey": "Careers + Education"
+    },
+    {
+      "topicId": "TB-047",
+      "mainTopic": "Technology",
+      "subtopic1": "AI",
+      "subtopic2": "Education",
+      "exampleContext": "Using AI to support learning",
+      "combinationKey": "AI + Education"
+    },
+    {
+      "topicId": "TB-048",
+      "mainTopic": "Entertainment",
+      "subtopic1": "Music",
+      "subtopic2": "Creativity",
+      "exampleContext": "Learning a musical instrument later in life",
+      "combinationKey": "Music + Creativity"
+    },
+    {
+      "topicId": "TB-049",
+      "mainTopic": "Culture",
+      "subtopic1": "History",
+      "subtopic2": "Society",
+      "exampleContext": "Preserving historical heritage",
+      "combinationKey": "History + Society"
+    },
+    {
+      "topicId": "TB-050",
+      "mainTopic": "Lifestyle",
+      "subtopic1": "Home",
+      "subtopic2": "Psychology",
+      "exampleContext": "Why people enjoy organising their homes",
+      "combinationKey": "Home + Psychology"
+    }
+  ]
+}

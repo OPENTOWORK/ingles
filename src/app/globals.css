@@ -2375,22 +2375,16 @@ body.nav-open {
 }
 
 .levels-b2-exam-picker__grid {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
   gap: 0.65rem;
-  justify-content: center;
   align-items: stretch;
-  overflow-x: auto;
   padding-bottom: 0.15rem;
-  scrollbar-width: thin;
 }
 
 .levels-b2-exam-picker__slot-wrap {
   position: relative;
-  flex: 1 1 0;
-  min-width: 118px;
-  max-width: 168px;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -2405,7 +2399,6 @@ body.nav-open {
 
   .levels-b2-exam-picker__slot-wrap {
     min-width: 0;
-    max-width: none;
   }
 }
 
@@ -2703,7 +2696,7 @@ body.nav-open {
   text-align: center;
   font-size: 0.875rem;
   color: #64748b;
-  flex: 1 1 100%;
+  grid-column: 1 / -1;
 }
 
 .levels-b2-exam-picker__slot--new {
@@ -2716,6 +2709,107 @@ body.nav-open {
 .levels-b2-exam-picker__slot--new:hover {
   border-color: #3b82f6;
   background: #dbeafe;
+}
+
+.levels-b2-exam-picker__coming-soon {
+  margin: 0.35rem 0 0;
+  padding: 1.35rem 1.5rem;
+  border-radius: 16px;
+  border: 1px dashed rgba(99, 102, 241, 0.32);
+  background:
+    radial-gradient(ellipse 80% 120% at 50% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 70%),
+    linear-gradient(180deg, #f8faff 0%, #f1f5f9 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.levels-b2-exam-picker__coming-soon-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  text-align: center;
+}
+
+.levels-b2-exam-picker__coming-soon-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.12);
+  border: 1px solid rgba(99, 102, 241, 0.22);
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.12);
+}
+
+.levels-b2-exam-picker__coming-soon-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: 28rem;
+}
+
+.levels-b2-exam-picker__coming-soon-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #312e81;
+}
+
+.levels-b2-exam-picker__coming-soon-subtitle {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__coming-soon {
+  margin: 0 18px 18px;
+  padding: 1.65rem 1.5rem 1.75rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 0 0 20px 20px;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  background:
+    radial-gradient(ellipse 90% 140% at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 72%),
+    linear-gradient(180deg, #fafbff 0%, #f8fafc 100%);
+}
+
+.levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__coming-soon-title {
+  font-size: 1.12rem;
+}
+
+.levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__coming-soon-subtitle {
+  font-size: 0.95rem;
+}
+
+@media (min-width: 520px) {
+  .levels-b2-exam-picker__coming-soon {
+    padding: 1.5rem 2rem;
+  }
+
+  .levels-b2-exam-picker__coming-soon-inner {
+    flex-direction: row;
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .levels-b2-exam-picker__coming-soon-copy {
+    align-items: flex-start;
+    max-width: none;
+  }
+
+  .levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__coming-soon {
+    padding: 1.85rem 2rem 2rem;
+  }
 }
 
 /* Exam mode — landing (choose test) */
@@ -2983,9 +3077,7 @@ body.nav-open {
 }
 
 .levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__slot--new {
-  flex: 1 1 0;
-  min-width: 118px;
-  max-width: 168px;
+  min-width: 0;
   width: auto;
 }
 
@@ -15834,6 +15926,35 @@ body.reading-night-mode .levels-b2-exam-picker__slot--new:hover {
   background: #1d4ed8;
   border-color: #60a5fa;
   color: #eff6ff;
+}
+
+body.reading-night-mode .levels-b2-exam-picker__coming-soon {
+  border-color: rgba(129, 140, 248, 0.35);
+  background:
+    radial-gradient(ellipse 80% 120% at 50% 0%, rgba(99, 102, 241, 0.18) 0%, transparent 70%),
+    linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  box-shadow: none;
+}
+
+body.reading-night-mode .levels-b2-exam-picker--exam-mode .levels-b2-exam-picker__coming-soon {
+  border-top-color: #475569;
+  background:
+    radial-gradient(ellipse 90% 140% at 50% 0%, rgba(99, 102, 241, 0.14) 0%, transparent 72%),
+    linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+}
+
+body.reading-night-mode .levels-b2-exam-picker__coming-soon-icon {
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.2);
+  border-color: rgba(129, 140, 248, 0.35);
+}
+
+body.reading-night-mode .levels-b2-exam-picker__coming-soon-title {
+  color: #e0e7ff;
+}
+
+body.reading-night-mode .levels-b2-exam-picker__coming-soon-subtitle {
+  color: #94a3b8;
 }
 
 body.reading-night-mode .levels-b2-exam-picker__slot-menu-trigger {

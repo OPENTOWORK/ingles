@@ -3,6 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import PlanUpgradeModal from '@/components/subscriptions/PlanUpgradeModal';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
+import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { requestStartExamSession } from '@/utils/requestStartExamSession';
 
 function slotHasPriorProgress(progressBySlot, slot) {
@@ -33,7 +34,7 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
   const lockedSlots = useMemo(() => {
     if (!applyLimits) return [];
     const slots = [];
-    for (let s = maxExamSlot + 1; s <= 5; s += 1) slots.push(s);
+    for (let s = maxExamSlot + 1; s <= B2_EXAM_SLOT_MAX; s += 1) slots.push(s);
     return slots;
   }, [applyLimits, maxExamSlot]);
 

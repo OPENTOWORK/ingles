@@ -221,6 +221,7 @@ function ExamSlotMenu({
  *   availableSlots?: number[],
  *   showNewExamButton?: boolean,
  *   onNewExam?: () => void,
+ *   showComingSoonCard?: boolean,
  *   showAdminMenu?: boolean,
  *   onRegenerateExam?: (slot: number) => void,
  *   onDeleteExam?: (slot: number) => void,
@@ -241,6 +242,7 @@ export function B2ExamSlotProgressPicker({
   availableSlots,
   showNewExamButton = false,
   onNewExam,
+  showComingSoonCard = !showNewExamButton,
   showAdminMenu = false,
   onRegenerateExam,
   onDeleteExam,
@@ -371,6 +373,27 @@ export function B2ExamSlotProgressPicker({
           </button>
         ) : null}
       </div>
+      {showComingSoonCard ? (
+        <div
+          className="levels-b2-exam-picker__coming-soon"
+          role="status"
+          aria-label={en ? 'More exams coming soon' : 'Pronto habrá más exámenes'}
+        >
+          <div className="levels-b2-exam-picker__coming-soon-inner">
+            <span className="levels-b2-exam-picker__coming-soon-icon" aria-hidden>
+              ✦
+            </span>
+            <div className="levels-b2-exam-picker__coming-soon-copy">
+              <p className="levels-b2-exam-picker__coming-soon-title">
+                {en ? 'Coming soon...' : 'Próximamente...'}
+              </p>
+              <p className="levels-b2-exam-picker__coming-soon-subtitle">
+                {en ? 'More exams will come soon' : 'Pronto habrá más exámenes'}
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

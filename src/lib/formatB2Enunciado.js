@@ -198,11 +198,16 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
       bullets.forEach((b, i) => lines.push(`${i + 1}. ${b}`));
     }
     lines.push('Instructions:');
+    // Official Cambridge directions first: the model's own `instructions` usually just
+    // restates the bullet points, which would show the same list twice. The leading
+    // "Part 1: Compulsory essay" heading is dropped because the title already says it.
     pushLines(
       lines,
-      g.instructions ||
+      String(
         g.directions ||
-        'Write an essay in 140–190 words. You must answer the question and include the three points below.',
+          g.instructions ||
+          'Write an essay in 140–190 words. You must answer the question and include the three points below.',
+      ).replace(/^\s*Part\s+\d+\s*:[^\n]*\n/i, ''),
     );
     lines.push(`Word limit: ${g.wordMin || 140}–${g.wordMax || 190} words`);
     return lines.join('\n').trim();
@@ -222,6 +227,10 @@ export function buildB2EnunciadoFromGenerated(gen = {}, partNumber) {
     lines.push('');
     for (const q of g.questions) {
       lines.push(String(q.number ?? ''));
+      // The scenario must be the first line of the block: that is what the practice UI
+      // reads back as the task context, and it carries the register cues for grading.
+      const context = String(q.context || '').replace(/\s*\n\s*/g, ' ').trim();
+      if (context) lines.push(context);
       pushLines(lines, q.prompt || q.task || '');
       if (q.bulletPoints?.length) {
         for (const b of q.bulletPoints) lines.push(b);

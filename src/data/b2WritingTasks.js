@@ -257,9 +257,14 @@ export function parseB2WritingPart2Task(enunciado = '', fallback = B2_WRITING_PA
 
   const { wordMin, wordMax } = parseWordLimit(raw, fallback.wordMin, fallback.wordMax);
   const introMatch = raw.match(/^([\s\S]*?)\n\d+\s*\n/);
-  const instructions = introMatch
-    ? introMatch[1].trim()
-    : fallback.instructions;
+  // The title and the word limit are rendered by their own UI elements, so keeping them
+  // in the instructions text would show each of them twice.
+  const intro = (introMatch?.[1] || '')
+    .split('\n')
+    .filter((line) => !/^\s*Writing Part\s+\d/i.test(line) && !/^\s*Word limit:/i.test(line))
+    .join('\n')
+    .trim();
+  const instructions = intro || fallback.instructions;
 
   const chunks = splitPart2Options(raw);
   if (chunks.length < 2) {

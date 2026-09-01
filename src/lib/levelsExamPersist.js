@@ -97,23 +97,33 @@ export async function resolveA2ExamenId(db, levelId, slot) {
   return existing?.id || null;
 }
 
-export async function resolveLevelExamenId(db, levelSlug, levelId, slot) {
-  const nombre = examenNameForLevel(levelSlug, slot);
-  const { data: existing } = await db
-    .from('levels_examenes')
-    .select('id')
-    .eq('level_id', levelId)
-    .ilike('nombre', `%Examen ${slot}%`)
-    .maybeSingle();
-  if (existing?.id) return existing.id;
+/** Primer entero del nombre: "Examen 12 B2" → 12. */
+function parseSlotFromExamenNombre(nombre) {
+  const match = String(nombre ?? '').match(/\d+/);
+  return match ? Number(match[0]) : null;
+}
 
-  const { data: byName } = await db
+/**
+ * Fila de `levels_examenes` del slot, comparando el número del nombre.
+ * No se puede usar `ilike '%Examen N%'`: con 20 exámenes el patrón del slot 1
+ * casa también con "Examen 10".. "Examen 19". Tolera espacios finales legacy.
+ */
+export async function findLevelExamenRowBySlot(db, levelId, slot) {
+  const target = Number(slot);
+  const { data, error } = await db
     .from('levels_examenes')
-    .select('id')
-    .eq('level_id', levelId)
-    .ilike('nombre', nombre)
-    .maybeSingle();
-  return byName?.id || null;
+    .select('id, nombre')
+    .eq('level_id', levelId);
+  if (error) throw new Error(`levels_examenes: ${error.message}`);
+
+  const matches = (data || []).filter((row) => parseSlotFromExamenNombre(row.nombre) === target);
+  if (matches.length <= 1) return matches[0] || null;
+  return [...matches].sort((a, b) => String(a.id).localeCompare(String(b.id)))[0];
+}
+
+export async function resolveLevelExamenId(db, levelSlug, levelId, slot) {
+  const row = await findLevelExamenRowBySlot(db, levelId, slot);
+  return row?.id || null;
 }
 
 async function deletePreguntaRowsByIds(db, ids) {
@@ -148,6 +158,10 @@ async function deletePreguntaRowsByIds(db, ids) {
   if (justPregErr) throw new Error(`levels_justificaciones: ${justPregErr.message}`);
 
   const tables = [
+    // FKs declared NO ACTION: they block the delete if a student ever touched the question.
+    { table: 'levels_favoritos', column: 'pregunta_id' },
+    { table: 'leves_correcciones', column: 'id_preguntas' },
+    { table: 'user_error_tracker', column: 'id_pregunta' },
     { table: 'levels_preguntas_audios', column: 'pregunta_id' },
     { table: 'levels_respuestas_abiertas', column: 'pregunta_id_abierta' },
     { table: 'levels_respuestas', column: 'pregunta_id' },

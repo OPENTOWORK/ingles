@@ -58,6 +58,11 @@ function normalizeHistory(conversationHistory = []) {
  * @param {object} [options.response_format]
  * @returns {Promise<string>}
  */
+/** `gpt-4o` keeps `max_tokens`; `o1`/`o3`/`o4-mini` and `gpt-5*` require the newer name. */
+function usesMaxCompletionTokens(model) {
+  return /^(o\d|gpt-[5-9])/i.test(String(model || '').trim());
+}
+
 /** Construye los parámetros de Chat Completions (compartido por la llamada normal y la de streaming). */
 function buildChatParams({
   systemPrompt,
@@ -112,7 +117,12 @@ function buildChatParams({
     temperature,
     messages: chatMessages,
   };
-  if (max_tokens != null) params.max_tokens = max_tokens;
+  if (max_tokens != null) {
+    // The o-series and gpt-5+ families reject `max_tokens` outright, so sending it turns
+    // any attempt to use a newer model into an opaque empty completion.
+    if (usesMaxCompletionTokens(model)) params.max_completion_tokens = max_tokens;
+    else params.max_tokens = max_tokens;
+  }
   if (response_format) params.response_format = response_format;
   return params;
 }

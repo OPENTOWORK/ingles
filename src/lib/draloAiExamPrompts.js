@@ -329,6 +329,19 @@ TEXT REQUIREMENTS:
 
 GAP DESIGN (CRITICAL):
 - Each gap contains exactly ONE missing word and has exactly ONE correct answer.
+- NEVER gap the relative pronoun of a defining relative clause. "the people ___ work here"
+  and "the one ___ suits you" both accept two answers ("who"/"that", "that"/"which") and are
+  therefore ungradeable. A relative pronoun may only be gapped when a single form is
+  grammatically forced: "whose" for possession, or "which"/"who" directly after a comma in a
+  non-defining clause. If in doubt, gap something else.
+- UNIQUENESS TEST — before returning, check every gap for a second word that a competent
+  candidate could defend. If one exists, redesign the gap. The context must rule out every
+  alternative. Other traps that are NOT acceptable as scored gaps:
+  - a contrast/addition slot where interchangeable linkers fit ("though"/"however",
+    "although"/"while", "so"/"therefore", "also"/"too");
+  - a slot accepting either of two prepositions with the same meaning ("for"/"at", "on"/"in");
+  - a slot where both "this" and "it", or both "some" and "any", refer back equally well;
+  - an indirect question where both "whether" and "what" fit.
 - Gaps test grammatical knowledge or functional language, not lexical content (that is Part 1).
 - Require the surrounding sentence and wider context where possible.
 - Across the 8 scored gaps include a balanced MIX of typical answer types:
@@ -340,7 +353,6 @@ GAP DESIGN (CRITICAL):
   - modal verbs
   - prepositions
   - conjunctions
-  - relative pronouns
   - infinitive marker "to"
   - particles
   - common grammatical fixed expressions

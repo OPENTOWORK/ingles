@@ -2,7 +2,7 @@
  * B2 First — 17 partes globales (misma numeración que levels_partes "Parte N B2").
  */
 
-export const B2_EXAM_SLOT_MAX = 6;
+export const B2_EXAM_SLOT_MAX = 20;
 
 export const B2_EXAM_PARTS = [
   { partNumber: 1, section: 'Reading and Use of English', mode: 'use-of-english', activity: 'multiple-choice-cloze', needsAudio: false },
