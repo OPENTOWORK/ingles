@@ -8,6 +8,7 @@ import {
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
+import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
 
 const supabaseUrl = getSupabaseUrl();
 const supabaseAnonKey = getSupabaseAnonKey();
@@ -86,6 +87,7 @@ export async function POST(req) {
         email: user.email || null,
         rol_id: rolId,
         activo: true,
+        plan_id: 'free',
       },
       { onConflict: 'id' },
     );
@@ -111,6 +113,27 @@ export async function POST(req) {
         to: user.email,
         variables: { email: user.email },
       });
+    }
+
+    const nombre =
+      user.user_metadata?.name ||
+      user.user_metadata?.full_name ||
+      user.user_metadata?.nombre ||
+      '';
+
+    try {
+      const founding = await maybeGrantFoundingMemberPlus(adminClient, {
+        userId: user.id,
+        email: user.email || '',
+        nombre,
+      });
+      if (founding.granted) {
+        console.info(
+          `api/auth/ensure-profile founding plus: slot ${founding.slotNumber} → ${user.email}`,
+        );
+      }
+    } catch (err) {
+      console.error('api/auth/ensure-profile founding plus:', err);
     }
 
     return NextResponse.json({ ok: true, created: true });

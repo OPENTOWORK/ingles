@@ -6,6 +6,7 @@ import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
 import { markReferralRegistered } from '@/lib/referrals';
+import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
 
 export const maxDuration = 30;
 
@@ -315,6 +316,17 @@ export async function POST(req) {
       });
     } catch (err) {
       console.error('api/auth/register referral:', err);
+    }
+
+    try {
+      const founding = await maybeGrantFoundingMemberPlus(adminClient, { userId, email, nombre });
+      if (founding.granted) {
+        console.info(
+          `api/auth/register founding plus: slot ${founding.slotNumber} → ${email}`,
+        );
+      }
+    } catch (err) {
+      console.error('api/auth/register founding plus:', err);
     }
 
     try {

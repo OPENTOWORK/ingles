@@ -13,6 +13,7 @@ const CTA_LABEL_BY_TRIGGER = {
   staff_task_assigned: 'Ver tareas',
   user_email_confirmation: 'Confirmar mi email',
   password_reset_requested: 'Crear nueva contraseña',
+  founding_member_plus_granted: 'Entrar en Dralo',
 };
 
 const TABLE = 'soporte_correos_automaticos';
