@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ADMIN_ASSIGNABLE_PLAN_OPTIONS } from '@/data/financialPlanConfig';
 import { formatSessionDuration } from '@/lib/userActivity';
@@ -19,6 +19,49 @@ function PlanBadge({ planSlug, getPlanLabel }) {
     <span className={`${styles.badge} ${getPlanBadgeClass(planSlug)}`}>
       {getPlanLabel(planSlug)}
     </span>
+  );
+}
+
+const TABLE_SORT_COLUMNS = {
+  usuario: 'usuario',
+  rol: 'rol',
+  plan: 'plan',
+  conexion: 'conexion',
+  sesion: 'sesion',
+  email: 'email',
+};
+
+function compareLocale(a, b, direction) {
+  const result = String(a || '').localeCompare(String(b || ''), 'es', {
+    sensitivity: 'base',
+    numeric: true,
+  });
+  return direction === 'asc' ? result : -result;
+}
+
+function SortableHeader({ column, label, sortColumn, sortDirection, onSort }) {
+  const active = sortColumn === column;
+  const ariaSort = active ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none';
+  const title = active
+    ? sortDirection === 'asc'
+      ? 'Ordenado A→Z. Clic para Z→A'
+      : 'Ordenado Z→A. Clic para A→Z'
+    : 'Clic para ordenar A→Z';
+
+  return (
+    <th className={styles.sortableTh} aria-sort={ariaSort}>
+      <button
+        type="button"
+        className={`${styles.sortBtn}${active ? ` ${styles.sortBtnActive}` : ''}`}
+        onClick={() => onSort(column)}
+        title={title}
+      >
+        <span>{label}</span>
+        <span className={styles.sortIcon} aria-hidden="true">
+          {active ? (sortDirection === 'asc' ? '▲' : '▼') : '↕'}
+        </span>
+      </button>
+    </th>
   );
 }
 
@@ -217,8 +260,65 @@ export default function AdminUserManagementList({
 }) {
   const [viewMode, setViewMode] = useState('cards');
   const [activeUserId, setActiveUserId] = useState(null);
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState('asc');
 
   const activeUser = users.find((item) => item.id === activeUserId) || null;
+
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      setSortDirection((current) => (current === 'asc' ? 'desc' : 'asc'));
+      return;
+    }
+    setSortColumn(column);
+    setSortDirection('asc');
+  };
+
+  const tableUsers = useMemo(() => {
+    if (!sortColumn) return users;
+
+    const getSortValue = (item) => {
+      const activity = userActivityByUser[item.id];
+      const planSlug = getUserPlanSlug(item.id, item.plan_id);
+
+      switch (sortColumn) {
+        case TABLE_SORT_COLUMNS.usuario:
+          return item.nombre || 'Sin nombre';
+        case TABLE_SORT_COLUMNS.rol:
+          return getRoleNameById(item.rol_id);
+        case TABLE_SORT_COLUMNS.plan:
+          return getPlanLabel(planSlug);
+        case TABLE_SORT_COLUMNS.conexion:
+          return activity?.online ? 'Conectado' : 'Desconectado';
+        case TABLE_SORT_COLUMNS.sesion:
+          return activity?.totalSessionSeconds ?? 0;
+        case TABLE_SORT_COLUMNS.email:
+          return item.email || '';
+        default:
+          return '';
+      }
+    };
+
+    return [...users].sort((a, b) => {
+      const aValue = getSortValue(a);
+      const bValue = getSortValue(b);
+
+      if (sortColumn === TABLE_SORT_COLUMNS.sesion) {
+        const diff = Number(aValue) - Number(bValue);
+        return sortDirection === 'asc' ? diff : -diff;
+      }
+
+      return compareLocale(aValue, bValue, sortDirection);
+    });
+  }, [
+    users,
+    sortColumn,
+    sortDirection,
+    userActivityByUser,
+    getRoleNameById,
+    getPlanLabel,
+    getUserPlanSlug,
+  ]);
 
   useEffect(() => {
     if (!activeUserId) return undefined;
@@ -348,17 +448,53 @@ export default function AdminUserManagementList({
                   />
                 </th>
                 <th>★</th>
-                <th>Usuario</th>
-                <th>Rol</th>
-                <th>Plan</th>
-                <th>Conexión</th>
-                <th>Sesión</th>
-                <th>Email</th>
+                <SortableHeader
+                  column={TABLE_SORT_COLUMNS.usuario}
+                  label="Usuario"
+                  sortColumn={sortColumn}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  column={TABLE_SORT_COLUMNS.rol}
+                  label="Rol"
+                  sortColumn={sortColumn}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  column={TABLE_SORT_COLUMNS.plan}
+                  label="Plan"
+                  sortColumn={sortColumn}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  column={TABLE_SORT_COLUMNS.conexion}
+                  label="Conexión"
+                  sortColumn={sortColumn}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  column={TABLE_SORT_COLUMNS.sesion}
+                  label="Sesión"
+                  sortColumn={sortColumn}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
+                />
+                <SortableHeader
+                  column={TABLE_SORT_COLUMNS.email}
+                  label="Email"
+                  sortColumn={sortColumn}
+                  sortDirection={sortDirection}
+                  onSort={handleSort}
+                />
                 <th />
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {users.map((item) => {
+              {tableUsers.map((item) => {
                 const activity = userActivityByUser[item.id];
                 const planSlug = getUserPlanSlug(item.id, item.plan_id);
                 return (

@@ -399,3 +399,44 @@
 .compactTable th {
   white-space: nowrap;
 }
+
+.sortableTh {
+  padding: 0 !important;
+}
+
+.sortBtn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 2.25rem;
+  padding: 0.55rem 0.65rem;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sortBtn:hover {
+  color: #4f46e5;
+  background: #eef2ff;
+}
+
+.sortBtnActive {
+  color: #4f46e5;
+  background: #e0e7ff;
+}
+
+.sortIcon {
+  font-size: 0.65rem;
+  opacity: 0.55;
+  line-height: 1;
+}
+
+.sortBtnActive .sortIcon {
+  opacity: 1;
+}
