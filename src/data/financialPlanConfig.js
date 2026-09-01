@@ -113,7 +113,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 30,
     descripcionCorta: 'La opción más popular para preparar exámenes y mejorar rápidamente.',
     descripcion:
-      'Nivel B2, 10 exámenes mensuales, Writing Correction (10/mes), Speaking Correction (10/mes), corrección Writing avanzada y 30 consultas Dralo Assistant al día. A2, B1, C1 y C2 próximamente.',
+      'Nivel B2, 10 exámenes mensuales, Writing Correction (10/mes), Speaking Correction (10/mes), corrección Writing avanzada y 30 consultas Dralo Assistant al día. A2, B1 y C1 próximamente.',
     badge: '🏆 MÁS POPULAR',
     badgeVariant: 'popular',
     recommended: true,
@@ -122,7 +122,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     activo: true,
     highlights: [
       'Nivel B2',
-      'A2, B1, C1 y C2: próximamente',
+      'A2, B1 y C1: próximamente',
       '10 exámenes mensuales',
       'Writing Correction: 10/mes',
       'Speaking Correction: 10/mes',
@@ -132,7 +132,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       'Soporte prioritario: hasta 48h',
     ],
     entitlements: {
-      levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
+      levels: ['a2', 'b1', 'b2', 'c1'],
       examsPerMonth: 10,
       placementTest: true,
       writingBasic: true,
@@ -168,7 +168,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     activo: true,
     highlights: [
       'Nivel B2',
-      'A2, B1, C1 y C2: próximamente',
+      'A2, B1 y C1: próximamente',
       'Exámenes mensuales',
       'Writing Correction',
       'Speaking Correction',
@@ -330,7 +330,7 @@ export const PLAN_COMPARISON_ROWS = [
     id: 'c2',
     label: 'Nivel C2',
     type: 'bool',
-    values: { free: false, premium: COMING_SOON, pro: COMING_SOON },
+    values: { free: false, premium: false, pro: COMING_SOON },
   },
   {
     id: 'writing-advanced',
@@ -400,7 +400,7 @@ export const PREMIUM_EXAM_LEVELS = [
   { slug: 'b1', label: 'B1', access: 'free', note: 'Incluido en FREE y todos los planes de pago.' },
   { slug: 'b2', label: 'B2', access: 'free', note: 'Incluido en FREE y todos los planes de pago.' },
   { slug: 'c1', label: 'C1', access: 'premium', note: 'Desde plan PLUS.' },
-  { slug: 'c2', label: 'C2', access: 'premium', note: 'Desde plan PLUS.' },
+  { slug: 'c2', label: 'C2', access: 'pro', note: 'Desde plan PREMIUM.' },
 ];
 
 /** Plantillas para monetizacion_planes (seed / sync). */
@@ -471,7 +471,7 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'The most popular option to prepare for exams and improve quickly.',
     highlights: [
       'Level B2',
-      'A2, B1, C1 and C2: coming soon',
+      'A2, B1 and C1: coming soon',
       '10 exams per month',
       'Writing Correction: 10/month',
       'Speaking Correction: 10/month',
@@ -486,7 +486,7 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'The most complete experience with the highest daily limits.',
     highlights: [
       'Level B2',
-      'A2, B1, C1 and C2: coming soon',
+      'A2, B1 and C1: coming soon',
       'Monthly exams',
       'Writing Correction',
       'Speaking Correction',
@@ -537,7 +537,7 @@ export function planSlugFromDbRow(row) {
 }
 
 /** Mínimo plan slug que desbloquea un nivel CEFR. */
-const LEVEL_MIN_PLAN = { a2: 'free', b1: 'free', b2: 'free', c1: 'premium', c2: 'premium' };
+const LEVEL_MIN_PLAN = { a2: 'free', b1: 'free', b2: 'free', c1: 'premium', c2: 'pro' };
 
 const PLAN_RANK = { free: 0, starter: 1, premium: 2, pro: 3 };
 

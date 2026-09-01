@@ -4,9 +4,12 @@ import PageHero from '@/components/PageHero';
 import ExamPracticeHubSection from '@/components/niveles/ExamPracticeHubSection';
 import StarsWayHubTabs from '@/components/niveles/StarsWayHubTabs';
 import { useUserRole } from '@/context/UserRoleContext';
+import usePlanEntitlements from '@/hooks/usePlanEntitlements';
 import { isNivelesLevelComingSoonForUser, usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { getNivelesLevelPlanLock } from '@/lib/nivelesPlanLevelAccess';
 import { isAdminRole } from '@/utils/authRoles';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
+import NivelesPlanLevelLockedNotice from '@/components/niveles/NivelesPlanLevelLockedNotice';
 
 /**
  * Hub de nivel: PageHero + Exam Practice (simulacros por paper).
@@ -14,8 +17,21 @@ import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotic
  */
 export default function LevelHubPage({ config }) {
   const { userRole: roleName, session } = useUserRole();
+  const { planSlug } = usePlanEntitlements();
   const isStudent = usesStudentContentRestrictions(roleName);
   const showStarsWayHub = isAdminRole(roleName);
+
+  if (session && isStudent) {
+    const planLock = getNivelesLevelPlanLock(config.cefr, planSlug);
+    if (planLock) {
+      return (
+        <NivelesPlanLevelLockedNotice
+          level={planLock.level}
+          requiredPlanName={planLock.requiredPlanName}
+        />
+      );
+    }
+  }
 
   if (isNivelesLevelComingSoonForUser(roleName, config.cefr, session?.user?.email)) {
     return <NivelesComingSoonNotice level={config.cefr} />;
