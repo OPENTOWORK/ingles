@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
+import { BLOG_CALLOUT_TEMPLATE } from '@/lib/blogContent';
 import styles from './BlogRichTextEditor.module.css';
 
 const FONT_FAMILIES = [
@@ -129,6 +130,12 @@ const BlogRichTextEditor = forwardRef(function BlogRichTextEditor(
   const handleList = (ordered) => {
     focusEditor();
     execCommand(ordered ? 'insertOrderedList' : 'insertUnorderedList');
+    emitChange();
+  };
+
+  const handleCallout = () => {
+    focusEditor();
+    document.execCommand('insertHTML', false, BLOG_CALLOUT_TEMPLATE);
     emitChange();
   };
 
@@ -294,6 +301,18 @@ const BlogRichTextEditor = forwardRef(function BlogRichTextEditor(
             title="Lista numerada"
           >
             1. Lista
+          </button>
+        </div>
+
+        <div className={styles.toolbarGroup}>
+          <button
+            type="button"
+            className={styles.toolBtn}
+            onMouseDown={preventToolbarBlur}
+            onClick={handleCallout}
+            title="Insertar caja destacada Dralo"
+          >
+            Destacado
           </button>
         </div>
 

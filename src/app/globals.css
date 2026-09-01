@@ -19366,7 +19366,7 @@ body.dark .profile-collapse--open .profile-collapse__head {
   font-size: clamp(2rem, 4vw, 2.75rem);
   line-height: 1.15;
   margin: 0 0 0.85rem;
-  color: #0f172a;
+  color: #4f46e5;
 }
 
 .blog-page__lead {
@@ -19717,17 +19717,22 @@ body.dark .profile-collapse--open .profile-collapse__head {
 .blog-article-page__body--rich h2,
 .blog-article-page__body--rich h3,
 .blog-article-page__body--rich h4 {
-  color: #0f172a;
   line-height: 1.3;
   margin: 2rem 0 0.85rem;
 }
 
 .blog-article-page__body--rich h2 {
   font-size: 1.55rem;
+  color: #cb55be;
 }
 
 .blog-article-page__body--rich h3 {
   font-size: 1.28rem;
+  color: #6366f1;
+}
+
+.blog-article-page__body--rich h4 {
+  color: #1e1b4b;
 }
 
 .blog-article-page__body--rich p {
@@ -19773,6 +19778,58 @@ body.dark .profile-collapse--open .profile-collapse__head {
   border-left: 4px solid #818cf8;
   background: #f8fafc;
   color: #475569;
+}
+
+.blog-article-page__body--rich .blog-callout {
+  margin: 1.75rem 0;
+  padding: 1.2rem 1.25rem 1.2rem 5.75rem;
+  border-radius: 18px;
+  border: 1px solid #c7d2fe;
+  background: linear-gradient(145deg, #eef2ff 0%, #faf5ff 55%, #ffffff 100%);
+  box-shadow: 0 14px 36px rgba(79, 70, 229, 0.08);
+  position: relative;
+}
+
+.blog-article-page__body--rich .blog-callout::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 72px;
+  height: 72px;
+  background: url('/mascot/6.png') center / contain no-repeat;
+  pointer-events: none;
+}
+
+.blog-article-page__body--rich .blog-callout__kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6366f1;
+}
+
+.blog-article-page__body--rich .blog-callout p {
+  margin: 0 0 0.65rem;
+  color: #1e1b4b;
+}
+
+.blog-article-page__body--rich .blog-callout p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .blog-article-page__body--rich .blog-callout {
+    padding: 1rem 1rem 1rem 4.5rem;
+  }
+
+  .blog-article-page__body--rich .blog-callout::before {
+    width: 52px;
+    height: 52px;
+    left: 0.65rem;
+  }
 }
 
 .blog-article-page__body--rich figure {

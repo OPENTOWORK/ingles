@@ -311,7 +311,7 @@ export default function BlogArticleEditor({
             <span className={styles.labelText}>Contenido del {meta.label.toLowerCase()}</span>
             <p className={styles.editorHint}>
               Selecciona texto y usa la barra como en Word: fuente, tamaño, negrita, cursiva,
-              hipervínculos e imágenes.
+              hipervínculos, imágenes y cajas <strong>Destacado</strong> con estilo Dralo.
             </p>
             <BlogRichTextEditor
               ref={richEditorRef}

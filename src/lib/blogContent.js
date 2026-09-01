@@ -19,7 +19,14 @@ const ALLOWED_TAGS = new Set([
   'figure',
   'figcaption',
   'div',
+  'aside',
 ]);
+
+const ALLOWED_BLOG_CLASSES = new Set(['blog-callout', 'blog-callout__kicker']);
+
+/** HTML de caja destacada Dralo para insertar desde el editor. */
+export const BLOG_CALLOUT_TEMPLATE =
+  '<aside class="blog-callout"><p class="blog-callout__kicker">Destacado</p><p>Escribe aquí el contenido destacado.</p></aside>';
 
 function sanitizeInlineStyle(styleValue = '') {
   const allowed = [];
@@ -80,6 +87,36 @@ function sanitizeImage(tagHtml) {
   return `<img src="${src.replace(/"/g, '&quot;')}" alt="${String(alt).replace(/"/g, '&quot;')}" loading="lazy" />`;
 }
 
+function getSafeBlogClassAttr(tagHtml) {
+  const classMatch = tagHtml.match(/\sclass\s*=\s*(['"])(.*?)\1/i);
+  if (!classMatch) return '';
+  const safe = classMatch[2]
+    .split(/\s+/)
+    .map((c) => c.trim())
+    .filter((c) => ALLOWED_BLOG_CLASSES.has(c));
+  return safe.length ? ` class="${safe.join(' ')}"` : '';
+}
+
+function sanitizeOpeningTag(tag, match) {
+  if (tag === 'img') return sanitizeImage(match);
+  if (tag === 'a') return sanitizeAnchor(match);
+  if (tag === 'span') return sanitizeSpan(match);
+  if (tag === 'br') return '<br />';
+  if (tag === 'aside') {
+    const cls = getSafeBlogClassAttr(match);
+    return cls.includes('blog-callout') ? `<aside${cls}>` : '';
+  }
+  if (tag === 'p') {
+    const cls = getSafeBlogClassAttr(match);
+    return cls ? `<p${cls}>` : '<p>';
+  }
+  if (tag === 'div') {
+    const cls = getSafeBlogClassAttr(match);
+    return cls ? `<div${cls}>` : '<div>';
+  }
+  return stripDangerousAttributes(match.replace(/\s+/g, ' '));
+}
+
 function slotFigureHtml(slot, url, alt = '') {
   const safeAlt = String(alt || '').replace(/"/g, '');
   const safeUrl = String(url || '').replace(/"/g, '&quot;');
@@ -132,12 +169,7 @@ export function sanitizeBlogHtml(html = '') {
     const tag = tagName.toLowerCase();
     if (!ALLOWED_TAGS.has(tag)) return '';
     if (match.startsWith('</')) return `</${tag}>`;
-    if (tag === 'img') return sanitizeImage(match);
-    if (tag === 'a') return sanitizeAnchor(match);
-    if (tag === 'span') return sanitizeSpan(match);
-    if (tag === 'br') return '<br />';
-    if (tag === 'div') return '<div>';
-    return stripDangerousAttributes(match.replace(/\s+/g, ' '));
+    return sanitizeOpeningTag(tag, match);
   });
 
   return output.trim();
