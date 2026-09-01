@@ -8,7 +8,7 @@ import Script from 'next/script';
 import { Suspense } from 'react';
 import ClientAppProviders from './ClientAppProviders';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
-import { SEO_PAGE_META } from '@/lib/siteSeo';
+import { SEO_PAGE_META, SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
 import {
   DRALO_APP_ICON_SRC,
   DRALO_APPLE_TOUCH_ICON_PATH,
@@ -21,13 +21,35 @@ import {
 const GTM_ID = 'GTM-N7KM9KNK';
 
 export const metadata = {
-  metadataBase: new URL('https://www.dralo.es'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: SEO_PAGE_META.home.title,
     template: `%s | ${DRALO_BRAND_NAME}`,
   },
   description: SEO_PAGE_META.home.description,
   applicationName: DRALO_BRAND_NAME,
+  openGraph: {
+    type: 'website',
+    locale: SOCIAL_SHARE.locale,
+    url: SITE_URL,
+    siteName: DRALO_BRAND_NAME,
+    title: SOCIAL_SHARE.title,
+    description: SOCIAL_SHARE.description,
+    images: [
+      {
+        url: '/opengraph-image',
+        width: 1200,
+        height: 630,
+        alt: SOCIAL_SHARE.imageAlt,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SOCIAL_SHARE.title,
+    description: SOCIAL_SHARE.description,
+    images: ['/opengraph-image'],
+  },
   icons: {
     icon: [
       { url: DRALO_FAVICON_PATH, sizes: 'any' },

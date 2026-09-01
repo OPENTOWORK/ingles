@@ -541,6 +541,23 @@ const LEVEL_MIN_PLAN = { a2: 'free', b1: 'free', b2: 'free', c1: 'premium', c2: 
 
 const PLAN_RANK = { free: 0, starter: 1, premium: 2, pro: 3 };
 
+export function getPlanTierRank(slug) {
+  const normalized = String(slug || 'free').toLowerCase();
+  return PLAN_RANK[normalized] ?? 0;
+}
+
+/** True when the user can start checkout for `targetSlug` (strict upgrade). */
+export function canUpgradeToPlan(currentSlug, targetSlug) {
+  const current = getPlanTierRank(currentSlug);
+  const target = getPlanTierRank(targetSlug);
+  if (target <= 0) return false;
+  return target > current;
+}
+
+export function isCurrentPlanSlug(currentSlug, targetSlug) {
+  return getPlanTierRank(currentSlug) === getPlanTierRank(targetSlug);
+}
+
 export function planMeetsMinimum(userSlug, requiredSlug) {
   return (PLAN_RANK[userSlug] ?? 0) >= (PLAN_RANK[requiredSlug] ?? 0);
 }

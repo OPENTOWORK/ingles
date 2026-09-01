@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -10,6 +10,7 @@ import {
   getB2StarsWayExerciseFocusId,
   getB2StarsWayExerciseHref,
   getB2StarsWayPartsForColumn,
+  isB2StarsWayColumnLockedForUser,
 } from '@/data/b2StarsWayConfig';
 import { useB2StarsWayProgress } from '@/hooks/useB2StarsWayProgress';
 import {
@@ -21,7 +22,22 @@ import {
 } from '@/utils/b2StarsWayProgress';
 import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
+import { useUserRole } from '@/context/UserRoleContext';
 import styles from './StarsWayToB2Section.module.css';
+
+function SkillLockIcon() {
+  return (
+    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M7 10V8a5 5 0 0 1 10 0v2"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+      />
+      <rect x="5" y="10" width="14" height="11" rx="2" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+}
 
 const PATH_ALIGNS = ['center', 'right', 'center', 'left'];
 
@@ -238,6 +254,7 @@ function SkillPath({ column, parts, progressBySlot, availableSlots, focusPart = 
 
 function StarsWayToB2SectionInner() {
   const searchParams = useSearchParams();
+  const { userRole } = useUserRole();
   const focusSkillKey = searchParams.get('skill');
   const focusPart = Number(searchParams.get('part') || 0);
   const focusExam = Number(searchParams.get('examen') || 0);
@@ -245,14 +262,27 @@ function StarsWayToB2SectionInner() {
   const { progressBySlot, availableSlots, loading } = useB2StarsWayProgress();
   const [activeSkillKey, setActiveSkillKey] = useState(null);
 
+  const isColumnLocked = (column) => isB2StarsWayColumnLockedForUser(column, userRole);
+
   useEffect(() => {
     if (
       focusSkillKey &&
       B2_STARS_WAY_COLUMNS.some((column) => column.key === focusSkillKey)
     ) {
-      setActiveSkillKey(focusSkillKey);
+      const column = B2_STARS_WAY_COLUMNS.find((item) => item.key === focusSkillKey);
+      if (column && !isColumnLocked(column)) {
+        setActiveSkillKey(focusSkillKey);
+      }
     }
-  }, [focusSkillKey]);
+  }, [focusSkillKey, userRole]);
+
+  useEffect(() => {
+    if (!activeSkillKey) return;
+    const column = B2_STARS_WAY_COLUMNS.find((item) => item.key === activeSkillKey);
+    if (column && isColumnLocked(column)) {
+      setActiveSkillKey(null);
+    }
+  }, [activeSkillKey, userRole]);
 
   const activeColumn = B2_STARS_WAY_COLUMNS.find((col) => col.key === activeSkillKey) ?? null;
   const activeParts = activeColumn ? getB2StarsWayPartsForColumn(activeColumn) : [];
@@ -288,6 +318,29 @@ function StarsWayToB2SectionInner() {
       <div className={styles.skillPicker} role="tablist" aria-label="Choose a skill">
         {B2_STARS_WAY_COLUMNS.map((column) => {
           const active = activeSkillKey === column.key;
+          const locked = isColumnLocked(column);
+
+          if (locked) {
+            return (
+              <span
+                key={column.key}
+                role="tab"
+                aria-selected={false}
+                aria-disabled="true"
+                title="Coming soon"
+                aria-label={`${column.shortLabel} locked`}
+                className={`${styles.skillTab} ${styles.skillTabLocked}`}
+                style={{ '--stars-way-accent': column.accent }}
+              >
+                <span className={styles.skillTabIcon}>
+                  <SkillLockIcon />
+                  <ExamSkillIcon theme={column.key === 'reading' ? 'reading' : column.key} />
+                </span>
+                <span className={styles.skillTabLabel}>{column.shortLabel}</span>
+              </span>
+            );
+          }
+
           return (
             <button
               key={column.key}

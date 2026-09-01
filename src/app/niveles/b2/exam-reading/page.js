@@ -2450,7 +2450,7 @@ function B2ReadingExamsPageInner() {
                       >
                       <B2ExamQuestionItem>
                         <div className={`reading-question-header${isFlagged ? ' question-flagged' : ''}`}>
-                        <p style={{ margin: '0 0 0.65rem', fontWeight: 700, color: '#2d3748' }}>
+                        <p className="reading-mcq-question__lead">
                           {!group.questionNumber
                             ? 'Options'
                             : group.questionStem
@@ -2469,7 +2469,7 @@ function B2ReadingExamsPageInner() {
                           />
                         ) : null}
                         </div>
-                        <div style={{ display: 'grid', gap: '0.6rem' }}>
+                        <div className="reading-mcq-options">
                           {group.options.map((option) => {
                             const isSelected = selectedOptions[questionKey] === option.id;
                             const isChecked = checkedQuestions[questionKey];
@@ -2480,11 +2480,28 @@ function B2ReadingExamsPageInner() {
 
                             const isLocked = !hideInstantFeedback && isChecked;
 
+                            const optionStateClass = showCorrect
+                              ? 'reading-mcq-option--correct'
+                              : showIncorrect
+                                ? 'reading-mcq-option--incorrect'
+                                : isSelected
+                                  ? 'reading-mcq-option--selected'
+                                  : '';
+
                             return (
                               <button
                                 key={option.id}
                                 type="button"
-                                className={`question-option tool-button${isEliminated ? ' eliminated' : ''}`}
+                                className={[
+                                  'question-option',
+                                  'tool-button',
+                                  'reading-mcq-option',
+                                  optionStateClass,
+                                  isEliminated ? 'eliminated' : '',
+                                  isLocked && !isSelected ? 'reading-mcq-option--dimmed' : '',
+                                ]
+                                  .filter(Boolean)
+                                  .join(' ')}
                                 disabled={isLocked}
                                 onClick={() => {
                                   if (isLocked) return;
@@ -2498,28 +2515,6 @@ function B2ReadingExamsPageInner() {
                                     option,
                                     questionKey,
                                   });
-                                }}
-                                style={{
-                                  textAlign: 'left',
-                                  whiteSpace: 'pre-line',
-                                  borderRadius: '8px',
-                                  padding: '0.75rem 1rem',
-                                  border: showCorrect
-                                    ? '2px solid #2f855a'
-                                    : showIncorrect
-                                      ? '2px solid #c53030'
-                                      : isSelected
-                                        ? '2px solid #3182ce'
-                                        : '1px solid #e2e8f0',
-                                  backgroundColor: showCorrect
-                                    ? '#f0fff4'
-                                    : showIncorrect
-                                      ? '#fff5f5'
-                                      : isSelected
-                                        ? '#ebf8ff'
-                                        : '#fff',
-                                  cursor: isLocked ? 'not-allowed' : 'pointer',
-                                  opacity: isLocked && !isSelected ? 0.65 : 1,
                                 }}
                               >
                                 {option.formattedText || option.respuesta}

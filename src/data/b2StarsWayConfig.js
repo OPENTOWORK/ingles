@@ -1,5 +1,6 @@
 import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import { getLevelExamSectionRange } from '@/data/levelExamPartMap';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 /** Skill columns for the Stars way to B2 cascade (left → right). */
 export const B2_STARS_WAY_COLUMNS = [
@@ -29,6 +30,7 @@ export const B2_STARS_WAY_COLUMNS = [
     accent: '#d97706',
     accentSoft: '#fffbeb',
     sectionTitle: 'Listening',
+    enabledForStudents: false,
   },
   {
     key: 'speaking',
@@ -38,8 +40,14 @@ export const B2_STARS_WAY_COLUMNS = [
     accent: '#db2777',
     accentSoft: '#fdf2f8',
     sectionTitle: 'Speaking',
+    enabledForStudents: false,
   },
 ];
+
+export function isB2StarsWayColumnLockedForUser(column, userRole = '') {
+  if (!column || column.enabledForStudents !== false) return false;
+  return usesStudentContentRestrictions(userRole);
+}
 
 export function getB2StarsWayPartsForColumn(column) {
   const { partMin, partMax } = getLevelExamSectionRange('b2', column.sectionTitle);

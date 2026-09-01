@@ -6,6 +6,7 @@ import {
   ANNUAL_BILLING_DISCOUNT_PERCENT,
   COMING_SOON,
   DRALO_SUBSCRIPTION_PLANS,
+  canUpgradeToPlan,
   formatEuroAmount,
   formatPlanAnnualTotal,
   formatPlanPriceAmount,
@@ -14,12 +15,15 @@ import {
   getPlanLaunchDiscountPercent,
   getPlanListDiscountPercent,
   getPlanListPrice,
+  getPlanTierRank,
+  isCurrentPlanSlug,
   LAUNCH_PRICE_LABEL,
   planHasLaunchPricing,
   PLAN_COMPARISON_ROWS,
 } from '@/data/financialPlanConfig';
 import { examsLimitLabel } from '@/lib/subscriptionPlans';
 import { startCheckout } from '@/lib/stripe/client';
+import usePlanEntitlements from '@/hooks/usePlanEntitlements';
 import styles from './SubscriptionPlansSection.module.css';
 
 function comparisonCellValue(row, planSlug, billingCycle) {
@@ -92,6 +96,50 @@ function CellValue({ value, type }) {
   return <span className={styles.cellText}>{value}</span>;
 }
 
+function resolvePlanCardCta(plan, { currentPlanSlug, enableCheckout, interactive, isSelected }) {
+  const hasPaidPlan = plan.precio > 0;
+  const isPremium = plan.recommended;
+
+  if (interactive) {
+    return {
+      kind: 'select',
+      label: isSelected ? 'Plan seleccionado' : hasPaidPlan ? 'Elegir plan' : 'Empezar gratis',
+      isPremium,
+    };
+  }
+
+  if (enableCheckout && currentPlanSlug) {
+    if (isCurrentPlanSlug(currentPlanSlug, plan.slug)) {
+      return { kind: 'static', label: 'Tu plan actual', variant: 'current', isPremium };
+    }
+    if (getPlanTierRank(plan.slug) < getPlanTierRank(currentPlanSlug)) {
+      return { kind: 'static', label: 'Incluido en tu plan', variant: 'disabled', isPremium };
+    }
+    if (hasPaidPlan && canUpgradeToPlan(currentPlanSlug, plan.slug)) {
+      const upgrading = getPlanTierRank(currentPlanSlug) > 0;
+      return {
+        kind: 'checkout',
+        label: upgrading ? 'Mejorar plan' : 'Suscribirme',
+        isPremium,
+      };
+    }
+    if (!hasPaidPlan) {
+      return { kind: 'static', label: 'Plan gratuito', variant: 'disabled', isPremium };
+    }
+  }
+
+  if (enableCheckout && hasPaidPlan) {
+    return { kind: 'checkout', label: 'Suscribirme', isPremium };
+  }
+
+  return {
+    kind: 'link',
+    label: hasPaidPlan ? 'Ver plan' : 'Empezar gratis',
+    href: hasPaidPlan ? `/precios?plan=${plan.slug}` : '/registro',
+    isPremium,
+  };
+}
+
 /**
  * Tarjetas de planes + tabla comparativa (página pública o admin).
  * @param {{
@@ -116,8 +164,14 @@ export default function SubscriptionPlansSection({
   const [checkoutPlan, setCheckoutPlan] = useState('');
   const [checkoutError, setCheckoutError] = useState('');
   const isAnnual = billingCycle === 'annual';
+  const { data: entitlementsData, planSlug: userPlanSlug, loading: planLoading } = usePlanEntitlements();
+  const currentPlanSlug = enableCheckout && entitlementsData ? userPlanSlug : null;
 
   async function handleCheckout(planSlug) {
+    if (currentPlanSlug && !canUpgradeToPlan(currentPlanSlug, planSlug)) {
+      setCheckoutError('Ya tienes este plan o uno superior.');
+      return;
+    }
     setCheckoutError('');
     setCheckoutPlan(planSlug);
     try {
@@ -181,6 +235,12 @@ export default function SubscriptionPlansSection({
           const isSelected = selectedSlug === plan.slug;
           const isPremium = plan.recommended;
           const hasPaidPlan = plan.precio > 0;
+          const cta = resolvePlanCardCta(plan, {
+            currentPlanSlug,
+            enableCheckout,
+            interactive,
+            isSelected,
+          });
           const listPrice = getPlanListPrice(plan, billingCycle);
           const crossedPrices = getPlanCrossedPrices(plan, billingCycle);
           const listDiscount = getPlanListDiscountPercent(plan, billingCycle);
@@ -265,30 +325,39 @@ export default function SubscriptionPlansSection({
                 })}
               </ul>
 
-              {interactive ? (
+              {cta.kind === 'select' ? (
                 <button
                   type="button"
-                  className={`${styles.cardBtn}${isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
+                  className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
                   onClick={() => onSelectPlan(plan.slug)}
                   aria-pressed={isSelected}
                 >
-                  {isSelected ? 'Plan seleccionado' : plan.precio > 0 ? 'Elegir plan' : 'Empezar gratis'}
+                  {cta.label}
                 </button>
-              ) : enableCheckout && hasPaidPlan ? (
+              ) : cta.kind === 'checkout' ? (
                 <button
                   type="button"
-                  className={`${styles.cardBtn}${isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
+                  className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
                   onClick={() => handleCheckout(plan.slug)}
-                  disabled={Boolean(checkoutPlan)}
+                  disabled={Boolean(checkoutPlan) || planLoading}
                 >
-                  {checkoutPlan === plan.slug ? 'Redirigiendo a Stripe…' : 'Suscribirme'}
+                  {checkoutPlan === plan.slug ? 'Redirigiendo a Stripe…' : cta.label}
                 </button>
+              ) : cta.kind === 'static' ? (
+                <span
+                  className={`${styles.cardBtn} ${
+                    cta.variant === 'current' ? styles.cardBtnCurrent : styles.cardBtnDisabled
+                  }`}
+                  aria-disabled="true"
+                >
+                  {cta.label}
+                </span>
               ) : showCta ? (
                 <Link
-                  href={plan.precio > 0 ? `/precios?plan=${plan.slug}` : '/registro'}
-                  className={`${styles.cardBtn}${isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
+                  href={cta.href}
+                  className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
                 >
-                  {plan.precio > 0 ? 'Ver plan' : 'Empezar gratis'}
+                  {cta.label}
                 </Link>
               ) : null}
             </article>

@@ -3,8 +3,9 @@
  * El alta real en `suscripciones` la hace el webhook, no esta ruta.
  */
 import { NextResponse } from 'next/server';
-import { getPlanBySlug } from '@/data/financialPlanConfig';
+import { getPlanBySlug, canUpgradeToPlan } from '@/data/financialPlanConfig';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
+import { resolveUserPlanSlug } from '@/lib/planAccess';
 import {
   getSiteUrl,
   getStripe,
@@ -53,6 +54,11 @@ export async function POST(req) {
     const db = getSubscriptionsDb();
     if (!db) {
       return NextResponse.json({ error: 'Servidor sin configurar.' }, { status: 503 });
+    }
+
+    const currentPlanSlug = await resolveUserPlanSlug(auth.user.id, auth.user.user_metadata);
+    if (!canUpgradeToPlan(currentPlanSlug, plan.slug)) {
+      return NextResponse.json({ error: 'Ya tienes este plan o uno superior.' }, { status: 400 });
     }
 
     // Con una suscripción viva, los cambios de plan van por el portal de Stripe:

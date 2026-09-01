@@ -17,30 +17,25 @@ export async function PATCH(req, { params }) {
     const starred = Boolean(body?.starred);
     const { db } = auth;
 
-    const tables = ['Usuarios_y_Perfil_users', 'user_profiles'];
-    let lastError = null;
+    const { data: updatedRow, error } = await db
+      .from('Usuarios_y_Perfil_users')
+      .update({ destacado_equipo: starred })
+      .eq('id', userId)
+      .select('id')
+      .maybeSingle();
 
-    for (const table of tables) {
-      const { error } = await db
-        .from(table)
-        .update({ destacado_equipo: starred })
-        .eq('id', userId);
-
-      if (!error) {
-        return NextResponse.json({ ok: true, destacado_equipo: starred });
-      }
-
-      lastError = error;
-      const message = String(error.message || '');
-      if (!message.includes('destacado_equipo') && !message.includes('column')) {
-        break;
-      }
+    if (error) {
+      return NextResponse.json(
+        { error: error.message || 'No se pudo actualizar la estrella del equipo.' },
+        { status: 500 },
+      );
     }
 
-    return NextResponse.json(
-      { error: lastError?.message || 'No se pudo actualizar la estrella del equipo.' },
-      { status: 500 },
-    );
+    if (!updatedRow) {
+      return NextResponse.json({ error: 'Usuario no encontrado.' }, { status: 404 });
+    }
+
+    return NextResponse.json({ ok: true, destacado_equipo: starred });
   } catch (error) {
     return NextResponse.json(
       { error: error?.message || 'Error interno al actualizar la estrella.' },

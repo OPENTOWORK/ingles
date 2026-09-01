@@ -95,7 +95,8 @@ const DraloLevelProgressSection = dynamic(
   },
 );
 import SiteMascot from '@/components/SiteMascot';
-import { Gift, TrendingUp } from 'lucide-react';
+import { Gift, TrendingUp, CheckCircle2, Info } from 'lucide-react';
+import toast from 'react-hot-toast';
 import PasswordInput from '@/components/PasswordInput';
 import {
   hydrateProfileMockData,
@@ -123,6 +124,7 @@ export default function ProfilePage() {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteMessage, setInviteMessage] = useState('');
   const [invitingFriend, setInvitingFriend] = useState(false);
+  const [inviteFeedback, setInviteFeedback] = useState(null);
   const [referralInvitations, setReferralInvitations] = useState([]);
   const [loadingReferrals, setLoadingReferrals] = useState(false);
   const [deleteCode, setDeleteCode] = useState('');
@@ -699,15 +701,17 @@ export default function ProfilePage() {
   const handleInviteFriend = async () => {
     const recipient = inviteEmail.trim().toLowerCase();
     if (!recipient || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipient)) {
-      alert('Enter a valid email for the invitation.');
+      toast.error('Enter a valid email for the invitation.');
       return;
     }
     if (!user?.id) {
-      alert('Could not validate your session to send the invitation.');
+      toast.error('Could not validate your session to send the invitation.');
       return;
     }
 
+    setInviteFeedback(null);
     setInvitingFriend(true);
+    const loadingToast = toast.loading('Sending invitation…');
     try {
       const accessToken =
         layoutSession?.access_token ||
@@ -742,27 +746,56 @@ export default function ProfilePage() {
 
       if (response.status === 404 && !process.env.NEXT_PUBLIC_INVITE_SEND_MAIL_URL) {
         throw new Error(
-          'Email invitations are not available in the static build. Deploy the API or set NEXT_PUBLIC_INVITE_SEND_MAIL_URL.'
+          'Email invitations are not available in the static build. Deploy the API or set NEXT_PUBLIC_INVITE_SEND_MAIL_URL.',
         );
       }
       if (!response.ok) {
-        throw new Error(payload?.error || 'Could not send invitation.');
+        const title =
+          response.status === 409
+            ? payload?.code === 'ALREADY_REGISTERED_PAID'
+              ? 'Account already had a paid plan'
+              : payload?.code === 'ALREADY_REGISTERED'
+                ? 'Already registered'
+                : 'Cannot send invitation'
+            : 'Could not send invitation';
+        setInviteFeedback({
+          type: 'error',
+          title,
+          message: payload?.error || 'Could not send invitation.',
+        });
+        toast.error(payload?.error || 'Could not send invitation.');
+        return;
       }
 
       if (payload?.sandbox) {
-        alert(
-          `Invitation saved in test mode: ${payload.sandbox}\n\nIn production, with dralo.es verified in Resend, it will reach your friend's inbox.`,
-        );
+        setInviteFeedback({
+          type: 'info',
+          title: 'Invitation saved in test mode',
+          message: `We stored the invite for ${recipient}. In production, with dralo.es verified in Resend, it will reach your friend's inbox.`,
+        });
+        toast('Invitation saved in test mode.', { icon: 'ℹ️' });
       } else {
-        alert('Invitation sent successfully.');
+        setInviteFeedback({
+          type: 'success',
+          title: 'Invitation sent',
+          message: `We've emailed ${recipient}. You'll see their progress here once they sign up.`,
+        });
+        toast.success(`Invitation sent to ${recipient}`);
       }
       setInviteEmail('');
       setInviteMessage('');
       await loadReferralInvitations();
     } catch (error) {
       console.error('Error inviting friend:', error);
-      alert(error.message || 'Error sending invitation.');
+      const message = error.message || 'Error sending invitation.';
+      setInviteFeedback({
+        type: 'error',
+        title: 'Could not send invitation',
+        message,
+      });
+      toast.error(message);
     } finally {
+      toast.dismiss(loadingToast);
       setInvitingFriend(false);
     }
   };
@@ -1308,7 +1341,8 @@ export default function ProfilePage() {
                 </p>
                 <p className="profile-invite-promo__text">
                   When your friend joins a paid plan, you get <strong>2 months free on PLUS</strong>.
-                  Send them an email invitation to start practising together.
+                  Send them an email invitation to start practising together. Referrals only count for{' '}
+                  <strong>new users</strong> who have never had a Dralo account.
                 </p>
               </div>
             </div>
@@ -1317,7 +1351,10 @@ export default function ProfilePage() {
               <input
                 type="email"
                 value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
+                onChange={(e) => {
+                  setInviteEmail(e.target.value);
+                  if (inviteFeedback) setInviteFeedback(null);
+                }}
                 className="form-input"
                 placeholder="friend@email.com"
               />
@@ -1335,6 +1372,34 @@ export default function ProfilePage() {
             <button type="button" onClick={handleInviteFriend} className="action-btn" disabled={invitingFriend}>
               {invitingFriend ? 'Sending invitation...' : 'Send invitation'}
             </button>
+
+            {inviteFeedback ? (
+              <div
+                className={`profile-invite-feedback profile-invite-feedback--${inviteFeedback.type}`}
+                role="status"
+                aria-live="polite"
+              >
+                <div className="profile-invite-feedback__icon" aria-hidden>
+                  {inviteFeedback.type === 'success' ? (
+                    <CheckCircle2 size={22} strokeWidth={2.25} />
+                  ) : (
+                    <Info size={22} strokeWidth={2.25} />
+                  )}
+                </div>
+                <div className="profile-invite-feedback__copy">
+                  <p className="profile-invite-feedback__title">{inviteFeedback.title}</p>
+                  <p className="profile-invite-feedback__message">{inviteFeedback.message}</p>
+                </div>
+                <button
+                  type="button"
+                  className="profile-invite-feedback__dismiss"
+                  onClick={() => setInviteFeedback(null)}
+                  aria-label="Dismiss message"
+                >
+                  ×
+                </button>
+              </div>
+            ) : null}
 
             <div className="profile-referrals">
               <h4 className="profile-referrals__title">Your invitations</h4>

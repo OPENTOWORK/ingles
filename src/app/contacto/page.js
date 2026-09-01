@@ -373,13 +373,17 @@ function GlobalStyles() {
       .contact-section {
         margin: 24px 0;
         padding: 28px;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--color-border-tertiary, #e2e8f0);
         border-radius: 20px;
-        background: #fff;
+        background: var(--card, #fff);
         box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
       }
       .contact-section--support {
-        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        background: linear-gradient(
+          180deg,
+          var(--card, #ffffff) 0%,
+          var(--color-background-secondary, #f8fafc) 100%
+        );
       }
       .contact-section__head {
         display: flex;
@@ -401,11 +405,11 @@ function GlobalStyles() {
         margin: 0 0 6px;
         font-size: 1.45rem;
         letter-spacing: -0.02em;
-        color: #0f172a;
+        color: var(--color-text-primary, #0f172a);
       }
       .contact-section__copy p {
         margin: 0;
-        color: #64748b;
+        color: var(--color-text-secondary, #64748b);
         font-size: 0.95rem;
         line-height: 1.6;
         max-width: 52rem;
@@ -422,9 +426,9 @@ function GlobalStyles() {
         gap: 8px;
         padding: 8px 12px;
         border-radius: 999px;
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        color: #475569;
+        background: var(--color-background-secondary, #f8fafc);
+        border: 1px solid var(--color-border-tertiary, #e2e8f0);
+        color: var(--color-text-secondary, #475569);
         font-size: 0.82rem;
         font-weight: 600;
       }
@@ -434,8 +438,8 @@ function GlobalStyles() {
         gap: 18px;
         padding: 22px;
         border-radius: 16px;
-        background: #fff;
-        border: 1px solid #e2e8f0;
+        background: var(--color-background-secondary, #fff);
+        border: 1px solid var(--color-border-tertiary, #e2e8f0);
       }
       .two-cols {
         display: grid;
@@ -452,15 +456,15 @@ function GlobalStyles() {
         font-weight: 700;
         letter-spacing: 0.03em;
         text-transform: uppercase;
-        color: #64748b;
+        color: var(--color-text-secondary, #64748b);
       }
       .form-input,
       .form-textarea {
         padding: 12px 14px;
         font-size: 0.95rem;
-        border: 1px solid #cbd5e1;
+        border: 1px solid var(--color-border-tertiary, #cbd5e1);
         border-radius: 12px;
-        background: #fff;
+        background: var(--card, #fff);
         color: var(--text);
         outline: none;
         transition: border-color 0.2s, box-shadow 0.2s;
@@ -503,16 +507,16 @@ function GlobalStyles() {
       .tickets-panel {
         margin-top: 24px;
         padding-top: 22px;
-        border-top: 1px solid #e2e8f0;
+        border-top: 1px solid var(--color-border-tertiary, #e2e8f0);
       }
       .tickets-panel__head h3 {
         margin: 0 0 4px;
         font-size: 1.1rem;
-        color: #0f172a;
+        color: var(--color-text-primary, #0f172a);
       }
       .tickets-panel__head p {
         margin: 0 0 16px;
-        color: #64748b;
+        color: var(--color-text-secondary, #64748b);
         font-size: 0.9rem;
       }
       .tickets-empty {
@@ -523,13 +527,13 @@ function GlobalStyles() {
         gap: 8px;
         padding: 28px 20px;
         border-radius: 14px;
-        border: 1px dashed #cbd5e1;
-        background: #f8fafc;
+        border: 1px dashed var(--color-border-tertiary, #cbd5e1);
+        background: var(--color-background-secondary, #f8fafc);
         text-align: center;
-        color: #64748b;
+        color: var(--color-text-secondary, #64748b);
       }
       .tickets-empty strong {
-        color: #334155;
+        color: var(--color-text-primary, #334155);
         font-size: 0.98rem;
       }
       .tickets-empty p {
@@ -540,9 +544,9 @@ function GlobalStyles() {
       }
       .tickets-table-wrap {
         overflow-x: auto;
-        border: 1px solid #e2e8f0;
+        border: 1px solid var(--color-border-tertiary, #e2e8f0);
         border-radius: 14px;
-        background: #fff;
+        background: var(--card, #fff);
       }
       .tickets-table {
         width: 100%;
@@ -557,8 +561,8 @@ function GlobalStyles() {
         border-bottom: 1px solid #f1f5f9;
       }
       .tickets-table th {
-        background: #f8fafc;
-        color: #64748b;
+        background: var(--color-background-secondary, #f8fafc);
+        color: var(--color-text-secondary, #64748b);
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.04em;
@@ -568,7 +572,7 @@ function GlobalStyles() {
         border-bottom: none;
       }
       .tickets-table tbody tr:hover {
-        background: #fafbff;
+        background: var(--color-background-secondary, #fafbff);
       }
       .tickets-table__col-id {
         width: 1%;
@@ -576,10 +580,10 @@ function GlobalStyles() {
       }
       .tickets-table__subject {
         font-weight: 600;
-        color: #0f172a;
+        color: var(--color-text-primary, #0f172a);
       }
       .tickets-table__muted {
-        color: #64748b;
+        color: var(--color-text-secondary, #64748b);
         white-space: nowrap;
       }
       .tickets-table__ticket-ref {
@@ -640,11 +644,11 @@ function GlobalStyles() {
       .contact-faq-entry h2 {
         margin: 0 0 6px;
         font-size: 1.2rem;
-        color: #0f172a;
+        color: var(--color-text-primary, #0f172a);
       }
       .contact-faq-entry p {
         margin: 0;
-        color: #64748b;
+        color: var(--color-text-secondary, #64748b);
         font-size: 0.92rem;
         line-height: 1.55;
         max-width: 36rem;

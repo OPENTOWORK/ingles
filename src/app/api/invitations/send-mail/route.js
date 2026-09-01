@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { getPublicSiteOrigin } from '@/lib/authActionLinks';
-import { recordReferralInvitation } from '@/lib/referrals';
+import { recordReferralInvitation, REFERRAL_INVITE_ERROR } from '@/lib/referrals';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 const supabaseUrl = getSupabaseUrl();
@@ -52,10 +52,24 @@ export async function POST(req) {
 
     const referral = await recordReferralInvitation({
       inviterUserId: authData.user.id,
+      inviterEmail: senderEmail,
       inviteeEmail: to,
       customMessage,
       origin,
     });
+
+    if (!referral.ok) {
+      const status =
+        referral.code === REFERRAL_INVITE_ERROR.ALREADY_REGISTERED ||
+        referral.code === REFERRAL_INVITE_ERROR.ALREADY_REGISTERED_PAID ||
+        referral.code === REFERRAL_INVITE_ERROR.SELF_INVITE
+          ? 409
+          : 400;
+      return NextResponse.json(
+        { error: referral.error || 'No se pudo registrar la invitación.', code: referral.code },
+        { status },
+      );
+    }
 
     const inviteUrl = referral.inviteUrl || `${origin.replace(/\/$/, '')}/registro`;
 

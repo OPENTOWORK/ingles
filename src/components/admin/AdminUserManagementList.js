@@ -6,6 +6,22 @@ import { ADMIN_ASSIGNABLE_PLAN_OPTIONS } from '@/data/financialPlanConfig';
 import { formatSessionDuration } from '@/lib/userActivity';
 import styles from './AdminUserManagementList.module.css';
 
+function getPlanBadgeClass(planSlug) {
+  const slug = String(planSlug || 'free').toLowerCase();
+  if (slug === 'pro') return styles.badgePlanPremium;
+  if (slug === 'premium') return styles.badgePlanPlus;
+  if (slug === 'starter') return styles.badgePlanStarter;
+  return styles.badgePlanFree;
+}
+
+function PlanBadge({ planSlug, getPlanLabel }) {
+  return (
+    <span className={`${styles.badge} ${getPlanBadgeClass(planSlug)}`}>
+      {getPlanLabel(planSlug)}
+    </span>
+  );
+}
+
 function UserDrawer({
   user,
   roles,
@@ -275,7 +291,7 @@ export default function AdminUserManagementList({
 
                   <div className={styles.cardBadges}>
                     <span className={styles.badge}>{getRoleNameById(item.rol_id)}</span>
-                    <span className={`${styles.badge} ${styles.badgePlan}`}>{getPlanLabel(planSlug)}</span>
+                    <PlanBadge planSlug={planSlug} getPlanLabel={getPlanLabel} />
                     <span
                       className={`${styles.badge} ${
                         activity?.online ? styles.badgeOnline : styles.badgeOffline
@@ -367,7 +383,9 @@ export default function AdminUserManagementList({
                     </td>
                     <td className="font-medium text-indigo-700">{item.nombre || 'Sin nombre'}</td>
                     <td>{getRoleNameById(item.rol_id)}</td>
-                    <td>{getPlanLabel(planSlug)}</td>
+                    <td>
+                      <PlanBadge planSlug={planSlug} getPlanLabel={getPlanLabel} />
+                    </td>
                     <td>{activity?.online ? 'Conectado' : 'Desconectado'}</td>
                     <td>{activity?.totalSessionLabel || formatSessionDuration(0)}</td>
                     <td className="text-gray-600">{item.email}</td>

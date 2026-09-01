@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
@@ -68,7 +68,19 @@ function SiteHeaderBrand({ nav = null }) {
   );
 }
 
-export default function RootLayoutClient({ children }) {
+function RootLayoutClientFallback() {
+  return (
+    <>
+      <SiteNightModeInit />
+      <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
+      <main className="page-content">
+        <RouteLoadingMascot label="Cargando" variant={3} />
+      </main>
+    </>
+  );
+}
+
+function RootLayoutClientInner({ children }) {
   /** Solo bloquea hasta conocer la sesión; el rol se resuelve en segundo plano. */
   const [authPending, setAuthPending] = useState(() => {
     if (typeof window === 'undefined') return true;
@@ -506,5 +518,13 @@ export default function RootLayoutClient({ children }) {
         </div>
       </footer>
     </>
+  );
+}
+
+export default function RootLayoutClient({ children }) {
+  return (
+    <Suspense fallback={<RootLayoutClientFallback />}>
+      <RootLayoutClientInner>{children}</RootLayoutClientInner>
+    </Suspense>
   );
 }

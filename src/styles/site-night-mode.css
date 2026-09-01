@@ -468,6 +468,73 @@ body.reading-night-mode .contact-section {
   border-color: #475569;
 }
 
+body.reading-night-mode .contact-section--support {
+  background: linear-gradient(180deg, #1e293b 0%, #172033 100%);
+}
+
+body.reading-night-mode .contact-section__copy h2 {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .contact-section__copy p,
+body.reading-night-mode .contact-meta__item {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .contact-meta__item {
+  background: #334155;
+  border-color: #475569;
+}
+
+body.reading-night-mode .contact-form {
+  background: #334155;
+  border-color: #475569;
+}
+
+body.reading-night-mode .contacto-page .form-input,
+body.reading-night-mode .contacto-page .form-textarea {
+  background: #1e293b;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
+body.reading-night-mode .contacto-page .form-input:focus,
+body.reading-night-mode .contacto-page .form-textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.18);
+}
+
+body.reading-night-mode .tickets-panel__head h3 {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .tickets-empty {
+  background: #334155;
+  border-color: #64748b;
+  color: #94a3b8;
+}
+
+body.reading-night-mode .tickets-empty strong {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .tickets-table-wrap {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+body.reading-night-mode .tickets-table tbody tr:hover {
+  background: #334155;
+}
+
+body.reading-night-mode .tickets-table__subject {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .contact-faq-entry h2 {
+  color: #f8fafc;
+}
+
 body.reading-night-mode .contact-section--internal {
   background: linear-gradient(180deg, #1e293b 0%, #172033 100%) !important;
   border-color: #475569 !important;
@@ -1367,6 +1434,41 @@ body.reading-night-mode .legal-footer-link-btn:hover {
 
 body.reading-night-mode .legal-doc-page {
   background: transparent;
+}
+
+/* ——— Precios / planes Dralo ——— */
+body.reading-night-mode .dralo-ai-page,
+body.reading-night-mode .precios-page {
+  background: transparent;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .precios-page .page-hero-wrap__breadcrumb .breadcrumb {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .precios-page .page-hero-wrap__breadcrumb .breadcrumb a {
+  color: #a5b4fc;
+}
+
+body.reading-night-mode .precios-page .page-hero {
+  background: linear-gradient(145deg, #1e293b 0%, #312e81 55%, #1e1b4b 100%);
+  border: 1px solid #475569;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+body.reading-night-mode .precios-page .page-hero__title,
+body.reading-night-mode .precios-page .page-hero__eyebrow {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .precios-page .page-hero__desc,
+body.reading-night-mode .precios-page .page-hero__stat-label {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .precios-page .page-hero__stat-value {
+  color: #e2e8f0;
 }
 
 /* Theory layout base (light mode) */

@@ -1,4 +1,4 @@
-﻿.section {
+.section {
   margin-top: 0.5rem;
   width: 100%;
 }
@@ -84,6 +84,31 @@
   background: color-mix(in srgb, var(--stars-way-accent) 14%, #ffffff);
   border-color: var(--stars-way-accent);
   box-shadow: 0 6px 18px color-mix(in srgb, var(--stars-way-accent) 18%, transparent);
+}
+
+.skillTabLocked {
+  opacity: 0.62;
+  cursor: not-allowed;
+  background: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  box-shadow: none;
+}
+
+.skillTabLocked:hover {
+  border-color: #e2e8f0;
+  box-shadow: none;
+  transform: none;
+}
+
+.skillTabLocked .skillTabIcon :global(.exam-skill-icon) {
+  color: #94a3b8;
+}
+
+.skillTabIcon {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .skillTabIcon :global(.exam-skill-icon) {

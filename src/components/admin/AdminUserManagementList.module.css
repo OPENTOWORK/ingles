@@ -113,9 +113,24 @@
   color: #64748b;
 }
 
-.badgePlan {
-  background: #eef2ff;
-  color: #4338ca;
+.badgePlanFree {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.badgePlanPlus {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.badgePlanPremium {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badgePlanStarter {
+  background: #e0f2fe;
+  color: #0369a1;
 }
 
 .cardMeta {

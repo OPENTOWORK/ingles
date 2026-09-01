@@ -1,17 +1,39 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { createContext, useContext, useState, useEffect, useRef, Suspense } from "react";
 import { usePathname } from "next/navigation";
 import { initializeExamData } from "@/utils/clearCorruptedData";
 
 const ExamContext = createContext();
 export const useExam = () => useContext(ExamContext);
 
+const noop = () => {};
+const DEFAULT_EXAM_CONTEXT = {
+  answers: {},
+  updateAnswer: noop,
+  clearExamAnswers: noop,
+  clearAllAnswers: noop,
+  calculateScore: () => ({ total: 0, correct: 0, percentage: 0, passed: false }),
+  globalStart: null,
+  setGlobalStart: noop,
+  sectionTimers: { reading: 0, writing: 0, listening: 0, speaking: 0 },
+  lastSaved: null,
+  isSaving: false,
+};
+
 /** Rutas que usan localStorage legacy del ExamContext (evita trabajo en B2 moderno, home, etc.). */
 const LEGACY_EXAM_STORAGE_ROUTE =
   /\/niveles\/(a2|b1|b2|c1|c2)\/exam-1(\/|$)|\/niveles\/c1\/exam-1\/part-/;
 
-export const ExamProvider = ({ children }) => {
+export const ExamProvider = ({ children }) => (
+  <Suspense
+    fallback={<ExamContext.Provider value={DEFAULT_EXAM_CONTEXT}>{children}</ExamContext.Provider>}
+  >
+    <ExamProviderInner>{children}</ExamProviderInner>
+  </Suspense>
+);
+
+function ExamProviderInner({ children }) {
   const pathname = usePathname();
   const usesLegacyExamStorage = LEGACY_EXAM_STORAGE_ROUTE.test(pathname || '');
   const lastSavedRef = useRef(null);
@@ -268,4 +290,4 @@ export const ExamProvider = ({ children }) => {
       {children}
     </ExamContext.Provider>
   );
-};
+}

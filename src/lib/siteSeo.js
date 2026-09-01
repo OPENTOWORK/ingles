@@ -27,3 +27,11 @@ export const SEO_PAGE_META = {
     description: 'Contacta con el equipo de Dralo para soporte, dudas sobre exámenes o la plataforma.',
   },
 };
+
+/** Open Graph / LinkedIn / Twitter — título corto para tarjetas sociales. */
+export const SOCIAL_SHARE = {
+  title: 'Dralo Academy',
+  description: SEO_PAGE_META.home.description,
+  locale: 'es_ES',
+  imageAlt: 'Dralo Academy — practica inglés con exámenes e IA',
+};

@@ -25,27 +25,30 @@ export async function resolveEffectivePlanForUser(db, userId, assignedPlanSlug =
   };
 }
 
+const USER_PROFILES_TABLE = 'Usuarios_y_Perfil_users';
+
 export async function assignUserPlan(db, userId, planSlug) {
   const normalized = normalizeAdminAssignablePlanSlug(planSlug);
-  const tables = ['Usuarios_y_Perfil_users', 'user_profiles'];
-  let lastError = null;
-  let updated = false;
 
-  for (const table of tables) {
-    const { error } = await db.from(table).update({ plan_id: normalized }).eq('id', userId);
-    if (!error) {
-      updated = true;
-      break;
-    }
-    lastError = error;
-    const message = String(error.message || '');
-    if (!message.includes('plan_id') && !message.includes('column')) {
-      break;
-    }
+  const { data: updatedRow, error } = await db
+    .from(USER_PROFILES_TABLE)
+    .update({ plan_id: normalized })
+    .eq('id', userId)
+    .select('id')
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message || 'No se pudo actualizar el plan del usuario.');
   }
 
-  if (!updated) {
-    throw new Error(lastError?.message || 'No se pudo actualizar el plan del usuario.');
+  if (!updatedRow) {
+    const { error: upsertError } = await db.from(USER_PROFILES_TABLE).upsert(
+      { id: userId, plan_id: normalized },
+      { onConflict: 'id' },
+    );
+    if (upsertError) {
+      throw new Error(upsertError.message || 'No se pudo crear el perfil del usuario.');
+    }
   }
 
   await syncAuthPlanMetadata(db, userId, normalized);
