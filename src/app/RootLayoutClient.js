@@ -88,13 +88,17 @@ function RootLayoutClientFallback() {
 }
 
 function RootLayoutClientInner({ children }) {
-  /** Solo bloquea hasta conocer la sesión; el rol se resuelve en segundo plano. */
-  const [authPending, setAuthPending] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    const path = window.location.pathname;
-    if (isPublicPath(path) || isWritingV3PreviewPath(path)) return false;
-    return !hasStoredSupabaseSession();
-  });
+  const router = useRouter();
+  const pathname = usePathname();
+  const isPublic = isPublicPath(pathname);
+  const isAuthFlow = AUTH_FLOW_PATH_PREFIXES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
+  /** Superficie interna de Writing v3: solo existe fuera de producción (Fase 8). */
+  const allowWithoutAuth = isPublic || isWritingV3PreviewPath(pathname);
+
+  /** Mismo valor en SSR y en el primer render del cliente (evita hydration mismatch). */
+  const [authPending, setAuthPending] = useState(() => !allowWithoutAuth);
   const [session, setSession] = useState(null);
   const [userRole, setUserRole] = useState('student');
   const [cookieConsent, setCookieConsent] = useState(null);
@@ -106,17 +110,9 @@ function RootLayoutClientInner({ children }) {
     analytics: false,
     personalization: false,
   });
-  const router = useRouter();
-  const pathname = usePathname();
   const roleFetchedForUserIdRef = useRef(null);
   const lastAccessTokenRef = useRef(null);
 
-  const isPublic = isPublicPath(pathname);
-  const isAuthFlow = AUTH_FLOW_PATH_PREFIXES.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`),
-  );
-  /** Superficie interna de Writing v3: solo existe fuera de producción (Fase 8). */
-  const allowWithoutAuth = isPublic || isWritingV3PreviewPath(pathname);
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
   const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-ELSL12SBGQ';
@@ -151,7 +147,13 @@ function RootLayoutClientInner({ children }) {
   }, [allowWithoutAuth, authPending, session, pathname, router]);
 
   useEffect(() => {
-    if (allowWithoutAuth) setAuthPending(false);
+    if (allowWithoutAuth) {
+      setAuthPending(false);
+      return;
+    }
+    if (hasStoredSupabaseSession()) {
+      setAuthPending(false);
+    }
   }, [allowWithoutAuth]);
 
   useEffect(() => {
