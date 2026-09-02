@@ -10,6 +10,30 @@ import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
 
+async function grantFoundingPlusForAuthUser(adminClient, user) {
+  if (!user?.email) return;
+  const nombre =
+    user.user_metadata?.name ||
+    user.user_metadata?.full_name ||
+    user.user_metadata?.nombre ||
+    '';
+  try {
+    const founding = await maybeGrantFoundingMemberPlus(adminClient, {
+      userId: user.id,
+      email: user.email,
+      nombre,
+      createdAt: user.created_at,
+    });
+    if (founding.granted) {
+      console.info(
+        `api/auth/ensure-profile founding plus: slot ${founding.slotNumber} → ${user.email}`,
+      );
+    }
+  } catch (err) {
+    console.error('api/auth/ensure-profile founding plus:', err);
+  }
+}
+
 const supabaseUrl = getSupabaseUrl();
 const supabaseAnonKey = getSupabaseAnonKey();
 const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
@@ -77,6 +101,7 @@ export async function POST(req) {
           .eq('user_id', user.id);
       }
 
+      await grantFoundingPlusForAuthUser(adminClient, user);
       return NextResponse.json({ ok: true, created: false });
     }
 
@@ -87,7 +112,6 @@ export async function POST(req) {
         email: user.email || null,
         rol_id: rolId,
         activo: true,
-        plan_id: 'free',
       },
       { onConflict: 'id' },
     );
@@ -115,26 +139,7 @@ export async function POST(req) {
       });
     }
 
-    const nombre =
-      user.user_metadata?.name ||
-      user.user_metadata?.full_name ||
-      user.user_metadata?.nombre ||
-      '';
-
-    try {
-      const founding = await maybeGrantFoundingMemberPlus(adminClient, {
-        userId: user.id,
-        email: user.email || '',
-        nombre,
-      });
-      if (founding.granted) {
-        console.info(
-          `api/auth/ensure-profile founding plus: slot ${founding.slotNumber} → ${user.email}`,
-        );
-      }
-    } catch (err) {
-      console.error('api/auth/ensure-profile founding plus:', err);
-    }
+    await grantFoundingPlusForAuthUser(adminClient, user);
 
     return NextResponse.json({ ok: true, created: true });
   } catch (err) {

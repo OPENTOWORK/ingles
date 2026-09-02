@@ -98,6 +98,7 @@ function RootLayoutClientFallback() {
   return (
     <>
       <SiteNightModeInit />
+      <SiteHeaderBrand />
       <main className="page-content">
         <RouteLoadingMascot label="Cargando" variant={3} />
       </main>

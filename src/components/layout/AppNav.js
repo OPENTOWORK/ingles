@@ -1,8 +1,9 @@
 'use client';
 
 import NavLink from '@/components/layout/NavLink';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import {
@@ -24,7 +25,7 @@ import {
 
 function AppNavInner({ session, userRole, onLogout }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
@@ -357,9 +358,5 @@ function AppNavInner({ session, userRole, onLogout }) {
 }
 
 export default function AppNav(props) {
-  return (
-    <Suspense fallback={null}>
-      <AppNavInner {...props} />
-    </Suspense>
-  );
+  return <AppNavInner {...props} />;
 }

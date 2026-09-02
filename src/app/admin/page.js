@@ -13,25 +13,26 @@ import AdminUserManagementList from '@/components/admin/AdminUserManagementList'
 import AdminOverviewStats from '@/components/admin/AdminOverviewStats';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import { useClientMounted } from '@/hooks/useClientMounted';
+
+const ANALYTICS_FALLBACK = (
+  <div
+    className="mb-8 rounded-xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500"
+    role="status"
+    aria-label="Cargando analíticas"
+  >
+    Cargando gráficos…
+  </div>
+);
 
 const AdminAnalyticsPanels = dynamic(
   () => import('@/components/admin/AdminAnalyticsPanels'),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        className="mb-8 rounded-xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500"
-        role="status"
-        aria-label="Cargando analíticas"
-      >
-        Cargando gráficos…
-      </div>
-    ),
-  },
+  { ssr: false, loading: () => ANALYTICS_FALLBACK },
 );
 
 const AdminClarityPanel = dynamic(() => import('@/components/admin/AdminClarityPanel'), {
   ssr: false,
+  loading: () => null,
 });
 
 const PERIOD_OPTIONS = ['dias', 'semanas', 'meses', 'anios'];
@@ -88,6 +89,7 @@ const formatDateByPeriod = (dateValue, period) => {
 };
 
 export default function AdminDashboard() {
+  const chartsReady = useClientMounted();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [roles, setRoles] = useState([]);
@@ -1088,37 +1090,41 @@ export default function AdminDashboard() {
           roleStats={roleStats}
         />
 
-        <AdminAnalyticsPanels
-          period={period}
-          setPeriod={setPeriod}
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-          analytics={analytics}
-          chartPeriod={chartPeriod}
-          setChartPeriod={setChartPeriod}
-          chartStartDate={chartStartDate}
-          setChartStartDate={setChartStartDate}
-          chartEndDate={chartEndDate}
-          setChartEndDate={setChartEndDate}
-          sessionChart={sessionChart}
-          connectionAnalytics={connectionAnalytics}
-          connectionActiveUsers={connectionActiveUsers}
-          connectionRoleFilter={connectionRoleFilter}
-          setConnectionRoleFilter={setConnectionRoleFilter}
-          connectionUserIdFilter={connectionUserIdFilter}
-          setConnectionUserIdFilter={setConnectionUserIdFilter}
-          appliedConnectionRoleFilter={appliedConnectionRoleFilter}
-          appliedConnectionUserIdFilter={appliedConnectionUserIdFilter}
-          onRunConnectionQuery={runConnectionQuery}
-          onLoadConnectionUserPages={loadConnectionUserPages}
-          connectionQueryKey={`${connectionQuery.period}|${connectionQuery.startDate}|${connectionQuery.endDate}|${connectionQuery.roleId}|${connectionQuery.userId}`}
-          connectionQueryLoading={connectionQueryLoading}
-          roles={roles}
-        />
+        {chartsReady ? (
+          <AdminAnalyticsPanels
+            period={period}
+            setPeriod={setPeriod}
+            startDate={startDate}
+            setStartDate={setStartDate}
+            endDate={endDate}
+            setEndDate={setEndDate}
+            analytics={analytics}
+            chartPeriod={chartPeriod}
+            setChartPeriod={setChartPeriod}
+            chartStartDate={chartStartDate}
+            setChartStartDate={setChartStartDate}
+            chartEndDate={chartEndDate}
+            setChartEndDate={setChartEndDate}
+            sessionChart={sessionChart}
+            connectionAnalytics={connectionAnalytics}
+            connectionActiveUsers={connectionActiveUsers}
+            connectionRoleFilter={connectionRoleFilter}
+            setConnectionRoleFilter={setConnectionRoleFilter}
+            connectionUserIdFilter={connectionUserIdFilter}
+            setConnectionUserIdFilter={setConnectionUserIdFilter}
+            appliedConnectionRoleFilter={appliedConnectionRoleFilter}
+            appliedConnectionUserIdFilter={appliedConnectionUserIdFilter}
+            onRunConnectionQuery={runConnectionQuery}
+            onLoadConnectionUserPages={loadConnectionUserPages}
+            connectionQueryKey={`${connectionQuery.period}|${connectionQuery.startDate}|${connectionQuery.endDate}|${connectionQuery.roleId}|${connectionQuery.userId}`}
+            connectionQueryLoading={connectionQueryLoading}
+            roles={roles}
+          />
+        ) : (
+          ANALYTICS_FALLBACK
+        )}
 
-        <AdminClarityPanel />
+        {chartsReady ? <AdminClarityPanel /> : null}
 
         <div className="bg-white rounded-lg shadow mb-8">
           <div className="px-6 py-4 border-b border-gray-200">

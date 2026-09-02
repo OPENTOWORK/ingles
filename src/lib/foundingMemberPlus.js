@@ -2,11 +2,27 @@ import { assignUserPlan } from '@/lib/adminUserPlan';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { formatNombreVariable } from '@/lib/renderEmailTemplate';
+import {
+  FIRST_AUTO_SLOT,
+  FOUNDING_CAMPAIGN_STARTED_AT,
+  MAX_FOUNDING_SLOT,
+  PLUS_PLAN_SLUG,
+  parseFoundingSlotNumber,
+  shouldAttemptFoundingPlus,
+  shouldGrantFoundingPlus,
+} from '@/lib/foundingMemberPlus.rules';
+
+export {
+  FIRST_AUTO_SLOT,
+  FOUNDING_CAMPAIGN_STARTED_AT,
+  MAX_FOUNDING_SLOT,
+  PLUS_PLAN_SLUG,
+  parseFoundingSlotNumber,
+  shouldAttemptFoundingPlus,
+  shouldGrantFoundingPlus,
+};
 
 const FOUNDING_MEMBER_TABLE = 'founding_member_grants';
-const MAX_FOUNDING_SLOT = 50;
-const FIRST_AUTO_SLOT = 2;
-const PLUS_PLAN_SLUG = 'premium';
 
 function isMissingTableError(error) {
   const msg = String(error?.message || error?.code || '').toLowerCase();
@@ -15,7 +31,8 @@ function isMissingTableError(error) {
     error?.code === 'PGRST205' ||
     msg.includes('does not exist') ||
     msg.includes('could not find the table') ||
-    msg.includes('claim_founding_member_slot')
+    msg.includes('claim_founding_member_slot') ||
+    msg.includes('founding_member_grants')
   );
 }
 
@@ -24,24 +41,40 @@ function isMissingTableError(error) {
  * El cupo 1 está reservado manualmente (Belén).
  *
  * @param {import('@supabase/supabase-js').SupabaseClient} adminClient
- * @param {{ userId: string, email: string, nombre?: string }} params
+ * @param {{ userId: string, email: string, nombre?: string, createdAt?: string }} params
  */
-export async function maybeGrantFoundingMemberPlus(adminClient, { userId, email, nombre }) {
+export async function maybeGrantFoundingMemberPlus(adminClient, { userId, email, nombre, createdAt }) {
   if (!adminClient || !userId || !email) {
     return { granted: false, reason: 'missing_params' };
+  }
+  if (!shouldAttemptFoundingPlus(createdAt)) {
+    return { granted: false, reason: 'before_campaign' };
   }
 
   try {
     const slotNumber = await claimFoundingMemberSlot(adminClient, userId, email);
-    if (!slotNumber || slotNumber < FIRST_AUTO_SLOT || slotNumber > MAX_FOUNDING_SLOT) {
+    if (!shouldGrantFoundingPlus(slotNumber)) {
+      const reason = slotNumber === 1 ? 'slot_reserved' : 'no_slot_available';
+      console.info(`[foundingMemberPlus] skip ${email}: ${reason} (slot=${slotNumber || 'none'})`);
       return {
         granted: false,
         slotNumber: slotNumber || null,
-        reason: slotNumber === 1 ? 'slot_reserved' : 'no_slot_available',
+        reason,
       };
     }
 
     await assignUserPlan(adminClient, userId, PLUS_PLAN_SLUG);
+
+    const alreadyEmailed = await hasFoundingPlusEmailBeenSent(adminClient, userId, email);
+    if (alreadyEmailed) {
+      return {
+        granted: true,
+        slotNumber,
+        planSlug: PLUS_PLAN_SLUG,
+        emailSent: false,
+        reason: 'already_emailed',
+      };
+    }
 
     let emailSent = false;
     try {
@@ -55,6 +88,9 @@ export async function maybeGrantFoundingMemberPlus(adminClient, { userId, email,
         },
       });
       emailSent = Boolean(mail?.sent || mail?.queued);
+      if (emailSent) {
+        await markFoundingPlusEmailSent(adminClient, userId);
+      }
     } catch (mailErr) {
       console.error('[foundingMemberPlus] email:', mailErr);
     }
@@ -71,6 +107,35 @@ export async function maybeGrantFoundingMemberPlus(adminClient, { userId, email,
   }
 }
 
+async function hasFoundingPlusEmailBeenSent(adminClient, userId, email) {
+  const { data: grantRow } = await adminClient
+    .from(FOUNDING_MEMBER_TABLE)
+    .select('email_sent_at')
+    .eq('user_id', userId)
+    .maybeSingle();
+  if (grantRow?.email_sent_at) return true;
+
+  const { data: logRow } = await adminClient
+    .from('soporte_correos_log')
+    .select('id')
+    .eq('slug', 'founding_member_plus')
+    .eq('destinatario', String(email).trim().toLowerCase())
+    .eq('ok', true)
+    .limit(1)
+    .maybeSingle();
+  return Boolean(logRow?.id);
+}
+
+async function markFoundingPlusEmailSent(adminClient, userId) {
+  const { error } = await adminClient
+    .from(FOUNDING_MEMBER_TABLE)
+    .update({ email_sent_at: new Date().toISOString() })
+    .eq('user_id', userId);
+  if (error && !isMissingTableError(error)) {
+    console.error('[foundingMemberPlus] mark email sent:', error);
+  }
+}
+
 async function claimFoundingMemberSlot(adminClient, userId, email) {
   const { data: rpcSlot, error: rpcError } = await adminClient.rpc('claim_founding_member_slot', {
     p_user_id: userId,
@@ -78,30 +143,32 @@ async function claimFoundingMemberSlot(adminClient, userId, email) {
   });
 
   if (!rpcError) {
-    return typeof rpcSlot === 'number' ? rpcSlot : null;
-  }
-
-  if (!isMissingTableError(rpcError)) {
+    const parsed = parseFoundingSlotNumber(rpcSlot);
+    if (parsed) return parsed;
+    console.error('[foundingMemberPlus] RPC returned unusable slot:', rpcSlot);
+  } else if (!isMissingTableError(rpcError)) {
     throw rpcError;
+  } else {
+    console.error('[foundingMemberPlus] RPC unavailable, using table fallback:', rpcError.message || rpcError);
   }
 
-  // Fallback si la migración aún no está aplicada: lectura + inserción simple.
-  const { data: existing } = await adminClient
+  const { data: existing, error: existingError } = await adminClient
     .from(FOUNDING_MEMBER_TABLE)
     .select('slot_number')
     .eq('user_id', userId)
     .maybeSingle();
+  if (existingError && !isMissingTableError(existingError)) throw existingError;
+  if (existing?.slot_number) return parseFoundingSlotNumber(existing.slot_number);
 
-  if (existing?.slot_number) return existing.slot_number;
-
-  const { data: maxRow } = await adminClient
+  const { data: maxRow, error: maxError } = await adminClient
     .from(FOUNDING_MEMBER_TABLE)
     .select('slot_number')
     .order('slot_number', { ascending: false })
     .limit(1)
     .maybeSingle();
+  if (maxError && !isMissingTableError(maxError)) throw maxError;
 
-  const nextSlot = (maxRow?.slot_number || 0) + 1;
+  const nextSlot = (parseFoundingSlotNumber(maxRow?.slot_number) || 0) + 1;
   if (nextSlot > MAX_FOUNDING_SLOT) return null;
 
   const { data: inserted, error: insertError } = await adminClient
@@ -117,10 +184,10 @@ async function claimFoundingMemberSlot(adminClient, userId, email) {
         .select('slot_number')
         .eq('user_id', userId)
         .maybeSingle();
-      return retry?.slot_number ?? null;
+      return parseFoundingSlotNumber(retry?.slot_number);
     }
     throw insertError;
   }
 
-  return inserted?.slot_number ?? nextSlot;
+  return parseFoundingSlotNumber(inserted?.slot_number) ?? nextSlot;
 }

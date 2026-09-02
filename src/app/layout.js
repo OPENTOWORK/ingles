@@ -5,7 +5,6 @@ import '@/styles/staff-panels-night-mode.css';
 import './globals.css';
 import '@/styles/mascot.css';
 import Script from 'next/script';
-import { Suspense } from 'react';
 import ClientAppProviders from './ClientAppProviders';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 import { SEO_PAGE_META, SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
@@ -98,9 +97,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <AccessibilityProvider>
-          <Suspense fallback={null}>
-            <ClientAppProviders>{children}</ClientAppProviders>
-          </Suspense>
+          <ClientAppProviders>{children}</ClientAppProviders>
         </AccessibilityProvider>
       </body>
     </html>

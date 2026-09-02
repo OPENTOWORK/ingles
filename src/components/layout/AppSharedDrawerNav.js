@@ -1,7 +1,8 @@
 'use client';
 
 import NavLink from '@/components/layout/NavLink';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import {
@@ -36,7 +37,7 @@ export function AppSharedDrawerNav({
   draloVariant = 'mobile',
 }) {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const {
     guest,
     sectionLinks,

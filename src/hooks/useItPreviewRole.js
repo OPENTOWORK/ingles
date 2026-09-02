@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import {
   IT_PREVIEW_ROLE_PARAM,
   resolveItPreviewState,
@@ -19,25 +19,26 @@ function isEmbeddedPreviewFrame() {
 }
 
 export function useItPreviewRole(realRole, realSession) {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const requestedRoleId = searchParams.get(IT_PREVIEW_ROLE_PARAM);
+  const [storedRoleId, setStoredRoleId] = useState(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     if (requestedRoleId && isEmbeddedPreviewFrame()) {
       sessionStorage.setItem(IT_PREVIEW_ROLE_STORAGE_KEY, requestedRoleId);
+      setStoredRoleId(requestedRoleId);
+      return;
+    }
+    if (!requestedRoleId && isEmbeddedPreviewFrame()) {
+      try {
+        setStoredRoleId(sessionStorage.getItem(IT_PREVIEW_ROLE_STORAGE_KEY));
+      } catch {
+        setStoredRoleId(null);
+      }
     }
   }, [requestedRoleId]);
 
-  const effectiveRoleId = useMemo(() => {
-    if (requestedRoleId) return requestedRoleId;
-    if (typeof window === 'undefined' || !isEmbeddedPreviewFrame()) return null;
-    try {
-      return sessionStorage.getItem(IT_PREVIEW_ROLE_STORAGE_KEY);
-    } catch {
-      return null;
-    }
-  }, [requestedRoleId]);
+  const effectiveRoleId = requestedRoleId || storedRoleId;
 
   return useMemo(
     () => resolveItPreviewState(effectiveRoleId, realRole, realSession),

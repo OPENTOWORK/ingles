@@ -1,7 +1,5 @@
 'use client';
 
-import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import ItPreviewRoleBanner from '@/components/layout/ItPreviewRoleBanner';
 import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
@@ -12,11 +10,7 @@ import { GuidedTourProvider } from '@/context/GuidedTourContext';
 import { PlacementAccessProvider } from '@/context/PlacementAccessContext';
 import { useItPreviewRole } from '@/hooks/useItPreviewRole';
 import { useItPreviewAdminBuzonLayout } from '@/hooks/useItPreviewAdminBuzonLayout';
-
-const AppNav = dynamic(() => import('@/components/layout/AppNav'), {
-  ssr: true,
-  loading: () => <div className="site-header__nav site-header__nav--loading" aria-hidden="true" />,
-});
+import AppNav from '@/components/layout/AppNav';
 
 function SiteHeaderBrand({ nav = null }) {
   return (
@@ -32,7 +26,7 @@ function SiteHeaderBrand({ nav = null }) {
   );
 }
 
-function AuthenticatedAppShellInner({ session, userRole, onLogout, children }) {
+export default function AuthenticatedAppShell({ session, userRole, onLogout, children }) {
   const pathname = usePathname();
   const preview = useItPreviewRole(userRole, session);
   useItPreviewAdminBuzonLayout();
@@ -57,13 +51,5 @@ function AuthenticatedAppShellInner({ session, userRole, onLogout, children }) {
         </GuidedTourProvider>
       </UserRoleProvider>
     </>
-  );
-}
-
-export default function AuthenticatedAppShell(props) {
-  return (
-    <Suspense fallback={null}>
-      <AuthenticatedAppShellInner {...props} />
-    </Suspense>
   );
 }
