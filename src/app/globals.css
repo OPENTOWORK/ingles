@@ -3783,6 +3783,7 @@ body.nav-open {
   width: 100%;
   max-width: var(--levels-b2-page-max-width);
   margin: 0 auto;
+  align-self: stretch;
   font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -5617,11 +5618,15 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 .levels-b2-practice__work-body {
   margin-top: 0.85rem;
+  width: 100%;
   min-width: 0;
+  max-width: 100%;
 }
 
 .levels-b2-practice__work-body > * {
+  width: 100%;
   max-width: 100%;
+  min-width: 0;
 }
 
 .levels-b2-practice__work-panel .levels-b2-part-tabs {
@@ -12103,10 +12108,33 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 }
 
 /* ——— B2 First Writing Practice ——— */
+.levels-b2-practice__work-panel--b2-writing {
+  max-width: 100%;
+  overflow-x: visible;
+}
+
 .b2-writing-practice {
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   margin: 0;
+  box-sizing: border-box;
+}
+
+.levels-exam-practice-root:has(.b2-writing-practice),
+.levels-exam-practice-root:has(.b2-writing-practice) .levels-b2-practice,
+.levels-exam-practice-root:has(.b2-writing-practice) .exam-practice-tools-target,
+.levels-exam-practice-root:has(.b2-writing-practice) .levels-b2-practice__work-panel,
+.levels-exam-practice-root:has(.b2-writing-practice) .levels-b2-practice__work-body,
+.b2-writing-practice .levels-listening-practice-layout,
+.b2-writing-practice .levels-listening-practice-main,
+.b2-writing-practice .levels-listening-practice-side,
+.b2-writing-practice .b2-writing-practice__body,
+.b2-writing-practice .levels-exam-practice-page,
+.b2-writing-practice .levels-exam-split-card {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   box-sizing: border-box;
 }
 
@@ -12119,7 +12147,7 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 }
 
 .levels-b2-practice--skill-compact:has(.b2-writing-practice):has(.levels-listening-practice-layout--with-strategy) {
-  --exam-practice-sidebar-col: minmax(260px, 320px);
+  --exam-practice-sidebar-col: minmax(240px, 300px);
 }
 
 .levels-exam-practice-root:has(.levels-b2-practice--skill-compact[data-skill-theme]) {
@@ -12136,8 +12164,12 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   max-width: none;
 }
 
-.levels-b2-practice:has(.b2-writing-practice) .levels-listening-practice-layout--with-strategy {
-  grid-template-columns: minmax(0, 1fr) minmax(260px, 320px);
+.b2-writing-practice .levels-exam-split__enunciado,
+.b2-writing-practice .levels-exam-split__enunciado p,
+.b2-writing-practice .b2-writing-task__instructions,
+.b2-writing-practice .b2-writing-task__question {
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .b2-writing-practice__body {
@@ -13636,13 +13668,177 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   align-items: start;
 }
 
-.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy) {
+.levels-listening-practice-layout--with-strategy > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.b2-writing-practice,
+.b2-writing-practice__body,
+.b2-writing-practice .levels-exam-split-card,
+.b2-writing-practice .levels-exam-split__enunciado {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.levels-b2-practice--skill-compact:has(.levels-listening-practice-layout--with-strategy):not(:has(.b2-writing-practice)) {
   --exam-practice-sidebar-col: minmax(240px, 300px);
 }
 
 @media (max-width: 960px) {
   .levels-listening-practice-layout--with-strategy {
     grid-template-columns: 1fr;
+  }
+}
+
+/*
+  Writing practice layout.
+  Desktop: prompt + side rail in two columns.
+  Narrow viewports: `.b2-writing-layout--stack` (see useNarrowWritingLayout) plus the
+  mobile block below, which forces the whole ancestor chain back to full width.
+*/
+.b2-writing-practice .levels-listening-practice-layout--with-strategy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  gap: 1.25rem;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.b2-writing-practice .b2-writing-layout--stack {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.b2-writing-practice .b2-writing-layout--stack > .levels-listening-practice-side {
+  margin-top: 1rem;
+}
+
+.b2-writing-practice .levels-listening-practice-main,
+.b2-writing-practice .levels-listening-practice-side {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.b2-writing-practice .levels-exam-practice-page,
+.b2-writing-practice .levels-exam-split-card,
+.b2-writing-practice .b2-writing-task,
+.b2-writing-practice .b2-writing-task__stimulus,
+.b2-writing-practice .levels-exam-split__enunciado,
+.b2-writing-practice .levels-exam-split__enunciado p {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* ——— Writing practice on phones/tablets: single full-width column ——— */
+@media (max-width: 960px) {
+  .levels-exam-practice-root:has(.b2-writing-practice),
+  .levels-exam-practice-root:has(.b2-writing-practice) .levels-b2-practice,
+  .levels-exam-practice-root:has(.b2-writing-practice) .exam-practice-tools-target,
+  .levels-exam-practice-root:has(.b2-writing-practice) .levels-b2-practice__work-panel,
+  .levels-exam-practice-root:has(.b2-writing-practice) .levels-b2-practice__work-body,
+  .b2-writing-practice,
+  .b2-writing-practice .levels-listening-practice-layout,
+  .b2-writing-practice .levels-listening-practice-main,
+  .b2-writing-practice .levels-listening-practice-side,
+  .b2-writing-practice .levels-exam-practice-page,
+  .b2-writing-practice .levels-exam-split-card,
+  .b2-writing-practice .levels-exam-split__enunciado,
+  .b2-writing-practice .b2-writing-task,
+  .b2-writing-practice .b2-writing-task__stimulus,
+  .b2-writing-practice .levels-b2-writing-panel,
+  .b2-writing-practice .levels-b2-writing-panel textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+    float: none !important;
+  }
+
+  .b2-writing-practice .levels-listening-practice-layout,
+  .b2-writing-practice .levels-listening-practice-layout--with-strategy,
+  .b2-writing-practice .b2-writing-layout--stack,
+  .b2-writing-practice .levels-listening-practice-main,
+  .b2-writing-practice .levels-exam-practice-page {
+    display: block !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  /* Any leftover grid on the page must not reserve a 240px sidebar track. */
+  .levels-exam-practice-root:has(.b2-writing-practice),
+  .levels-b2-practice--skill-compact:has(.b2-writing-practice),
+  .levels-b2-practice--skill-compact:has(.b2-writing-practice) .levels-b2-practice__status,
+  .levels-b2-practice--skill-compact:has(.b2-writing-practice) .levels-b2-practice__toolbar-band,
+  .b2-writing-practice {
+    --exam-practice-sidebar-col: minmax(0, 1fr) !important;
+  }
+
+  .levels-b2-practice--skill-compact:has(.b2-writing-practice) .levels-b2-practice__toolbar-band,
+  .levels-b2-practice--skill-compact:has(.b2-writing-practice)
+    .levels-b2-practice__status-row--with-result,
+  .levels-b2-practice--skill-compact:has(.b2-writing-practice)
+    .levels-b2-practice__status-main-band {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0.5rem;
+  }
+
+  .b2-writing-practice .levels-listening-practice-side {
+    position: static !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin-top: 1rem;
+  }
+
+  .levels-b2-practice--skill-compact:has(.b2-writing-practice) .levels-b2-practice__work-panel {
+    padding: 0.75rem 0.7rem 0.9rem;
+    overflow-x: clip;
+  }
+
+  .b2-writing-practice .levels-exam-split-card {
+    padding: 0.9rem 0.6rem 1rem;
+  }
+
+  .b2-writing-practice .levels-exam-practice-page {
+    margin-inline: 0;
+  }
+
+  /* Nested paddings stack up fast on a 390px screen: keep them tight. */
+  .b2-writing-practice .b2-writing-task {
+    padding: 0.85rem 0.6rem;
+  }
+
+  .b2-writing-practice .levels-exam-split__enunciado {
+    padding: 0.85rem 0.7rem 0.85rem 0.75rem;
+  }
+
+  .levels-exam-split-card .b2-writing-task__stimulus,
+  .levels-exam-split-card .b2-writing-part2__stimulus {
+    padding: 0.85rem 0.65rem;
+  }
+
+  .levels-b2-practice--skill-compact[data-skill-theme]:has(.b2-writing-practice) {
+    padding: 0.2rem;
+  }
+
+  /* Justified serif text reads badly in a narrow column. */
+  .levels-exam-split-card .b2-writing-task__question,
+  .levels-exam-split-card .b2-writing-part2__context,
+  .levels-exam-split-card .b2-writing-part2__task-body p {
+    text-align: left;
+    text-align-last: left;
+  }
+
+  .b2-writing-part2__options {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -14103,6 +14299,12 @@ body.reading-night-mode .reading-feedback-toggle__btn--sidebar-top.active {
   background: #fef9c3;
   border-color: #facc15;
   color: #854d0e;
+}
+
+.exam-practice-tools-target {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .exam-practice-tools-target .levels-listening-practice-main:not(.reading-area) {
@@ -17846,6 +18048,17 @@ body.reading-night-mode .levels-writing-strategy__check-item {
   font-size: 15px;
 }
 
+.profile-settings-panel__danger-notice {
+  margin: 0 0 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #fcd34d;
+  background: #fffbeb;
+  color: #92400e;
+  line-height: 1.55;
+  font-size: 14px;
+}
+
 .profile-settings-panel__danger-actions {
   display: flex;
   flex-direction: column;
@@ -17891,6 +18104,12 @@ body.dark .profile-settings-panel .profile-collapse--danger {
 body.dark .profile-settings-panel__danger-intro,
 body.dark .profile-settings-panel__danger-hint {
   color: #fca5a5;
+}
+
+body.dark .profile-settings-panel__danger-notice {
+  border-color: #b45309;
+  background: rgba(180, 83, 9, 0.15);
+  color: #fcd34d;
 }
 
 .profile-tab-panels {
@@ -19781,25 +20000,31 @@ body.dark .profile-collapse--open .profile-collapse__head {
 }
 
 .blog-article-page__body--rich .blog-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
   margin: 1.75rem 0;
-  padding: 1.2rem 1.25rem 1.2rem 5.75rem;
+  padding: 1.2rem 1.25rem;
   border-radius: 18px;
   border: 1px solid #c7d2fe;
   background: linear-gradient(145deg, #eef2ff 0%, #faf5ff 55%, #ffffff 100%);
   box-shadow: 0 14px 36px rgba(79, 70, 229, 0.08);
-  position: relative;
 }
 
-.blog-article-page__body--rich .blog-callout::before {
-  content: '';
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
+.blog-article-page__body--rich .blog-callout__media {
+  flex-shrink: 0;
+}
+
+.blog-article-page__body--rich .blog-callout__mascot {
+  display: block;
   width: 72px;
   height: 72px;
-  background: url('/mascot/6.png') center / contain no-repeat;
-  pointer-events: none;
+  object-fit: contain;
+}
+
+.blog-article-page__body--rich .blog-callout__content {
+  flex: 1;
+  min-width: 0;
 }
 
 .blog-article-page__body--rich .blog-callout__kicker {
@@ -19822,13 +20047,13 @@ body.dark .profile-collapse--open .profile-collapse__head {
 
 @media (max-width: 640px) {
   .blog-article-page__body--rich .blog-callout {
-    padding: 1rem 1rem 1rem 4.5rem;
+    gap: 0.75rem;
+    padding: 1rem;
   }
 
-  .blog-article-page__body--rich .blog-callout::before {
+  .blog-article-page__body--rich .blog-callout__mascot {
     width: 52px;
     height: 52px;
-    left: 0.65rem;
   }
 }
 

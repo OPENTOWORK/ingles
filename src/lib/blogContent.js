@@ -22,11 +22,28 @@ const ALLOWED_TAGS = new Set([
   'aside',
 ]);
 
-const ALLOWED_BLOG_CLASSES = new Set(['blog-callout', 'blog-callout__kicker']);
+const ALLOWED_BLOG_CLASSES = new Set([
+  'blog-callout',
+  'blog-callout__kicker',
+  'blog-callout__media',
+  'blog-callout__content',
+  'blog-callout__mascot',
+]);
+
+const BLOG_CALLOUT_MASCOT_SRC = '/mascot/6.png';
+
+function calloutMediaHtml() {
+  return `<div class="blog-callout__media"><img class="blog-callout__mascot" src="${BLOG_CALLOUT_MASCOT_SRC}" alt="" /></div>`;
+}
+
+function wrapCalloutInner(inner) {
+  return `${calloutMediaHtml()}<div class="blog-callout__content">${inner}</div>`;
+}
 
 /** HTML de caja destacada Dralo para insertar desde el editor. */
-export const BLOG_CALLOUT_TEMPLATE =
-  '<aside class="blog-callout"><p class="blog-callout__kicker">Destacado</p><p>Escribe aquí el contenido destacado.</p></aside>';
+export const BLOG_CALLOUT_TEMPLATE = `<div class="blog-callout">${wrapCalloutInner(
+  '<p class="blog-callout__kicker">Destacado</p><p>Escribe aquí el contenido destacado.</p>',
+)}</div>`;
 
 function sanitizeInlineStyle(styleValue = '') {
   const allowed = [];
@@ -84,7 +101,12 @@ function sanitizeImage(tagHtml) {
   if (!/^https?:\/\//i.test(src) && !src.startsWith('/')) return '';
   const altMatch = tagHtml.match(/\salt\s*=\s*(['"])(.*?)\1/i);
   const alt = altMatch ? altMatch[2] : '';
-  return `<img src="${src.replace(/"/g, '&quot;')}" alt="${String(alt).replace(/"/g, '&quot;')}" loading="lazy" />`;
+  const classMatch = tagHtml.match(/\sclass\s*=\s*(['"])(.*?)\1/i);
+  const isMascot =
+    classMatch?.[2]?.split(/\s+/).includes('blog-callout__mascot') &&
+    src === BLOG_CALLOUT_MASCOT_SRC;
+  const classAttr = isMascot ? ' class="blog-callout__mascot"' : '';
+  return `<img src="${src.replace(/"/g, '&quot;')}" alt="${String(alt).replace(/"/g, '&quot;')}" loading="lazy"${classAttr} />`;
 }
 
 function getSafeBlogClassAttr(tagHtml) {
@@ -104,7 +126,7 @@ function sanitizeOpeningTag(tag, match) {
   if (tag === 'br') return '<br />';
   if (tag === 'aside') {
     const cls = getSafeBlogClassAttr(match);
-    return cls.includes('blog-callout') ? `<aside${cls}>` : '';
+    return cls.includes('blog-callout') ? `<div${cls}>` : '';
   }
   if (tag === 'p') {
     const cls = getSafeBlogClassAttr(match);
@@ -152,6 +174,112 @@ export function upsertBlogSlotImage(html, slot, url, alt = '') {
   return `${raw}${spacer}${figure}`;
 }
 
+function isInsideBlogCallout(before) {
+  const lastCallout = before.lastIndexOf('<div class="blog-callout"');
+  if (lastCallout === -1) return false;
+  const afterCallout = before.slice(lastCallout);
+  const opens = (afterCallout.match(/<div\b/gi) || []).length;
+  const closes = (afterCallout.match(/<\/div>/gi) || []).length;
+  return opens > closes;
+}
+
+/** Convierte <figure> sin imagen (artefacto del editor) en párrafos normales. */
+function repairSpuriousFigures(html = '') {
+  return String(html).replace(/<figure\b[^>]*>([\s\S]*?)<\/figure>/gi, (match, inner) => {
+    if (/<img\b/i.test(inner)) return match;
+    const trimmed = inner.trim();
+    if (!trimmed || /^<br\s*\/?>$/i.test(trimmed)) return '<div><br /></div>';
+    if (/^<(p|h[2-4]|ul|ol|blockquote|div)\b/i.test(trimmed)) return trimmed;
+    return `<p>${trimmed}</p>`;
+  });
+}
+
+function findMatchingCloseDiv(html, openIdx) {
+  let depth = 0;
+  const re = /<(\/?)div\b[^>]*>/gi;
+  re.lastIndex = openIdx;
+  let match = re.exec(html);
+  while (match) {
+    if (match[1] === '/') {
+      depth -= 1;
+      if (depth === 0) return match.index;
+    } else {
+      depth += 1;
+    }
+    match = re.exec(html);
+  }
+  return -1;
+}
+
+function upgradeLegacyCallouts(html = '') {
+  const marker = '<div class="blog-callout">';
+  let result = '';
+  let cursor = 0;
+  let idx = html.indexOf(marker);
+
+  while (idx !== -1) {
+    result += html.slice(cursor, idx);
+    const closeIdx = findMatchingCloseDiv(html, idx);
+    if (closeIdx === -1) {
+      result += html.slice(idx);
+      return result;
+    }
+
+    const inner = html.slice(idx + marker.length, closeIdx);
+    if (inner.includes('blog-callout__media')) {
+      result += html.slice(idx, closeIdx + 6);
+    } else {
+      result += `${marker}${wrapCalloutInner(inner.trim())}</div>`;
+    }
+
+    cursor = closeIdx + 6;
+    idx = html.indexOf(marker, cursor);
+  }
+
+  return result + html.slice(cursor);
+}
+
+function repairOrphanCalloutKickers(html = '') {
+  const kickerRe = /<p class="blog-callout__kicker">[\s\S]*?<\/p>/gi;
+  let result = html;
+  let match = kickerRe.exec(result);
+
+  while (match) {
+    const idx = match.index;
+    if (!isInsideBlogCallout(result.slice(0, idx))) {
+      const after = result.slice(idx + match[0].length);
+      const bodyMatch = after.match(
+        /^\s*<p(?![^>]*blog-callout__kicker)[^>]*>[\s\S]*?<\/p>/i,
+      );
+      if (bodyMatch) {
+        const callout = `<div class="blog-callout">${wrapCalloutInner(
+          match[0] + bodyMatch[0],
+        )}</div>`;
+        result =
+          result.slice(0, idx) +
+          callout +
+          result.slice(idx + match[0].length + bodyMatch[0].length);
+        kickerRe.lastIndex = idx + callout.length;
+        match = kickerRe.exec(result);
+        continue;
+      }
+    }
+    match = kickerRe.exec(result);
+  }
+
+  return result;
+}
+
+/** Repara cajas Destacado rotas o en formato legacy (aside / solo kicker). */
+function repairBlogCallouts(html = '') {
+  let output = String(html)
+    .replace(/<aside class="blog-callout">/gi, '<div class="blog-callout">')
+    .replace(/<\/aside>/gi, '</div>');
+
+  output = upgradeLegacyCallouts(output);
+  return repairOrphanCalloutKickers(output);
+}
+
 /**
  * Sanitiza HTML de artículos del blog (lista blanca básica).
  * @param {string} html
@@ -168,7 +296,10 @@ export function sanitizeBlogHtml(html = '') {
   output = output.replace(/<\/?([a-z][a-z0-9]*)\b[^>]*>/gi, (match, tagName) => {
     const tag = tagName.toLowerCase();
     if (!ALLOWED_TAGS.has(tag)) return '';
-    if (match.startsWith('</')) return `</${tag}>`;
+    if (match.startsWith('</')) {
+      if (tag === 'aside') return '</div>';
+      return `</${tag}>`;
+    }
     return sanitizeOpeningTag(tag, match);
   });
 
@@ -182,7 +313,10 @@ export function sanitizeBlogHtml(html = '') {
 export function normalizeBlogContent(content = '') {
   const raw = String(content || '').trim();
   if (!raw) return '';
-  if (/<[a-z][\s\S]*>/i.test(raw)) return sanitizeBlogHtml(raw);
+  if (/<[a-z][\s\S]*>/i.test(raw)) {
+    const repaired = repairBlogCallouts(repairSpuriousFigures(raw));
+    return sanitizeBlogHtml(repaired);
+  }
   return raw
     .split(/\n{2,}/)
     .map((p) => p.trim())

@@ -3,7 +3,7 @@ import { authenticateAdminRequest } from '@/lib/adminAccess';
 import {
   DEFAULT_MONETIZATION_PLANS,
   LEGACY_PLAN_NAMES,
-  PLAN_SLUGS,
+  ALL_USER_PLAN_SLUGS,
   planSlugFromDbRow,
 } from '@/data/financialPlanConfig';
 import { rowToDbInsert } from '@/lib/subscriptionPlans';
@@ -93,7 +93,7 @@ async function syncCatalog(db) {
 
   for (const row of allPlans || []) {
     const slug = planSlugFromDbRow(row);
-    if (!PLAN_SLUGS.includes(slug) && row.activo !== false) {
+    if (!ALL_USER_PLAN_SLUGS.includes(slug) && row.activo !== false) {
       await db.from('monetizacion_planes').update({ activo: false }).eq('id', row.id);
       stats.deactivated += 1;
     }

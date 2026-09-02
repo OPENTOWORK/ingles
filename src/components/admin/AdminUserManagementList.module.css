@@ -381,9 +381,21 @@
 }
 
 .stripeNote {
-  margin: 0.25rem 0 0;
-  font-size: 0.75rem;
-  color: #047857;
+  margin: 0.35rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.planReadonly {
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
 }
 
 .tableWrap {

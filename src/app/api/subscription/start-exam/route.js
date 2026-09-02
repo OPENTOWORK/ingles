@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
+import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
 import { LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
 import {
   PLAN_USAGE_KEYS,
@@ -44,7 +45,7 @@ export async function POST(req) {
   }
 
   if (!canAccessExamSlot(ctx.planSlug, examSlot, { maxExamSlot: ctx.maxExamSlot })) {
-    const isPlus = String(ctx.planSlug).toLowerCase() === 'premium';
+    const isPlus = isPlusTierPlanSlug(ctx.planSlug);
     return NextResponse.json(
       {
         allowed: false,

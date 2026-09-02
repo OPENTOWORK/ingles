@@ -2,14 +2,20 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ADMIN_ASSIGNABLE_PLAN_OPTIONS } from '@/data/financialPlanConfig';
+import {
+  ADMIN_PANEL_ASSIGNABLE_PLAN_OPTIONS,
+  ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS,
+  getPlanDisplayLabel,
+  isStripeManagedPlanSlug,
+  normalizeUserPlanSlug,
+} from '@/data/financialPlanConfig';
 import { formatSessionDuration } from '@/lib/userActivity';
 import styles from './AdminUserManagementList.module.css';
 
 function getPlanBadgeClass(planSlug) {
   const slug = String(planSlug || 'free').toLowerCase();
-  if (slug === 'pro') return styles.badgePlanPremium;
-  if (slug === 'premium') return styles.badgePlanPlus;
+  if (slug === 'pro' || slug === 'friendly_premium') return styles.badgePlanPremium;
+  if (slug === 'premium' || slug === 'friendly_plus') return styles.badgePlanPlus;
   if (slug === 'starter') return styles.badgePlanStarter;
   return styles.badgePlanFree;
 }
@@ -89,6 +95,17 @@ function UserDrawer({
   if (!user) return null;
 
   const planSlug = getUserPlanSlug(user.id, user.plan_id);
+  const assignedPlanSlug = normalizeUserPlanSlug(
+    plansByUser[user.id]?.assignedPlanSlug ?? user.plan_id,
+  );
+  const stripeLocked = plansByUser[user.id]?.source === 'stripe';
+  const legacyManualPaid =
+    !stripeLocked &&
+    isStripeManagedPlanSlug(assignedPlanSlug) &&
+    !ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS.includes(assignedPlanSlug);
+  const selectValue = ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS.includes(assignedPlanSlug)
+    ? assignedPlanSlug
+    : 'free';
   const displayName = user.nombre || 'Sin nombre';
 
   return (
@@ -129,22 +146,43 @@ function UserDrawer({
               </select>
             </div>
             <div className={styles.field}>
-              <label htmlFor={`drawer-plan-${user.id}`}>Plan</label>
-              <select
-                id={`drawer-plan-${user.id}`}
-                value={planSlug}
-                onChange={(event) => onPlanChange(user.id, event.target.value)}
-                disabled={saving}
-              >
-                {ADMIN_ASSIGNABLE_PLAN_OPTIONS.map((plan) => (
-                  <option key={plan.slug} value={plan.slug}>
-                    {plan.label}
-                  </option>
-                ))}
-              </select>
-              {plansByUser[user.id]?.source === 'stripe' ? (
-                <p className={styles.stripeNote}>Pago Stripe activo (prevalece sobre asignación manual)</p>
-              ) : null}
+              <label htmlFor={`drawer-plan-${user.id}`}>Plan (admin)</label>
+              {stripeLocked ? (
+                <>
+                  <p className={styles.planReadonly} id={`drawer-plan-${user.id}`}>
+                    {getPlanDisplayLabel(planSlug)}
+                  </p>
+                  <p className={styles.stripeNote}>
+                    Suscripción Stripe activa. El plan de pago se gestiona en Stripe, no desde aquí.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <select
+                    id={`drawer-plan-${user.id}`}
+                    value={selectValue}
+                    onChange={(event) => onPlanChange(user.id, event.target.value)}
+                    disabled={saving}
+                  >
+                    {ADMIN_PANEL_ASSIGNABLE_PLAN_OPTIONS.map((plan) => (
+                      <option key={plan.slug} value={plan.slug}>
+                        {plan.label}
+                      </option>
+                    ))}
+                  </select>
+                  {legacyManualPaid ? (
+                    <p className={styles.stripeNote}>
+                      Plan actual en perfil: {getPlanDisplayLabel(assignedPlanSlug)} (legacy).
+                      Elige FREE, Friendly PLUS o Friendly PREMIUM para sustituirlo.
+                    </p>
+                  ) : (
+                    <p className={styles.stripeNote}>
+                      Solo planes gratuitos admin: FREE, Friendly PLUS y Friendly PREMIUM. PLUS/PREMIUM
+                      de pago solo vía Stripe.
+                    </p>
+                  )}
+                </>
+              )}
             </div>
             <div className={styles.field}>
               <label>Equipo destacado</label>

@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import PlanUpgradeModal from '@/components/subscriptions/PlanUpgradeModal';
+import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { requestStartExamSession } from '@/utils/requestStartExamSession';
@@ -66,7 +67,7 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
       if (!Number.isFinite(n) || n < 1) return false;
 
       if (applyLimits && isExamSlotLocked(n)) {
-        const isPlus = planSlug === 'premium';
+        const isPlus = isPlusTierPlanSlug(planSlug);
         const message = isPlus
           ? lang === 'es'
             ? `Con Plus tienes desbloqueados los exámenes 1–${maxExamSlot}. Cada mes se desbloquean 10 nuevos hasta completar el catálogo. El examen ${n} estará disponible pronto.`

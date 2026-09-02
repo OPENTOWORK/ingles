@@ -50,7 +50,7 @@ export function buildInviteSignupUrl(origin, token) {
 
 export function isPaidPlanSlug(planSlug) {
   const slug = String(planSlug || '').trim().toLowerCase();
-  return Boolean(slug && slug !== 'free');
+  return slug === 'starter' || slug === 'premium' || slug === 'pro';
 }
 
 function normalizeEmail(email) {

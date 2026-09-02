@@ -34,6 +34,7 @@ import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS, isStudentHiddenProfileTab, getVisibleProfileTabs } from '@/components/perfil/profileTabsConfig';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
+import { useSubscription } from '@/hooks/useSubscription';
 import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
 import {
   getMascotAvatarPath,
@@ -168,6 +169,7 @@ export default function ProfilePage() {
 
   const router = useRouter();
   const { userRole, session: layoutSession } = useUserRole();
+  const { subscription, isActive: subscriptionIsActive } = useSubscription();
   const isStudent = usesStudentContentRestrictions(userRole);
   const { applyLimits, progressTracking, loading: planLoading, planSlug } = usePlanEntitlements();
   const showProgressTracking = !applyLimits || progressTracking;
@@ -628,18 +630,37 @@ export default function ProfilePage() {
         throw new Error('Invalid or expired code. Request a new one.');
       }
 
-      await supabase.from('user_preferences').delete().eq('user_id', user.id);
-      await supabase.from('profiles').delete().eq('user_id', user.id);
-      await supabase.from('user_profiles').delete().eq('id', user.id);
-      await supabase.auth.updateUser({
-        data: {
-          account_status: 'deleted',
-          account_deleted_at: new Date().toISOString(),
+      const accessToken =
+        layoutSession?.access_token ||
+        (await supabase.auth.getSession()).data?.session?.access_token;
+      if (!accessToken) {
+        throw new Error('Session expired. Sign in again and retry.');
+      }
+
+      const res = await fetch('/api/account/delete', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
         },
       });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'Could not delete account.');
+      }
 
       await supabase.auth.signOut();
-      alert('Account deleted successfully.');
+
+      let message = 'Your account has been deleted.';
+      if (payload.subscription?.accessUntil) {
+        const when = new Date(payload.subscription.accessUntil).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+        message += ` Your paid plan stays active until ${when}. You will not be charged again after that date.`;
+      }
+      alert(message);
       router.push('/registro');
     } catch (error) {
       console.error('Error deleting account:', error);
@@ -922,6 +943,14 @@ export default function ProfilePage() {
     mascotVariant != null ? getMascotAvatarPath(mascotVariant) : null;
 
   const estimatedLevel = stats.stats?.levelEstimate || placementLevel || null;
+
+  const subscriptionPeriodLabel = subscription?.current_period_end
+    ? new Date(subscription.current_period_end).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : null;
 
   return (
     <main className={`shell perfil-page${activeTab === 'mis-datos' ? ' perfil-page--mis-datos' : ''}`}>
@@ -1455,6 +1484,14 @@ export default function ProfilePage() {
             <p className="profile-settings-panel__danger-intro">
               This action cannot be undone. To confirm, we will send a 6-digit code to your account email.
             </p>
+            {subscriptionIsActive ? (
+              <p className="profile-settings-panel__danger-notice" role="status">
+                You have an active paid subscription. If you delete your account, billing stops at the end of
+                your current period
+                {subscriptionPeriodLabel ? ` (${subscriptionPeriodLabel})` : ''}. Your plan stays active until
+                that date and you will not be charged again.
+              </p>
+            ) : null}
             <div className="profile-settings-panel__danger-actions">
               <button
                 type="button"

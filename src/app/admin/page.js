@@ -8,7 +8,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
 import { formatSessionDuration } from '@/lib/userActivity';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
-import { ADMIN_ASSIGNABLE_PLAN_OPTIONS } from '@/data/financialPlanConfig';
+import { getPlanDisplayLabel } from '@/data/financialPlanConfig';
 import AdminUserManagementList from '@/components/admin/AdminUserManagementList';
 import AdminOverviewStats from '@/components/admin/AdminOverviewStats';
 import PanelPageHeader from '@/components/PanelPageHeader';
@@ -269,10 +269,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const getPlanLabel = (planSlug) => {
-    const option = ADMIN_ASSIGNABLE_PLAN_OPTIONS.find((item) => item.slug === planSlug);
-    return option?.label || 'Plan FREE';
-  };
+  const getPlanLabel = (planSlug) => getPlanDisplayLabel(planSlug);
 
   const getUserPlanSlug = (userId, fallbackPlanId) => {
     const fromApi = plansByUser[userId]?.planSlug;
@@ -617,7 +614,9 @@ export default function AdminDashboard() {
       return;
     }
 
-    const confirmed = window.confirm(`Se eliminara la cuenta de ${targetUser.email}. Esta accion no se puede deshacer. Continuar?`);
+    const confirmed = window.confirm(
+      `Se eliminará la cuenta de ${targetUser.email}. Si tiene suscripción de pago en Stripe, se cancelará al final del periodo facturado (sin reembolso del periodo en curso). Esta acción no se puede deshacer. ¿Continuar?`,
+    );
     if (!confirmed) return;
 
     setSavingByUser((prev) => ({ ...prev, [targetUser.id]: true }));
@@ -629,6 +628,14 @@ export default function AdminDashboard() {
       const payload = await res.json().catch(() => ({}));
       if (!res.ok) {
         throw new Error(payload.error || 'No se pudo eliminar la cuenta.');
+      }
+      if (payload.subscription?.accessUntil) {
+        const when = new Date(payload.subscription.accessUntil).toLocaleDateString('es-ES', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+        toast.success(`Cuenta eliminada. Suscripción en Stripe activa hasta el ${when}.`);
       }
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
@@ -677,7 +684,7 @@ export default function AdminDashboard() {
     }
 
     const confirmed = window.confirm(
-      `Se eliminarán ${targets.length} cuenta(s). Esta acción no se puede deshacer. ¿Continuar?`,
+      `Se eliminarán ${targets.length} cuenta(s). Las suscripciones de pago en Stripe se cancelarán al final del periodo facturado. Esta acción no se puede deshacer. ¿Continuar?`,
     );
     if (!confirmed) return;
 
@@ -798,6 +805,8 @@ export default function AdminDashboard() {
       if (planSlug === 'free') acc.planFree += 1;
       if (planSlug === 'premium') acc.planPlus += 1;
       if (planSlug === 'pro') acc.planPremium += 1;
+      if (planSlug === 'friendly_plus') acc.planFriendlyPlus += 1;
+      if (planSlug === 'friendly_premium') acc.planFriendlyPremium += 1;
 
       if (userActivityByUser[item.id]?.online) acc.online += 1;
       else acc.offline += 1;
@@ -814,6 +823,8 @@ export default function AdminDashboard() {
       planFree: 0,
       planPlus: 0,
       planPremium: 0,
+      planFriendlyPlus: 0,
+      planFriendlyPremium: 0,
       online: 0,
       offline: 0,
       placementDone: 0,
@@ -1262,8 +1273,14 @@ export default function AdminDashboard() {
                 >
                   <option value="all">Todos los planes ({users.length})</option>
                   <option value="free">Plan FREE ({filterCounts.planFree})</option>
-                  <option value="premium">Plan PLUS ({filterCounts.planPlus})</option>
-                  <option value="pro">Plan PREMIUM ({filterCounts.planPremium})</option>
+                  <option value="premium">Plan PLUS · Stripe ({filterCounts.planPlus})</option>
+                  <option value="pro">Plan PREMIUM · Stripe ({filterCounts.planPremium})</option>
+                  <option value="friendly_plus">
+                    Friendly PLUS ({filterCounts.planFriendlyPlus})
+                  </option>
+                  <option value="friendly_premium">
+                    Friendly PREMIUM ({filterCounts.planFriendlyPremium})
+                  </option>
                 </select>
               </div>
               <div>

@@ -3,23 +3,82 @@
  * Compatible con monetizacion_planes (nombre = slug) y Stripe (stripe_price_id opcional).
  */
 
+/** Planes públicos / Stripe (checkout). */
 export const PLAN_SLUGS = ['free', 'starter', 'premium', 'pro'];
 
-/** Planes que el admin puede asignar manualmente (sin cobro). */
-export const ADMIN_ASSIGNABLE_PLAN_SLUGS = ['free', 'premium', 'pro'];
-
-export const ADMIN_ASSIGNABLE_PLAN_OPTIONS = [
-  { slug: 'free', label: 'Plan FREE' },
-  { slug: 'premium', label: 'Plan PLUS' },
-  { slug: 'pro', label: 'Plan PREMIUM' },
+/** Todos los slugs válidos en perfil de usuario. */
+export const ALL_USER_PLAN_SLUGS = [
+  'free',
+  'starter',
+  'premium',
+  'pro',
+  'friendly_plus',
+  'friendly_premium',
 ];
 
-export function normalizeAdminAssignablePlanSlug(slug) {
+/**
+ * Planes que el admin puede asignar desde «Gestionar» (sin Stripe).
+ * PLUS/PREMIUM de pago solo vía Stripe.
+ */
+export const ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS = ['free', 'friendly_plus', 'friendly_premium'];
+
+export const ADMIN_PANEL_ASSIGNABLE_PLAN_OPTIONS = [
+  { slug: 'free', label: 'Plan FREE' },
+  { slug: 'friendly_plus', label: 'Friendly PLUS' },
+  { slug: 'friendly_premium', label: 'Friendly PREMIUM' },
+];
+
+/** @deprecated Usar ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS */
+export const ADMIN_ASSIGNABLE_PLAN_SLUGS = ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS;
+
+/** @deprecated Usar ADMIN_PANEL_ASSIGNABLE_PLAN_OPTIONS */
+export const ADMIN_ASSIGNABLE_PLAN_OPTIONS = ADMIN_PANEL_ASSIGNABLE_PLAN_OPTIONS;
+
+const PLAN_DISPLAY_LABELS = {
+  free: 'Plan FREE',
+  starter: 'Plan STARTER',
+  premium: 'Plan PLUS',
+  pro: 'Plan PREMIUM',
+  friendly_plus: 'Friendly PLUS',
+  friendly_premium: 'Friendly PREMIUM',
+};
+
+export function normalizeUserPlanSlug(slug) {
   const raw = String(slug || 'free').toLowerCase();
-  return ADMIN_ASSIGNABLE_PLAN_SLUGS.includes(raw) ? raw : 'free';
+  return ALL_USER_PLAN_SLUGS.includes(raw) ? raw : 'free';
 }
 
-/** @typedef {'free'|'starter'|'premium'|'pro'} PlanSlug */
+/** Alias histórico: normaliza cualquier slug de plan de usuario. */
+export function normalizeAdminAssignablePlanSlug(slug) {
+  return normalizeUserPlanSlug(slug);
+}
+
+export function getPlanDisplayLabel(slug) {
+  const normalized = normalizeUserPlanSlug(slug);
+  return PLAN_DISPLAY_LABELS[normalized] || normalized;
+}
+
+export function isFriendlyPlanSlug(slug) {
+  const normalized = normalizeUserPlanSlug(slug);
+  return normalized === 'friendly_plus' || normalized === 'friendly_premium';
+}
+
+export function isStripeManagedPlanSlug(slug) {
+  const normalized = normalizeUserPlanSlug(slug);
+  return normalized === 'premium' || normalized === 'pro';
+}
+
+export function isPlusTierPlanSlug(slug) {
+  const normalized = normalizeUserPlanSlug(slug);
+  return normalized === 'premium' || normalized === 'friendly_plus';
+}
+
+export function isProTierPlanSlug(slug) {
+  const normalized = normalizeUserPlanSlug(slug);
+  return normalized === 'pro' || normalized === 'friendly_premium';
+}
+
+/** @typedef {'free'|'starter'|'premium'|'pro'|'friendly_plus'|'friendly_premium'} PlanSlug */
 
 /** Plan STARTER retirado del catálogo; conservado solo para suscripciones legacy. */
 const STARTER_LEGACY_PLAN = {
@@ -178,6 +237,84 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       'Acceso prioritario a nuevas funciones',
       'Seguimiento de progreso',
       'Soporte prioritario: hasta 24h',
+    ],
+    entitlements: {
+      levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
+      examsPerMonth: null,
+      placementTest: true,
+      writingBasic: true,
+      writingAdvanced: true,
+      speakingCoach: true,
+      draloAiDaily: null,
+      writingCorrectionMonthly: null,
+      speakingCorrectionMonthly: null,
+      speakingMissionsDaily: 20,
+      progressTracking: 'advanced',
+      priorityAccess: true,
+      prioritySupport: true,
+    },
+  },
+];
+
+/** Planes gratuitos con mismos permisos que PLUS/PREMIUM; solo asignación admin. */
+export const FRIENDLY_GRANT_PLANS = [
+  {
+    slug: 'friendly_plus',
+    nombre: 'FRIENDLY PLUS',
+    precio: 0,
+    precioLabel: 'Gratuito',
+    duracion_dias: 36500,
+    descripcionCorta: 'Plan PLUS gratuito (asignación manual, sin Stripe).',
+    descripcion:
+      'Mismos permisos que Plan PLUS: nivel B2, 10 exámenes mensuales, correcciones y Dralo Assistant. Solo asignable desde el panel de administración.',
+    badge: '🤝 FRIENDLY',
+    badgeVariant: 'friendly',
+    recommended: false,
+    stripe_price_id: null,
+    orden: 10,
+    activo: true,
+    adminGrantOnly: true,
+    highlights: [
+      'Mismos permisos que Plan PLUS',
+      'Sin cobro (gestión admin)',
+      'No gestionado por Stripe',
+    ],
+    entitlements: {
+      levels: ['a2', 'b1', 'b2', 'c1'],
+      examsPerMonth: 10,
+      placementTest: true,
+      writingBasic: true,
+      writingAdvanced: true,
+      speakingCoach: false,
+      draloAiDaily: 30,
+      writingCorrectionMonthly: 10,
+      speakingCorrectionMonthly: 10,
+      speakingMissionsDaily: 10,
+      progressTracking: 'advanced',
+      priorityAccess: false,
+      prioritySupport: false,
+    },
+  },
+  {
+    slug: 'friendly_premium',
+    nombre: 'FRIENDLY PREMIUM',
+    precio: 0,
+    precioLabel: 'Gratuito',
+    duracion_dias: 36500,
+    descripcionCorta: 'Plan PREMIUM gratuito (asignación manual, sin Stripe).',
+    descripcion:
+      'Mismos permisos que Plan PREMIUM: catálogo completo, correcciones y Dralo Assistant sin límite práctico. Solo asignable desde el panel de administración.',
+    badge: '🤝 FRIENDLY',
+    badgeVariant: 'friendly',
+    recommended: false,
+    stripe_price_id: null,
+    orden: 11,
+    activo: true,
+    adminGrantOnly: true,
+    highlights: [
+      'Mismos permisos que Plan PREMIUM',
+      'Sin cobro (gestión admin)',
+      'No gestionado por Stripe',
     ],
     entitlements: {
       levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
@@ -404,7 +541,7 @@ export const PREMIUM_EXAM_LEVELS = [
 ];
 
 /** Plantillas para monetizacion_planes (seed / sync). */
-export const DEFAULT_MONETIZATION_PLANS = DRALO_SUBSCRIPTION_PLANS.map((p) => ({
+export const DEFAULT_MONETIZATION_PLANS = [...DRALO_SUBSCRIPTION_PLANS, ...FRIENDLY_GRANT_PLANS].map((p) => ({
   nombre: p.nombre,
   slug: p.slug,
   descripcion: p.descripcion,
@@ -499,6 +636,22 @@ const PROFILE_PLAN_DISPLAY = {
     ],
     badge: 'Best value',
   },
+  friendly_plus: {
+    descripcionCorta: 'Free PLUS-tier access (admin grant, not billed via Stripe).',
+    highlights: [
+      'Same access as Plan PLUS',
+      'Admin-assigned complimentary plan',
+    ],
+    badge: 'Friendly',
+  },
+  friendly_premium: {
+    descripcionCorta: 'Free PREMIUM-tier access (admin grant, not billed via Stripe).',
+    highlights: [
+      'Same access as Plan PREMIUM',
+      'Admin-assigned complimentary plan',
+    ],
+    badge: 'Friendly',
+  },
 };
 
 export function getPlanProfileDisplay(plan) {
@@ -512,9 +665,11 @@ export function getPlanProfileDisplay(plan) {
 }
 
 export function getPlanBySlug(slug) {
-  const s = String(slug || 'free').toLowerCase();
+  const s = normalizeUserPlanSlug(slug);
   const fromCatalog = DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === s);
   if (fromCatalog) return fromCatalog;
+  const fromFriendly = FRIENDLY_GRANT_PLANS.find((p) => p.slug === s);
+  if (fromFriendly) return fromFriendly;
   if (s === 'starter') return STARTER_LEGACY_PLAN;
   return DRALO_SUBSCRIPTION_PLANS[0];
 }
@@ -522,7 +677,7 @@ export function getPlanBySlug(slug) {
 export function planSlugFromDbRow(row) {
   if (!row) return 'free';
   const slug = String(row.slug || '').toLowerCase();
-  if (PLAN_SLUGS.includes(slug)) return slug;
+  if (ALL_USER_PLAN_SLUGS.includes(slug)) return slug;
   const nombre = String(row.nombre || '').trim().toUpperCase();
   const nameToSlug = {
     FREE: 'free',
@@ -530,6 +685,8 @@ export function planSlugFromDbRow(row) {
     PLUS: 'premium',
     PRO: 'pro',
     PREMIUM: slug === 'pro' ? 'pro' : 'premium',
+    'FRIENDLY PLUS': 'friendly_plus',
+    'FRIENDLY PREMIUM': 'friendly_premium',
   };
   if (nameToSlug[nombre]) return nameToSlug[nombre];
   const byName = DRALO_SUBSCRIPTION_PLANS.find((p) => p.nombre === nombre);
@@ -539,7 +696,14 @@ export function planSlugFromDbRow(row) {
 /** Mínimo plan slug que desbloquea un nivel CEFR. */
 const LEVEL_MIN_PLAN = { a2: 'free', b1: 'free', b2: 'free', c1: 'premium', c2: 'pro' };
 
-const PLAN_RANK = { free: 0, starter: 1, premium: 2, pro: 3 };
+const PLAN_RANK = {
+  free: 0,
+  starter: 1,
+  premium: 2,
+  friendly_plus: 2,
+  pro: 3,
+  friendly_premium: 3,
+};
 
 export function getPlanTierRank(slug) {
   const normalized = String(slug || 'free').toLowerCase();
@@ -572,8 +736,5 @@ export function minPlanForLevel(levelSlug) {
 }
 
 export function authMetadataPlanSlug(subscriptionPlanMeta) {
-  const raw = String(subscriptionPlanMeta || 'free').toLowerCase();
-  if (PLAN_SLUGS.includes(raw)) return raw;
-  if (raw === 'premium') return 'premium';
-  return 'free';
+  return normalizeUserPlanSlug(subscriptionPlanMeta);
 }

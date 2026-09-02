@@ -9,6 +9,7 @@ import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import {
   findPlanByPriceId,
   getStripe,
+  isStripeConfigured,
   subscriptionGrantsAccess,
   subscriptionInterval,
   subscriptionPeriodEndIso,
@@ -204,6 +205,57 @@ export async function syncUserSubscriptionFromStripe(user) {
  * Devuelve el customer de Stripe del usuario, creándolo la primera vez.
  * Se guarda `supabase_user_id` en metadata para poder resolverlo al revés.
  */
+/**
+ * Programa la cancelación de la suscripción de Stripe al final del periodo
+ * facturado actual (sin cortar el acceso de inmediato).
+ */
+export async function scheduleSubscriptionCancelAtPeriodEnd(db, userId) {
+  if (!userId) {
+    return { scheduled: false, reason: 'no_user' };
+  }
+  if (!isStripeConfigured()) {
+    return { scheduled: false, reason: 'stripe_not_configured' };
+  }
+
+  const subscriptionsDb = db || getSubscriptionsDb();
+  if (!subscriptionsDb) {
+    return { scheduled: false, reason: 'no_db' };
+  }
+
+  const existing = await findSubscriptionByUserId(subscriptionsDb, userId);
+  if (!existing?.stripe_subscription_id) {
+    return { scheduled: false, reason: 'no_subscription' };
+  }
+  if (!subscriptionGrantsAccess(existing.status)) {
+    return { scheduled: false, reason: 'not_active' };
+  }
+
+  const accessUntil =
+    existing.current_period_end || null;
+
+  if (existing.cancel_at_period_end) {
+    return {
+      scheduled: true,
+      alreadyScheduled: true,
+      accessUntil,
+      cancelAtPeriodEnd: true,
+    };
+  }
+
+  const stripe = getStripe();
+  const updated = await stripe.subscriptions.update(existing.stripe_subscription_id, {
+    cancel_at_period_end: true,
+  });
+
+  await syncSubscriptionFromStripe(updated, { userId });
+
+  return {
+    scheduled: true,
+    accessUntil: subscriptionPeriodEndIso(updated) || accessUntil,
+    cancelAtPeriodEnd: true,
+  };
+}
+
 export async function getOrCreateStripeCustomer(db, user) {
   const stripe = getStripe();
   const existing = await findSubscriptionByUserId(db, user.id);

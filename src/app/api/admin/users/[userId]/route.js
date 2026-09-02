@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { getSupabaseServiceRoleKey } from '@/lib/supabaseEnv';
+import { scheduleSubscriptionCancelAtPeriodEnd } from '@/lib/stripe/subscriptions';
 import { getPageTitleForPath } from '@/lib/pageViewLabels';
 import { isSchemaNotReadyError } from '@/lib/teacherAccess';
 import {
@@ -92,6 +93,21 @@ export async function DELETE(req, { params }) {
     }
 
     const { db } = auth;
+
+    let subscriptionResult = { scheduled: false };
+    try {
+      subscriptionResult = await scheduleSubscriptionCancelAtPeriodEnd(db, userId);
+    } catch (err) {
+      console.error('[admin/users DELETE] Stripe cancel at period end:', err);
+      return NextResponse.json(
+        {
+          error:
+            'No se pudo programar la cancelación de la suscripción en Stripe. La cuenta no se eliminó.',
+        },
+        { status: 502 },
+      );
+    }
+
     await deleteAppUserRows(db, userId);
 
     const { error: authDeleteError } = await db.auth.admin.deleteUser(userId);
@@ -108,7 +124,16 @@ export async function DELETE(req, { params }) {
       }
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({
+      ok: true,
+      subscription: subscriptionResult.scheduled
+        ? {
+            cancelAtPeriodEnd: true,
+            accessUntil: subscriptionResult.accessUntil || null,
+            alreadyScheduled: Boolean(subscriptionResult.alreadyScheduled),
+          }
+        : null,
+    });
   } catch (err) {
     console.error('[admin/users/[userId] DELETE]', err);
     return NextResponse.json({ error: 'Error interno.' }, { status: 500 });

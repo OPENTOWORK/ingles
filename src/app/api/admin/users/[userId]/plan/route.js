@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
-import { ADMIN_ASSIGNABLE_PLAN_SLUGS } from '@/data/financialPlanConfig';
+import { ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS } from '@/data/financialPlanConfig';
 import { assignUserPlan } from '@/lib/adminUserPlan';
 
 export async function PATCH(req, { params }) {
@@ -17,8 +17,11 @@ export async function PATCH(req, { params }) {
 
     const body = await req.json();
     const planSlug = String(body?.planSlug || '').trim().toLowerCase();
-    if (!ADMIN_ASSIGNABLE_PLAN_SLUGS.includes(planSlug)) {
-      return NextResponse.json({ error: 'Plan no válido.' }, { status: 400 });
+    if (!ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS.includes(planSlug)) {
+      return NextResponse.json(
+        { error: 'Solo puedes asignar Plan FREE, Friendly PLUS o Friendly PREMIUM.' },
+        { status: 400 },
+      );
     }
 
     const result = await assignUserPlan(auth.db, userId, planSlug);

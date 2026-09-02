@@ -4,6 +4,7 @@
 import {
   authMetadataPlanSlug,
   getPlanBySlug,
+  isPlusTierPlanSlug,
   normalizeAdminAssignablePlanSlug,
 } from '@/data/financialPlanConfig';
 import {
@@ -89,8 +90,8 @@ export function getPlanUsageLimit(planSlug, usageKey) {
     case PLAN_USAGE_KEYS.SPEAKING_CORRECTION:
       return getSpeakingCorrectionMonthlyLimit(slug);
     case PLAN_USAGE_KEYS.EXAM_SESSION: {
-      // PLUS: el cupo lo marca el desbloqueo progresivo de slots, no intentos mensuales.
-      if (slug === 'premium' || slug === 'pro') return Infinity;
+      // PLUS / Friendly PLUS: el cupo lo marca el desbloqueo progresivo de slots.
+      if (isPlusTierPlanSlug(slug) || slug === 'pro' || slug === 'friendly_premium') return Infinity;
       const n = getPlanBySlug(slug).entitlements.examsPerMonth;
       return n == null ? Infinity : n;
     }
@@ -111,7 +112,7 @@ export function getPlanUsageLimit(planSlug, usageKey) {
 
 async function resolvePlusSubscriptionAnchor(userId, planSlug) {
   const slug = String(planSlug || 'free').toLowerCase();
-  if (slug !== 'premium') return null;
+  if (!isPlusTierPlanSlug(slug)) return null;
 
   const db = getDb();
   if (!db || !userId) return null;
@@ -127,7 +128,10 @@ async function resolvePlusSubscriptionAnchor(userId, planSlug) {
     .eq('id', userId)
     .maybeSingle();
 
-  if (normalizeAdminAssignablePlanSlug(profileRow?.plan_id) === 'premium') {
+  if (
+    normalizeAdminAssignablePlanSlug(profileRow?.plan_id) === 'premium' ||
+    normalizeAdminAssignablePlanSlug(profileRow?.plan_id) === 'friendly_plus'
+  ) {
     return profileRow?.updated_at || profileRow?.creado_en || null;
   }
 
@@ -301,8 +305,7 @@ export async function getStudentPlanContext(userId, userEmail = '', userMetadata
   const subscriptionAnchor = await resolvePlusSubscriptionAnchor(userId, planSlug);
   const subscriptionMonths = getSubscriptionTenureMonths(subscriptionAnchor);
   const maxExamSlot = resolveMaxExamSlotForPlan(planSlug, { subscriptionMonths });
-  const plusExamUnlock =
-    String(planSlug).toLowerCase() === 'premium'
+  const plusExamUnlock = isPlusTierPlanSlug(planSlug)
       ? getPlusUnlockProgress(subscriptionMonths)
       : null;
 
@@ -311,7 +314,7 @@ export async function getStudentPlanContext(userId, userEmail = '', userMetadata
     applyLimits,
     entitlements: getPlanBySlug(planSlug).entitlements,
     maxExamSlot,
-    subscriptionMonths: String(planSlug).toLowerCase() === 'premium' ? subscriptionMonths : null,
+    subscriptionMonths: isPlusTierPlanSlug(planSlug) ? subscriptionMonths : null,
     plusExamUnlock,
     progressTracking: getPlanBySlug(planSlug).entitlements.progressTracking === 'advanced',
     writingAdvanced: hasEntitlement(planSlug, 'writingAdvanced'),

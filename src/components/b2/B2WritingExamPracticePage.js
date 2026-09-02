@@ -53,6 +53,7 @@ import {
   EXAM_MODE_SECTION_DRAFT_VERSION,
 } from '@/utils/examModeSectionDraft';
 import { useExamModeHubNav } from '@/hooks/useExamModeHubNav';
+import { useNarrowWritingLayout } from '@/hooks/useNarrowWritingLayout';
 import {
   resolveExamPracticeMode,
   isPartPracticeMode,
@@ -736,6 +737,23 @@ function B2WritingExamPracticePageInner() {
   const showPracticeSideRail =
     isSkillPracticeSession && isPartPracticeMode(practiceMode) && scoring.examPracticeOpen;
 
+  const narrowWritingLayout = useNarrowWritingLayout();
+
+  const writingLayoutClassName = useMemo(() => {
+    const classes = ['levels-listening-practice-layout'];
+    if (showPracticeSideRail) {
+      classes.push(
+        narrowWritingLayout
+          ? 'b2-writing-layout--stack'
+          : 'levels-listening-practice-layout--with-strategy',
+      );
+    }
+    if (readingSession.focusMode) {
+      classes.push('levels-listening-practice-layout--focus');
+    }
+    return classes.join(' ');
+  }, [showPracticeSideRail, narrowWritingLayout, readingSession.focusMode]);
+
   const writingRepeatClearedRef = useRef(false);
   useEffect(() => {
     if (!examSection?.redoPart || examSection.redoPart !== partNumber || writingRepeatClearedRef.current) {
@@ -1061,11 +1079,7 @@ function B2WritingExamPracticePageInner() {
           )}
 
           {!loading && !error && selectedPart ? (
-            <div
-              className={`levels-listening-practice-layout${
-                showPracticeSideRail ? ' levels-listening-practice-layout--with-strategy' : ''
-              }${readingSession.focusMode ? ' levels-listening-practice-layout--focus' : ''}`}
-            >
+            <div className={writingLayoutClassName}>
               <div
                 className={`levels-listening-practice-main${isSkillPracticeSession ? ` ${readingSession.readingAreaClassName}` : ''}`}
                 style={isSkillPracticeSession ? readingSession.readingAreaStyle : undefined}

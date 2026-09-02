@@ -3,6 +3,7 @@
  * Mes 1 → exámenes 1–10, mes 2 → 11–20, etc., hasta completar el catálogo.
  */
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
+import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
 
 export const PLUS_EXAMS_UNLOCK_BATCH = 10;
 
@@ -33,7 +34,7 @@ export function getPlusMaxExamSlot(subscriptionMonths, catalogMax = B2_EXAM_SLOT
 export function getMaxExamSlotForPlan(planSlug, { subscriptionMonths = null } = {}) {
   const slug = String(planSlug || 'free').toLowerCase();
   if (slug === 'free') return 1;
-  if (slug === 'premium') {
+  if (isPlusTierPlanSlug(slug)) {
     return getPlusMaxExamSlot(subscriptionMonths ?? 1);
   }
   return B2_EXAM_SLOT_MAX;
