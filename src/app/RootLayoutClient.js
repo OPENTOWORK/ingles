@@ -36,6 +36,7 @@ const Toaster = dynamic(
 import AuthenticatedAppShell from '@/components/layout/AuthenticatedAppShell';
 import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
 import { useLevelsStarsBackfill } from '@/hooks/useLevelsStarsBackfill';
+import { useClientMounted } from '@/hooks/useClientMounted';
 
 const TOAST_OPTIONS = {
   duration: 4500,
@@ -75,11 +76,28 @@ function SiteHeaderBrand({ nav = null }) {
   );
 }
 
+function ClientToaster() {
+  const mounted = useClientMounted();
+  if (!mounted) return null;
+  return <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />;
+}
+
+function ClientAnalytics({ clarityEnabled, clarityProjectId, gaEnabled, gaId, pixelEnabled, pixelId }) {
+  const mounted = useClientMounted();
+  if (!mounted) return null;
+  return (
+    <>
+      <MicrosoftClarity enabled={clarityEnabled} projectId={clarityProjectId} />
+      <GoogleAnalytics enabled={gaEnabled} measurementId={gaId} />
+      <MetaPixel enabled={pixelEnabled} pixelId={pixelId} />
+    </>
+  );
+}
+
 function RootLayoutClientFallback() {
   return (
     <>
       <SiteNightModeInit />
-      <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
       <main className="page-content">
         <RouteLoadingMascot label="Cargando" variant={3} />
       </main>
@@ -89,7 +107,7 @@ function RootLayoutClientFallback() {
 
 function RootLayoutClientInner({ children }) {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '';
   const isPublic = isPublicPath(pathname);
   const isAuthFlow = AUTH_FLOW_PATH_PREFIXES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
@@ -97,8 +115,8 @@ function RootLayoutClientInner({ children }) {
   /** Superficie interna de Writing v3: solo existe fuera de producción (Fase 8). */
   const allowWithoutAuth = isPublic || isWritingV3PreviewPath(pathname);
 
-  /** Mismo valor en SSR y en el primer render del cliente (evita hydration mismatch). */
-  const [authPending, setAuthPending] = useState(() => !allowWithoutAuth);
+  /** Siempre true en SSR y primer render cliente; se resuelve en useEffect. */
+  const [authPending, setAuthPending] = useState(true);
   const [session, setSession] = useState(null);
   const [userRole, setUserRole] = useState('student');
   const [cookieConsent, setCookieConsent] = useState(null);
@@ -293,7 +311,7 @@ function RootLayoutClientInner({ children }) {
     return (
       <>
         <SiteNightModeInit />
-        <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
+        <ClientToaster />
         <main className="page-content">{children}</main>
       </>
     );
@@ -303,7 +321,7 @@ function RootLayoutClientInner({ children }) {
     return (
       <>
         <SiteNightModeInit />
-        <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
+        <ClientToaster />
         <SiteHeaderBrand />
         <main className="page-content">
           <RouteLoadingMascot label="Cargando" variant={3} />
@@ -316,7 +334,7 @@ function RootLayoutClientInner({ children }) {
     return (
       <>
         <SiteNightModeInit />
-        <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
+        <ClientToaster />
         <SiteHeaderBrand />
         <main className="page-content">
           <RouteLoadingMascot label="Redirigiendo al login" variant={3} />
@@ -373,10 +391,15 @@ function RootLayoutClientInner({ children }) {
   return (
     <>
       <SiteNightModeInit />
-      <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />
-      <MicrosoftClarity enabled={clarityAnalyticsEnabled} projectId={clarityProjectId} />
-      <GoogleAnalytics enabled={googleAnalyticsEnabled} measurementId={gaMeasurementId} />
-      <MetaPixel enabled={metaPixelEnabled} pixelId={metaPixelId} />
+      <ClientToaster />
+      <ClientAnalytics
+        clarityEnabled={clarityAnalyticsEnabled}
+        clarityProjectId={clarityProjectId}
+        gaEnabled={googleAnalyticsEnabled}
+        gaId={gaMeasurementId}
+        pixelEnabled={metaPixelEnabled}
+        pixelId={metaPixelId}
+      />
 
       <AuthenticatedAppShell session={session} userRole={userRole} onLogout={handleLogout}>
         {children}
