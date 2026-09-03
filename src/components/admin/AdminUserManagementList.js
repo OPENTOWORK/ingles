@@ -14,8 +14,10 @@ import styles from './AdminUserManagementList.module.css';
 
 function getPlanBadgeClass(planSlug) {
   const slug = String(planSlug || 'free').toLowerCase();
-  if (slug === 'pro' || slug === 'friendly_premium') return styles.badgePlanPremium;
-  if (slug === 'premium' || slug === 'friendly_plus') return styles.badgePlanPlus;
+  if (slug === 'friendly_premium') return styles.badgePlanFriendlyPremium;
+  if (slug === 'friendly_plus') return styles.badgePlanFriendlyPlus;
+  if (slug === 'pro') return styles.badgePlanPremium;
+  if (slug === 'premium') return styles.badgePlanPlus;
   if (slug === 'starter') return styles.badgePlanStarter;
   return styles.badgePlanFree;
 }

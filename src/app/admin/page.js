@@ -8,7 +8,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
 import { formatSessionDuration } from '@/lib/userActivity';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
-import { getPlanDisplayLabel } from '@/data/financialPlanConfig';
+import { getPlanDisplayLabel, normalizeUserPlanSlug } from '@/data/financialPlanConfig';
 import AdminUserManagementList from '@/components/admin/AdminUserManagementList';
 import AdminOverviewStats from '@/components/admin/AdminOverviewStats';
 import PanelPageHeader from '@/components/PanelPageHeader';
@@ -198,14 +198,14 @@ export default function AdminDashboard() {
 
   const loadUsers = async () => {
     const selectVariants = [
-      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo, consentimiento_comercial',
-      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo, marketing_updates',
-      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo, metadata',
-      'id, email, nombre, rol_id, creado_en, activo, destacado_equipo',
-      'id, email, nombre, rol_id, creado_en, activo, consentimiento_comercial',
-      'id, email, nombre, rol_id, creado_en, activo, marketing_updates',
-      'id, email, nombre, rol_id, creado_en, activo, metadata',
-      'id, email, nombre, rol_id, creado_en, activo',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo, consentimiento_comercial',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo, marketing_updates',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo, metadata',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo, consentimiento_comercial',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo, marketing_updates',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo, metadata',
+      'id, email, nombre, rol_id, plan_id, creado_en, activo',
     ];
 
     let rows = null;
@@ -274,7 +274,7 @@ export default function AdminDashboard() {
   const getUserPlanSlug = (userId, fallbackPlanId) => {
     const fromApi = plansByUser[userId]?.planSlug;
     if (fromApi) return fromApi;
-    return String(fallbackPlanId || 'free').toLowerCase();
+    return normalizeUserPlanSlug(fallbackPlanId);
   };
 
   const loadPlacementByUser = async () => {
