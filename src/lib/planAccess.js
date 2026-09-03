@@ -124,15 +124,12 @@ async function resolvePlusSubscriptionAnchor(userId, planSlug) {
 
   const { data: profileRow } = await db
     .from('Usuarios_y_Perfil_users')
-    .select('creado_en, updated_at, plan_id')
+    .select('creado_en, plan_id')
     .eq('id', userId)
     .maybeSingle();
 
-  if (
-    normalizeAdminAssignablePlanSlug(profileRow?.plan_id) === 'premium' ||
-    normalizeAdminAssignablePlanSlug(profileRow?.plan_id) === 'friendly_plus'
-  ) {
-    return profileRow?.updated_at || profileRow?.creado_en || null;
+  if (isPlusTierPlanSlug(normalizeAdminAssignablePlanSlug(profileRow?.plan_id))) {
+    return profileRow?.creado_en || null;
   }
 
   return null;
