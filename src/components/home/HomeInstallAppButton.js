@@ -2,12 +2,20 @@
 
 import { useEffect, useState } from 'react';
 
+const MOBILE_TABLET_MEDIA_QUERY = '(max-width: 1024px)';
+
 export default function HomeInstallAppButton() {
   const [installPrompt, setInstallPrompt] = useState(null);
   const [showInstructions, setShowInstructions] = useState(false);
   const [installed, setInstalled] = useState(false);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia(MOBILE_TABLET_MEDIA_QUERY);
+    const syncViewport = () => setIsMobileOrTablet(mediaQuery.matches);
+    syncViewport();
+    mediaQuery.addEventListener('change', syncViewport);
+
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true;
@@ -28,7 +36,7 @@ export default function HomeInstallAppButton() {
     if (
       process.env.NODE_ENV === 'production' &&
       'serviceWorker' in navigator &&
-      window.matchMedia('(max-width: 1024px)').matches
+      mediaQuery.matches
     ) {
       void navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch((error) => {
         console.error('Could not prepare app installation:', error);
@@ -36,6 +44,7 @@ export default function HomeInstallAppButton() {
     }
 
     return () => {
+      mediaQuery.removeEventListener('change', syncViewport);
       window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
       window.removeEventListener('appinstalled', handleInstalled);
     };
@@ -53,7 +62,7 @@ export default function HomeInstallAppButton() {
     setInstallPrompt(null);
   };
 
-  if (installed) return null;
+  if (!isMobileOrTablet || installed) return null;
 
   return (
     <div className="home-install-app">
@@ -61,7 +70,7 @@ export default function HomeInstallAppButton() {
         <span className="home-install-app__icon" aria-hidden>
           ↓
         </span>
-        Descargar app
+        Descargar acceso directo
       </button>
       {showInstructions ? (
         <p className="home-install-app__instructions" role="status">

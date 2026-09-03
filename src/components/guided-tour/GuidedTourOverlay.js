@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { getGuidedTourSteps } from '@/components/home/homeHowItWorksData';
 import { useUserRole } from '@/context/UserRoleContext';
 import {
@@ -14,8 +14,14 @@ import {
 
 const MOBILE_NAV_MQ = '(max-width: 900px)';
 const TARGET_WAIT_MS = 4000;
+const ROUTE_TARGET_WAIT_MS = 12000;
 const TARGET_POLL_MS = 80;
 const SPOTLIGHT_PAD = 10;
+
+function getClientSearchParams() {
+  if (typeof window === 'undefined') return new URLSearchParams();
+  return new URLSearchParams(window.location.search);
+}
 
 function parseRoute(route) {
   if (!route) return { path: null, hash: null, query: null };
@@ -127,7 +133,6 @@ function computeTooltipStyle(rect, step) {
 export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClose }) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const { userRole } = useUserRole();
   const steps = useMemo(() => getGuidedTourSteps(userRole), [userRole]);
   const step = steps[stepIndex];
@@ -191,15 +196,20 @@ export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClos
     } else {
       closeMobileNavIfOpen();
     }
+  }, [step, stepIndex]);
+
+  useEffect(() => {
+    if (!step) return;
 
     const { path, hash, query } = parseRoute(step.route);
-    if (path && !pathMatches(pathname, path, searchParams, query)) {
+    if (path && !pathMatches(pathname, path, getClientSearchParams(), query)) {
       const base = query ? `${path}?${query}` : path;
       const url = hash ? `${base}#${hash}` : base;
       router.push(url);
       return;
     }
-    if (hash && pathMatches(pathname, path, searchParams, query)) {
+
+    if (hash && pathMatches(pathname, path, getClientSearchParams(), query)) {
       const applyHash = () => {
         if (window.location.hash !== `#${hash}`) {
           window.location.hash = hash;
@@ -208,24 +218,37 @@ export default function GuidedTourOverlay({ stepIndex, onStepIndexChange, onClos
       applyHash();
       window.setTimeout(applyHash, 120);
     }
-  }, [step, stepIndex, pathname, searchParams, router]);
+  }, [step, stepIndex, pathname, router]);
 
   useEffect(() => {
     if (!step?.target) return undefined;
 
     let cancelled = false;
     const started = Date.now();
+    const { path: routePath, query: routeQuery } = parseRoute(step.route);
+    const waitMs = step.route ? ROUTE_TARGET_WAIT_MS : TARGET_WAIT_MS;
 
     const tryResolve = () => {
       if (cancelled) return;
       if (step.openNavOnMobile) openMobileNavIfNeeded();
+
+      if (routePath && !pathMatches(pathname, routePath, getClientSearchParams(), routeQuery)) {
+        if (Date.now() - started < waitMs) {
+          window.setTimeout(tryResolve, TARGET_POLL_MS);
+        } else {
+          setTargetReady(true);
+          setRect(null);
+        }
+        return;
+      }
+
       const el = findVisibleTarget(step.target);
       if (el) {
         if (step.scrollTarget) scrollTargetIntoView(el, step);
         measureTarget();
         return;
       }
-      if (Date.now() - started < TARGET_WAIT_MS) {
+      if (Date.now() - started < waitMs) {
         window.setTimeout(tryResolve, TARGET_POLL_MS);
       } else {
         setTargetReady(true);

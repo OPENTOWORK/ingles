@@ -1,16 +1,20 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 import DraloTagline from '@/components/DraloTagline';
 import HomeHowItWorks from '@/components/home/HomeHowItWorks';
-import HomeInstallAppButton from '@/components/home/HomeInstallAppButton';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
 import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
 import FoundingMemberSlotsBanner from '@/components/home/FoundingMemberSlotsBanner';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isStudentRole } from '@/utils/authRoles';
+
+const HomeInstallAppButton = dynamic(() => import('@/components/home/HomeInstallAppButton'), {
+  ssr: false,
+});
 
 const FEATURES = [
   'Interactive',
