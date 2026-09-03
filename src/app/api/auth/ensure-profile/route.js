@@ -6,8 +6,7 @@ import {
   getSupabaseUrl,
 } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
-import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
-import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
+import { maybeSendWelcomeRegistrationEmail } from '@/lib/welcomeRegistrationEmail';
 import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
 
 async function grantFoundingPlusForAuthUser(adminClient, user) {
@@ -102,7 +101,13 @@ export async function POST(req) {
       }
 
       await grantFoundingPlusForAuthUser(adminClient, user);
-      return NextResponse.json({ ok: true, created: false });
+      const welcomeMail = await maybeSendWelcomeRegistrationEmail(adminClient, user);
+      return NextResponse.json({
+        ok: true,
+        created: false,
+        welcomeEmailSent: Boolean(welcomeMail?.sent || welcomeMail?.queued),
+        welcomeEmailSkipped: Boolean(welcomeMail?.skipped),
+      });
     }
 
     const rolId = await resolveStudentRoleId(adminClient);
@@ -131,12 +136,7 @@ export async function POST(req) {
     );
 
     if (user.email) {
-      await dispatchAutomatedEmail({
-        adminClient,
-        triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
-        to: user.email,
-        variables: { email: user.email },
-      });
+      await maybeSendWelcomeRegistrationEmail(adminClient, user);
     }
 
     await grantFoundingPlusForAuthUser(adminClient, user);

@@ -1,8 +1,9 @@
 import { supabase } from '@/utils/supabaseClient';
 
 /**
- * Comprueba que el usuario tenga fila en Usuarios_y_Perfil_users (FK de levels_*).
- * Primero SELECT (RLS propio); si falta, llama a /api/auth/ensure-profile.
+ * Sincroniza el perfil de aplicación y correos de bienvenida (también OAuth/Google).
+ * Siempre llama al servidor: el trigger de auth.users puede crear la fila antes
+ * de que el cliente la vea y, sin esto, Google no recibiría el correo de bienvenida.
  */
 export async function ensureAppUserProfile() {
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
@@ -11,16 +12,6 @@ export async function ensureAppUserProfile() {
 
   if (sessionError || !userId || !token) {
     return { ok: false, reason: 'no_session' };
-  }
-
-  const { data: existing, error: selErr } = await supabase
-    .from('Usuarios_y_Perfil_users')
-    .select('id')
-    .eq('id', userId)
-    .maybeSingle();
-
-  if (!selErr && existing?.id) {
-    return { ok: true };
   }
 
   try {

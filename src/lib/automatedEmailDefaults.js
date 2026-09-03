@@ -7,7 +7,7 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
     nombre: 'Bienvenida al registrarse',
     trigger_event: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
     trigger_reason:
-      'Se envía cuando un alumno crea su cuenta en la plataforma (registro público).',
+      'Se envía cuando un alumno crea su cuenta en la plataforma (registro con email o Google).',
     asunto: '¡Bienvenido/a a Dralo English!',
     cuerpo: [
       'Hola{{nombre}},',
