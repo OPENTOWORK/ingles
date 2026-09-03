@@ -6,6 +6,9 @@ import { Sparkles } from 'lucide-react';
 const CONDITIONS_TEXT =
   'Después de 30 días solo tendrás que rellenar un breve formulario.';
 
+/** Refresco en home: la API ya va sin caché; esto evita números viejos con la pestaña abierta. */
+const FOUNDING_SLOTS_POLL_MS = 45_000;
+
 function formatSlotsMessage(remaining, total) {
   if (remaining === 1) {
     return (
@@ -57,13 +60,22 @@ export default function FoundingMemberSlotsBanner() {
 
   useEffect(() => {
     let cancelled = false;
+    let intervalId = 0;
 
-    async function loadAvailability() {
+    async function refreshAvailability() {
       try {
-        const res = await fetch('/api/founding-member/slots', { cache: 'no-store' });
+        const res = await fetch(`/api/founding-member/slots?_=${Date.now()}`, {
+          cache: 'no-store',
+          headers: { Pragma: 'no-cache' },
+        });
         if (!res.ok) throw new Error('availability_fetch_failed');
         const data = await res.json();
-        if (!cancelled) setAvailability(data);
+        if (cancelled) return;
+        setAvailability(data);
+        if (data?.soldOut && intervalId) {
+          window.clearInterval(intervalId);
+          intervalId = 0;
+        }
       } catch {
         if (!cancelled) setAvailability(null);
       } finally {
@@ -71,9 +83,20 @@ export default function FoundingMemberSlotsBanner() {
       }
     }
 
-    loadAvailability();
+    refreshAvailability();
+    intervalId = window.setInterval(refreshAvailability, FOUNDING_SLOTS_POLL_MS);
+
+    const handleVisible = () => {
+      if (document.visibilityState === 'visible') void refreshAvailability();
+    };
+    document.addEventListener('visibilitychange', handleVisible);
+    window.addEventListener('focus', refreshAvailability);
+
     return () => {
       cancelled = true;
+      if (intervalId) window.clearInterval(intervalId);
+      document.removeEventListener('visibilitychange', handleVisible);
+      window.removeEventListener('focus', refreshAvailability);
     };
   }, []);
 
