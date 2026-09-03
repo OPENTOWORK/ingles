@@ -718,6 +718,21 @@ body {
   font-weight: 800;
 }
 
+.founding-slots-banner__gratis {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  margin: 0 0.08em;
+  border-radius: 0.4em;
+  background: linear-gradient(135deg, #fde047 0%, #f59e0b 100%);
+  color: #451a03;
+  font-size: 1.08em;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  box-shadow: 0 2px 10px rgba(251, 191, 36, 0.55);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
 .founding-slots-banner__cta {
   display: inline-flex;
   align-items: center;

@@ -7,16 +7,18 @@ function formatSlotsMessage(remaining, total) {
   if (remaining === 1) {
     return (
       <>
-        Queda <strong>1 plaza</strong> de <strong>Plan Plus</strong> <strong>para siempre</strong> entre los{' '}
-        {total} primeros registros
+        Queda <strong>1 plaza</strong>{' '}
+        <span className="founding-slots-banner__gratis">GRATIS</span> de <strong>Plan Plus</strong>{' '}
+        <strong>para siempre</strong> entre los {total} primeros registros
       </>
     );
   }
 
   return (
     <>
-      Quedan <strong>{remaining} plazas</strong> de <strong>Plan Plus</strong> <strong>para siempre</strong> entre
-      los {total} primeros registros
+      Quedan <strong>{remaining} plazas</strong>{' '}
+      <span className="founding-slots-banner__gratis">GRATIS</span> de <strong>Plan Plus</strong>{' '}
+      <strong>para siempre</strong> entre los {total} primeros registros
     </>
   );
 }
