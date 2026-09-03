@@ -309,6 +309,42 @@ function RootLayoutClientInner({ children }) {
     });
   }, []);
 
+  /** En producción, fuerza actualización del SW para que el móvil/PWA no se quede en builds antiguos. */
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') return;
+    if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return;
+
+    let reloaded = false;
+
+    const reloadOnce = () => {
+      if (reloaded) return;
+      reloaded = true;
+      window.location.reload();
+    };
+
+    void navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((registration) => {
+      registration.update().catch(() => {});
+
+      registration.addEventListener('updatefound', () => {
+        const worker = registration.installing;
+        if (!worker) return;
+        worker.addEventListener('statechange', () => {
+          if (worker.state === 'activated' && navigator.serviceWorker.controller) {
+            reloadOnce();
+          }
+        });
+      });
+
+      if (registration.waiting && navigator.serviceWorker.controller) {
+        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      }
+    });
+
+    const onControllerChange = () => reloadOnce();
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    return () => navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+  }, []);
+
   if (isAuthFlow) {
     return (
       <>

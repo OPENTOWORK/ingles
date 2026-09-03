@@ -33,15 +33,6 @@ export default function HomeInstallAppButton() {
 
     window.addEventListener('beforeinstallprompt', handleInstallPrompt);
     window.addEventListener('appinstalled', handleInstalled);
-    if (
-      process.env.NODE_ENV === 'production' &&
-      'serviceWorker' in navigator &&
-      mediaQuery.matches
-    ) {
-      void navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch((error) => {
-        console.error('Could not prepare app installation:', error);
-      });
-    }
 
     return () => {
       mediaQuery.removeEventListener('change', syncViewport);

@@ -1,7 +1,7 @@
 // Service Worker for English Practice App
-const CACHE_NAME = 'english-practice-v2';
-const STATIC_CACHE_NAME = 'english-practice-static-v2';
-const DYNAMIC_CACHE_NAME = 'english-practice-dynamic-v2';
+const CACHE_NAME = 'english-practice-v4';
+const STATIC_CACHE_NAME = 'english-practice-static-v4';
+const DYNAMIC_CACHE_NAME = 'english-practice-dynamic-v4';
 const IS_LOCAL_DEVELOPMENT =
   self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1';
 
@@ -77,7 +77,11 @@ self.addEventListener('activate', (event) => {
       .then((cacheNames) => {
         return Promise.all(
           cacheNames.map((cacheName) => {
-            if (cacheName !== STATIC_CACHE_NAME && cacheName !== DYNAMIC_CACHE_NAME) {
+            if (
+              cacheName !== STATIC_CACHE_NAME &&
+              cacheName !== DYNAMIC_CACHE_NAME &&
+              cacheName !== CACHE_NAME
+            ) {
               console.log('Deleting old cache:', cacheName);
               return caches.delete(cacheName);
             }
@@ -119,7 +123,12 @@ async function handleFetch(request) {
   const url = new URL(request.url);
   
   try {
-    // Strategy 1: Static assets - Cache First
+    // Next.js bundles: always network-first so deploys reach installed PWAs.
+    if (url.pathname.startsWith('/_next/static/')) {
+      return await networkFirst(request, STATIC_CACHE_NAME);
+    }
+
+    // Strategy 1: Other static assets - Cache First
     if (isStaticAsset(request)) {
       return await cacheFirst(request, STATIC_CACHE_NAME);
     }
@@ -254,7 +263,6 @@ async function getOfflineResponse(request) {
 function isStaticAsset(request) {
   const url = new URL(request.url);
   return (
-    url.pathname.startsWith('/_next/static/') ||
     url.pathname.match(/\.(css|js|woff|woff2|ttf|eot)$/) ||
     STATIC_ASSETS.includes(url.pathname)
   );
