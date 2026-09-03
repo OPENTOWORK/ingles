@@ -35,3 +35,6 @@ export const SOCIAL_SHARE = {
   locale: 'es_ES',
   imageAlt: 'Dralo Academy — practica inglés con exámenes e IA',
 };
+
+export const SITE_FOOTER_TAGLINE =
+  'Ejercicios diseñados para practicar tus exámenes de inglés.';

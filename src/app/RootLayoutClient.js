@@ -26,6 +26,7 @@ const MetaPixel = dynamic(() => import('@/components/analytics/MetaPixel'), {
   ssr: false,
 });
 import { isClarityExcludedPath } from '@/lib/clarity';
+import { SITE_FOOTER_TAGLINE } from '@/lib/siteSeo';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
 import { clearAssistantDismissed } from '@/components/chat/SiteAssistantWidget';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -549,7 +550,7 @@ function RootLayoutClientInner({ children }) {
           <div className="legal-footer-column legal-footer-column--tagline">
             <DraloTagline className="dralo-tagline--footer" />
             <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-copy--tagline-desc">
-              Ejercicios diseñados para practicar tus habilidades en inglés.
+              {SITE_FOOTER_TAGLINE}
             </p>
             <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-meta">
               <span>© {new Date().getFullYear()} Dralo</span>

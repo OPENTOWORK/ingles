@@ -27,3 +27,16 @@ export function shouldAttemptFoundingPlus(createdAt) {
   if (Number.isNaN(t)) return true;
   return t >= new Date(FOUNDING_CAMPAIGN_STARTED_AT).getTime();
 }
+
+/** Cupos públicos de la campaña founding (slots 1–50 en `founding_member_grants`). */
+export function computeFoundingSlotAvailability(claimedCount) {
+  const claimed = Math.max(0, Number(claimedCount) || 0);
+  const cappedClaimed = Math.min(claimed, MAX_FOUNDING_SLOT);
+  const remaining = Math.max(0, MAX_FOUNDING_SLOT - cappedClaimed);
+  return {
+    total: MAX_FOUNDING_SLOT,
+    claimed: cappedClaimed,
+    remaining,
+    soldOut: remaining === 0,
+  };
+}

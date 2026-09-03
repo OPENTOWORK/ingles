@@ -7,20 +7,11 @@ import {
   FOUNDING_CAMPAIGN_STARTED_AT,
   MAX_FOUNDING_SLOT,
   PLUS_PLAN_SLUG,
+  computeFoundingSlotAvailability,
   parseFoundingSlotNumber,
   shouldAttemptFoundingPlus,
   shouldGrantFoundingPlus,
 } from '@/lib/foundingMemberPlus.rules';
-
-export {
-  FIRST_AUTO_SLOT,
-  FOUNDING_CAMPAIGN_STARTED_AT,
-  MAX_FOUNDING_SLOT,
-  PLUS_PLAN_SLUG,
-  parseFoundingSlotNumber,
-  shouldAttemptFoundingPlus,
-  shouldGrantFoundingPlus,
-};
 
 const FOUNDING_MEMBER_TABLE = 'founding_member_grants';
 
@@ -133,6 +124,35 @@ async function markFoundingPlusEmailSent(adminClient, userId) {
     .eq('user_id', userId);
   if (error && !isMissingTableError(error)) {
     console.error('[foundingMemberPlus] mark email sent:', error);
+  }
+}
+
+/**
+ * Estadísticas públicas de cupos founding (sin datos personales).
+ *
+ * @param {import('@supabase/supabase-js').SupabaseClient} adminClient
+ */
+export async function getFoundingMemberSlotAvailability(adminClient) {
+  if (!adminClient) {
+    return computeFoundingSlotAvailability(0);
+  }
+
+  try {
+    const { count, error } = await adminClient
+      .from(FOUNDING_MEMBER_TABLE)
+      .select('*', { count: 'exact', head: true });
+
+    if (error) {
+      if (isMissingTableError(error)) {
+        return computeFoundingSlotAvailability(0);
+      }
+      throw error;
+    }
+
+    return computeFoundingSlotAvailability(count ?? 0);
+  } catch (err) {
+    console.error('[foundingMemberPlus] slot availability:', err);
+    return computeFoundingSlotAvailability(0);
   }
 }
 

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   FOUNDING_CAMPAIGN_STARTED_AT,
+  computeFoundingSlotAvailability,
   parseFoundingSlotNumber,
   shouldAttemptFoundingPlus,
   shouldGrantFoundingPlus,
@@ -35,5 +36,21 @@ describe('founding member plus slots', () => {
     expect(shouldAttemptFoundingPlus('2026-09-02T07:11:36.200Z')).toBe(true);
     expect(shouldAttemptFoundingPlus('2026-05-18T08:38:00.000Z')).toBe(false);
     expect(shouldAttemptFoundingPlus(null)).toBe(true);
+  });
+
+  it('computes remaining founding slots from claimed count', () => {
+    expect(computeFoundingSlotAvailability(1)).toEqual({
+      total: 50,
+      claimed: 1,
+      remaining: 49,
+      soldOut: false,
+    });
+    expect(computeFoundingSlotAvailability(50)).toEqual({
+      total: 50,
+      claimed: 50,
+      remaining: 0,
+      soldOut: true,
+    });
+    expect(computeFoundingSlotAvailability(99).claimed).toBe(50);
   });
 });
