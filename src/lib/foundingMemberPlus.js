@@ -138,18 +138,41 @@ export async function getFoundingMemberSlotAvailability(adminClient) {
   }
 
   try {
-    const { count, error } = await adminClient
-      .from(FOUNDING_MEMBER_TABLE)
-      .select('*', { count: 'exact', head: true });
+    const { data: rpcData, error: rpcError } = await adminClient.rpc(
+      'get_public_founding_slot_availability',
+    );
 
-    if (error) {
-      if (isMissingTableError(error)) {
-        return computeFoundingSlotAvailability(0);
-      }
-      throw error;
+    if (!rpcError && rpcData && typeof rpcData === 'object') {
+      const claimed = Math.max(0, Number(rpcData.claimed) || 0);
+      const remaining = Math.max(0, Number(rpcData.remaining) || 0);
+      const total = Math.max(0, Number(rpcData.total) || MAX_FOUNDING_SLOT);
+      return {
+        total,
+        claimed,
+        remaining,
+        soldOut: Boolean(rpcData.soldOut ?? remaining === 0),
+      };
     }
 
-    return computeFoundingSlotAvailability(count ?? 0);
+    if (rpcError && !isMissingTableError(rpcError)) {
+      console.error('[foundingMemberPlus] slot availability RPC:', rpcError);
+    }
+
+    const { data: maxRow, error: maxError } = await adminClient
+      .from(FOUNDING_MEMBER_TABLE)
+      .select('slot_number')
+      .order('slot_number', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (maxError) {
+      if (isMissingTableError(maxError)) {
+        return computeFoundingSlotAvailability(0);
+      }
+      throw maxError;
+    }
+
+    return computeFoundingSlotAvailability(parseFoundingSlotNumber(maxRow?.slot_number) ?? 0);
   } catch (err) {
     console.error('[foundingMemberPlus] slot availability:', err);
     return computeFoundingSlotAvailability(0);

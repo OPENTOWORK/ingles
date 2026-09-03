@@ -4,6 +4,8 @@ import { getFoundingMemberSlotAvailability } from '@/lib/foundingMemberPlus';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
 
 export async function GET() {
   try {
@@ -25,7 +27,9 @@ export async function GET() {
 
     return NextResponse.json(availability, {
       headers: {
-        'Cache-Control': 'public, s-maxage=30, stale-while-revalidate=60',
+        'Cache-Control': 'private, no-store, max-age=0, must-revalidate',
+        'CDN-Cache-Control': 'no-store',
+        'Vercel-CDN-Cache-Control': 'no-store',
       },
     });
   } catch (err) {
