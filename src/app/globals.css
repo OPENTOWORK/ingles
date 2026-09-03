@@ -754,6 +754,85 @@ body {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
+.founding-slots-banner__conditions {
+  position: relative;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.founding-slots-banner__conditions-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.founding-slots-banner__conditions-btn:hover,
+.founding-slots-banner__conditions-btn[aria-expanded='true'] {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.75);
+}
+
+.founding-slots-banner__conditions-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 2px;
+}
+
+.founding-slots-banner__conditions-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: min(18rem, calc(100vw - 2rem));
+  padding: 0.85rem 2rem 0.85rem 0.9rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: #fff;
+  color: #312e81;
+  box-shadow: 0 14px 36px rgba(30, 27, 75, 0.28);
+}
+
+.founding-slots-banner__conditions-popover p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  font-weight: 600;
+}
+
+.founding-slots-banner__conditions-close {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: #6366f1;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.founding-slots-banner__conditions-close:hover {
+  background: #eef2ff;
+}
+
 @media (max-width: 640px) {
   .founding-slots-banner__inner {
     border-radius: 16px;
@@ -766,6 +845,18 @@ body {
 
   .founding-slots-banner__cta {
     width: 100%;
+  }
+
+  .founding-slots-banner__conditions {
+    margin-left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .founding-slots-banner__conditions-popover {
+    right: 0;
+    left: auto;
   }
 }
 

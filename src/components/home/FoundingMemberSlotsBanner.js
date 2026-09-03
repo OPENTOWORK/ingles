@@ -1,7 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Sparkles } from 'lucide-react';
+
+const CONDITIONS_TEXT =
+  'Después de 30 días solo tendrás que rellenar un breve formulario.';
 
 function formatSlotsMessage(remaining, total) {
   if (remaining === 1) {
@@ -29,6 +32,28 @@ function formatSlotsMessage(remaining, total) {
 export default function FoundingMemberSlotsBanner() {
   const [availability, setAvailability] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showConditions, setShowConditions] = useState(false);
+  const conditionsRef = useRef(null);
+
+  useEffect(() => {
+    if (!showConditions) return undefined;
+
+    const handlePointerDown = (event) => {
+      if (conditionsRef.current?.contains(event.target)) return;
+      setShowConditions(false);
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') setShowConditions(false);
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [showConditions]);
 
   useEffect(() => {
     let cancelled = false;
@@ -74,6 +99,35 @@ export default function FoundingMemberSlotsBanner() {
         <p className="founding-slots-banner__text">
           {formatSlotsMessage(availability.remaining, availability.total)}
         </p>
+        <div className="founding-slots-banner__conditions" ref={conditionsRef}>
+          <button
+            type="button"
+            className="founding-slots-banner__conditions-btn"
+            onClick={() => setShowConditions((open) => !open)}
+            aria-expanded={showConditions}
+            aria-controls="founding-slots-conditions-popover"
+          >
+            Condiciones
+          </button>
+          {showConditions ? (
+            <div
+              id="founding-slots-conditions-popover"
+              className="founding-slots-banner__conditions-popover"
+              role="dialog"
+              aria-label="Condiciones del Plan Plus founding"
+            >
+              <p>{CONDITIONS_TEXT}</p>
+              <button
+                type="button"
+                className="founding-slots-banner__conditions-close"
+                onClick={() => setShowConditions(false)}
+                aria-label="Cerrar condiciones"
+              >
+                ×
+              </button>
+            </div>
+          ) : null}
+        </div>
       </div>
     </div>
   );
