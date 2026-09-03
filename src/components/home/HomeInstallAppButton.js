@@ -70,7 +70,7 @@ export default function HomeInstallAppButton() {
         <span className="home-install-app__icon" aria-hidden>
           ↓
         </span>
-        Descargar acceso directo
+        Acceso directo
       </button>
       {showInstructions ? (
         <p className="home-install-app__instructions" role="status">
