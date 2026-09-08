@@ -7,6 +7,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
 import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
+import { isMinimalLandingPath } from '@/utils/minimalLandingRoutes';
 import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 
@@ -63,11 +64,11 @@ const TOAST_OPTIONS = {
   },
 };
 
-function SiteHeaderBrand({ nav = null }) {
+function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/' }) {
   return (
-    <header className="site-header">
+    <header className={`site-header${logoOnly ? ' site-header--logo-only' : ''}`}>
       <div className="site-header__bar">
-        <Link href="/" className="site-header__logo">
+        <Link href={logoHref} className="site-header__logo">
           <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
           <span>Dralo Academy</span>
         </Link>
@@ -111,6 +112,7 @@ function RootLayoutClientInner({ children }) {
   const router = useRouter();
   const pathname = usePathname() ?? '';
   const isPublic = isPublicPath(pathname);
+  const isMinimalLanding = isMinimalLandingPath(pathname);
   const isAuthFlow = AUTH_FLOW_PATH_PREFIXES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
@@ -439,11 +441,18 @@ function RootLayoutClientInner({ children }) {
         pixelId={metaPixelId}
       />
 
-      <AuthenticatedAppShell session={session} userRole={userRole} onLogout={handleLogout}>
-        {children}
-      </AuthenticatedAppShell>
+      {isMinimalLanding ? (
+        <>
+          <SiteHeaderBrand logoOnly logoHref="/campana" />
+          <main className="page-content page-content--conversion-landing">{children}</main>
+        </>
+      ) : (
+        <AuthenticatedAppShell session={session} userRole={userRole} onLogout={handleLogout}>
+          {children}
+        </AuthenticatedAppShell>
+      )}
 
-      <DeferredSiteAssistant enabled={Boolean(session)} />
+      <DeferredSiteAssistant enabled={Boolean(session) && !isMinimalLanding} />
 
       {cookieConsentHydrated && !cookieConsent && (
         <div

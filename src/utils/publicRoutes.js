@@ -4,6 +4,7 @@
  */
 export const PUBLIC_ROUTE_PREFIXES = [
   '/',
+  '/campana',
   '/login',
   '/registro',
   '/contacto',
