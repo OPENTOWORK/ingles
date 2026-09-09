@@ -324,6 +324,12 @@ function RootLayoutClientInner({ children }) {
       window.location.reload();
     };
 
+    const purgeClientCaches = async () => {
+      if (!('caches' in window)) return;
+      const names = await window.caches.keys();
+      await Promise.all(names.map((name) => window.caches.delete(name)));
+    };
+
     void navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((registration) => {
       registration.update().catch(() => {});
 
@@ -331,14 +337,16 @@ function RootLayoutClientInner({ children }) {
         const worker = registration.installing;
         if (!worker) return;
         worker.addEventListener('statechange', () => {
-          if (worker.state === 'activated' && navigator.serviceWorker.controller) {
-            reloadOnce();
-          }
+          if (worker.state !== 'activated') return;
+          void purgeClientCaches().finally(() => {
+            if (navigator.serviceWorker.controller) reloadOnce();
+          });
         });
       });
 
       if (registration.waiting && navigator.serviceWorker.controller) {
         registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        void purgeClientCaches();
       }
     });
 
