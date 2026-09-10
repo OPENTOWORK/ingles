@@ -22,6 +22,7 @@ import {
 } from '@/utils/b2StarsWayProgress';
 import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
+import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { useUserRole } from '@/context/UserRoleContext';
 import styles from './StarsWayToB2Section.module.css';
 
@@ -97,6 +98,7 @@ function ExerciseNode({
   isFocused = false,
 }) {
   const bypassStarGating = useExamStarGatingBypass();
+  const { maxExamSlot } = usePlanEntitlements();
   const score = getExerciseScore(progressBySlot, part.globalPartNumber, examSlot);
   const stars = getExerciseStars(progressBySlot, part.globalPartNumber, examSlot);
   const attempted = Boolean(score?.total);
@@ -109,7 +111,7 @@ function ExerciseNode({
     part.globalPartNumber,
     examSlot,
     availableSlots,
-    { bypassStarGating },
+    { bypassStarGating, maxExamSlot },
   );
 
   const nodeClassName = [

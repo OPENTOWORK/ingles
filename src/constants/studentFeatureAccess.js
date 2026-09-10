@@ -47,11 +47,12 @@ export function usesStudentContentRestrictions(userRole = '') {
 }
 
 /**
- * El profesorado necesita abrir cualquier test de cualquier parte para preparar clases,
- * así que se salta el desbloqueo secuencial por estrellas.
+ * El profesorado y la coordinación necesitan abrir cualquier test de cualquier parte
+ * para preparar clases, así que se saltan el desbloqueo secuencial por estrellas.
  */
 export function bypassesExamStarGating(userRole = '', email = '') {
-  return hasFullNivelesLevelAccess(userRole, email);
+  if (hasFullNivelesLevelAccess(userRole, email)) return true;
+  return isCoordinatorRole(userRole);
 }
 
 export function isTrainingLockedForUser(userRole = '') {

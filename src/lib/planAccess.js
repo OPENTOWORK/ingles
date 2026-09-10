@@ -14,6 +14,7 @@ import {
   getWritingCorrectionMonthlyLimit,
   hasEntitlement,
 } from '@/lib/subscriptionPlans';
+import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { subscriptionGrantsAccess } from '@/lib/stripe/server';
 import { getSubscriptionsDb, findSubscriptionByUserId } from '@/lib/stripe/subscriptions';
 import { getSupabaseAdmin } from '@/lib/aiUsage';
@@ -299,6 +300,25 @@ export async function getPlanUsageSnapshot(userId, usageKey, planSlug) {
 export async function getStudentPlanContext(userId, userEmail = '', userMetadata = null) {
   const planSlug = await resolveUserPlanSlug(userId, userMetadata);
   const applyLimits = await shouldApplyPlanUsageLimits(userId, userEmail);
+
+  /**
+   * Profesorado, coordinación, admin, informática y marketing preparan clases con
+   * cualquier test, así que abren el catálogo entero sin el cupo mensual del plan.
+   */
+  if (!applyLimits) {
+    return {
+      planSlug,
+      applyLimits,
+      entitlements: getPlanBySlug(planSlug).entitlements,
+      maxExamSlot: B2_EXAM_SLOT_MAX,
+      subscriptionMonths: null,
+      plusExamUnlock: null,
+      progressTracking: true,
+      writingAdvanced: true,
+      speakingCoach: true,
+    };
+  }
+
   const subscriptionAnchor = await resolvePlusSubscriptionAnchor(userId, planSlug);
   const subscriptionMonths = getSubscriptionTenureMonths(subscriptionAnchor);
   const maxExamSlot = resolveMaxExamSlotForPlan(planSlug, { subscriptionMonths });

@@ -1,3 +1,4 @@
+import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
 import { getSortedExamSlots } from '@/utils/skillPracticeNavigation';
 
@@ -51,11 +52,11 @@ export function isExerciseSlotUnlocked(
   partNumber,
   examSlot,
   examenIdBySlotOrSlots = {},
-  { bypassStarGating = false, maxExamSlot = 5 } = {},
+  { bypassStarGating = false, maxExamSlot = B2_EXAM_SLOT_MAX } = {},
 ) {
   const slot = Number(examSlot);
-  if (Number.isFinite(maxExamSlot) && slot > maxExamSlot) return false;
   if (bypassStarGating) return true;
+  if (Number.isFinite(maxExamSlot) && slot > maxExamSlot) return false;
   const slots = Array.isArray(examenIdBySlotOrSlots)
     ? [...examenIdBySlotOrSlots].sort((a, b) => a - b)
     : getSortedExamSlots(examenIdBySlotOrSlots);
