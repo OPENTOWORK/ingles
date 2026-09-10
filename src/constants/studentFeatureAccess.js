@@ -18,7 +18,7 @@ export const STUDENT_EXAM_STRATEGIES_COMING_SOON = true;
 /** CEFR levels on /niveles that show COMING SOON for students (B2 stays open). */
 export const STUDENT_NIVELES_COMING_SOON_LEVELS = new Set(['A2', 'B1', 'C1', 'C2']);
 
-/** Exam-mode sections unavailable for students/coordinators (skill practice uses the same rule). */
+/** Exam-mode sections unavailable for students (skill practice uses the same rule). */
 export const STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS = new Set(['listening', 'speaking']);
 
 export function isStudentRole(userRole = '') {
@@ -27,14 +27,14 @@ export function isStudentRole(userRole = '') {
 }
 
 /**
- * Alumno y coordinador: misma experiencia de contenido (coming soon, locks, perfil, etc.).
- * Admin, profesor, informático y Resp.marketing: acceso completo a Exam Practice,
- * Exam Strategies y Dralo AI (sin restricciones de alumno ni límites de plan).
+ * Profesorado y coordinación: acceso completo a niveles, exámenes y teoría.
+ * Admin, informático y Resp.marketing comparten la misma experiencia de contenido.
  */
 export function hasFullNivelesLevelAccess(userRole = '', email = '') {
   if (normalizeEmail(email) === normalizeEmail(ADMIN_EMAIL)) return true;
   if (isAdminRole(userRole)) return true;
   if (isTeacherRole(userRole)) return true;
+  if (isCoordinatorRole(userRole)) return true;
   if (isItRole(userRole)) return true;
   if (isMarketingRole(userRole)) return true;
   return false;
@@ -42,17 +42,12 @@ export function hasFullNivelesLevelAccess(userRole = '', email = '') {
 
 export function usesStudentContentRestrictions(userRole = '') {
   if (hasFullNivelesLevelAccess(userRole)) return false;
-  if (isCoordinatorRole(userRole)) return true;
   return isStudentRole(userRole);
 }
 
-/**
- * El profesorado y la coordinación necesitan abrir cualquier test de cualquier parte
- * para preparar clases, así que se saltan el desbloqueo secuencial por estrellas.
- */
+/** Profesorado y coordinación abren cualquier test sin desbloqueo secuencial por estrellas. */
 export function bypassesExamStarGating(userRole = '', email = '') {
-  if (hasFullNivelesLevelAccess(userRole, email)) return true;
-  return isCoordinatorRole(userRole);
+  return hasFullNivelesLevelAccess(userRole, email);
 }
 
 export function isTrainingLockedForUser(userRole = '') {

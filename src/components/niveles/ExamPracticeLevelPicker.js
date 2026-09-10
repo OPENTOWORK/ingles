@@ -7,7 +7,17 @@ import { hasFullNivelesLevelAccess } from '@/constants/studentFeatureAccess';
 import { EXAM_PRACTICE_LEVELS } from '@/data/examPracticeLevels';
 import { userHasRole } from '@/utils/authRoles';
 
-const STAFF_LEVEL_ROLES = ['admin', 'administrador', 'teacher', 'profesor', 'informatico', 'it'];
+const STAFF_LEVEL_ROLES = [
+  'admin',
+  'administrador',
+  'teacher',
+  'profesor',
+  'coordinator',
+  'coordinador',
+  'informatico',
+  'it',
+  'Resp.marketing',
+];
 
 function resolveLevelLock({ level, userRole, email = '', staffUnlock = false }) {
   if (staffUnlock || hasFullNivelesLevelAccess(userRole, email)) {

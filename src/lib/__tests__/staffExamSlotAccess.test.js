@@ -1,6 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { bypassesExamStarGating } from '@/constants/studentFeatureAccess.js';
+import {
+  bypassesExamStarGating,
+  hasFullNivelesLevelAccess,
+  isExamModeSectionKeyBlockedForStudent,
+  isNivelesLevelComingSoonForUser,
+  isTrainingLockedForUser,
+  usesStudentContentRestrictions,
+} from '@/constants/studentFeatureAccess.js';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog.js';
 import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress.js';
 
@@ -33,5 +40,20 @@ describe('staff exam slot access', () => {
     assert.equal(isExerciseSlotUnlocked(NO_PROGRESS, 1, 1, SLOTS, opts), true);
     assert.equal(isExerciseSlotUnlocked(NO_PROGRESS, 1, 2, SLOTS, opts), false);
     assert.equal(isExerciseSlotUnlocked(NO_PROGRESS, 1, 11, SLOTS, opts), false);
+  });
+
+  it('gives teachers and coordinators full content access without student locks', () => {
+    for (const role of ['profesor', 'teacher', 'coordinador', 'coordinator']) {
+      assert.equal(hasFullNivelesLevelAccess(role), true, role);
+      assert.equal(usesStudentContentRestrictions(role), false, role);
+      assert.equal(isTrainingLockedForUser(role), false, role);
+      assert.equal(isNivelesLevelComingSoonForUser(role, 'C1'), false, role);
+      assert.equal(isExamModeSectionKeyBlockedForStudent(role, 'listening'), false, role);
+      assert.equal(isExamModeSectionKeyBlockedForStudent(role, 'speaking'), false, role);
+    }
+
+    assert.equal(usesStudentContentRestrictions('alumno'), true);
+    assert.equal(isNivelesLevelComingSoonForUser('alumno', 'C1'), true);
+    assert.equal(isExamModeSectionKeyBlockedForStudent('alumno', 'listening'), true);
   });
 });
