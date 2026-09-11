@@ -1,7 +1,10 @@
 'use client';
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from 'react';
-import { BLOG_CALLOUT_TEMPLATE } from '@/lib/blogContent';
+import {
+  BLOG_CALLOUT_PLACEHOLDER,
+  repairBlogCallouts,
+} from '@/lib/blogContent';
 import styles from './BlogRichTextEditor.module.css';
 
 const FONT_FAMILIES = [
@@ -75,7 +78,13 @@ const BlogRichTextEditor = forwardRef(function BlogRichTextEditor(
   const lastHtmlRef = useRef(value || '');
 
   const emitChange = useCallback(() => {
-    const html = editorRef.current?.innerHTML || '';
+    const editor = editorRef.current;
+    if (!editor) return;
+    const raw = editor.innerHTML || '';
+    const html = repairBlogCallouts(raw);
+    if (html !== raw) {
+      editor.innerHTML = html;
+    }
     lastHtmlRef.current = html;
     onChange(html);
   }, [onChange]);
@@ -95,8 +104,9 @@ const BlogRichTextEditor = forwardRef(function BlogRichTextEditor(
     const editor = editorRef.current;
     if (!editor) return;
     if (value === lastHtmlRef.current) return;
-    editor.innerHTML = value || '';
-    lastHtmlRef.current = value || '';
+    const html = repairBlogCallouts(value || '');
+    editor.innerHTML = html;
+    lastHtmlRef.current = html;
   }, [value]);
 
   const focusEditor = () => {
@@ -134,8 +144,32 @@ const BlogRichTextEditor = forwardRef(function BlogRichTextEditor(
   };
 
   const handleCallout = () => {
-    focusEditor();
-    document.execCommand('insertHTML', false, BLOG_CALLOUT_TEMPLATE);
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.focus();
+
+    const callout = document.createElement('blockquote');
+    callout.className = 'blog-callout';
+    const paragraph = document.createElement('p');
+    paragraph.textContent = BLOG_CALLOUT_PLACEHOLDER;
+    callout.appendChild(paragraph);
+
+    const selection = window.getSelection();
+    if (selection?.rangeCount) {
+      const range = selection.getRangeAt(0);
+      range.deleteContents();
+      range.insertNode(callout);
+      const trailingBreak = document.createElement('div');
+      trailingBreak.appendChild(document.createElement('br'));
+      callout.after(trailingBreak);
+      range.selectNodeContents(paragraph);
+      range.collapse(false);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    } else {
+      editor.appendChild(callout);
+    }
+
     emitChange();
   };
 

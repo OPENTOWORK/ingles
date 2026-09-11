@@ -111,7 +111,7 @@
   color: #6366f1;
 }
 
-.editor .blog-callout {
+.editor :global(.blog-callout) {
   position: relative;
   overflow: hidden;
   margin: 1rem 0;
@@ -123,7 +123,12 @@
   text-align: center;
 }
 
-.editor .blog-callout::before {
+.editor :global(blockquote.blog-callout) {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.editor :global(.blog-callout)::before {
   content: '\201D';
   position: absolute;
   top: 0.2rem;
@@ -136,7 +141,7 @@
   pointer-events: none;
 }
 
-.editor .blog-callout::after {
+.editor :global(.blog-callout)::after {
   content: '';
   position: absolute;
   right: 0.85rem;
@@ -148,17 +153,17 @@
   pointer-events: none;
 }
 
-.editor .blog-callout__media,
-.editor .blog-callout__kicker {
+.editor :global(.blog-callout__media),
+.editor :global(.blog-callout__kicker) {
   display: none;
 }
 
-.editor .blog-callout__content {
+.editor :global(.blog-callout__content) {
   position: relative;
   z-index: 1;
 }
 
-.editor .blog-callout p {
+.editor :global(.blog-callout) p {
   margin: 0;
   text-align: center;
   color: #2e1065;

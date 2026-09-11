@@ -20301,6 +20301,11 @@ body.dark .profile-collapse--open .profile-collapse__head {
   text-align: center;
 }
 
+.blog-article-page__body--rich blockquote.blog-callout {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .blog-article-page__body--rich .blog-callout::before {
   content: '\201D';
   position: absolute;

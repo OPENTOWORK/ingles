@@ -31,18 +31,32 @@ const ALLOWED_BLOG_CLASSES = new Set([
 ]);
 
 const BLOG_CALLOUT_MASCOT_SRC = '/mascot/6.png';
+const BLOG_CALLOUT_OPEN = '<blockquote class="blog-callout">';
+const BLOG_CALLOUT_CLOSE = '</blockquote>';
+
+/** Texto por defecto al insertar una caja destacada desde el editor. */
+export const BLOG_CALLOUT_PLACEHOLDER = 'Escribe aquí el contenido destacado.';
 
 function wrapCalloutInner(inner) {
   const cleaned = String(inner || '')
     .replace(/<p class="blog-callout__kicker">[\s\S]*?<\/p>/gi, '')
     .trim();
+  if (!cleaned) return '';
+  if (cleaned.includes('blog-callout__content') || cleaned.includes('blog-callout__media')) {
+    return cleaned;
+  }
   return `<div class="blog-callout__content">${cleaned}</div>`;
 }
 
+function openBlogCallout(inner = '') {
+  const body = wrapCalloutInner(inner) || '<p></p>';
+  return `${BLOG_CALLOUT_OPEN}${body}${BLOG_CALLOUT_CLOSE}`;
+}
+
 /** HTML de caja destacada Dralo para insertar desde el editor. */
-export const BLOG_CALLOUT_TEMPLATE = `<div class="blog-callout">${wrapCalloutInner(
-  '<p>Escribe aquí el contenido destacado.</p>',
-)}</div>`;
+export const BLOG_CALLOUT_TEMPLATE = openBlogCallout(
+  `<p>${BLOG_CALLOUT_PLACEHOLDER}</p>`,
+);
 
 function sanitizeInlineStyle(styleValue = '') {
   const allowed = [];
@@ -135,6 +149,10 @@ function sanitizeOpeningTag(tag, match) {
     const cls = getSafeBlogClassAttr(match);
     return cls ? `<div${cls}>` : '<div>';
   }
+  if (tag === 'blockquote') {
+    const cls = getSafeBlogClassAttr(match);
+    return cls ? `<blockquote${cls}>` : '<blockquote>';
+  }
   return stripDangerousAttributes(match.replace(/\s+/g, ' '));
 }
 
@@ -174,9 +192,19 @@ export function upsertBlogSlotImage(html, slot, url, alt = '') {
 }
 
 function isInsideBlogCallout(before) {
-  const lastCallout = before.lastIndexOf('<div class="blog-callout"');
-  if (lastCallout === -1) return false;
-  const afterCallout = before.slice(lastCallout);
+  const divIdx = before.lastIndexOf('<div class="blog-callout"');
+  const blockIdx = before.lastIndexOf('<blockquote class="blog-callout"');
+  const start = Math.max(divIdx, blockIdx);
+  if (start === -1) return false;
+
+  if (blockIdx > divIdx) {
+    const after = before.slice(blockIdx);
+    const opens = (after.match(/<blockquote\b/gi) || []).length;
+    const closes = (after.match(/<\/blockquote>/gi) || []).length;
+    return opens > closes;
+  }
+
+  const afterCallout = before.slice(divIdx);
   const opens = (afterCallout.match(/<div\b/gi) || []).length;
   const closes = (afterCallout.match(/<\/div>/gi) || []).length;
   return opens > closes;
@@ -210,32 +238,66 @@ function findMatchingCloseDiv(html, openIdx) {
   return -1;
 }
 
+function findMatchingCloseTag(html, openIdx, tagName) {
+  let depth = 0;
+  const re = new RegExp(`<(\\/?)${tagName}\\b[^>]*>`, 'gi');
+  re.lastIndex = openIdx;
+  let match = re.exec(html);
+  while (match) {
+    if (match[1] === '/') {
+      depth -= 1;
+      if (depth === 0) return { index: match.index, length: match[0].length };
+    } else {
+      depth += 1;
+    }
+    match = re.exec(html);
+  }
+  return null;
+}
+
 function upgradeLegacyCallouts(html = '') {
-  const marker = '<div class="blog-callout">';
+  const marker = { open: '<div class="blog-callout">', closeTag: 'div', openLen: 26 };
   let result = '';
   let cursor = 0;
-  let idx = html.indexOf(marker);
+  let idx = String(html).indexOf(marker.open);
 
   while (idx !== -1) {
     result += html.slice(cursor, idx);
-    const closeIdx = findMatchingCloseDiv(html, idx);
-    if (closeIdx === -1) {
+    const close = findMatchingCloseTag(html, idx, marker.closeTag);
+    if (!close) {
       result += html.slice(idx);
       return result;
     }
 
-    const inner = html.slice(idx + marker.length, closeIdx);
+    const inner = html.slice(idx + marker.openLen, close.index);
     if (inner.includes('blog-callout__media')) {
-      result += html.slice(idx, closeIdx + 6);
+      result += html.slice(idx, close.index + close.length);
     } else {
-      result += `${marker}${wrapCalloutInner(inner.trim())}</div>`;
+      result += openBlogCallout(inner.trim());
     }
 
-    cursor = closeIdx + 6;
-    idx = html.indexOf(marker, cursor);
+    cursor = close.index + close.length;
+    idx = html.indexOf(marker.open, cursor);
   }
 
   return result + html.slice(cursor);
+}
+
+function repairDetachedCalloutContent(html = '') {
+  return String(html).replace(
+    /<div class="blog-callout__content">([\s\S]*?)<\/div>/gi,
+    (match, inner, offset, full) => {
+      if (isInsideBlogCallout(full.slice(0, offset))) return match;
+      return openBlogCallout(inner.trim());
+    },
+  );
+}
+
+function normalizeDivCalloutsToBlockquote(html = '') {
+  return String(html).replace(
+    /<div class="blog-callout">([\s\S]*?)<\/div>/gi,
+    (_match, inner) => openBlogCallout(inner.trim()),
+  );
 }
 
 function repairOrphanCalloutKickers(html = '') {
@@ -251,9 +313,7 @@ function repairOrphanCalloutKickers(html = '') {
         /^\s*<p(?![^>]*blog-callout__kicker)[^>]*>[\s\S]*?<\/p>/i,
       );
       if (bodyMatch) {
-        const callout = `<div class="blog-callout">${wrapCalloutInner(
-          match[0] + bodyMatch[0],
-        )}</div>`;
+        const callout = openBlogCallout(match[0] + bodyMatch[0]);
         result =
           result.slice(0, idx) +
           callout +
@@ -270,12 +330,14 @@ function repairOrphanCalloutKickers(html = '') {
 }
 
 /** Repara cajas Destacado rotas o en formato legacy (aside / solo kicker). */
-function repairBlogCallouts(html = '') {
-  let output = String(html)
-    .replace(/<aside class="blog-callout">/gi, '<div class="blog-callout">')
-    .replace(/<\/aside>/gi, '</div>');
+export function repairBlogCallouts(html = '') {
+  let output = repairSpuriousFigures(String(html))
+    .replace(/<aside class="blog-callout">/gi, BLOG_CALLOUT_OPEN)
+    .replace(/<\/aside>/gi, BLOG_CALLOUT_CLOSE);
 
+  output = repairDetachedCalloutContent(output);
   output = upgradeLegacyCallouts(output);
+  output = normalizeDivCalloutsToBlockquote(output);
   return repairOrphanCalloutKickers(output);
 }
 
@@ -313,8 +375,7 @@ export function normalizeBlogContent(content = '') {
   const raw = String(content || '').trim();
   if (!raw) return '';
   if (/<[a-z][\s\S]*>/i.test(raw)) {
-    const repaired = repairBlogCallouts(repairSpuriousFigures(raw));
-    return sanitizeBlogHtml(repaired);
+    return sanitizeBlogHtml(repairBlogCallouts(raw));
   }
   return raw
     .split(/\n{2,}/)
