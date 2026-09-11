@@ -1,6 +1,6 @@
 // Service Worker for English Practice App
-const CACHE_NAME = 'english-practice-v5';
-const OFFLINE_CACHE_NAME = 'english-practice-offline-v5';
+const CACHE_NAME = 'english-practice-v6';
+const OFFLINE_CACHE_NAME = 'english-practice-offline-v6';
 const IS_LOCAL_DEVELOPMENT =
   self.location.hostname === 'localhost' || self.location.hostname === '127.0.0.1';
 
@@ -73,17 +73,16 @@ async function handleFetch(request) {
     return fetch(request);
   }
 
-  // HTML / navegación: red primero; solo offline.html si no hay red.
-  if (isHtmlNavigation(request)) {
+  // HTML / navegación: red primero; solo offline.html si la red falla de verdad.
+  // No usar response.ok: 304, 401 o 5xx deben llegar al navegador, no sustituirse por offline.
+  if (request.mode === 'navigate') {
     try {
-      const response = await fetch(request);
-      if (response.ok) return response;
+      return await fetch(request);
     } catch {
-      /* offline */
+      const offline = await caches.match('/offline.html');
+      if (offline) return offline;
+      throw new Error('Navigation unavailable offline');
     }
-    const offline = await caches.match('/offline.html');
-    if (offline) return offline;
-    return fetch(request);
   }
 
   // API: red con fallback mínimo.
@@ -115,12 +114,6 @@ async function handleFetch(request) {
   }
 
   return fetch(request);
-}
-
-function isHtmlNavigation(request) {
-  if (request.mode === 'navigate') return true;
-  const accept = request.headers.get('accept') || '';
-  return accept.includes('text/html');
 }
 
 function isMediaRequest(request) {
