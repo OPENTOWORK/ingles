@@ -311,48 +311,29 @@ function RootLayoutClientInner({ children }) {
     });
   }, []);
 
-  /** En producción, fuerza actualización del SW para que el móvil/PWA no se quede en builds antiguos. */
+  /**
+   * Producción: purga SW antiguos que interceptaban HTML (offline loop) y registra
+   * el worker solo para push, sin tocar la navegación.
+   */
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') return;
     if (typeof navigator === 'undefined' || !('serviceWorker' in navigator)) return;
 
-    let reloaded = false;
-
-    const reloadOnce = () => {
-      if (reloaded) return;
-      reloaded = true;
-      window.location.reload();
-    };
-
-    const purgeClientCaches = async () => {
-      if (!('caches' in window)) return;
-      const names = await window.caches.keys();
-      await Promise.all(names.map((name) => window.caches.delete(name)));
-    };
-
-    void navigator.serviceWorker.register('/sw.js', { scope: '/' }).then((registration) => {
-      registration.update().catch(() => {});
-
-      registration.addEventListener('updatefound', () => {
-        const worker = registration.installing;
-        if (!worker) return;
-        worker.addEventListener('statechange', () => {
-          if (worker.state !== 'activated') return;
-          void purgeClientCaches().finally(() => {
-            if (navigator.serviceWorker.controller) reloadOnce();
-          });
-        });
-      });
-
-      if (registration.waiting && navigator.serviceWorker.controller) {
-        registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-        void purgeClientCaches();
+    void (async () => {
+      try {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((registration) => registration.unregister()));
+        if ('caches' in window) {
+          const names = await window.caches.keys();
+          await Promise.all(names.map((name) => window.caches.delete(name)));
+        }
+        const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/' });
+        registration.waiting?.postMessage({ type: 'SKIP_WAITING' });
+        await registration.update().catch(() => {});
+      } catch {
+        /* ignore */
       }
-    });
-
-    const onControllerChange = () => reloadOnce();
-    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
-    return () => navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange);
+    })();
   }, []);
 
   if (isAuthFlow) {
