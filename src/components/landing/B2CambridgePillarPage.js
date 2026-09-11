@@ -192,7 +192,7 @@ function B2CambridgePillarContent() {
         </header>
 
         <nav className="pillar-landing__toc" aria-label="En esta guía">
-          <h2 className="pillar-landing__toc-title">En esta guía</h2>
+          <p className="pillar-landing__toc-title">En esta guía</p>
           <ol className="pillar-landing__toc-list">
             {TOC_ITEMS.map((item) => (
               <li key={item.id}>

@@ -555,7 +555,7 @@ function RootLayoutClientInner({ children }) {
       <footer className="footer legal-footer">
         <div className="legal-footer-content">
           <div className="legal-footer-column">
-            <h3>Legal</h3>
+            <p className="legal-footer-column__title">Legal</p>
             <ul className="legal-footer-list">
               <li>
                 <Link href="/terminos-condiciones">Términos y condiciones</Link>
@@ -575,7 +575,7 @@ function RootLayoutClientInner({ children }) {
             </ul>
           </div>
           <div className="legal-footer-column">
-            <h3>Privacidad</h3>
+            <p className="legal-footer-column__title">Privacidad</p>
             <ul className="legal-footer-list">
               <li>
                 <Link href="/politica-privacidad">Política de privacidad</Link>

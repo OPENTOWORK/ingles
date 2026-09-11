@@ -1419,7 +1419,7 @@ body.reading-night-mode .legal-footer {
   color: #e2e8f0;
 }
 
-body.reading-night-mode .legal-footer-column h3,
+body.reading-night-mode .legal-footer-column__title,
 body.reading-night-mode .legal-footer-column a,
 body.reading-night-mode .legal-footer-link-btn,
 body.reading-night-mode .legal-footer-version,

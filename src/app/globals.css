@@ -197,7 +197,7 @@ a:hover {
   }
 }
 
-.legal-footer-column h3 {
+.legal-footer-column__title {
   margin: 0 0 0.75rem;
   font-size: 1.12rem;
   font-weight: 700;
