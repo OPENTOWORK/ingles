@@ -1,6 +1,7 @@
 import { TASK_ESTADOS } from '@/lib/staffTasksConstants';
 
 const TERMINAL_ESTADOS = new Set(['completada', 'cancelada']);
+const PANEL_HIDDEN_TASK_ESTADOS = new Set(['completada', 'cancelada']);
 
 /** Fecha corta en español: 01/12/2026 */
 export function formatStaffDateLabel(value) {
@@ -33,6 +34,53 @@ export function formatStaffDateTimeLabel(value) {
 
 export function isTaskTerminal(estado = '') {
   return TERMINAL_ESTADOS.has(estado);
+}
+
+export function isPanelPhaseComplete(estado = '') {
+  return estado === 'completada';
+}
+
+export function isPanelTaskHidden(estado = '') {
+  return PANEL_HIDDEN_TASK_ESTADOS.has(estado);
+}
+
+/** Tareas visibles en el panel principal (oculta completadas/canceladas salvo filtro explícito). */
+export function filterPanelTasks(tasks = [], estadoFilter = '') {
+  if (estadoFilter === 'completada' || estadoFilter === 'cancelada') {
+    return tasks.filter((task) => task.estado === estadoFilter);
+  }
+  return tasks.filter((task) => !isPanelTaskHidden(task.estado));
+}
+
+export function filterPanelPhases(phases = []) {
+  return phases.filter((phase) => !isPanelPhaseComplete(phase.estado));
+}
+
+export function filterPanelSubphases(subphases = [], faseId = '') {
+  return subphases.filter((subphase) => {
+    if (isPanelPhaseComplete(subphase.estado)) return false;
+    if (faseId && subphase.fase_id !== faseId) return false;
+    return true;
+  });
+}
+
+/** Métricas del panel: tareas activas + contador de completadas (tareas, subfases y fases). */
+export function computePanelSummary(tasks = [], phases = [], subphases = []) {
+  const activeTasks = tasks.filter((task) => !isPanelTaskHidden(task.estado));
+  const metrics = computeTaskMetrics(activeTasks);
+  const completedTasks = tasks.filter((task) => task.estado === 'completada').length;
+  const completedSubphases = subphases.filter((subphase) =>
+    isPanelPhaseComplete(subphase.estado),
+  ).length;
+  const completedPhases = phases.filter((phase) => isPanelPhaseComplete(phase.estado)).length;
+
+  return {
+    ...metrics,
+    completed: completedTasks + completedSubphases + completedPhases,
+    completedTasks,
+    completedSubphases,
+    completedPhases,
+  };
 }
 
 export function isTaskOverdue(task, now = new Date()) {

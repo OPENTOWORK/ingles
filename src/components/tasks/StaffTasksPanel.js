@@ -22,7 +22,14 @@ import {
   getStaffDepartmentLabel,
   shouldShowSchemaSetupHint,
 } from '@/lib/staffTasksPermissions';
-import { formatStaffDateLabel, formatStaffDateTimeLabel } from '@/lib/staffTaskHelpers';
+import {
+  computePanelSummary,
+  filterPanelPhases,
+  filterPanelSubphases,
+  filterPanelTasks,
+  formatStaffDateLabel,
+  formatStaffDateTimeLabel,
+} from '@/lib/staffTaskHelpers';
 import StaffTaskTemplatesSection from '@/components/tasks/StaffTaskTemplatesSection';
 import StaffTaskFormModal, { ROL_OPTIONS } from '@/components/tasks/StaffTaskFormModal';
 import StaffPhaseFormModal from '@/components/tasks/StaffPhaseFormModal';
@@ -147,7 +154,6 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const [subphases, setSubphases] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [tasks, setTasks] = useState([]);
-  const [summary, setSummary] = useState({});
   const [tasksReady, setTasksReady] = useState(null);
   const [phasesReady, setPhasesReady] = useState(null);
   const [subphasesReady, setSubphasesReady] = useState(null);
@@ -246,7 +252,6 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         return;
       }
       setTasks(data.tasks || []);
-      setSummary(data.summary || {});
       if (typeof data.tablesReady === 'boolean') setTasksReady(data.tablesReady);
     } finally {
       setLoading(false);
@@ -449,10 +454,22 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     }
   };
 
-  const visibleSubphases = useMemo(() => {
-    if (!filters.faseId) return subphases;
-    return subphases.filter((s) => s.fase_id === filters.faseId);
-  }, [subphases, filters.faseId]);
+  const panelSummary = useMemo(
+    () => computePanelSummary(tasks, phases, subphases),
+    [tasks, phases, subphases],
+  );
+
+  const visiblePhases = useMemo(() => filterPanelPhases(phases), [phases]);
+
+  const visibleSubphases = useMemo(
+    () => filterPanelSubphases(subphases, filters.faseId),
+    [subphases, filters.faseId],
+  );
+
+  const visibleTasks = useMemo(
+    () => filterPanelTasks(tasks, filters.estado),
+    [tasks, filters.estado],
+  );
 
   const filterSubphases = useMemo(() => {
     if (!filters.faseId) return subphases;
@@ -544,16 +561,25 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
 
       {/* Metrics */}
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
-        <MetricCard label="Total" value={summary.total ?? 0} accent="violet" />
-        <MetricCard label="Pendientes" value={summary.pending ?? 0} accent="blue" />
-        <MetricCard label="En progreso" value={summary.inProgress ?? 0} accent="blue" />
-        <MetricCard label="En revisión" value={summary.inReview ?? 0} accent="amber" />
-        <MetricCard label="Completadas" value={summary.completed ?? 0} accent="emerald" />
-        <MetricCard label="Vencidas" value={summary.overdue ?? 0} accent="red" />
-        <MetricCard label="Bloqueadas" value={summary.blocked ?? 0} accent="red" />
+        <MetricCard label="Total" value={panelSummary.total ?? 0} accent="violet" />
+        <MetricCard label="Pendientes" value={panelSummary.pending ?? 0} accent="blue" />
+        <MetricCard label="En progreso" value={panelSummary.inProgress ?? 0} accent="blue" />
+        <MetricCard label="En revisión" value={panelSummary.inReview ?? 0} accent="amber" />
+        <MetricCard
+          label="Completadas"
+          value={panelSummary.completed ?? 0}
+          hint={
+            panelSummary.completedSubphases || panelSummary.completedPhases
+              ? `${panelSummary.completedTasks ?? 0} tareas · ${panelSummary.completedSubphases ?? 0} subfases · ${panelSummary.completedPhases ?? 0} fases`
+              : null
+          }
+          accent="emerald"
+        />
+        <MetricCard label="Vencidas" value={panelSummary.overdue ?? 0} accent="red" />
+        <MetricCard label="Bloqueadas" value={panelSummary.blocked ?? 0} accent="red" />
         <MetricCard
           label="% cumplimiento"
-          value={`${summary.compliancePct ?? 0}%`}
+          value={`${panelSummary.compliancePct ?? 0}%`}
           hint="Completadas a tiempo"
           accent="emerald"
         />
@@ -574,9 +600,13 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         ) : null}
         {phasesLoading ? (
           <p className="text-sm text-gray-500">Cargando fases…</p>
-        ) : phases.length === 0 ? (
+        ) : visiblePhases.length === 0 ? (
           <div className="text-center py-8 text-gray-500 text-sm">
-            <p>No hay fases definidas.</p>
+            <p>
+              {phases.length
+                ? 'No hay fases activas. Las completadas aparecen en el contador superior.'
+                : 'No hay fases definidas.'}
+            </p>
             {canManagePhases ? (
               <button
                 type="button"
@@ -589,7 +619,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           </div>
         ) : (
           <div className="flex gap-4 overflow-x-auto pb-2">
-            {phases.map((phase) => (
+            {visiblePhases.map((phase) => (
               <div
                 key={phase.id}
                 className="min-w-[240px] max-w-[280px] flex-shrink-0 rounded-xl border border-violet-100 bg-violet-50/30 p-4"
@@ -672,7 +702,11 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           </p>
         ) : visibleSubphases.length === 0 ? (
           <div className="text-center py-8 text-gray-500 text-sm">
-            <p>No hay subfases definidas{filters.faseId ? ' en esta fase' : ''}.</p>
+            <p>
+              {subphases.length
+                ? `No hay subfases activas${filters.faseId ? ' en esta fase' : ''}. Las completadas aparecen en el contador superior.`
+                : `No hay subfases definidas${filters.faseId ? ' en esta fase' : ''}.`}
+            </p>
             {canManagePhases ? (
               <button
                 type="button"
@@ -930,10 +964,14 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                     Cargando tareas…
                   </td>
                 </tr>
-              ) : tasks.length === 0 ? (
+              ) : visibleTasks.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-5 py-12 text-center">
-                    <p className="text-gray-500">No hay tareas con estos filtros.</p>
+                    <p className="text-gray-500">
+                      {tasks.length && !filters.estado
+                        ? 'No hay tareas activas. Las completadas aparecen en el contador superior.'
+                        : 'No hay tareas con estos filtros.'}
+                    </p>
                     <button
                       type="button"
                       onClick={() => openNewTask()}
@@ -944,7 +982,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                   </td>
                 </tr>
               ) : (
-                tasks.map((task) => (
+                visibleTasks.map((task) => (
                   <tr key={task.id} className="hover:bg-violet-50/30 align-top">
                     <td className="px-5 py-4">
                       <TaskTableTitleCell task={task} onOpen={() => setDetailTask(task)} />
