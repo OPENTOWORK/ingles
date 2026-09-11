@@ -44,31 +44,139 @@ export function isPanelTaskHidden(estado = '') {
   return PANEL_HIDDEN_TASK_ESTADOS.has(estado);
 }
 
-/** Tareas visibles en el panel principal (oculta completadas/canceladas salvo filtro explícito). */
-export function filterPanelTasks(tasks = [], estadoFilter = '') {
-  if (estadoFilter === 'completada' || estadoFilter === 'cancelada') {
-    return tasks.filter((task) => task.estado === estadoFilter);
+/** Tarea completada explícitamente o heredada de una fase/subfase completada. */
+export function isTaskCompleteForPanel(task) {
+  if (!task) return false;
+  if (task.estado === 'completada') return true;
+  if (isPanelPhaseComplete(task.subfase?.estado)) return true;
+  if (isPanelPhaseComplete(task.fase?.estado)) return true;
+  return false;
+}
+
+export function isTaskVisibleInMainPanel(task) {
+  if (!task) return false;
+  if (task.estado === 'cancelada') return false;
+  return !isTaskCompleteForPanel(task);
+}
+
+function isPanelItemOverdue(item, now = new Date()) {
+  if (isPanelPhaseComplete(item?.estado)) return false;
+  if (!item?.fecha_limite) return false;
+  return new Date(item.fecha_limite) < now;
+}
+
+function phaseEstadoForTaskFilter(estadoFilter = '') {
+  if (estadoFilter === 'pendiente') return 'no_iniciada';
+  return estadoFilter;
+}
+
+function matchesPanelPhaseFilter(
+  item,
+  { estadoFilter = '', cumplimientoFilter = '', tasks = [], kind = 'phase' } = {},
+) {
+  if (cumplimientoFilter === 'a_tiempo') {
+    return isPanelPhaseComplete(item.estado);
   }
-  return tasks.filter((task) => !isPanelTaskHidden(task.estado));
+
+  if (!estadoFilter) {
+    return !isPanelPhaseComplete(item.estado);
+  }
+
+  if (estadoFilter === 'completada') {
+    return isPanelPhaseComplete(item.estado);
+  }
+
+  if (estadoFilter === 'vencida') {
+    if (isPanelItemOverdue(item)) return true;
+    const childTasks = (tasks || []).filter((task) =>
+      kind === 'subphase' ? task.subfase_id === item.id : task.fase_id === item.id,
+    );
+    return childTasks.some((task) => isTaskOverdue(task));
+  }
+
+  const mappedEstado = phaseEstadoForTaskFilter(estadoFilter);
+  if (['no_iniciada', 'en_progreso', 'en_revision', 'bloqueada'].includes(mappedEstado)) {
+    return item.estado === mappedEstado;
+  }
+
+  return !isPanelPhaseComplete(item.estado);
 }
 
-export function filterPanelPhases(phases = []) {
-  return phases.filter((phase) => !isPanelPhaseComplete(phase.estado));
+/** Tareas visibles en el panel principal (oculta completadas/canceladas salvo filtro explícito). */
+export function filterPanelTasks(tasks = [], estadoFilter = '', cumplimientoFilter = '') {
+  if (cumplimientoFilter === 'a_tiempo') {
+    return (tasks || []).filter((task) => getCumplimientoLabel(task) === 'completada_a_tiempo');
+  }
+
+  if (estadoFilter === 'vencida') {
+    return (tasks || []).filter((task) => isTaskOverdue(task));
+  }
+
+  if (estadoFilter === 'completada') {
+    return (tasks || []).filter((task) => isTaskCompleteForPanel(task));
+  }
+
+  if (estadoFilter === 'cancelada') {
+    return (tasks || []).filter((task) => task.estado === 'cancelada');
+  }
+
+  if (estadoFilter) {
+    return (tasks || []).filter(
+      (task) => task.estado === estadoFilter && isTaskVisibleInMainPanel(task),
+    );
+  }
+
+  return (tasks || []).filter((task) => isTaskVisibleInMainPanel(task));
 }
 
-export function filterPanelSubphases(subphases = [], faseId = '') {
-  return subphases.filter((subphase) => {
-    if (isPanelPhaseComplete(subphase.estado)) return false;
+export function filterPanelPhases(phases = [], estadoFilter = '', tasks = [], cumplimientoFilter = '') {
+  return (phases || []).filter((phase) =>
+    matchesPanelPhaseFilter(phase, { estadoFilter, cumplimientoFilter, tasks, kind: 'phase' }),
+  );
+}
+
+/** Items para tableros Kanban (incluye completadas; respeta filtro de estado si está activo). */
+export function filterKanbanTasks(tasks = [], estadoFilter = '') {
+  if (estadoFilter === 'vencida') {
+    return (tasks || []).filter((task) => isTaskOverdue(task));
+  }
+  if (estadoFilter === 'completada' || estadoFilter === 'cancelada') {
+    return (tasks || []).filter((task) => task.estado === estadoFilter);
+  }
+  if (estadoFilter) {
+    return (tasks || []).filter((task) => task.estado === estadoFilter);
+  }
+  return (tasks || []).filter((task) => task.estado !== 'cancelada');
+}
+
+export function filterKanbanSubphases(subphases = [], faseId = '') {
+  if (!faseId) return subphases || [];
+  return (subphases || []).filter((subphase) => subphase.fase_id === faseId);
+}
+
+export function filterPanelSubphases(
+  subphases = [],
+  faseId = '',
+  estadoFilter = '',
+  tasks = [],
+  cumplimientoFilter = '',
+) {
+  return (subphases || []).filter((subphase) => {
     if (faseId && subphase.fase_id !== faseId) return false;
-    return true;
+    return matchesPanelPhaseFilter(subphase, {
+      estadoFilter,
+      cumplimientoFilter,
+      tasks,
+      kind: 'subphase',
+    });
   });
 }
 
 /** Métricas del panel: tareas activas + contador de completadas (tareas, subfases y fases). */
 export function computePanelSummary(tasks = [], phases = [], subphases = []) {
-  const activeTasks = tasks.filter((task) => !isPanelTaskHidden(task.estado));
+  const activeTasks = tasks.filter((task) => isTaskVisibleInMainPanel(task));
   const metrics = computeTaskMetrics(activeTasks);
-  const completedTasks = tasks.filter((task) => task.estado === 'completada').length;
+  const completedTasks = tasks.filter((task) => isTaskCompleteForPanel(task)).length;
   const completedSubphases = subphases.filter((subphase) =>
     isPanelPhaseComplete(subphase.estado),
   ).length;

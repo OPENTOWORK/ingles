@@ -13,6 +13,12 @@ describe('staff task panel summary', () => {
       { id: '1', estado: 'pendiente' },
       { id: '2', estado: 'completada' },
       { id: '3', estado: 'cancelada' },
+      {
+        id: '4',
+        estado: 'pendiente',
+        subfase: { estado: 'completada' },
+        fase: { estado: 'en_progreso' },
+      },
     ];
     const phases = [{ id: 'f1', estado: 'completada' }, { id: 'f2', estado: 'en_progreso' }];
     const subphases = [
@@ -21,6 +27,7 @@ describe('staff task panel summary', () => {
     ];
 
     assert.equal(filterPanelTasks(tasks).length, 1);
+    assert.deepEqual(filterPanelTasks(tasks, 'completada').map((task) => task.id), ['2', '4']);
     assert.equal(filterPanelPhases(phases).length, 1);
     assert.equal(filterPanelSubphases(subphases).length, 1);
   });
@@ -42,8 +49,92 @@ describe('staff task panel summary', () => {
 
     assert.equal(summary.total, 2);
     assert.equal(summary.completedTasks, 1);
+
+    const inheritedSummary = computePanelSummary(
+      [
+        { id: '1', estado: 'pendiente', subfase: { estado: 'completada' } },
+        { id: '2', estado: 'en_progreso', subfase: { estado: 'completada' } },
+      ],
+      [],
+      [{ id: 's1', estado: 'completada' }],
+    );
+    assert.equal(inheritedSummary.total, 0);
+    assert.equal(inheritedSummary.completedTasks, 2);
+    assert.equal(inheritedSummary.completed, 3);
     assert.equal(summary.completedSubphases, 3);
     assert.equal(summary.completedPhases, 1);
     assert.equal(summary.completed, 5);
+  });
+
+  it('shows completed phases when the completada metric filter is active', () => {
+    const phases = [
+      { id: 'f1', estado: 'completada' },
+      { id: 'f2', estado: 'en_progreso' },
+    ];
+    assert.equal(filterPanelPhases(phases).length, 1);
+    assert.equal(filterPanelPhases(phases, 'completada').length, 1);
+    assert.deepEqual(
+      filterPanelPhases(phases, 'completada').map((phase) => phase.id),
+      ['f1'],
+    );
+  });
+
+  it('maps pendiente tasks to no_iniciada phases and subphases', () => {
+    const phases = [
+      { id: 'f1', estado: 'no_iniciada' },
+      { id: 'f2', estado: 'en_progreso' },
+    ];
+    const subphases = [
+      { id: 's1', fase_id: 'f1', estado: 'no_iniciada' },
+      { id: 's2', fase_id: 'f2', estado: 'en_progreso' },
+    ];
+    assert.deepEqual(
+      filterPanelPhases(phases, 'pendiente').map((phase) => phase.id),
+      ['f1'],
+    );
+    assert.deepEqual(
+      filterPanelSubphases(subphases, '', 'pendiente').map((subphase) => subphase.id),
+      ['s1'],
+    );
+  });
+
+  it('filters overdue tasks and phases with overdue children', () => {
+    const past = new Date(Date.now() - 86400000).toISOString();
+    const tasks = [
+      { id: 't1', estado: 'pendiente', fecha_limite: past, fase_id: 'f2' },
+      { id: 't2', estado: 'completada', fecha_limite: past, fase_id: 'f1' },
+    ];
+    const phases = [
+      { id: 'f1', estado: 'en_progreso', fecha_limite: past },
+      { id: 'f2', estado: 'en_progreso' },
+    ];
+
+    assert.deepEqual(filterPanelTasks(tasks, 'vencida').map((task) => task.id), ['t1']);
+    assert.deepEqual(
+      filterPanelPhases(phases, 'vencida', tasks).map((phase) => phase.id).sort(),
+      ['f1', 'f2'],
+    );
+  });
+
+  it('filters tasks completed on time for the compliance metric', () => {
+    const tasks = [
+      {
+        id: 't1',
+        estado: 'completada',
+        fecha_limite: '2026-12-01T00:00:00.000Z',
+        completada_at: '2026-11-20T00:00:00.000Z',
+      },
+      {
+        id: 't2',
+        estado: 'completada',
+        fecha_limite: '2026-11-01T00:00:00.000Z',
+        completada_at: '2026-11-20T00:00:00.000Z',
+      },
+    ];
+
+    assert.deepEqual(
+      filterPanelTasks(tasks, 'completada', 'a_tiempo').map((task) => task.id),
+      ['t1'],
+    );
   });
 });
