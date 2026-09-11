@@ -32,17 +32,16 @@ const ALLOWED_BLOG_CLASSES = new Set([
 
 const BLOG_CALLOUT_MASCOT_SRC = '/mascot/6.png';
 
-function calloutMediaHtml() {
-  return `<div class="blog-callout__media"><img class="blog-callout__mascot" src="${BLOG_CALLOUT_MASCOT_SRC}" alt="" /></div>`;
-}
-
 function wrapCalloutInner(inner) {
-  return `${calloutMediaHtml()}<div class="blog-callout__content">${inner}</div>`;
+  const cleaned = String(inner || '')
+    .replace(/<p class="blog-callout__kicker">[\s\S]*?<\/p>/gi, '')
+    .trim();
+  return `<div class="blog-callout__content">${cleaned}</div>`;
 }
 
 /** HTML de caja destacada Dralo para insertar desde el editor. */
 export const BLOG_CALLOUT_TEMPLATE = `<div class="blog-callout">${wrapCalloutInner(
-  '<p class="blog-callout__kicker">Destacado</p><p>Escribe aquí el contenido destacado.</p>',
+  '<p>Escribe aquí el contenido destacado.</p>',
 )}</div>`;
 
 function sanitizeInlineStyle(styleValue = '') {
