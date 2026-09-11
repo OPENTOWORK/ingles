@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
+  buildPanelLookupMaps,
   computePanelSummary,
   filterPanelPhases,
   filterPanelSubphases,
@@ -16,18 +17,25 @@ describe('staff task panel summary', () => {
       {
         id: '4',
         estado: 'pendiente',
-        subfase: { estado: 'completada' },
-        fase: { estado: 'en_progreso' },
+        subfase_id: 's1',
+        fase_id: 'f2',
       },
     ];
+    const { phasesById, subphasesById } = buildPanelLookupMaps(
+      [{ id: 'f2', estado: 'en_progreso' }],
+      [{ id: 's1', fase_id: 'f2', estado: 'completada' }],
+    );
     const phases = [{ id: 'f1', estado: 'completada' }, { id: 'f2', estado: 'en_progreso' }];
     const subphases = [
       { id: 's1', fase_id: 'f2', estado: 'completada' },
       { id: 's2', fase_id: 'f2', estado: 'no_iniciada' },
     ];
 
-    assert.equal(filterPanelTasks(tasks).length, 1);
-    assert.deepEqual(filterPanelTasks(tasks, 'completada').map((task) => task.id), ['2', '4']);
+    assert.equal(filterPanelTasks(tasks, '', '', phasesById, subphasesById).length, 1);
+    assert.deepEqual(
+      filterPanelTasks(tasks, 'completada', '', phasesById, subphasesById).map((task) => task.id),
+      ['2', '4'],
+    );
     assert.equal(filterPanelPhases(phases).length, 1);
     assert.equal(filterPanelSubphases(subphases).length, 1);
   });
@@ -52,8 +60,8 @@ describe('staff task panel summary', () => {
 
     const inheritedSummary = computePanelSummary(
       [
-        { id: '1', estado: 'pendiente', subfase: { estado: 'completada' } },
-        { id: '2', estado: 'en_progreso', subfase: { estado: 'completada' } },
+        { id: '1', estado: 'pendiente', subfase_id: 's1' },
+        { id: '2', estado: 'en_progreso', subfase_id: 's1' },
       ],
       [],
       [{ id: 's1', estado: 'completada' }],
@@ -98,6 +106,56 @@ describe('staff task panel summary', () => {
     );
   });
 
+  it('hides overdue tasks that belong to completed subphases from the vencida filter', () => {
+    const past = new Date(Date.now() - 86400000).toISOString();
+    const { phasesById, subphasesById } = buildPanelLookupMaps(
+      [],
+      [{ id: 's1', estado: 'en_progreso' }],
+    );
+    const tasks = [
+      {
+        id: 't1',
+        estado: 'pendiente',
+        fecha_limite: past,
+        subfase_id: 's1',
+        subfase: { id: 's1', estado: 'completada' },
+      },
+      {
+        id: 't2',
+        estado: 'pendiente',
+        fecha_limite: past,
+        subfase_id: 's2',
+        subfase: { id: 's2', estado: 'en_progreso' },
+      },
+    ];
+
+    assert.deepEqual(
+      filterPanelTasks(tasks, 'vencida', '', phasesById, subphasesById).map((task) => task.id),
+      ['t2'],
+    );
+    assert.equal(filterPanelTasks(tasks, '', '', phasesById, subphasesById).length, 1);
+  });
+
+  it('prefers nested task relations over stale panel lookup maps', () => {
+    const { phasesById, subphasesById } = buildPanelLookupMaps(
+      [{ id: 'f1', estado: 'en_progreso' }],
+      [{ id: 's1', fase_id: 'f1', estado: 'en_progreso' }],
+    );
+    const tasks = [
+      {
+        id: 't1',
+        estado: 'pendiente',
+        fase_id: 'f1',
+        subfase_id: 's1',
+        fase: { id: 'f1', estado: 'completada' },
+        subfase: { id: 's1', estado: 'completada' },
+      },
+    ];
+
+    assert.equal(filterPanelTasks(tasks, '', '', phasesById, subphasesById).length, 0);
+    assert.equal(computePanelSummary(tasks, [], []).completedTasks, 1);
+  });
+
   it('filters overdue tasks and phases with overdue children', () => {
     const past = new Date(Date.now() - 86400000).toISOString();
     const tasks = [
@@ -109,7 +167,11 @@ describe('staff task panel summary', () => {
       { id: 'f2', estado: 'en_progreso' },
     ];
 
-    assert.deepEqual(filterPanelTasks(tasks, 'vencida').map((task) => task.id), ['t1']);
+    const { phasesById, subphasesById } = buildPanelLookupMaps(phases, []);
+    assert.deepEqual(
+      filterPanelTasks(tasks, 'vencida', '', phasesById, subphasesById).map((task) => task.id),
+      ['t1'],
+    );
     assert.deepEqual(
       filterPanelPhases(phases, 'vencida', tasks).map((phase) => phase.id).sort(),
       ['f1', 'f2'],

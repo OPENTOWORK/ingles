@@ -1,0 +1,294 @@
+{
+  "source": "Manual extension for RUOE batch 2 (exams 11-16). Base bank is regenerated from the xlsx by b2-extract-topic-bank.mjs, so new domains live here instead.",
+  "rationale": "The base Topic Bank holds 50 topics, 27 of them inside the saturated domains (technology, travel, health, sustainability, work). It has no history, geography, media, literature, consumption or public-life entries, so cumulative thematic variety could not be improved by reordering alone.",
+  "topics": [
+    {
+      "topicId": "TB-051",
+      "mainTopic": "Art & Culture",
+      "subtopic1": "Museums",
+      "subtopic2": "Access",
+      "exampleContext": "How a small museum changed who comes through its door",
+      "combinationKey": "Museums + Access",
+      "themeBucket": "art-culture"
+    },
+    {
+      "topicId": "TB-052",
+      "mainTopic": "Art & Culture",
+      "subtopic1": "Crafts",
+      "subtopic2": "Tradition",
+      "exampleContext": "A craft that survived because one person kept teaching it",
+      "combinationKey": "Crafts + Tradition",
+      "themeBucket": "art-culture"
+    },
+    {
+      "topicId": "TB-053",
+      "mainTopic": "Art & Culture",
+      "subtopic1": "Street Art",
+      "subtopic2": "Cities",
+      "exampleContext": "Why a city began commissioning the murals it used to remove",
+      "combinationKey": "Street Art + Cities",
+      "themeBucket": "art-culture"
+    },
+    {
+      "topicId": "TB-054",
+      "mainTopic": "Art & Culture",
+      "subtopic1": "Theatre",
+      "subtopic2": "Community",
+      "exampleContext": "A theatre run by the town that actually uses it",
+      "combinationKey": "Theatre + Community",
+      "themeBucket": "art-culture"
+    },
+    {
+      "topicId": "TB-055",
+      "mainTopic": "History",
+      "subtopic1": "Everyday Objects",
+      "subtopic2": "Origins",
+      "exampleContext": "Where an ordinary household object actually came from",
+      "combinationKey": "Everyday Objects + Origins",
+      "themeBucket": "history"
+    },
+    {
+      "topicId": "TB-056",
+      "mainTopic": "History",
+      "subtopic1": "Streets",
+      "subtopic2": "Change",
+      "exampleContext": "What one street looked like a century before anyone photographed it",
+      "combinationKey": "Streets + Change",
+      "themeBucket": "history"
+    },
+    {
+      "topicId": "TB-057",
+      "mainTopic": "History",
+      "subtopic1": "Trade Routes",
+      "subtopic2": "Decline",
+      "exampleContext": "An old trade route and the thing that replaced it",
+      "combinationKey": "Trade Routes + Decline",
+      "themeBucket": "history"
+    },
+    {
+      "topicId": "TB-058",
+      "mainTopic": "Science",
+      "subtopic1": "Materials",
+      "subtopic2": "Discovery",
+      "exampleContext": "A material found by accident and used ever since",
+      "combinationKey": "Materials + Discovery",
+      "themeBucket": "science"
+    },
+    {
+      "topicId": "TB-059",
+      "mainTopic": "Science",
+      "subtopic1": "Measurement",
+      "subtopic2": "Standards",
+      "exampleContext": "How people ever agreed on what counts as one metre",
+      "combinationKey": "Measurement + Standards",
+      "themeBucket": "science"
+    },
+    {
+      "topicId": "TB-060",
+      "mainTopic": "Science",
+      "subtopic1": "Weather",
+      "subtopic2": "Prediction",
+      "exampleContext": "Why forecasting one particular storm is still hard",
+      "combinationKey": "Weather + Prediction",
+      "themeBucket": "science"
+    },
+    {
+      "topicId": "TB-061",
+      "mainTopic": "Media",
+      "subtopic1": "Photography",
+      "subtopic2": "Evidence",
+      "exampleContext": "What a well-known photograph leaves outside the frame",
+      "combinationKey": "Photography + Evidence",
+      "themeBucket": "media"
+    },
+    {
+      "topicId": "TB-062",
+      "mainTopic": "Media",
+      "subtopic1": "Radio",
+      "subtopic2": "Local News",
+      "exampleContext": "A local station that outlived the local paper",
+      "combinationKey": "Radio + Local News",
+      "themeBucket": "media"
+    },
+    {
+      "topicId": "TB-063",
+      "mainTopic": "Media",
+      "subtopic1": "Archives",
+      "subtopic2": "Preservation",
+      "exampleContext": "Saving recordings nobody thought worth keeping",
+      "combinationKey": "Archives + Preservation",
+      "themeBucket": "media"
+    },
+    {
+      "topicId": "TB-064",
+      "mainTopic": "Geography",
+      "subtopic1": "Rivers",
+      "subtopic2": "Settlement",
+      "exampleContext": "Why towns grew where two rivers meet",
+      "combinationKey": "Rivers + Settlement",
+      "themeBucket": "geography"
+    },
+    {
+      "topicId": "TB-065",
+      "mainTopic": "Geography",
+      "subtopic1": "Islands",
+      "subtopic2": "Isolation",
+      "exampleContext": "A community whose week is set by the ferry timetable",
+      "combinationKey": "Islands + Isolation",
+      "themeBucket": "geography"
+    },
+    {
+      "topicId": "TB-066",
+      "mainTopic": "Geography",
+      "subtopic1": "Maps",
+      "subtopic2": "Borders",
+      "exampleContext": "How one border came to be drawn where it is",
+      "combinationKey": "Maps + Borders",
+      "themeBucket": "geography"
+    },
+    {
+      "topicId": "TB-067",
+      "mainTopic": "Nature",
+      "subtopic1": "Trees",
+      "subtopic2": "Streets",
+      "exampleContext": "The trees that manage to survive on a busy street",
+      "combinationKey": "Trees + Streets",
+      "themeBucket": "nature"
+    },
+    {
+      "topicId": "TB-068",
+      "mainTopic": "Nature",
+      "subtopic1": "Birds",
+      "subtopic2": "Seasons",
+      "exampleContext": "Birds that changed when they leave and when they return",
+      "combinationKey": "Birds + Seasons",
+      "themeBucket": "nature"
+    },
+    {
+      "topicId": "TB-069",
+      "mainTopic": "Nature",
+      "subtopic1": "Soil",
+      "subtopic2": "Growing",
+      "exampleContext": "Why the ground under a field decides what grows on it",
+      "combinationKey": "Soil + Growing",
+      "themeBucket": "nature"
+    },
+    {
+      "topicId": "TB-070",
+      "mainTopic": "Consumption",
+      "subtopic1": "Repair",
+      "subtopic2": "Ownership",
+      "exampleContext": "Choosing to mend something rather than replace it",
+      "combinationKey": "Repair + Ownership",
+      "themeBucket": "consumption"
+    },
+    {
+      "topicId": "TB-071",
+      "mainTopic": "Consumption",
+      "subtopic1": "Markets",
+      "subtopic2": "Prices",
+      "exampleContext": "Why the same item costs different amounts on the same street",
+      "combinationKey": "Markets + Prices",
+      "themeBucket": "consumption"
+    },
+    {
+      "topicId": "TB-072",
+      "mainTopic": "Consumption",
+      "subtopic1": "Packaging",
+      "subtopic2": "Habits",
+      "exampleContext": "What shoppers actually notice about packaging",
+      "combinationKey": "Packaging + Habits",
+      "themeBucket": "consumption"
+    },
+    {
+      "topicId": "TB-073",
+      "mainTopic": "Public Life",
+      "subtopic1": "Libraries",
+      "subtopic2": "Community",
+      "exampleContext": "Everything a library does besides lend books",
+      "combinationKey": "Libraries + Community",
+      "themeBucket": "public-life"
+    },
+    {
+      "topicId": "TB-074",
+      "mainTopic": "Public Life",
+      "subtopic1": "Volunteers",
+      "subtopic2": "Local Services",
+      "exampleContext": "The local services that only run because volunteers turn up",
+      "combinationKey": "Volunteers + Local Services",
+      "themeBucket": "public-life"
+    },
+    {
+      "topicId": "TB-075",
+      "mainTopic": "Public Life",
+      "subtopic1": "Shared Spaces",
+      "subtopic2": "Rules",
+      "exampleContext": "Who decides how a shared square gets used",
+      "combinationKey": "Shared Spaces + Rules",
+      "themeBucket": "public-life"
+    },
+    {
+      "topicId": "TB-076",
+      "mainTopic": "Professions",
+      "subtopic1": "Trades",
+      "subtopic2": "Apprenticeship",
+      "exampleContext": "Learning a trade by standing next to someone who has it",
+      "combinationKey": "Trades + Apprenticeship",
+      "themeBucket": "professions"
+    },
+    {
+      "topicId": "TB-077",
+      "mainTopic": "Professions",
+      "subtopic1": "Emergency Work",
+      "subtopic2": "Judgement",
+      "exampleContext": "Deciding quickly with information that is never complete",
+      "combinationKey": "Emergency Work + Judgement",
+      "themeBucket": "professions"
+    },
+    {
+      "topicId": "TB-078",
+      "mainTopic": "Literature",
+      "subtopic1": "Translation",
+      "subtopic2": "Meaning",
+      "exampleContext": "What disappears when a novel crosses into another language",
+      "combinationKey": "Translation + Meaning",
+      "themeBucket": "literature"
+    },
+    {
+      "topicId": "TB-079",
+      "mainTopic": "Literature",
+      "subtopic1": "Poetry",
+      "subtopic2": "Performance",
+      "exampleContext": "Poems written to be heard rather than read",
+      "combinationKey": "Poetry + Performance",
+      "themeBucket": "literature"
+    },
+    {
+      "topicId": "TB-080",
+      "mainTopic": "Social Change",
+      "subtopic1": "Generations",
+      "subtopic2": "Housing",
+      "exampleContext": "Why people now leave the family home later than their parents did",
+      "combinationKey": "Generations + Housing",
+      "themeBucket": "social-change"
+    },
+    {
+      "topicId": "TB-081",
+      "mainTopic": "Social Change",
+      "subtopic1": "Language",
+      "subtopic2": "Generations",
+      "exampleContext": "Words that changed meaning within one generation",
+      "combinationKey": "Language + Generations",
+      "themeBucket": "social-change"
+    },
+    {
+      "topicId": "TB-082",
+      "mainTopic": "Social Change",
+      "subtopic1": "Neighbourhoods",
+      "subtopic2": "Belonging",
+      "exampleContext": "What makes newcomers feel part of a neighbourhood",
+      "combinationKey": "Neighbourhoods + Belonging",
+      "themeBucket": "social-change"
+    }
+  ]
+}

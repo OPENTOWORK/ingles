@@ -8,9 +8,42 @@ Return ONLY valid JSON (no markdown). All student-facing task text in English.
 Include EVERY field requested. Generate a COMPLETE exam part (not a single sample item).
 `;
 
+/**
+ * Discourse shapes rotated per generation. Left to itself the model writes every text as the
+ * same expository chain (current situation → change → pros and cons → expert opinion), which
+ * made the published exams read alike however different their topics were.
+ */
+export const RUOE_DISCOURSE_PATTERNS = [
+  'Narrative — one episode told in chronological order, ending in a changed judgement. Do not survey advantages and disadvantages.',
+  'Process explanation — how something actually works, step by step, without weighing benefits against drawbacks.',
+  'Counter-intuitive finding — the outcome everyone expects, then the real one, then the mechanism that explains it.',
+  'Portrait — a person, place or trade rendered through concrete observed detail rather than general commentary.',
+  'Historical account — how a practice began, what changed it, and what survives today.',
+  'Appraisal — a work, place, object or method judged against criteria the writer makes explicit.',
+  'Problem-solving account — a constraint, the attempts that failed, and what finally worked.',
+  'Paired comparison — two contrasting cases set side by side, with the difference explained.',
+  'First-person reflection — a common assumption tested against the writer’s own experience.',
+];
+
+/** Domains already saturated across the published exams; texts must not default to them. */
+const SATURATED_THEME_FRAMINGS = 'technology, travel, health and wellbeing, sustainability, work and career';
+/** Domains the exam bank still under-covers and should move towards. */
+const UNDERUSED_THEME_FRAMINGS =
+  'art and culture, history, science, media, geography, nature, consumption, public life, professions, literature, social change';
+
+export function pickRuoeDiscoursePattern(varietySeed) {
+  const seed = Number(varietySeed);
+  const safe = Number.isFinite(seed) ? Math.abs(Math.trunc(seed)) : 0;
+  return RUOE_DISCOURSE_PATTERNS[safe % RUOE_DISCOURSE_PATTERNS.length];
+}
+
+function resolveVarietySeed(options) {
+  return options.varietySeed ?? Date.now();
+}
+
 function varietyBlock(options) {
   const topic = options.topic || 'general everyday life';
-  const seed = options.varietySeed ?? Date.now();
+  const seed = resolveVarietySeed(options);
   const avoid = Array.isArray(options.recentFingerprints)
     ? options.recentFingerprints.filter(Boolean).slice(0, 8)
     : [];
@@ -19,6 +52,19 @@ function varietyBlock(options) {
       ? `\nDo NOT repeat or closely imitate:\n${avoid.map((f) => `- ${f}`).join('\n')}`
       : '';
   return `Topic/theme: ${topic}. Variety seed: ${seed}. Create completely NEW content.${avoidBlock}`;
+}
+
+/**
+ * Added only to the parts that carry a passage (1, 2, 3, 5, 6, 7). Key word transformations have
+ * no text, and Listening/Writing tasks have their own shape, so a mandated discourse pattern
+ * would be meaningless there.
+ */
+function passageDiscourseBlock(options) {
+  return `DISCOURSE AND THEME VARIETY (v1.2 — applies to the passage):
+- Discourse pattern (MANDATORY): ${pickRuoeDiscoursePattern(resolveVarietySeed(options))}
+- FORBIDDEN discourse shape: the generic chain "current situation → recent change → advantages and disadvantages → expert opinion". Do not fall back on it for any topic.
+- Thematic framing: across the exam bank as a whole, ${SATURATED_THEME_FRAMINGS} are already saturated. Unless the assigned topic genuinely requires one of those angles, approach it through ${UNDERUSED_THEME_FRAMINGS}.
+- Do not open the text with a general statement about how something "has become increasingly popular in recent years".`;
 }
 
 /**
@@ -79,6 +125,7 @@ export function buildExamGeneratePrompt(mode, activity, level, options = {}) {
   if (L === 'B2' && mode === 'listening' && partNumber === 12 && activity === 'multiple-matching') n = 5;
   const directions = getExamDirections(mode, activity);
   const variety = varietyBlock(options);
+  const discourse = passageDiscourseBlock(options);
 
   if (mode === 'use-of-english') {
     if (activity === 'key-word' && L === 'B2') {
@@ -188,6 +235,15 @@ Include a balanced mix such as: passive voice; reported speech; conditionals; wi
 - Do not repeat the same keyword across the 6 scored items.
 - Do not create all 6 items from the same grammar area.
 - Do not use C1/C2 obscure structures or B1-trivial items.
+- v1.2: Do not build the set from mechanical, drill-like frames. An item whose answer is reached by slotting the keyword into a memorised template, with no real reading of sentence 1, is too mechanical — rewrite it so the candidate must reconstruct the meaning.
+
+PRE-RETURN CHECKLIST (v1.2 — run on EVERY scored item before returning JSON):
+For each of Q25–30, verify in order and fix or replace the item if any check fails:
+1. MEANING IDENTITY: sentence 1 and the completed sentence 2 must mean exactly the same thing. Reject any answer that is grammatically possible but shifts meaning even slightly — changes of certainty (must/might), of time reference, of scope (all/most), of agency, of politeness, or of degree (quite/very) all count as failures, not as acceptable near-misses.
+2. KEYWORD INTEGRITY: the keyword appears in the answer in exactly the given form — not pluralised, not conjugated, not derived, not split, not omitted.
+3. WORD COUNT: the answer is 2–5 Cambridge words including the keyword (don't / didn't = TWO words; can't / cannot = ONE).
+4. UNIQUENESS: there is exactly ONE defensible completion. Write out the strongest rival completion a competent B2 candidate might produce and confirm it is blocked by grammar, by the keyword, or by the fixed wording of sentence 2. If it is not blocked, redesign the item.
+5. GAP FIT: the completed sentence 2 reads as natural British English with no leftover or duplicated words around the gap.
 
 FORBIDDEN:
 - more or fewer than 6 scored questions
@@ -198,6 +254,8 @@ FORBIDDEN:
 - keyword changed, split, or omitted
 - two equally valid different transformation routes in fullAnswers
 - target_structure or marking labels that contradict the canonical answer
+- an answer that is grammatically possible but changes the meaning of sentence 1
+- mechanical template items solvable without reading sentence 1
 
 Each modelAnswers entry: {id, number:25–30, answer:"2–5 word primary answer"} matching the question answer.
 Generate exactly 6 questions numbered 25–30.
@@ -233,6 +291,7 @@ Return ONLY JSON with: partTitle, directions, example {number:0, sentence1, keyw
       return `Create ONE complete B2 Reading and Use of English Part 1: multiple-choice cloze (Q1–8).
 The task should match official B2 First style, difficulty and item design.
 ${variety}
+${discourse}
 ${SHARED_JSON_RULES}
 ${directions}
 
@@ -258,11 +317,14 @@ QUESTION DESIGN:
 - Each gap must require the surrounding sentence and wider context.
 - A gap must NEVER be solvable by grammar alone: all four options must fit grammatically.
 - The correct choice is decided by meaning, collocation, dependent preposition, word partnership or lexical precision.
+- v1.2: A gap must NEVER be solvable from the option list alone. If a candidate who has not read the text could pick the answer because one pairing is a textbook collocation ("heavy rain", "make a decision", "take part"), the item is too obvious — replace it.
 
 OPTIONS RULES (CRITICAL):
 - Exactly 4 options per question: "A) word", "B) word", "C) word", "D) word".
 - Each option is ONE word only. No phrases, no multi-word options.
 - Exactly ONE correct answer per item. The three distractors must be plausible same-class words that fail on collocation, dependent preposition, precise meaning or word partnership — never absurd or obviously wrong.
+- v1.2 DISTRACTOR STANDARD: every distractor must be plausible BOTH grammatically AND semantically — it must make sense as an idea in that sentence, and fail only because it is not the natural combination in this context. Options that are semantically impossible ("the rain *decided* heavily") are wasted and must be replaced.
+- v1.2: Exactly one option may be the natural combination, and that superiority must be clear once the context is read. If a competent B2 candidate could defend a second option, redesign the item (HARD FAIL).
 - Adversarially test all four options before finalising. If two options are defensible in context, redesign the item (v1.1 HARD FAIL).
 - Spread the correct letters across A, B, C and D — no letter may be correct more than 3 times across Q1–8.
 
@@ -273,26 +335,32 @@ EXAMPLE RULES (CRITICAL):
 - example.number must be 0.
 
 ITEM VARIETY (CRITICAL — the part must test a MIX of lexical knowledge):
-- collocations
-- fixed expressions
-- dependent prepositions
-- close-meaning verbs
-- close-meaning nouns
+The 8 scored items must be spread across these knowledge types:
+- collocations and word partnerships
+- fixed expressions and idiomatic chunks
 - phrasal verbs
-- adjectives
-- adverbs
-- Do NOT make all 8 items verb-based.
-- Include at least 2 items whose options are nouns, adjectives or adverbs.
-- Include at least 1 item decided by a dependent preposition or fixed expression.
+- dependent prepositions
+- lexical association (which word belongs with this subject matter)
+- subtle semantic difference between near-synonyms
+- word class variety: verbs, nouns, adjectives, adverbs
+
+v1.2 DISTRIBUTION QUOTAS (count them before returning JSON):
+- Cover at least 5 of the knowledge types listed above.
+- At most 3 of the 8 items may have verb options. Isolated-verb items must not dominate the part.
+- At least 2 items must have noun options, and at least 2 must have adjective or adverb options.
+- At least 1 item must be decided by a dependent preposition, and at least 1 by a fixed expression or phrasal verb.
+- At least 2 items must turn on a subtle semantic difference between near-synonyms rather than on a fixed pairing.
+- No knowledge type may account for more than 3 of the 8 items.
 - Avoid repeating the same lexical pattern, word family or collocation type excessively.
 
 FORBIDDEN:
 - creating 9 scored questions or gaps beyond (8)
 - passage longer than 180 words or shorter than 150 words
-- all 8 items testing verbs
+- more than 3 items testing verbs, or all 8 items testing verbs
+- a part built mainly from high-frequency textbook collocations
 - options with more than one word
 - items where two options are both defensible
-- distractors that are obviously wrong
+- distractors that are obviously wrong, or that make no sense as an idea in the sentence
 - C1/C2 obscure vocabulary, or B1-trivial gaps
 - testing the same word family or the same collocation type twice without clear justification
 
@@ -305,6 +373,7 @@ ${baseExamSchema(directions, `,"title":"short text title","passage":"full 150–
       return `Create ONE complete B2 Reading and Use of English Part 2: Open cloze (Q9–16).
 The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
+${discourse}
 ${SHARED_JSON_RULES}
 ${directions}
 
@@ -384,6 +453,7 @@ Return ONLY JSON with: partTitle, directions, example {number:0, answer:"one wor
       return `Create ONE complete B2 Reading and Use of English Part 3: Word formation (Q17–24).
 The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
+${discourse}
 ${SHARED_JSON_RULES}
 ${directions}
 
@@ -410,18 +480,26 @@ GAP DESIGN (CRITICAL):
 - The candidate must transform the base word into ONE correctly formed word that fits grammatically and semantically.
 - Require genuine understanding of word formation, not only mechanical suffix addition.
 - Exactly ONE defensible derived answer per gap.
-- Across the 8 scored items include a balanced MIX of transformations:
+- Across the 8 scored items include a balanced MIX of derivational transformations:
   - noun → adjective
   - adjective → noun
   - adjective → adverb
   - verb → noun
   - verb → adjective
   - noun → verb
-  - singular/plural where appropriate
-  - positive/negative forms
-  - prefix changes
+  - negative and privative forms (un-, in-, im-, dis-, mis-, -less)
+  - other prefix changes
   - suffix changes
   - combined prefix + suffix changes
+
+DERIVATION STANDARD (v1.2 — CRITICAL):
+- Every scored answer must require knowledge of WORD FORMATION, not mere recognition of a grammatical form.
+- **HARD RULE:** an answer whose only difference from the stem is number (plural -s/-es) or a bare inflection (-s, -ed, -ing as simple verb agreement/tense) is FORBIDDEN. Pluralising the stem is not word formation.
+- If a derived form legitimately needs a plural (e.g. stem DIFFER → "differences"), the item is only acceptable because a real derivational suffix is also applied; a plural on its own never is.
+- At least 2 of the 8 answers must be LESS TRANSPARENT derivatives — where the stem changes shape or stress, or the suffix is not the first one a candidate would try (e.g. LONG → length, DECIDE → decisive, ANXIOUS → anxiety) — while staying inside B2 range.
+- At least 1 answer must use a negative or privative prefix/suffix.
+- At least 3 answers must change word class relative to the stem.
+- No single transformation type may account for more than 3 of the 8 items.
 
 ITEM VARIETY (CRITICAL):
 - Include a genuine mix of: prefixes; suffixes; changes of word class; positive and negative forms; abstract nouns; adjectives; adverbs; verbs.
@@ -450,6 +528,8 @@ FORBIDDEN:
 - two equally valid derived answers
 - passage shorter than 150 or longer than 180 words
 - any scored answer identical to its stem (case-insensitive)
+- any scored answer that differs from its stem only by a plural or a bare inflection
+- a part where most answers are the single most predictable suffix on the stem
 
 Each questions entry: {id:"q1"–"q8", number:17–24, type:"word-formation", stem:"CAPITALS"}.
 Each modelAnswers entry MUST be an object: {id:"q1"–"q8", number:17–24, answer:"one derived word"} — never a bare string array.
@@ -481,6 +561,7 @@ ${baseExamSchema(directions, `,"title":"short text title","passage":"full text w
       return `Create ONE complete B2 Reading Part 5: Multiple choice (Q31–36).
 The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
+${discourse}
 ${SHARED_JSON_RULES}
 ${directions}
 
@@ -507,16 +588,25 @@ QUESTION DESIGN (CRITICAL):
 - Assess understanding of ideas rather than simple word matching.
 - Require the surrounding paragraph and wider context; avoid being answerable by locating a single sentence.
 - Use natural Cambridge-style stems (field "prompt" or "question").
-- Across the 6 questions include a balanced MIX of questionType values such as:
-  - main-idea / global
+- Across the 6 questions include a balanced MIX of questionType values, drawn from:
   - detail
   - inference
-  - attitude / opinion / tone
+  - opinion
+  - attitude / tone
   - purpose
+  - contextual-meaning (what a word or phrase means as used here)
+  - text-organisation (how ideas are ordered, linked or referred back to)
+  - main-idea / global
   - reference
-  - vocabulary
+- v1.2 DISTRIBUTION (count before returning JSON):
+  - Use at least 4 DIFFERENT questionType values across the 6 questions.
+  - No questionType may appear more than twice.
+  - At most 2 questions may be plain "detail".
+  - Include at least 1 inference question and at least 1 opinion/attitude question.
+  - Include at least 1 question testing purpose, contextual meaning or text organisation.
 - Do NOT make all questions simple detail questions.
 - v1.1: Build distractors from passage information (distorted relation/scope/attitude); reject options unrelated to the text unless strategically justified.
+- v1.2 DISTRACTOR SOURCING: every distractor must be built from information genuinely present in the passage and must be plausible to a B2 candidate who has read the text. It may only fail on precise interpretation — wrong scope, wrong relation, wrong speaker, wrong paragraph, or an attitude the writer never expresses. Options that are simply false, off-topic, or eliminable without reading closely are not acceptable.
 - v1.1: Verify paragraph references ("last paragraph", etc.) and quoted evidence against the final passage before returning JSON.
 - Include at least 2 inferential/attitude/purpose/reference/global questions.
 - Avoid direct copying from the passage into stems or options.
@@ -543,6 +633,8 @@ FORBIDDEN:
 - missing options or non A–D answers
 - placeholder text
 - visible "Cambridge" in student-facing fields
+- more than 2 plain detail questions, or the same questionType used more than twice
+- distractors invented from outside the passage, or eliminable without reading it closely
 
 Each modelAnswers entry: {id, number:31–36, answer:"A"|"B"|"C"|"D"}.
 Generate exactly 6 questions numbered 31–36.
@@ -564,6 +656,7 @@ PART 6 ARCHITECTURE v2 (MANDATORY SEQUENCE):
 8. Validate: 6 gaps, 7 options, 1 unused, no duplication, no multifit.
 
 ${variety}
+${discourse}
 ${SHARED_JSON_RULES}
 ${directions}
 
@@ -640,6 +733,7 @@ Return ONLY JSON with: partTitle, directions, title, passage (500–600 words wi
       return `Create ONE complete B2 Reading and Use of English Part 7: Multiple matching (Q43–52).
 The task should match official B2 First style, difficulty, wording and item design.
 ${variety}
+${discourse}
 ${SHARED_JSON_RULES}
 ${directions}
 

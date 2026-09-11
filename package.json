@@ -58,6 +58,8 @@
     "synth:b2-exam6-audio": "node --loader ./scripts/alias-loader.mjs scripts/synth-b2-exam6-audio.mjs"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/utilities": "^3.2.2",
     "@prisma/client": "^6.16.0",
     "@stripe/react-stripe-js": "^6.6.0",
     "@stripe/stripe-js": "^9.8.0",

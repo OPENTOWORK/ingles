@@ -240,6 +240,7 @@
 
 .primaryBtn,
 .secondaryBtn,
+.scheduleBtnActive,
 .dangerBtn {
   font: inherit;
   cursor: pointer;
@@ -254,7 +255,10 @@
   border: none;
 }
 
-.primaryBtn:disabled {
+.primaryBtn:disabled,
+.secondaryBtn:disabled,
+.scheduleBtnActive:disabled,
+.dangerBtn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -263,6 +267,12 @@
   background: #f8fafc;
   border: 1px solid #cbd5e1;
   color: #334155;
+}
+
+.scheduleBtnActive {
+  background: #fff1f2;
+  border: 1px solid #f5c2cb;
+  color: #be123c;
 }
 
 .dangerBtn {

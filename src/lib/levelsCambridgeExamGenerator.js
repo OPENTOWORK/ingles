@@ -26,13 +26,24 @@ import { logExamGeneration } from '@/lib/examGenerationLog';
 import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
 import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 
+/**
+ * Fallback themes for callers that pass no topic (admin UI). Weighted towards the domains the
+ * exam bank under-covers, since the earlier list was entirely inside the saturated ones
+ * (technology, travel, health, work, sustainability).
+ */
 const EXAM_THEMES = [
-  'urban life and technology',
-  'travel and cultural exchange',
-  'health and lifestyle',
-  'work and education',
-  'environment and sustainability',
-  'entertainment and media',
+  'art, craft and cultural life',
+  'history and how practices began',
+  'science and everyday explanation',
+  'media, publishing and audiences',
+  'geography, place and landscape',
+  'nature and the living world',
+  'consumption, money and what people buy',
+  'public life and shared spaces',
+  'trades, professions and expertise',
+  'books, reading and storytelling',
+  'social change across generations',
+  'entertainment and performance',
 ];
 
 const CAMBRIDGE_EXAM_NAMES = {

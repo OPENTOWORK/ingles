@@ -4057,6 +4057,39 @@ body.nav-open {
   margin-bottom: 0;
 }
 
+.staff-tareas-page.niveles-level-page--b2.shell {
+  padding: clamp(1.25rem, 3.5vw, 2.5rem);
+}
+
+.staff-tareas-page .levels-b2-page-content {
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+}
+
+.staff-tareas-panel {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.staff-tareas-page .page-hero {
+  margin-bottom: 0;
+}
+
+.staff-tareas-page .staff-tasks-panel {
+  min-width: 0;
+}
+
+.staff-tareas-panel--loading {
+  align-items: center;
+  justify-content: center;
+  min-height: 16rem;
+}
+
 @media (max-width: 900px) {
   .staff-buzon-page .page-hero__desc {
     white-space: normal;

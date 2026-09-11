@@ -44,19 +44,42 @@ export function isPanelTaskHidden(estado = '') {
   return PANEL_HIDDEN_TASK_ESTADOS.has(estado);
 }
 
+export function buildPanelLookupMaps(phases = [], subphases = []) {
+  return {
+    phasesById: Object.fromEntries((phases || []).map((phase) => [phase.id, phase])),
+    subphasesById: Object.fromEntries((subphases || []).map((subphase) => [subphase.id, subphase])),
+  };
+}
+
+export function resolveTaskPanelContext(task, phasesById = {}, subphasesById = {}) {
+  // Prefer nested relations from the task payload (fresh from enrichTasksList) over panel
+  // lookup maps, which can lag behind after a subfase/fase is marked completada.
+  const subfase =
+    task?.subfase ||
+    (task?.subfase_id ? subphasesById[task.subfase_id] : null) ||
+    null;
+  const fase =
+    task?.fase ||
+    (task?.fase_id ? phasesById[task.fase_id] : null) ||
+    (subfase?.fase_id ? phasesById[subfase.fase_id] : null) ||
+    null;
+  return { fase, subfase };
+}
+
 /** Tarea completada explícitamente o heredada de una fase/subfase completada. */
-export function isTaskCompleteForPanel(task) {
+export function isTaskCompleteForPanel(task, phasesById = {}, subphasesById = {}) {
   if (!task) return false;
   if (task.estado === 'completada') return true;
-  if (isPanelPhaseComplete(task.subfase?.estado)) return true;
-  if (isPanelPhaseComplete(task.fase?.estado)) return true;
+  const { fase, subfase } = resolveTaskPanelContext(task, phasesById, subphasesById);
+  if (isPanelPhaseComplete(subfase?.estado)) return true;
+  if (isPanelPhaseComplete(fase?.estado)) return true;
   return false;
 }
 
-export function isTaskVisibleInMainPanel(task) {
+export function isTaskVisibleInMainPanel(task, phasesById = {}, subphasesById = {}) {
   if (!task) return false;
   if (task.estado === 'cancelada') return false;
-  return !isTaskCompleteForPanel(task);
+  return !isTaskCompleteForPanel(task, phasesById, subphasesById);
 }
 
 function isPanelItemOverdue(item, now = new Date()) {
@@ -103,17 +126,28 @@ function matchesPanelPhaseFilter(
 }
 
 /** Tareas visibles en el panel principal (oculta completadas/canceladas salvo filtro explícito). */
-export function filterPanelTasks(tasks = [], estadoFilter = '', cumplimientoFilter = '') {
+export function filterPanelTasks(
+  tasks = [],
+  estadoFilter = '',
+  cumplimientoFilter = '',
+  phasesById = {},
+  subphasesById = {},
+) {
+  const isVisible = (task) => isTaskVisibleInMainPanel(task, phasesById, subphasesById);
+  const isComplete = (task) => isTaskCompleteForPanel(task, phasesById, subphasesById);
+
   if (cumplimientoFilter === 'a_tiempo') {
-    return (tasks || []).filter((task) => getCumplimientoLabel(task) === 'completada_a_tiempo');
+    return (tasks || []).filter(
+      (task) => isComplete(task) && getCumplimientoLabel(task) === 'completada_a_tiempo',
+    );
   }
 
   if (estadoFilter === 'vencida') {
-    return (tasks || []).filter((task) => isTaskOverdue(task));
+    return (tasks || []).filter((task) => isTaskOverdue(task) && isVisible(task));
   }
 
   if (estadoFilter === 'completada') {
-    return (tasks || []).filter((task) => isTaskCompleteForPanel(task));
+    return (tasks || []).filter((task) => isComplete(task));
   }
 
   if (estadoFilter === 'cancelada') {
@@ -121,12 +155,10 @@ export function filterPanelTasks(tasks = [], estadoFilter = '', cumplimientoFilt
   }
 
   if (estadoFilter) {
-    return (tasks || []).filter(
-      (task) => task.estado === estadoFilter && isTaskVisibleInMainPanel(task),
-    );
+    return (tasks || []).filter((task) => task.estado === estadoFilter && isVisible(task));
   }
 
-  return (tasks || []).filter((task) => isTaskVisibleInMainPanel(task));
+  return (tasks || []).filter((task) => isVisible(task));
 }
 
 export function filterPanelPhases(phases = [], estadoFilter = '', tasks = [], cumplimientoFilter = '') {
@@ -149,9 +181,22 @@ export function filterKanbanTasks(tasks = [], estadoFilter = '') {
   return (tasks || []).filter((task) => task.estado !== 'cancelada');
 }
 
-export function filterKanbanSubphases(subphases = [], faseId = '') {
-  if (!faseId) return subphases || [];
-  return (subphases || []).filter((subphase) => subphase.fase_id === faseId);
+export function filterKanbanPhases(phases = [], estadoFilter = '', tasks = [], cumplimientoFilter = '') {
+  if (!estadoFilter && !cumplimientoFilter) return phases || [];
+  return filterPanelPhases(phases, estadoFilter, tasks, cumplimientoFilter);
+}
+
+export function filterKanbanSubphases(
+  subphases = [],
+  faseId = '',
+  estadoFilter = '',
+  tasks = [],
+  cumplimientoFilter = '',
+) {
+  let list = subphases || [];
+  if (faseId) list = list.filter((subphase) => subphase.fase_id === faseId);
+  if (!estadoFilter && !cumplimientoFilter) return list;
+  return filterPanelSubphases(list, '', estadoFilter, tasks, cumplimientoFilter);
 }
 
 export function filterPanelSubphases(
@@ -174,9 +219,14 @@ export function filterPanelSubphases(
 
 /** Métricas del panel: tareas activas + contador de completadas (tareas, subfases y fases). */
 export function computePanelSummary(tasks = [], phases = [], subphases = []) {
-  const activeTasks = tasks.filter((task) => isTaskVisibleInMainPanel(task));
+  const { phasesById, subphasesById } = buildPanelLookupMaps(phases, subphases);
+  const activeTasks = tasks.filter((task) =>
+    isTaskVisibleInMainPanel(task, phasesById, subphasesById),
+  );
   const metrics = computeTaskMetrics(activeTasks);
-  const completedTasks = tasks.filter((task) => isTaskCompleteForPanel(task)).length;
+  const completedTasks = tasks.filter((task) =>
+    isTaskCompleteForPanel(task, phasesById, subphasesById),
+  ).length;
   const completedSubphases = subphases.filter((subphase) =>
     isPanelPhaseComplete(subphase.estado),
   ).length;
@@ -417,8 +467,11 @@ export function validateTaskPayload(body = {}) {
 export function enrichTaskRow(task, profilesById = {}, phasesById = {}, subphasesById = {}) {
   const asignado = task.asignado_id ? profilesById[task.asignado_id] : null;
   const alumno = task.alumno_id ? profilesById[task.alumno_id] : null;
-  const fase = task.fase_id ? phasesById[task.fase_id] : null;
   const subfase = task.subfase_id ? subphasesById[task.subfase_id] : null;
+  const fase =
+    (task.fase_id ? phasesById[task.fase_id] : null) ||
+    (subfase?.fase_id ? phasesById[subfase.fase_id] : null) ||
+    null;
   const now = new Date();
 
   return {

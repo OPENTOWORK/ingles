@@ -74,23 +74,36 @@ if (!env.OPENAI_API_KEY) {
   process.exit(1);
 }
 
-/** Fresh Topic Bank entries first, then the ones the pilot briefs already used. */
+/**
+ * Base bank (regenerated from the xlsx) plus the batch-2 extension, which adds the domains the
+ * base bank lacks entirely — history, geography, media, literature, consumption, public life.
+ */
 const bank = JSON.parse(readFileSync(path.join(root, 'scripts', 'data', 'ruoe-topic-bank.json'), 'utf8'));
-const usedByPilots = new Set(bank.usedByPilots || []);
-const orderedTopics = [
-  ...bank.topics.filter((t) => !usedByPilots.has(t.topicId)),
-  ...bank.topics.filter((t) => usedByPilots.has(t.topicId)),
-];
+const batch2 = JSON.parse(
+  readFileSync(path.join(root, 'scripts', 'data', 'ruoe-topic-bank-batch2.json'), 'utf8'),
+);
+const allTopics = [...bank.topics, ...(batch2.topics || [])];
+
+const { buildRuoeTopicPlan } = await import('../src/lib/ruoeTopicVariety.js');
 
 /**
- * Deterministic, and distinct across the nine parts of any single exam. `--topic-offset`
- * shifts the assignment when a topic fights the part's item design — a career-choice text,
- * for instance, is full of defining relative clauses, which Part 2 cannot gap unambiguously.
+ * The whole 1–20 range is planned in one pass so the running thematic balance across ALL exams
+ * drives each choice. Assigning per exam kept every exam internally varied while leaving the
+ * bank as a whole concentrated in technology, travel, health, sustainability and work.
+ *
+ * `--topic-offset` shifts the rotation when a topic fights a part's item design — a career-choice
+ * text, for instance, is full of defining relative clauses, which Part 2 cannot gap unambiguously.
  */
+const { assignments: topicPlan, bucketCounts } = buildRuoeTopicPlan({
+  topics: allTopics,
+  usedTopicIds: bank.usedByPilots || [],
+  maxSlot: 20,
+  partsPerExam: 9,
+  offset: topicOffset,
+});
+
 function topicForPart(examSlot, partNumber) {
-  const base = (examSlot - 1) * 9 + (partNumber - 1);
-  const index = (base + topicOffset) % orderedTopics.length;
-  return orderedTopics[index];
+  return topicPlan.get(`${examSlot}:${partNumber}`);
 }
 
 /**
@@ -183,7 +196,18 @@ const outDir = path.join(root, 'scripts', 'generated', 'b2-exams', `exam-${Strin
 mkdirSync(outDir, { recursive: true });
 
 console.log(`\n### Exam ${slot} B2 · parts ${parts.join(', ')} · up to ${maxAttempts} attempts each`);
-console.log(`Model: ${process.env.OPENAI_MODEL_CAMBRIDGE || env.OPENAI_MODEL_CAMBRIDGE || '(default)'}\n`);
+console.log(`Model: ${process.env.OPENAI_MODEL_CAMBRIDGE || env.OPENAI_MODEL_CAMBRIDGE || '(default)'}`);
+console.log(
+  `Topic plan for this exam: ${parts
+    .map((p) => `P${p}=${topicForPart(slot, p)?.themeBucket || '?'}`)
+    .join(' ')}`,
+);
+console.log(
+  `Bank-wide thematic spread (slots 1–20): ${[...bucketCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([bucket, count]) => `${bucket}:${count}`)
+    .join(' ')}\n`,
+);
 
 const summary = [];
 

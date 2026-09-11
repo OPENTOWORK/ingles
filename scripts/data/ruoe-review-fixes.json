@@ -1,0 +1,588 @@
+{
+  "source": "Teacher human-review documents for RUOE-PILOT-E05 … E010 (Google Docs, Sept 2026).",
+  "howToApply": "node --loader ./scripts/alias-loader.mjs scripts/b2-apply-review-fixes.mjs --exams=5-10 [--apply]",
+  "exams": {
+    "5": {
+      "1": {
+        "notes": "Q1/Q3/Q6/Q8 rewritten: each had a second defensible option. Every replacement now turns on a dependent preposition or verb pattern that blocks the rivals.",
+        "passage": "The vast and mysterious world (0) ___ the ocean has always fascinated explorers and scientists alike. Recent advances in technology have allowed researchers to (1) ___ out surveys in parts of the sea once thought unreachable, uncovering secrets that have long (2) ___ hidden from human eyes. One of the most astonishing discoveries is the existence of vibrant ecosystems on the ocean floor that have (3) ___ to survive in total darkness. Unlike terrestrial ecosystems, these underwater worlds (4) ___ around hydrothermal vents, which provide the necessary heat and nutrients. Scientists are particularly interested in them because they may (5) ___ clues about the origins of life on Earth. The intense pressure and darkness make the depths a challenging place to study. However, remotely operated vehicles and submersibles now gather data and samples that (6) ___ to groundbreaking studies. Each discovery adds to our understanding of the complex relationships that (7) ___ in these remote places. As exploration continues, more sites are being found, and each one deepens our (8) ___ with what lies beneath the sea.",
+        "questions": {
+          "1": { "options": ["A) carry", "B) bring", "C) take", "D) make"] },
+          "3": { "options": ["A) managed", "B) achieved", "C) succeeded", "D) accomplished"] },
+          "6": { "options": ["A) assist", "B) support", "C) contribute", "D) promote"] },
+          "8": { "options": ["A) fascination", "B) attraction", "C) interest", "D) attention"] }
+        },
+        "modelAnswers": {
+          "1": { "answer": "A" },
+          "3": { "answer": "A" },
+          "6": { "answer": "C" },
+          "8": { "answer": "A" }
+        }
+      },
+      "2": {
+        "notes": "Q10 (begin/start), Q14 (gap not required by the sentence) and Q15 (as/because) all accepted more than one answer. Replaced with a fixed expression, a fronted concessive and a two-word linker whose second half is printed.",
+        "passage": "Getting enough good quality sleep is essential for maintaining a healthy lifestyle. Sleep (0) ___ course is not just about resting the body. It also involves restoring the mind and has a significant impact on our mental health. Many people fail to realise the importance (9) ___ getting a good night's sleep, and (10) ___ a result they suffer from sleep deprivation. Lack of sleep can lead to a variety of health issues, (11) ___ as weakened immunity and decreased concentration. Moreover, it can affect your mood, causing irritability and even depression. Experts recommend that adults aim for between seven (12) ___ nine hours of sleep per night. (13) ___ you struggle to achieve this, it could be beneficial to establish a regular sleeping routine. Try to go to bed at the same time every night and create a comfortable sleeping environment. (14) ___ tempting it may be to check your phone in bed, screens are best avoided in the hour before sleep, (15) ___ of the blue light they emit. Lastly, ensure that your bedroom is dark and quiet to improve (16) ___ chances of falling asleep quickly.",
+        "modelAnswers": {
+          "10": { "answer": "as" },
+          "14": { "answer": "However" },
+          "15": { "answer": "because" }
+        }
+      },
+      "3": {
+        "notes": "Q17 (OPPORTUNITY→opportunities) and Q21 (CHALLENGE→challenges) were plural-only items. Replaced with the reviewer's proposals COMPETE→competitive and STRESS→stressful, keeping the (22) DETERMINE gap intact.",
+        "passage": "The world of business is constantly evolving, and many young people are proving to be (0) ___ (AMBITION) and capable of achieving remarkable success at an early age. With the rise of technology, there are now more (17) ___ (COMPETE) ways for young entrepreneurs to start their own businesses. In recent years, there has been significant (18) ___ (EXPAND) in the number of platforms available for young people to market their products, which has made it easier for them to reach a global audience. \n\nA successful business often requires (19) ___ (INNOVATE) and a deep understanding of market trends. Many young business owners are able to identify gaps in the market and come up with (20) ___ (CREATE) solutions to fill them. Although running a business can be extremely (21) ___ (STRESS), their persistence and (22) ___ (DETERMINE) often lead them to overcome obstacles and succeed in their ventures.\n\nInterestingly, the ability to think (23) ___ (STRATEGY) and adapt quickly to changes often distinguishes successful young entrepreneurs from others. They are not only concerned about making profits but are also focused on (24) ___ (SUSTAIN) practices, ensuring that their businesses have a positive impact on society and the environment.",
+        "questions": {
+          "17": { "stem": "COMPETE", "transformationFamily": "adjective" },
+          "21": { "stem": "STRESS", "transformationFamily": "adjective" }
+        },
+        "modelAnswers": {
+          "17": { "answer": "competitive", "transformationFamily": "adjective" },
+          "21": { "answer": "stressful", "transformationFamily": "adjective" }
+        }
+      },
+      "4": {
+        "notes": "Q26 was too easy and Q28 was missing an article; both replaced with the reviewer's proposals (UNLESS, causative HAD). Q29 rewritten: the old answer made the electricity bills introduce the controls, and the sequence needs a past perfect. Q27 and Q30 also carried pre-existing quality fails, so Q30's frame was de-parallelised and Q27's route note corrected.",
+        "questions": {
+          "26": {
+            "sentence1": "The only way for guests to open their rooms with a phone is to download the hotel app.",
+            "keyword": "UNLESS",
+            "sentence2Start": "Guests cannot use the digital room key __________________ the hotel app first.",
+            "answer": "unless they download",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "UNLESS",
+              "fullAnswers": ["unless they download"],
+              "markingPoints": [
+                { "id": 1, "label": "negative conditional conjunction plus subject", "accepted": ["unless they"] },
+                { "id": 2, "label": "bare present verb", "accepted": ["download"] }
+              ]
+            },
+            "family_id": "TF-02",
+            "target_structure": "only if converted to a negative conditional with unless",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 supplies the unless clause opener; MP2 supplies the verb in the present simple.",
+            "alternative_route_check": "A single route is valid: 'if they do not download' is blocked because the keyword UNLESS must appear unchanged."
+          },
+          "27": {
+            "alternative_route_check": "Only one route is possible: the gap sits between 'I' and the object, so WISH forces 'wish I had read' and no other regret pattern fits the frame."
+          },
+          "30": {
+            "sentence1": "Many people found the website too confusing to finish booking a room.",
+            "alternative_route_check": "Only one route is valid: variants like 'such confusing a website that' are ungrammatical, and SUCH blocks the original so ... that pattern."
+          },
+          "28": {
+            "sentence1": "The hotel arranged for a technician to repair the air-conditioning yesterday.",
+            "keyword": "HAD",
+            "sentence2Start": "The hotel __________________ yesterday.",
+            "answer": "had the air-conditioning repaired",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "HAD",
+              "fullAnswers": ["had the air-conditioning repaired"],
+              "markingPoints": [
+                { "id": 1, "label": "causative have plus object", "accepted": ["had the air-conditioning"] },
+                { "id": 2, "label": "past participle", "accepted": ["repaired"] }
+              ]
+            },
+            "family_id": "TF-02",
+            "target_structure": "causative have something done",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 tests the causative pattern and its object; MP2 tests the participle.",
+            "alternative_route_check": "'had a technician repair' is blocked because the gap ends before 'yesterday' and the agent is not required."
+          },
+          "29": {
+            "sentence1": "The hotel introduced smart energy controls, and then its electricity bills fell.",
+            "keyword": "AFTER",
+            "sentence2Start": "The electricity bills fell __________________ smart energy controls.",
+            "answer": "after the hotel had introduced",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "AFTER",
+              "fullAnswers": ["after the hotel had introduced"],
+              "markingPoints": [
+                { "id": 1, "label": "time linker plus subject", "accepted": ["after the hotel"] },
+                { "id": 2, "label": "past perfect verb phrase", "accepted": ["had introduced"] }
+              ]
+            },
+            "family_id": "TF-02",
+            "target_structure": "sequential past actions with after plus past perfect",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "multi_step_transformation",
+            "marking_point_plan": "MP1 supplies the linker and the real subject; MP2 tests the past perfect.",
+            "alternative_route_check": "'after introducing' is blocked because it would make the bills introduce the controls."
+          }
+        },
+        "modelAnswers": {
+          "26": { "answer": "unless they download" },
+          "28": { "answer": "had the air-conditioning repaired" },
+          "29": { "answer": "after the hotel had introduced" }
+        }
+      },
+      "5": {
+        "notes": "Q32 distractors rebuilt from ideas actually present in the paragraph, per the reviewer's proposal; the previous three were eliminable without reading it.",
+        "questions": {
+          "32": {
+            "options": [
+              "A) To show that useful language practice can be built into ordinary routines",
+              "B) To show that learners need to make major changes to their daily lives to improve",
+              "C) To explain why out-of-class activities are more valuable when they are done regularly",
+              "D) To suggest that informal activities can replace organised language lessons"
+            ],
+            "rationale": "A is correct because the examples illustrate how small, everyday actions can become language practice. B is wrong because the writer says out-of-class learning is 'usually far less dramatic' and needs no upheaval. C inverts the point: the writer concedes these activities are often done irregularly and still count. D is contradicted by the following paragraph, which insists teachers remain important."
+          }
+        }
+      },
+      "7": {
+        "notes": "Q43/Q49/Q51 had two defensible answers or misrepresented the text; Q44/Q45/Q46/Q47/Q50 were solvable by keyword matching. Q49 retargeted to Liam, which also fixes the underused profile B and evens the answer key to A3 B2 C2 D3. Profile A's pollution claim and profile B's insulation/air-quality claim softened; American spellings swept to British.",
+        "sections": {
+          "A": {
+            "text": "When my city council proposed to transform an old industrial site into a community garden, I was excited. Initially, I was skeptical about the project's feasibility, given the site's historical contamination. However, after thorough soil treatments and planning, we successfully created a vibrant space. It took teamwork and dedication, but seeing local residents coming together to enjoy the green urban oasis is rewarding. The positive effects on our mental health and community spirit are undeniable. Since then, I've been advocating for additional green projects to enhance urban living. Although some challenges remain, the benefits of having green spaces close to home make it worthwhile. We've also noticed how the garden has made the area feel cleaner and more pleasant. Despite some opposition, particularly from motorists who lost parking spaces, overall, the initiative has been embraced warmly."
+          },
+          "B": {
+            "text": "A few years ago, I initiated a rooftop garden project on top of the commercial building where I work. The primary goal was to reduce the building's energy use and carbon footprint by improving insulation. Initially, raising awareness and funding were challenging, but persistence paid off. The garden now boasts a range of plants that not only beautify the space but also benefit the environment. Colleagues have embraced the opportunity to unwind in the tranquil setting during breaks. Furthermore, it's sparked a noticeable shift in attitudes towards environmental responsibility among staff. There's now a growing interest in expanding similar projects throughout the city. Despite lacking expertise initially, I've learned a lot about sustainable practices. The transformation has been remarkable, and I'm proud to have led this initiative, proving that even small changes can lead to significant impacts."
+          }
+        },
+        "questions": {
+          "43": { "prompt": "Who had to deal with a problem left behind by the site's previous use?" },
+          "44": { "prompt": "Who reports that residents themselves said the scheme had made their lives better?" },
+          "45": { "prompt": "Who found that people outside the project doubted it would work?" },
+          "46": { "prompt": "Who has since taken on the role of pushing for similar schemes elsewhere?" },
+          "47": { "prompt": "Who believes official financial support is currently insufficient?" },
+          "49": { "prompt": "Who describes people using the new space to relax during the working day?" },
+          "50": { "prompt": "Who admits that the hardest part at the start was managing the people involved?" },
+          "51": { "prompt": "Who reports that the scheme was welcomed in spite of objections from one group?" }
+        },
+        "modelAnswers": {
+          "49": { "answer": "B" }
+        },
+        "replaceText": [
+          ["skeptical", "sceptical"],
+          ["skepticism", "scepticism"],
+          ["prioritized", "prioritised"],
+          ["revitalize", "revitalise"],
+          ["neighborhood", "neighbourhood"]
+        ]
+      }
+    },
+    "6": {
+      "1": {
+        "notes": "Example 0 was unusable: the passage already contained 'packed' and option D repeated it, when the gap actually needed 'with'. Rebuilt as an independent grammatical example. Q1/Q2/Q4/Q6 each accepted a second answer (look through/after, grown bored of, put back, in the long term); Q1 also converted into a lexical-precision item to dilute the run of fixed expressions the reviewer flagged.",
+        "passage": "A growing number of people are deciding that a comfortable home does not (0) ___ to be full of possessions. Instead of filling every shelf, they keep only what they really use. For some, this change begins after moving house, while others simply become tired of the (1) ___ they have built up over the years.\n\nThe idea is not to live with almost nothing, but to be more selective. People often start by getting rid of broken items or clothes they are (2) ___ up with wearing. As rooms become less crowded, many say they can focus better and feel more (3) ___ . They also find it easier to keep their homes tidy, since there is less stuff to put (4) ___ .\n\nLiving with fewer possessions can save money too. When people stop buying things on (5) ___ and think carefully before each purchase, they are less likely to waste cash. In the long (6) ___ , this habit may also reduce the amount of rubbish we (7) ___ away. Owning less is not the right choice for everyone, but many people say it has had a positive (8) ___ on daily life.",
+        "example": {
+          "options": ["A) need", "B) must", "C) should", "D) ought"],
+          "answer": "A",
+          "explanation": "Only \"need\" can follow \"does not\" and take an infinitive with \"to\"."
+        },
+        "questions": {
+          "1": { "options": ["A) rubbish", "B) clutter", "C) litter", "D) waste"] },
+          "2": { "options": ["A) fed", "B) tired", "C) bored", "D) sick"] },
+          "4": { "options": ["A) aside", "B) off", "C) away", "D) out"] },
+          "6": { "options": ["A) length", "B) distance", "C) period", "D) run"] }
+        },
+        "modelAnswers": {
+          "1": { "answer": "B" },
+          "2": { "answer": "A" },
+          "4": { "answer": "C" },
+          "6": { "answer": "D" }
+        }
+      },
+      "2": {
+        "notes": "Reviewer flagged cumulative easiness (for/in/to/a/down/but/to/what). The set also repeated 'to' twice and echoed the example's 'for'. Rebuilt gaps 9, 10, 11 and 15 as a preposition-in-relative, a possessive relative, a dummy subject and a modal. The passage is rewritten throughout, so all eight answers are restated: in, whose, it, a, down, but, can, what — no repeats, and no echo of the example.",
+        "passage": "Not long ago, many experts predicted that screens would replace books for (0) ___ good. Yet reading is becoming popular again, and not only among children. One reason is that people are searching for ways (9) ___ which they can escape constant messages and updates. A novel demands attention, but also offers a break from the pressure to reply immediately.\n\nBookshops and libraries have changed too. Many now organise events that encourage readers to meet others (10) ___ tastes are similar to their own. Reading, once a solitary hobby, has become something people share online and in person, posting reactions and recommending titles.\n\nAnother factor is convenience. It is easier than ever to carry a book, and (11) ___ is now common for busy adults to read on trains instead of scrolling. Some say they sleep better as (12) ___ result. Others find that, once they start, they cannot put the book (13) ___. If this trend continues, reading may prove to be not old-fashioned (14) ___ exactly what modern life needs. After all, stories still do something that few apps (15) ___ ever manage: slow us down and make us think about (16) ___ really matters.",
+        "modelAnswers": {
+          "9": { "answer": "in" },
+          "10": { "answer": "whose" },
+          "11": { "answer": "it" },
+          "12": { "answer": "a" },
+          "13": { "answer": "down" },
+          "14": { "answer": "but" },
+          "15": { "answer": "can" },
+          "16": { "answer": "what" }
+        }
+      },
+      "3": {
+        "notes": "Q24 (MEMORY→memories) was a pluralisation, not a derivation; replaced with the reviewer's proposal ENJOY→enjoyment. Q23 (DISAPPOINT→disappointment) swapped for RARE→rarely, which also clears the standing 'no -ly adverb' variety warning.",
+        "passage": "Some events are more than a simple (0) ___ (CELEBRATE) of local culture; they become reasons to book a flight. The best festivals offer visitors a memorable mix of music, food and atmosphere, but also a sense of (17) ___ (CONNECT) with the place itself. In many towns, the streets are carefully decorated, and even ordinary corners become (18) ___ (RECOGNISE) after dark. What makes these occasions special is not always size. A small festival can be just as (19) ___ (IMPRESS) as a famous international one if the welcome feels genuine.\n\nTravellers should, however, do some research before they go. Hotel rooms may be (20) ___ (POSSIBLE) to find at short notice, and public transport is often extremely crowded. On the other hand, good planning can turn a difficult trip into an (21) ___ (FORGET) experience. Many regular festival-goers say that the real pleasure lies in the (22) ___ (EXPECT) that builds before the main event begins. Even bad weather (23) ___ (RARE) spoils the atmosphere, and the shared excitement creates lasting (24) ___ (ENJOY) for visitors.",
+        "questions": {
+          "23": { "stem": "RARE", "transformationFamily": "adverb" },
+          "24": { "stem": "ENJOY", "transformationFamily": "noun" }
+        },
+        "modelAnswers": {
+          "23": { "answer": "rarely", "transformationFamily": "adverb" },
+          "24": { "answer": "enjoyment", "transformationFamily": "noun" }
+        }
+      },
+      "4": {
+        "notes": "Q30 did not preserve meaning: 'too difficult for me to learn' blames the task, 'not good enough' blames the learner. Reframed on the same ENOUGH target so the adjective still describes the flute, and sentence 1 reworded so the two sentences are not near-identical. Q26 and Q28 carried pre-existing quality fails: Q26's route note was corrected and Q28's second sentence rebuilt, which also removes the 'more' / 'regularly' meaning drift.",
+        "questions": {
+          "26": {
+            "alternative_route_check": "Only one route is possible: the gap sits between 'I' and 'up the saxophone', so WISH forces 'wish I had taken' and no other regret pattern fits."
+          },
+          "28": {
+            "sentence2Start": "If I __________________, the first few guitar lessons would have been easier.",
+            "answer": "had practised regularly",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "HAD",
+              "fullAnswers": ["had practised regularly"],
+              "markingPoints": [
+                { "id": 1, "label": "third conditional past perfect", "accepted": ["had practised"] },
+                { "id": 2, "label": "adverb carrying the original meaning", "accepted": ["regularly"] }
+              ],
+              "family_id": "TF-05",
+              "target_structure": "cause and effect in the past converted to a third conditional",
+              "difficulty_band": "B2-Strong",
+              "transformation_distance": "multi_step_transformation",
+              "marking_point_plan": "MP1 tests the past perfect in the if-clause; MP2 recovers 'regularly' from sentence 1.",
+              "alternative_route_check": "Only one route is valid: the result clause is already supplied, so HAD must open the if-clause."
+            }
+          },
+          "30": {
+            "sentence1": "I found the flute too difficult to learn without a teacher.",
+            "sentence2Start": "The flute was __________________ on my own.",
+            "answer": "not easy enough to learn",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "ENOUGH",
+              "fullAnswers": ["not easy enough to learn"],
+              "markingPoints": [
+                { "id": 1, "label": "not plus adjective plus enough", "accepted": ["not easy enough"] },
+                { "id": 2, "label": "infinitive complement", "accepted": ["to learn"] }
+              ],
+              "family_id": "TF-03",
+              "target_structure": "too plus adjective plus to converted to not plus adjective plus enough plus to",
+              "difficulty_band": "B2-Strong",
+              "transformation_distance": "syntactic_restructuring",
+              "marking_point_plan": "MP1 tests the enough structure with the adjective that describes the instrument; MP2 supplies the infinitive.",
+              "alternative_route_check": "Only one route is valid: the subject of sentence 2 is the flute, so ability adjectives such as 'good' no longer fit the frame."
+            }
+          }
+        },
+        "modelAnswers": {
+          "28": { "answer": "had practised regularly" },
+          "30": { "answer": "not easy enough to learn" }
+        }
+      },
+      "7": {
+        "notes": "Q46 and Q49 restated their target text almost verbatim, so both were solvable by lexical overlap. Reworded to require inference while keeping the same keyed answer (A). Q43 also carried a standing keyword-matching warning against section A, so its 'conversations' wording was removed.",
+        "questions": {
+          "43": { "prompt": "Who found that being on their own changed the way others reacted to them?" },
+          "46": { "prompt": "Who began travelling independently as a result of another person's change of mind?" },
+          "49": { "prompt": "Who values the chance to observe places carefully rather than to socialise?" }
+        }
+      }
+    },
+    "7": {
+      "1": {
+        "notes": "Q1 ('gain interest' forced, 'attract' more idiomatic), Q3 (seem/look both defensible) and Q5 (create/build both defensible) rewritten. Q5 is now a noun item, which also brings the all-verb option count down to the 4-of-8 target the validator asks for.",
+        "passage": "A few years ago, sports such as underwater hockey and extreme ironing seemed too unusual to attract a wide audience. Yet both have (0) ___ popular enough to appear regularly on social media, where short videos can quickly (1) ___ interest. One reason is that people are always looking for fresh experiences, especially if they can (2) ___ them with friends online. Another factor is that many unusual sports are easier to try than their strange names (3) ___. Participants often need only basic equipment, and clubs are keen to welcome beginners.\n\nAs a result, these activities are no longer seen as jokes. In fact, some are beginning to (4) ___ in serious sponsorship deals and organised competitions. Supporters say unusual sports also give beginners a sense of (5) ___ , because newcomers and experts mix more easily than in traditional games. Of course, not every trend will last, and some sports may fade (6) ___ once the novelty disappears. Still, their recent success shows that people are open (7) ___ trying something different, provided it is safe, social and fun. What once looked ridiculous may soon be a familiar (8) ___ at local sports centres.",
+        "questions": {
+          "1": { "options": ["A) attract", "B) receive", "C) collect", "D) obtain"] },
+          "3": { "options": ["A) tell", "B) suggest", "C) speak", "D) talk"] },
+          "5": { "options": ["A) belonging", "B) owning", "C) joining", "D) fitting"] }
+        },
+        "modelAnswers": {
+          "1": { "answer": "A" },
+          "3": { "answer": "B" },
+          "5": { "answer": "A" }
+        }
+      },
+      "3": {
+        "notes": "Q20 required the less idiomatic singular 'careful arrangement'; the stem now forces the natural plural. Q23 swapped from APPRECIATE to DEEP so the set contains an -ly adverb, clearing a standing variety warning.",
+        "passage": "For many people, the idea of leaving home without a smartphone seems (0) ___ (USUAL). Yet journalist Sam Briggs recently tried it for a week and wrote about the experience. His first feeling was one of (17) ___ (NERVOUS), especially on the journey to work, when he could not check messages every few minutes. However, he soon noticed an (18) ___ (EXPECT) benefit: he paid more attention to the world around him. Streets he had walked along for years suddenly seemed more interesting.\n\nThere were, of course, some (19) ___ (PRACTICE) difficulties. He got lost twice because he had no maps, and making plans with friends required several careful (20) ___ (ARRANGE) in advance. Still, Sam argues that the constant (21) ___ (AVAILABLE) of information can be a problem in itself. Without his phone, he became less (22) ___ (DISTRACT) and far more aware of how often people turn to screens out of habit rather than need. By the end of the week, he had come to value quiet moments far more (23) ___ (DEEP) and had developed a stronger (24) ___ (BELIEVE) that occasional disconnection is good for us.",
+        "questions": {
+          "23": { "stem": "DEEP", "transformationFamily": "adverb" }
+        },
+        "modelAnswers": {
+          "20": { "answer": "arrangements" },
+          "23": { "answer": "deeply", "transformationFamily": "adverb" }
+        }
+      },
+      "6": {
+        "notes": "Answers ran 37=A, 38=B, 39=C, 40=D, 41=E, 42=F, a sequence a candidate could ride without reading the text. The pool is relettered so the same sentence still fits the same gap but the key becomes D, G, F, E, A, B, with the unused sentence in the middle of the list. The sentence keyed to gap 40 also carried a standing multifit fail against gap 38, so it now names group chats explicitly.",
+        "sentencePool": [
+          "A) This has completely altered who gets heard and how quickly ideas move from private conversation into public debate.",
+          "B) For that reason, a handwritten note or a carefully timed phone call can still feel more meaningful than a stream of short messages.",
+          "C) Some experts believe that voice technology will soon replace keyboards for most online conversations.",
+          "D) In many cases, that can strengthen family life and make international friendships feel surprisingly ordinary.",
+          "E) The same group chat that keeps everyone informed, however, can make it almost impossible to escape constant updates.",
+          "F) Even punctuation has taken on new roles, with emojis and gifs helping to show feelings that plain text may hide.",
+          "G) This is why a quick text can sometimes create more anxiety than comfort, despite its convenience."
+        ],
+        "modelAnswers": {
+          "37": { "answer": "D" },
+          "38": { "answer": "G" },
+          "39": { "answer": "F" },
+          "40": { "answer": "E" },
+          "41": { "answer": "A" },
+          "42": { "answer": "B" }
+        },
+        "dropFields": ["__adversarialFindings"]
+      },
+      "7": {
+        "notes": "Q46 lifted 'reminders' straight from Owen's profile, so it was solvable by word matching. Q52 was worse than the standing warning suggested: 'less hard than they had imagined' fitted Leah as readily as the keyed Nikhil, so it is now anchored to the skills he had to learn.",
+        "questions": {
+          "46": { "prompt": "Who has set up practical aids to avoid drifting back to how they used to live?" },
+          "52": { "prompt": "Who discovered that one habit became straightforward once they had learnt some basic skills?" }
+        }
+      }
+    },
+    "8": {
+      "1": {
+        "notes": "Q2 was unanswerable as set: 'keep an eye for' is not idiomatic, so 'on' looked better than the keyed 'for'. Printing 'out' in the passage restores 'keep an eye out for' without touching the key. Q8 had the identical defect ('get the most of'), fixed the same way with 'out'. Q6 also offered 'term', which makes 'in the long term' as defensible as 'in the long run'.",
+        "passage": "Many people believe that healthy food is expensive, but that is not always true. If you are living on a (0) ___ budget, a little planning can make a big difference. One useful (1) ___ is to write a shopping list before you go to the supermarket and stick to it. This helps you avoid buying things you do not really need. It is also worth keeping an eye out (2) ___ special offers, although you should only buy extra items if you know you will use them.\n\nAnother way to save money is to base meals (3) ___ simple ingredients such as rice, beans and seasonal vegetables. These are often cheaper and can be used in a wide (4) ___ of dishes. Cooking at home may take more time, but it usually works (5) ___ far less expensive than buying prepared meals. You can also make larger amounts and freeze portions for later. In the long (6) ___, this can reduce waste as well as cost.\n\nHealthy eating does not depend on buying fashionable products. It is more a (7) ___ of making sensible choices and getting the most out (8) ___ the food you buy.",
+        "questions": {
+          "6": { "options": ["A) length", "B) distance", "C) period", "D) run"] }
+        }
+      },
+      "3": {
+        "notes": "Q17 (WIDE) required 'the width of songs', which is not idiomatic. The stem now takes the adverb, which is both natural and clears the standing 'no -ly adverb' variety warning.",
+        "passage": "It is no longer (0) ___ (USUAL) to see grandparents and teenagers sharing headphones on the bus. Music streaming has made this kind of connection easier, and many families are surprised by how (17) ___ (WIDE) their tastes actually overlap. A teenager may introduce a grandparent to a new singer, while an older relative offers stories about the first time a classic track became popular. This exchange creates a sense of (18) ___ (CLOSE) that is hard to find in everyday conversation.\n\nResearchers say that shared listening can also improve (19) ___ (RELATE) between age groups, especially when each person feels their tastes are respected. In community centres, mixed-age choirs are growing in (20) ___ (POPULAR), partly because rehearsals give people a regular reason to meet. Members often say that the most (21) ___ (VALUE) part is not the performance itself but the chance to learn from one another. For younger people, that can be an (22) ___ (EXPECT) benefit. For older singers, music can bring back confidence and encourage active (23) ___ (INVOLVE) in local life. In the end, a song's real power may lie in its (24) ___ (ABLE) to make strangers, and relatives, feel closer.",
+        "questions": {
+          "17": { "transformationFamily": "adverb" }
+        },
+        "modelAnswers": {
+          "17": { "answer": "widely", "transformationFamily": "adverb" }
+        }
+      },
+      "4": {
+        "notes": "Q27 reversed the meaning: 'more successful than he had expected' does not license 'not as unsuccessful as he thought', which asserts Tom expected failure. Rebuilt on the same AS target with the polarity kept in the expectation clause. Q26 carried a pre-existing quality fail because sentence 2 was sentence 1 with a hole in it; both frames reworded.",
+        "questions": {
+          "26": {
+            "sentence1": "Mia is sorry that she put her grandmother's sewing machine up for sale on the internet.",
+            "sentence2Start": "Mia __________________ the machine online.",
+            "alternative_route_check": "Only one route is valid: WISHES is fixed in the third person and the gap must carry the negative past perfect."
+          },
+          "27": {
+            "sentence2Start": "Tom had not expected his blog __________________ it was.",
+            "answer": "to be as successful as",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "AS",
+              "fullAnswers": ["to be as successful as"],
+              "markingPoints": [
+                { "id": 1, "label": "infinitive plus first comparator", "accepted": ["to be as"] },
+                { "id": 2, "label": "adjective plus second comparator", "accepted": ["successful as"] }
+              ]
+            },
+            "target_structure": "comparison of expectation and outcome with as ... as",
+            "alternative_route_check": "Only one route is valid: the negative sits outside the gap on 'had not expected', so the adjective inside the gap must stay positive."
+          }
+        },
+        "modelAnswers": {
+          "27": { "answer": "to be as successful as" }
+        }
+      },
+      "6": {
+        "notes": "Option D was keyed to gap 39 but talked about treatment becoming 'a conversation', which does not follow a paragraph about hearing aids separating speech from noise. Rewritten to bridge the device features to the confidence outcome, which also clears the standing multifit fail against gap 37 and the weak-cohesion fail on gap 39.",
+        "sentencePool": [
+          "A) This gives doctors a fuller picture, but it also gives patients early warnings when something is beginning to go wrong.",
+          "B) In some cases, the same technology can then be used to create personalised supports, such as braces or artificial limbs.",
+          "C) This shift may sound modest, yet it is exactly how modern medicine often moves forward.",
+          "D) Together, these features mean that following a single voice no longer demands constant effort.",
+          "E) That approach is not suitable for everyone, but it can free up hospital beds and reduce the risk of infection.",
+          "F) Progress is measured not only by major milestones, but by tiny improvements from one session to the next.",
+          "G) Researchers are also developing new vaccines that could protect people against several diseases at once."
+        ],
+        "dropFields": ["__adversarialFindings"]
+      },
+      "7": {
+        "notes": "Reviewer asked for greater paraphrase distance on Q45, Q51 and Q52. Q45 also shared the phrase 'travel time' with Noah's profile while being keyed to Liam, so the wording now points only at working on the move.",
+        "questions": {
+          "45": { "prompt": "Who appreciates being able to get on with work while travelling?" },
+          "51": { "prompt": "Who says a hypothetical improvement would make them change transport for many trips?" },
+          "52": { "prompt": "Who concedes that their preferred method makes greater demands on the traveller beforehand?" }
+        }
+      }
+    },
+    "9": {
+      "1": {
+        "notes": "The example was unanswerable: 'more families are (0) ___ an interest' needs a participle, but every option was a base or past form, so the keyed 'taken' produced 'are taken an interest'. Options changed to -ing forms. Q3 relied on 'show up recipes', but 'show up' is intransitive; rebuilt as a causative pattern where only one verb licenses a bare infinitive.",
+        "passage": "A few years ago, many people had little time for cooking and relied on ready meals. Now, however, more families are (0) ___ an interest in preparing food at home again. One reason is cost: with prices rising, home cooking is a practical way to (1) ___ money. Another is health. After years of eating food high in salt and sugar, people have become more (2) ___ of what they eat.\n\nSocial media has also played a part. Short videos can (3) ___ even simple recipes look exciting, and home cooks are quick to share tips for using basic ingredients well. As a result, cooking no longer seems like a skill reserved (4) ___ experts. For some, it has become a hobby that helps them slow down after a busy day.\n\nOf course, not everyone has time to cook every evening, and takeaways still have their (5) ___. But many people now plan meals more (6) ___, cook larger amounts, and freeze portions for later. This means they can (7) ___ on convenience less often while still eating well. Home cooking may not solve everything, but it is clearly making a (8) ___ comeback.",
+        "example": {
+          "options": ["A) making", "B) spending", "C) taking", "D) keeping"],
+          "answer": "C",
+          "explanation": "We use the fixed expression 'take an interest in', and only the -ing form fits after 'are'."
+        },
+        "questions": {
+          "3": { "options": ["A) make", "B) let", "C) have", "D) get"] }
+        }
+      },
+      "2": {
+        "notes": "Reviewer asked to remove the duplicate answers ('than' at Q11 and Q13, 'to' at Q12 and Q14) and raise the difficulty. Q13 now takes the concessive 'although' and Q14 the dependent preposition after 'responsibility', as proposed. The example also duplicated Q9's 'at', so it now tests an article. Beyond the reviewer's list, five of the eight answers were still bare prepositions, so Q10 now takes the negative in 'would rather not' and Q12 the conjunction 'whether'. The whole key is restated here — at, not, than, whether, although, for, when, of — because the passage is replaced wholesale and a partly restated key would silently keep answers from the old wording.",
+        "passage": "From (0) ___ early age, many teenagers are told to decide what they want to do in the future. In reality, choosing a career is rarely as simple as picking the job that sounds most exciting. People often know what they are good (9) ___, but may not realise how important the kind of working life they want is too. Some enjoy teamwork, while others would rather (10) ___ work in a group.\n\nExperts suggest trying different experiences before deciding. A weekend job can teach you more about yourself (11) ___ a long list of online quizzes. It can also show (12) ___ you are able to deal with pressure, customers or strict deadlines. Even if a job does not suit you, that is useful, because you learn what to avoid.\n\nIn the end, the best career choice is usually the one that matches both your abilities and your values, not simply your expectations. (13) ___ you may not find the perfect role immediately, each experience leaves you readier to take responsibility (14) ___ your own future. What matters most is staying open-minded, so (15) ___ opportunities appear, you are ready to take advantage (16) ___ them.",
+        "example": { "answer": "an" },
+        "modelAnswers": {
+          "9": { "answer": "at" },
+          "10": { "answer": "not" },
+          "11": { "answer": "than" },
+          "12": { "answer": "whether" },
+          "13": { "answer": "Although" },
+          "14": { "answer": "for" },
+          "15": { "answer": "when" },
+          "16": { "answer": "of" }
+        }
+      },
+      "3": {
+        "notes": "Example changed from 'scientific development' to 'scientific innovation', which the reviewer found more natural. Q24 broke the parallelism ('a guide that supports, rather than replacing') so the clause now reads 'supports human teaching rather than replaces it', as proposed.",
+        "passage": "Artificial intelligence is no longer limited to research labs. It has become a normal tool in many classrooms, and some teachers now see it as a (0) ___ (SCIENCE) innovation that can improve daily study habits. One of its main strengths is the speed with which it provides (17) ___ (RESPOND) to students' questions, allowing them to continue working instead of waiting for help. This can be especially useful for learners who are shy and may feel (18) ___ (COMFORT) about asking for support in front of others. AI systems can also offer (19) ___ (PERSON) practice activities based on a student's recent mistakes. Used (20) ___ (WISE), such tools can build confidence and encourage regular revision. However, there is also a risk of (21) ___ (DEPEND) if students begin to trust every answer without checking it. Teachers therefore need to discuss the (22) ___ (LIMIT) of these systems and remind learners that not all information is equally reliable. The most (23) ___ (VALUE) use of AI may be as a guide that supports human teaching rather than (24) ___ (PLACE) it.",
+        "modelAnswers": {
+          "24": { "answer": "replaces" }
+        }
+      },
+      "4": {
+        "notes": "Q26 accepted a second answer, since 'not so much time as' is defensible alongside 'not as much time as'. Rebuilt on a positive frame where MUCH must intensify a comparative, which closes the 'so' route and moves the item off the equality-comparison pattern the reviewer found predictable. Q27 carried a pre-existing fail for listing only the expanded negative, so a candidate writing 'hadn't' would have been marked wrong; the contraction is now accepted.",
+        "questions": {
+          "27": {
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "WISHES",
+              "fullAnswers": ["wishes she had not thrown", "wishes she hadn't thrown"],
+              "markingPoints": [
+                { "id": 1, "label": "wish plus negated auxiliary", "accepted": ["wishes she had not", "wishes she hadn't"] },
+                { "id": 2, "label": "past participle", "accepted": ["thrown"] }
+              ]
+            }
+          },
+          "26": {
+            "sentence2Start": "Organising the kitchen took __________________ I had expected.",
+            "answer": "much less time than",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "MUCH",
+              "fullAnswers": ["much less time than"],
+              "markingPoints": [
+                { "id": 1, "label": "intensifier plus comparative", "accepted": ["much less"] },
+                { "id": 2, "label": "noun plus comparator", "accepted": ["time than"] }
+              ]
+            },
+            "target_structure": "intensified comparative of decreased quantity",
+            "alternative_route_check": "Only one route is valid: the positive frame blocks 'not so much time as', and MUCH must premodify the comparative."
+          }
+        },
+        "modelAnswers": {
+          "26": { "answer": "much less time than" }
+        }
+      },
+      "5": {
+        "notes": "Four questionType values were off-schema ('main-idea / global', 'attitude / opinion / tone', 'reference / inference', 'vocabulary / tone') and rejected by the validator; mapped to canonical types. Q35 also asked what a phrase 'refers to' while its keyed option named the thing the writer says does not matter, so the options now state the point directly.",
+        "questions": {
+          "31": { "questionType": "main-idea" },
+          "32": { "questionType": "attitude" },
+          "35": {
+            "questionType": "reference",
+            "prompt": "In the fifth paragraph, what point is the writer making by saying 'What matters is the quality of attention you bring'?",
+            "options": [
+              "A) Either a famous or a quiet place can be worthwhile, depending on how the visitor engages with it.",
+              "B) Visitors should spend longer in each part of a city before judging it.",
+              "C) Travellers need background knowledge before arriving in order to appreciate a place.",
+              "D) A place is only rewarding if the visitor can talk to local people."
+            ]
+          },
+          "36": { "questionType": "vocabulary" }
+        }
+      },
+      "6": {
+        "notes": "Option E, the unused distractor, was close enough to gap 37 that both the reviewer and the validator judged it defensible there. Replaced with a sentence that is topically plausible but supplies no antecedent any gap needs, so B remains the only fit at 37.",
+        "sentencePool": [
+          "A) In addition, when upsetting content appears, it can reach a large audience before anyone has time to calm the situation down.",
+          "B) This sense of instant contact can make distance feel less important and everyday worries easier to share.",
+          "C) Instead, experts increasingly argue that teenagers should be taught how to manage these platforms wisely.",
+          "D) That can make online approval seem far more important than it really is.",
+          "E) Researchers still disagree about how many hours of daily use should count as excessive.",
+          "F) In this way, social media can support identity as well as entertainment.",
+          "G) This often means phones remain nearby long after lights have been turned out."
+        ],
+        "dropFields": ["__adversarialFindings"]
+      }
+    },
+    "10": {
+      "1": {
+        "notes": "Q6 required 'a fresh mind', which is not idiomatic; rebuilt on the fixed expression 'clear your head', where no other option works. Q7 was too easy because 'remove ... entirely' is an obvious pairing, so the item now turns on 'altogether' against adverbs that cannot modify 'remove'.",
+        "passage": "Many people say they are constantly (0) ___ pressure, but experts believe that stress can often be reduced through small daily habits. One useful idea is to (1) ___ aside a few minutes each morning to plan the day. This can stop minor problems from building (2) ___ and becoming harder to deal with later on.\n\nAnother helpful technique is to pay attention to what causes stress in the first (3) ___. Some people feel anxious because they take (4) ___ too many tasks, while others simply do not leave enough time between activities. Once you understand your own patterns, it becomes easier to make sensible changes.\n\nPhysical movement also has a positive (5) ___ on mood. A short walk, for example, can help you calm down and (6) ___ your head before returning to work. Finally, it is worth remembering that nobody manages stress perfectly all the time. The aim is not to remove it (7) ___, but to keep it at a level that does not (8) ___ with everyday life.",
+        "questions": {
+          "6": { "options": ["A) clear", "B) empty", "C) free", "D) open"] },
+          "7": { "options": ["A) thoroughly", "B) absolutely", "C) utterly", "D) altogether"] }
+        },
+        "modelAnswers": {
+          "6": { "answer": "A" },
+          "7": { "answer": "D" }
+        }
+      },
+      "3": {
+        "notes": "Q21 (REMEMBER) forced 'remembrance', which is commemorative rather than cognitive; the stem now takes RETAIN, giving the natural 'retention'. Q24 was too easy because the sentence semantics forced the un- prefix, so it now requires the noun 'likelihood'.",
+        "passage": "For years, the idea that video games could support learning was dismissed as unproven. However, recent (0) ___ (SCIENCE) research suggests that some games may offer real educational value. Good games demand close attention, quick decisions and the (17) ___ (ABLE) to solve problems under pressure. Players often improve through repeated failure, which encourages a (18) ___ (WILL) to try new strategies rather than give up.\n\nIn classrooms, teachers have used historical adventure games to increase students’ (19) ___ (CURIOUS) about the past. In language learning, online games can create a more (20) ___ (INTERACT) experience than traditional exercises, especially when players need to cooperate. This kind of active involvement may lead to better (21) ___ (RETAIN) of new words and ideas.\n\nOf course, not every game is useful. Some are purely entertaining, while others contain material that is (22) ___ (SUIT) for younger learners. Success also depends on careful planning. Without clear goals, the educational benefits may disappear (23) ___ (ENTIRE). Even so, the (24) ___ (LIKELY) of games disappearing from education completely now seems small.",
+        "questions": {
+          "21": { "stem": "RETAIN", "transformationFamily": "noun" },
+          "24": { "stem": "LIKELY", "transformationFamily": "noun" }
+        },
+        "modelAnswers": {
+          "21": { "answer": "retention", "transformationFamily": "noun" },
+          "24": { "answer": "likelihood", "transformationFamily": "noun" }
+        }
+      },
+      "4": {
+        "notes": "Q28 repeated the worked example almost exactly — both used ENOUGH to turn 'too late to do X' into 'not early enough to do X', so the example handed the candidate the answer. Replaced with a concession transformation, which also answers the reviewer's note that the set leaned on predictable patterns. Q26 carried a pre-existing alternative-route fail, fixed in its route note.",
+        "questions": {
+          "26": {
+            "alternative_route_check": "Only one route is possible: the gap follows 'I' and precedes the object, so WISH forces 'wish I had asked' and no other regret pattern fits the frame."
+          },
+          "28": {
+            "sentence1": "The market stall had a long queue, but we decided to wait for a table anyway.",
+            "keyword": "SPITE",
+            "sentence2Start": "We waited for a table at the stall __________________ long queue.",
+            "answer": "in spite of the",
+            "grading_metadata": {
+              "type": "b2_key_word_transformation",
+              "version": 1,
+              "keyword": "SPITE",
+              "fullAnswers": ["in spite of the"],
+              "markingPoints": [
+                { "id": 1, "label": "concessive preposition phrase", "accepted": ["in spite"] },
+                { "id": 2, "label": "preposition plus determiner", "accepted": ["of the"] }
+              ]
+            },
+            "family_id": "TF-06",
+            "target_structure": "although clause converted to in spite of plus noun phrase",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 supplies the concessive phrase; MP2 supplies the preposition and determiner the noun phrase needs.",
+            "alternative_route_check": "Only one route is valid: 'despite the' would not use the keyword, and 'in spite of' must be completed by a determiner because the gap ends before 'long queue'."
+          }
+        },
+        "modelAnswers": {
+          "28": { "answer": "in spite of the" }
+        }
+      },
+      "6": {
+        "notes": "At gap 37 the keyed sentence conceded that huge areas remain unexplored, which does not lead into 'As a result, the seabed is now seen as a varied landscape'; it also read as a possible fit for gap 42. Rewritten so the causal chain holds and it can only sit at 37. At gap 40 the link rested on a weak 'In fact', so that sentence now refers back to what the sea preserves and forward to trade, diet and routine.",
+        "sentencePool": [
+          "A) This changed ideas not only about the deep ocean, but about the possible limits of life itself.",
+          "B) Such objects are often surprisingly ordinary: bowls, ropes and even the grain a ship was carrying.",
+          "C) Before that, many experts believed nothing could survive in such heat and darkness.",
+          "D) Every new descent has brought back images and samples that nobody had predicted.",
+          "E) This has transformed underwater research from a largely uncertain search into something much more systematic.",
+          "F) Once damage is done in the deep ocean, it may be almost impossible to reverse.",
+          "G) By contrast, many coastal towns now use underwater museums to attract visitors during the summer season."
+        ],
+        "dropFields": ["__adversarialFindings"]
+      },
+      "7": {
+        "notes": "Reviewer asked for better distinctiveness, since Q43, Q47 and Q52 all rested on Noah's change of attitude. Q52 was the weakest: Gareth also argues that staying awake proves nothing, so it was defensible for D as well as the keyed B. It is now anchored to the competition pressure only Noah mentions.",
+        "questions": {
+          "52": { "prompt": "Who thinks that boasting about needing little sleep leads to poor judgement once competitive pressure builds?" }
+        }
+      }
+    }
+  }
+}

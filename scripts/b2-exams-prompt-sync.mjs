@@ -25,22 +25,28 @@ const PARTS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 /** Blueprint markers that must survive the sync; a missing one means the code drifted. */
 const BLUEPRINT_SIGNATURES = {
-  1: ['Adversarially test all four options', 'STRICT word count: minimum 150'],
+  1: [
+    'Adversarially test all four options',
+    'STRICT word count: minimum 150',
+    'v1.2 DISTRIBUTION QUOTAS',
+    'v1.2 DISTRACTOR STANDARD',
+  ],
   2: ['Open cloze (Q9–16)'],
-  3: ['Word formation (Q17–24)', 'Natural sentence first'],
-  4: ['Key word transformations', 'grading_metadata'],
-  5: ['Reading Part 5', 'v1.1: Build distractors'],
+  3: ['Word formation (Q17–24)', 'Natural sentence first', 'DERIVATION STANDARD (v1.2'],
+  4: ['Key word transformations', 'grading_metadata', 'PRE-RETURN CHECKLIST (v1.2'],
+  5: ['Reading Part 5', 'v1.1: Build distractors', 'v1.2 DISTRACTOR SOURCING'],
   6: ['PART 6 ARCHITECTURE v2', 'PHYSICALLY REMOVE'],
   7: ['Multiple matching (Q43–52)'],
   8: ['essay'],
   9: ['four'],
 };
 
-/** Topic/seed are re-injected per generation, so they must not count as drift. */
+/** Topic/seed/discourse rotation are re-injected per generation, so they must not count as drift. */
 function stripVarietyNoise(text) {
   return promptHtmlToPlainText(text)
     .replace(/Topic\/theme:[^\n]*/gi, '')
     .replace(/Variety seed:\s*\d+/gi, '')
+    .replace(/Discourse pattern \(MANDATORY\):[^\n]*/gi, '')
     .replace(/\s+/g, ' ')
     .trim();
 }

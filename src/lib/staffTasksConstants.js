@@ -133,6 +133,32 @@ export const EMPTY_SUBFASE_FORM = {
   visible_para_todos: true,
 };
 
+export const STAFF_TASKS_VIEW_STORAGE_KEY = 'dralo_staff_tasks_view_mode';
+
+export const STAFF_TASKS_VIEW_MODES = [
+  { id: 'classic', label: 'Vista actual' },
+  { id: 'kanban-phases', label: 'Kanban fases' },
+  { id: 'kanban-subphases', label: 'Kanban subfases' },
+  { id: 'kanban-tasks', label: 'Kanban tareas' },
+];
+
+export const KANBAN_FASE_COLUMN_STYLES = {
+  no_iniciada: { background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)' },
+  en_progreso: { background: 'linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%)' },
+  en_revision: { background: 'linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%)' },
+  completada: { background: 'linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%)' },
+  bloqueada: { background: 'linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%)' },
+};
+
+export const KANBAN_TASK_COLUMN_STYLES = {
+  pendiente: { background: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)' },
+  en_progreso: { background: 'linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%)' },
+  en_revision: { background: 'linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%)' },
+  completada: { background: 'linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%)' },
+  cancelada: { background: 'linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%)' },
+  bloqueada: { background: 'linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%)' },
+};
+
 export const EMPTY_TEMPLATE_FORM = {
   nombre: '',
   titulo: '',

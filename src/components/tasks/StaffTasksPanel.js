@@ -8,7 +8,12 @@ import {
   EMPTY_FASE_FORM,
   EMPTY_SUBFASE_FORM,
   EMPTY_TASK_FORM,
+  FASE_ESTADOS,
+  FASE_ESTADO_LABELS,
   FECHA_LIMITE_FILTERS,
+  KANBAN_FASE_COLUMN_STYLES,
+  KANBAN_TASK_COLUMN_STYLES,
+  STAFF_TASKS_VIEW_STORAGE_KEY,
   TASK_ESTADOS,
   TASK_ESTADO_LABELS,
   TASK_PRIORIDADES,
@@ -24,12 +29,17 @@ import {
 } from '@/lib/staffTasksPermissions';
 import {
   computePanelSummary,
+  filterKanbanPhases,
+  filterKanbanSubphases,
+  filterKanbanTasks,
   filterPanelPhases,
   filterPanelSubphases,
   filterPanelTasks,
   formatStaffDateLabel,
   formatStaffDateTimeLabel,
 } from '@/lib/staffTaskHelpers';
+import StaffTasksKanbanBoard, { kanbanStyles } from '@/components/tasks/StaffTasksKanbanBoard';
+import StaffTasksViewSwitcher from '@/components/tasks/StaffTasksViewSwitcher';
 import StaffTaskTemplatesSection from '@/components/tasks/StaffTaskTemplatesSection';
 import StaffTaskFormModal, { ROL_OPTIONS } from '@/components/tasks/StaffTaskFormModal';
 import StaffPhaseFormModal from '@/components/tasks/StaffPhaseFormModal';
@@ -46,20 +56,60 @@ import {
   TaskTableTitleCell,
 } from '@/components/tasks/StaffTaskBadges';
 
-function MetricCard({ label, value, hint, accent = 'violet' }) {
+const PANEL_METRIC_FILTERS = [
+  { key: 'total', label: 'Total', estado: '', cumplimiento: '' },
+  { key: 'pendiente', label: 'Pendientes', estado: 'pendiente', cumplimiento: '' },
+  { key: 'en_progreso', label: 'En progreso', estado: 'en_progreso', cumplimiento: '' },
+  { key: 'en_revision', label: 'En revisión', estado: 'en_revision', cumplimiento: '' },
+  { key: 'completada', label: 'Completadas', estado: 'completada', cumplimiento: '' },
+  { key: 'vencida', label: 'Vencidas', estado: 'vencida', cumplimiento: '' },
+  { key: 'bloqueada', label: 'Bloqueadas', estado: 'bloqueada', cumplimiento: '' },
+  { key: 'a_tiempo', label: '% cumplimiento', estado: 'completada', cumplimiento: 'a_tiempo' },
+];
+
+function getActiveMetricKey(filters = {}) {
+  if (filters.cumplimiento === 'a_tiempo') return 'a_tiempo';
+  if (!filters.estado) return 'total';
+  return filters.estado;
+}
+
+function MetricCard({ label, value, hint, accent = 'violet', active = false, onClick }) {
   const accents = {
-    violet: 'border-violet-100 bg-violet-50/50',
-    amber: 'border-amber-100 bg-amber-50/50',
-    emerald: 'border-emerald-100 bg-emerald-50/50',
-    red: 'border-red-100 bg-red-50/50',
-    blue: 'border-blue-100 bg-blue-50/50',
+    violet: {
+      base: 'border-violet-100 bg-violet-50/50 hover:bg-violet-50',
+      active: 'border-violet-500 bg-violet-100 ring-2 ring-violet-300',
+    },
+    amber: {
+      base: 'border-amber-100 bg-amber-50/50 hover:bg-amber-50',
+      active: 'border-amber-500 bg-amber-100 ring-2 ring-amber-300',
+    },
+    emerald: {
+      base: 'border-emerald-100 bg-emerald-50/50 hover:bg-emerald-50',
+      active: 'border-emerald-500 bg-emerald-100 ring-2 ring-emerald-300',
+    },
+    red: {
+      base: 'border-red-100 bg-red-50/50 hover:bg-red-50',
+      active: 'border-red-500 bg-red-100 ring-2 ring-red-300',
+    },
+    blue: {
+      base: 'border-blue-100 bg-blue-50/50 hover:bg-blue-50',
+      active: 'border-blue-500 bg-blue-100 ring-2 ring-blue-300',
+    },
   };
+  const palette = accents[accent] || accents.violet;
   return (
-    <div className={`rounded-xl border p-4 ${accents[accent] || accents.violet}`}>
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`rounded-xl border p-4 text-left transition-all cursor-pointer w-full ${
+        active ? palette.active : palette.base
+      }`}
+    >
       <p className="text-2xl font-bold text-gray-900">{value}</p>
       <p className="text-sm font-medium text-gray-700 mt-1">{label}</p>
       {hint ? <p className="text-xs text-gray-500 mt-0.5">{hint}</p> : null}
-    </div>
+    </button>
   );
 }
 
@@ -170,6 +220,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     faseId: '',
     subfaseId: '',
     estado: '',
+    cumplimiento: '',
     prioridad: '',
     fechaLimite: '',
     search: '',
@@ -189,6 +240,25 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
 
   const [detailTask, setDetailTask] = useState(null);
   const [showTemplates, setShowTemplates] = useState(false);
+  const [viewMode, setViewMode] = useState('classic');
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STAFF_TASKS_VIEW_STORAGE_KEY);
+      if (stored) setViewMode(stored);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const handleViewModeChange = (mode) => {
+    setViewMode(mode);
+    try {
+      localStorage.setItem(STAFF_TASKS_VIEW_STORAGE_KEY, mode);
+    } catch {
+      /* ignore */
+    }
+  };
 
   const loadAssignees = useCallback(async () => {
     const data = await staffTasksFetch('/api/coordinator/staff-assignees', {}, { soft: true });
@@ -348,6 +418,78 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     }
   };
 
+  const moveTaskEstado = async (task, estado) => {
+    const previous = tasks;
+    setTasks((current) =>
+      current.map((row) => (row.id === task.id ? { ...row, estado } : row)),
+    );
+    setSaving(true);
+    try {
+      await staffTasksFetch('/api/coordinator/tasks', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'updateEstado', id: task.id, estado }),
+      });
+      await loadTasks();
+    } catch (e) {
+      setTasks(previous);
+      alert(e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const movePhaseEstado = async (phase, estado) => {
+    const previous = phases;
+    setPhases((current) =>
+      current.map((row) => (row.id === phase.id ? { ...row, estado } : row)),
+    );
+    setSaving(true);
+    try {
+      await staffTasksFetch('/api/coordinator/phases', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'update',
+          id: phase.id,
+          ...phaseToForm(phase),
+          estado,
+        }),
+      });
+      await loadPhases();
+      await loadTasks();
+    } catch (e) {
+      setPhases(previous);
+      alert(e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const moveSubphaseEstado = async (subphase, estado) => {
+    const previous = subphases;
+    setSubphases((current) =>
+      current.map((row) => (row.id === subphase.id ? { ...row, estado } : row)),
+    );
+    setSaving(true);
+    try {
+      await staffTasksFetch('/api/coordinator/subphases', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'update',
+          id: subphase.id,
+          ...subphaseToForm(subphase),
+          estado,
+        }),
+      });
+      await loadSubphases();
+      await loadTasks();
+    } catch (e) {
+      setSubphases(previous);
+      alert(e.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const duplicateTask = async (task) => {
     setSaving(true);
     try {
@@ -454,27 +596,109 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     }
   };
 
+  const phasesById = useMemo(
+    () => Object.fromEntries(phases.map((phase) => [phase.id, phase])),
+    [phases],
+  );
+
+  const subphasesById = useMemo(
+    () => Object.fromEntries(subphases.map((subphase) => [subphase.id, subphase])),
+    [subphases],
+  );
+
   const panelSummary = useMemo(
     () => computePanelSummary(tasks, phases, subphases),
     [tasks, phases, subphases],
   );
 
-  const visiblePhases = useMemo(() => filterPanelPhases(phases), [phases]);
+  const activeMetricKey = getActiveMetricKey(filters);
+
+  const visiblePhases = useMemo(
+    () => filterPanelPhases(phases, filters.estado, tasks, filters.cumplimiento),
+    [phases, filters.estado, filters.cumplimiento, tasks],
+  );
 
   const visibleSubphases = useMemo(
-    () => filterPanelSubphases(subphases, filters.faseId),
-    [subphases, filters.faseId],
+    () =>
+      filterPanelSubphases(
+        subphases,
+        filters.faseId,
+        filters.estado,
+        tasks,
+        filters.cumplimiento,
+      ),
+    [subphases, filters.faseId, filters.estado, filters.cumplimiento, tasks],
   );
 
   const visibleTasks = useMemo(
-    () => filterPanelTasks(tasks, filters.estado),
-    [tasks, filters.estado],
+    () =>
+      filterPanelTasks(
+        tasks,
+        filters.estado,
+        filters.cumplimiento,
+        phasesById,
+        subphasesById,
+      ),
+    [tasks, filters.estado, filters.cumplimiento, phasesById, subphasesById],
   );
+
+  const handleMetricClick = (metric) => {
+    const isActive = activeMetricKey === metric.key;
+    setFilters((current) => ({
+      ...current,
+      estado: isActive ? '' : metric.estado,
+      cumplimiento: isActive ? '' : metric.cumplimiento,
+    }));
+  };
 
   const filterSubphases = useMemo(() => {
     if (!filters.faseId) return subphases;
     return subphases.filter((s) => s.fase_id === filters.faseId);
   }, [subphases, filters.faseId]);
+
+  const kanbanPhases = useMemo(
+    () => filterKanbanPhases(phases, filters.estado, tasks, filters.cumplimiento),
+    [phases, filters.estado, filters.cumplimiento, tasks],
+  );
+
+  const kanbanTasks = useMemo(
+    () => filterKanbanTasks(tasks, filters.estado),
+    [tasks, filters.estado],
+  );
+
+  const kanbanSubphases = useMemo(
+    () =>
+      filterKanbanSubphases(
+        subphases,
+        filters.faseId,
+        filters.estado,
+        tasks,
+        filters.cumplimiento,
+      ),
+    [subphases, filters.faseId, filters.estado, filters.cumplimiento, tasks],
+  );
+
+  const faseKanbanColumns = useMemo(
+    () =>
+      FASE_ESTADOS.map((id) => ({
+        id,
+        label: FASE_ESTADO_LABELS[id] || id,
+        headStyle: KANBAN_FASE_COLUMN_STYLES[id],
+      })),
+    [],
+  );
+
+  const taskKanbanColumns = useMemo(
+    () =>
+      TASK_ESTADOS.map((id) => ({
+        id,
+        label: TASK_ESTADO_LABELS[id] || id,
+        headStyle: KANBAN_TASK_COLUMN_STYLES[id],
+      })),
+    [],
+  );
+
+  const isKanbanView = viewMode !== 'classic';
 
   const clearFilters = () => {
     setFilters({
@@ -483,6 +707,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
       faseId: '',
       subfaseId: '',
       estado: '',
+      cumplimiento: '',
       prioridad: '',
       fechaLimite: '',
       search: '',
@@ -492,9 +717,13 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const schemaHint = shouldShowSchemaSetupHint(tasksReady);
 
   return (
-    <div className="space-y-6">
+    <div className="staff-tasks-panel space-y-6">
       {/* Header */}
-      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+      <div
+        className={`flex flex-col gap-4 ${
+          embedded ? 'lg:flex-row lg:items-center lg:justify-end' : 'lg:flex-row lg:items-start lg:justify-between'
+        }`}
+      >
         {!embedded ? (
           <div>
             <h2 className="text-xl font-bold text-gray-900">Gestión de tareas</h2>
@@ -502,11 +731,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
               Organiza el trabajo del equipo, controla fechas límite y revisa el avance por fases.
             </p>
           </div>
-        ) : (
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">Gestión de tareas</h2>
-          </div>
-        )}
+        ) : null}
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
@@ -546,6 +771,8 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         </div>
       </div>
 
+      <StaffTasksViewSwitcher value={viewMode} onChange={handleViewModeChange} />
+
       {schemaHint && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           Migración pendiente en desarrollo: ejecuta{' '}
@@ -559,33 +786,295 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         </div>
       ) : null}
 
-      {/* Metrics */}
+      {/* Metrics — each card toggles a panel-wide filter */}
       <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3">
-        <MetricCard label="Total" value={panelSummary.total ?? 0} accent="violet" />
-        <MetricCard label="Pendientes" value={panelSummary.pending ?? 0} accent="blue" />
-        <MetricCard label="En progreso" value={panelSummary.inProgress ?? 0} accent="blue" />
-        <MetricCard label="En revisión" value={panelSummary.inReview ?? 0} accent="amber" />
-        <MetricCard
-          label="Completadas"
-          value={panelSummary.completed ?? 0}
-          hint={
-            panelSummary.completedSubphases || panelSummary.completedPhases
-              ? `${panelSummary.completedTasks ?? 0} tareas · ${panelSummary.completedSubphases ?? 0} subfases · ${panelSummary.completedPhases ?? 0} fases`
-              : null
-          }
-          accent="emerald"
-        />
-        <MetricCard label="Vencidas" value={panelSummary.overdue ?? 0} accent="red" />
-        <MetricCard label="Bloqueadas" value={panelSummary.blocked ?? 0} accent="red" />
-        <MetricCard
-          label="% cumplimiento"
-          value={`${panelSummary.compliancePct ?? 0}%`}
-          hint="Completadas a tiempo"
-          accent="emerald"
-        />
+        {PANEL_METRIC_FILTERS.map((metric) => {
+          const accents = {
+            total: 'violet',
+            pendiente: 'blue',
+            en_progreso: 'blue',
+            en_revision: 'amber',
+            completada: 'emerald',
+            vencida: 'red',
+            bloqueada: 'red',
+            a_tiempo: 'emerald',
+          };
+          const values = {
+            total: panelSummary.total ?? 0,
+            pendiente: panelSummary.pending ?? 0,
+            en_progreso: panelSummary.inProgress ?? 0,
+            en_revision: panelSummary.inReview ?? 0,
+            completada: panelSummary.completed ?? 0,
+            vencida: panelSummary.overdue ?? 0,
+            bloqueada: panelSummary.blocked ?? 0,
+            a_tiempo: `${panelSummary.compliancePct ?? 0}%`,
+          };
+          const hints = {
+            completada:
+              panelSummary.completedSubphases || panelSummary.completedPhases
+                ? `${panelSummary.completedTasks ?? 0} tareas · ${panelSummary.completedSubphases ?? 0} subfases · ${panelSummary.completedPhases ?? 0} fases`
+                : null,
+            a_tiempo: 'Completadas a tiempo',
+          };
+          return (
+            <MetricCard
+              key={metric.key}
+              label={metric.label}
+              value={values[metric.key]}
+              hint={hints[metric.key]}
+              accent={accents[metric.key]}
+              active={activeMetricKey === metric.key}
+              onClick={() => handleMetricClick(metric)}
+            />
+          );
+        })}
       </div>
 
+      {/* Filters */}
+      <section className="rounded-xl border bg-white p-4 shadow-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+          <div className="xl:col-span-2">
+            <label className="block text-xs font-medium text-gray-600 mb-1">Buscar</label>
+            <input
+              value={filters.search}
+              onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+              placeholder="Título o descripción…"
+              className="border rounded-lg px-3 py-2 text-sm w-full"
+            />
+          </div>
+          {canPickAssignee ? (
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Persona</label>
+              <select
+                value={filters.assigneeId}
+                onChange={(e) => setFilters((f) => ({ ...f, assigneeId: e.target.value }))}
+                className="border rounded-lg px-3 py-2 text-sm w-full"
+              >
+                <option value="">Todas</option>
+                {assignees.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {formatAssigneeLabel(u)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : null}
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Departamento</label>
+            <select
+              value={filters.rol}
+              onChange={(e) => setFilters((f) => ({ ...f, rol: e.target.value }))}
+              className="border rounded-lg px-3 py-2 text-sm w-full"
+            >
+              <option value="">Todos</option>
+              {ROL_OPTIONS.map((r) => (
+                <option key={r.value} value={r.label}>
+                  {r.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Fase</label>
+            <select
+              value={filters.faseId}
+              onChange={(e) => {
+                const faseId = e.target.value;
+                setFilters((f) => ({
+                  ...f,
+                  faseId,
+                  subfaseId:
+                    f.subfaseId &&
+                    subphases.some((s) => s.id === f.subfaseId && s.fase_id === faseId)
+                      ? f.subfaseId
+                      : '',
+                }));
+              }}
+              className="border rounded-lg px-3 py-2 text-sm w-full"
+            >
+              <option value="">Todas</option>
+              {phases.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Subfase</label>
+            <select
+              value={filters.subfaseId}
+              onChange={(e) => setFilters((f) => ({ ...f, subfaseId: e.target.value }))}
+              className="border rounded-lg px-3 py-2 text-sm w-full"
+            >
+              <option value="">Todas</option>
+              {filterSubphases.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Estado</label>
+            <select
+              value={filters.estado}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, estado: e.target.value, cumplimiento: '' }))
+              }
+              className="border rounded-lg px-3 py-2 text-sm w-full"
+            >
+              <option value="">Todos</option>
+              {[...TASK_ESTADOS, 'vencida'].map((s) => (
+                <option key={s} value={s}>
+                  {TASK_ESTADO_LABELS[s] || s}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Prioridad</label>
+            <select
+              value={filters.prioridad}
+              onChange={(e) => setFilters((f) => ({ ...f, prioridad: e.target.value }))}
+              className="border rounded-lg px-3 py-2 text-sm w-full"
+            >
+              <option value="">Todas</option>
+              {TASK_PRIORIDADES.map((p) => (
+                <option key={p} value={p}>
+                  {TASK_PRIORIDAD_LABELS[p]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-600 mb-1">Fecha límite</label>
+            <select
+              value={filters.fechaLimite}
+              onChange={(e) => setFilters((f) => ({ ...f, fechaLimite: e.target.value }))}
+              className="border rounded-lg px-3 py-2 text-sm w-full"
+            >
+              {FECHA_LIMITE_FILTERS.map((opt) => (
+                <option key={opt.value || 'all'} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2 mt-3">
+          <button
+            type="button"
+            onClick={() => loadTasks()}
+            disabled={loading || saving}
+            className="px-4 py-2 bg-violet-600 text-white rounded-lg text-sm disabled:opacity-50"
+          >
+            {loading ? 'Cargando…' : 'Actualizar'}
+          </button>
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50"
+          >
+            Limpiar filtros
+          </button>
+        </div>
+      </section>
+
+      {isKanbanView ? (
+        <section className="rounded-xl border bg-white p-5 shadow-sm">
+          <p className={kanbanStyles.kanbanHint}>
+            Arrastra las tarjetas entre columnas para cambiar el estado. Los cambios se guardan al
+            soltar.
+          </p>
+          {viewMode === 'kanban-phases' ? (
+            <StaffTasksKanbanBoard
+              columns={faseKanbanColumns}
+              items={kanbanPhases}
+              disabled={saving || phasesReady === false || !canManagePhases}
+              onMove={movePhaseEstado}
+              renderCard={(phase) => (
+                <>
+                  <h4 className={kanbanStyles.cardTitle}>{phase.nombre}</h4>
+                  {phase.descripcion ? (
+                    <p className={kanbanStyles.cardMeta}>{phase.descripcion}</p>
+                  ) : null}
+                  <div className={kanbanStyles.cardBadges}>
+                    <ProgressBar pct={phase.progressPct} />
+                  </div>
+                  <p className={kanbanStyles.cardMeta}>
+                    {phase.completedCount}/{phase.taskCount} tareas
+                  </p>
+                </>
+              )}
+            />
+          ) : null}
+          {viewMode === 'kanban-subphases' ? (
+            <StaffTasksKanbanBoard
+              columns={faseKanbanColumns}
+              items={kanbanSubphases}
+              disabled={saving || subphasesReady === false || !canManagePhases}
+              onMove={moveSubphaseEstado}
+              renderCard={(subphase) => (
+                <>
+                  <p className={kanbanStyles.cardMeta}>{subphase.fase_nombre || '—'}</p>
+                  <h4 className={kanbanStyles.cardTitle}>{subphase.nombre}</h4>
+                  <div className={kanbanStyles.cardBadges}>
+                    <ProgressBar pct={subphase.progressPct} />
+                  </div>
+                  <p className={kanbanStyles.cardMeta}>
+                    {subphase.completedCount}/{subphase.taskCount} tareas
+                  </p>
+                </>
+              )}
+            />
+          ) : null}
+          {viewMode === 'kanban-tasks' ? (
+            loading && !tasks.length ? (
+              <p className="text-sm text-gray-500 py-8 text-center">Cargando tareas…</p>
+            ) : (
+              <StaffTasksKanbanBoard
+                columns={taskKanbanColumns}
+                items={kanbanTasks}
+                disabled={saving || tasksReady === false}
+                onMove={moveTaskEstado}
+                renderCard={(task) => (
+                  <>
+                    <h4 className={kanbanStyles.cardTitle}>{task.titulo}</h4>
+                    <p className={kanbanStyles.cardMeta}>
+                      {task.fase?.nombre || 'Sin fase'}
+                      {task.subfase?.nombre ? ` · ${task.subfase.nombre}` : ''}
+                    </p>
+                    <div className={kanbanStyles.cardBadges}>
+                      <TaskPrioridadBadge prioridad={task.prioridad} />
+                      {task.asignado?.nombre || task.asignado_rol ? (
+                        <span className="text-xs text-gray-500">
+                          {task.asignado?.nombre || task.asignado_rol}
+                        </span>
+                      ) : null}
+                    </div>
+                    {task.fecha_limite ? (
+                      <p className={kanbanStyles.cardMeta}>{task.timeRemaining}</p>
+                    ) : null}
+                    <button
+                      type="button"
+                      className={kanbanStyles.cardAction}
+                      onPointerDown={(e) => e.stopPropagation()}
+                      onClick={() => setDetailTask(task)}
+                    >
+                      Ver detalle
+                    </button>
+                  </>
+                )}
+              />
+            )
+          ) : null}
+        </section>
+      ) : null}
+
       {/* Phases */}
+      {!isKanbanView ? (
+      <>
       <section className="rounded-xl border bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -604,7 +1093,9 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           <div className="text-center py-8 text-gray-500 text-sm">
             <p>
               {phases.length
-                ? 'No hay fases activas. Las completadas aparecen en el contador superior.'
+                ? activeMetricKey === 'total'
+                  ? 'No hay fases activas. Las completadas aparecen en el contador superior.'
+                  : 'No hay fases con este filtro.'
                 : 'No hay fases definidas.'}
             </p>
             {canManagePhases ? (
@@ -704,7 +1195,9 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           <div className="text-center py-8 text-gray-500 text-sm">
             <p>
               {subphases.length
-                ? `No hay subfases activas${filters.faseId ? ' en esta fase' : ''}. Las completadas aparecen en el contador superior.`
+                ? activeMetricKey === 'total'
+                  ? `No hay subfases activas${filters.faseId ? ' en esta fase' : ''}. Las completadas aparecen en el contador superior.`
+                  : `No hay subfases con este filtro${filters.faseId ? ' en esta fase' : ''}.`
                 : `No hay subfases definidas${filters.faseId ? ' en esta fase' : ''}.`}
             </p>
             {canManagePhases ? (
@@ -795,155 +1288,6 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         />
       ) : null}
 
-      {/* Filters */}
-      <section className="rounded-xl border bg-white p-4 shadow-sm">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-3">
-          <div className="xl:col-span-2">
-            <label className="block text-xs font-medium text-gray-600 mb-1">Buscar</label>
-            <input
-              value={filters.search}
-              onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
-              placeholder="Título o descripción…"
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-            />
-          </div>
-          {canPickAssignee ? (
-            <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Persona</label>
-              <select
-                value={filters.assigneeId}
-                onChange={(e) => setFilters((f) => ({ ...f, assigneeId: e.target.value }))}
-                className="border rounded-lg px-3 py-2 text-sm w-full"
-              >
-                <option value="">Todas</option>
-                {assignees.map((u) => (
-                  <option key={u.id} value={u.id}>
-                    {formatAssigneeLabel(u)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          ) : null}
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Departamento</label>
-            <select
-              value={filters.rol}
-              onChange={(e) => setFilters((f) => ({ ...f, rol: e.target.value }))}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-            >
-              <option value="">Todos</option>
-              {ROL_OPTIONS.map((r) => (
-                <option key={r.value} value={r.label}>
-                  {r.label}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Fase</label>
-            <select
-              value={filters.faseId}
-              onChange={(e) => {
-                const faseId = e.target.value;
-                setFilters((f) => ({
-                  ...f,
-                  faseId,
-                  subfaseId:
-                    f.subfaseId &&
-                    subphases.some((s) => s.id === f.subfaseId && s.fase_id === faseId)
-                      ? f.subfaseId
-                      : '',
-                }));
-              }}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-            >
-              <option value="">Todas</option>
-              {phases.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Subfase</label>
-            <select
-              value={filters.subfaseId}
-              onChange={(e) => setFilters((f) => ({ ...f, subfaseId: e.target.value }))}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-            >
-              <option value="">Todas</option>
-              {filterSubphases.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.nombre}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Estado</label>
-            <select
-              value={filters.estado}
-              onChange={(e) => setFilters((f) => ({ ...f, estado: e.target.value }))}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-            >
-              <option value="">Todos</option>
-              {[...TASK_ESTADOS, 'vencida'].map((s) => (
-                <option key={s} value={s}>
-                  {TASK_ESTADO_LABELS[s] || s}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Prioridad</label>
-            <select
-              value={filters.prioridad}
-              onChange={(e) => setFilters((f) => ({ ...f, prioridad: e.target.value }))}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-            >
-              <option value="">Todas</option>
-              {TASK_PRIORIDADES.map((p) => (
-                <option key={p} value={p}>
-                  {TASK_PRIORIDAD_LABELS[p]}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Fecha límite</label>
-            <select
-              value={filters.fechaLimite}
-              onChange={(e) => setFilters((f) => ({ ...f, fechaLimite: e.target.value }))}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-            >
-              {FECHA_LIMITE_FILTERS.map((opt) => (
-                <option key={opt.value || 'all'} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-2 mt-3">
-          <button
-            type="button"
-            onClick={() => loadTasks()}
-            disabled={loading || saving}
-            className="px-4 py-2 bg-violet-600 text-white rounded-lg text-sm disabled:opacity-50"
-          >
-            {loading ? 'Cargando…' : 'Actualizar'}
-          </button>
-          <button
-            type="button"
-            onClick={clearFilters}
-            className="px-4 py-2 border rounded-lg text-sm text-gray-700 hover:bg-gray-50"
-          >
-            Limpiar filtros
-          </button>
-        </div>
-      </section>
-
       {/* Table */}
       <section className="rounded-xl border bg-white shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
@@ -968,7 +1312,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                 <tr>
                   <td colSpan={5} className="px-5 py-12 text-center">
                     <p className="text-gray-500">
-                      {tasks.length && !filters.estado
+                      {tasks.length && activeMetricKey === 'total' && !filters.search
                         ? 'No hay tareas activas. Las completadas aparecen en el contador superior.'
                         : 'No hay tareas con estos filtros.'}
                     </p>
@@ -1060,6 +1404,8 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           </table>
         </div>
       </section>
+      </>
+      ) : null}
 
       {/* Detail drawer */}
       {detailTask ? (

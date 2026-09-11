@@ -27,6 +27,15 @@ export const PART5_QUESTION_TYPES = new Set([
   'tone',
   'main-idea',
   'main_idea',
+  // v1.2 blueprint additions: contextual meaning and organisation of ideas.
+  'contextual-meaning',
+  'contextual_meaning',
+  'text-organisation',
+  'text_organisation',
+  'text-organization',
+  'text_organization',
+  'organisation',
+  'organization',
 ]);
 
 export const PART5_ABSURD_DISTRACTOR_PATTERNS = [
@@ -388,14 +397,23 @@ export function analyzePart5Quality(gen) {
       `Part 5 has only ${inferential.length} inferential/attitude/purpose/reference/global questions (target at least 2).`,
     );
   }
+  // Blueprint v1.2 caps plain detail items at 2 of 6 and asks for 4+ distinct types.
   const detailCount = metrics.questionTypes.filter((t) => t === 'detail').length;
-  if (questions.length === 6 && detailCount >= 5) {
-    warnings.push(`Part 5 looks heavily detail-based (${detailCount}/6) — soft check.`);
+  if (questions.length === 6 && detailCount > 2) {
+    warnings.push(`Part 5 looks heavily detail-based (${detailCount}/6, blueprint cap is 2) — soft check.`);
   }
-  if (questions.length === 6 && new Set(metrics.questionTypes).size < 3 && metrics.questionTypes.length >= 4) {
+  if (questions.length === 6 && new Set(metrics.questionTypes).size < 4 && metrics.questionTypes.length >= 4) {
     warnings.push(
-      `Part 5 questionType variety is low (${[...new Set(metrics.questionTypes)].join(', ') || 'none'}) — soft check.`,
+      `Part 5 questionType variety is low (${[...new Set(metrics.questionTypes)].join(', ') || 'none'}; blueprint asks for 4+) — soft check.`,
     );
+  }
+  if (questions.length === 6) {
+    const overused = [...new Set(metrics.questionTypes)].filter(
+      (t) => metrics.questionTypes.filter((x) => x === t).length > 2,
+    );
+    if (overused.length) {
+      warnings.push(`Part 5 overuses questionType ${overused.join(', ')} (more than twice) — soft check.`);
+    }
   }
 
   warnings.push(...findOverusedPatterns(gen));

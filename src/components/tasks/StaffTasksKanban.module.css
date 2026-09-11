@@ -1,0 +1,259 @@
+.board {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 0.25rem 0.15rem 0.75rem;
+  min-height: 420px;
+  scroll-snap-type: x proximity;
+  scrollbar-gutter: stable;
+}
+
+.column {
+  flex: 0 0 min(300px, 82vw);
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  scroll-snap-align: start;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.columnOver {
+  border-color: #8b5cf6;
+  background: #f5f3ff;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+.columnHead {
+  padding: 0.85rem 1rem 0.65rem;
+  border-bottom: 1px solid #e2e8f0;
+  border-radius: 14px 14px 0 0;
+}
+
+.columnTitle {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.columnCount {
+  margin: 0.2rem 0 0;
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.columnBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  min-height: 120px;
+}
+
+.card {
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  padding: 0.85rem 0.9rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.card:hover {
+  border-color: #c4b5fd;
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+}
+
+.cardDragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+
+.cardOverlay {
+  border-radius: 12px;
+  border: 1px solid #8b5cf6;
+  background: #ffffff;
+  padding: 0.85rem 0.9rem;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
+  cursor: grabbing;
+  transform: rotate(1.5deg);
+  max-width: 300px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.35;
+}
+
+.cardMeta {
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.cardBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.55rem;
+}
+
+.cardAction {
+  margin-top: 0.65rem;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #7c3aed;
+  cursor: pointer;
+  text-align: left;
+}
+
+.cardAction:hover {
+  color: #5b21b6;
+  text-decoration: underline;
+}
+
+.emptyColumn {
+  margin: 0;
+  padding: 1.25rem 0.5rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.viewSwitcher {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.35rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.viewBtn {
+  border: 1px solid transparent;
+  border-radius: 9px;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.viewBtn:hover {
+  background: #ffffff;
+  border-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.viewBtnActive {
+  background: #ffffff;
+  border-color: #c4b5fd;
+  color: #5b21b6;
+  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
+}
+
+.kanbanHint {
+  margin: 0 0 0.75rem;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+body.reading-night-mode .column {
+  background: #0f172a;
+  border-color: #475569;
+}
+
+body.reading-night-mode .columnOver {
+  background: #1e1b4b;
+  border-color: #8b5cf6;
+}
+
+body.reading-night-mode .columnHead {
+  border-bottom-color: #475569;
+}
+
+body.reading-night-mode .columnTitle {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .columnCount {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .card,
+body.reading-night-mode .cardOverlay {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .cardTitle {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .cardMeta {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .emptyColumn {
+  background: rgba(15, 23, 42, 0.5);
+  border-color: #475569;
+  color: #64748b;
+}
+
+body.reading-night-mode .viewSwitcher {
+  background: #0f172a;
+  border-color: #475569;
+}
+
+body.reading-night-mode .viewBtn {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .viewBtn:hover,
+body.reading-night-mode .viewBtnActive {
+  background: #1e293b;
+  border-color: #6366f1;
+  color: #e0e7ff;
+}
+
+body.reading-night-mode .kanbanHint {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .cardAction {
+  color: #a78bfa;
+}
+
+body.reading-night-mode .cardAction:hover {
+  color: #c4b5fd;
+}

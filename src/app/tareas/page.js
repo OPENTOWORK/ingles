@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { canAccessStaffTasks, getRoleNameByUserId } from '@/utils/authRoles';
 import StaffTasksPanelPage from '@/components/tasks/StaffTasksPanelPage';
-import PanelPageHeader from '@/components/PanelPageHeader';
+import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
 export default function TareasPage() {
@@ -13,7 +13,6 @@ export default function TareasPage() {
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [userRole, setUserRole] = useState('');
-  const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -34,7 +33,6 @@ export default function TareasPage() {
 
       setUserId(user.id);
       setUserRole(role);
-      setUserEmail(user.email || '');
       setLoading(false);
     };
 
@@ -43,25 +41,32 @@ export default function TareasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <RouteLoadingMascot label="Cargando panel de tareas…" variant={5} width={130} />
-      </div>
+      <main className="niveles-level-page niveles-level-page--b2 shell staff-tareas-page">
+        <div className="levels-b2-page-content">
+          <div className="staff-tareas-panel staff-tareas-panel--loading">
+            <RouteLoadingMascot label="Cargando panel de tareas…" variant={5} width={130} />
+          </div>
+        </div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <PanelPageHeader title="Panel de tareas" mascotVariant={5} mascotWidth={92}>
-            <span className="text-sm text-gray-600">{userEmail}</span>
-          </PanelPageHeader>
+    <main className="niveles-level-page niveles-level-page--b2 shell staff-tareas-page">
+      <div className="levels-b2-page-content">
+        <div className="staff-tareas-panel">
+          <PageHero
+            eyebrow="Organización del equipo"
+            title="Panel de tareas"
+            description="Organiza el trabajo del equipo, controla fechas límite y revisa el avance por fases."
+            showMascot
+            mascotVariant={5}
+            mascotWidth={146}
+            accent="violet"
+          />
+          <StaffTasksPanelPage currentUserId={userId} userRole={userRole} />
         </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <StaffTasksPanelPage currentUserId={userId} userRole={userRole} />
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }

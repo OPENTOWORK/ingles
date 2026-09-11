@@ -72,6 +72,7 @@ export default function AdminBlogPanel() {
   const [form, setForm] = useState(emptyFormForType(BLOG_TYPE_ARTICLE));
   const [slugTouched, setSlugTouched] = useState(false);
   const [draftRestore, setDraftRestore] = useState(null);
+  const [publicationFocusSeq, setPublicationFocusSeq] = useState(0);
   const editorRef = useRef(null);
   const handledCreateParam = useRef(false);
   const handledIdParam = useRef('');
@@ -327,6 +328,12 @@ export default function AdminBlogPanel() {
   const activeMeta = blogTypeMeta(activeType);
   const formMeta = blogTypeMeta(form.contentType);
   const isScheduleMode = form.publishMode === PUBLISH_MODE_SCHEDULE;
+
+  const handleScheduleClick = () => {
+    patchForm({ publishMode: PUBLISH_MODE_SCHEDULE });
+    setPublicationFocusSeq((count) => count + 1);
+  };
+
   const submitLabel = isScheduleMode
     ? formMeta.scheduleActionLabel
     : form.id
@@ -424,6 +431,7 @@ export default function AdminBlogPanel() {
             onTitleChange={handleTitleChange}
             onUploadImage={uploadImage}
             uploading={uploading}
+            publicationFocusSeq={publicationFocusSeq}
           />
 
           <div className={styles.actions}>
@@ -437,6 +445,15 @@ export default function AdminBlogPanel() {
               onClick={(event) => handleSubmit(event, { asDraft: true })}
             >
               Guardar borrador
+            </button>
+            <button
+              type="button"
+              className={isScheduleMode ? styles.scheduleBtnActive : styles.secondaryBtn}
+              disabled={saving || uploading}
+              aria-pressed={isScheduleMode}
+              onClick={handleScheduleClick}
+            >
+              Programar
             </button>
             {form.id ? (
               <>

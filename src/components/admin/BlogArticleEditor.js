@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BlogRichTextEditor from '@/components/admin/BlogRichTextEditor';
 import { upsertBlogSlotImage } from '@/lib/blogContent';
 import { createEmptyFaqItem } from '@/lib/blogFaq';
@@ -69,6 +69,7 @@ export default function BlogArticleEditor({
   onTitleChange,
   onUploadImage,
   uploading,
+  publicationFocusSeq = 0,
 }) {
   const [tab, setTab] = useState('content');
   const richEditorRef = useRef(null);
@@ -85,6 +86,18 @@ export default function BlogArticleEditor({
     Boolean(form.id) && !form.published && !isScheduleMode && !isFutureSchedule(form.scheduledPublishAt);
   const schedulePreviewIso = combineScheduleInputs(form.scheduleDate, form.scheduleTime);
   const schedulePresets = getScheduleQuickPresets();
+
+  useEffect(() => {
+    if (!publicationFocusSeq) return;
+    setTab('content');
+    const timer = window.setTimeout(() => {
+      document
+        .getElementById('blog-publication-title')
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('blog-schedule-date')?.focus();
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [publicationFocusSeq]);
 
   const updateFaqItem = (id, patch) => {
     onChange({
@@ -368,6 +381,7 @@ export default function BlogArticleEditor({
                   <label className={styles.scheduleField}>
                     <span>Fecha</span>
                     <input
+                      id="blog-schedule-date"
                       type="date"
                       className={styles.input}
                       value={form.scheduleDate || ''}
