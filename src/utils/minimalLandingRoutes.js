@@ -1,5 +1,5 @@
 /** Rutas de landing de conversión (ads): sin menú, solo logo. */
-export const MINIMAL_LANDING_PATH_PREFIXES = ['/campana'];
+export const MINIMAL_LANDING_PATH_PREFIXES = ['/campana', '/preparar-b2-cambridge'];
 
 export function isMinimalLandingPath(pathname = '') {
   if (!pathname) return false;

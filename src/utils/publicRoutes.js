@@ -5,6 +5,7 @@
 export const PUBLIC_ROUTE_PREFIXES = [
   '/',
   '/campana',
+  '/preparar-b2-cambridge',
   '/login',
   '/registro',
   '/contacto',

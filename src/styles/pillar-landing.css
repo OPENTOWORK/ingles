@@ -1,0 +1,145 @@
+/* Página pilar SEO / publi — /preparar-b2-cambridge */
+
+.pillar-landing__hero {
+  text-align: left;
+}
+
+.pillar-landing__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.pillar-landing__toc {
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  padding: 1.25rem 1.35rem;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.pillar-landing__toc-title {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.pillar-landing__toc-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.pillar-landing__toc-list li {
+  margin-bottom: 0.45rem;
+  line-height: 1.45;
+}
+
+.pillar-landing__toc-list a {
+  color: #5b4bb7;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pillar-landing__toc-list a:hover {
+  text-decoration: underline;
+}
+
+.pillar-landing__section {
+  scroll-margin-top: 1.5rem;
+}
+
+.pillar-landing__exam-parts .conversion-landing__pillar h3 {
+  font-size: 0.95rem;
+}
+
+.pillar-landing__plan-steps li {
+  color: #334155;
+  border-bottom-color: #e2e8f0;
+}
+
+.pillar-landing__plan-steps .conversion-landing__step-num {
+  background: #5b4bb7;
+}
+
+.pillar-landing__mistakes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.pillar-landing__mistakes li {
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.pillar-landing__mistakes strong {
+  color: #0f172a;
+}
+
+.pillar-landing__tools {
+  display: grid;
+  gap: 0.85rem;
+  margin: 1.25rem 0;
+}
+
+.pillar-landing__tool-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.35rem 0.85rem;
+  padding: 1rem 1.1rem;
+  border-radius: 14px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+}
+
+.pillar-landing__tool-icon {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  background: #ede9fe;
+  color: #5b4bb7;
+}
+
+.pillar-landing__tool-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.pillar-landing__tool-card p {
+  margin: 0;
+  grid-column: 2;
+  line-height: 1.55;
+  color: #475569;
+}
+
+.pillar-landing__tool-card a {
+  color: #5b4bb7;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .pillar-landing__hero {
+    text-align: center;
+  }
+
+  .pillar-landing__hero .conversion-landing__cta {
+    width: 100%;
+    max-width: 22rem;
+  }
+}
