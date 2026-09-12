@@ -17,12 +17,7 @@ import DraloTagline from '@/components/DraloTagline';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
-const MicrosoftClarity = dynamic(() => import('@/components/analytics/MicrosoftClarity'), {
-  ssr: false,
-});
-const MetaPixel = dynamic(() => import('@/components/analytics/MetaPixel'), {
-  ssr: false,
-});
+import ClientAnalyticsLoader from '@/components/analytics/ClientAnalyticsLoader';
 import { isClarityExcludedPath } from '@/lib/clarity';
 import { SITE_FOOTER_TAGLINE } from '@/lib/siteSeo';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
@@ -79,17 +74,6 @@ function ClientToaster() {
   const mounted = useClientMounted();
   if (!mounted) return null;
   return <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />;
-}
-
-function ClientAnalytics({ clarityEnabled, clarityProjectId, pixelEnabled, pixelId }) {
-  const mounted = useClientMounted();
-  if (!mounted) return null;
-  return (
-    <>
-      <MicrosoftClarity enabled={clarityEnabled} projectId={clarityProjectId} />
-      <MetaPixel enabled={pixelEnabled} pixelId={pixelId} />
-    </>
-  );
 }
 
 function RootLayoutClientFallback() {
@@ -412,7 +396,7 @@ function RootLayoutClientInner({ children }) {
     <>
       <SiteNightModeInit />
       <ClientToaster />
-      <ClientAnalytics
+      <ClientAnalyticsLoader
         clarityEnabled={clarityAnalyticsEnabled}
         clarityProjectId={clarityProjectId}
         pixelEnabled={metaPixelEnabled}
