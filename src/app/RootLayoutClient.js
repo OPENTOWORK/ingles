@@ -20,9 +20,6 @@ import { useClarityPageTags } from '@/hooks/useClarityPageTags';
 const MicrosoftClarity = dynamic(() => import('@/components/analytics/MicrosoftClarity'), {
   ssr: false,
 });
-const GoogleAnalytics = dynamic(() => import('@/components/analytics/GoogleAnalytics'), {
-  ssr: false,
-});
 const MetaPixel = dynamic(() => import('@/components/analytics/MetaPixel'), {
   ssr: false,
 });
@@ -84,13 +81,12 @@ function ClientToaster() {
   return <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />;
 }
 
-function ClientAnalytics({ clarityEnabled, clarityProjectId, gaEnabled, gaId, pixelEnabled, pixelId }) {
+function ClientAnalytics({ clarityEnabled, clarityProjectId, pixelEnabled, pixelId }) {
   const mounted = useClientMounted();
   if (!mounted) return null;
   return (
     <>
       <MicrosoftClarity enabled={clarityEnabled} projectId={clarityProjectId} />
-      <GoogleAnalytics enabled={gaEnabled} measurementId={gaId} />
       <MetaPixel enabled={pixelEnabled} pixelId={pixelId} />
     </>
   );
@@ -137,7 +133,6 @@ function RootLayoutClientInner({ children }) {
 
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
-  const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-ELSL12SBGQ';
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
   const analyticsCookiesEnabled = Boolean(cookieConsent) && Boolean(cookiePreferences.analytics);
   const personalizationCookiesEnabled =
@@ -145,10 +140,6 @@ function RootLayoutClientInner({ children }) {
   const clarityAnalyticsEnabled =
     analyticsCookiesEnabled &&
     Boolean(clarityProjectId) &&
-    !isClarityExcludedPath(pathname);
-  const googleAnalyticsEnabled =
-    analyticsCookiesEnabled &&
-    Boolean(gaMeasurementId) &&
     !isClarityExcludedPath(pathname);
   const metaPixelEnabled =
     personalizationCookiesEnabled &&
@@ -424,8 +415,6 @@ function RootLayoutClientInner({ children }) {
       <ClientAnalytics
         clarityEnabled={clarityAnalyticsEnabled}
         clarityProjectId={clarityProjectId}
-        gaEnabled={googleAnalyticsEnabled}
-        gaId={gaMeasurementId}
         pixelEnabled={metaPixelEnabled}
         pixelId={metaPixelId}
       />
