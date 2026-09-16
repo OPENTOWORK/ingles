@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import { isDevLightweightMode } from '@/lib/devRuntime';
 
 /** Wait until initial navigation has settled before background sync work. */
 const BACKFILL_DEFER_MS = 15000;
@@ -14,7 +15,7 @@ export function useLevelsStarsBackfill(session) {
 
   useEffect(() => {
     const userId = session?.user?.id;
-    if (!userId || ranRef.current) return undefined;
+    if (isDevLightweightMode() || !userId || ranRef.current) return undefined;
 
     ranRef.current = true;
     let cancelled = false;

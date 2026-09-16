@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { useDeferredMount } from '@/hooks/useDeferredMount';
+import { isDevLightweightMode } from '@/lib/devRuntime';
 
 const SiteAssistantWidget = dynamic(() => import('@/components/chat/SiteAssistantWidget'), {
   ssr: false,
@@ -16,6 +17,6 @@ function SiteAssistantDeferred() {
 
 /** Solo monta el chat si hay sesión (evita carga en rutas públicas). */
 export default function DeferredSiteAssistant({ enabled = false }) {
-  if (!enabled) return null;
+  if (!enabled || isDevLightweightMode()) return null;
   return <SiteAssistantDeferred />;
 }

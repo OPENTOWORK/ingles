@@ -9,6 +9,10 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   FRIEND_INVITED: 'friend_invited',
   STAFF_TASK_ASSIGNED: 'staff_task_assigned',
   FOUNDING_MEMBER_PLUS_GRANTED: 'founding_member_plus_granted',
+  FOUNDING_MEMBER_SURVEY: 'founding_member_survey',
+  FOUNDING_MEMBER_SURVEY_REMINDER: 'founding_member_survey_reminder',
+  FOUNDING_MEMBER_SURVEY_CONFIRMED: 'founding_member_survey_confirmed',
+  FOUNDING_MEMBER_SURVEY_REVOKED: 'founding_member_survey_revoked',
 };
 
 export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
@@ -57,6 +61,27 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     label: 'Plan Plus founding (50 primeras inscripciones)',
     description:
       'Se envía automáticamente a las inscripciones 2–50 con Plan Plus gratuito e indefinido.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_SURVEY,
+    label: 'Encuesta founding (30 días)',
+    description:
+      'A los 30 días del alta: formulario para consolidar el Plan Plus de por vida. 7 días de plazo.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_SURVEY_REMINDER,
+    label: 'Recordatorio de la encuesta founding',
+    description: 'Aviso a los 5 días si el formulario de los 30 días sigue sin responder.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_SURVEY_CONFIRMED,
+    label: 'Encuesta founding respondida',
+    description: 'Confirma que el Plan Plus queda consolidado de por vida al enviar el formulario.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_SURVEY_REVOKED,
+    label: 'Plan Plus founding retirado',
+    description: 'Se envía cuando pasan los 7 días sin respuesta y se retira el Plan Plus.',
   },
 ];
 

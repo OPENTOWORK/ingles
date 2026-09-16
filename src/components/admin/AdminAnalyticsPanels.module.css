@@ -1,9 +1,9 @@
 .panel {
   background: #fff;
-  border-radius: 1rem;
+  border-radius: 1.15rem;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-  margin-bottom: 2rem;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+  margin-bottom: 1.25rem;
   overflow: hidden;
 }
 
@@ -32,6 +32,14 @@
   color: #64748b;
   max-width: 42rem;
   line-height: 1.5;
+}
+
+.audienceHint {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #4338ca;
 }
 
 .tabList {
@@ -582,4 +590,185 @@
   font-size: 0.8125rem;
   font-weight: 600;
   color: #f8fafc;
+}
+
+/* Pestaña Seguimiento */
+
+.legendRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.25rem 0 1rem;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.legendDot {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+}
+
+.focusBar {
+  display: flex;
+  width: 100%;
+  height: 0.5rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.focusSegment {
+  display: block;
+  height: 100%;
+}
+
+.focusStudy {
+  background: #6366f1;
+}
+
+.focusBrowsing {
+  background: #94a3b8;
+}
+
+.focusIdle {
+  background: #fbbf24;
+}
+
+.trackingList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.trackingRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid #e8edf5;
+  border-radius: 0.95rem;
+  background: #fff;
+}
+
+.trackingHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.trackingIdentity {
+  min-width: 0;
+}
+
+.trackingName {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.trackingEmail {
+  margin: 0.1rem 0 0;
+  font-size: 0.76rem;
+  color: #64748b;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trackingScore {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.trackingScoreValue {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #4338ca;
+}
+
+.trackingScoreLabel {
+  margin: 0;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.trackingMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.trackingMeta strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.trackingAreas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.areaChip {
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px solid #e8edf5;
+}
+
+.areaChipStudy {
+  color: #4338ca;
+  background: #eef2ff;
+  border-color: #e0e7ff;
+}
+
+.monitoredBlock {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #eef2f7;
+}
+
+.monitoredTitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f172a;
+}
+
+.monitoredIntro {
+  margin: 0.25rem 0 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+.monitoredSummary {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e0e7ff;
+  background: #eef2ff;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #312e81;
 }

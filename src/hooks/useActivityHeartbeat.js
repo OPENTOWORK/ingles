@@ -4,13 +4,14 @@ import { useEffect, useRef } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { HEARTBEAT_INTERVAL_MS, HEARTBEAT_INITIAL_DELAY_MS } from '@/lib/userActivity';
 import { detectClientDeviceType } from '@/lib/clientDeviceType';
+import { isDevLightweightMode } from '@/lib/devRuntime';
 
 export function useActivityHeartbeat(session, enabled = true) {
   const lastPingRef = useRef(Date.now());
   const deviceTypeRef = useRef(null);
 
   useEffect(() => {
-    if (!enabled || !session?.access_token) return undefined;
+    if (isDevLightweightMode() || !enabled || !session?.access_token) return undefined;
 
     deviceTypeRef.current = detectClientDeviceType();
 

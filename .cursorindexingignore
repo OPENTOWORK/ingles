@@ -1,0 +1,27 @@
+﻿# Carpetas pesadas que no son codigo de la app.
+# Excluirlas del indexado acelera el editor en local. No borra nada del disco ni de git.
+
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+
+# Backups historicos (~3.900 archivos, 31 MB)
+backup-training-structure/
+backup-old-training-structure/
+server-routes-archive/
+
+# Documentacion y material pesado (~188 MB)
+docs/
+Imagenes/
+listening-assets/
+Ejercicios/
+assets/
+
+# Artefactos temporales
+tmp/
+temp/
+secrets/
+scripts/generated/

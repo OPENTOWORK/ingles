@@ -127,6 +127,7 @@ export function buildAppNavModel(userRole, session) {
   const admin = isAdminRole(userRole);
   const showPricing = !guest && canViewPricing(userRole);
   const staffItems = guest ? [] : getStaffPanelMenuItemsForRole(userRole);
+  const useAdminSidebarNav = admin && staffItems.length > 0;
 
   return {
     guest,
@@ -143,8 +144,12 @@ export function buildAppNavModel(userRole, session) {
     showLogout: !guest,
     staffItems,
     staffMenuLabel: getStaffPanelMenuLabel(userRole),
-    showStaffDropdown: staffItems.length > 1,
-    showStaffSingleLink: staffItems.length === 1,
+    userRole: userRole || '',
+    showStaffAdminLink: useAdminSidebarNav,
+    staffAdminHref: '/admin',
+    staffAdminLabel: 'Admin',
+    showStaffDropdown: !useAdminSidebarNav && staffItems.length > 1,
+    showStaffSingleLink: !useAdminSidebarNav && staffItems.length === 1,
     isStudent: usesStudentContentRestrictions(userRole),
   };
 }
@@ -265,6 +270,48 @@ export function getAdminPanelMenuItems() {
     items.push(COORDINATOR_ADMIN_PANEL_ITEM);
   }
   return items;
+}
+
+function normalizeStaffShellPath(path = '') {
+  const trimmed = String(path || '').replace(/\/$/, '');
+  return trimmed || '/';
+}
+
+function staffShellPathMatches(pathname = '', href = '') {
+  const current = normalizeStaffShellPath(pathname);
+  const target = normalizeStaffShellPath(href);
+  if (target === '/admin') {
+    return current === '/admin' || current.startsWith('/admin/');
+  }
+  return current === target || current.startsWith(`${target}/`);
+}
+
+/** Módulos del menú lateral Admin (dropdown completo para administradores). */
+export function getAdminShellMenuItems(roleName = '') {
+  const items = isAdminRole(roleName)
+    ? [
+        ...getAdminPanelMenuItems(),
+        { href: '/admin/speaking-tasks', label: 'Speaking tasks' },
+      ]
+    : getStaffPanelMenuItemsForRole(roleName).filter((item) => item.href.startsWith('/admin'));
+
+  const seen = new Set();
+  return items.filter((item) => {
+    const href = normalizeStaffShellPath(item.href);
+    if (seen.has(href)) return false;
+    seen.add(href);
+    return true;
+  });
+}
+
+/** Muestra el shell lateral solo en rutas de gestión admin (rol administrador u otros con /admin/*). */
+export function shouldShowAdminShell(pathname = '', roleName = '') {
+  if (isAdminRole(roleName) && normalizeStaffShellPath(pathname) === STAFF_PANELS_HUB_PATH) {
+    return true;
+  }
+  const menuItems = getAdminShellMenuItems(roleName);
+  if (!menuItems.length) return false;
+  return menuItems.some((item) => staffShellPathMatches(pathname, item.href));
 }
 
 export const TEACHER_PANEL_MENU_ITEMS = [

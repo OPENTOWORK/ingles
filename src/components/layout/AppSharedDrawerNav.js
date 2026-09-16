@@ -16,6 +16,7 @@ import {
   NAV_LINK_PROFILE,
   HOME_PRICING_LINK,
   isStaffPanelsNavActive,
+  shouldShowAdminShell,
 } from '@/config/appNavMenu';
 
 /**
@@ -53,9 +54,14 @@ export function AppSharedDrawerNav({
     staffMenuLabel,
     showStaffDropdown,
     showStaffSingleLink,
+    showStaffAdminLink,
+    staffAdminHref,
+    staffAdminLabel,
   } = navModel;
 
-  const staffPanelsNavActive = isStaffPanelsNavActive(pathname, searchParams, staffItems);
+  const staffPanelsNavActive = showStaffAdminLink
+    ? shouldShowAdminShell(pathname, navModel.userRole)
+    : isStaffPanelsNavActive(pathname, searchParams, staffItems);
 
   return (
     <>
@@ -157,6 +163,16 @@ export function AppSharedDrawerNav({
           {...(NAV_LINK_CONTACT.tourId ? { 'data-tour': NAV_LINK_CONTACT.tourId } : {})}
         >
           {NAV_LINK_CONTACT.label}
+        </NavLink>
+      ) : null}
+
+      {showStaffAdminLink ? (
+        <NavLink
+          href={staffAdminHref}
+          className={`${linkClass}${staffPanelsNavActive ? ' is-active' : ''}`}
+          onClick={onNavigate}
+        >
+          {staffAdminLabel}
         </NavLink>
       ) : null}
 

@@ -346,7 +346,7 @@ export default function AdminBlogPanel() {
   const articleMeta = BLOG_CONTENT_TYPE_META[BLOG_TYPE_ARTICLE];
 
   return (
-    <div className={`shell ${styles.wrap}`}>
+    <div className={`admin-module ${styles.wrap}`}>
       <PanelPageHeader
         title="Blog"
         subtitle="Gestiona noticias breves y artículos completos con SEO para marketing."

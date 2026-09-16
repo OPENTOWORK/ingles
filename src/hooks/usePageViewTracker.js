@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { getPageTitleForPath } from '@/lib/pageViewLabels';
+import { isDevLightweightMode } from '@/lib/devRuntime';
 
 const MIN_DURATION_SEC = 2;
 
@@ -36,7 +37,7 @@ export function usePageViewTracker(session, enabled = true) {
   };
 
   useEffect(() => {
-    if (!enabled || !session?.access_token) return undefined;
+    if (isDevLightweightMode() || !enabled || !session?.access_token) return undefined;
 
     const now = Date.now();
     const previousPath = pathRef.current;

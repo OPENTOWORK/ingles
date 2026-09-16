@@ -8,6 +8,10 @@ const supabaseUrl = getSupabaseUrl();
 const supabaseAnonKey = getSupabaseAnonKey();
 
 export async function POST(req) {
+  if (process.env.NODE_ENV === 'development' && process.env.NEXT_PUBLIC_DEV_FULL_TRACKING !== '1') {
+    return NextResponse.json({ ok: true, devSkipped: true });
+  }
+
   try {
     const authHeader = req.headers.get('authorization') || '';
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;

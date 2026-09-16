@@ -78,6 +78,12 @@ export function isProTierPlanSlug(slug) {
   return normalized === 'pro' || normalized === 'friendly_premium';
 }
 
+/** Seguimiento de estudio monitorizado: planes PLUS y PREMIUM (incl. Friendly). */
+export function hasStudySessionPlanAccess(slug) {
+  const normalized = normalizeUserPlanSlug(slug);
+  return isPlusTierPlanSlug(normalized) || isProTierPlanSlug(normalized);
+}
+
 /** @typedef {'free'|'starter'|'premium'|'pro'|'friendly_plus'|'friendly_premium'} PlanSlug */
 
 /** Plan STARTER retirado del catálogo; conservado solo para suscripciones legacy. */

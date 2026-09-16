@@ -282,6 +282,12 @@ function RootLayoutClientInner({ children }) {
         const names = await window.caches.keys();
         await Promise.all(names.map((name) => window.caches.delete(name)));
       }
+      try {
+        if (window.sessionStorage.getItem('dralo_dev_sw_cleared') === '1') return;
+        window.sessionStorage.setItem('dralo_dev_sw_cleared', '1');
+      } catch {
+        /* ignore */
+      }
       window.location.reload();
     });
   }, []);

@@ -11,6 +11,9 @@ import { PlacementAccessProvider } from '@/context/PlacementAccessContext';
 import { useItPreviewRole } from '@/hooks/useItPreviewRole';
 import { useItPreviewAdminBuzonLayout } from '@/hooks/useItPreviewAdminBuzonLayout';
 import AppNav from '@/components/layout/AppNav';
+import AdminShell from '@/components/admin/AdminShell';
+import { shouldShowAdminShell } from '@/config/appNavMenu';
+import StudySessionBarGate from '@/components/study/StudySessionBarGate';
 
 function SiteHeaderBrand({ nav = null }) {
   return (
@@ -30,6 +33,8 @@ export default function AuthenticatedAppShell({ session, userRole, onLogout, chi
   const pathname = usePathname();
   const preview = useItPreviewRole(userRole, session);
   useItPreviewAdminBuzonLayout();
+  const showAdminShell = shouldShowAdminShell(pathname, preview.userRole);
+  const showStudyBar = Boolean(preview.session?.access_token) && !showAdminShell;
 
   return (
     <>
@@ -44,9 +49,18 @@ export default function AuthenticatedAppShell({ session, userRole, onLogout, chi
           <PlacementAccessProvider session={preview.session} userRole={preview.userRole}>
             <PlacementTestNotice />
             <main className="page-content">
-              <ExamNavigationGuard>{children}</ExamNavigationGuard>
+              <ExamNavigationGuard>
+                {showAdminShell ? (
+                  <AdminShell userRole={preview.userRole}>{children}</AdminShell>
+                ) : (
+                  children
+                )}
+              </ExamNavigationGuard>
               {pathname === '/' && <DeferredAppSideMenu defaultOpen={false} />}
             </main>
+            {showStudyBar ? (
+              <StudySessionBarGate session={preview.session} userRole={preview.userRole} />
+            ) : null}
           </PlacementAccessProvider>
         </GuidedTourProvider>
       </UserRoleProvider>

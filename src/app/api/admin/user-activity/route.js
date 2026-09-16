@@ -7,6 +7,7 @@ import {
   formatSessionDuration,
 } from '@/lib/userActivity';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
+import { isStarredTeamMember, resolveStarredTeamUserIds } from '@/lib/adminStarredUsers';
 
 async function resolveUserIdsForRoleFilter(db, roleId) {
   if (!roleId || roleId === 'all') return null;
@@ -50,8 +51,10 @@ export async function GET(req) {
     const endDate = searchParams.get('endDate') || '';
     const roleId = searchParams.get('roleId') || '';
     const userIdFilter = String(searchParams.get('userId') || '').trim();
+    const excludeStaff = searchParams.get('excludeStaff') === '1';
 
     const db = auth.db;
+    const starredUserIds = excludeStaff ? await resolveStarredTeamUserIds(db) : null;
 
     const [presenceRes, sessionsRes] = await Promise.all([
       db.from('usuario_presencia').select('user_id, last_seen_at, total_session_seconds'),
@@ -71,6 +74,7 @@ export async function GET(req) {
 
     const byUser = {};
     for (const row of presenceRes.data || []) {
+      if (isStarredTeamMember(starredUserIds, row.user_id)) continue;
       byUser[row.user_id] = {
         online: isUserOnline(row.last_seen_at),
         lastSeenAt: row.last_seen_at,
@@ -79,7 +83,9 @@ export async function GET(req) {
       };
     }
 
-    let sessions = sessionsRes.data || [];
+    let sessions = (sessionsRes.data || []).filter(
+      (row) => !isStarredTeamMember(starredUserIds, row.user_id),
+    );
     const allowedUserIds = await resolveUserIdsForRoleFilter(db, roleId);
     if (allowedUserIds !== null) {
       sessions = sessions.filter((row) => allowedUserIds.has(row.user_id));
@@ -124,6 +130,8 @@ export async function GET(req) {
       activeUsers,
       appliedRoleId: roleId && roleId !== 'all' ? String(roleId) : 'all',
       appliedUserId: userIdFilter || '',
+      appliedExcludeStaff: excludeStaff,
+      excludedStaffCount: starredUserIds?.size ?? 0,
     });
   } catch (err) {
     console.error('[admin/user-activity]', err);

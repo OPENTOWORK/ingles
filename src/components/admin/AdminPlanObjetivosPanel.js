@@ -44,7 +44,7 @@ export default function AdminPlanObjetivosPanel() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="admin-module admin-module--narrow">
       <PanelPageHeader
         title="Plan de objetivos"
         subtitle="Vista previa de la encuesta que completan los alumnos tras el placement test"

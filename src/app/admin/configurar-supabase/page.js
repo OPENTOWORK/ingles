@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+import PanelPageHeader from '@/components/PanelPageHeader';
 
 const DASHBOARD_API_URL =
   'https://supabase.com/dashboard/project/qnazrzvwvkwhkfbqsbmr/settings/api';
@@ -44,91 +45,69 @@ export default function ConfigurarSupabasePage() {
   };
 
   return (
-    <main style={mainStyle}>
-      <h1 style={{ marginBottom: 8 }}>Configurar Supabase (admin local)</h1>
-      <p style={{ color: '#555', lineHeight: 1.5, marginBottom: 16 }}>
-        Para <strong>crear usuarios</strong> desde el panel hace falta la clave{' '}
-        <strong>service_role</strong> del proyecto. No la compartas ni la subas a Git.
-      </p>
+    <div className="admin-module admin-config-page">
+      <PanelPageHeader
+        title="Configurar Supabase"
+        subtitle="Entorno local de administración"
+        mascotVariant={5}
+        mascotWidth={88}
+      />
 
-      {configured === true && (
-        <p style={{ background: '#ecfdf5', padding: 12, borderRadius: 6, marginBottom: 20, lineHeight: 1.5 }}>
-          Ya hay una clave configurada en este entorno. Puedes pegar otra para sustituirla.
-        </p>
-      )}
+      <div className="admin-section">
+        <div className="admin-section__body">
+          <p>
+            Para <strong>crear usuarios</strong> desde el panel hace falta la clave{' '}
+            <strong>service_role</strong> del proyecto. No la compartas ni la subas a Git.
+          </p>
 
-      <ol style={{ marginBottom: 24, paddingLeft: 20, lineHeight: 1.6 }}>
-        <li>
-          Abre{' '}
-          <a href={DASHBOARD_API_URL} target="_blank" rel="noreferrer">
-            Supabase → API Keys
-          </a>{' '}
-          (proyecto qnazrzvwvkwhkfbqsbmr).
-        </li>
-        <li>
-          En <strong>Project API keys</strong>, copia <strong>service_role</strong> (secret).
-        </li>
-        <li>Pégala abajo y guarda. Se almacena en <code>secrets/</code> (ignorado por git).</li>
-      </ol>
+          {configured === true ? (
+            <p className="admin-config-notice admin-config-notice--ok">
+              Ya hay una clave configurada en este entorno. Puedes pegar otra para sustituirla.
+            </p>
+          ) : null}
 
-      <form onSubmit={handleSubmit} style={{ maxWidth: 520 }}>
-        <label style={labelStyle}>service_role key</label>
-        <textarea
-          value={serviceRoleKey}
-          onChange={(e) => setServiceRoleKey(e.target.value.trim())}
-          placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-          rows={4}
-          style={{ ...inputStyle, fontFamily: 'monospace', fontSize: 13 }}
-          required
-        />
+          <ol>
+            <li>
+              Abre{' '}
+              <a href={DASHBOARD_API_URL} target="_blank" rel="noreferrer">
+                Supabase → API Keys
+              </a>{' '}
+              (proyecto qnazrzvwvkwhkfbqsbmr).
+            </li>
+            <li>
+              En <strong>Project API keys</strong>, copia <strong>service_role</strong> (secret).
+            </li>
+            <li>Pégala abajo y guarda. Se almacena en <code>secrets/</code> (ignorado por git).</li>
+          </ol>
 
-        <button type="submit" style={buttonStyle} disabled={loading}>
-          {loading ? 'Comprobando…' : 'Guardar y comprobar conexión'}
-        </button>
-      </form>
+          <form onSubmit={handleSubmit}>
+            <div className="admin-field" style={{ marginBottom: '1rem' }}>
+              <label htmlFor="service-role-key">service_role key</label>
+              <textarea
+                id="service-role-key"
+                value={serviceRoleKey}
+                onChange={(e) => setServiceRoleKey(e.target.value.trim())}
+                placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                rows={4}
+                style={{ fontFamily: 'ui-monospace, monospace', fontSize: '0.8125rem' }}
+                required
+              />
+            </div>
 
-      <p style={{ marginTop: 20, fontSize: 14, color: '#666', lineHeight: 1.5 }}>
-        Alternativa en terminal: <code>npm run supabase:service-role-setup</code>
-      </p>
+            <button type="submit" className="admin-btn admin-btn--primary" disabled={loading}>
+              {loading ? 'Comprobando…' : 'Guardar y comprobar conexión'}
+            </button>
+          </form>
 
-      <p style={{ marginTop: 16 }}>
-        <Link href="/admin" style={{ color: '#0070f3' }}>
-          ← Volver al panel de administración
-        </Link>
-      </p>
-    </main>
+          <p className="admin-meta" style={{ marginTop: '1.25rem' }}>
+            Alternativa en terminal: <code>npm run supabase:service-role-setup</code>
+          </p>
+
+          <p style={{ marginTop: '1rem' }}>
+            <Link href="/admin">← Volver al panel de administración</Link>
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }
-
-const mainStyle = {
-  maxWidth: 560,
-  margin: '3rem auto',
-  padding: '2rem',
-  background: '#fff',
-  borderRadius: 8,
-  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-  fontFamily: 'Segoe UI, sans-serif',
-};
-
-const labelStyle = { display: 'block', marginBottom: 8, fontWeight: 600 };
-
-const inputStyle = {
-  width: '100%',
-  padding: '0.75rem',
-  fontSize: '1rem',
-  border: '1px solid #ccc',
-  borderRadius: 4,
-  boxSizing: 'border-box',
-  marginBottom: 16,
-};
-
-const buttonStyle = {
-  width: '100%',
-  padding: '0.75rem',
-  backgroundColor: '#0070f3',
-  color: '#fff',
-  fontWeight: 'bold',
-  border: 'none',
-  borderRadius: 4,
-  cursor: 'pointer',
-};

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -11,16 +11,14 @@ import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
 import { getPlanDisplayLabel, normalizeUserPlanSlug } from '@/data/financialPlanConfig';
 import AdminUserManagementList from '@/components/admin/AdminUserManagementList';
 import AdminOverviewStats from '@/components/admin/AdminOverviewStats';
+import AdminFoundingSurveyPanel from '@/components/admin/AdminFoundingSurveyPanel';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import { useClientMounted } from '@/hooks/useClientMounted';
+import { isDevLightweightMode } from '@/lib/devRuntime';
 
 const ANALYTICS_FALLBACK = (
-  <div
-    className="mb-8 rounded-xl border border-slate-200 bg-white px-6 py-10 text-center text-sm text-slate-500"
-    role="status"
-    aria-label="Cargando analíticas"
-  >
+  <div className="admin-analytics-fallback" role="status" aria-label="Cargando analíticas">
     Cargando gráficos…
   </div>
 );
@@ -36,9 +34,20 @@ const AdminClarityPanel = dynamic(() => import('@/components/admin/AdminClarityP
 });
 
 const PERIOD_OPTIONS = ['dias', 'semanas', 'meses', 'anios'];
+/** En local el polling agresivo + APIs en frío ralentizan mucho el dev server. */
+const ADMIN_ACTIVITY_POLL_MS = isDevLightweightMode() ? 120_000 : 45_000;
+const ADMIN_ACTIVITY_POLL_ENABLED =
+  !isDevLightweightMode() || process.env.NEXT_PUBLIC_ADMIN_DEV_POLL === '1';
+
+let adminFetchHeadersCache = { headers: null, at: 0 };
 
 /** Cabeceras admin: JWT actualizado + cookies para APIs en producción. */
 async function getAdminFetchHeaders() {
+  const now = Date.now();
+  if (adminFetchHeadersCache.headers && now - adminFetchHeadersCache.at < 60_000) {
+    return adminFetchHeadersCache.headers;
+  }
+
   const { data: userData, error: userError } = await supabase.auth.getUser();
   if (userError || !userData?.user) {
     throw new Error('Sesión no válida. Cierra sesión y vuelve a entrar.');
@@ -59,6 +68,8 @@ async function getAdminFetchHeaders() {
   if (accessToken) {
     headers.Authorization = `Bearer ${accessToken}`;
   }
+
+  adminFetchHeadersCache = { headers, at: now };
   return headers;
 }
 
@@ -117,6 +128,13 @@ export default function AdminDashboard() {
   const [period, setPeriod] = useState('meses');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  /** all | sin_staff — excluye usuarios con estrella de equipo destacado */
+  const [platformAnalyticsAudience, setPlatformAnalyticsAudience] = useState('all');
+  const [trackingStartDate, setTrackingStartDate] = useState('');
+  const [trackingEndDate, setTrackingEndDate] = useState('');
+  const [trackingQuery, setTrackingQuery] = useState({ startDate: '', endDate: '' });
+  const [studyTracking, setStudyTracking] = useState(null);
+  const [studyTrackingLoading, setStudyTrackingLoading] = useState(false);
   const [analytics, setAnalytics] = useState({
     incorporaciones: [],
     abandonos: 0,
@@ -145,6 +163,7 @@ export default function AdminDashboard() {
     endDate: '',
     roleId: 'all',
     userId: '',
+    excludeStaff: false,
   });
   const [connectionAnalytics, setConnectionAnalytics] = useState({
     totalSessionLabel: '0 s',
@@ -177,7 +196,6 @@ export default function AdminDashboard() {
 
       setUser(currentUser);
       await Promise.all([loadRoles(), loadUsers(), loadPlacementByUser(), loadUserPlans()]);
-      await Promise.all([loadAnalytics(), loadUserActivity(currentUser)]);
     } catch (error) {
       console.error('Error checking user:', error);
       router.push('/login');
@@ -319,26 +337,52 @@ export default function AdminDashboard() {
 
   const loadAnalytics = async () => {
     try {
-      const [usersRes, sesionesNivelRes, placementRes, authRes] = await Promise.all([
+      const excludeStaff = platformAnalyticsAudience === 'sin_staff';
+
+      const [usersRes, placementRes, authRes] = await Promise.all([
         supabase
           .from('user_profiles')
-          .select('id, creado_en, activo'),
-        supabase
-          .from('sesiones_nivel')
-          .select('id', { count: 'exact', head: true })
-          .eq('estado', 'abandonada'),
+          .select('id, creado_en, activo, destacado_equipo'),
         supabase
           .from('placement_results')
           .select('user_id, nivel_asignado, fecha')
           .order('fecha', { ascending: false }),
         supabase
           .from('auth_sesiones')
-          .select('creado_en, exitoso, tipo_evento')
-          .order('creado_en', { ascending: false }),
+          .select('user_id, creado_en, exitoso, tipo_evento')
+          .order('creado_en', { ascending: false })
+          .limit(5000),
       ]);
 
       const userRows = usersRes.data || [];
-      const filteredUsers = userRows.filter((u) => withinClosedDates(u.creado_en));
+      const starredUserIds = new Set(
+        userRows
+          .filter((row) => Boolean(row.destacado_equipo))
+          .map((row) => String(row.id)),
+      );
+      const isEligibleUser = (userId) => !excludeStaff || !starredUserIds.has(String(userId));
+      const eligibleUserRows = userRows.filter((row) => isEligibleUser(row.id));
+
+      let sesionesNivelAbandonadas = 0;
+      if (excludeStaff && starredUserIds.size > 0) {
+        const quotedIds = Array.from(starredUserIds)
+          .map((id) => `"${id}"`)
+          .join(',');
+        const sesionesNivelRes = await supabase
+          .from('sesiones_nivel')
+          .select('id', { count: 'exact', head: true })
+          .eq('estado', 'abandonada')
+          .not('user_id', 'in', `(${quotedIds})`);
+        sesionesNivelAbandonadas = sesionesNivelRes.count || 0;
+      } else {
+        const sesionesNivelRes = await supabase
+          .from('sesiones_nivel')
+          .select('id', { count: 'exact', head: true })
+          .eq('estado', 'abandonada');
+        sesionesNivelAbandonadas = sesionesNivelRes.count || 0;
+      }
+
+      const filteredUsers = eligibleUserRows.filter((u) => withinClosedDates(u.creado_en));
       const incorporacionesByPeriod = filteredUsers.reduce((acc, item) => {
         const key = formatDateByPeriod(item.creado_en, period);
         acc[key] = (acc[key] || 0) + 1;
@@ -348,12 +392,13 @@ export default function AdminDashboard() {
         .sort((a, b) => a[0].localeCompare(b[0]))
         .map(([bucket, total]) => ({ bucket, total }));
 
-      const inactiveUsers = userRows.filter((u) => u.activo === false).length;
-      const abandonos = (sesionesNivelRes.count || 0) + inactiveUsers;
+      const inactiveUsers = eligibleUserRows.filter((u) => u.activo === false).length;
+      const abandonos = sesionesNivelAbandonadas + inactiveUsers;
 
       const latestLevelByUser = new Map();
       for (const row of placementRes.data || []) {
         if (!row.user_id || latestLevelByUser.has(row.user_id)) continue;
+        if (!isEligibleUser(row.user_id)) continue;
         latestLevelByUser.set(row.user_id, row.nivel_asignado || 'Sin nivel');
       }
       const usuariosPorNivelMap = {};
@@ -362,7 +407,9 @@ export default function AdminDashboard() {
       }
       const usuariosPorNivel = Object.entries(usuariosPorNivelMap).map(([nivel, total]) => ({ nivel, total }));
 
-      const authRows = (authRes.data || []).filter((row) => withinClosedDates(row.creado_en));
+      const authRows = (authRes.data || []).filter(
+        (row) => withinClosedDates(row.creado_en) && (!row.user_id || isEligibleUser(row.user_id)),
+      );
       const hours = {};
       const weekdays = {};
       const heatmapMap = {};
@@ -402,13 +449,36 @@ export default function AdminDashboard() {
     }
   };
 
+  const connectionQueryKey = useMemo(
+    () =>
+      `${connectionQuery.period}|${connectionQuery.startDate}|${connectionQuery.endDate}|${connectionQuery.roleId}|${connectionQuery.userId}|${connectionQuery.excludeStaff ? '1' : '0'}`,
+    [
+      connectionQuery.period,
+      connectionQuery.startDate,
+      connectionQuery.endDate,
+      connectionQuery.roleId,
+      connectionQuery.userId,
+      connectionQuery.excludeStaff,
+    ],
+  );
+
+  const connectionQueryRef = useRef(connectionQuery);
+  connectionQueryRef.current = connectionQuery;
+
   useEffect(() => {
-    if (!user) return;
+    if (!user || loading || !chartsReady) return;
     loadAnalytics();
-  }, [period, startDate, endDate, user]);
+  }, [period, startDate, endDate, user, loading, chartsReady, platformAnalyticsAudience]);
+
+  useEffect(() => {
+    setConnectionQuery((prev) => ({
+      ...prev,
+      excludeStaff: platformAnalyticsAudience === 'sin_staff',
+    }));
+  }, [platformAnalyticsAudience]);
 
   const loadUserActivity = useCallback(
-    async (adminUser = user, query = connectionQuery) => {
+    async (adminUser = user, query = connectionQueryRef.current) => {
       if (!adminUser) return;
       setConnectionQueryLoading(true);
       try {
@@ -422,6 +492,9 @@ export default function AdminDashboard() {
         }
         if (query.userId) {
           params.set('userId', query.userId);
+        }
+        if (query.excludeStaff) {
+          params.set('excludeStaff', '1');
         }
 
         const res = await fetch(`/api/admin/user-activity?${params}`, {
@@ -455,7 +528,7 @@ export default function AdminDashboard() {
         setConnectionQueryLoading(false);
       }
     },
-    [user, connectionQuery],
+    [user],
   );
 
   const runConnectionQuery = useCallback(() => {
@@ -465,9 +538,17 @@ export default function AdminDashboard() {
       endDate: chartEndDate,
       roleId: connectionRoleFilter,
       userId: connectionUserIdFilter.trim(),
+      excludeStaff: platformAnalyticsAudience === 'sin_staff',
     };
     setConnectionQuery(nextQuery);
-  }, [chartPeriod, chartStartDate, chartEndDate, connectionRoleFilter, connectionUserIdFilter]);
+  }, [
+    chartPeriod,
+    chartStartDate,
+    chartEndDate,
+    connectionRoleFilter,
+    connectionUserIdFilter,
+    platformAnalyticsAudience,
+  ]);
 
   const loadConnectionUserPages = useCallback(
     async (userId) => {
@@ -490,15 +571,66 @@ export default function AdminDashboard() {
   );
 
   useEffect(() => {
-    if (!user) return;
-    loadUserActivity(user, connectionQuery);
-  }, [user, connectionQuery, loadUserActivity]);
+    if (!user || loading || !chartsReady) return;
+    const delayMs = isDevLightweightMode() ? 2000 : 0;
+    const timer = window.setTimeout(() => {
+      loadUserActivity(user);
+    }, delayMs);
+    return () => window.clearTimeout(timer);
+  }, [user, loading, chartsReady, connectionQueryKey, loadUserActivity]);
 
   useEffect(() => {
-    if (!user) return undefined;
-    const interval = setInterval(() => loadUserActivity(user, connectionQuery), 45_000);
+    if (!user || !ADMIN_ACTIVITY_POLL_ENABLED) return undefined;
+    const interval = setInterval(() => loadUserActivity(user), ADMIN_ACTIVITY_POLL_MS);
     return () => clearInterval(interval);
-  }, [user, connectionQuery, loadUserActivity]);
+  }, [user, connectionQueryKey, loadUserActivity]);
+
+  const excludeStaffTracking = platformAnalyticsAudience === 'sin_staff';
+
+  const loadStudyTracking = useCallback(
+    async (query, excludeStaff) => {
+      setStudyTrackingLoading(true);
+      try {
+        const headers = await getAdminFetchHeaders();
+        const params = new URLSearchParams();
+        if (query.startDate) params.set('startDate', query.startDate);
+        if (query.endDate) params.set('endDate', query.endDate);
+        if (excludeStaff) params.set('excludeStaff', '1');
+
+        const res = await fetch(`/api/admin/study-tracking?${params}`, {
+          credentials: 'include',
+          headers,
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          console.error('[admin] study-tracking', data.error);
+          return;
+        }
+        setStudyTracking(data);
+      } catch (error) {
+        console.error('Error loading study tracking:', error);
+      } finally {
+        setStudyTrackingLoading(false);
+      }
+    },
+    [],
+  );
+
+  const runStudyTrackingQuery = useCallback(() => {
+    setTrackingQuery({ startDate: trackingStartDate, endDate: trackingEndDate });
+  }, [trackingStartDate, trackingEndDate]);
+
+  useEffect(() => {
+    if (!user || loading || !chartsReady) return;
+    loadStudyTracking(trackingQuery, excludeStaffTracking);
+  }, [
+    user,
+    loading,
+    chartsReady,
+    trackingQuery,
+    excludeStaffTracking,
+    loadStudyTracking,
+  ]);
 
   const getRoleNameById = (roleId) => {
     const role = roles.find((item) => item.id === roleId);
@@ -724,7 +856,7 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="admin-dashboard admin-dashboard--loading">
         <RouteLoadingMascot label="Cargando panel de administración…" variant={5} width={130} />
       </div>
     );
@@ -1080,18 +1212,12 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-4">
-            <PanelPageHeader title="Panel de Administración" mascotVariant={5} mascotWidth={92}>
-              <span className="text-sm text-gray-600">Bienvenido, {user.email}</span>
-            </PanelPageHeader>
-          </div>
-        </div>
-      </header>
+    <div className="admin-dashboard">
+      <PanelPageHeader title="Panel de Administración" mascotVariant={5} mascotWidth={92}>
+        <span>Bienvenido, {user.email}</span>
+      </PanelPageHeader>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="admin-dashboard__content">
         <AdminOverviewStats
           totalUsers={users.length}
           activeUsers={users.filter((item) => item.activo !== false).length}
@@ -1127,9 +1253,19 @@ export default function AdminDashboard() {
             appliedConnectionUserIdFilter={appliedConnectionUserIdFilter}
             onRunConnectionQuery={runConnectionQuery}
             onLoadConnectionUserPages={loadConnectionUserPages}
-            connectionQueryKey={`${connectionQuery.period}|${connectionQuery.startDate}|${connectionQuery.endDate}|${connectionQuery.roleId}|${connectionQuery.userId}`}
+            connectionQueryKey={connectionQueryKey}
             connectionQueryLoading={connectionQueryLoading}
             roles={roles}
+            platformAnalyticsAudience={platformAnalyticsAudience}
+            setPlatformAnalyticsAudience={setPlatformAnalyticsAudience}
+            starredTeamCount={starredTeamCount}
+            studyTracking={studyTracking}
+            studyTrackingLoading={studyTrackingLoading}
+            trackingStartDate={trackingStartDate}
+            setTrackingStartDate={setTrackingStartDate}
+            trackingEndDate={trackingEndDate}
+            setTrackingEndDate={setTrackingEndDate}
+            onRunStudyTrackingQuery={runStudyTrackingQuery}
           />
         ) : (
           ANALYTICS_FALLBACK
@@ -1137,17 +1273,19 @@ export default function AdminDashboard() {
 
         {chartsReady ? <AdminClarityPanel /> : null}
 
-        <div className="bg-white rounded-lg shadow mb-8">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-medium text-gray-900">Gestion de usuarios y roles</h2>
+        <AdminFoundingSurveyPanel />
+
+        <div className="admin-section">
+          <div className="admin-section__header">
+            <h2>Gestión de usuarios y roles</h2>
           </div>
-          <div className="p-6">
-            <div className="border rounded-lg p-4 mb-6 bg-gray-50">
-              <h3 className="text-md font-semibold text-gray-900 mb-3">Alta de usuario por administrador</h3>
-              <p className="text-sm text-gray-600 mb-3">
+          <div className="admin-section__body">
+            <div className="admin-subsection">
+              <h3>Alta de usuario por administrador</h3>
+              <p>
                 Crea una cuenta nueva y envía automáticamente un correo con acceso inicial.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+              <div className="admin-form-grid">
                 <input
                   type="text"
                   value={newUserName}
@@ -1178,16 +1316,16 @@ export default function AdminDashboard() {
               <button
                 onClick={handleCreateUser}
                 disabled={creatingUser}
-                className="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 mb-5"
+                className="admin-btn admin-btn--primary mb-5"
               >
                 {creatingUser ? 'Creando usuario...' : 'Crear usuario y enviar mail'}
               </button>
 
-              <h3 className="text-md font-semibold text-gray-900 mb-3">Envio de correo masivo</h3>
-              <p className="text-sm text-gray-600 mb-3">
+              <h3>Envío de correo masivo</h3>
+              <p>
                 Selecciona usuarios con las casillas y envía un correo a todos los marcados.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+              <div className="admin-form-grid admin-form-grid--2">
                 <input
                   type="text"
                   value={mailSubject}
@@ -1195,7 +1333,7 @@ export default function AdminDashboard() {
                   placeholder="Asunto del correo"
                   className="border rounded px-3 py-2 text-sm"
                 />
-                <div className="text-sm text-gray-700 self-center">
+                <div className="admin-meta self-center">
                   Seleccionados: <strong>{selectedUsers.length}</strong>
                 </div>
               </div>
@@ -1209,15 +1347,15 @@ export default function AdminDashboard() {
               <button
                 onClick={handleMassMailSend}
                 disabled={mailing || selectedUsers.length === 0}
-                className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                className="admin-btn admin-btn--primary"
               >
                 {mailing ? 'Enviando...' : 'Enviar mail masivo'}
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Buscar usuario</label>
+            <div className="admin-filter-grid">
+              <div className="admin-field">
+                <label>Buscar usuario</label>
                 <input
                   type="text"
                   value={searchTerm}
@@ -1226,8 +1364,8 @@ export default function AdminDashboard() {
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Filtrar por rol</label>
+              <div className="admin-field">
+                <label>Filtrar por rol</label>
                 <select
                   value={roleFilter}
                   onChange={(e) => setRoleFilter(e.target.value)}
@@ -1241,8 +1379,8 @@ export default function AdminDashboard() {
                   ))}
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Filtrar por estado</label>
+              <div className="admin-field">
+                <label>Filtrar por estado</label>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
@@ -1253,8 +1391,8 @@ export default function AdminDashboard() {
                   <option value="paused">Pausada</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Equipo destacado</label>
+              <div className="admin-field">
+                <label>Equipo destacado</label>
                 <select
                   value={teamStarFilter}
                   onChange={(e) => setTeamStarFilter(e.target.value)}
@@ -1264,8 +1402,8 @@ export default function AdminDashboard() {
                   <option value="starred">Solo con estrella ({starredTeamCount})</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Filtrar por plan</label>
+              <div className="admin-field">
+                <label>Filtrar por plan</label>
                 <select
                   value={planFilter}
                   onChange={(e) => setPlanFilter(e.target.value)}
@@ -1283,8 +1421,8 @@ export default function AdminDashboard() {
                   </option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Conexión</label>
+              <div className="admin-field">
+                <label>Conexión</label>
                 <select
                   value={connectionFilter}
                   onChange={(e) => setConnectionFilter(e.target.value)}
@@ -1295,8 +1433,8 @@ export default function AdminDashboard() {
                   <option value="offline">Desconectados ({filterCounts.offline})</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Placement test</label>
+              <div className="admin-field">
+                <label>Placement test</label>
                 <select
                   value={placementFilter}
                   onChange={(e) => setPlacementFilter(e.target.value)}
@@ -1307,8 +1445,8 @@ export default function AdminDashboard() {
                   <option value="pending">Pendiente ({filterCounts.placementPending})</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-600 mb-1">Comercial</label>
+              <div className="admin-field">
+                <label>Comercial</label>
                 <select
                   value={marketingFilter}
                   onChange={(e) => setMarketingFilter(e.target.value)}
@@ -1320,38 +1458,32 @@ export default function AdminDashboard() {
                 </select>
               </div>
             </div>
-            <div className="flex flex-wrap items-center gap-3 mb-4">
+            <div className="admin-actions-row">
               {hasActiveUserFilters ? (
                 <button
                   type="button"
                   onClick={clearUserFilters}
-                  className="px-3 py-2 rounded bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 text-sm"
+                  className="admin-btn admin-btn--secondary"
                 >
                   Limpiar filtros
                 </button>
               ) : null}
-              <span className="text-sm text-gray-600">
+              <span className="admin-meta">
                 Mostrando <strong>{filteredUsers.length}</strong> de {users.length} usuarios
               </span>
             </div>
-            <div className="flex flex-wrap gap-3 mb-4">
-              <button
-                onClick={exportUsersToCSV}
-                className="px-3 py-2 rounded bg-green-100 text-green-800 hover:bg-green-200"
-              >
+            <div className="admin-actions-row admin-actions-row--tight">
+              <button onClick={exportUsersToCSV} className="admin-btn admin-btn--export">
                 Exportar CSV
               </button>
-              <button
-                onClick={exportUsersToExcel}
-                className="px-3 py-2 rounded bg-emerald-100 text-emerald-800 hover:bg-emerald-200"
-              >
+              <button onClick={exportUsersToExcel} className="admin-btn admin-btn--export">
                 Exportar Excel
               </button>
             </div>
 
             {selectedUsers.length > 0 ? (
-              <div className="flex flex-wrap items-center gap-3 mb-4 rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3">
-                <span className="text-sm font-medium text-indigo-900">
+              <div className="admin-bulk-bar">
+                <span className="admin-bulk-bar__label">
                   {selectedUsers.length} seleccionado(s)
                   {selectedUsers.some((item) => item.id === user?.id)
                     ? ' · tu cuenta se excluye de acciones masivas'
@@ -1361,7 +1493,7 @@ export default function AdminDashboard() {
                   type="button"
                   onClick={() => bulkSetUsersActive(false)}
                   disabled={bulkProcessing || getBulkActionTargets().length === 0}
-                  className="px-3 py-2 rounded bg-yellow-100 text-yellow-900 hover:bg-yellow-200 disabled:opacity-50"
+                  className="admin-btn admin-btn--warn"
                 >
                   {bulkProcessing ? 'Procesando…' : 'Pausar seleccionados'}
                 </button>
@@ -1369,7 +1501,7 @@ export default function AdminDashboard() {
                   type="button"
                   onClick={() => bulkSetUsersActive(true)}
                   disabled={bulkProcessing || getBulkActionTargets().length === 0}
-                  className="px-3 py-2 rounded bg-green-100 text-green-900 hover:bg-green-200 disabled:opacity-50"
+                  className="admin-btn admin-btn--success"
                 >
                   {bulkProcessing ? 'Procesando…' : 'Reanudar seleccionados'}
                 </button>
@@ -1377,7 +1509,7 @@ export default function AdminDashboard() {
                   type="button"
                   onClick={bulkDeleteUsers}
                   disabled={bulkProcessing || getBulkActionTargets().length === 0}
-                  className="px-3 py-2 rounded bg-red-100 text-red-900 hover:bg-red-200 disabled:opacity-50"
+                  className="admin-btn admin-btn--danger"
                 >
                   {bulkProcessing ? 'Procesando…' : 'Eliminar seleccionados'}
                 </button>
@@ -1385,7 +1517,7 @@ export default function AdminDashboard() {
                   type="button"
                   onClick={() => setSelectedUserIds([])}
                   disabled={bulkProcessing}
-                  className="px-3 py-2 rounded bg-white text-gray-700 border border-gray-200 hover:bg-gray-50 disabled:opacity-50"
+                  className="admin-btn admin-btn--secondary"
                 >
                   Quitar selección
                 </button>

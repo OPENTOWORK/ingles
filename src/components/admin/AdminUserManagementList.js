@@ -39,6 +39,16 @@ const TABLE_SORT_COLUMNS = {
   email: 'email',
 };
 
+function userInitials(name = '', email = '') {
+  const source = String(name || email || '?').trim();
+  if (!source) return '?';
+  const parts = source.split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return `${parts[0].charAt(0)}${parts[1].charAt(0)}`.toUpperCase();
+  }
+  return source.slice(0, 2).toUpperCase();
+}
+
 function compareLocale(a, b, direction) {
   const result = String(a || '').localeCompare(String(b || ''), 'es', {
     sensitivity: 'base',
@@ -372,8 +382,9 @@ export default function AdminUserManagementList({
   return (
     <>
       <div className={styles.toolbar}>
-        <p className="text-sm text-gray-600 m-0">
-          {users.length} usuario(s) · abre una ficha para gestionar sin desplazarte en horizontal
+        <p className={styles.toolbarHint}>
+          <strong>{users.length}</strong> usuario{users.length === 1 ? '' : 's'} · abre una ficha
+          para gestionar sin desplazarte en horizontal
         </p>
         <div className={styles.viewToggle} role="group" aria-label="Vista de usuarios">
           <button
@@ -407,26 +418,38 @@ export default function AdminUserManagementList({
                   key={item.id}
                   className={`${styles.userCard} ${item.destacado_equipo ? styles.userCardStarred : ''}`}
                 >
-                  <div className={styles.cardTop}>
-                    <input
-                      type="checkbox"
-                      checked={selectedUserIds.includes(item.id)}
-                      onChange={() => onToggleSelectUser(item.id)}
-                      aria-label={`Seleccionar ${item.email}`}
-                    />
+                  <div className={styles.cardHeader}>
+                    <div className={styles.cardHeaderMain}>
+                      <input
+                        type="checkbox"
+                        className={styles.cardCheckbox}
+                        checked={selectedUserIds.includes(item.id)}
+                        onChange={() => onToggleSelectUser(item.id)}
+                        aria-label={`Seleccionar ${item.email}`}
+                      />
+                      <div
+                        className={styles.avatar}
+                        aria-hidden="true"
+                        title={item.nombre || item.email}
+                      >
+                        {userInitials(item.nombre, item.email)}
+                      </div>
+                      <div className={styles.cardIdentity}>
+                        <h3 className={styles.cardName}>{item.nombre || 'Sin nombre'}</h3>
+                        <p className={styles.cardEmail}>{item.email}</p>
+                      </div>
+                    </div>
                     <button
                       type="button"
-                      className={styles.starBtn}
+                      className={`${styles.starBtn} ${
+                        item.destacado_equipo ? styles.starBtnActive : ''
+                      }`}
                       onClick={() => onTeamStarToggle(item)}
                       disabled={Boolean(savingByUser[item.id])}
                       aria-label={item.destacado_equipo ? 'Quitar estrella' : 'Marcar estrella'}
                     >
                       {item.destacado_equipo ? '★' : '☆'}
                     </button>
-                    <div className={styles.cardIdentity}>
-                      <h3 className={styles.cardName}>{item.nombre || 'Sin nombre'}</h3>
-                      <p className={styles.cardEmail}>{item.email}</p>
-                    </div>
                   </div>
 
                   <div className={styles.cardBadges}>
@@ -437,36 +460,43 @@ export default function AdminUserManagementList({
                         activity?.online ? styles.badgeOnline : styles.badgeOffline
                       }`}
                     >
+                      <span
+                        className={`${styles.statusDot} ${
+                          activity?.online ? styles.statusDotOnline : styles.statusDotOffline
+                        }`}
+                        aria-hidden="true"
+                      />
                       {activity?.online ? 'Conectado' : 'Desconectado'}
                     </span>
                   </div>
 
                   <dl className={styles.cardMeta}>
-                    <div>
+                    <div className={styles.metaItem}>
                       <dt>Sesión</dt>
                       <dd>{activity?.totalSessionLabel || formatSessionDuration(0)}</dd>
                     </div>
-                    <div>
+                    <div className={styles.metaItem}>
                       <dt>Registro</dt>
                       <dd>{formatRegistrationDate(item.creado_en)}</dd>
                     </div>
-                    <div>
+                    <div className={styles.metaItem}>
                       <dt>Placement</dt>
                       <dd>{placement?.done ? placement.level : '—'}</dd>
                     </div>
-                    <div>
+                    <div className={styles.metaItem}>
                       <dt>Comercial</dt>
                       <dd>{item.marketingAccepted ? 'Sí' : 'No'}</dd>
                     </div>
                   </dl>
 
-                  <div className={styles.cardActions}>
+                  <div className={styles.cardFooter}>
                     <button
                       type="button"
                       className={styles.openBtn}
                       onClick={() => setActiveUserId(item.id)}
                     >
                       Gestionar
+                      <span className={styles.openBtnIcon} aria-hidden="true">→</span>
                     </button>
                   </div>
                 </article>

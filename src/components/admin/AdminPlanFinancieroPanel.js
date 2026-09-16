@@ -196,7 +196,7 @@ export default function AdminPlanFinancieroPanel() {
   const revenueByMonth = data?.revenueByMonth || [];
 
   return (
-    <div className={styles.wrap}>
+    <div className={`admin-module ${styles.wrap}`}>
       <PanelPageHeader
         title="Plan financiero"
         subtitle="Monetización, niveles premium y suscripciones (solo administración)"

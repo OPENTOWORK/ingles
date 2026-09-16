@@ -14,6 +14,10 @@ const CTA_LABEL_BY_TRIGGER = {
   user_email_confirmation: 'Confirmar mi email',
   password_reset_requested: 'Crear nueva contraseña',
   founding_member_plus_granted: 'Entrar en Dralo',
+  founding_member_survey: 'Responder el formulario',
+  founding_member_survey_reminder: 'Responder ahora',
+  founding_member_survey_confirmed: 'Entrar en Dralo',
+  founding_member_survey_revoked: 'Ver los planes',
 };
 
 const TABLE = 'soporte_correos_automaticos';

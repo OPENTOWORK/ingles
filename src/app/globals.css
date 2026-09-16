@@ -4,6 +4,7 @@
 
 /* Reset básico */
 html {
+  --site-header-height: 5.3rem;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -4082,6 +4083,13 @@ body.nav-open {
 
 .staff-tareas-page .staff-tasks-panel {
   min-width: 0;
+}
+
+.admin-shell-page--full-bleed {
+  width: 100%;
+  max-width: none;
+  padding: 0 !important;
+  margin: 0;
 }
 
 .staff-tareas-panel--loading {

@@ -19,6 +19,9 @@ const nextConfig = {
       '@supabase/ssr',
       'date-fns',
     ],
+    // Next 14 usa esta clave; `serverExternalPackages` (Next 15) se ignora en silencio
+    // y acaba empaquetando estos binarios en el bundle de servidor.
+    serverComponentsExternalPackages: ['ffmpeg-static', 'music-metadata'],
   },
   // Solo en build de producción: Turbopack (`next dev --turbo`) no admite compiler.removeConsole.
   ...(process.env.NODE_ENV === 'production'
@@ -32,7 +35,6 @@ const nextConfig = {
     unoptimized: isStaticExport,
   },
   compress: true,
-  serverExternalPackages: ['ffmpeg-static', 'music-metadata'],
   async headers() {
     if (isStaticExport) return [];
     return [

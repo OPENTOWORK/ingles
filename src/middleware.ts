@@ -47,9 +47,15 @@ export async function middleware(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const isDev = process.env.NODE_ENV === 'development';
+  let user = null;
+  if (isDev) {
+    const { data: { session } } = await supabase.auth.getSession();
+    user = session?.user ?? null;
+  } else {
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  }
 
   if (!user) {
     const loginUrl = request.nextUrl.clone();

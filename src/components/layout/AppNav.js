@@ -16,6 +16,7 @@ import {
   buildAppNavModel,
   isNavLinkActive,
   isStaffPanelsNavActive,
+  shouldShowAdminShell,
   NAV_LINKS_BEFORE_DRALO,
   NAV_LINK_CONTACT,
   NAV_LINK_PRICING,
@@ -107,11 +108,9 @@ function AppNavInner({ session, userRole, onLogout }) {
   const desktopLinkClass = (href) =>
     `app-nav__link${isNavLinkActive(href, pathname, searchParams) ? ' is-active' : ''}`;
 
-  const staffPanelsNavActive = isStaffPanelsNavActive(
-    pathname,
-    searchParams,
-    navModel.staffItems,
-  );
+  const staffPanelsNavActive = navModel.showStaffAdminLink
+    ? shouldShowAdminShell(pathname, userRole)
+    : isStaffPanelsNavActive(pathname, searchParams, navModel.staffItems);
 
   return (
     <>
@@ -259,6 +258,15 @@ function AppNavInner({ session, userRole, onLogout }) {
             </>
           ) : (
             <>
+              {navModel.showStaffAdminLink ? (
+                <NavLink
+                  href={navModel.staffAdminHref}
+                  className={`app-nav__link${staffPanelsNavActive ? ' is-active' : ''}`}
+                  onClick={closeDesktopDropdowns}
+                >
+                  {navModel.staffAdminLabel}
+                </NavLink>
+              ) : null}
               {navModel.showStaffDropdown ? (
                 <AdminPanelsNav
                   variant="desktop"

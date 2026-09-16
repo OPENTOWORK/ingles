@@ -15,8 +15,11 @@ import {
   YAxis,
 } from 'recharts';
 import {
+  BookOpen,
   Clock3,
+  EyeOff,
   LogIn,
+  Target,
   TrendingUp,
   UserMinus,
   UserPlus,
@@ -87,13 +90,35 @@ function PeriodFilters({
   showRoleFilter = false,
   userIdFilter,
   setUserIdFilter,
+  audienceFilter = 'all',
+  setAudienceFilter,
+  starredTeamCount = 0,
   onExecute,
   executing = false,
 }) {
   const hasUserIdFilter = typeof setUserIdFilter === 'function';
+  const hasAudienceFilter = typeof setAudienceFilter === 'function';
 
   return (
     <div className={styles.filterBar}>
+      {hasAudienceFilter ? (
+        <div className={styles.filterField}>
+          <label htmlFor="analytics-audience">Audiencia</label>
+          <select
+            id="analytics-audience"
+            value={audienceFilter}
+            onChange={(event) => setAudienceFilter(event.target.value)}
+          >
+            <option value="all">Todos los usuarios</option>
+            <option value="sin_staff">Sin staff (sin estrella)</option>
+          </select>
+          {audienceFilter === 'sin_staff' && starredTeamCount > 0 ? (
+            <span className={styles.audienceHint}>
+              Excluye {starredTeamCount} con estrella
+            </span>
+          ) : null}
+        </div>
+      ) : null}
       <div className={styles.filterField}>
         <label htmlFor="analytics-period">Periodo</label>
         <select id="analytics-period" value={period} onChange={(e) => setPeriod(e.target.value)}>
@@ -420,6 +445,223 @@ function ConnectionUsersActivityPanel({
   );
 }
 
+function StudyFocusBar({ studySeconds, browsingSeconds, unattributedSeconds }) {
+  const total = studySeconds + browsingSeconds + unattributedSeconds;
+  if (total <= 0) return null;
+
+  const pct = (value) => `${(value / total) * 100}%`;
+
+  return (
+    <div
+      className={styles.focusBar}
+      role="img"
+      aria-label={`Estudio ${Math.round((studySeconds / total) * 100)}%, navegación ${Math.round(
+        (browsingSeconds / total) * 100,
+      )}%, sin actividad ${Math.round((unattributedSeconds / total) * 100)}%`}
+    >
+      <span
+        className={`${styles.focusSegment} ${styles.focusStudy}`}
+        style={{ width: pct(studySeconds) }}
+      />
+      <span
+        className={`${styles.focusSegment} ${styles.focusBrowsing}`}
+        style={{ width: pct(browsingSeconds) }}
+      />
+      <span
+        className={`${styles.focusSegment} ${styles.focusIdle}`}
+        style={{ width: pct(unattributedSeconds) }}
+      />
+    </div>
+  );
+}
+
+function formatMonitoredDate(value) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return date.toLocaleString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function StudyTrackingPanel({ tracking, loading, navigationReady }) {
+  const summary = tracking?.summary;
+  const users = tracking?.users || [];
+  const monitored = tracking?.monitoredSessions || [];
+
+  if (loading && !summary) {
+    return <p className={styles.emptyState}>Cargando seguimiento de estudio…</p>;
+  }
+
+  if (navigationReady === false) {
+    return (
+      <p className={styles.emptyState}>
+        La tabla <code>usuario_navegacion</code> todavía no está disponible. El seguimiento se
+        activará en cuanto se registre navegación.
+      </p>
+    );
+  }
+
+  if (!summary) {
+    return <p className={styles.emptyState}>Sin datos de seguimiento en el rango.</p>;
+  }
+
+  return (
+    <>
+      <div className={styles.kpiGrid}>
+        <KpiCard
+          icon={BookOpen}
+          label="Tiempo de estudio"
+          value={summary.studyLabel}
+          hint="En ejercicios, teoría y speaking"
+          accent="#6366f1"
+          iconBg="#eef2ff"
+        />
+        <KpiCard
+          icon={Target}
+          label="Ratio de foco"
+          value={`${summary.focusRatio}%`}
+          hint="Estudio sobre tiempo conectado"
+          accent="#10b981"
+          iconBg="#ecfdf5"
+        />
+        <KpiCard
+          icon={Users}
+          label="Alumnos estudiando"
+          value={summary.studentsWithStudy.toLocaleString('es-ES')}
+          hint={`${summary.trackedUsers} con actividad registrada`}
+          accent="#0ea5e9"
+          iconBg="#f0f9ff"
+        />
+        <KpiCard
+          icon={EyeOff}
+          label="Sin actividad"
+          value={summary.unattributedLabel}
+          hint="Conectado sin página activa"
+          accent="#f59e0b"
+          iconBg="#fffbeb"
+        />
+      </div>
+
+      <div className={styles.legendRow}>
+        <span className={styles.legendItem}>
+          <span className={`${styles.legendDot} ${styles.focusStudy}`} /> Estudio
+        </span>
+        <span className={styles.legendItem}>
+          <span className={`${styles.legendDot} ${styles.focusBrowsing}`} /> Navegación en Dralo
+        </span>
+        <span className={styles.legendItem}>
+          <span className={`${styles.legendDot} ${styles.focusIdle}`} /> Sin actividad / fuera de
+          pestaña
+        </span>
+      </div>
+
+      {users.length === 0 ? (
+        <p className={styles.emptyState}>Sin alumnos con actividad en el rango seleccionado.</p>
+      ) : (
+        <div className={styles.trackingList}>
+          {users.map((row) => (
+            <article key={row.userId} className={styles.trackingRow}>
+              <div className={styles.trackingHead}>
+                <div className={styles.trackingIdentity}>
+                  <p className={styles.trackingName}>{row.name}</p>
+                  <p className={styles.trackingEmail}>{row.email}</p>
+                </div>
+                <div className={styles.trackingScore}>
+                  <p className={styles.trackingScoreValue}>{row.focusRatio}%</p>
+                  <p className={styles.trackingScoreLabel}>foco</p>
+                </div>
+              </div>
+
+              <StudyFocusBar
+                studySeconds={row.studySeconds}
+                browsingSeconds={row.browsingSeconds}
+                unattributedSeconds={row.unattributedSeconds}
+              />
+
+              <div className={styles.trackingMeta}>
+                <span>
+                  Estudio <strong>{row.studyLabel}</strong>
+                </span>
+                <span>
+                  Navegación <strong>{row.browsingLabel}</strong>
+                </span>
+                <span>
+                  Sin actividad <strong>{row.unattributedLabel}</strong>
+                </span>
+                <span>
+                  Sesiones <strong>{row.sessionCount}</strong>
+                </span>
+              </div>
+
+              {row.topAreas?.length ? (
+                <div className={styles.trackingAreas}>
+                  {row.topAreas.map((area) => (
+                    <span
+                      key={area.area}
+                      className={`${styles.areaChip} ${area.isStudy ? styles.areaChipStudy : ''}`}
+                    >
+                      {area.area} · {area.label}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
+            </article>
+          ))}
+        </div>
+      )}
+
+      {monitored.length > 0 ? (
+        <div className={styles.monitoredBlock}>
+          <h3 className={styles.monitoredTitle}>Sesiones de estudio monitorizadas</h3>
+          <p className={styles.monitoredIntro}>
+            Sesiones que el alumno inició y consintió de forma expresa, con el resumen generado al
+            cerrarlas.
+          </p>
+          <div className={styles.trackingList}>
+            {monitored.map((entry) => (
+              <article key={entry.sessionId} className={styles.trackingRow}>
+                <div className={styles.trackingHead}>
+                  <div className={styles.trackingIdentity}>
+                    <p className={styles.trackingName}>{entry.name}</p>
+                    <p className={styles.trackingEmail}>{formatMonitoredDate(entry.startedAt)}</p>
+                  </div>
+                  <div className={styles.trackingScore}>
+                    <p className={styles.trackingScoreValue}>{entry.focusRatio}%</p>
+                    <p className={styles.trackingScoreLabel}>foco</p>
+                  </div>
+                </div>
+
+                <div className={styles.trackingMeta}>
+                  <span>
+                    Concentrado <strong>{entry.focusLabel}</strong>
+                  </span>
+                  <span>
+                    Salidas <strong>{entry.awayCount}</strong>
+                  </span>
+                  <span>
+                    Pausa m&aacute;s larga <strong>{entry.longestAwayLabel}</strong>
+                  </span>
+                  <span>
+                    Total <strong>{entry.totalLabel}</strong>
+                  </span>
+                </div>
+
+                {entry.resumen ? (
+                  <p className={styles.monitoredSummary}>{entry.resumen}</p>
+                ) : null}
+              </article>
+            ))}
+          </div>
+        </div>
+      ) : null}
+    </>
+  );
+}
+
 export default function AdminAnalyticsPanels({
   period,
   setPeriod,
@@ -448,6 +690,16 @@ export default function AdminAnalyticsPanels({
   connectionQueryLoading = false,
   connectionQueryKey = '',
   roles = [],
+  platformAnalyticsAudience = 'all',
+  setPlatformAnalyticsAudience,
+  starredTeamCount = 0,
+  studyTracking = null,
+  studyTrackingLoading = false,
+  trackingStartDate = '',
+  setTrackingStartDate,
+  trackingEndDate = '',
+  setTrackingEndDate,
+  onRunStudyTrackingQuery,
 }) {
   const [activeTab, setActiveTab] = useState('growth');
 
@@ -457,6 +709,7 @@ export default function AdminAnalyticsPanels({
       ? roles.find((role) => String(role.id) === String(appliedConnectionRoleFilter))?.nombre
       : null;
   const selectedConnectionUserId = appliedConnectionUserIdFilter?.trim() || '';
+  const excludeStaff = platformAnalyticsAudience === 'sin_staff';
 
   const sortedLevels = [...(analytics.usuariosPorNivel || [])].sort((a, b) => b.total - a.total);
 
@@ -489,6 +742,15 @@ export default function AdminAnalyticsPanels({
           >
             Conexión
           </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'tracking'}
+            className={`${styles.tab} ${activeTab === 'tracking' ? styles.tabActive : ''}`}
+            onClick={() => setActiveTab('tracking')}
+          >
+            Seguimiento
+          </button>
         </div>
       </header>
 
@@ -497,6 +759,7 @@ export default function AdminAnalyticsPanels({
           <>
             <p className={styles.sectionIntro}>
               Altas de usuario, abandonos y patrones de inicio de sesión en el rango seleccionado.
+              {excludeStaff ? ' Los usuarios del equipo con estrella no se incluyen.' : ''}
             </p>
             <PeriodFilters
               period={period}
@@ -505,6 +768,9 @@ export default function AdminAnalyticsPanels({
               setStartDate={setStartDate}
               endDate={endDate}
               setEndDate={setEndDate}
+              audienceFilter={platformAnalyticsAudience}
+              setAudienceFilter={setPlatformAnalyticsAudience}
+              starredTeamCount={starredTeamCount}
             />
 
             <div className={styles.kpiGrid}>
@@ -587,15 +853,19 @@ export default function AdminAnalyticsPanels({
               <LevelDistribution rows={sortedLevels} />
             </div>
           </>
-        ) : (
+        ) : activeTab === 'engagement' ? (
           <>
             <p className={styles.sectionIntro}>
               Sesiones en la app: usuarios activos por intervalo y tiempo medio por usuario con
               actividad.
+              {excludeStaff ? ' Los usuarios del equipo con estrella no se incluyen.' : ''}
             </p>
 
-            {(selectedConnectionRole || selectedConnectionUserId) && (
+            {(excludeStaff || selectedConnectionRole || selectedConnectionUserId) && (
               <div className={styles.activeFilters}>
+                {excludeStaff ? (
+                  <span className={styles.filterChip}>Sin staff</span>
+                ) : null}
                 {selectedConnectionRole ? (
                   <span className={styles.filterChip}>Rol: {selectedConnectionRole}</span>
                 ) : null}
@@ -618,6 +888,9 @@ export default function AdminAnalyticsPanels({
               setUserIdFilter={setConnectionUserIdFilter}
               roles={roles}
               showRoleFilter
+              audienceFilter={platformAnalyticsAudience}
+              setAudienceFilter={setPlatformAnalyticsAudience}
+              starredTeamCount={starredTeamCount}
               onExecute={onRunConnectionQuery}
               executing={connectionQueryLoading}
               onClear={() => {
@@ -723,6 +996,48 @@ export default function AdminAnalyticsPanels({
               Sesiones registradas en el rango: {connectionAnalytics.sessionCount.toLocaleString('es-ES')}
               {' · '}
               Los datos de conexión se actualizan automáticamente cada 45 segundos.
+            </p>
+          </>
+        ) : (
+          <>
+            <p className={styles.sectionIntro}>
+              Reparto del tiempo conectado de cada alumno entre estudio real (ejercicios, teoría,
+              speaking), navegación por la plataforma y tiempo sin actividad.
+              {excludeStaff ? ' Los usuarios del equipo con estrella no se incluyen.' : ''}
+            </p>
+
+            <PeriodFilters
+              period={period}
+              setPeriod={setPeriod}
+              startDate={trackingStartDate}
+              setStartDate={setTrackingStartDate}
+              endDate={trackingEndDate}
+              setEndDate={setTrackingEndDate}
+              audienceFilter={platformAnalyticsAudience}
+              setAudienceFilter={setPlatformAnalyticsAudience}
+              starredTeamCount={starredTeamCount}
+              onExecute={onRunStudyTrackingQuery}
+              executing={studyTrackingLoading}
+              onClear={
+                typeof setTrackingStartDate === 'function'
+                  ? () => {
+                      setTrackingStartDate('');
+                      setTrackingEndDate('');
+                    }
+                  : undefined
+              }
+            />
+
+            <StudyTrackingPanel
+              tracking={studyTracking}
+              loading={studyTrackingLoading}
+              navigationReady={studyTracking?.navigationReady}
+            />
+
+            <p className={styles.footnote}>
+              El navegador no permite ver a qué sitios externos va el alumno. &quot;Sin
+              actividad&quot; es tiempo conectado sin página de Dralo en primer plano: pestaña en
+              segundo plano, otra aplicación o inactividad.
             </p>
           </>
         )}

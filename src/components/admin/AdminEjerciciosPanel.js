@@ -393,7 +393,7 @@ export default function AdminEjerciciosPanel() {
   }
 
   return (
-    <div className={styles.wrap}>
+    <div className={`admin-module ${styles.wrap}`}>
       <PanelPageHeader
         title="Panel de ejercicios"
         subtitle="Generación automática vinculada a levels_teoria_preguntas, respuestas y respuestas_abiertas"
