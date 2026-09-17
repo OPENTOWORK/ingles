@@ -5,42 +5,48 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.15rem;
+  gap: 1.35rem;
 }
 
-.tabs {
-  display: flex;
+.tabBar {
+  display: inline-flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.35rem;
+  padding: 0.35rem;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
 }
 
 .tab,
 .tabActive {
   font: inherit;
   font-weight: 600;
-  border-radius: 999px;
-  padding: 0.5rem 1rem;
+  font-size: 0.84rem;
+  border-radius: 0.75rem;
+  padding: 0.55rem 1rem;
   cursor: pointer;
-  border: 1px solid #dbeafe;
-  background: #fff;
-  color: #475569;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #64748b;
   transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease,
-    box-shadow 0.15s ease;
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
 .tab:hover {
-  border-color: #c7d2fe;
-  color: #312e81;
+  color: #334155;
+  background: rgba(255, 255, 255, 0.65);
 }
 
 .tabActive {
-  background: #eef2ff;
-  border-color: #818cf8;
+  background: #ffffff;
+  border-color: #c7d2fe;
   color: #4338ca;
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.12);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.12);
 }
 
 .error {
@@ -66,63 +72,88 @@
 
 .kpiGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.85rem;
 }
 
 .kpi {
-  padding: 1rem;
-  border-radius: 0.95rem;
+  padding: 1rem 1.05rem;
+  border-radius: 1rem;
   border: 1px solid #e2e8f0;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.04);
 }
 
 .kpiLabel {
   margin: 0 0 0.35rem;
-  font-size: 0.78rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: #64748b;
 }
 
 .kpiValue {
   margin: 0;
-  font-size: 1.45rem;
+  font-size: 1.55rem;
   font-weight: 700;
+  letter-spacing: -0.02em;
   color: #0f172a;
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 1rem;
+}
+
+.sectionHead {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid #e8edf5;
 }
 
 .sectionTitle {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: #0f172a;
 }
 
 .sectionDesc {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.86rem;
   color: #64748b;
   line-height: 1.5;
 }
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 0.9rem;
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   border: 1px solid #e2e8f0;
   border-radius: 1rem;
   background: #fff;
-  padding: 1rem 1.1rem;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
+  padding: 1.05rem 1.15rem;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.card:hover {
+  border-color: #c7d2fe;
+  box-shadow: 0 14px 32px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
 }
 
 .cardHead {
@@ -130,13 +161,14 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 0.65rem;
+  margin-bottom: 0.7rem;
 }
 
 .cardTitle {
   margin: 0;
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   font-weight: 700;
+  line-height: 1.4;
   color: #0f172a;
 }
 
@@ -144,11 +176,12 @@
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  padding: 0.2rem 0.55rem;
-  font-size: 0.72rem;
+  padding: 0.22rem 0.6rem;
+  font-size: 0.68rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .badgeActive {
@@ -168,22 +201,28 @@
 
 .cardText {
   margin: 0;
-  font-size: 0.86rem;
+  font-size: 0.85rem;
   color: #475569;
-  line-height: 1.5;
+  line-height: 1.55;
+  flex: 1 1 auto;
 }
 
 .cardMeta {
-  margin: 0.55rem 0 0;
-  font-size: 0.8rem;
-  color: #64748b;
+  margin: 0.65rem 0 0;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.65rem;
+  background: #f8fafc;
+  border: 1px solid #e8edf5;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
 }
 
 .linkRow {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
-  margin-top: 0.85rem;
+  margin-top: 0.95rem;
 }
 
 .linkBtn,
@@ -192,16 +231,21 @@
   align-items: center;
   justify-content: center;
   border-radius: 0.65rem;
-  padding: 0.45rem 0.85rem;
-  font-size: 0.82rem;
+  padding: 0.48rem 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .linkBtn {
   background: #4f46e5;
   color: #fff;
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
 }
 
 .linkBtn:hover {
@@ -216,21 +260,24 @@
 
 .linkBtnSecondary:hover {
   background: #eef2ff;
+  border-color: #a5b4fc;
 }
 
 .chartBox {
-  height: 260px;
-  padding: 1rem;
+  height: 280px;
+  padding: 1rem 1.1rem;
   border: 1px solid #e2e8f0;
-  border-radius: 0.85rem;
-  background: #fff;
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
 }
 
 .tableWrap {
   overflow-x: auto;
   border: 1px solid #e2e8f0;
-  border-radius: 0.85rem;
+  border-radius: 1rem;
   background: #fff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
 }
 
 .table {
@@ -241,23 +288,31 @@
 
 .table th,
 .table td {
-  padding: 0.7rem 0.85rem;
+  padding: 0.78rem 0.95rem;
   text-align: left;
   border-bottom: 1px solid #f1f5f9;
 }
 
+.table tbody tr:hover {
+  background: #f8fafc;
+}
+
 .table th {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: #64748b;
   background: #f8fafc;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
 }
 
 .statusPill {
   display: inline-flex;
   border-radius: 999px;
-  padding: 0.18rem 0.55rem;
+  padding: 0.2rem 0.58rem;
   font-size: 0.72rem;
   font-weight: 700;
 }
@@ -279,7 +334,7 @@
 
 .empty {
   margin: 0;
-  padding: 1.25rem;
+  padding: 1.5rem;
   text-align: center;
   color: #64748b;
   font-size: 0.88rem;

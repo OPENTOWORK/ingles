@@ -15,6 +15,17 @@ import { usesStudentContentRestrictions, isExamStrategiesLockedForUser } from '@
 import { getExamStrategiesMenuItems } from '@/data/examSkillTheme';
 import { APP_ROUTES, isExamPracticeAppPath, isExamStrategiesPath } from '@/config/appRoutes';
 import { STAFF_PANELS_HUB_PATH } from '@/config/staffPanelHub';
+import {
+  permissionKeysToMenuItems,
+  resolvePermissionKeysForRole,
+  resolveStaffRolePermissionKey,
+} from '@/lib/staffRolePermissions';
+import {
+  ADMIN_SHELL_MENU_SECTIONS,
+  STAFF_BUZON_PANEL_ITEM,
+  STAFF_TASKS_PANEL_ITEM,
+  getAdminPanelMenuItems,
+} from '@/config/adminShellMenu';
 
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
@@ -227,51 +238,8 @@ export function isStaffPanelsNavActive(pathname, searchParams, staffItems = []) 
   return staffItems.some((item) => isNavLinkActive(item.href, pathname, searchParams));
 }
 
-/** Desplegable «Admin» solo para rol administrador. */
-const COORDINATOR_ADMIN_PANEL_ITEM = {
-  href: '/admin/coordinador',
-  label: 'Panel de coordinador',
-};
-
-const STAFF_BUZON_PANEL_ITEM = {
-  href: '/buzon',
-  label: 'Buzón y reuniones',
-};
-
-const STAFF_TASKS_PANEL_ITEM = {
-  href: '/tareas',
-  label: 'Panel de tareas',
-};
-
-export const ADMIN_PANEL_MENU_ITEMS = [
-  STAFF_BUZON_PANEL_ITEM,
-  STAFF_TASKS_PANEL_ITEM,
-  { href: '/admin', label: 'Panel de administración' },
-  { href: '/admin/profesor', label: 'Panel de profesor' },
-  COORDINATOR_ADMIN_PANEL_ITEM,
-  { href: '/soporte', label: 'Panel de soporte' },
-  { href: '/informatico', label: 'Panel informático' },
-  { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
-  { href: '/admin/plan-financiero', label: 'Plan financiero' },
-  { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
-  { href: '/admin/blog', label: 'Blog' },
-  { href: '/admin/plan-marketing', label: 'Plan de marketing' },
-];
-
-/** Lista completa del desplegable Admin (incluye coordinador si faltara en caché antigua). */
-export function getAdminPanelMenuItems() {
-  if (ADMIN_PANEL_MENU_ITEMS.some((item) => item.href === COORDINATOR_ADMIN_PANEL_ITEM.href)) {
-    return ADMIN_PANEL_MENU_ITEMS;
-  }
-  const items = [...ADMIN_PANEL_MENU_ITEMS];
-  const profesorIdx = items.findIndex((item) => item.href === '/admin/profesor');
-  if (profesorIdx >= 0) {
-    items.splice(profesorIdx + 1, 0, COORDINATOR_ADMIN_PANEL_ITEM);
-  } else {
-    items.push(COORDINATOR_ADMIN_PANEL_ITEM);
-  }
-  return items;
-}
+export { STAFF_BUZON_PANEL_ITEM, STAFF_TASKS_PANEL_ITEM, getAdminPanelMenuItems };
+export const ADMIN_PANEL_MENU_ITEMS = getAdminPanelMenuItems();
 
 function normalizeStaffShellPath(path = '') {
   const trimmed = String(path || '').replace(/\/$/, '');
@@ -287,19 +255,38 @@ function staffShellPathMatches(pathname = '', href = '') {
   return current === target || current.startsWith(`${target}/`);
 }
 
-/** Módulos del menú lateral Admin (dropdown completo para administradores). */
-export function getAdminShellMenuItems(roleName = '') {
-  const items = isAdminRole(roleName)
-    ? getAdminPanelMenuItems()
-    : getStaffPanelMenuItemsForRole(roleName).filter((item) => item.href.startsWith('/admin'));
+/** Módulos del menú lateral Admin (lista plana; preferir getAdminShellMenuSections). */
+export function getAdminShellMenuItems(roleName = '', permissionOverridesByRole = {}) {
+  return flattenAdminShellMenuSections(getAdminShellMenuSections(roleName, permissionOverridesByRole));
+}
 
+/** Índice lateral agrupado por departamento. */
+export function getAdminShellMenuSections(roleName = '', permissionOverridesByRole = {}) {
+  if (isAdminRole(roleName)) {
+    return ADMIN_SHELL_MENU_SECTIONS;
+  }
+
+  const items = getStaffPanelMenuItemsForRole(roleName, permissionOverridesByRole).filter((item) =>
+    item.href.startsWith('/admin'),
+  );
+
+  if (!items.length) return [];
+
+  return [{ id: 'modules', title: null, items }];
+}
+
+function flattenAdminShellMenuSections(sections = []) {
+  const items = [];
   const seen = new Set();
-  return items.filter((item) => {
-    const href = normalizeStaffShellPath(item.href);
-    if (seen.has(href)) return false;
-    seen.add(href);
-    return true;
-  });
+  for (const section of sections) {
+    for (const item of section.items || []) {
+      const href = normalizeStaffShellPath(item.href);
+      if (seen.has(href)) continue;
+      seen.add(href);
+      items.push(item);
+    }
+  }
+  return items;
 }
 
 /** Muestra el shell lateral solo en rutas de gestión admin (rol administrador u otros con /admin/*). */
@@ -313,27 +300,31 @@ export function shouldShowAdminShell(pathname = '', roleName = '') {
 }
 
 export const TEACHER_PANEL_MENU_ITEMS = [
-  { href: '/teacher', label: 'Panel de profesor' },
+  { href: '/teacher', label: 'Profesor' },
 ];
 
 export const COORDINATOR_PANEL_MENU_ITEMS = [
-  { href: '/coordinador', label: 'Panel de coordinador' },
+  { href: '/coordinador', label: 'Coordinador' },
 ];
 
 const STAFF_PANEL_BY_KEY = {
-  admin: { href: '/admin', label: 'Panel de administración' },
-  profesorAdmin: { href: '/admin/profesor', label: 'Panel de profesor' },
-  profesor: { href: '/teacher', label: 'Panel de profesor' },
-  coordinador: { href: '/coordinador', label: 'Panel de coordinador' },
-  soporte: { href: '/soporte', label: 'Panel de soporte' },
-  informatico: { href: '/informatico', label: 'Panel informático' },
+  admin: { href: '/admin', label: 'Administración' },
+  profesorAdmin: { href: '/admin/profesor', label: 'Profesor' },
+  profesor: { href: '/teacher', label: 'Profesor' },
+  coordinador: { href: '/coordinador', label: 'Coordinador' },
+  soporte: { href: '/soporte', label: 'Soporte' },
+  informatico: { href: '/informatico', label: 'Informático' },
   buzon: STAFF_BUZON_PANEL_ITEM,
   tareas: STAFF_TASKS_PANEL_ITEM,
-  planObjetivos: { href: '/admin/plan-objetivos', label: 'Plan de objetivos' },
-  planFinanciero: { href: '/admin/plan-financiero', label: 'Plan financiero' },
-  ejercicios: { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
+  planObjetivos: { href: '/admin/plan-objetivos', label: 'Objetivos' },
+  planFinanciero: { href: '/admin/plan-financiero', label: 'Financiero' },
+  ejercicios: { href: '/admin/ejercicios', label: 'Ejercicios' },
   blog: { href: '/admin/blog', label: 'Blog' },
-  planMarketing: { href: '/admin/plan-marketing', label: 'Plan de marketing' },
+  planMarketing: { href: '/admin/plan-marketing', label: 'Marketing' },
+  configuracion: { href: '/admin/configuracion', label: 'Permisos' },
+  facturacion: { href: '/admin/finanzas/facturacion', label: 'Facturación' },
+  contabilidad: { href: '/admin/finanzas/contabilidad', label: 'Contabilidad' },
+  tesoreria: { href: '/admin/finanzas/tesoreria', label: 'Tesorería' },
 };
 
 /**
@@ -346,48 +337,14 @@ const STAFF_PANEL_BY_KEY = {
  * - centro/empresa, clases/grupos: su panel + buzón + tareas
  * - alumno y otros sin rol: ninguno
  */
-export function getStaffPanelMenuItemsForRole(roleName = '') {
+export function getStaffPanelMenuItemsForRole(roleName = '', permissionOverridesByRole = {}) {
   if (isAdminRole(roleName)) {
     return getAdminPanelMenuItems();
   }
-  if (isMarketingRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.planMarketing, STAFF_PANEL_BY_KEY.blog];
-  }
-  if (isCoordinatorRole(roleName)) {
-    return [
-      STAFF_PANEL_BY_KEY.buzon,
-      STAFF_PANEL_BY_KEY.tareas,
-      STAFF_PANEL_BY_KEY.profesorAdmin,
-      STAFF_PANEL_BY_KEY.coordinador,
-      STAFF_PANEL_BY_KEY.planObjetivos,
-      STAFF_PANEL_BY_KEY.blog,
-    ];
-  }
-  if (isTeacherRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.tareas, STAFF_PANEL_BY_KEY.profesor];
-  }
-  const role = normalizeRoleName(roleName);
-  if (isSupportRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.tareas, STAFF_PANEL_BY_KEY.soporte];
-  }
-  if (isItRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.tareas, STAFF_PANEL_BY_KEY.informatico];
-  }
-  if (role === 'centro_empresa' || role === 'centro/empresa') {
-    return [
-      STAFF_PANEL_BY_KEY.buzon,
-      STAFF_PANEL_BY_KEY.tareas,
-      { href: '/centro-empresa', label: 'Panel centro/empresa' },
-    ];
-  }
-  if (role === 'clases_grupos' || role === 'clases/grupos') {
-    return [
-      STAFF_PANEL_BY_KEY.buzon,
-      STAFF_PANEL_BY_KEY.tareas,
-      { href: '/clases-grupos', label: 'Panel clases/grupos' },
-    ];
-  }
-  return [];
+
+  const roleKey = resolveStaffRolePermissionKey(roleName);
+  const permissionKeys = resolvePermissionKeysForRole(roleKey, permissionOverridesByRole);
+  return permissionKeysToMenuItems(permissionKeys);
 }
 
 export function canAccessStaffPanelsHub(roleName = '') {

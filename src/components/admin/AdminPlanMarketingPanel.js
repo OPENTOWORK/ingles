@@ -83,7 +83,7 @@ function PromotionsTab({ data }) {
 
   return (
     <div className={styles.section}>
-      <div>
+      <div className={styles.sectionHead}>
         <h2 className={styles.sectionTitle}>Campañas activas</h2>
         <p className={styles.sectionDesc}>
           Promociones y programas que impactan en captación, conversión y retención.
@@ -114,7 +114,7 @@ function PromotionsTab({ data }) {
         ))}
       </div>
 
-      <div>
+      <div className={styles.sectionHead}>
         <h2 className={styles.sectionTitle}>Precios y promociones de planes</h2>
         <p className={styles.sectionDesc}>
           Estado comercial de cada plan. Para editar precios o badges, usa el plan financiero.
@@ -169,7 +169,7 @@ function ResultsTab({ data }) {
 
   return (
     <div className={styles.section}>
-      <div>
+      <div className={styles.sectionHead}>
         <h2 className={styles.sectionTitle}>Resultados de marketing</h2>
         <p className={styles.sectionDesc}>
           Indicadores de captación, consentimiento comercial y conversión a planes de pago.
@@ -251,7 +251,7 @@ function AttributionTab({ data }) {
 
   return (
     <div className={styles.section}>
-      <div>
+      <div className={styles.sectionHead}>
         <h2 className={styles.sectionTitle}>Atribución del lead</h2>
         <p className={styles.sectionDesc}>
           Origen de los registros y seguimiento del programa de referidos.
@@ -410,7 +410,7 @@ export default function AdminPlanMarketingPanel() {
         mascotVariant={5}
       />
 
-      <div className={styles.tabs} role="tablist" aria-label="Secciones del plan de marketing">
+      <div className={styles.tabBar} role="tablist" aria-label="Secciones del plan de marketing">
         {TABS.map((tab) => (
           <button
             key={tab.id}

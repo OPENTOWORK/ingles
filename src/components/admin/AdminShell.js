@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { getAdminShellMenuItems } from '@/config/appNavMenu';
+import { getAdminShellMenuSections } from '@/config/appNavMenu';
 import { getRoleNameByUserId } from '@/utils/authRoles';
 import { getClientAuth } from '@/utils/getClientAuth';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import AdminShellNav from '@/components/admin/AdminShellNav';
 import styles from './AdminShell.module.css';
 
 const SIDEBAR_COLLAPSED_KEY = 'dralo_admin_sidebar_collapsed';
@@ -29,7 +29,8 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
   const [loading, setLoading] = useState(!userRoleProp);
   const [userRole, setUserRole] = useState(userRoleProp || '');
   const [collapsed, setCollapsed] = useState(false);
-  const menuItems = getAdminShellMenuItems(userRole);
+  const [permissionOverrides, setPermissionOverrides] = useState({});
+  const menuSections = getAdminShellMenuSections(userRole, permissionOverrides);
 
   useEffect(() => {
     try {
@@ -38,6 +39,25 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
       setCollapsed(false);
     }
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const res = await fetch('/api/staff/role-permissions', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (!cancelled) setPermissionOverrides(data?.overrides || {});
+      } catch {
+        if (!cancelled) setPermissionOverrides({});
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [userRole]);
 
   useEffect(() => {
     if (userRoleProp) {
@@ -118,22 +138,13 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
             </button>
           </div>
 
-          <nav className={styles.nav}>
-            {menuItems.map((item) => {
-              const active = isAdminNavActive(item.href, pathname);
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={active ? styles.navLinkActive : styles.navLink}
-                  aria-current={active ? 'page' : undefined}
-                  title={collapsed ? item.label : undefined}
-                >
-                  <span className={styles.navLabel}>{item.label}</span>
-                </Link>
-              );
-            })}
-          </nav>
+          <AdminShellNav
+            menuSections={menuSections}
+            pathname={pathname}
+            userRole={userRole}
+            collapsed={collapsed}
+            isAdminNavActive={isAdminNavActive}
+          />
         </aside>
 
         <div className={`${styles.main} admin-shell__main`}>{children}</div>

@@ -73,6 +73,26 @@ export const STAFF_PANEL_HUB_META = {
     accent: 'rose',
     description: 'Promociones, resultados y atribución de leads',
   },
+  '/admin/configuracion': {
+    icon: 'panel',
+    accent: 'slate',
+    description: 'Permisos de paneles por rol',
+  },
+  '/admin/finanzas/facturacion': {
+    icon: 'finance',
+    accent: 'lime',
+    description: 'Emisión y seguimiento de facturas',
+  },
+  '/admin/finanzas/contabilidad': {
+    icon: 'finance',
+    accent: 'lime',
+    description: 'Registro contable y conciliación',
+  },
+  '/admin/finanzas/tesoreria': {
+    icon: 'finance',
+    accent: 'lime',
+    description: 'Cobros, pagos y tesorería',
+  },
   '/centro-empresa': {
     icon: 'building',
     accent: 'slate',

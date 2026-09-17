@@ -94,6 +94,7 @@ const ADMIN_EXTRA_SECTIONS = `
 - **Precios** (/precios): comparativa de planes (solo administradores, oculto para estudiantes de momento).
 - **Plan financiero** (/admin/plan-financiero): monetización, sincronización del catálogo, suscripciones e ingresos (solo admin).
 - **Plan de marketing** (/admin/plan-marketing): promociones, resultados de captación y atribución de leads (admin y marketing).
+- **Permisos** (/admin/configuracion): permisos de módulos por rol (solo admin).
 - **Panel de ejercicios** (/admin/ejercicios): creación automática de ejercicios de teoría en Supabase (solo admin).
 
 ## Menú staff (si aplica su rol)
