@@ -89,6 +89,10 @@ export function canAccessBlogAdminPanel(roleName = '') {
   return isAdminRole(roleName) || isCoordinatorRole(roleName) || isMarketingRole(roleName);
 }
 
+export function canAccessMarketingPlanAdminPanel(roleName = '') {
+  return isAdminRole(roleName) || isMarketingRole(roleName);
+}
+
 /** Prompts de generación de partes de examen (lectura/edición). */
 export function canAccessExamPartPrompts(roleName = '') {
   return isAdminRole(roleName) || isCoordinatorRole(roleName) || isTeacherRole(roleName);

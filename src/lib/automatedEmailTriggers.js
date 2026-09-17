@@ -8,6 +8,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   SUPPORT_REPLY_SENT: 'support_reply_sent',
   FRIEND_INVITED: 'friend_invited',
   STAFF_TASK_ASSIGNED: 'staff_task_assigned',
+  STAFF_TASK_MESSAGE: 'staff_task_message',
   FOUNDING_MEMBER_PLUS_GRANTED: 'founding_member_plus_granted',
   FOUNDING_MEMBER_SURVEY: 'founding_member_survey',
   FOUNDING_MEMBER_SURVEY_REMINDER: 'founding_member_survey_reminder',
@@ -55,6 +56,12 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.STAFF_TASK_ASSIGNED,
     label: 'Tarea asignada (staff)',
     description: 'Cuando se crea una tarea y se asigna a una persona del equipo.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.STAFF_TASK_MESSAGE,
+    label: 'Mensaje en chat de tarea',
+    description:
+      'Avisa a los involucrados cuando hay un mensaje nuevo en la conversación de una tarea.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_PLUS_GRANTED,

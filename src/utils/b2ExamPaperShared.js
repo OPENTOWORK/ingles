@@ -1272,6 +1272,13 @@ export function normalizeText(value = '') {
     .toLowerCase();
 }
 
+/** Display text for instant-feedback correct answers (grading still uses normalizeText). */
+export function formatEnglishAnswerForDisplay(value = '') {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  return text.replace(/\bi\b/g, 'I');
+}
+
 /**
  * Mapa número de hueco → variantes válidas (normalizadas).
  * Si `respuesta_texto` en BD viene sin prefijo (`from` en vez de `9 from`), `orderedQuestionNumbers`

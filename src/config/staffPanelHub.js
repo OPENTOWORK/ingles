@@ -68,6 +68,11 @@ export const STAFF_PANEL_HUB_META = {
     accent: 'violet',
     description: 'Noticias y artículos del blog',
   },
+  '/admin/plan-marketing': {
+    icon: 'finance',
+    accent: 'rose',
+    description: 'Promociones, resultados y atribución de leads',
+  },
   '/centro-empresa': {
     icon: 'building',
     accent: 'slate',

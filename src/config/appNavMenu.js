@@ -255,6 +255,7 @@ export const ADMIN_PANEL_MENU_ITEMS = [
   { href: '/admin/plan-financiero', label: 'Plan financiero' },
   { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
   { href: '/admin/blog', label: 'Blog' },
+  { href: '/admin/plan-marketing', label: 'Plan de marketing' },
 ];
 
 /** Lista completa del desplegable Admin (incluye coordinador si faltara en caché antigua). */
@@ -289,10 +290,7 @@ function staffShellPathMatches(pathname = '', href = '') {
 /** Módulos del menú lateral Admin (dropdown completo para administradores). */
 export function getAdminShellMenuItems(roleName = '') {
   const items = isAdminRole(roleName)
-    ? [
-        ...getAdminPanelMenuItems(),
-        { href: '/admin/speaking-tasks', label: 'Speaking tasks' },
-      ]
+    ? getAdminPanelMenuItems()
     : getStaffPanelMenuItemsForRole(roleName).filter((item) => item.href.startsWith('/admin'));
 
   const seen = new Set();
@@ -335,6 +333,7 @@ const STAFF_PANEL_BY_KEY = {
   planFinanciero: { href: '/admin/plan-financiero', label: 'Plan financiero' },
   ejercicios: { href: '/admin/ejercicios', label: 'Panel de ejercicios' },
   blog: { href: '/admin/blog', label: 'Blog' },
+  planMarketing: { href: '/admin/plan-marketing', label: 'Plan de marketing' },
 };
 
 /**
@@ -352,7 +351,7 @@ export function getStaffPanelMenuItemsForRole(roleName = '') {
     return getAdminPanelMenuItems();
   }
   if (isMarketingRole(roleName)) {
-    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.blog];
+    return [STAFF_PANEL_BY_KEY.buzon, STAFF_PANEL_BY_KEY.planMarketing, STAFF_PANEL_BY_KEY.blog];
   }
   if (isCoordinatorRole(roleName)) {
     return [

@@ -9611,6 +9611,19 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   max-height: none;
 }
 
+/* Inline inputs + justify stretch word gaps on short wrapped lines (Part 3 gap 21) */
+.levels-exam-inline-passage__line--interactive,
+.levels-exam-open-cloze-inline .levels-exam-inline-passage__line--interactive,
+.levels-exam-uoe-inline .levels-exam-inline-passage__line--interactive,
+.reading-area .levels-exam-inline-passage__line--interactive,
+.levels-exam-split__text p.levels-exam-inline-passage__line--interactive,
+.levels-exam-split__passage-panel p.levels-exam-inline-passage__line--interactive {
+  text-align: left !important;
+  text-align-last: left !important;
+  text-justify: auto !important;
+  word-spacing: normal !important;
+}
+
 .levels-exam-open-cloze-inline .levels-exam-split__questions {
   display: none;
 }

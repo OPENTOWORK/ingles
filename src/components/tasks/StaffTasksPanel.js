@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { getStaffRoleLabel } from '@/utils/staffBuzon';
 import { staffTasksFetch } from '@/lib/staffTasksClient';
 import {
@@ -44,6 +45,7 @@ import StaffTaskTemplatesSection from '@/components/tasks/StaffTaskTemplatesSect
 import StaffTaskFormModal, { ROL_OPTIONS } from '@/components/tasks/StaffTaskFormModal';
 import StaffPhaseFormModal from '@/components/tasks/StaffPhaseFormModal';
 import StaffSubphaseFormModal from '@/components/tasks/StaffSubphaseFormModal';
+import StaffTaskConversation from '@/components/tasks/StaffTaskConversation';
 import {
   CumplimientoBadge,
   FaseEstadoBadge,
@@ -194,6 +196,7 @@ function formatPhaseResponsablesLabel(phase) {
 }
 
 export default function StaffTasksPanel({ currentUserId, userRole, embedded = false }) {
+  const searchParams = useSearchParams();
   const canPickAssignee = canPickAnyAssignee(userRole);
   const canManagePhases = canManageStaffPhases(userRole);
   const canDelete = canDeleteStaffTask(userRole);
@@ -339,6 +342,13 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     void loadTasks();
   }, [loadTasks]);
 
+  useEffect(() => {
+    const openId = String(searchParams?.get('abierta') || '').trim();
+    if (!openId || !tasks.length) return;
+    const match = tasks.find((task) => String(task.id) === openId);
+    if (match) setDetailTask(match);
+  }, [searchParams, tasks]);
+
   const taskAssignee = useMemo(
     () => assignees.find((u) => u.id === taskForm.asignado_id),
     [assignees, taskForm.asignado_id],
@@ -411,6 +421,9 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         body: JSON.stringify({ action: 'updateEstado', id: task.id, estado }),
       });
       await loadTasks();
+      setDetailTask((current) =>
+        current?.id === task.id ? { ...current, estado } : current,
+      );
     } catch (e) {
       alert(e.message);
     } finally {
@@ -1410,7 +1423,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
       {/* Detail drawer */}
       {detailTask ? (
         <div className="fixed inset-0 z-40 flex justify-end bg-black/30">
-          <div className="w-full max-w-md bg-white h-full shadow-xl overflow-y-auto">
+          <div className="w-full max-w-lg bg-white h-full shadow-xl overflow-y-auto">
             <div className="sticky top-0 bg-white border-b px-5 py-4 flex justify-between items-center">
               <h3 className="font-semibold">Detalle de tarea</h3>
               <button type="button" onClick={() => setDetailTask(null)} className="text-gray-400 text-xl">
@@ -1448,6 +1461,9 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                   </div>
                 ) : null}
               </dl>
+
+              <StaffTaskConversation taskId={detailTask.id} taskEstado={detailTask.estado} />
+
               <div className="flex gap-2 pt-2">
                 <button
                   type="button"

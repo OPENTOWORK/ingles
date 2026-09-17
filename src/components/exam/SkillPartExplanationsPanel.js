@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
+import { formatEnglishAnswerForDisplay } from '@/utils/b2ExamPaperShared';
 
 /**
  * Bottom-of-passage feedback block (Part 1 UOE style).
@@ -88,7 +89,8 @@ export default function SkillPartExplanationsPanel({
               ) : null}
               {!isCorrect && entry.correctAnswer ? (
                 <span>
-                  {' · '}Correct answer: <strong>{entry.correctAnswer}</strong>
+                  {' · '}Correct answer:{' '}
+                  <strong>{formatEnglishAnswerForDisplay(entry.correctAnswer)}</strong>
                 </span>
               ) : null}
               {onRequestExplanation ? (

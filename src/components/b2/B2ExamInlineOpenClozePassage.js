@@ -141,7 +141,10 @@ export default function B2ExamInlineOpenClozePassage({
         }
 
         return (
-          <p key={`inline-passage-line-${lineIdx}`} className="levels-exam-inline-passage__line">
+          <p
+            key={`inline-passage-line-${lineIdx}`}
+            className="levels-exam-inline-passage__line levels-exam-inline-passage__line--interactive"
+          >
             {segments.map((segment, segIdx) => {
               if (segment.type === 'text') {
                 return (

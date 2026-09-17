@@ -1,4 +1,52 @@
 import { getB2Part4V2FeedbackCopy } from '@/lib/b2Part4Grading';
+import { parseKeyWordRespuestaTexto } from '@/lib/parseB2KeyWordAnswerKey';
+import { formatEnglishAnswerForDisplay } from '@/utils/b2ExamPaperShared';
+
+/**
+ * Resolves the correct-answer string shown in instant feedback, preserving DB casing
+ * (e.g. pronoun "I") instead of the lowercased openAnswerMap values used for grading.
+ */
+export function resolveInstantFeedbackCorrectAnswer(
+  questionNumber,
+  openAnswerMap,
+  { openAnswerRows = [], part4ParsedKeys = null } = {},
+) {
+  const qn = Number(questionNumber);
+  const parsed = part4ParsedKeys?.get?.(qn);
+
+  if (parsed?.mode === 'metadata' && Array.isArray(parsed.answerKey?.fullAnswers)) {
+    const answers = parsed.answerKey.fullAnswers
+      .map((answer) => String(answer || '').trim())
+      .filter(Boolean);
+    if (answers.length) return answers.join(' · ');
+  }
+
+  if (parsed?.mode === 'legacy' && Array.isArray(parsed.acceptedFullAnswers)) {
+    const answers = parsed.acceptedFullAnswers
+      .map((answer) => String(answer || '').trim())
+      .filter(Boolean);
+    if (answers.length) return answers.join(' · ');
+  }
+
+  const fromRows = [];
+  const seen = new Set();
+  for (const row of openAnswerRows) {
+    const { questionNumber: num, answerText } = parseKeyWordRespuestaTexto(row?.respuesta_texto || '');
+    if (num !== qn || !answerText) continue;
+    const dedupeKey = answerText.toLowerCase();
+    if (seen.has(dedupeKey)) continue;
+    seen.add(dedupeKey);
+    fromRows.push(answerText);
+  }
+  if (fromRows.length) return fromRows.join(' · ');
+
+  const expected = openAnswerMap?.get?.(qn);
+  if (expected?.size) {
+    return [...expected].map(formatEnglishAnswerForDisplay).join(' · ');
+  }
+
+  return undefined;
+}
 
 export function buildOpenClozeExplanationEntries({
   activeQuestionNumbers = [],
@@ -6,20 +54,24 @@ export function buildOpenClozeExplanationEntries({
   openInputs = {},
   openChecks = {},
   openAnswerMap,
+  openAnswerRows = [],
+  part4ParsedKeys = null,
 }) {
   return activeQuestionNumbers
     .map((questionNumber) => {
       const questionKey = getQuestionKey(questionNumber);
       const checkResult = openChecks[questionKey];
       if (typeof checkResult !== 'boolean') return null;
-      const expected = openAnswerMap?.get?.(questionNumber);
-      const expectedList = expected && expected.size > 0 ? [...expected] : [];
+      const correctAnswer = resolveInstantFeedbackCorrectAnswer(questionNumber, openAnswerMap, {
+        openAnswerRows,
+        part4ParsedKeys,
+      });
       return {
         questionNumber,
         questionKey,
         isCorrect: checkResult,
         userAnswer: String(openInputs[questionKey] || '').trim(),
-        correctAnswer: expectedList.length > 0 ? expectedList.join(' · ') : undefined,
+        correctAnswer: checkResult ? undefined : correctAnswer,
       };
     })
     .filter(Boolean);
@@ -33,14 +85,17 @@ export function buildKeyWordExplanationEntries({
   openGrades = {},
   scoringV2Part4 = false,
   openAnswerMap,
+  openAnswerRows = [],
+  part4ParsedKeys = null,
 }) {
   return activeQuestionNumbers
     .map((questionNumber) => {
       const questionKey = getQuestionKey(questionNumber);
       const userAnswer = String(openInputs[questionKey] || '').trim();
-      const expected = openAnswerMap?.get?.(questionNumber);
-      const expectedList = expected && expected.size > 0 ? [...expected] : [];
-      const correctAnswer = expectedList.length > 0 ? expectedList.join(' · ') : undefined;
+      const correctAnswer = resolveInstantFeedbackCorrectAnswer(questionNumber, openAnswerMap, {
+        openAnswerRows,
+        part4ParsedKeys,
+      });
 
       if (scoringV2Part4) {
         const grade = openGrades[questionKey];

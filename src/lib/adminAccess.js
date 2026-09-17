@@ -123,6 +123,41 @@ export async function authenticateBlogAdminRequest(req) {
   return { user: auth.user, token, db, isAdmin, isCoordinator, isMarketing };
 }
 
+/** Admin o responsable de marketing (plan de marketing). */
+export async function authenticateMarketingPlanAdminRequest(req) {
+  const auth = await getSupabaseUserFromRequest(req);
+  if (!auth?.user) {
+    return {
+      error: 'Sesión no válida. Cierra sesión y vuelve a entrar en www.dralo.es.',
+      status: 401,
+    };
+  }
+
+  const supabaseUrl = getSupabaseUrl();
+  const serviceKey = getSupabaseServiceRoleKey()?.trim();
+  const supabaseAnonKey = getSupabaseAnonKey();
+  const token = auth.accessToken || '';
+
+  const db = serviceKey
+    ? createClient(supabaseUrl, serviceKey, {
+        auth: { autoRefreshToken: false, persistSession: false },
+      })
+    : createClient(supabaseUrl, supabaseAnonKey, {
+        global: token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+        auth: { autoRefreshToken: false, persistSession: false },
+      });
+
+  const isAdmin = await userIsAdmin(auth.user, db);
+  const roleName = await getUserRoleNameServer(auth.user.id, db);
+  const isMarketing = isMarketingRole(roleName);
+
+  if (!isAdmin && !isMarketing) {
+    return { error: 'Sin permiso.', status: 403 };
+  }
+
+  return { user: auth.user, token, db, isAdmin, isMarketing };
+}
+
 /** Admin, coordinador o profesor (ver/editar prompts de generación de partes). */
 export async function authenticateExamPartPromptRequest(req) {
   const auth = await getSupabaseUserFromRequest(req);

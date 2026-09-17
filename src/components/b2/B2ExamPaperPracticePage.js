@@ -15,6 +15,7 @@ import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsP
 import {
   buildOpenClozeExplanationEntries,
   buildMcqGroupExplanationEntries,
+  resolveInstantFeedbackCorrectAnswer,
 } from '@/utils/buildOpenGapExplanationEntries';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { useLevelExamScoringSession } from '@/hooks/useLevelExamScoringSession';
@@ -1830,6 +1831,7 @@ function B2ExamPaperPracticePageInner({
         openInputs,
         openChecks,
         openAnswerMap,
+        openAnswerRows: selectedQuestion?.respuestasAbiertas || [],
       });
     },
     [
@@ -1839,6 +1841,7 @@ function B2ExamPaperPracticePageInner({
       isListeningGapPart,
       openQuestionNumbers,
       selectedPart?.id,
+      selectedQuestion?.respuestasAbiertas,
       openInputs,
       openChecks,
       openAnswerMap,
@@ -1874,14 +1877,16 @@ function B2ExamPaperPracticePageInner({
         const questionKey = getQuestionKey(selectedPart?.id, qn, 'open');
         const checkResult = openChecks[questionKey];
         if (typeof checkResult !== 'boolean') continue;
-        const expected = openAnswerMap.get(qn);
-        const expectedList = expected && expected.size > 0 ? [...expected] : [];
         entries.push({
           questionNumber: qn,
           questionKey,
           isCorrect: checkResult,
           userAnswer: String(openInputs[questionKey] || '').trim(),
-          correctAnswer: expectedList.length > 0 ? expectedList.join(' · ') : undefined,
+          correctAnswer: checkResult
+            ? undefined
+            : resolveInstantFeedbackCorrectAnswer(qn, openAnswerMap, {
+                openAnswerRows: selectedQuestion?.respuestasAbiertas || [],
+              }),
         });
         continue;
       }
@@ -1929,6 +1934,7 @@ function B2ExamPaperPracticePageInner({
     listeningQuestionNumbersOrdered,
     isListeningGapPart,
     selectedPart?.id,
+    selectedQuestion?.respuestasAbiertas,
     openChecks,
     openInputs,
     openAnswerMap,

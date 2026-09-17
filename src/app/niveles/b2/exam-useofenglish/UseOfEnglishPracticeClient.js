@@ -1181,6 +1181,8 @@ function UseOfEnglishExamsPageInner() {
         openGrades,
         scoringV2Part4,
         openAnswerMap,
+        openAnswerRows: selectedQuestion?.respuestasAbiertas || [],
+        part4ParsedKeys: scoringV2Part4 ? part4ParsedKeys : null,
       });
       if (!entries.length) return null;
       return (
@@ -1200,6 +1202,7 @@ function UseOfEnglishExamsPageInner() {
         openInputs,
         openChecks,
         openAnswerMap,
+        openAnswerRows: selectedQuestion?.respuestasAbiertas || [],
       });
       if (!entries.length) return null;
       return (
@@ -1236,6 +1239,8 @@ function UseOfEnglishExamsPageInner() {
     openGrades,
     scoringV2Part4,
     openAnswerMap,
+    selectedQuestion?.respuestasAbiertas,
+    part4ParsedKeys,
     aiHintsByKey,
     handlePart1ExplanationRequest,
     handleOpenGapExplanationRequest,
