@@ -8,6 +8,7 @@ import { getClientAuth } from '@/utils/getClientAuth';
 import { userHasRole } from '@/utils/authRoles';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import CustomerJourneyPanel from '@/components/marketing/CustomerJourneyPanel';
 
 function formatRegistrationDate(value) {
   if (!value) return '—';
@@ -188,6 +189,10 @@ export default function AdminStudentProfilePage() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden p-6">
+        <CustomerJourneyPanel userId={userId} />
       </section>
 
       <section className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">

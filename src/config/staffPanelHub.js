@@ -68,6 +68,11 @@ export const STAFF_PANEL_HUB_META = {
     accent: 'violet',
     description: 'Noticias y artículos del blog',
   },
+  '/admin/marketing': {
+    icon: 'finance',
+    accent: 'rose',
+    description: 'Adquisición, customer journey, campañas y ROI',
+  },
   '/admin/plan-marketing': {
     icon: 'finance',
     accent: 'rose',

@@ -23,7 +23,7 @@ export const STAFF_PERMISSION_PANELS = {
   planFinanciero: { href: '/admin/plan-financiero', label: 'Financiero' },
   ejercicios: { href: '/admin/ejercicios', label: 'Ejercicios' },
   blog: { href: '/admin/blog', label: 'Blog' },
-  planMarketing: { href: '/admin/plan-marketing', label: 'Marketing' },
+  planMarketing: { href: '/admin/marketing', label: 'Marketing' },
   configuracion: { href: '/admin/configuracion', label: 'Permisos' },
   facturacion: { href: '/admin/finanzas/facturacion', label: 'Facturación' },
   contabilidad: { href: '/admin/finanzas/contabilidad', label: 'Contabilidad' },

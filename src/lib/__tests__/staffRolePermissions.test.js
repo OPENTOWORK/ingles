@@ -26,6 +26,6 @@ test('resolvePermissionKeysForRole falls back to defaults', () => {
 
 test('permissionKeysToMenuItems builds menu entries', () => {
   const items = permissionKeysToMenuItems(getDefaultPermissionKeysForRole('marketing'));
-  assert.ok(items.some((item) => item.href === '/admin/plan-marketing'));
+  assert.ok(items.some((item) => item.href === '/admin/marketing'));
   assert.ok(items.some((item) => item.href === '/admin/blog'));
 });

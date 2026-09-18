@@ -49,7 +49,7 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
     id: 'comercial',
     title: 'Comercial',
     items: [
-      { href: '/admin/plan-marketing', label: 'Marketing' },
+      { href: '/admin/marketing', label: 'Marketing' },
       { href: '/admin/blog', label: 'Blog' },
     ],
   },
