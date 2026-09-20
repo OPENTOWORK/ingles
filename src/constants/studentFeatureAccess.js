@@ -12,7 +12,7 @@ import {
 /** When true, Training paths show COMING SOON for students only. */
 export const STUDENT_TRAINING_COMING_SOON = true;
 
-/** When true, Exam Strategies hub and routes show COMING SOON for students only. */
+/** @deprecated Students have full Exam Strategies access; kept for legacy imports. */
 export const STUDENT_EXAM_STRATEGIES_COMING_SOON = false;
 
 /** CEFR levels on /niveles that show COMING SOON for students (B2 stays open). */
@@ -55,10 +55,9 @@ export function isTrainingLockedForUser(userRole = '') {
   return usesStudentContentRestrictions(userRole);
 }
 
-/** Exam Strategies: coming soon for logged-in students only (staff/coordinators keep access). */
-export function isExamStrategiesLockedForUser(userRole = '') {
-  if (!STUDENT_EXAM_STRATEGIES_COMING_SOON) return false;
-  return isStudentRole(userRole);
+/** Exam Strategies is open for all logged-in roles (including students). */
+export function isExamStrategiesLockedForUser(_userRole = '') {
+  return false;
 }
 
 export function isNivelesLevelComingSoonForUser(userRole = '', level = '', email = '') {
