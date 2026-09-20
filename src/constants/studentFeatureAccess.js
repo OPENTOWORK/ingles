@@ -13,13 +13,13 @@ import {
 export const STUDENT_TRAINING_COMING_SOON = true;
 
 /** When true, Exam Strategies hub and routes show COMING SOON for students only. */
-export const STUDENT_EXAM_STRATEGIES_COMING_SOON = true;
+export const STUDENT_EXAM_STRATEGIES_COMING_SOON = false;
 
 /** CEFR levels on /niveles that show COMING SOON for students (B2 stays open). */
 export const STUDENT_NIVELES_COMING_SOON_LEVELS = new Set(['A2', 'B1', 'C1', 'C2']);
 
-/** Exam-mode sections unavailable for students (skill practice uses the same rule). */
-export const STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS = new Set(['listening', 'speaking']);
+/** Exam-mode sections unavailable for students (skill practice uses hub `enabledForStudents`). */
+export const STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS = new Set(['speaking']);
 
 export function isStudentRole(userRole = '') {
   const role = normalizeRoleName(userRole);
@@ -70,7 +70,7 @@ export function isNivelesLevelComingSoonForUser(userRole = '', level = '', email
   return STUDENT_NIVELES_COMING_SOON_LEVELS.has(normalized);
 }
 
-/** Listening and Speaking are blocked in exam mode for the same roles as skill practice. */
+/** Speaking stays blocked in full exam mode for students; listening follows hub flags like writing/RUOE. */
 export function isExamModeSectionKeyBlockedForStudent(userRole = '', sectionKey = '') {
   if (!usesStudentContentRestrictions(userRole)) return false;
   const key = String(sectionKey || '').toLowerCase();

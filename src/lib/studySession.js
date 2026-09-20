@@ -119,6 +119,41 @@ export function buildStudyReport(session = {}) {
   };
 }
 
+/** Totales en pantalla = último snapshot del servidor + tramo aún no enviado. */
+export function mergeStudyReportWithBuffer(serverReport, buffer = {}) {
+  if (!serverReport) return null;
+
+  const focusSeconds =
+    Math.max(0, Number(serverReport.focusSeconds) || 0) +
+    Math.max(0, Number(buffer.focusSeconds) || 0);
+  const awaySeconds =
+    Math.max(0, Number(serverReport.awaySeconds) || 0) +
+    Math.max(0, Number(buffer.awaySeconds) || 0);
+  const idleSeconds =
+    Math.max(0, Number(serverReport.idleSeconds) || 0) +
+    Math.max(0, Number(buffer.idleSeconds) || 0);
+  const totalSeconds = focusSeconds + awaySeconds + idleSeconds;
+  const focusRatio = totalSeconds > 0 ? Math.round((focusSeconds / totalSeconds) * 100) : 0;
+  const awayCount =
+    Math.max(0, Number(serverReport.awayCount) || 0) +
+    Math.max(0, Number(buffer.awayEvents) || 0);
+
+  return {
+    ...serverReport,
+    focusSeconds,
+    focusLabel: formatSessionDuration(focusSeconds),
+    awaySeconds,
+    awayLabel: formatSessionDuration(awaySeconds),
+    idleSeconds,
+    idleLabel: formatSessionDuration(idleSeconds),
+    totalSeconds,
+    totalLabel: formatSessionDuration(totalSeconds),
+    focusRatio,
+    awayCount,
+    quality: qualityFor(focusRatio),
+  };
+}
+
 /**
  * Resumen determinista. Se usa tal cual si la IA no está disponible y como
  * contexto factual del prompt cuando sí lo está.

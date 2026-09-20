@@ -405,8 +405,7 @@ function LevelExamModePracticeInner({ slug }) {
               (sec, idx) => {
                 const mins = getCambridgeSectionDurationMinutes(slug, sec.title);
                 const status = sec.status || (idx === 0 ? 'active' : 'locked');
-                const isBlocked =
-                  status === 'blocked' || isExamModeSectionKeyBlockedForStudent(userRole, sec.key);
+                const isBlocked = isExamModeSectionKeyBlockedForStudent(userRole, sec.key);
                 const isLocked = !isBlocked && status === 'locked';
                 const isDone = !isBlocked && status === 'completed';
                 const isActive = !isBlocked && status === 'active';

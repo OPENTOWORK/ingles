@@ -14,6 +14,7 @@ import AppNav from '@/components/layout/AppNav';
 import AdminShell from '@/components/admin/AdminShell';
 import { shouldShowAdminShell } from '@/config/appNavMenu';
 import StudySessionBarGate from '@/components/study/StudySessionBarGate';
+import ProfileStudyTimerPill from '@/components/study/ProfileStudyTimerPill';
 
 function SiteHeaderBrand({ nav = null }) {
   return (
@@ -43,6 +44,7 @@ export default function AuthenticatedAppShell({ session, userRole, onLogout, chi
       <SiteHeaderBrand
         nav={<AppNav session={preview.session} userRole={preview.userRole} onLogout={onLogout} />}
       />
+      <ProfileStudyTimerPill />
 
       <UserRoleProvider userRole={preview.userRole} session={preview.session}>
         <GuidedTourProvider>

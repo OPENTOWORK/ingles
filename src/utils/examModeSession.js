@@ -56,6 +56,21 @@ function getPlayableSections(session, userRole = '') {
   return (session?.sections ?? []).filter((s) => !isSectionBlockedForRole(s, userRole));
 }
 
+/** Sections saved as `blocked` before a skill was released for students. */
+function revivePreviouslyBlockedSection(section) {
+  return {
+    ...section,
+    status: /** @type {ExamModeSectionStatus} */ ('locked'),
+    startedAt: null,
+    finishedAt: null,
+    answers: null,
+    sectionDraft: null,
+    scores: null,
+    remainingSeconds: section.durationSeconds ?? section.remainingSeconds ?? null,
+    redoPart: undefined,
+  };
+}
+
 function blockedSectionState(section) {
   return {
     ...section,
@@ -75,7 +90,10 @@ export function reconcileExamModeSessionProgress(session, userRole = '') {
   if (!session?.sections?.length) return session;
 
   const sections = session.sections.map((s) => {
-    if (!isSectionBlockedForRole(s, userRole)) return { ...s };
+    if (!isSectionBlockedForRole(s, userRole)) {
+      if (s.status === 'blocked') return revivePreviouslyBlockedSection(s);
+      return { ...s };
+    }
     return blockedSectionState(s);
   });
 
@@ -111,7 +129,7 @@ export function reconcileExamModeSessionProgress(session, userRole = '') {
   };
 }
 
-/** Strip listening/speaking progress for students and fix session progression. */
+/** Apply student section blocks (e.g. speaking) and fix session progression. */
 export function applyExamModeStudentRestrictions(session, userRole = '') {
   if (!session?.sections?.length) return session;
   return reconcileExamModeSessionProgress(session, userRole);

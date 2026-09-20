@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { classifyStudyPath } from '@/lib/studyFocus';
 import {
+  mergeStudyReportWithBuffer,
   STUDY_CONSENT_VERSION,
   STUDY_IDLE_THRESHOLD_MS,
   STUDY_PING_INTERVAL_MS,
@@ -45,6 +46,7 @@ export function useStudySession(session) {
 
   const [activeSession, setActiveSession] = useState(null);
   const [report, setReport] = useState(null);
+  const [liveReport, setLiveReport] = useState(null);
   const [lastSummary, setLastSummary] = useState(null);
   const [starting, setStarting] = useState(false);
   const [finishing, setFinishing] = useState(false);
@@ -246,19 +248,32 @@ export function useStudySession(session) {
     const onVisibility = () => (document.visibilityState === 'hidden' ? leave() : enter());
 
     document.addEventListener('visibilitychange', onVisibility);
-    window.addEventListener('blur', leave);
-    window.addEventListener('focus', enter);
     INPUT_EVENTS.forEach((event) =>
       window.addEventListener(event, markInput, { passive: true }),
     );
 
     return () => {
       document.removeEventListener('visibilitychange', onVisibility);
-      window.removeEventListener('blur', leave);
-      window.removeEventListener('focus', enter);
       INPUT_EVENTS.forEach((event) => window.removeEventListener(event, markInput));
     };
   }, [activeSession, tick]);
+
+  // Contador en pantalla sin esperar al ping de 30 s.
+  useEffect(() => {
+    if (!activeSession || !report) {
+      setLiveReport(null);
+      return undefined;
+    }
+
+    const refresh = () => {
+      tick();
+      setLiveReport(mergeStudyReportWithBuffer(report, bufferRef.current));
+    };
+
+    refresh();
+    const uiTicker = setInterval(refresh, 1000);
+    return () => clearInterval(uiTicker);
+  }, [activeSession, report, tick]);
 
   // Contabilidad continua y envío periódico de contadores.
   useEffect(() => {
@@ -309,9 +324,11 @@ export function useStudySession(session) {
     return () => window.removeEventListener('pagehide', flush);
   }, [activeSession, drainBuffer, tick]);
 
+  const displayReport = liveReport || report;
+
   return {
     activeSession,
-    report,
+    report: displayReport,
     lastSummary,
     starting,
     finishing,

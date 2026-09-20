@@ -12,6 +12,7 @@ export const PROFILE_TABS = [
   { id: 'study-planner', label: 'Planner' },
   { id: 'ai-tools', label: 'AI tools' },
   { id: 'error-tracker', label: 'Error Tracker', studentAllowed: true },
+  { id: 'track-record', label: 'Track record', studentAllowed: true },
   { id: 'analytics', label: 'Analytics' },
   { id: 'settings', label: 'Settings', studentAllowed: true },
   { id: 'social', label: 'Social' },
@@ -37,7 +38,7 @@ export const PROFILE_TAB_GROUPS = [
     id: 'tools',
     title: 'Tools',
     description: 'Study tools, planner and AI',
-    tabIds: ['study-tools', 'study-planner', 'ai-tools', 'error-tracker'],
+    tabIds: ['study-tools', 'study-planner', 'ai-tools', 'error-tracker', 'track-record'],
   },
   {
     id: 'more',

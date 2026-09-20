@@ -16,11 +16,26 @@ export const MARKETING_NAV = [
   { href: '/admin/marketing/campanas', label: 'Campañas' },
   { href: '/admin/marketing/conversiones', label: 'Conversiones' },
   { href: '/admin/marketing/roi', label: 'ROI' },
+  { href: '/admin/marketing/promociones', label: 'Promociones' },
 ];
 
+function normalizePath(pathname = '') {
+  const p = String(pathname || '').split('?')[0].replace(/\/$/, '') || '/';
+  return p;
+}
+
 function isActive(pathname, item) {
-  if (item.exact) return pathname === item.href;
-  return pathname === item.href || pathname.startsWith(`${item.href}/`);
+  const path = normalizePath(pathname);
+  const href = normalizePath(item.href);
+
+  if (href === '/admin/marketing/promociones') {
+    if (path === '/admin/plan-marketing' || path.startsWith('/admin/plan-marketing/')) {
+      return true;
+    }
+  }
+
+  if (item.exact) return path === href;
+  return path === href || path.startsWith(`${href}/`);
 }
 
 export default function MarketingShell({
@@ -82,12 +97,6 @@ export default function MarketingShell({
       </nav>
 
       {children}
-
-      <div className={styles.linkRow}>
-        <Link href="/admin/plan-marketing" className={styles.inlineLink}>
-          Promociones y plan de marketing →
-        </Link>
-      </div>
     </div>
   );
 }

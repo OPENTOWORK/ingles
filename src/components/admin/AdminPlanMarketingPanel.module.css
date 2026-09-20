@@ -8,6 +8,12 @@
   gap: 1.35rem;
 }
 
+.embedded {
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
 .tabBar {
   display: inline-flex;
   flex-wrap: wrap;

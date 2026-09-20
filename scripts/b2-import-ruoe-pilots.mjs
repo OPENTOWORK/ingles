@@ -9,6 +9,7 @@
  *   node --loader ./scripts/alias-loader.mjs scripts/b2-import-ruoe-pilots.mjs --dry-run
  *   node --loader ./scripts/alias-loader.mjs scripts/b2-import-ruoe-pilots.mjs --apply
  *   node --loader ./scripts/alias-loader.mjs scripts/b2-import-ruoe-pilots.mjs --apply --slot=2
+ *   node --loader ./scripts/alias-loader.mjs scripts/b2-import-ruoe-pilots.mjs --apply --slot=2 --part=6
  */
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
@@ -91,7 +92,22 @@ const APO = '\u2019';
  * Two pilot Part 4 items fail the app's Cambridge validator, so they would be
  * ungradeable in the exam. Both keep the teacher's target structure.
  */
+const PART6_DUPLICATE_GAP37_TAIL =
+  'Creating that end-of-day line allowed me to mentally switch off without any unrealistic promises about sleep quality. (37) There';
+
+const PART6_DUPLICATE_GAP37_TAIL_FIXED =
+  'Creating that end-of-day line allowed me to mentally switch off without any unrealistic promises about sleep quality. There';
+
 const PILOT_REPAIRS = {
+  '2:6': {
+    reason:
+      'The closing paragraph carried a stray second (37) gap marker after gap (42), so the last dropdown showed (37) instead of ending the passage.',
+    patch(generated) {
+      if (generated.passage?.includes(PART6_DUPLICATE_GAP37_TAIL)) {
+        generated.passage = generated.passage.split(PART6_DUPLICATE_GAP37_TAIL).join(PART6_DUPLICATE_GAP37_TAIL_FIXED);
+      }
+    },
+  },
   '3:4': {
     reason:
       'Q25 marking points did not partition the answer, so "was not as good as" scored 1/2. ' +
@@ -131,7 +147,11 @@ const PILOT_REPAIRS = {
 
 const apply = process.argv.includes('--apply');
 const slotArg = process.argv.find((a) => a.startsWith('--slot='));
+const partArg = process.argv.find((a) => a.startsWith('--part='));
 const slots = slotArg ? [Number(slotArg.split('=')[1])] : [1, 2, 3, 4];
+const partsToImport = partArg
+  ? [Number(partArg.split('=')[1])]
+  : [1, 2, 3, 4, 5, 6, 7];
 
 const env = loadEnvLocal();
 const url = env.NEXT_PUBLIC_SUPABASE_URL;
@@ -170,7 +190,7 @@ for (const slot of slots) {
 
   console.log(`\n=== Exam ${slot} B2 · ${source.label}`);
 
-  for (const partNumber of [1, 2, 3, 4, 5, 6, 7]) {
+  for (const partNumber of partsToImport) {
     const file = source.parts[partNumber];
     if (!existsSync(file)) {
       console.error(`  Part ${partNumber}: MISSING FILE ${file}`);

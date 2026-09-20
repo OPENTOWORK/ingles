@@ -569,7 +569,7 @@ export const NIVELES_LEVEL_HUB = {
         enabledForStudents: true,
       },
       { text: '✍️ Writing', href: '/niveles/b2/exam-writing', enabledForStudents: true },
-      { text: '🎧 Listening', href: '/niveles/b2/exam-listening', enabledForStudents: false },
+      { text: '🎧 Listening', href: '/niveles/b2/exam-listening', enabledForStudents: true },
       { text: '🗣️ Speaking', href: '/niveles/b2/exam-speaking', enabledForStudents: false },
     ],
   },

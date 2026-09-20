@@ -57,7 +57,7 @@ const PRESET_ROUTES = [
   { label: 'Panel tareas', path: '/tareas', roles: ['teacher', 'coordinator', 'support', 'informatico', 'admin'] },
   { label: 'Buzón y reuniones', path: '/buzon', roles: ['teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Blog (admin)', path: '/admin/blog', roles: ['coordinator', 'marketing', 'admin'] },
-  { label: 'Plan de marketing', path: '/admin/plan-marketing', roles: ['marketing', 'admin'] },
+  { label: 'Plan de marketing', path: '/admin/marketing/promociones', roles: ['marketing', 'admin'] },
   { label: 'Permisos', path: '/admin/configuracion', roles: ['admin'] },
   { label: 'Facturación', path: '/admin/finanzas/facturacion', roles: ['admin'] },
   { label: 'Contabilidad', path: '/admin/finanzas/contabilidad', roles: ['admin'] },

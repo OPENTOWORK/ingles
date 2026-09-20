@@ -1,9 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { useStudySession } from '@/hooks/useStudySession';
+import {
+  STUDY_TRACK_RECORD_REFRESH_EVENT,
+  isStudyTrackRecordProfileRoute,
+  studyTrackRecordProfileHref,
+} from '@/lib/studyTrackRecord';
 import styles from './StudySessionBar.module.css';
+
+function isExamPracticePath(pathname = '') {
+  const path = String(pathname || '').split('?')[0];
+  return path.includes('/niveles/') || path.includes('/exam-practice/');
+}
 
 function ConsentDialog({ onAccept, onCancel, starting, error }) {
   return (
@@ -68,6 +79,18 @@ function ConsentDialog({ onAccept, onCancel, starting, error }) {
 
 function SummaryDialog({ summary, onClose }) {
   const { report, resumen } = summary;
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const viewTrackRecord = () => {
+    onClose();
+    const search = typeof window !== 'undefined' ? window.location.search : '';
+    if (isStudyTrackRecordProfileRoute(pathname, search)) {
+      window.dispatchEvent(new CustomEvent(STUDY_TRACK_RECORD_REFRESH_EVENT));
+      return;
+    }
+    router.push(studyTrackRecordProfileHref());
+  };
 
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="study-summary-title">
@@ -99,9 +122,9 @@ function SummaryDialog({ summary, onClose }) {
         {resumen ? <p className={styles.summaryText}>{resumen}</p> : null}
 
         <div className={styles.modalActions}>
-          <Link href="/perfil/track-record" className={styles.secondaryBtn}>
+          <button type="button" className={styles.secondaryBtn} onClick={viewTrackRecord}>
             Ver mi track record
-          </Link>
+          </button>
           <button type="button" className={styles.primaryBtn} onClick={onClose}>
             Hecho
           </button>
@@ -112,6 +135,8 @@ function SummaryDialog({ summary, onClose }) {
 }
 
 export default function StudySessionBar({ session }) {
+  const pathname = usePathname() || '';
+  const inPractice = isExamPracticePath(pathname);
   const {
     activeSession,
     report,
@@ -125,6 +150,14 @@ export default function StudySessionBar({ session }) {
   } = useStudySession(session);
   const [askingConsent, setAskingConsent] = useState(false);
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return undefined;
+    const cls = 'study-session-active';
+    if (activeSession) document.body.classList.add(cls);
+    else document.body.classList.remove(cls);
+    return () => document.body.classList.remove(cls);
+  }, [activeSession]);
+
   const handleAccept = async () => {
     const ok = await start();
     if (ok) setAskingConsent(false);
@@ -136,7 +169,10 @@ export default function StudySessionBar({ session }) {
 
   if (activeSession) {
     return (
-      <div className={styles.bar} role="status">
+      <div
+        className={`${styles.bar}${inPractice ? ` ${styles.barPractice}` : ''}`}
+        role="status"
+      >
         <span className={styles.live}>
           <span className={styles.liveDot} aria-hidden="true" />
           Estudiando
@@ -162,7 +198,7 @@ export default function StudySessionBar({ session }) {
     <>
       <button
         type="button"
-        className={styles.launcher}
+        className={`${styles.launcher}${inPractice ? ` ${styles.launcherPractice}` : ''}`}
         onClick={() => setAskingConsent(true)}
       >
         Iniciar estudio

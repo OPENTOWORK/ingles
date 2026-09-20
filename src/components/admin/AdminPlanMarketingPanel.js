@@ -20,6 +20,10 @@ import { getClientAuth } from '@/utils/getClientAuth';
 import { canAccessMarketingPlanAdminPanel, getRoleNameByUserId } from '@/utils/authRoles';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import {
+  formatPlanAnnualTotal,
+  getPlanMonthlyPrice,
+} from '@/data/financialPlanConfig';
 import styles from './AdminPlanMarketingPanel.module.css';
 
 const TABS = [
@@ -50,6 +54,12 @@ async function getAdminFetchHeaders() {
 function formatMoney(value) {
   const n = Number(value) || 0;
   return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' }).format(n);
+}
+
+function formatAnnualPriceCell(plan) {
+  const monthlyWhenAnnual = getPlanMonthlyPrice(plan, 'annual');
+  if (monthlyWhenAnnual <= 0) return '—';
+  return `${formatMoney(monthlyWhenAnnual)}/mes · ${formatPlanAnnualTotal(plan)}/año`;
 }
 
 function formatDate(value) {
@@ -127,7 +137,8 @@ function PromotionsTab({ data }) {
             <tr>
               <th>Plan</th>
               <th>Tipo</th>
-              <th>Precio</th>
+              <th>Precio mensual</th>
+              <th>Precio anual</th>
               <th>Referencia</th>
               <th>Estado</th>
             </tr>
@@ -138,6 +149,7 @@ function PromotionsTab({ data }) {
                 <td>{plan.nombre}</td>
                 <td>{plan.tipo === 'lanzamiento' ? 'Lanzamiento' : 'Estándar'}</td>
                 <td>{formatMoney(plan.precio)}</td>
+                <td>{formatAnnualPriceCell(plan)}</td>
                 <td>
                   {plan.precioLista > 0 ? formatMoney(plan.precioLista) : '—'}
                   {plan.badge ? ` · ${plan.badge}` : ''}
@@ -345,7 +357,7 @@ function AttributionTab({ data }) {
   );
 }
 
-export default function AdminPlanMarketingPanel() {
+export default function AdminPlanMarketingPanel({ embedded = false } = {}) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -365,16 +377,18 @@ export default function AdminPlanMarketingPanel() {
     let cancelled = false;
 
     (async () => {
-      const { session, user } = await getClientAuth();
-      if (!session?.user || !user) {
-        router.push('/login?next=/admin/plan-marketing');
-        return;
-      }
+      if (!embedded) {
+        const { session, user } = await getClientAuth();
+        if (!session?.user || !user) {
+          router.push('/login?next=/admin/marketing/promociones');
+          return;
+        }
 
-      const role = await getRoleNameByUserId(user.id, user.email);
-      if (!canAccessMarketingPlanAdminPanel(role)) {
-        router.push('/perfil');
-        return;
+        const role = await getRoleNameByUserId(user.id, user.email);
+        if (!canAccessMarketingPlanAdminPanel(role)) {
+          router.push('/perfil');
+          return;
+        }
       }
 
       try {
@@ -389,17 +403,61 @@ export default function AdminPlanMarketingPanel() {
     return () => {
       cancelled = true;
     };
-  }, [router, load]);
+  }, [router, load, embedded]);
 
   const tabContent = useMemo(() => {
     if (!data) return null;
+    if (embedded) return <PromotionsTab data={data} />;
     if (activeTab === 'promociones') return <PromotionsTab data={data} />;
     if (activeTab === 'resultados') return <ResultsTab data={data} />;
     return <AttributionTab data={data} />;
-  }, [activeTab, data]);
+  }, [activeTab, data, embedded]);
 
   if (loading) {
-    return <RouteLoadingMascot label="Cargando plan de marketing…" variant={5} width={120} />;
+    return (
+      <RouteLoadingMascot
+        label={embedded ? 'Cargando promociones…' : 'Cargando plan de marketing…'}
+        variant={5}
+        width={120}
+      />
+    );
+  }
+
+  const tabBar = (
+    <div
+      className={styles.tabBar}
+      role="tablist"
+      aria-label={embedded ? 'Secciones de promociones' : 'Secciones del plan de marketing'}
+    >
+      {TABS.map((tab) => (
+        <button
+          key={tab.id}
+          type="button"
+          role="tab"
+          aria-selected={activeTab === tab.id}
+          className={activeTab === tab.id ? styles.tabActive : styles.tab}
+          onClick={() => setActiveTab(tab.id)}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  );
+
+  const body = (
+    <>
+      {embedded ? null : tabBar}
+      {error ? (
+        <p className={styles.error} role="alert">
+          {error}
+        </p>
+      ) : null}
+      {tabContent}
+    </>
+  );
+
+  if (embedded) {
+    return <div className={styles.embedded}>{body}</div>;
   }
 
   return (
@@ -409,29 +467,7 @@ export default function AdminPlanMarketingPanel() {
         subtitle="Promociones, resultados de captación y atribución de leads en un solo lugar."
         mascotVariant={5}
       />
-
-      <div className={styles.tabBar} role="tablist" aria-label="Secciones del plan de marketing">
-        {TABS.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            aria-selected={activeTab === tab.id}
-            className={activeTab === tab.id ? styles.tabActive : styles.tab}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {error ? (
-        <p className={styles.error} role="alert">
-          {error}
-        </p>
-      ) : null}
-
-      {tabContent}
+      {body}
     </div>
   );
 }

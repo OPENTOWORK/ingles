@@ -73,7 +73,7 @@ export const STAFF_PANEL_HUB_META = {
     accent: 'rose',
     description: 'Adquisición, customer journey, campañas y ROI',
   },
-  '/admin/plan-marketing': {
+  '/admin/marketing/promociones': {
     icon: 'finance',
     accent: 'rose',
     description: 'Promociones, resultados y atribución de leads',

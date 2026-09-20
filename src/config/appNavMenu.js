@@ -75,8 +75,8 @@ export const NAV_LINK_EXAM_STRATEGIES = {
 };
 
 export const NAV_LINKS_BEFORE_DRALO = [
-  NAV_LINK_EXAM_STRATEGIES,
   { href: APP_ROUTES.examPracticeDefaultLevel, label: 'Exam Practice', tourId: 'nav-levels' },
+  NAV_LINK_EXAM_STRATEGIES,
 ];
 
 export const NAV_LINK_HOME = { href: '/', label: 'Home' };

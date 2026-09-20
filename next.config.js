@@ -279,6 +279,16 @@ const nextConfig = {
         permanent: true,
       },
       ...examPartTipsRedirects,
+      {
+        source: '/admin/plan-marketing',
+        destination: '/admin/marketing/promociones/',
+        permanent: true,
+      },
+      {
+        source: '/admin/plan-marketing/:path*',
+        destination: '/admin/marketing/promociones/',
+        permanent: true,
+      },
     ];
   },
 };

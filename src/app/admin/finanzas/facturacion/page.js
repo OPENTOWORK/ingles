@@ -1,13 +1,7 @@
 'use client';
 
-import AdminFinanceModulePanel from '@/components/admin/AdminFinanceModulePanel';
+import InvoicingPanel from '@/components/finance/invoicing/InvoicingPanel';
 
 export default function AdminFinanzasFacturacionPage() {
-  return (
-    <AdminFinanceModulePanel
-      title="Facturación"
-      subtitle="Emisión y seguimiento de facturas."
-      moduleKey="facturación"
-    />
-  );
+  return <InvoicingPanel />;
 }

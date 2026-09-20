@@ -91,12 +91,12 @@ export default function ExamPracticeHubSection({
               </div>
             ) : null}
             <div className="exam-practice-hub__body">
+              {skillsGrid}
               {examModeLink ? (
                 <div className="exam-practice-hub__exam-mode">
                   <ExamPracticeCard exam={examModeLink} isStudent={isStudent} />
                 </div>
               ) : null}
-              {skillsGrid}
             </div>
             {quadrantFooter ? (
               <div className="exam-practice-hub__quadrant-footer">{quadrantFooter}</div>
@@ -115,24 +115,22 @@ export default function ExamPracticeHubSection({
       {quadrant ? (
         <div className="exam-practice-hub__quadrant-inner">
           <div className="exam-practice-hub__body">
+            {skillsGrid}
             {examModeLink ? (
               <div className="exam-practice-hub__exam-mode">
                 <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
               </div>
             ) : null}
-
-            {skillsGrid}
           </div>
         </div>
       ) : (
         <div className="exam-practice-hub__body">
+          {skillsGrid}
           {examModeLink ? (
             <div className="exam-practice-hub__exam-mode">
               <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
             </div>
           ) : null}
-
-          {skillsGrid}
         </div>
       )}
 
@@ -157,7 +155,8 @@ function ExamPracticeHubLayoutStyles() {
         padding: 0;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode {
-        margin-bottom: 14px;
+        margin-top: 14px;
+        margin-bottom: 0;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card {
         width: 100%;
@@ -248,7 +247,8 @@ function ExamPracticeHubLayoutStyles() {
         padding: 16px 18px 18px;
       }
       .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__exam-mode {
-        margin-bottom: 14px;
+        margin-top: 14px;
+        margin-bottom: 0;
       }
       body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);

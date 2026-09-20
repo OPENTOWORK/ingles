@@ -30,7 +30,6 @@ export const B2_STARS_WAY_COLUMNS = [
     accent: '#d97706',
     accentSoft: '#fffbeb',
     sectionTitle: 'Listening',
-    enabledForStudents: false,
   },
   {
     key: 'speaking',

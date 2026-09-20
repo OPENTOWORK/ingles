@@ -8,6 +8,10 @@ import {
 import { getFoundingMemberSlotAvailability } from '@/lib/foundingMemberPlus';
 import { MAX_FOUNDING_SLOT } from '@/lib/foundingMemberPlus.rules';
 import { REFERRAL_INVITATIONS_TABLE, REFERRAL_STATUS } from '@/lib/referrals';
+import {
+  REFERRAL_REWARD_FREE_DAYS,
+  referralRewardPlanLabel,
+} from '@/lib/stripe/referralRewards';
 import { SUBSCRIPTIONS_TABLE } from '@/lib/stripe/subscriptions';
 import { subscriptionGrantsAccess } from '@/lib/stripe/server';
 
@@ -52,6 +56,8 @@ function buildPromotionFromPlan(plan) {
     precio: Number(plan.precio) || 0,
     precioRegular: Number(plan.precioRegular) || 0,
     precioLista: Number(plan.precioLista) || 0,
+    precioAnualLanzamiento: Number(plan.precioAnualLanzamiento) || 0,
+    precioAnualRegular: Number(plan.precioAnualRegular) || 0,
     tipo: hasLaunch ? 'lanzamiento' : 'estandar',
     enlacePublico: '/precios',
   };
@@ -215,6 +221,35 @@ function buildAttributionSummary(users = [], invitations = []) {
   };
 }
 
+function buildReferralProgramCampaign(invitations = [], tableReady = false) {
+  const sent = invitations.length;
+  const registered = invitations.filter(
+    (row) => row.status === REFERRAL_STATUS.REGISTERED || row.status === REFERRAL_STATUS.PAID,
+  ).length;
+  const paid = invitations.filter((row) => row.status === REFERRAL_STATUS.PAID).length;
+  const rewardPlan = referralRewardPlanLabel();
+  const rewardMonths = Math.round(REFERRAL_REWARD_FREE_DAYS / 30);
+
+  const descripcion = [
+    'Desde su perfil, el alumno envía una invitación por email a un amigo que aún no tenga cuenta en Dralo (o que nunca haya tenido un plan de pago).',
+    'El invitado se registra con el enlace personal y queda atribuido al referidor.',
+    `La conversión se registra cuando el invitado contrata un plan de pago: el invitador recibe ${rewardMonths} meses gratis de ${rewardPlan} y la invitación pasa al estado «Plan de pago» en el embudo.`,
+  ].join(' ');
+
+  const meta = tableReady
+    ? `${sent} invitaciones · ${registered} registros · ${paid} conversiones a pago`
+    : '';
+
+  return {
+    id: 'referral-program',
+    nombre: 'Programa de referidos',
+    descripcion,
+    estado: tableReady ? 'activa' : 'pendiente_migracion',
+    enlace: '/perfil',
+    meta,
+  };
+}
+
 function buildFoundingLifetimePlusCampaign(slots = {}) {
   const total = Number(slots.total) || MAX_FOUNDING_SLOT;
   const claimed = Math.max(0, Number(slots.claimed) || 0);
@@ -278,14 +313,7 @@ export async function fetchMarketingPlanDashboard(db) {
       plans: promotions,
       campaigns: [
         buildFoundingLifetimePlusCampaign(foundingSlots),
-        {
-          id: 'referral-program',
-          nombre: 'Programa de referidos',
-          descripcion:
-            'Los alumnos invitan amigos desde su perfil. Si el invitado contrata un plan de pago, se registra la conversión.',
-          estado: referralSnapshot.tableReady ? 'activa' : 'pendiente_migracion',
-          enlace: '/perfil',
-        },
+        buildReferralProgramCampaign(invitations, referralSnapshot.tableReady),
         {
           id: 'launch-pricing',
           nombre: LAUNCH_PRICE_LABEL,

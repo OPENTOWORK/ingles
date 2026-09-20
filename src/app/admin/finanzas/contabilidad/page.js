@@ -1,13 +1,7 @@
 'use client';
 
-import AdminFinanceModulePanel from '@/components/admin/AdminFinanceModulePanel';
+import AccountingPanel from '@/components/finance/accounting/AccountingPanel';
 
 export default function AdminFinanzasContabilidadPage() {
-  return (
-    <AdminFinanceModulePanel
-      title="Contabilidad"
-      subtitle="Registro contable y conciliación."
-      moduleKey="contabilidad"
-    />
-  );
+  return <AccountingPanel />;
 }

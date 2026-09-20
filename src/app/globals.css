@@ -4022,6 +4022,14 @@ body.nav-open {
   padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x);
 }
 
+body.study-session-active .levels-exam-practice-root {
+  padding-bottom: calc(var(--levels-b2-page-padding-y, 1.25rem) + 0.5rem);
+}
+
+body.study-session-active .levels-exam-module-nav {
+  margin-bottom: 4.75rem;
+}
+
 .levels-b2-page-content {
   width: 100%;
   max-width: var(--levels-b2-page-max-width);

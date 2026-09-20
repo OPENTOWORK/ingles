@@ -44,6 +44,7 @@ import {
 import { authMetadataPlanSlug, getPlanBySlug, getPlanProfileDisplay } from '@/data/financialPlanConfig';
 import { canViewPricing } from '@/utils/pricingAccess';
 import { getPersonalizedRecommendations } from '@/utils/adaptiveLearning';
+import { formatProfileStudyTimer, useProfileStudyTimer } from '@/context/ProfileStudyTimerContext';
 
 const ProfileExamDatesPanel = dynamic(
   () => import('@/components/perfil/ProfileExamDatesPanel').then((mod) => mod.default),
@@ -71,6 +72,10 @@ const StudyActivityHeatmap = dynamic(
 
 const UserErrorTrackerPanel = dynamicImport(
   () => import('@/components/profile/UserErrorTrackerPanel'),
+);
+
+const ProfileTrackRecordPanel = dynamicImport(
+  () => import('@/components/perfil/ProfileTrackRecordPanel'),
 );
 
 const ProfileSkillAnalysis = dynamicImport(
@@ -142,7 +147,7 @@ export default function ProfilePage() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [notifications, setNotifications] = useState({ email: true, push: true });
   const [theme, setTheme] = useState('light');
-  const [studyTimer, setStudyTimer] = useState({ isRunning: false, time: 0, sessionTime: 0 });
+  const profileStudyTimer = useProfileStudyTimer();
   const [studyHistory, setStudyHistory] = useState([]);
   const [weeklyChallenges, setWeeklyChallenges] = useState([]);
   const [studyRecommendations, setStudyRecommendations] = useState([]);
@@ -819,19 +824,6 @@ export default function ProfilePage() {
       toast.dismiss(loadingToast);
       setInvitingFriend(false);
     }
-  };
-
-  // Funciones del temporizador
-  const startTimer = () => {
-    setStudyTimer(prev => ({ ...prev, isRunning: true }));
-  };
-
-  const stopTimer = () => {
-    setStudyTimer(prev => ({ ...prev, isRunning: false }));
-  };
-
-  const resetTimer = () => {
-    setStudyTimer({ isRunning: false, time: 0, sessionTime: 0 });
   };
 
   // Funciones de flashcards
@@ -1542,18 +1534,18 @@ export default function ProfilePage() {
 <div className="timer-container">
               <div className="timer-display">
                 <div className="timer-time">
-                  {Math.floor(studyTimer.sessionTime / 60)}:{(studyTimer.sessionTime % 60).toString().padStart(2, '0')}
+                  {formatProfileStudyTimer(profileStudyTimer.sessionTime)}
                 </div>
                 <div className="timer-label">Session time</div>
               </div>
               <div className="timer-controls">
                 <button 
-                  onClick={studyTimer.isRunning ? stopTimer : startTimer}
-                  className={`timer-btn ${studyTimer.isRunning ? 'timer-stop' : 'timer-start'}`}
+                  onClick={profileStudyTimer.isRunning ? profileStudyTimer.pause : profileStudyTimer.start}
+                  className={`timer-btn ${profileStudyTimer.isRunning ? 'timer-stop' : 'timer-start'}`}
                 >
-                  {studyTimer.isRunning ? '⏸️ Pause' : '▶️ Start'}
+                  {profileStudyTimer.isRunning ? '⏸️ Pause' : '▶️ Start'}
                 </button>
-                <button onClick={resetTimer} className="timer-btn timer-reset">
+                <button onClick={profileStudyTimer.reset} className="timer-btn timer-reset">
                   🔄 Reset
                 </button>
               </div>
@@ -1943,6 +1935,8 @@ export default function ProfilePage() {
       {activeTab === 'error-tracker' && (
         <UserErrorTrackerPanel userId={user?.id ?? null} />
       )}
+
+      {activeTab === 'track-record' && <ProfileTrackRecordPanel />}
 
       {/* Tab: Comunidad */}
       {activeTab === 'community' && (
