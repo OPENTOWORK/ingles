@@ -1,8 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useUserRole } from '@/context/UserRoleContext';
-import { isExamStrategiesLockedForUser } from '@/constants/studentFeatureAccess';
 
 export function ExamStrategiesBlockedScreen() {
   return (
