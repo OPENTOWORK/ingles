@@ -38,15 +38,30 @@ const nextConfig = {
   async headers() {
     if (isStaticExport) return [];
     return [
-      {
-        source: '/_next/static/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
-          },
-        ],
-      },
+      // En dev los chunks no llevan hash: cachearlos como immutable sirve código viejo tras editar.
+      ...(process.env.NODE_ENV === 'production'
+        ? [
+            {
+              source: '/_next/static/:path*',
+              headers: [
+                {
+                  key: 'Cache-Control',
+                  value: 'public, max-age=31536000, immutable',
+                },
+              ],
+            },
+          ]
+        : [
+            {
+              source: '/_next/static/:path*',
+              headers: [
+                {
+                  key: 'Cache-Control',
+                  value: 'no-cache, no-store, must-revalidate',
+                },
+              ],
+            },
+          ]),
       {
         source: '/sw.js',
         headers: [
