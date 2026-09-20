@@ -5,10 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
-import {
-  ExamStrategiesComingSoonRibbon,
-  ExamStrategiesNavMenuItems,
-} from '@/components/layout/ExamStrategiesNavMenu';
+import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
 import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import {
   NAV_LINK_CONTACT,
@@ -44,7 +41,6 @@ export function AppSharedDrawerNav({
     sectionLinks,
     showDralo,
     draloLocked,
-    examStrategiesLocked,
     showPricing,
     showContact,
     showLogin,
@@ -70,9 +66,7 @@ export function AppSharedDrawerNav({
           <div key={item.href}>
             <button
               type="button"
-              className={`${linkClass} app-nav__accordion${examStrategiesOpen ? ' is-open' : ''}${
-                examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
-              }`}
+              className={`${linkClass} app-nav__accordion${examStrategiesOpen ? ' is-open' : ''}`}
               onClick={onToggleExamStrategies}
               aria-expanded={examStrategiesOpen}
               {...(item.tourId ? { 'data-tour': item.tourId } : {})}
@@ -81,23 +75,15 @@ export function AppSharedDrawerNav({
               <span aria-hidden>{examStrategiesOpen ? '▲' : '▼'}</span>
             </button>
             {examStrategiesOpen ? (
-              <div className={`app-nav__sub${examStrategiesLocked ? ' app-nav__sub--locked' : ''}`}>
-                {examStrategiesLocked ? (
-                  <span className={`${linkClass} app-nav__dropdown-item--locked`} aria-disabled="true">
-                    All skills
-                  </span>
-                ) : (
-                  <NavLink href={item.href} className={linkClass} onClick={onNavigate}>
-                    All skills
-                  </NavLink>
-                )}
+              <div className="app-nav__sub">
+                <NavLink href={item.href} className={linkClass} onClick={onNavigate}>
+                  All skills
+                </NavLink>
                 <ExamStrategiesNavMenuItems
-                  locked={examStrategiesLocked}
                   guestRequiresLogin={guest}
                   variant={draloVariant}
                   onNavigate={onNavigate}
                 />
-                {examStrategiesLocked ? <ExamStrategiesComingSoonRibbon /> : null}
               </div>
             ) : null}
           </div>

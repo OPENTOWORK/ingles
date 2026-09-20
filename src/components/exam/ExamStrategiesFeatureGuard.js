@@ -25,12 +25,5 @@ export function ExamStrategiesBlockedScreen() {
  * Blocks Exam Strategies routes for students (staff roles keep access).
  */
 export default function ExamStrategiesFeatureGuard({ children }) {
-  const { userRole, session } = useUserRole();
-  const locked = Boolean(session) && isExamStrategiesLockedForUser(userRole);
-
-  if (locked) {
-    return <ExamStrategiesBlockedScreen />;
-  }
-
   return children;
 }

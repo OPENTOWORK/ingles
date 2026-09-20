@@ -6,10 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
-import {
-  ExamStrategiesComingSoonRibbon,
-  ExamStrategiesNavMenuItems,
-} from '@/components/layout/ExamStrategiesNavMenu';
+import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
 import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import {
@@ -23,6 +20,7 @@ import {
   NAV_LINK_PROFILE,
   resolveNavItemHref,
 } from '@/config/appNavMenu';
+import { useClientMounted } from '@/hooks/useClientMounted';
 
 function AppNavInner({ session, userRole, onLogout }) {
   const pathname = usePathname();
@@ -138,41 +136,22 @@ function AppNavInner({ session, userRole, onLogout }) {
                     {...bindDesktopHoverMenu('exam-strategies')}
                     {...(item.tourId ? { 'data-tour': item.tourId } : {})}
                   >
-                    {navModel.examStrategiesLocked ? (
-                      <span
-                        className={`${desktopLinkClass(item.href)} app-nav__link--has-menu app-nav__link--locked-preview`}
-                        aria-disabled="true"
-                      >
-                        {item.label}
-                        <span className="app-nav__chevron" aria-hidden>
-                          ▾
-                        </span>
-                      </span>
-                    ) : (
-                      <NavLink
-                        href={resolveNavItemHref(item.href, session)}
-                        className={`${desktopLinkClass(item.href)} app-nav__link--has-menu`}
-                        onClick={closeDesktopDropdowns}
-                      >
-                        {item.label}
-                        <span className="app-nav__chevron" aria-hidden>
-                          ▾
-                        </span>
-                      </NavLink>
-                    )}
-                    <div
-                      className={`app-nav__dropdown app-nav__dropdown--hover${
-                        navModel.examStrategiesLocked ? ' app-nav__dropdown--locked' : ''
-                      }`}
-                      role="menu"
+                    <NavLink
+                      href={resolveNavItemHref(item.href, session)}
+                      className={`${desktopLinkClass(item.href)} app-nav__link--has-menu`}
+                      onClick={closeDesktopDropdowns}
                     >
+                      {item.label}
+                      <span className="app-nav__chevron" aria-hidden>
+                        ▾
+                      </span>
+                    </NavLink>
+                    <div className="app-nav__dropdown app-nav__dropdown--hover" role="menu">
                       <ExamStrategiesNavMenuItems
-                        locked={navModel.examStrategiesLocked}
                         guestRequiresLogin={navModel.guest}
                         variant="desktop"
                         onNavigate={closeDesktopDropdowns}
                       />
-                      {navModel.examStrategiesLocked ? <ExamStrategiesComingSoonRibbon /> : null}
                     </div>
                   </div>
                 ) : (
@@ -365,6 +344,28 @@ function AppNavInner({ session, userRole, onLogout }) {
   );
 }
 
+function AppNavHydrationShell() {
+  return (
+    <>
+      <button
+        type="button"
+        className="app-nav__toggle"
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+      <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
+        <div className="app-nav__primary" role="group" aria-label="Sections" />
+        <ReadingNightModeToggle variant="desktop" />
+        <div className="app-nav__account" role="group" aria-label="Account" />
+      </nav>
+    </>
+  );
+}
+
 export default function AppNav(props) {
+  const mounted = useClientMounted();
+  if (!mounted) {
+    return <AppNavHydrationShell />;
+  }
   return <AppNavInner {...props} />;
 }
