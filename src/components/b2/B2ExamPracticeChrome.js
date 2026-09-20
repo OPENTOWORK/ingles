@@ -23,6 +23,7 @@ import {
   useExamPracticeSidebarSlots,
 } from '@/context/ExamPracticeSidebarSlotsContext';
 import { useUserRole } from '@/context/UserRoleContext';
+import { resolvePartFinishNoticeFromProgress } from '@/utils/partFinishNoticeDisplay';
 import { isAdminRole } from '@/utils/authRoles';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
@@ -285,8 +286,30 @@ export function B2ExamPracticeChrome({
   const showScorePanel =
     (!hideScorePanel && scorePanelOverride) ||
     (!hidePracticeScorePanel && !scorePanelOverride && partScoreMetrics);
+
+  const skillExercisePartNumberEarly = useMemo(() => {
+    if (!showLevelPicker || !selectedPartId || !partsData?.length) return null;
+    const part = partsData.find((p) => p.id === selectedPartId);
+    if (!part) return null;
+    const n = Number(
+      part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0,
+    );
+    return n > 0 ? n : null;
+  }, [showLevelPicker, selectedPartId, partsData]);
+
+  const resolvedPartFinishNotice = useMemo(
+    () =>
+      resolvePartFinishNoticeFromProgress(
+        partFinishNotice,
+        progressBySlot,
+        examSlot,
+        skillExercisePartNumberEarly,
+      ),
+    [partFinishNotice, progressBySlot, examSlot, skillExercisePartNumberEarly],
+  );
+
   const showHeaderFinishNotice =
-    partFinishNoticePlacement === 'header' && partFinishNotice;
+    partFinishNoticePlacement === 'header' && resolvedPartFinishNotice;
   const showStudyNotesInHeader =
     effectiveShowStudyNotes && studyNotesPlacement === 'header';
   const showStatusRow =
@@ -317,15 +340,7 @@ export function B2ExamPracticeChrome({
   const showSidebarTopRail =
     compactSkillHeader && studyNotesPlacement === 'sidebar-top';
 
-  const skillExercisePartNumber = useMemo(() => {
-    if (!showLevelPicker || !selectedPartId || !partsData?.length) return null;
-    const part = partsData.find((p) => p.id === selectedPartId);
-    if (!part) return null;
-    const n = Number(
-      part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0,
-    );
-    return n > 0 ? n : null;
-  }, [showLevelPicker, selectedPartId, partsData]);
+  const skillExercisePartNumber = skillExercisePartNumberEarly;
 
   const skillExerciseStars = useMemo(() => {
     if (!skillExercisePartNumber || !examSlot) return 0;
@@ -712,6 +727,7 @@ export function B2ExamPracticeChrome({
               overlayContainerRef={workPanelRef}
               sideRailMountRef={sideRailMountRef}
               portSideRailToToolbar={showSidebarTopRail}
+              sideRailToolbarMounted={!useFoldableToolbar || toolbarOpen}
             >
           {(() => {
             const practiceStatusPanel = (
@@ -770,7 +786,7 @@ export function B2ExamPracticeChrome({
                       showExerciseStarsInToolbarAside={showExerciseStarsInToolbarAside}
                       exerciseStarsBadge={exerciseStarsBadge}
                       showToolbarFinishNotice={showToolbarFinishNotice}
-                      partFinishNotice={partFinishNotice}
+                      partFinishNotice={resolvedPartFinishNotice}
                       lang={lang}
                     />
                   </div>
@@ -780,7 +796,7 @@ export function B2ExamPracticeChrome({
             {showSidebarTopRail ? (
               <ExamPracticeToolbarSubRail
                 showToolbarFinishNotice={showToolbarFinishNotice}
-                partFinishNotice={partFinishNotice}
+                partFinishNotice={resolvedPartFinishNotice}
                 lang={lang}
               />
             ) : null}
@@ -807,7 +823,7 @@ export function B2ExamPracticeChrome({
               <div ref={statusRowRef} className="levels-b2-practice__status-row">
                 {!showCombinedToolbar ? categoryTimerEl : null}
                 {!showToolbarFinishNotice && showHeaderFinishNotice ? (
-                  <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
+                  <PracticeHeaderFinishNotice notice={resolvedPartFinishNotice} lang={lang} />
                 ) : null}
                 {!hideScorePanel && scorePanelOverride ? scorePanelOverride : null}
                 {!hidePracticeScorePanel && !scorePanelOverride && partScoreMetrics ? (
@@ -860,22 +876,24 @@ export function B2ExamPracticeChrome({
             );
           })()}
 
-          {partFinishNoticePlacement === 'main' && partFinishNotice && !partFinishNotice.error ? (
+          {partFinishNoticePlacement === 'main' &&
+          resolvedPartFinishNotice &&
+          !resolvedPartFinishNotice.error ? (
             <LevelsPartFinishBanner
-              passed={partFinishNotice.passed}
-              correct={partFinishNotice.correct}
-              total={partFinishNotice.total}
-              passing={partFinishNotice.passing}
+              passed={resolvedPartFinishNotice.passed}
+              correct={resolvedPartFinishNotice.correct}
+              total={resolvedPartFinishNotice.total}
+              passing={resolvedPartFinishNotice.passing}
               lang={lang}
             />
           ) : null}
-          {partFinishNoticePlacement === 'main' && partFinishNotice?.error ? (
+          {partFinishNoticePlacement === 'main' && resolvedPartFinishNotice?.error ? (
             <LevelsPartFinishBanner
               passed={false}
               correct={0}
               total={0}
               passing={0}
-              error={partFinishNotice.error}
+              error={resolvedPartFinishNotice.error}
               lang={lang}
             />
           ) : null}

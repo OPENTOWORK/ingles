@@ -9,20 +9,17 @@ import { useExamPracticeSidebarSlots } from '@/context/ExamPracticeSidebarSlotsC
  * En modo columna lateral: render normal en el grid.
  */
 export default function ExamPracticeSideColumnAnchor({ children }) {
-  const { sideRailMountRef, portSideRailToToolbar } = useExamPracticeSidebarSlots();
+  const { sideRailMountRef, portSideRailToToolbar, sideRailToolbarMounted } =
+    useExamPracticeSidebarSlots();
   const [mountNode, setMountNode] = useState(null);
 
   useLayoutEffect(() => {
-    if (!portSideRailToToolbar) {
+    if (!portSideRailToToolbar || !sideRailToolbarMounted) {
       setMountNode(null);
-      return undefined;
+      return;
     }
-
-    const syncMount = () => setMountNode(sideRailMountRef?.current ?? null);
-    syncMount();
-    const raf = requestAnimationFrame(syncMount);
-    return () => cancelAnimationFrame(raf);
-  }, [portSideRailToToolbar, sideRailMountRef, children]);
+    setMountNode(sideRailMountRef?.current ?? null);
+  }, [portSideRailToToolbar, sideRailToolbarMounted, sideRailMountRef]);
 
   if (!portSideRailToToolbar) {
     return children;

@@ -66,3 +66,17 @@ export function formatPartSavedScoreLabel(saved, partNumber = 0) {
   const earned = saved.itemCorrect ?? saved.correct ?? saved.correctCount ?? 0;
   return `${earned}/${total}${saved.passed ? ' ✓' : ''}`;
 }
+
+/** Aviso de parte ya guardada en progreso (mismo render que llega progressBySlot). */
+export function resolvePartFinishNoticeFromProgress(
+  partFinishNotice,
+  progressBySlot,
+  examSlot,
+  partNumber,
+) {
+  if (partFinishNotice) return partFinishNotice;
+  if (!examSlot || !partNumber) return null;
+  const saved = progressBySlot?.[examSlot]?.parts?.[partNumber];
+  if (!saved?.total && !saved?.itemTotal) return null;
+  return buildPartFinishNoticeDisplay(saved, partNumber, { saved: true });
+}
