@@ -1,12 +1,13 @@
 'use client';
 
 import NavLink from '@/components/layout/NavLink';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
+import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
 import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import {
@@ -20,10 +21,11 @@ import {
   NAV_LINK_PROFILE,
   resolveNavItemHref,
 } from '@/config/appNavMenu';
-import { useClientMounted } from '@/hooks/useClientMounted';
+import { APP_ROUTES } from '@/config/appRoutes';
 
 function AppNavInner({ session, userRole, onLogout }) {
   const pathname = usePathname();
+  const router = useRouter();
   const searchParams = useMountedSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
@@ -31,15 +33,22 @@ function AppNavInner({ session, userRole, onLogout }) {
   const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
   const [desktopHoverMenu, setDesktopHoverMenu] = useState(null);
 
-  const navModel = useMemo(() => buildAppNavModel(userRole, session), [userRole, session]);
+  const { locked: examStrategiesPlanLocked } = useExamStrategiesAccess({ userRole, session });
+  const navModel = useMemo(() => {
+    const base = buildAppNavModel(userRole, session);
+    return {
+      ...base,
+      examStrategiesLocked: base.guest ? false : examStrategiesPlanLocked,
+    };
+  }, [userRole, session, examStrategiesPlanLocked]);
 
   const bindDesktopHoverMenu = (menuId) => ({
     onMouseEnter: () => setDesktopHoverMenu(menuId),
     onMouseLeave: () => setDesktopHoverMenu(null),
   });
 
-  const desktopHoverMenuClass = (menuId) =>
-    desktopHoverMenu === menuId ? ' is-hover-open' : '';
+  const desktopHoverMenuClass = (menuId, pinnedOpen = false) =>
+    desktopHoverMenu === menuId || pinnedOpen ? ' is-hover-open' : '';
 
   useEffect(() => {
     document.body.classList.toggle('nav-open', mobileOpen);
@@ -66,9 +75,24 @@ function AppNavInner({ session, userRole, onLogout }) {
 
   const closeDesktopDropdowns = () => {
     setDesktopHoverMenu(null);
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
+  };
+
+  const examStrategiesHubHref = resolveNavItemHref(`${APP_ROUTES.examStrategies}/`, session);
+
+  const goToExamStrategiesHub = (event) => {
+    closeDesktopDropdowns();
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey ||
+      event.defaultPrevented
+    ) {
+      return;
     }
+    event.preventDefault();
+    router.push(examStrategiesHubHref);
   };
 
   const toggleExamStrategiesMobile = () => {
@@ -132,14 +156,18 @@ function AppNavInner({ session, userRole, onLogout }) {
                 item.menuItems ? (
                   <div
                     key={item.href}
-                    className={`app-nav__dropdown-wrap app-nav__dropdown-wrap--hover${desktopHoverMenuClass('exam-strategies')}`}
+                    className={`app-nav__dropdown-wrap app-nav__dropdown-wrap--hover${desktopHoverMenuClass(
+                      'exam-strategies',
+                    )}`}
                     {...bindDesktopHoverMenu('exam-strategies')}
                     {...(item.tourId ? { 'data-tour': item.tourId } : {})}
                   >
                     <NavLink
-                      href={resolveNavItemHref(item.href, session)}
-                      className={`${desktopLinkClass(item.href)} app-nav__link--has-menu`}
-                      onClick={closeDesktopDropdowns}
+                      href={examStrategiesHubHref}
+                      className={`${desktopLinkClass(item.href)} app-nav__link--has-menu app-nav__link--dropdown-trigger${
+                        navModel.examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
+                      }`}
+                      onClick={goToExamStrategiesHub}
                     >
                       {item.label}
                       <span className="app-nav__chevron" aria-hidden>
@@ -148,6 +176,7 @@ function AppNavInner({ session, userRole, onLogout }) {
                     </NavLink>
                     <div className="app-nav__dropdown app-nav__dropdown--hover" role="menu">
                       <ExamStrategiesNavMenuItems
+                        locked={navModel.examStrategiesLocked}
                         guestRequiresLogin={navModel.guest}
                         variant="desktop"
                         onNavigate={closeDesktopDropdowns}
@@ -344,28 +373,6 @@ function AppNavInner({ session, userRole, onLogout }) {
   );
 }
 
-function AppNavHydrationShell() {
-  return (
-    <>
-      <button
-        type="button"
-        className="app-nav__toggle"
-        aria-hidden="true"
-        tabIndex={-1}
-      />
-      <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
-        <div className="app-nav__primary" role="group" aria-label="Sections" />
-        <ReadingNightModeToggle variant="desktop" />
-        <div className="app-nav__account" role="group" aria-label="Account" />
-      </nav>
-    </>
-  );
-}
-
 export default function AppNav(props) {
-  const mounted = useClientMounted();
-  if (!mounted) {
-    return <AppNavHydrationShell />;
-  }
   return <AppNavInner {...props} />;
 }

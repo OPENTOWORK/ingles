@@ -1,5 +1,4 @@
 import { SEO_PAGE_META } from '@/lib/siteSeo';
-import ExamStrategiesFeatureGuard from '@/components/exam/ExamStrategiesFeatureGuard';
 
 export const metadata = {
   title: SEO_PAGE_META.examTheory.title,
@@ -7,6 +6,7 @@ export const metadata = {
   alternates: { canonical: '/exam-strategies/' },
 };
 
+/** Hub overview is public; skill routes enforce plan access in TeoriaSectionGate / nested layouts. */
 export default function ExamStrategiesLayout({ children }) {
-  return <ExamStrategiesFeatureGuard>{children}</ExamStrategiesFeatureGuard>;
+  return children;
 }

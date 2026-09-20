@@ -8,12 +8,10 @@ import {
   normalizeEmail,
   normalizeRoleName,
 } from '@/utils/authRoles';
+import { hasEntitlement } from '@/lib/subscriptionPlans';
 
 /** When true, Training paths show COMING SOON for students only. */
 export const STUDENT_TRAINING_COMING_SOON = true;
-
-/** @deprecated Students have full Exam Strategies access; kept for legacy imports. */
-export const STUDENT_EXAM_STRATEGIES_COMING_SOON = false;
 
 /** CEFR levels on /niveles that show COMING SOON for students (B2 stays open). */
 export const STUDENT_NIVELES_COMING_SOON_LEVELS = new Set(['A2', 'B1', 'C1', 'C2']);
@@ -55,9 +53,14 @@ export function isTrainingLockedForUser(userRole = '') {
   return usesStudentContentRestrictions(userRole);
 }
 
-/** Exam Strategies is open for all logged-in roles (including students). */
-export function isExamStrategiesLockedForUser(_userRole = '') {
-  return false;
+/**
+ * Exam Strategies for students: included on all student plans (FREE, PLUS, PREMIUM).
+ * Staff and roles without student limits always have access.
+ */
+export function isExamStrategiesLockedForUser(userRole = '', planSlug = 'free') {
+  if (hasFullNivelesLevelAccess(userRole)) return false;
+  if (!isStudentRole(userRole)) return false;
+  return !hasEntitlement(planSlug, 'examStrategies');
 }
 
 export function isNivelesLevelComingSoonForUser(userRole = '', level = '', email = '') {

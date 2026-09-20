@@ -56,6 +56,7 @@ import {
 import { saveTheoryExercisePass } from '@/lib/saveTheoryExerciseProgress';
 import { normalizeTopicHref } from '@/lib/normalizeTopicHref';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { examStrategiesSkillPath } from '@/config/appRoutes';
 
 const TheoryLayout = ({ 
   title, 
@@ -99,6 +100,7 @@ const TheoryLayout = ({
     );
   const examUnitSlug = examSlugEarly ?? getExamUnitSlugFromPathname(pathname);
   const sectionKey = examUnitSlug ? getSectionKeyBySlug(examUnitSlug) : null;
+  const examStrategiesSkillBackHref = examUnitSlug ? examStrategiesSkillPath(examUnitSlug) : null;
   const lockActive = shouldApplySequentialLock(isStudent);
   const examUnitLocked =
     lockActive &&
@@ -650,8 +652,8 @@ const TheoryLayout = ({
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <Link 
-          href="/teoria"
+        <Link
+          href={examStrategiesSkillBackHref || '/teoria'}
           className="theory-layout-back-link"
           style={{
             display: 'flex',
@@ -662,10 +664,12 @@ const TheoryLayout = ({
             textDecoration: 'none',
             borderRadius: '12px',
             fontWeight: '500',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
           }}
         >
-          ← Back to Theory
+          {examStrategiesSkillBackHref
+            ? `← Back to ${sectionKey || 'Exam Strategies'}`
+            : '← Back to Theory'}
         </Link>
         
         {activeTab === 'theory' && topicHref && (

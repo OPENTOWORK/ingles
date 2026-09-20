@@ -124,7 +124,8 @@ function ExamTheoryPartTipsStyles({ accent }) {
     <style jsx global>{`
       .exam-theory-topics-page .exam-theory-parts {
         margin: 0 0 28px;
-        padding: 20px 20px 8px;
+        padding: clamp(16px, 2.5vw, 22px) clamp(16px, 2.5vw, 24px) 8px;
+        box-sizing: border-box;
         border-radius: 18px;
         background: linear-gradient(
           180deg,

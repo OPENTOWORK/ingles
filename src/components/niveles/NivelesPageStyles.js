@@ -8,12 +8,23 @@ export default function NivelesPageStyles() {
         color: var(--text);
         min-height: 100vh;
       }
-      .niveles-page .shell,
-      .niveles-page.shell {
+      .niveles-page .shell:not(.content-hub-shell),
+      .niveles-page.shell:not(.content-hub-shell) {
         min-height: 100svh;
         max-width: 1100px;
         margin: 0 auto;
         padding: clamp(20px, 4vw, 32px) clamp(14px, 3vw, 20px);
+      }
+      .niveles-page.shell.content-hub-shell,
+      .niveles-page--theory-hub.shell.content-hub-shell {
+        max-width: none;
+        width: 100%;
+        margin: 0 auto;
+        padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x);
+        box-sizing: border-box;
+      }
+      .niveles-page--theory-hub .exam-theory-section.section {
+        padding: 0;
       }
       .niveles-page.center {
         display: grid;

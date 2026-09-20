@@ -7,7 +7,6 @@ import TeoriaFilterToolbar from '@/components/theory/TeoriaFilterToolbar';
 import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheoryProgressBar from '@/components/niveles/ExamTheoryProgressBar';
 import { APP_ROUTES } from '@/config/appRoutes';
-import { MASCOT_EXAM_STRATEGIES_VARIANT } from '@/config/mascotAssets';
 import { useUserRole } from '@/context/UserRoleContext';
 import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { buildTopicProgressByHref } from '@/lib/examTheoryProgress';
@@ -21,6 +20,7 @@ import { getExamStrategiesStudentIndex } from '@/data/examStrategiesStudentIndex
 import { SEQUENTIAL_LOCK_FOR_STUDENTS } from '@/lib/theoryLockConfig';
 import ExamTheoryPartTipsSection from '@/components/theory/ExamTheoryPartTipsSection';
 import ExamStrategiesStudentIndex from '@/components/theory/ExamStrategiesStudentIndex';
+import ExamStrategiesChapterStyles from '@/components/theory/ExamStrategiesChapterStyles';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function ExamTheoryTopicList({
@@ -71,23 +71,21 @@ export default function ExamTheoryTopicList({
   );
 
   return (
-    <main className="shell teoria-page exam-theory-topics-page">
+    <main
+      className="shell content-hub-shell teoria-page exam-theory-topics-page"
+      style={{ '--exam-skill-accent': sectionAccent }}
+    >
+      <div className="levels-b2-page-content">
       <PageHero
-        breadcrumb={
-          <nav className="breadcrumb" aria-label="Breadcrumb">
-            <Link href={APP_ROUTES.examStrategies}>Exam Strategies</Link>
-            <span aria-hidden>›</span>
-            <span>{sectionTitle}</span>
-          </nav>
-        }
+        backHref={`${APP_ROUTES.examStrategies}/`}
+        backLabel="Back"
+        contentAlign="left"
         eyebrow="Strategies"
         title={sectionTitle}
         description={
           sectionDescription ||
           'Search by title and explore topics in this area.'
         }
-        mascotVariant={MASCOT_EXAM_STRATEGIES_VARIANT}
-        mascotWidth={148}
         accent={sectionHeroAccent}
       />
 
@@ -191,7 +189,9 @@ export default function ExamTheoryTopicList({
       ) : null}
 
       <TeoriaGlobalStyles />
+      <ExamStrategiesChapterStyles />
       <ExamTheoryTopicListStyles />
+      </div>
     </main>
   );
 }

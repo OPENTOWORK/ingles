@@ -8,6 +8,10 @@ import {
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { maybeSendWelcomeRegistrationEmail } from '@/lib/welcomeRegistrationEmail';
 import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
+import {
+  normalizeRegistrationDeviceType,
+  persistRegistrationDevice,
+} from '@/lib/registrationDevice';
 
 async function grantFoundingPlusForAuthUser(adminClient, user) {
   if (!user?.email) return;
@@ -79,6 +83,17 @@ export async function POST(req) {
       auth: { persistSession: false, autoRefreshToken: false },
     });
 
+    let body = {};
+    try {
+      body = await req.json();
+    } catch {
+      body = {};
+    }
+
+    const registrationDevice =
+      normalizeRegistrationDeviceType(body?.deviceType) ||
+      normalizeRegistrationDeviceType(user.user_metadata?.registration_device);
+
     const { data: existing } = await adminClient
       .from('Usuarios_y_Perfil_users')
       .select('id')
@@ -101,6 +116,7 @@ export async function POST(req) {
       }
 
       await grantFoundingPlusForAuthUser(adminClient, user);
+      await persistRegistrationDevice(adminClient, user.id, registrationDevice);
       const welcomeMail = await maybeSendWelcomeRegistrationEmail(adminClient, user);
       return NextResponse.json({
         ok: true,
@@ -140,6 +156,7 @@ export async function POST(req) {
     }
 
     await grantFoundingPlusForAuthUser(adminClient, user);
+    await persistRegistrationDevice(adminClient, user.id, registrationDevice);
 
     return NextResponse.json({ ok: true, created: true });
   } catch (err) {

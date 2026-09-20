@@ -6,7 +6,7 @@ export function TeoriaGlobalStyles() {
         color: var(--text);
         min-height: 100vh;
       }
-      .shell {
+      .teoria-page.shell:not(.content-hub-shell) {
         min-height: 100svh;
         max-width: 1100px;
         margin: 0 auto;

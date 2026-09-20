@@ -41,6 +41,7 @@ export function AppSharedDrawerNav({
     sectionLinks,
     showDralo,
     draloLocked,
+    examStrategiesLocked,
     showPricing,
     showContact,
     showLogin,
@@ -63,23 +64,29 @@ export function AppSharedDrawerNav({
     <>
       {sectionLinks.map((item) =>
         item.menuItems ? (
-          <div key={item.href}>
-            <button
-              type="button"
-              className={`${linkClass} app-nav__accordion${examStrategiesOpen ? ' is-open' : ''}`}
-              onClick={onToggleExamStrategies}
-              aria-expanded={examStrategiesOpen}
-              {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+          <div key={item.href} {...(item.tourId ? { 'data-tour': item.tourId } : {})}>
+            <div
+              className={`app-nav__accordion-row${examStrategiesOpen ? ' is-open' : ''}${
+                examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
+              }`}
             >
-              {item.label}
-              <span aria-hidden>{examStrategiesOpen ? '▲' : '▼'}</span>
-            </button>
+              <NavLink href={item.href} className={`${linkClass} app-nav__accordion-link`} onClick={onNavigate}>
+                {item.label}
+              </NavLink>
+              <button
+                type="button"
+                className="app-nav__accordion-toggle"
+                onClick={onToggleExamStrategies}
+                aria-expanded={examStrategiesOpen}
+                aria-label={`Show ${item.label} skills`}
+              >
+                <span aria-hidden>{examStrategiesOpen ? '▲' : '▼'}</span>
+              </button>
+            </div>
             {examStrategiesOpen ? (
               <div className="app-nav__sub">
-                <NavLink href={item.href} className={linkClass} onClick={onNavigate}>
-                  All skills
-                </NavLink>
                 <ExamStrategiesNavMenuItems
+                  locked={examStrategiesLocked}
                   guestRequiresLogin={guest}
                   variant={draloVariant}
                   onNavigate={onNavigate}

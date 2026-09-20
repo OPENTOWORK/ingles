@@ -7,6 +7,11 @@ import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
 import { markReferralRegistered } from '@/lib/referrals';
 import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
+import {
+  inferDeviceTypeFromUserAgent,
+  normalizeRegistrationDeviceType,
+  persistRegistrationDevice,
+} from '@/lib/registrationDevice';
 
 export const maxDuration = 30;
 
@@ -178,6 +183,10 @@ export async function POST(req) {
     const acceptedDataProtection = Boolean(body?.acceptedDataProtection);
     const acceptedMarketing = Boolean(body?.acceptedMarketing);
     const referralToken = String(body?.referralToken || body?.ref || '').trim();
+    let registrationDevice = normalizeRegistrationDeviceType(body?.deviceType || body?.registrationDevice);
+    if (!registrationDevice) {
+      registrationDevice = inferDeviceTypeFromUserAgent(req.headers.get('user-agent'));
+    }
 
     if (!acceptedTerms || !acceptedDataProtection) {
       return NextResponse.json(
@@ -236,6 +245,7 @@ export async function POST(req) {
         role: 'student',
         ...(nombre ? { name: nombre } : {}),
         legal_acceptance,
+        ...(registrationDevice ? { registration_device: registrationDevice } : {}),
       },
     });
 
@@ -283,6 +293,7 @@ export async function POST(req) {
       }
 
       await persistMarketingConsent(adminClient, userId, email, acceptedMarketing);
+      await persistRegistrationDevice(adminClient, userId, registrationDevice);
 
       const { data: profileRow } = await adminClient
         .from('Usuarios_y_Perfil_profiles')

@@ -8,6 +8,7 @@ import { mapSignupErrorMessage } from '@/utils/authSignupErrors';
 import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
+import { detectClientDeviceType } from '@/lib/clientDeviceType';
 
 const PASSWORD_RULES = [
   { id: 'length', label: 'Al menos 8 caracteres', test: (p) => p.length >= 8 },
@@ -124,6 +125,7 @@ export default function RegistroPage() {
       marketing_updates: Boolean(acceptedMarketing),
       accepted_at: new Date().toISOString(),
     };
+    const registrationDevice = detectClientDeviceType();
 
     const tryServerRegister = async () => {
       const storedRef =
@@ -146,6 +148,7 @@ export default function RegistroPage() {
             acceptedDataProtection: true,
             acceptedMarketing,
             referralToken: storedRef || undefined,
+            deviceType: registrationDevice,
           }),
         });
       } catch {
@@ -180,6 +183,7 @@ export default function RegistroPage() {
             role: 'student',
             ...(normalizedNombre ? { name: normalizedNombre } : {}),
             legal_acceptance,
+            registration_device: registrationDevice,
           },
         },
       });
@@ -197,7 +201,11 @@ export default function RegistroPage() {
         try {
           await fetch('/api/auth/ensure-profile', {
             method: 'POST',
-            headers: { Authorization: `Bearer ${data.session.access_token}` },
+            headers: {
+              Authorization: `Bearer ${data.session.access_token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ deviceType: registrationDevice }),
           });
         } catch {
           /* perfil se puede completar en el primer login */

@@ -34,6 +34,7 @@ export async function GET(req) {
       entitlements: ctx.entitlements,
       progressTracking: ctx.progressTracking,
       writingAdvanced: ctx.writingAdvanced,
+      examStrategies: ctx.examStrategies,
       usage,
     },
     {

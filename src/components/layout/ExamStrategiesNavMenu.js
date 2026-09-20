@@ -2,7 +2,6 @@
 
 import NavLink from '@/components/layout/NavLink';
 import { EXAM_STRATEGIES_MENU_ITEMS, getGuestLoginHref } from '@/config/appNavMenu';
-import { DraloAiComingSoonRibbon } from '@/components/layout/DraloAiNavMenu';
 
 /**
  * Sub-ítems de Exam Strategies (dropdown desktop, acordeón móvil / lateral).
@@ -51,8 +50,4 @@ export function ExamStrategiesNavMenuItems({
       })}
     </>
   );
-}
-
-export function ExamStrategiesComingSoonRibbon() {
-  return <DraloAiComingSoonRibbon />;
 }

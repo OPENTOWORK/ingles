@@ -1,4 +1,5 @@
 import { supabase } from '@/utils/supabaseClient';
+import { detectClientDeviceType } from '@/lib/clientDeviceType';
 
 /**
  * Sincroniza el perfil de aplicación y correos de bienvenida (también OAuth/Google).
@@ -17,7 +18,11 @@ export async function ensureAppUserProfile() {
   try {
     const res = await fetch('/api/auth/ensure-profile', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ deviceType: detectClientDeviceType() }),
     });
 
     if (res.ok) {

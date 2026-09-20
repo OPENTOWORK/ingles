@@ -11,7 +11,7 @@ import {
 import { canViewPricing } from '@/utils/pricingAccess';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
-import { usesStudentContentRestrictions, isExamStrategiesLockedForUser } from '@/constants/studentFeatureAccess';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { getExamStrategiesMenuItems } from '@/data/examSkillTheme';
 import { APP_ROUTES, isExamPracticeAppPath, isExamStrategiesPath } from '@/config/appRoutes';
 import { STAFF_PANELS_HUB_PATH } from '@/config/staffPanelHub';
@@ -147,7 +147,8 @@ export function buildAppNavModel(userRole, session) {
     showPrimaryNav: shouldShowLoggedInPrimaryNav(session),
     showDralo: shouldShowDraloNav(session),
     draloLocked: !guest && isDraloAiLockedForRole(userRole),
-    examStrategiesLocked: !guest && isExamStrategiesLockedForUser(userRole),
+    /** Sobrescribir con useExamStrategiesAccess() cuando haya sesión (plan real). */
+    examStrategiesLocked: false,
     showPricing,
     showContact: true,
     showLogin: guest,

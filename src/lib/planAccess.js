@@ -316,6 +316,7 @@ export async function getStudentPlanContext(userId, userEmail = '', userMetadata
       progressTracking: true,
       writingAdvanced: true,
       speakingCoach: true,
+      examStrategies: true,
     };
   }
 
@@ -336,6 +337,7 @@ export async function getStudentPlanContext(userId, userEmail = '', userMetadata
     progressTracking: getPlanBySlug(planSlug).entitlements.progressTracking === 'advanced',
     writingAdvanced: hasEntitlement(planSlug, 'writingAdvanced'),
     speakingCoach: hasEntitlement(planSlug, 'speakingCoach'),
+    examStrategies: hasEntitlement(planSlug, 'examStrategies'),
   };
 }
 

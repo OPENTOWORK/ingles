@@ -82,6 +82,8 @@ export function hasEntitlement(planSlug, key) {
       return Boolean(e.priorityAccess);
     case 'prioritySupport':
       return Boolean(e.prioritySupport);
+    case 'examStrategies':
+      return Boolean(e.examStrategies);
     default:
       return false;
   }

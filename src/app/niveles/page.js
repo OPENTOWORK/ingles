@@ -36,13 +36,15 @@ function NivelesInner() {
   }
 
   return (
-    <main className="shell niveles-page niveles-page--theory">
-      <div className="sections">
-        <ExamTheorySection
-          userId={session?.user?.id}
-          accessToken={session?.access_token}
-          isStudent={isStudent}
-        />
+    <main className="shell content-hub-shell niveles-page niveles-page--theory niveles-page--theory-hub">
+      <div className="levels-b2-page-content">
+        <div className="sections">
+          <ExamTheorySection
+            userId={session?.user?.id}
+            accessToken={session?.access_token}
+            isStudent={isStudent}
+          />
+        </div>
       </div>
 
       <NivelesPageStyles />

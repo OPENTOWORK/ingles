@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import ExamStrategiesChapterView from '@/components/theory/ExamStrategiesChapterView';
 import { getExamStrategiesChapterCopy } from '@/data/examStrategiesStudentIndex';
 import { getExamStrategiesOverallContent } from '@/data/examStrategiesOverallContent';
+import { getExamStrategiesWritingTaskContent } from '@/data/examStrategiesWritingTaskContent';
 
 export function generateStaticParams() {
   return [
@@ -31,7 +32,10 @@ export default function ExamStrategiesChapterPage({ params }) {
       chapter={chapter}
       title={copy.title}
       intro={copy.intro}
-      content={getExamStrategiesOverallContent(skill, chapter)}
+      content={
+        getExamStrategiesOverallContent(skill, chapter) ||
+        getExamStrategiesWritingTaskContent(skill, chapter)
+      }
     />
   );
 }

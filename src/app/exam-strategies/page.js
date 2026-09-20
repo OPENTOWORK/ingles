@@ -12,13 +12,17 @@ function ExamStrategiesInner() {
   const isStudent = Boolean(session) && usesStudentContentRestrictions(userRole);
 
   return (
-    <main className="shell niveles-page niveles-page--theory">
-      <div className="sections">
-        <ExamTheorySection
-          userId={session?.user?.id}
-          accessToken={session?.access_token}
-          isStudent={isStudent}
-        />
+    <main
+      className="shell content-hub-shell niveles-page niveles-page--theory niveles-page--theory-hub niveles-level-page--b2"
+    >
+      <div className="levels-b2-page-content">
+        <div className="sections">
+          <ExamTheorySection
+            userId={session?.user?.id}
+            accessToken={session?.access_token}
+            isStudent={isStudent}
+          />
+        </div>
       </div>
 
       <NivelesPageStyles />

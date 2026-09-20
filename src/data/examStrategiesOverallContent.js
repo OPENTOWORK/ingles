@@ -1,11 +1,4 @@
-import { buildTeoriaExamPartTipsHref } from '@/lib/examPartTipsHref';
-import { examStrategiesChapterPath } from '@/config/appRoutes';
-import { EXAM_STRATEGIES_STUDENT_LEVEL } from '@/data/examStrategiesStudentIndex';
-
-const LEVEL = EXAM_STRATEGIES_STUDENT_LEVEL;
-
 /**
- * @typedef {{ label: string, href: string }} StrategyLink
  * @typedef {{ part: string, time: string, note?: string }} TimingRow
  * @typedef {{
  *   overview: string,
@@ -14,7 +7,6 @@ const LEVEL = EXAM_STRATEGIES_STUDENT_LEVEL;
  *   crossPart: string[],
  *   mistakes: string[],
  *   studyTip: string,
- *   nextSteps: StrategyLink[],
  * }} OverallStrategyContent
  */
 
@@ -52,10 +44,6 @@ export const EXAM_STRATEGIES_OVERALL_CONTENT = {
     ],
     studyTip:
       'In practice, time each part separately once a week. If Part 7 always runs over, cut 2 minutes from Parts 1–2 before the real exam.',
-    nextSteps: [1, 2, 3, 4, 5, 6, 7].map((part) => ({
-      label: `Part ${part} Tips`,
-      href: buildTeoriaExamPartTipsHref(LEVEL, 'reading-and-use-of-english', part),
-    })),
   },
   listening: {
     overview:
@@ -90,10 +78,6 @@ export const EXAM_STRATEGIES_OVERALL_CONTENT = {
     ],
     studyTip:
       'Listen to short BBC or podcast clips without subtitles twice a week: first for gist, second for exact phrases. It mirrors the exam rhythm.',
-    nextSteps: [1, 2, 3, 4].map((part) => ({
-      label: `Part ${part} Tips`,
-      href: buildTeoriaExamPartTipsHref(LEVEL, 'listening', part),
-    })),
   },
   writing: {
     overview:
@@ -127,28 +111,6 @@ export const EXAM_STRATEGIES_OVERALL_CONTENT = {
     ],
     studyTip:
       'Once a week, write only the plan for Part 1 in 8 minutes, then compare with a model answer. Planning is the cheapest way to raise your Content score.',
-    nextSteps: [
-      {
-        label: 'Part 1 — Essay Tips',
-        href: buildTeoriaExamPartTipsHref(LEVEL, 'writing', 1),
-      },
-      {
-        label: 'Part 2 — Review',
-        href: examStrategiesChapterPath('writing', 'part-2-review'),
-      },
-      {
-        label: 'Part 2 — Report',
-        href: examStrategiesChapterPath('writing', 'part-2-report'),
-      },
-      {
-        label: 'Part 2 — Article',
-        href: examStrategiesChapterPath('writing', 'part-2-article'),
-      },
-      {
-        label: 'Part 2 — Email',
-        href: examStrategiesChapterPath('writing', 'part-2-email'),
-      },
-    ],
   },
   speaking: {
     overview:
@@ -181,10 +143,6 @@ export const EXAM_STRATEGIES_OVERALL_CONTENT = {
     ],
     studyTip:
       'Record yourself answering a Part 2-style comparison for one minute. Listen back: did you compare, speculate, and give a preference? Repeat until all three are present.',
-    nextSteps: [1, 2, 3, 4].map((part) => ({
-      label: `Part ${part} Tips`,
-      href: buildTeoriaExamPartTipsHref(LEVEL, 'speaking', part),
-    })),
   },
 };
 

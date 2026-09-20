@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 
 const ACCENTS = {
@@ -39,6 +40,8 @@ const ACCENTS = {
 
 export default function PageHero({
   breadcrumb,
+  backHref,
+  backLabel = 'Back',
   eyebrow,
   title,
   description,
@@ -47,15 +50,20 @@ export default function PageHero({
   mascotWidth = 148,
   accent = 'violet',
   stats = [],
+  contentAlign = 'default',
 }) {
   const theme = ACCENTS[accent] || ACCENTS.violet;
+  const showBack = Boolean(backHref);
+  const alignLeft = contentAlign === 'left';
 
   return (
     <>
       {breadcrumb ? <div className="page-hero-wrap__breadcrumb">{breadcrumb}</div> : null}
 
       <header
-        className="page-hero"
+        className={`page-hero${showBack ? ' page-hero--has-back' : ''}${
+          alignLeft ? ' page-hero--align-left' : ''
+        }`}
         style={{
           '--hero-gradient': theme.gradient,
           '--hero-glow': theme.glow,
@@ -66,35 +74,46 @@ export default function PageHero({
         <span className="page-hero__grid" aria-hidden />
 
         <div className="page-hero__inner">
-          <div className="page-hero__content">
-            {eyebrow ? <span className="page-hero__eyebrow">{eyebrow}</span> : null}
-            <h1 className="page-hero__title">{title}</h1>
-            {description ? <p className="page-hero__desc">{description}</p> : null}
-            {stats.length > 0 ? (
-              <ul className="page-hero__stats">
-                {stats.map((item) => (
-                  <li key={item.label || item.value}>
-                    <span className="page-hero__stat-value">{item.value}</span>
-                    {item.label ? (
-                      <span className="page-hero__stat-label">{item.label}</span>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
-
-          {showMascot ? (
-            <div className="page-hero__mascot" aria-hidden>
-              <SiteMascot
-                variant={mascotVariant}
-                width={mascotWidth}
-                alt=""
-                className="page-hero__mascot-img"
-                style={{ maxWidth: mascotWidth, maxHeight: Math.round(mascotWidth * 1.15) }}
-              />
+          {showBack ? (
+            <div className="page-hero__back-row">
+              <Link href={backHref} className="page-hero__back">
+                <span className="page-hero__back-icon" aria-hidden>←</span>
+                {backLabel}
+              </Link>
             </div>
           ) : null}
+
+          <div className="page-hero__body">
+            <div className="page-hero__content">
+              {eyebrow ? <span className="page-hero__eyebrow">{eyebrow}</span> : null}
+              <h1 className="page-hero__title">{title}</h1>
+              {description ? <p className="page-hero__desc">{description}</p> : null}
+              {stats.length > 0 ? (
+                <ul className="page-hero__stats">
+                  {stats.map((item) => (
+                    <li key={item.label || item.value}>
+                      <span className="page-hero__stat-value">{item.value}</span>
+                      {item.label ? (
+                        <span className="page-hero__stat-label">{item.label}</span>
+                      ) : null}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </div>
+
+            {showMascot ? (
+              <div className="page-hero__mascot" aria-hidden>
+                <SiteMascot
+                  variant={mascotVariant}
+                  width={mascotWidth}
+                  alt=""
+                  className="page-hero__mascot-img"
+                  style={{ maxWidth: mascotWidth, maxHeight: Math.round(mascotWidth * 1.15) }}
+                />
+              </div>
+            ) : null}
+          </div>
         </div>
       </header>
 
@@ -124,6 +143,59 @@ export default function PageHero({
           box-shadow:
             0 4px 6px rgba(15, 23, 42, 0.06),
             0 20px 50px var(--hero-glow);
+        }
+        .page-hero__back-row {
+          width: 100%;
+          display: flex;
+          justify-content: flex-start;
+          margin-bottom: 1rem;
+        }
+        .page-hero__back {
+          position: relative;
+          z-index: 3;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          padding: 0.45rem 0.9rem 0.45rem 0.75rem;
+          border-radius: 999px;
+          font-size: 0.84rem;
+          font-weight: 700;
+          line-height: 1.2;
+          color: #fff;
+          text-decoration: none;
+          background: rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.35);
+          backdrop-filter: blur(10px);
+          transition: background 0.15s ease;
+        }
+        .page-hero__back:hover {
+          background: rgba(255, 255, 255, 0.32);
+          text-decoration: none;
+          color: #fff;
+        }
+        .page-hero__back-icon {
+          font-size: 1rem;
+          line-height: 1;
+        }
+        .page-hero--align-left .page-hero__body {
+          justify-content: flex-start;
+          text-align: left;
+        }
+        .page-hero--align-left .page-hero__content {
+          margin-inline: 0;
+        }
+        .page-hero--align-left .page-hero__desc {
+          margin-inline: 0;
+        }
+        .page-hero--align-left .page-hero__stats {
+          justify-content: flex-start;
+        }
+        .page-hero__body {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 24px 32px;
+          width: 100%;
         }
         .page-hero__grid {
           position: absolute;
@@ -159,10 +231,11 @@ export default function PageHero({
           position: relative;
           z-index: 1;
           display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 24px 32px;
-          padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
+          flex-direction: column;
+          align-items: stretch;
+          gap: 0;
+          padding: clamp(22px, 3.5vw, 32px) clamp(24px, 4vw, 36px)
+            clamp(28px, 4vw, 40px);
         }
         .page-hero__content {
           flex: 1 1 260px;
@@ -256,14 +329,14 @@ export default function PageHero({
           .page-hero__mascot {
             margin: 8px auto 0;
           }
-          .page-hero__inner {
+          .page-hero:not(.page-hero--align-left) .page-hero__body {
             justify-content: center;
             text-align: center;
           }
-          .page-hero__desc {
+          .page-hero:not(.page-hero--align-left) .page-hero__desc {
             margin-inline: auto;
           }
-          .page-hero__stats {
+          .page-hero:not(.page-hero--align-left) .page-hero__stats {
             justify-content: center;
           }
         }

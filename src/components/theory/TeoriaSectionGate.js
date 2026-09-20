@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import { usePathname } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
 import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { useTeoriaProgress } from '@/hooks/useTeoriaProgress';
@@ -21,20 +20,13 @@ import ExamTheoryTopicList from '@/components/theory/ExamTheoryTopicList';
 import TheoryTopicList from '@/components/theory/TheoryTopicList';
 import TeoriaTopicList from '@/components/theory/TeoriaTopicList';
 import { ExamStrategiesBlockedScreen } from '@/components/exam/ExamStrategiesFeatureGuard';
-import { isExamStrategiesPath } from '@/config/appRoutes';
-import {
-  isExamStrategiesLockedForUser,
-  usesStudentContentRestrictions,
-} from '@/constants/studentFeatureAccess';
+import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 
 export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics }) {
-  const pathname = usePathname();
   const { userRole, session } = useUserRole();
   const isStudent = usesStudentContentRestrictions(userRole);
-  const examStrategiesLocked =
-    Boolean(session) &&
-    isExamStrategiesLockedForUser(userRole) &&
-    isExamStrategiesPath(pathname);
+  const { locked: examStrategiesLocked, loading: examStrategiesLoading } = useExamStrategiesAccess();
   const isExam = isExamTheorySectionSlug(sectionSlug);
   const isTheory = isTheorySectionSlug(sectionSlug);
   const examProgress = useExamTheoryProgress(
@@ -56,6 +48,13 @@ export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics })
   );
 
   if (isExam) {
+    if (examStrategiesLoading) {
+      return (
+        <main className="shell teoria-page" style={{ padding: '2rem', textAlign: 'center' }}>
+          <p>Cargando…</p>
+        </main>
+      );
+    }
     if (examStrategiesLocked) {
       return <ExamStrategiesBlockedScreen />;
     }

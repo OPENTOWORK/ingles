@@ -11,9 +11,12 @@ import {
   isUserOnline,
   withinDateRange,
 } from '@/lib/userActivity';
+import { resolveRegistrationDeviceType } from '@/lib/registrationDevice';
 
 async function loadProfile(db, userId) {
   const variants = [
+    'id, email, nombre, rol_id, creado_en, activo, metadata',
+    'id, email, nombre, rol_id, creado_en, metadata',
     'id, email, nombre, rol_id, creado_en, activo',
     'id, email, nombre, rol_id, creado_en',
   ];
@@ -31,7 +34,7 @@ async function loadProfile(db, userId) {
 
   const { data, error } = await db
     .from('Usuarios_y_Perfil_users')
-    .select('id, email, nombre, rol_id, creado_en, activo')
+    .select('id, email, nombre, rol_id, creado_en, activo, metadata')
     .eq('id', userId)
     .maybeSingle();
 
@@ -263,6 +266,9 @@ export async function GET(req, { params }) {
       };
     });
 
+    const registrationDeviceType = resolveRegistrationDeviceType(profile, sessions);
+    const registrationDeviceLabel = formatDeviceTypeLabel(registrationDeviceType);
+
     return NextResponse.json({
       profile: {
         id: profile.id,
@@ -272,6 +278,8 @@ export async function GET(req, { params }) {
         rolNombre: roleName,
         creadoEn: profile.creado_en,
         activo: profile.activo !== false,
+        registrationDeviceType,
+        registrationDeviceLabel,
       },
       presence: {
         online: presence ? isUserOnline(presence.last_seen_at) : false,

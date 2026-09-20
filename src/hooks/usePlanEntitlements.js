@@ -74,6 +74,7 @@ export function usePlanEntitlements() {
     usage: data?.usage ?? null,
     progressTracking: Boolean(data?.progressTracking),
     writingAdvanced: Boolean(data?.writingAdvanced),
+    examStrategies: Boolean(data?.examStrategies),
     isExamSlotLocked,
   };
 }

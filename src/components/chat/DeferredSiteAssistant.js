@@ -1,7 +1,9 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { usePathname } from 'next/navigation';
 import { useDeferredMount } from '@/hooks/useDeferredMount';
+import { isExamStrategiesPath } from '@/config/appRoutes';
 
 const SiteAssistantWidget = dynamic(() => import('@/components/chat/SiteAssistantWidget'), {
   ssr: false,
@@ -16,6 +18,7 @@ function SiteAssistantDeferred() {
 
 /** Solo monta el chat si hay sesión (evita carga en rutas públicas). */
 export default function DeferredSiteAssistant({ enabled = false }) {
-  if (!enabled) return null;
+  const pathname = usePathname() || '';
+  if (!enabled || isExamStrategiesPath(pathname)) return null;
   return <SiteAssistantDeferred />;
 }

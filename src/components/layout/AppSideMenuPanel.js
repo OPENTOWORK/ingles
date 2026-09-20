@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
 import { buildAppNavModel } from '@/config/appNavMenu';
+import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import { performLogout } from '@/utils/logout';
 
@@ -18,7 +19,14 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
-  const navModel = useMemo(() => buildAppNavModel(userRole, session), [userRole, session]);
+  const { locked: examStrategiesPlanLocked } = useExamStrategiesAccess({ userRole, session });
+  const navModel = useMemo(() => {
+    const base = buildAppNavModel(userRole, session);
+    return {
+      ...base,
+      examStrategiesLocked: base.guest ? false : examStrategiesPlanLocked,
+    };
+  }, [userRole, session, examStrategiesPlanLocked]);
   const linkClass = 'app-side-menu__link';
 
   useEffect(() => {

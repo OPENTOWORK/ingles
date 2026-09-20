@@ -208,6 +208,12 @@ function UserDrawer({
                 {user.destacado_equipo ? '★ Destacado' : '☆ Sin destacar'}
               </button>
             </div>
+            <div className={styles.field}>
+              <label>Registro desde</label>
+              <p className={styles.planReadonly} id={`drawer-registration-device-${user.id}`}>
+                {user.registrationDeviceLabel || '—'}
+              </p>
+            </div>
           </section>
 
           <section className={styles.section}>
@@ -478,6 +484,10 @@ export default function AdminUserManagementList({
                     <div className={styles.metaItem}>
                       <dt>Registro</dt>
                       <dd>{formatRegistrationDate(item.creado_en)}</dd>
+                    </div>
+                    <div className={styles.metaItem}>
+                      <dt>Desde</dt>
+                      <dd>{item.registrationDeviceLabel || '—'}</dd>
                     </div>
                     <div className={styles.metaItem}>
                       <dt>Placement</dt>

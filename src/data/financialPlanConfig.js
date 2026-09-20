@@ -121,6 +121,7 @@ const STARTER_LEGACY_PLAN = {
     progressTracking: 'basic',
     priorityAccess: false,
     prioritySupport: false,
+    examStrategies: false,
   },
 };
 
@@ -147,6 +148,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       'Writing Correction: 1/mes',
       'Speaking Correction: 1/mes',
       '3 consultas Dralo Assistant al mes',
+      'Exam Strategies (tips por skill y parte)',
       'Soporte prioritario: hasta 72h',
     ],
     entitlements: {
@@ -164,6 +166,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       progressTracking: 'none',
       priorityAccess: false,
       prioritySupport: false,
+      examStrategies: true,
     },
   },
   {
@@ -193,6 +196,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       'Speaking Correction: 10/mes',
       'Corrección Writing avanzada',
       '30 consultas Dralo Assistant al día',
+      'Exam Strategies',
       'Seguimiento de progreso',
       'Soporte prioritario: hasta 48h',
     ],
@@ -210,6 +214,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       progressTracking: 'advanced',
       priorityAccess: false,
       prioritySupport: false,
+      examStrategies: true,
     },
   },
   {
@@ -258,6 +263,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       progressTracking: 'advanced',
       priorityAccess: true,
       prioritySupport: true,
+      examStrategies: true,
     },
   },
 ];
@@ -299,6 +305,7 @@ export const FRIENDLY_GRANT_PLANS = [
       progressTracking: 'advanced',
       priorityAccess: false,
       prioritySupport: false,
+      examStrategies: true,
     },
   },
   {
@@ -336,6 +343,7 @@ export const FRIENDLY_GRANT_PLANS = [
       progressTracking: 'advanced',
       priorityAccess: true,
       prioritySupport: true,
+      examStrategies: true,
     },
   },
 ];
@@ -520,8 +528,8 @@ export const PLAN_COMPARISON_ROWS = [
   {
     id: 'exam-strategies',
     label: 'Exam Strategies',
-    type: 'text',
-    values: { free: false, premium: false, pro: COMING_SOON },
+    type: 'bool',
+    values: { free: true, premium: true, pro: true },
   },
   {
     id: 'dralo-ai',
@@ -594,6 +602,7 @@ const PROFILE_PLAN_DISPLAY = {
       'Writing Correction: 1/month',
       'Speaking Correction: 1/month',
       '3 Dralo Assistant queries per month',
+      'Exam Strategies (tips by skill and part)',
       'Priority support: within 72h',
     ],
     badge: null,

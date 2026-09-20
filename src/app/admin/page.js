@@ -7,6 +7,12 @@ import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
 import { formatSessionDuration } from '@/lib/userActivity';
+import {
+  formatDeviceTypeLabel,
+  getRegistrationDeviceLabel,
+  getRegistrationDeviceType,
+  normalizeRegistrationDeviceType,
+} from '@/lib/registrationDevice';
 import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
 import { getPlanDisplayLabel, normalizeUserPlanSlug } from '@/data/financialPlanConfig';
 import AdminUserManagementList from '@/components/admin/AdminUserManagementList';
@@ -264,10 +270,46 @@ export default function AdminDashboard() {
         destacado_equipo: Boolean(item.destacado_equipo),
         marketingAccepted:
           consentFromDirectColumn === null ? consentFromMetadata : consentFromDirectColumn,
+        registrationDeviceLabel: getRegistrationDeviceLabel(item),
       };
     });
 
-    setUsers(normalizedUsers);
+    const missingIds = normalizedUsers
+      .filter((item) => !getRegistrationDeviceType(item))
+      .map((item) => item.id);
+
+    const sessionDeviceByUser = new Map();
+    if (missingIds.length) {
+      const { data: sessionRows, error: sessionError } = await supabase
+        .from('usuario_sesiones_app')
+        .select('user_id, device_type, started_at')
+        .in('user_id', missingIds.slice(0, 800))
+        .not('device_type', 'is', null)
+        .order('started_at', { ascending: true });
+
+      if (sessionError) {
+        console.error('[admin] registration device sessions', sessionError);
+      } else {
+        for (const row of sessionRows || []) {
+          if (!sessionDeviceByUser.has(row.user_id)) {
+            sessionDeviceByUser.set(row.user_id, row.device_type);
+          }
+        }
+      }
+    }
+
+    setUsers(
+      normalizedUsers.map((item) => {
+        const registrationDeviceType =
+          getRegistrationDeviceType(item) ||
+          normalizeRegistrationDeviceType(sessionDeviceByUser.get(item.id));
+        return {
+          ...item,
+          registrationDeviceType,
+          registrationDeviceLabel: formatDeviceTypeLabel(registrationDeviceType),
+        };
+      }),
+    );
   };
 
   const loadUserPlans = async () => {

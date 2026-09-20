@@ -1,12 +1,37 @@
 import { buildTeoriaExamPartTipsHref } from '@/lib/examPartTipsHref';
 import { examStrategiesChapterPath } from '@/config/appRoutes';
+import { partInfo as b2ReadingPartInfo } from '@/data/part-info/b2-reading-and-use-of-english';
+import { partInfo as b2ListeningPartInfo } from '@/data/part-info/b2-listening';
+import { partInfo as b2WritingPartInfo } from '@/data/part-info/b2-writing';
+import { partInfo as b2SpeakingPartInfo } from '@/data/part-info/b2-speaking';
 
 /** Nivel por defecto para el índice de estudiantes (único abierto). */
 export const EXAM_STRATEGIES_STUDENT_LEVEL = 'b2';
 
 /**
- * @typedef {{ label: string, href?: string, children?: IndexChapter[] }} IndexChapter
+ * @typedef {{ label: string, partName?: string, href?: string, children?: IndexChapter[] }} IndexChapter
  */
+
+/** @param {Record<string, { title?: string }>} partInfo @param {number} part */
+function partNameFromPartInfo(partInfo, part) {
+  const title = partInfo?.[String(part)]?.title;
+  if (!title) return undefined;
+  const match = title.match(/^Part\s+\d+\s*[:\-–]\s*(.+)$/i);
+  return match ? match[1].trim() : title.trim();
+}
+
+/**
+ * @param {string} skillFolder
+ * @param {number[]} parts
+ * @param {Record<string, { title?: string }>} partInfo
+ */
+function buildPartTipChapters(skillFolder, parts, partInfo) {
+  return parts.map((part) => ({
+    label: `Part ${part} Tips`,
+    partName: partNameFromPartInfo(partInfo, part),
+    href: buildTeoriaExamPartTipsHref(EXAM_STRATEGIES_STUDENT_LEVEL, skillFolder, part),
+  }));
+}
 
 /** @type {Record<string, IndexChapter[]>} */
 export const EXAM_STRATEGIES_STUDENT_INDEX_BY_SLUG = {
@@ -15,24 +40,14 @@ export const EXAM_STRATEGIES_STUDENT_INDEX_BY_SLUG = {
       label: 'Overall Strategy',
       href: examStrategiesChapterPath('reading-and-use-of-english', 'overall-strategy'),
     },
-    ...[1, 2, 3, 4, 5, 6, 7].map((part) => ({
-      label: `Part ${part} Tips`,
-      href: buildTeoriaExamPartTipsHref(
-        EXAM_STRATEGIES_STUDENT_LEVEL,
-        'reading-and-use-of-english',
-        part,
-      ),
-    })),
+    ...buildPartTipChapters('reading-and-use-of-english', [1, 2, 3, 4, 5, 6, 7], b2ReadingPartInfo),
   ],
   listening: [
     {
       label: 'Overall Strategy',
       href: examStrategiesChapterPath('listening', 'overall-strategy'),
     },
-    ...[1, 2, 3, 4].map((part) => ({
-      label: `Part ${part} Tips`,
-      href: buildTeoriaExamPartTipsHref(EXAM_STRATEGIES_STUDENT_LEVEL, 'listening', part),
-    })),
+    ...buildPartTipChapters('listening', [1, 2, 3, 4], b2ListeningPartInfo),
   ],
   writing: [
     {
@@ -40,11 +55,13 @@ export const EXAM_STRATEGIES_STUDENT_INDEX_BY_SLUG = {
       href: examStrategiesChapterPath('writing', 'overall-strategy'),
     },
     {
-      label: 'Part 1 - Essay',
+      label: 'Part 1 Tips',
+      partName: partNameFromPartInfo(b2WritingPartInfo, 1),
       href: buildTeoriaExamPartTipsHref(EXAM_STRATEGIES_STUDENT_LEVEL, 'writing', 1),
     },
     {
-      label: 'Part 2 - Choice',
+      label: 'Part 2 Tips',
+      partName: partNameFromPartInfo(b2WritingPartInfo, 2),
       children: [
         {
           label: 'Review',
@@ -70,10 +87,7 @@ export const EXAM_STRATEGIES_STUDENT_INDEX_BY_SLUG = {
       label: 'Overall Strategy',
       href: examStrategiesChapterPath('speaking', 'overall-strategy'),
     },
-    ...[1, 2, 3, 4].map((part) => ({
-      label: `Part ${part} Tips`,
-      href: buildTeoriaExamPartTipsHref(EXAM_STRATEGIES_STUDENT_LEVEL, 'speaking', part),
-    })),
+    ...buildPartTipChapters('speaking', [1, 2, 3, 4], b2SpeakingPartInfo),
   ],
 };
 

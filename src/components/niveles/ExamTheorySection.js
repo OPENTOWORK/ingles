@@ -7,8 +7,7 @@ import { EXAM_THEORY_CATALOG } from '@/data/teoriaSections';
 import { useExamTheoryProgress } from '@/hooks/useExamTheoryProgress';
 import { getExamTheoryUnlockStates } from '@/lib/examTheoryUnlock';
 import ExamTheoryProgressBar from '@/components/niveles/ExamTheoryProgressBar';
-import { examStrategiesSkillPath } from '@/config/appRoutes';
-import { MASCOT_EXAM_STRATEGIES_VARIANT } from '@/config/mascotAssets';
+import { APP_ROUTES, examStrategiesSkillPath } from '@/config/appRoutes';
 
 export default function ExamTheorySection({ userId, accessToken, isStudent = false }) {
   const { globalPercent, units } = useExamTheoryProgress(userId, accessToken);
@@ -22,12 +21,12 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
     <section className="section exam-theory-section" id="exam-theory" data-tour="exam-theory-hub">
       <div className="exam-theory-section__hero" data-tour="exam-theory-hub-hero">
         <PageHero
+          backHref={APP_ROUTES.home}
+          backLabel="Back"
+          contentAlign="left"
           eyebrow="Reading · Writing · Listening · Speaking"
           title="Exam Strategies"
           description={introDescription}
-          showMascot
-          mascotVariant={MASCOT_EXAM_STRATEGIES_VARIANT}
-          mascotWidth={152}
           accent="violet"
           stats={[
             {

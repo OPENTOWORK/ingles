@@ -132,6 +132,12 @@ export default function AdminStudentProfilePage() {
           </p>
         </div>
         <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+          <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Registro desde</p>
+          <p className="mt-1 text-lg font-semibold text-gray-900">
+            {profile.registrationDeviceLabel || '—'}
+          </p>
+        </div>
+        <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
           <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Tiempo total en app</p>
           <p className="mt-1 text-lg font-semibold text-gray-900">
             {presence.totalSessionLabel}
