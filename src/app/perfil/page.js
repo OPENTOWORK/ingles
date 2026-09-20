@@ -1,6 +1,6 @@
 'use client';
 import dynamic from 'next/dynamic';
-import { useEffect, useRef, useState, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
@@ -180,6 +180,7 @@ export default function ProfilePage() {
   const showProgressTracking = !applyLimits || progressTracking;
   const showFreePlanUpgrade = !planLoading && applyLimits && !progressTracking;
 
+  /** Aplica ?tab= solo al entrar (deep link). No re-leer en cada cambio de pestaña. */
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const params = new URLSearchParams(window.location.search);
@@ -190,13 +191,31 @@ export default function ProfilePage() {
       const valid = PROFILE_TABS.find((t) => t.id === tab);
       if (valid && !(isStudent && isStudentHiddenProfileTab(tab, true))) {
         setActiveTab(tab);
-        return;
       }
     }
+  }, [isStudent]);
+
+  useEffect(() => {
     if (isStudent && isStudentHiddenProfileTab(activeTab, true)) {
       setActiveTab('overview');
     }
   }, [isStudent, activeTab]);
+
+  const handleSelectTab = useCallback(
+    (tabId) => {
+      setActiveTab(tabId);
+      if (typeof window === 'undefined') return;
+      const url = new URL(window.location.href);
+      if (tabId === 'overview') {
+        url.searchParams.delete('tab');
+      } else {
+        url.searchParams.set('tab', tabId);
+      }
+      const next = `${url.pathname}${url.search}`;
+      router.replace(next, { scroll: false });
+    },
+    [router],
+  );
 
   const integratedStatsLoadedRef = useRef(false);
   const recommendationsLoadedRef = useRef(false);
@@ -923,7 +942,7 @@ export default function ProfilePage() {
   const tabsProps = {
     tabs: getVisibleProfileTabs(isStudent),
     activeTab,
-    onSelectTab: setActiveTab,
+    onSelectTab: handleSelectTab,
     isStudent,
   };
 
