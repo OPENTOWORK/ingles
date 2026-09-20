@@ -1,12 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { useExamPracticeTools, HIGHLIGHT_COLORS } from '@/context/ExamPracticeToolsContext';
+import ExamPracticeRailDisclosure from '@/components/exam/ExamPracticeRailDisclosure';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 
 export default function ReadingPracticeToolsPanel({ lang = 'en' }) {
   const en = lang === 'en';
-  const [open, setOpen] = useState(false);
   const tools = useExamPracticeTools();
   const session = useReadingPracticeSession();
 
@@ -33,19 +32,11 @@ export default function ReadingPracticeToolsPanel({ lang = 'en' }) {
   };
 
   return (
-    <aside className="levels-listening-strategy levels-listening-strategy--tools">
-      <button
-        type="button"
-        className="levels-listening-strategy__toggle levels-listening-strategy__toggle--tools"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        <span>{labels.title}</span>
-        <span aria-hidden>{open ? '−' : '+'}</span>
-      </button>
-
-      {open ? (
-        <div className="levels-listening-strategy__body">
+    <ExamPracticeRailDisclosure
+      title={labels.title}
+      asideClassName="levels-listening-strategy levels-listening-strategy--tools"
+      toggleClassName="levels-listening-strategy__toggle levels-listening-strategy__toggle--tools"
+    >
           <section>
             <h3 className="levels-listening-strategy__heading">{labels.textSettings}</h3>
             <p className="levels-listening-strategy__tool-hint">
@@ -162,8 +153,6 @@ export default function ReadingPracticeToolsPanel({ lang = 'en' }) {
               </button>
             </div>
           </section>
-        </div>
-      ) : null}
-    </aside>
+    </ExamPracticeRailDisclosure>
   );
 }

@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import ExamPracticeRailDisclosure from '@/components/exam/ExamPracticeRailDisclosure';
 
 /**
  * Collapsible Strategy & tips + interactive Structure checklist for Writing practice.
  * Practice Mode only — never rendered during Exam Mode.
  */
 export default function B2WritingStrategyPanel({ pack }) {
-  const [open, setOpen] = useState(false);
   const [checked, setChecked] = useState({});
 
   useEffect(() => {
@@ -24,18 +24,10 @@ export default function B2WritingStrategyPanel({ pack }) {
   const doneCount = checklist.filter((item) => checked[item]).length;
 
   return (
-    <aside className="levels-listening-strategy levels-writing-strategy">
-      <button
-        type="button"
-        className="levels-listening-strategy__toggle"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        <span>Strategy and tips</span>
-        <span aria-hidden>{open ? '−' : '+'}</span>
-      </button>
-      {open ? (
-        <div className="levels-listening-strategy__body">
+    <ExamPracticeRailDisclosure
+      title="Strategy and tips"
+      asideClassName="levels-listening-strategy levels-writing-strategy"
+    >
           <section>
             <h3 className="levels-listening-strategy__heading">Strategy</h3>
             <p>{pack.strategy}</p>
@@ -85,8 +77,6 @@ export default function B2WritingStrategyPanel({ pack }) {
               <p>{pack.studyTip}</p>
             </section>
           ) : null}
-        </div>
-      ) : null}
-    </aside>
+    </ExamPracticeRailDisclosure>
   );
 }

@@ -11,11 +11,6 @@ import {
 } from '@/lib/studyTrackRecord';
 import styles from './StudySessionBar.module.css';
 
-function isExamPracticePath(pathname = '') {
-  const path = String(pathname || '').split('?')[0];
-  return path.includes('/niveles/') || path.includes('/exam-practice/');
-}
-
 function ConsentDialog({ onAccept, onCancel, starting, error }) {
   return (
     <div className={styles.overlay} role="dialog" aria-modal="true" aria-labelledby="study-consent-title">
@@ -135,8 +130,6 @@ function SummaryDialog({ summary, onClose }) {
 }
 
 export default function StudySessionBar({ session }) {
-  const pathname = usePathname() || '';
-  const inPractice = isExamPracticePath(pathname);
   const {
     activeSession,
     report,
@@ -169,10 +162,7 @@ export default function StudySessionBar({ session }) {
 
   if (activeSession) {
     return (
-      <div
-        className={`${styles.bar}${inPractice ? ` ${styles.barPractice}` : ''}`}
-        role="status"
-      >
+      <div className={styles.bar} role="status">
         <span className={styles.live}>
           <span className={styles.liveDot} aria-hidden="true" />
           Estudiando
@@ -198,7 +188,7 @@ export default function StudySessionBar({ session }) {
     <>
       <button
         type="button"
-        className={`${styles.launcher}${inPractice ? ` ${styles.launcherPractice}` : ''}`}
+        className={styles.launcher}
         onClick={() => setAskingConsent(true)}
       >
         Iniciar estudio

@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+
+import ExamPracticeRailDisclosure from '@/components/exam/ExamPracticeRailDisclosure';
 import { useExamPracticeSlotProgress } from '@/hooks/useExamPracticeSlotProgress';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { formatExamSlotDisplayLabel } from '@/utils/formatExamDisplayLabel';
@@ -30,7 +31,6 @@ export default function ExamPracticeProgressPanel({
   enabled = true,
 }) {
   const en = lang === 'en';
-  const [open, setOpen] = useState(false);
   const { applyLimits, progressTracking, loading: planLoading } = usePlanEntitlements();
   const showProgress = enabled && (!applyLimits || progressTracking);
   const { signedIn, loading, estadisticasByPart } = useExamPracticeSlotProgress({
@@ -82,19 +82,11 @@ export default function ExamPracticeProgressPanel({
   };
 
   return (
-    <aside className="levels-listening-strategy levels-listening-strategy--progress">
-      <button
-        type="button"
-        className="levels-listening-strategy__toggle levels-listening-strategy__toggle--progress"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        <span>{labels.title}</span>
-        <span aria-hidden>{open ? '−' : '+'}</span>
-      </button>
-
-      {open ? (
-        <div className="levels-listening-strategy__body">
+    <ExamPracticeRailDisclosure
+      title={labels.title}
+      asideClassName="levels-listening-strategy levels-listening-strategy--progress"
+      toggleClassName="levels-listening-strategy__toggle levels-listening-strategy__toggle--progress"
+    >
           {!signedIn ? (
             <p className="levels-listening-strategy__muted">{labels.signIn}</p>
           ) : loading ? (
@@ -181,8 +173,6 @@ export default function ExamPracticeProgressPanel({
               <p className="levels-listening-strategy__source">{labels.source}</p>
             </>
           )}
-        </div>
-      ) : null}
-    </aside>
+    </ExamPracticeRailDisclosure>
   );
 }

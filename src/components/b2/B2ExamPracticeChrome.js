@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import SiteMascot from '@/components/SiteMascot';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
@@ -17,7 +18,10 @@ import {
   getB2StarsWayPageHref,
 } from '@/data/b2StarsWayConfig';
 import { ExamPracticeToolsProvider } from '@/context/ExamPracticeToolsContext';
-import { ExamPracticeSidebarSlotsProvider } from '@/context/ExamPracticeSidebarSlotsContext';
+import {
+  ExamPracticeSidebarSlotsProvider,
+  useExamPracticeSidebarSlots,
+} from '@/context/ExamPracticeSidebarSlotsContext';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
@@ -147,6 +151,49 @@ export function B2ExamPracticeLayout({ examPracticeOpen, children }) {
   );
 }
 
+function ExamPracticeToolbarBandAside({
+  showExerciseStarsInToolbarAside,
+  exerciseStarsBadge,
+  showToolbarFinishNotice,
+  partFinishNotice,
+  lang,
+}) {
+  return (
+    <>
+      {showExerciseStarsInToolbarAside ? (
+        <div className="levels-b2-practice__status-stars">{exerciseStarsBadge}</div>
+      ) : null}
+      {showToolbarFinishNotice ? (
+        <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
+      ) : null}
+    </>
+  );
+}
+
+/** Notas + Strategy + Progress + Tools en una franja horizontal bajo la toolbar. */
+function ExamPracticeToolbarSubRail({
+  showToolbarFinishNotice,
+  partFinishNotice,
+  lang,
+}) {
+  const { sideRailMountRef } = useExamPracticeSidebarSlots();
+
+  return (
+    <div className="levels-b2-practice__toolbar-sub-rail">
+      <div
+        ref={sideRailMountRef}
+        className="levels-b2-practice__toolbar-sub-rail-side"
+        data-exam-practice-side-rail-mount=""
+      />
+      {showToolbarFinishNotice ? (
+        <div className="levels-b2-practice__toolbar-sub-rail-item levels-b2-practice__toolbar-sub-rail-finish">
+          <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 export function B2ExamPracticeChrome({
   examSlot,
   onSelectExam,
@@ -211,7 +258,15 @@ export function B2ExamPracticeChrome({
   children,
 }) {
   const { userRole } = useUserRole();
+  const pathname = usePathname() || '';
+  const [skillNavOpen, setSkillNavOpen] = useState(false);
+  const [toolbarOpen, setToolbarOpen] = useState(false);
   const planGating = useExamSlotPlanGating(progressBySlot);
+
+  useEffect(() => {
+    setSkillNavOpen(false);
+    setToolbarOpen(false);
+  }, [pathname]);
   const handleSelectExamWithPlan = useCallback(
     (slot) => planGating.wrapSelectHandler(onSelectExam)(slot),
     [planGating, onSelectExam],
@@ -243,6 +298,7 @@ export function B2ExamPracticeChrome({
   const updatingLabel = lang === 'en' ? 'Updating…' : 'Actualizando…';
   const savedPrefix = lang === 'en' ? 'Saved:' : 'Guardado:';
   const workPanelRef = useRef(null);
+  const sideRailMountRef = useRef(null);
   const statusAreaRef = useRef(null);
   const statusRowRef = useRef(null);
   const workBodyRef = useRef(null);
@@ -330,7 +386,13 @@ export function B2ExamPracticeChrome({
     />
   ) : null;
 
-  const sidebarExerciseStars = showSkillExerciseStarsInSidebarTop ? exerciseStarsBadge : null;
+  const showExerciseStarsInToolbarRow =
+    showSkillExerciseStarsInSidebarTop && showCombinedToolbar;
+  const showExerciseStarsInToolbarAside =
+    showExerciseStarsInToolbarRow && !showSidebarTopRail;
+  const sidebarExerciseStars = null;
+  const showToolbarBandAside =
+    showToolbarFinishNotice || showExerciseStarsInToolbarAside || showSidebarTopRail;
 
   useEffect(() => {
     const shouldSyncStatusHeight = showStatusRow && showHeaderFinishNotice;
@@ -396,7 +458,7 @@ export function B2ExamPracticeChrome({
 
   useEffect(() => {
     if (
-      !showSidebarTopRail ||
+      showSidebarTopRail ||
       !showStatusRow ||
       !statusAreaRef.current ||
       !workBodyRef.current
@@ -458,6 +520,33 @@ export function B2ExamPracticeChrome({
       onToggleTimerHidden={showTimerHideToggle ? handleToggleTimerHidden : null}
     />
   ) : null;
+
+  const useFoldableSkillNav =
+    compactSkillHeader && showLevelPicker && levelSlug && skillRoute && !focusMode;
+
+  /** Misma franja que en la captura: focus, timer, estrellas, notas/strategy y aviso de parte. */
+  const hasFoldableToolbarContent =
+    showCombinedToolbar || showSidebarTopRail || showLegacyToolsRow || showSecondaryStatusRow;
+  /** Si hay «Parts & navigation» plegable, esta barra va igual (cerrada por defecto). */
+  const useFoldableToolbar =
+    !isExamSimulation &&
+    !focusMode &&
+    hasFoldableToolbarContent &&
+    (useFoldableSkillNav || (compactSkillHeader && (showCombinedToolbar || showSidebarTopRail)));
+  const toolbarDisclosureTitle =
+    lang === 'en' ? 'Tools & timer' : 'Herramientas y temporizador';
+
+  const skillNavEl =
+    showLevelPicker && levelSlug && skillRoute && !focusMode ? (
+      <div className="exam-practice-skill-nav">
+        <ExamPracticeLevelPicker
+          variant="strip"
+          activeLevel={levelSlug}
+          linkForLevel={(level) => getLevelSkillPracticeHref(level.slug, skillRoute)}
+        />
+        <ExamPracticeSkillPicker levelSlug={levelSlug} activeSkillRoute={skillRoute} />
+      </div>
+    ) : null;
 
   const partTabsEl =
     partsData?.length > 0 && !hidePartTabs ? (
@@ -576,26 +665,75 @@ export function B2ExamPracticeChrome({
 
           <div
             ref={workPanelRef}
-            className={['levels-b2-practice__work-panel', workPanelClassName]
+            className={[
+              'levels-b2-practice__work-panel',
+              showSidebarTopRail ? 'levels-b2-practice__work-panel--side-under-toolbar' : '',
+              workPanelClassName,
+            ]
               .filter(Boolean)
               .join(' ')}
           >
-          {partTabsVariant === 'excel' ? partTabsEl : null}
-
-          {showLevelPicker && levelSlug && skillRoute && !focusMode ? (
-            <div className="exam-practice-skill-nav">
-              <ExamPracticeLevelPicker
-                variant="strip"
-                activeLevel={levelSlug}
-                linkForLevel={(level) => getLevelSkillPracticeHref(level.slug, skillRoute)}
-              />
-              <ExamPracticeSkillPicker levelSlug={levelSlug} activeSkillRoute={skillRoute} />
+          {useFoldableSkillNav ? (
+            <div className="exam-practice-skill-nav-disclosure">
+              <button
+                type="button"
+                className="exam-practice-skill-nav-disclosure__trigger"
+                aria-expanded={skillNavOpen}
+                aria-controls="exam-practice-skill-nav-panel"
+                onClick={() => setSkillNavOpen((open) => !open)}
+              >
+                <span className="exam-practice-skill-nav-disclosure__title">
+                  {lang === 'en' ? 'Parts & navigation' : 'Partes y navegación'}
+                </span>
+                <span className="exam-practice-skill-nav-disclosure__chevron" aria-hidden>
+                  {skillNavOpen ? '▴' : '▾'}
+                </span>
+              </button>
+              {skillNavOpen ? (
+                <div
+                  id="exam-practice-skill-nav-panel"
+                  className="exam-practice-skill-nav-disclosure__panel"
+                >
+                  {partTabsVariant === 'excel' ? partTabsEl : null}
+                  {skillNavEl}
+                </div>
+              ) : null}
             </div>
-          ) : null}
+          ) : (
+            <>
+              {partTabsVariant === 'excel' ? partTabsEl : null}
+              {skillNavEl}
+            </>
+          )}
 
-          <div className="levels-b2-practice__status" ref={statusAreaRef}>
+          <ExamPracticeToolsProvider>
+            <ExamPracticeSidebarSlotsProvider
+              exerciseStars={sidebarExerciseStars}
+              overlayContainerRef={workPanelRef}
+              sideRailMountRef={sideRailMountRef}
+              portSideRailToToolbar={showSidebarTopRail}
+            >
+          {(() => {
+            const practiceStatusPanel = (
+              <div
+                id={useFoldableToolbar ? 'exam-practice-toolbar-panel' : undefined}
+                className={[
+                  'levels-b2-practice__status',
+                  useFoldableToolbar ? 'levels-b2-practice__status--foldable' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                ref={statusAreaRef}
+              >
             {showCombinedToolbar ? (
-              <div className="levels-b2-practice__toolbar-band">
+              <div
+                className={[
+                  'levels-b2-practice__toolbar-band',
+                  showSidebarTopRail ? 'levels-b2-practice__toolbar-band--stacked' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
                 <div className="levels-b2-practice__toolbar-band-main">
                   <div className="levels-b2-practice__toolbar-band-start">
                     <div className="levels-b2-practice__study-tools">{headerTools}</div>
@@ -614,14 +752,37 @@ export function B2ExamPracticeChrome({
                   </div>
                   <div className="levels-b2-practice__toolbar-band-end">
                     {categoryTimerEl}
+                    {showExerciseStarsInToolbarRow ? (
+                      <div className="levels-b2-practice__toolbar-inline-stars">
+                        <SkillExerciseStarsBadge
+                          stars={skillExerciseStars}
+                          href={starsWayHref}
+                          lang={lang === 'es' ? 'es' : 'en'}
+                          variant="toolbar"
+                        />
+                      </div>
+                    ) : null}
                   </div>
                 </div>
-                {showToolbarFinishNotice ? (
+                {!showSidebarTopRail && showToolbarBandAside ? (
                   <div className="levels-b2-practice__toolbar-band-aside">
-                    <PracticeHeaderFinishNotice notice={partFinishNotice} lang={lang} />
+                    <ExamPracticeToolbarBandAside
+                      showExerciseStarsInToolbarAside={showExerciseStarsInToolbarAside}
+                      exerciseStarsBadge={exerciseStarsBadge}
+                      showToolbarFinishNotice={showToolbarFinishNotice}
+                      partFinishNotice={partFinishNotice}
+                      lang={lang}
+                    />
                   </div>
                 ) : null}
               </div>
+            ) : null}
+            {showSidebarTopRail ? (
+              <ExamPracticeToolbarSubRail
+                showToolbarFinishNotice={showToolbarFinishNotice}
+                partFinishNotice={partFinishNotice}
+                lang={lang}
+              />
             ) : null}
             {showLegacyToolsRow ? (
               <div className="levels-b2-practice__status-tools-row">
@@ -667,7 +828,37 @@ export function B2ExamPracticeChrome({
                 ) : null}
               </div>
             ) : null}
-          </div>
+              </div>
+            );
+
+            if (!useFoldableToolbar) {
+              return practiceStatusPanel;
+            }
+
+            return (
+              <div className="exam-practice-skill-nav-disclosure exam-practice-toolbar-disclosure">
+                <button
+                  type="button"
+                  className="exam-practice-skill-nav-disclosure__trigger"
+                  aria-expanded={toolbarOpen}
+                  aria-controls="exam-practice-toolbar-panel"
+                  onClick={() => setToolbarOpen((open) => !open)}
+                >
+                  <span className="exam-practice-skill-nav-disclosure__title">
+                    {toolbarDisclosureTitle}
+                  </span>
+                  <span className="exam-practice-skill-nav-disclosure__chevron" aria-hidden>
+                    {toolbarOpen ? '▴' : '▾'}
+                  </span>
+                </button>
+                {toolbarOpen ? (
+                  <div className="exam-practice-skill-nav-disclosure__panel">
+                    {practiceStatusPanel}
+                  </div>
+                ) : null}
+              </div>
+            );
+          })()}
 
           {partFinishNoticePlacement === 'main' && partFinishNotice && !partFinishNotice.error ? (
             <LevelsPartFinishBanner
@@ -689,10 +880,8 @@ export function B2ExamPracticeChrome({
             />
           ) : null}
 
-          {partTabsVariant !== 'excel' ? partTabsEl : null}
+          {!useFoldableSkillNav && partTabsVariant !== 'excel' ? partTabsEl : null}
 
-          <ExamPracticeToolsProvider>
-            <ExamPracticeSidebarSlotsProvider exerciseStars={sidebarExerciseStars}>
               <div ref={workBodyRef} className="levels-b2-practice__work-body">
                 {children}
                 {showPractice && !loading && reportErrorContext ? (

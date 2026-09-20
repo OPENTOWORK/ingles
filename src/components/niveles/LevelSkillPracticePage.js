@@ -279,7 +279,9 @@ function LevelSkillPracticePageInner({ slug, skillRoute }) {
         ) : (
           <div
             className={`levels-listening-practice-layout${
-              showPracticeSideRail ? ' levels-listening-practice-layout--with-strategy' : ''
+              showPracticeSideRail
+                ? ' levels-listening-practice-layout--with-strategy levels-listening-practice-layout--side-under-toolbar'
+                : ''
             }${readingSession.focusMode ? ' levels-listening-practice-layout--focus' : ''}`}
           >
             <div

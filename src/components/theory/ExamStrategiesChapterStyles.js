@@ -14,10 +14,29 @@ export default function ExamStrategiesChapterStyles() {
       }
 
       .shell.content-hub-shell.exam-strategies-chapter-page {
-        max-width: none;
         width: 100%;
+        max-width: var(--content-hub-max-width);
         margin: 0 auto;
-        padding-bottom: 3.5rem;
+        padding: var(--content-hub-padding-y) var(--content-hub-padding-x) 3rem;
+        box-sizing: border-box;
+      }
+
+      .shell.content-hub-shell.exam-strategies-chapter-page .levels-b2-page-content {
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        box-sizing: border-box;
+      }
+
+      .shell.content-hub-shell.exam-strategies-chapter-page .page-hero,
+      .shell.content-hub-shell.exam-strategies-chapter-page .exam-strategies-chapter-body,
+      .shell.content-hub-shell.exam-strategies-chapter-page .exam-strategies-chapter-placeholder,
+      .shell.content-hub-shell.exam-strategies-chapter-page .exam-strategies-chapter-footer,
+      .shell.content-hub-shell.exam-strategies-chapter-page .exam-strategies-index {
+        width: 100%;
+        max-width: 100%;
+        margin-inline: 0;
+        box-sizing: border-box;
       }
 
       .exam-strategies-chapter-page .page-hero__mascot,

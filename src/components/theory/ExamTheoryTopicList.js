@@ -72,7 +72,7 @@ export default function ExamTheoryTopicList({
 
   return (
     <main
-      className="shell content-hub-shell teoria-page exam-theory-topics-page"
+      className="shell content-hub-shell teoria-page exam-theory-topics-page niveles-level-page--b2"
       style={{ '--exam-skill-accent': sectionAccent }}
     >
       <div className="levels-b2-page-content">

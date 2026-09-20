@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { useExamPracticeSidebarSlots } from '@/context/ExamPracticeSidebarSlotsContext';
+import { useFloatingOverlayTransition } from '@/hooks/useFloatingOverlayTransition';
 import { useStudyNotes } from '@/hooks/useStudyNotes';
 import { buildStudyNotesContextKey, formatStudyNoteDate } from '@/lib/studyNotes';
 
@@ -14,6 +16,9 @@ export default function ExamStudyNotesSidebar({
 }) {
   const en = lang === 'en';
   const [open, setOpen] = useState(false);
+  const [panelStyle, setPanelStyle] = useState(null);
+  const triggerRef = useRef(null);
+  const panelRef = useRef(null);
   const [draft, setDraft] = useState('');
   const [saving, setSaving] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
@@ -32,7 +37,49 @@ export default function ExamStudyNotesSidebar({
     return notes.filter((n) => n.contextKey === contextKey && n.id !== scratchNote?.id);
   }, [contextKey, notes, scratchNote?.id]);
 
-  const overlayRoot = overlayContainerRef?.current || null;
+  const { overlayContainerRef: overlayFromContext } = useExamPracticeSidebarSlots();
+  const overlayRef = overlayContainerRef ?? overlayFromContext;
+  const [overlayRoot, setOverlayRoot] = useState(null);
+  const { mounted: layerMounted, layerClassName } = useFloatingOverlayTransition(open);
+
+  useLayoutEffect(() => {
+    setOverlayRoot(overlayRef?.current ?? null);
+  }, [overlayRef, open]);
+
+  const syncPanelPosition = useCallback(() => {
+    const trigger = triggerRef.current;
+    if (!trigger) return;
+    const rect = trigger.getBoundingClientRect();
+    const width = Math.min(320, window.innerWidth - 24);
+    let left = rect.left;
+    if (left + width > window.innerWidth - 12) {
+      left = window.innerWidth - 12 - width;
+    }
+    left = Math.max(12, left);
+    const spaceBelow = window.innerHeight - rect.bottom - 12;
+    const maxHeight = Math.max(160, Math.min(window.innerHeight * 0.7, spaceBelow));
+    setPanelStyle({ top: rect.bottom + 8, left, width, maxHeight });
+  }, []);
+
+  useLayoutEffect(() => {
+    if ((!open && !layerMounted) || !overlayRoot) {
+      if (!layerMounted) setPanelStyle(null);
+      return undefined;
+    }
+    syncPanelPosition();
+    let raf = 0;
+    const onScrollOrResize = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(syncPanelPosition);
+    };
+    window.addEventListener('resize', onScrollOrResize);
+    window.addEventListener('scroll', onScrollOrResize, true);
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('resize', onScrollOrResize);
+      window.removeEventListener('scroll', onScrollOrResize, true);
+    };
+  }, [open, layerMounted, overlayRoot, syncPanelPosition]);
 
   useEffect(() => {
     if (!context || !open) return;
@@ -50,6 +97,19 @@ export default function ExamStudyNotesSidebar({
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return undefined;
+    const onPointerDown = (event) => {
+      const panel = panelRef.current;
+      const trigger = triggerRef.current;
+      if (panel?.contains(event.target)) return;
+      if (trigger?.contains(event.target)) return;
+      setOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => document.removeEventListener('pointerdown', onPointerDown);
   }, [open]);
 
   const labels = {
@@ -82,7 +142,11 @@ export default function ExamStudyNotesSidebar({
   };
 
   const panelContent = (
-    <div className="exam-notes-popover__panel">
+    <div
+      ref={panelRef}
+      className="exam-notes-popover__panel"
+      style={overlayRoot && panelStyle ? panelStyle : undefined}
+    >
       <header className="exam-notes-popover__head">
         <div>
           <h2 className="exam-notes-popover__title">{labels.title}</h2>
@@ -192,6 +256,7 @@ export default function ExamStudyNotesSidebar({
   return (
     <div className={`exam-notes-popover${open ? ' exam-notes-popover--open' : ''}`}>
       <button
+        ref={triggerRef}
         type="button"
         className="exam-notes-popover__trigger"
         onClick={() => setOpen((v) => !v)}
@@ -204,15 +269,13 @@ export default function ExamStudyNotesSidebar({
         <span className="exam-notes-popover__trigger-label">{labels.toggle}</span>
       </button>
 
-      {open && overlayRoot
+      {layerMounted && overlayRoot
         ? createPortal(
-            <div className="exam-notes-popover__layer" role="presentation">
-              <button
-                type="button"
-                className="exam-notes-popover__backdrop"
-                onClick={() => setOpen(false)}
-                aria-label={labels.close}
-              />
+            <div
+              className={`exam-notes-popover__layer ${layerClassName}`.trim()}
+              role="presentation"
+            >
+              <div className="exam-notes-popover__backdrop" aria-hidden />
               {panelContent}
             </div>,
             overlayRoot,

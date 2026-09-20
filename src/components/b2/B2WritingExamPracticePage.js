@@ -745,7 +745,7 @@ function B2WritingExamPracticePageInner() {
       classes.push(
         narrowWritingLayout
           ? 'b2-writing-layout--stack'
-          : 'levels-listening-practice-layout--with-strategy',
+          : 'levels-listening-practice-layout--with-strategy levels-listening-practice-layout--side-under-toolbar',
       );
     }
     if (readingSession.focusMode) {

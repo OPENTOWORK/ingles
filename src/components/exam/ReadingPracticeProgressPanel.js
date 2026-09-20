@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
+import ExamPracticeRailDisclosure from '@/components/exam/ExamPracticeRailDisclosure';
 import { getWeakAreas, getWeakAreaTheoryHref } from '@/lib/readingPracticeWeakAreas';
 import ExamPracticePartScoreHistorySection from '@/components/exam/ExamPracticePartScoreHistorySection';
 
@@ -75,7 +75,6 @@ export default function ReadingPracticeProgressPanel({
   accuracyByPoints = null,
 }) {
   const en = lang === 'en';
-  const [open, setOpen] = useState(false);
 
   const isV2 = scoringVersion === 2 && maxPoints > 0;
   const answeredCount =
@@ -118,19 +117,11 @@ export default function ReadingPracticeProgressPanel({
   };
 
   return (
-    <aside className="levels-listening-strategy levels-listening-strategy--progress">
-      <button
-        type="button"
-        className="levels-listening-strategy__toggle levels-listening-strategy__toggle--progress"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        <span>{labels.title}</span>
-        <span aria-hidden>{open ? '−' : '+'}</span>
-      </button>
-
-      {open ? (
-        <div className="levels-listening-strategy__body">
+    <ExamPracticeRailDisclosure
+      title={labels.title}
+      asideClassName="levels-listening-strategy levels-listening-strategy--progress"
+      toggleClassName="levels-listening-strategy__toggle levels-listening-strategy__toggle--progress"
+    >
           {progressBySlot ? (
             <ExamPracticePartScoreHistorySection
               partNumber={partNumber}
@@ -287,8 +278,6 @@ export default function ReadingPracticeProgressPanel({
               </div>
             ) : null}
           </section>
-        </div>
-      ) : null}
-    </aside>
+    </ExamPracticeRailDisclosure>
   );
 }

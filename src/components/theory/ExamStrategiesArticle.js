@@ -46,7 +46,7 @@ export default function ExamStrategiesArticle({
 
   return (
     <main
-      className="shell content-hub-shell teoria-page exam-strategies-chapter-page"
+      className="shell content-hub-shell teoria-page exam-strategies-chapter-page niveles-level-page--b2"
       style={{ '--chapter-accent': sectionAccent, '--exam-skill-accent': sectionAccent }}
     >
       <div className="levels-b2-page-content">

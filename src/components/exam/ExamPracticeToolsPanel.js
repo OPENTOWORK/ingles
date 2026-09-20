@@ -1,14 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import { useExamPracticeTools, HIGHLIGHT_COLORS } from '@/context/ExamPracticeToolsContext';
+import ExamPracticeRailDisclosure from '@/components/exam/ExamPracticeRailDisclosure';
 
 /**
  * Herramientas de lectura: lupa (zoom), subrayado, espaciado.
  */
 export default function ExamPracticeToolsPanel({ lang = 'en' }) {
   const en = lang === 'en';
-  const [open, setOpen] = useState(false);
   const tools = useExamPracticeTools();
 
   const labels = {
@@ -27,19 +26,11 @@ export default function ExamPracticeToolsPanel({ lang = 'en' }) {
   };
 
   return (
-    <aside className="levels-listening-strategy levels-listening-strategy--tools">
-      <button
-        type="button"
-        className="levels-listening-strategy__toggle levels-listening-strategy__toggle--tools"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-      >
-        <span>{labels.title}</span>
-        <span aria-hidden>{open ? '−' : '+'}</span>
-      </button>
-
-      {open ? (
-        <div className="levels-listening-strategy__body">
+    <ExamPracticeRailDisclosure
+      title={labels.title}
+      asideClassName="levels-listening-strategy levels-listening-strategy--tools"
+      toggleClassName="levels-listening-strategy__toggle levels-listening-strategy__toggle--tools"
+    >
           <section>
             <h3 className="levels-listening-strategy__heading">{labels.magnifier}</h3>
             <p className="levels-listening-strategy__tool-hint">
@@ -100,8 +91,6 @@ export default function ExamPracticeToolsPanel({ lang = 'en' }) {
               ↔ {labels.spacing}
             </button>
           </section>
-        </div>
-      ) : null}
-    </aside>
+    </ExamPracticeRailDisclosure>
   );
 }

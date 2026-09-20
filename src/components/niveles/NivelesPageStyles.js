@@ -17,10 +17,10 @@ export default function NivelesPageStyles() {
       }
       .niveles-page.shell.content-hub-shell,
       .niveles-page--theory-hub.shell.content-hub-shell {
-        max-width: none;
+        max-width: var(--content-hub-max-width);
         width: 100%;
         margin: 0 auto;
-        padding: var(--levels-b2-page-padding-y) var(--levels-b2-page-padding-x);
+        padding: var(--content-hub-padding-y) var(--content-hub-padding-x) 3rem;
         box-sizing: border-box;
       }
       .niveles-page--theory-hub .exam-theory-section.section {

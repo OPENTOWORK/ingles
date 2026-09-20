@@ -4,9 +4,16 @@ import Link from 'next/link';
 import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
 
 /** Up to 3 stars (with halves) for the current skill test; links to Stars way when `href` is set. */
-export default function SkillExerciseStarsBadge({ stars = 0, href = null, lang = 'en' }) {
+export default function SkillExerciseStarsBadge({
+  stars = 0,
+  href = null,
+  lang = 'en',
+  variant = 'default',
+}) {
   const en = lang === 'en';
+  const toolbar = variant === 'toolbar';
   const value = Math.min(3, Math.max(0, Number(stars) || 0));
+  const badgeClass = `skill-exercise-stars-badge${toolbar ? ' skill-exercise-stars-badge--toolbar' : ''}`;
 
   const ariaLabel = href
     ? en
@@ -21,8 +28,8 @@ export default function SkillExerciseStarsBadge({ stars = 0, href = null, lang =
       <span className="skill-exercise-stars-badge__label">
         {en ? 'Test stars' : 'Estrellas del test'}
       </span>
-      <TheoryLevelStars stars={value} size="md" variant="gold" />
-      {href ? (
+      <TheoryLevelStars stars={value} size={toolbar ? 'lg' : 'md'} variant="gold" />
+      {href && !toolbar ? (
         <span className="skill-exercise-stars-badge__hint">
           {en ? 'Stars way to B2' : 'Stars way to B2'}
         </span>
@@ -34,7 +41,7 @@ export default function SkillExerciseStarsBadge({ stars = 0, href = null, lang =
     return (
       <Link
         href={href}
-        className="skill-exercise-stars-badge skill-exercise-stars-badge--link"
+        className={`${badgeClass} skill-exercise-stars-badge--link`}
         aria-label={ariaLabel}
       >
         {content}
@@ -43,7 +50,7 @@ export default function SkillExerciseStarsBadge({ stars = 0, href = null, lang =
   }
 
   return (
-    <div className="skill-exercise-stars-badge" aria-label={ariaLabel}>
+    <div className={badgeClass} aria-label={ariaLabel}>
       {content}
     </div>
   );

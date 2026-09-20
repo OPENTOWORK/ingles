@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import SubscriptionPlansSection from '@/components/subscriptions/SubscriptionPlansSection';
@@ -42,14 +41,6 @@ function PreciosContent() {
 
   return (
     <main className="dralo-ai-page precios-page" style={{ '--dralo-accent-solid': '#6366f1' }}>
-      <div className="page-hero-wrap__breadcrumb">
-        <nav className="breadcrumb" aria-label="Breadcrumb">
-          <Link href="/">Home</Link>
-          <span aria-hidden> / </span>
-          <span>Precios</span>
-        </nav>
-      </div>
-
       <PageHero
         eyebrow="Planes Dralo"
         title="Elige el plan que necesitas"

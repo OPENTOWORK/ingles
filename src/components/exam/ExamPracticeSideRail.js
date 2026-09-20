@@ -1,5 +1,7 @@
 'use client';
 
+import ExamPracticeSideColumnAnchor from '@/components/exam/ExamPracticeSideColumnAnchor';
+
 /**
  * Columna lateral: top (stats + notes) + Strategy + Progress + Tools.
  */
@@ -12,7 +14,7 @@ export default function ExamPracticeSideRail({
 }) {
   if (!topRail && !strategy && !progress && !tools && !finishNotice) return null;
 
-  return (
+  const rail = (
     <div className="levels-listening-practice-side">
       {topRail}
       {strategy || progress || tools || finishNotice ? (
@@ -25,4 +27,6 @@ export default function ExamPracticeSideRail({
       ) : null}
     </div>
   );
+
+  return <ExamPracticeSideColumnAnchor>{rail}</ExamPracticeSideColumnAnchor>;
 }
