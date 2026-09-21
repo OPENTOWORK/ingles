@@ -5,13 +5,12 @@ import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import { useConfirmedUserRole } from '@/context/UserRoleContext';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { getLevelExamSkillRoute, getLevelSkillNavLinks } from '@/data/nivelesLevelHub';
-import { APP_ROUTES, nivelesPathToExamPractice } from '@/config/appRoutes';
-import { studyTrackRecordProfileHref } from '@/lib/studyTrackRecord';
+import { nivelesPathToExamPractice } from '@/config/appRoutes';
 
 const LEVEL_SLUG = 'b2';
 
 /**
- * Acción principal, skills de B2 y progreso para el alumno.
+ * Accesos a las skills de B2 para el alumno.
  * Solo visible por debajo de 640px (`.home-student-board` está oculto por defecto).
  */
 export default function HomeStudentMobileBoard() {
@@ -23,17 +22,7 @@ export default function HomeStudentMobileBoard() {
 
   return (
     <section className="home-student-board">
-      <Link
-        href={APP_ROUTES.examPracticeDefaultLevel}
-        className="home-cta__btn home-student-board__cta"
-      >
-        Start practising
-      </Link>
-
-      <nav className="home-student-board__skills" aria-labelledby="home-student-board-title">
-        <h2 id="home-student-board-title" className="home-student-board__title">
-          B2 practice
-        </h2>
+      <nav className="home-student-board__skills" aria-label="Skills">
         <ul className="home-student-board__list">
           {skills.map((item) => {
             const label =
@@ -45,8 +34,9 @@ export default function HomeStudentMobileBoard() {
                 {locked ? (
                   <span
                     className="home-student-board__skill home-student-board__skill--locked"
+                    data-skill={item.theme}
                     aria-disabled="true"
-                    aria-label={`${label} locked`}
+                    aria-label={`${label}, coming soon`}
                   >
                     <ExamSkillIcon theme={item.theme} />
                     <span className="home-student-board__skill-label">{label}</span>
@@ -56,6 +46,7 @@ export default function HomeStudentMobileBoard() {
                   <Link
                     href={nivelesPathToExamPractice(item.href)}
                     className="home-student-board__skill"
+                    data-skill={item.theme}
                   >
                     <ExamSkillIcon theme={item.theme} />
                     <span className="home-student-board__skill-label">{label}</span>
@@ -66,10 +57,6 @@ export default function HomeStudentMobileBoard() {
           })}
         </ul>
       </nav>
-
-      <Link href={studyTrackRecordProfileHref()} className="home-student-board__progress">
-        Progress
-      </Link>
     </section>
   );
 }

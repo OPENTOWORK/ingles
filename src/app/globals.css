@@ -165,6 +165,18 @@ a:hover {
   justify-content: start;
 }
 
+.legal-footer-legal {
+  display: contents;
+}
+
+.legal-footer-toggle {
+  display: none;
+}
+
+.legal-footer-links {
+  display: contents;
+}
+
 .legal-footer-column--tagline {
   display: flex;
   flex-direction: column;
@@ -180,7 +192,13 @@ a:hover {
 
 @media (max-width: 900px) {
   .legal-footer-content {
+    grid-template-columns: 1fr;
+  }
+
+  .legal-footer-links {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 2rem;
   }
 
   .legal-footer-column--tagline {
@@ -192,9 +210,8 @@ a:hover {
 }
 
 @media (max-width: 640px) {
-  .legal-footer-content {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+  .legal-footer {
+    display: none;
   }
 }
 
@@ -1596,6 +1613,30 @@ body {
   min-height: 44px;
 }
 
+.app-nav__legal-note,
+.app-side-menu__sub .app-nav__legal-note {
+  margin: 0.35rem 1.25rem 0.5rem 2rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.app-nav__legal-tagline,
+.app-side-menu__sub .app-nav__legal-tagline {
+  margin: 0.75rem 1.25rem 0.85rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.app-nav__legal-tagline p,
+.app-side-menu__sub .app-nav__legal-tagline p {
+  margin: 0;
+}
+
 .app-nav__accordion-row {
   display: flex;
   align-items: stretch;
@@ -1638,6 +1679,21 @@ body {
 
 body.nav-open {
   overflow: hidden;
+}
+
+/* Acceso directo, iniciar estudio y mascota: solo con el menú lateral abierto. */
+@media (max-width: 1099px) {
+  body.has-home-side-menu:not(:has(.app-side-menu--open)) .site-header__install,
+  body.has-home-side-menu:not(:has(.app-side-menu--open)) .site-assistant-fab,
+  body.has-home-side-menu:not(:has(.app-side-menu--open)) .site-assistant-panel,
+  body.has-home-side-menu:not(:has(.app-side-menu--open)) .study-session-launcher {
+    display: none !important;
+  }
+
+  body.has-home-side-menu:has(.app-side-menu--open) .site-assistant-fab,
+  body.has-home-side-menu:has(.app-side-menu--open) .study-session-launcher {
+    z-index: 80;
+  }
 }
 
 /* ——— Home: menú lateral (solo móvil / tablet estrecha) ——— */
@@ -1688,6 +1744,14 @@ body.nav-open {
 
   .app-side-menu__tab:hover {
     background: #f8fafc;
+  }
+
+  /* En el móvil el botón queda a la altura de la mascota, no en el centro de la pantalla. */
+  @media (max-width: 639px) {
+    .app-side-menu__tab {
+      align-self: flex-start;
+      margin-top: 6.75rem;
+    }
   }
 
   .app-side-menu__panel {
@@ -1906,20 +1970,6 @@ body.nav-open {
   color: #fff;
   font-size: 1rem;
   line-height: 1;
-}
-
-.home-install-app__instructions {
-  max-width: 38rem;
-  margin: 0;
-  padding: 0.65rem 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  border-radius: 12px;
-  background: rgba(38, 27, 80, 0.42);
-  color: rgba(255, 255, 255, 0.96);
-  font-size: 0.8rem;
-  line-height: 1.45;
-  text-align: center;
-  backdrop-filter: blur(8px);
 }
 
 .home-page__title {
@@ -2358,12 +2408,28 @@ body.nav-open {
   color: #fff;
 }
 
-/* ——— Home del alumno en móvil (<640px): acción principal, skills B2 y progreso ——— */
+/* ——— Home del alumno en móvil (<640px): skills de B2 ——— */
 .home-student-board {
   display: none;
 }
 
 @media (max-width: 639px) {
+  /* El contenido cabe en la pantalla y, si no, el fondo claro del body asoma abajo. */
+  body:has(.home-page--student-mobile) {
+    background-color: #5b4bb7;
+  }
+
+  .page-content:has(> .home-page--student-mobile) {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+  }
+
+  .home-page--student-mobile {
+    flex: 1 1 auto;
+    min-height: calc(100dvh - var(--site-header-height));
+  }
+
   .home-page--student-mobile .home-student-board {
     display: flex;
     flex-direction: column;
@@ -2372,47 +2438,31 @@ body.nav-open {
     box-sizing: border-box;
   }
 
-  /*
-   * La pestaña «Menu» es fija, mide 2.45rem (39px medidos) y se centra verticalmente sobre
-   * el contenido. Se reserva su ancho menos el relleno mínimo que la Home ya aporta (1rem),
-   * para que ni las tarjetas ni el CTA ni Progress queden debajo. La rejilla pasa sola a una
-   * columna cuando lo que queda no da para dos.
-   */
-  body.has-home-side-menu .home-page--student-mobile .home-student-board {
-    padding-right: calc(2.45rem - 1rem);
-  }
-
-  .home-page--student-mobile .home-student-board__cta {
-    align-self: stretch;
-    min-height: 52px;
-    font-size: 1.05rem;
-  }
-
   .home-page--student-mobile .home-student-board__skills {
     width: 100%;
   }
 
-  .home-page--student-mobile .home-student-board__title {
-    margin: 0 0 0.7rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.78);
-  }
-
   .home-page--student-mobile .home-student-board__list {
     list-style: none;
-    margin: 0;
+    margin: 0 auto;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.6rem;
+    justify-content: center;
+    width: calc(100% - 1.45rem);
+    margin-inline: auto;
+  }
+
+  .home-page--student-mobile .home-student-board__list > li {
+    display: flex;
+    min-width: 0;
   }
 
   .home-page--student-mobile .home-student-board__skill {
     display: flex;
+    flex: 1 1 auto;
+    width: 100%;
     height: 100%;
     min-height: 5.5rem;
     box-sizing: border-box;
@@ -2449,32 +2499,108 @@ body.nav-open {
     color: rgba(255, 255, 255, 0.75);
   }
 
-  .home-page--student-mobile .home-student-board__skill-note {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  .home-page--student-mobile .home-student-board__skill[data-skill='reading'] {
+    --skill-accent: #0ea5e9;
+    --skill-chip: #0369a1;
+    --skill-surface: #f0f9ff;
+    --skill-surface-2: #e0f2fe;
+    --skill-border: #7dd3fc;
+    --skill-ink: #0c4a6e;
   }
 
-  .home-page--student-mobile .home-student-board__progress {
-    align-self: center;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 44px;
-    padding: 0.6rem 1.7rem;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.12);
+  .home-page--student-mobile .home-student-board__skill[data-skill='writing'] {
+    --skill-accent: #059669;
+    --skill-chip: #047857;
+    --skill-surface: #ecfdf5;
+    --skill-surface-2: #d1fae5;
+    --skill-border: #6ee7b7;
+    --skill-ink: #14532d;
+  }
+
+  .home-page--student-mobile .home-student-board__skill[data-skill='listening'] {
+    --skill-accent: #d97706;
+    --skill-chip: #b45309;
+    --skill-surface: #fffbeb;
+    --skill-surface-2: #fef3c7;
+    --skill-border: #fcd34d;
+    --skill-ink: #78350f;
+  }
+
+  .home-page--student-mobile .home-student-board__skill[data-skill='speaking'] {
+    --skill-accent: #db2777;
+    --skill-chip: #be185d;
+    --skill-surface: #fdf2f8;
+    --skill-surface-2: #fce7f3;
+    --skill-border: #f9a8d4;
+    --skill-ink: #831843;
+  }
+
+  .home-page--student-mobile .home-student-board__skill[data-skill] {
+    position: relative;
+    overflow: hidden;
+    border-color: var(--skill-border);
+    border-radius: 18px;
+    background: linear-gradient(165deg, #fff 0%, var(--skill-surface) 58%, var(--skill-surface-2) 100%);
+    color: var(--skill-ink);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.85),
+      0 10px 22px color-mix(in srgb, var(--skill-accent) 24%, transparent);
+  }
+
+  .home-page--student-mobile .home-student-board__skill[data-skill]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 4px;
+    background: var(--skill-accent);
+  }
+
+  .home-page--student-mobile .home-student-board__skill[data-skill] .exam-skill-icon {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 10px;
+    border-color: transparent;
+    background: var(--skill-chip);
     color: #fff;
-    font-size: 0.9375rem;
-    font-weight: 700;
-    text-decoration: none;
   }
 
-  .home-page--student-mobile .home-student-board__progress:focus-visible {
-    outline: 3px solid rgba(255, 255, 255, 0.85);
-    outline-offset: 2px;
+  .home-page--student-mobile .home-student-board__skill[data-skill] .exam-skill-icon__svg svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .home-page--student-mobile a.home-student-board__skill[data-skill]:active {
+    background: var(--skill-surface-2);
+  }
+
+  .home-page--student-mobile .home-student-board__skill--locked[data-skill] {
+    border-style: solid;
+  }
+
+  .home-page--student-mobile .home-student-board__skill-note {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 50%;
+    width: 145%;
+    margin: 0;
+    padding: 0.28rem 0;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    background: var(--skill-chip);
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    line-height: 1.2;
+    text-align: center;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16);
+  }
+
+  .home-page--student-mobile .home-how-trigger {
+    display: none;
   }
 
   /* Cabecera compacta: mascota, título y subtítulo; sin las tres features comerciales. */
@@ -2798,8 +2924,8 @@ body.nav-open {
   }
 }
 
-@media (max-width: 1024px) {
-  .home-install-app {
+@media (max-width: 1024px) and (min-width: 640px) {
+  .home-install-app:not(.home-install-app--header) {
     grid-column: 1 / -1;
     order: -2;
     display: flex;
@@ -2809,6 +2935,51 @@ body.nav-open {
     gap: 0.65rem;
     width: min(100%, 620px);
     margin-bottom: -0.65rem;
+  }
+}
+
+.site-header__install {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .home-hero > .home-install-app {
+    display: none !important;
+  }
+
+  .site-header__install {
+    display: none;
+  }
+
+  body:has(.app-side-menu--open) .site-header__install {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .home-install-app--header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: auto;
+    margin: 0;
+    gap: 0.35rem;
+  }
+
+  .home-install-app--header .home-install-app__button {
+    min-height: 32px;
+    padding: 0.18rem 0.5rem;
+    gap: 0.25rem;
+    font-size: 0.68rem;
+    box-shadow: 0 4px 12px rgba(34, 24, 74, 0.18);
+  }
+
+  .home-install-app--header .home-install-app__icon {
+    width: 0.95rem;
+    height: 0.95rem;
+    font-size: 0.65rem;
   }
 }
 

@@ -1,6 +1,9 @@
 'use client';
 
+import { useState } from 'react';
 import NavLink from '@/components/layout/NavLink';
+import DraloTagline from '@/components/DraloTagline';
+import { SITE_FOOTER_TAGLINE } from '@/lib/siteSeo';
 import { usePathname } from 'next/navigation';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
@@ -36,6 +39,9 @@ export function AppSharedDrawerNav({
 }) {
   const pathname = usePathname();
   const searchParams = useMountedSearchParams();
+  const [legalOpen, setLegalOpen] = useState(false);
+  const showMobileLegal = draloVariant === 'mobile' || draloVariant === 'side';
+  const legalSubClass = draloVariant === 'side' ? 'app-side-menu__sub' : 'app-nav__sub';
   const {
     guest,
     sectionLinks,
@@ -197,6 +203,72 @@ export function AppSharedDrawerNav({
         >
           {NAV_LINK_PROFILE.label}
         </NavLink>
+      ) : null}
+
+      {showMobileLegal ? (
+        <>
+          <button
+            type="button"
+            className={`${linkClass} app-nav__accordion${legalOpen ? ' is-open' : ''}`}
+            onClick={() => setLegalOpen((open) => !open)}
+            aria-expanded={legalOpen}
+          >
+            Legal y privacidad
+            <span aria-hidden>{legalOpen ? '▲' : '▼'}</span>
+          </button>
+          {legalOpen ? (
+            <div className={legalSubClass}>
+              <NavLink href="/terminos-condiciones" className={linkClass} onClick={onNavigate}>
+                Términos y condiciones
+              </NavLink>
+              <NavLink href="/aviso-legal" className={linkClass} onClick={onNavigate}>
+                Aviso legal
+              </NavLink>
+              <NavLink href="/politica-reembolsos" className={linkClass} onClick={onNavigate}>
+                Política de reembolsos
+              </NavLink>
+              <NavLink href="/normas-comunidad" className={linkClass} onClick={onNavigate}>
+                Normas de comunidad
+              </NavLink>
+              <NavLink href="/contact" className={linkClass} onClick={onNavigate}>
+                Contacta con nosotros
+              </NavLink>
+              <NavLink href="/politica-privacidad" className={linkClass} onClick={onNavigate}>
+                Política de privacidad
+              </NavLink>
+              <NavLink href="/politica-cookies" className={linkClass} onClick={onNavigate}>
+                Política de cookies
+              </NavLink>
+              <NavLink href="/proteccion-datos" className={linkClass} onClick={onNavigate}>
+                Protección de datos
+              </NavLink>
+              <NavLink href="/blog" className={linkClass} onClick={onNavigate}>
+                Blog
+              </NavLink>
+              <button
+                type="button"
+                className={linkClass}
+                onClick={() => {
+                  onNavigate?.();
+                  window.dispatchEvent(new Event('dralo:open-cookie-settings'));
+                }}
+              >
+                Ajustes de cookies
+              </button>
+              <p className="app-nav__legal-note">
+                En iPhone o iPad: pulsa Compartir y “Añadir a pantalla de inicio”. En Android: abre el
+                menú ⋮ y pulsa “Instalar aplicación”.
+              </p>
+              <div className="app-nav__legal-tagline">
+                <DraloTagline className="dralo-tagline--footer" />
+                <p>{SITE_FOOTER_TAGLINE}</p>
+                <p>
+                  © {new Date().getFullYear()} Dralo · Versión Alpha 1.0.0
+                </p>
+              </div>
+            </div>
+          ) : null}
+        </>
       ) : null}
 
       {showLogout ? (

@@ -37,8 +37,15 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
 
   useEffect(() => {
     document.body.classList.add('has-home-side-menu');
-    return () => document.body.classList.remove('has-home-side-menu');
+    return () => {
+      document.body.classList.remove('has-home-side-menu');
+      document.body.classList.remove('home-side-menu-open');
+    };
   }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle('home-side-menu-open', open);
+  }, [open]);
 
   const closeMenu = () => setOpen(false);
 

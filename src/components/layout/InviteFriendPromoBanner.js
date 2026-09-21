@@ -8,27 +8,38 @@ import { supabase } from '@/utils/supabaseClient';
 
 const SESSION_COLLAPSED_KEY = 'dralo_invite_promo_collapsed';
 
-function readCollapsed() {
-  if (typeof window === 'undefined') return false;
+/** true = plegado, false = abierto, null = sin elección guardada. */
+function readCollapsePreference() {
+  if (typeof window === 'undefined') return null;
   try {
-    return sessionStorage.getItem(SESSION_COLLAPSED_KEY) === '1';
+    const value = sessionStorage.getItem(SESSION_COLLAPSED_KEY);
+    if (value === '1') return true;
+    if (value === '0') return false;
+    return null;
   } catch {
-    return false;
+    return null;
   }
 }
 
-function writeCollapsed(collapsed) {
+function writeCollapsePreference(collapsed) {
   try {
-    if (collapsed) sessionStorage.setItem(SESSION_COLLAPSED_KEY, '1');
+    if (collapsed === true) sessionStorage.setItem(SESSION_COLLAPSED_KEY, '1');
+    else if (collapsed === false) sessionStorage.setItem(SESSION_COLLAPSED_KEY, '0');
     else sessionStorage.removeItem(SESSION_COLLAPSED_KEY);
   } catch {
     /* ignore */
   }
 }
 
+function defaultCollapsed() {
+  const preference = readCollapsePreference();
+  if (preference !== null) return preference;
+  return window.matchMedia('(max-width: 639px)').matches;
+}
+
 /**
  * Promo de referidos en la home (zona morada).
- * Al cerrar se pliega; en una nueva sesión del navegador vuelve a desplegarse.
+ * En móvil (<640px) empieza plegado. Al abrirlo o cerrarlo se recuerda en la sesión.
  */
 export default function InviteFriendPromoBanner() {
   const { session } = useUserRole();
@@ -40,7 +51,7 @@ export default function InviteFriendPromoBanner() {
       setReady(false);
       return;
     }
-    setCollapsed(readCollapsed());
+    setCollapsed(defaultCollapsed());
     setReady(true);
   }, [session?.user]);
 
@@ -49,8 +60,8 @@ export default function InviteFriendPromoBanner() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
-        writeCollapsed(false);
-        setCollapsed(false);
+        writeCollapsePreference(null);
+        setCollapsed(window.matchMedia('(max-width: 639px)').matches);
       }
     });
     return () => subscription.unsubscribe();
@@ -58,12 +69,12 @@ export default function InviteFriendPromoBanner() {
 
   const collapse = () => {
     setCollapsed(true);
-    writeCollapsed(true);
+    writeCollapsePreference(true);
   };
 
   const expand = () => {
     setCollapsed(false);
-    writeCollapsed(false);
+    writeCollapsePreference(false);
   };
 
   if (!session?.user || !ready) return null;

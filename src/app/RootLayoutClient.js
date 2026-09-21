@@ -66,6 +66,7 @@ function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/' }) {
           <span>Dralo Academy</span>
         </Link>
         {nav ? <div className="site-header__nav">{nav}</div> : null}
+        <div className="site-header__install" data-home-install-slot />
       </div>
     </header>
   );
@@ -110,6 +111,8 @@ function RootLayoutClientInner({ children }) {
   /** Evita renderizar el banner en SSR (LinkedIn y otros crawlers leían los botones como título). */
   const [cookieConsentHydrated, setCookieConsentHydrated] = useState(false);
   const [showCookieSettings, setShowCookieSettings] = useState(false);
+  /** Bloque Legal/Privacidad del footer: plegado por defecto en móvil. */
+  const [footerLegalOpen, setFooterLegalOpen] = useState(false);
   const [cookiePreferences, setCookiePreferences] = useState({
     necessary: true,
     analytics: false,
@@ -547,64 +550,83 @@ function RootLayoutClientInner({ children }) {
 
       <footer className="footer legal-footer">
         <div className="legal-footer-content">
-          <div className="legal-footer-column">
-            <p className="legal-footer-column__title">Legal</p>
-            <ul className="legal-footer-list">
-              <li>
-                <Link href="/terminos-condiciones">Términos y condiciones</Link>
-              </li>
-              <li>
-                <Link href="/aviso-legal">Aviso legal</Link>
-              </li>
-              <li>
-                <Link href="/politica-reembolsos">Política de reembolsos</Link>
-              </li>
-              <li>
-                <Link href="/normas-comunidad">Normas de comunidad</Link>
-              </li>
-              <li>
-                <Link href="/contact">Contacta con nosotros</Link>
-              </li>
-            </ul>
-          </div>
-          <div className="legal-footer-column">
-            <p className="legal-footer-column__title">Privacidad</p>
-            <ul className="legal-footer-list">
-              <li>
-                <Link href="/politica-privacidad">Política de privacidad</Link>
-              </li>
-              <li>
-                <Link href="/politica-cookies">Política de cookies</Link>
-              </li>
-              <li>
-                <Link href="/proteccion-datos">Protección de datos</Link>
-              </li>
-              <li>
-                <Link href="/blog">Blog</Link>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  className="legal-footer-link-btn"
-                  onClick={() => setShowCookieSettings(true)}
-                >
-                  Ajustes de cookies
-                </button>
-              </li>
-            </ul>
-          </div>
-          <div className="legal-footer-column legal-footer-column--tagline">
-            <DraloTagline className="dralo-tagline--footer" />
-            <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-copy--tagline-desc">
-              {SITE_FOOTER_TAGLINE}
-            </p>
-            <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-meta">
-              <span>© {new Date().getFullYear()} Dralo</span>
-              <span className="legal-footer-meta__sep" aria-hidden="true">
-                ·
+          <div className="legal-footer-legal">
+            <button
+              type="button"
+              className="legal-footer-toggle"
+              aria-expanded={footerLegalOpen}
+              aria-controls="legal-footer-links"
+              onClick={() => setFooterLegalOpen((open) => !open)}
+            >
+              <span>Legal y privacidad</span>
+              <span className="legal-footer-toggle__chevron" aria-hidden>
+                {footerLegalOpen ? '▴' : '▾'}
               </span>
-              <span className="legal-footer-version">Versión Alpha 1.0.0</span>
-            </p>
+            </button>
+            <div
+              id="legal-footer-links"
+              className={`legal-footer-links${footerLegalOpen ? ' is-open' : ''}`}
+            >
+              <div className="legal-footer-column">
+                <p className="legal-footer-column__title">Legal</p>
+                <ul className="legal-footer-list">
+                  <li>
+                    <Link href="/terminos-condiciones">Términos y condiciones</Link>
+                  </li>
+                  <li>
+                    <Link href="/aviso-legal">Aviso legal</Link>
+                  </li>
+                  <li>
+                    <Link href="/politica-reembolsos">Política de reembolsos</Link>
+                  </li>
+                  <li>
+                    <Link href="/normas-comunidad">Normas de comunidad</Link>
+                  </li>
+                  <li>
+                    <Link href="/contact">Contacta con nosotros</Link>
+                  </li>
+                </ul>
+              </div>
+              <div className="legal-footer-column">
+                <p className="legal-footer-column__title">Privacidad</p>
+                <ul className="legal-footer-list">
+                  <li>
+                    <Link href="/politica-privacidad">Política de privacidad</Link>
+                  </li>
+                  <li>
+                    <Link href="/politica-cookies">Política de cookies</Link>
+                  </li>
+                  <li>
+                    <Link href="/proteccion-datos">Protección de datos</Link>
+                  </li>
+                  <li>
+                    <Link href="/blog">Blog</Link>
+                  </li>
+                  <li>
+                    <button
+                      type="button"
+                      className="legal-footer-link-btn"
+                      onClick={() => setShowCookieSettings(true)}
+                    >
+                      Ajustes de cookies
+                    </button>
+                  </li>
+                </ul>
+              </div>
+              <div className="legal-footer-column legal-footer-column--tagline">
+                <DraloTagline className="dralo-tagline--footer" />
+                <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-copy--tagline-desc">
+                  {SITE_FOOTER_TAGLINE}
+                </p>
+                <p className="legal-footer-copy legal-footer-copy--tagline legal-footer-meta">
+                  <span>© {new Date().getFullYear()} Dralo</span>
+                  <span className="legal-footer-meta__sep" aria-hidden="true">
+                    ·
+                  </span>
+                  <span className="legal-footer-version">Versión Alpha 1.0.0</span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

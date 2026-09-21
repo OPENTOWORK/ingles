@@ -25,6 +25,7 @@ function SiteHeaderBrand({ nav = null }) {
           <span>Dralo Academy</span>
         </a>
         {nav ? <div className="site-header__nav">{nav}</div> : null}
+        <div className="site-header__install" data-home-install-slot />
       </div>
     </header>
   );
