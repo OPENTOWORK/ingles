@@ -1415,6 +1415,77 @@ body {
   font-size: 1rem;
 }
 
+/* Phone drawer only (<640px): --mobile toggle on white panel (not header bar styles). */
+@media (max-width: 639px) {
+  .app-nav__drawer .app-nav__drawer-nav .app-nav__night-mode.app-nav__night-mode--mobile {
+    width: calc(100% - 2rem);
+    align-self: center;
+    justify-content: flex-start;
+    margin: 0.35rem 1rem;
+    padding: 0.85rem 1rem;
+    min-height: 44px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 1rem;
+  }
+
+  .app-nav__drawer .app-nav__drawer-nav .app-nav__night-mode.app-nav__night-mode--mobile:hover {
+    background: #f1f5f9;
+    color: #4f46e5;
+    border-color: #cbd5e1;
+  }
+
+  .app-nav__drawer .app-nav__drawer-nav .app-nav__night-mode.app-nav__night-mode--mobile:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
+
+  .app-nav__drawer .app-nav__drawer-nav .app-nav__night-mode.app-nav__night-mode--mobile.app-nav__night-mode--active {
+    background: #fef3c7;
+    border-color: #fbbf24;
+    color: #78350f;
+  }
+
+  .app-nav__drawer .app-nav__drawer-nav .app-nav__night-mode.app-nav__night-mode--mobile.app-nav__night-mode--active:hover {
+    background: #fde68a;
+    border-color: #f59e0b;
+    color: #713f12;
+  }
+
+  body.reading-night-mode .app-nav__drawer .app-nav__drawer-nav .app-nav__night-mode.app-nav__night-mode--mobile {
+    border-color: #475569;
+    background: #334155;
+    color: #e2e8f0;
+  }
+
+  body.reading-night-mode .app-nav__drawer .app-nav__drawer-nav .app-nav__night-mode.app-nav__night-mode--mobile:hover {
+    background: #475569;
+    color: #f8fafc;
+    border-color: #64748b;
+  }
+
+  body.reading-night-mode
+    .app-nav__drawer
+    .app-nav__drawer-nav
+    .app-nav__night-mode.app-nav__night-mode--mobile.app-nav__night-mode--active {
+    background: #fef3c7;
+    border-color: #fbbf24;
+    color: #78350f;
+  }
+
+  body.reading-night-mode
+    .app-nav__drawer
+    .app-nav__drawer-nav
+    .app-nav__night-mode.app-nav__night-mode--mobile.app-nav__night-mode--active:hover {
+    background: #fde68a;
+    border-color: #f59e0b;
+    color: #713f12;
+  }
+}
+
 .app-nav__backdrop {
   display: none;
   position: fixed;
@@ -2285,6 +2356,154 @@ body.nav-open {
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.14);
   text-decoration: none;
   color: #fff;
+}
+
+/* ——— Home del alumno en móvil (<640px): acción principal, skills B2 y progreso ——— */
+.home-student-board {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .home-page--student-mobile .home-student-board {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /*
+   * La pestaña «Menu» es fija, mide 2.45rem (39px medidos) y se centra verticalmente sobre
+   * el contenido. Se reserva su ancho menos el relleno mínimo que la Home ya aporta (1rem),
+   * para que ni las tarjetas ni el CTA ni Progress queden debajo. La rejilla pasa sola a una
+   * columna cuando lo que queda no da para dos.
+   */
+  body.has-home-side-menu .home-page--student-mobile .home-student-board {
+    padding-right: calc(2.45rem - 1rem);
+  }
+
+  .home-page--student-mobile .home-student-board__cta {
+    align-self: stretch;
+    min-height: 52px;
+    font-size: 1.05rem;
+  }
+
+  .home-page--student-mobile .home-student-board__skills {
+    width: 100%;
+  }
+
+  .home-page--student-mobile .home-student-board__title {
+    margin: 0 0 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.78);
+  }
+
+  .home-page--student-mobile .home-student-board__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 0.6rem;
+  }
+
+  .home-page--student-mobile .home-student-board__skill {
+    display: flex;
+    height: 100%;
+    min-height: 5.5rem;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.9rem 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .home-page--student-mobile a.home-student-board__skill:active {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .home-page--student-mobile .home-student-board__skill:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.85);
+    outline-offset: 2px;
+  }
+
+  .home-page--student-mobile .home-student-board__skill--locked {
+    border-style: dashed;
+    background: rgba(255, 255, 255, 0.09);
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .home-page--student-mobile .home-student-board__skill-note {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .home-page--student-mobile .home-student-board__progress {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.6rem 1.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .home-page--student-mobile .home-student-board__progress:focus-visible {
+    outline: 3px solid rgba(255, 255, 255, 0.85);
+    outline-offset: 2px;
+  }
+
+  /* Cabecera compacta: mascota, título y subtítulo; sin las tres features comerciales. */
+  .home-page--student-mobile .home-page__inner {
+    gap: 1.4rem;
+  }
+
+  .home-page--student-mobile .home-hero {
+    gap: 0.9rem;
+  }
+
+  .home-page--student-mobile .home-page__features {
+    display: none;
+  }
+
+  .home-page--student-mobile .home-page__title {
+    margin-bottom: 0.5rem;
+    font-size: clamp(1.6rem, 7vw, 2.1rem);
+  }
+
+  .home-page--student-mobile .home-hero__subtitle {
+    margin-bottom: 0;
+    font-size: 1rem;
+  }
+
+  /* SiteMascot fija el ancho con estilo en línea; solo !important puede reducirlo aquí. */
+  .home-page--student-mobile .home-hero__mascot .site-mascot {
+    width: min(150px, 42vw) !important;
+  }
 }
 
 /* ——— Guided tour (spotlight) ——— */
@@ -7398,6 +7617,17 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 .exam-practice-skill-nav-disclosure__panel .exam-practice-skill-nav {
   margin-bottom: 0;
+}
+
+@media (max-width: 639px) {
+  .exam-practice-skill-nav-disclosure__trigger {
+    min-height: 44px;
+  }
+
+  .exam-practice-skill-nav-disclosure__trigger:focus-visible {
+    outline: 2px solid #4f46e5;
+    outline-offset: 2px;
+  }
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-skill-nav-disclosure__trigger {

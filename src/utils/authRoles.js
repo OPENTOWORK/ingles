@@ -1,5 +1,6 @@
 import { supabase } from '@/utils/supabaseClient';
 import { APP_ROUTES } from '@/config/appRoutes';
+import { roleFromConfirmedCache, shouldCacheResolvedRole } from '@/lib/userRoleResolution';
 export const ADMIN_EMAIL = 'direccion@opentowork.com';
 export const normalizeEmail = (email = '') => email.trim().toLowerCase();
 
@@ -146,6 +147,11 @@ export function peekCachedRoleName(userId) {
 }
 
 function readCachedRole(userId) {
+  return readCachedRoleEntry(userId)?.role ?? null;
+}
+
+/** Entradas anteriores a `confirmed` se tratan como no confirmadas. */
+function readCachedRoleEntry(userId) {
   if (typeof window === 'undefined' || !userId) return null;
   try {
     const raw = sessionStorage.getItem(`${ROLE_CACHE_PREFIX}${userId}`);
@@ -155,18 +161,18 @@ function readCachedRole(userId) {
       sessionStorage.removeItem(`${ROLE_CACHE_PREFIX}${userId}`);
       return null;
     }
-    return parsed.role;
+    return { role: parsed.role, confirmed: parsed.confirmed === true };
   } catch {
     return null;
   }
 }
 
-function writeCachedRole(userId, role) {
+function writeCachedRole(userId, role, confirmed = false) {
   if (typeof window === 'undefined' || !userId || !role) return;
   try {
     sessionStorage.setItem(
       `${ROLE_CACHE_PREFIX}${userId}`,
-      JSON.stringify({ role, t: Date.now() }),
+      JSON.stringify({ role, t: Date.now(), confirmed }),
     );
   } catch {
     /* quota / private mode */
@@ -188,7 +194,11 @@ export function clearAllRoleCaches() {
   }
 }
 
-async function fetchRoleNameFromDb(userId) {
+/**
+ * Devuelve `{ role, confirmed }`. `confirmed` es false en cada camino de respaldo:
+ * el rol sigue siendo 'student' para los consumidores, pero no se ha leído de verdad.
+ */
+async function fetchRoleFromDb(userId) {
   // Real tables: Usuarios_y_Perfil_users (rol_id) and Usuarios_y_Perfil_profiles.
   // Do not depend on the TABLE_NAME_MAP alias `user_profiles` alone — query the
   // physical relation names so server and remapped-client paths stay consistent.
@@ -200,7 +210,7 @@ async function fetchRoleNameFromDb(userId) {
 
   const embedded = userRow?.Usuarios_y_Perfil_roles;
   const embeddedName = Array.isArray(embedded) ? embedded[0]?.nombre : embedded?.nombre;
-  if (!userError && embeddedName) return embeddedName;
+  if (!userError && embeddedName) return { role: embeddedName, confirmed: true };
 
   let rolId = userRow?.rol_id ?? null;
   if (!rolId) {
@@ -222,7 +232,7 @@ async function fetchRoleNameFromDb(userId) {
     rolId = aliasRow?.rol_id ?? null;
   }
 
-  if (!rolId) return 'student';
+  if (!rolId) return { role: 'student', confirmed: false };
 
   const { data: roleRow, error: roleError } = await supabase
     .from('Usuarios_y_Perfil_roles')
@@ -230,18 +240,22 @@ async function fetchRoleNameFromDb(userId) {
     .eq('id', rolId)
     .single();
 
-  if (roleError || !roleRow?.nombre) return 'student';
-  return roleRow.nombre;
+  if (roleError || !roleRow?.nombre) return { role: 'student', confirmed: false };
+  return { role: roleRow.nombre, confirmed: true };
 }
 
-export const getRoleNameByUserId = async (userId, email = '') => {
+/**
+ * Igual que `getRoleNameByUserId`, indicando además si el rol se leyó realmente.
+ * Un rechazo se propaga como antes: quien llame debe tratarlo como no confirmado.
+ */
+export const resolveRoleByUserId = async (userId, email = '') => {
   if (normalizeEmail(email) === normalizeEmail(ADMIN_EMAIL)) {
-    return 'admin';
+    return { role: 'admin', confirmed: true };
   }
 
-  if (!userId) return 'student';
+  if (!userId) return { role: 'student', confirmed: false };
 
-  const cached = readCachedRole(userId);
+  const cached = roleFromConfirmedCache(readCachedRoleEntry(userId));
   if (cached) return cached;
 
   if (roleFetchInflight.has(userId)) {
@@ -249,9 +263,11 @@ export const getRoleNameByUserId = async (userId, email = '') => {
   }
 
   const fetchPromise = (async () => {
-    const role = await fetchRoleNameFromDb(userId);
-    writeCachedRole(userId, role);
-    return role;
+    const resolved = await fetchRoleFromDb(userId);
+    if (shouldCacheResolvedRole(resolved)) {
+      writeCachedRole(userId, resolved.role, true);
+    }
+    return resolved;
   })();
 
   roleFetchInflight.set(userId, fetchPromise);
@@ -261,6 +277,9 @@ export const getRoleNameByUserId = async (userId, email = '') => {
     roleFetchInflight.delete(userId);
   }
 };
+
+export const getRoleNameByUserId = async (userId, email = '') =>
+  (await resolveRoleByUserId(userId, email)).role;
 
 export const getRedirectPathByUserId = async (userId, email = '') => {
   const roleName = await getRoleNameByUserId(userId, email);

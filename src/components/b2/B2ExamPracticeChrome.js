@@ -267,7 +267,7 @@ export function B2ExamPracticeChrome({
   useEffect(() => {
     setSkillNavOpen(false);
     setToolbarOpen(false);
-  }, [pathname]);
+  }, [pathname, selectedPartId]);
   const handleSelectExamWithPlan = useCallback(
     (slot) => planGating.wrapSelectHandler(onSelectExam)(slot),
     [planGating, onSelectExam],

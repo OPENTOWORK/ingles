@@ -32,7 +32,7 @@ export default function AdminExamPartPromptBox({
   lang = 'es',
 }) {
   const [canAccess, setCanAccess] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -102,6 +102,10 @@ export default function AdminExamPartPromptBox({
     if (!canAccess) return;
     void loadPrompt();
   }, [canAccess, loadPrompt]);
+
+  useEffect(() => {
+    setCollapsed(true);
+  }, [slug, part, examSlot]);
 
   const handleSave = async () => {
     setSaving(true);

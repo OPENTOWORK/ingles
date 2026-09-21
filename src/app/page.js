@@ -6,10 +6,12 @@ import SiteMascot from '@/components/SiteMascot';
 import DraloTagline from '@/components/DraloTagline';
 import HomeHowItWorks from '@/components/home/HomeHowItWorks';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
+import HomeStudentMobileBoard from '@/components/home/HomeStudentMobileBoard';
 import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
 import FoundingMemberSlotsBanner from '@/components/home/FoundingMemberSlotsBanner';
 import { useGuidedTour } from '@/context/GuidedTourContext';
-import { useUserRole } from '@/context/UserRoleContext';
+import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
+import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { isStudentRole } from '@/utils/authRoles';
 
 const HomeInstallAppButton = dynamic(() => import('@/components/home/HomeInstallAppButton'), {
@@ -24,11 +26,14 @@ const FEATURES = [
 
 export default function Home() {
   const { session, userRole } = useUserRole();
+  const { roleConfirmed, userRole: confirmedRole } = useConfirmedUserRole();
   const { startTour } = useGuidedTour();
   const isRegistered = Boolean(session?.user);
   const isStudentView = isRegistered && isStudentRole(userRole);
+  /** Home de alumno en móvil: exige rol resuelto para esta misma sesión, no el valor por defecto. */
+  const showStudentBoard = roleConfirmed && usesStudentContentRestrictions(confirmedRole);
   return (
-    <main className="home-page">
+    <main className={`home-page${showStudentBoard ? ' home-page--student-mobile' : ''}`}>
       <div className="home-page__inner">
         {isRegistered ? <InviteFriendPromoBanner /> : <FoundingMemberSlotsBanner />}
         <section className="home-hero" aria-labelledby="home-title">
@@ -61,6 +66,8 @@ export default function Home() {
             <SiteMascot variant={10} width={300} priority alt="Dralo mascot" />
           </div>
         </section>
+
+        {showStudentBoard ? <HomeStudentMobileBoard /> : null}
 
         <blockquote className="home-quote">
           <DraloTagline />

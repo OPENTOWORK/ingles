@@ -30,7 +30,13 @@ function SiteHeaderBrand({ nav = null }) {
   );
 }
 
-export default function AuthenticatedAppShell({ session, userRole, onLogout, children }) {
+export default function AuthenticatedAppShell({
+  session,
+  userRole,
+  roleConfirmedForUserId = null,
+  onLogout,
+  children,
+}) {
   const pathname = usePathname();
   const preview = useItPreviewRole(userRole, session);
   useItPreviewAdminBuzonLayout();
@@ -46,7 +52,11 @@ export default function AuthenticatedAppShell({ session, userRole, onLogout, chi
       />
       <ProfileStudyTimerPill />
 
-      <UserRoleProvider userRole={preview.userRole} session={preview.session}>
+      <UserRoleProvider
+        userRole={preview.userRole}
+        session={preview.session}
+        roleConfirmedForUserId={roleConfirmedForUserId}
+      >
         <GuidedTourProvider>
           <PlacementAccessProvider session={preview.session} userRole={preview.userRole}>
             <PlacementTestNotice />

@@ -4,12 +4,13 @@ import dynamic from 'next/dynamic';
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { normalizeRoleName, getRoleNameByUserId, peekCachedRoleName } from '@/utils/authRoles';
+import { normalizeRoleName, resolveRoleByUserId, peekCachedRoleName } from '@/utils/authRoles';
 import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import { isMinimalLandingPath } from '@/utils/minimalLandingRoutes';
 import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
+import { nextRoleConfirmation } from '@/lib/userRoleResolution';
 
 const AUTH_FLOW_PATH_PREFIXES = ['/auth/callback', '/auth/confirm'];
 import Link from 'next/link';
@@ -103,6 +104,8 @@ function RootLayoutClientInner({ children }) {
   const [authPending, setAuthPending] = useState(true);
   const [session, setSession] = useState(null);
   const [userRole, setUserRole] = useState('student');
+  /** Id del usuario cuyo rol se ha leído realmente; null mientras esté pendiente o falle. */
+  const [roleConfirmedForUserId, setRoleConfirmedForUserId] = useState(null);
   const [cookieConsent, setCookieConsent] = useState(null);
   /** Evita renderizar el banner en SSR (LinkedIn y otros crawlers leían los botones como título). */
   const [cookieConsentHydrated, setCookieConsentHydrated] = useState(false);
@@ -114,6 +117,8 @@ function RootLayoutClientInner({ children }) {
   });
   const roleFetchedForUserIdRef = useRef(null);
   const lastAccessTokenRef = useRef(null);
+  /** Usuario vigente: descarta respuestas de rol que llegan tras un cambio de usuario. */
+  const currentUserIdRef = useRef(null);
 
   const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
@@ -168,6 +173,9 @@ function RootLayoutClientInner({ children }) {
         roleFetchedForUserIdRef.current === uid;
 
       lastAccessTokenRef.current = accessToken;
+      const previousUid = currentUserIdRef.current;
+      currentUserIdRef.current = uid;
+      if (previousUid !== uid) setRoleConfirmedForUserId(null);
       setSession(newSession);
 
       if (!uid) {
@@ -186,10 +194,17 @@ function RootLayoutClientInner({ children }) {
 
       if (sameSession) return;
 
-      void getRoleNameByUserId(uid, newSession.user.email).then((roleName) => {
+      void resolveRoleByUserId(uid, newSession.user.email).then(({ role, confirmed }) => {
         if (cancelled) return;
+        const next = nextRoleConfirmation({
+          currentUserId: currentUserIdRef.current,
+          resolvedForUserId: uid,
+          confirmed,
+        });
+        if (!next.apply) return;
         roleFetchedForUserIdRef.current = uid;
-        setUserRole(normalizeRoleName(roleName));
+        setUserRole(normalizeRoleName(role));
+        setRoleConfirmedForUserId(next.confirmedForUserId);
       });
     };
 
@@ -203,16 +218,25 @@ function RootLayoutClientInner({ children }) {
         clearAssistantDismissed();
         lastAccessTokenRef.current = newSession.access_token ?? null;
         roleFetchedForUserIdRef.current = null;
+        const uid = newSession.user?.id ?? null;
+        currentUserIdRef.current = uid;
+        setRoleConfirmedForUserId(null);
         setSession(newSession);
         setAuthPending(false);
-        const uid = newSession.user?.id;
         if (uid) {
           const cachedRole = peekCachedRoleName(uid);
           if (cachedRole) setUserRole(normalizeRoleName(cachedRole));
-          void getRoleNameByUserId(uid, newSession.user.email).then((roleName) => {
+          void resolveRoleByUserId(uid, newSession.user.email).then(({ role, confirmed }) => {
             if (cancelled) return;
+            const next = nextRoleConfirmation({
+              currentUserId: currentUserIdRef.current,
+              resolvedForUserId: uid,
+              confirmed,
+            });
+            if (!next.apply) return;
             roleFetchedForUserIdRef.current = uid;
-            setUserRole(normalizeRoleName(roleName));
+            setUserRole(normalizeRoleName(role));
+            setRoleConfirmedForUserId(next.confirmedForUserId);
           });
         }
         return;
@@ -221,6 +245,8 @@ function RootLayoutClientInner({ children }) {
         if (cancelled) return;
         lastAccessTokenRef.current = null;
         roleFetchedForUserIdRef.current = null;
+        currentUserIdRef.current = null;
+        setRoleConfirmedForUserId(null);
         setSession(null);
         setUserRole('student');
         if (!allowWithoutAuth) setAuthPending(false);
@@ -356,6 +382,8 @@ function RootLayoutClientInner({ children }) {
   const handleLogout = () => {
     lastAccessTokenRef.current = null;
     roleFetchedForUserIdRef.current = null;
+    currentUserIdRef.current = null;
+    setRoleConfirmedForUserId(null);
     setSession(null);
     setUserRole('student');
     void performLogout();
@@ -415,7 +443,12 @@ function RootLayoutClientInner({ children }) {
           <main className="page-content page-content--conversion-landing">{children}</main>
         </>
       ) : (
-        <AuthenticatedAppShell session={session} userRole={userRole} onLogout={handleLogout}>
+        <AuthenticatedAppShell
+          session={session}
+          userRole={userRole}
+          roleConfirmedForUserId={roleConfirmedForUserId}
+          onLogout={handleLogout}
+        >
           {children}
         </AuthenticatedAppShell>
       )}
