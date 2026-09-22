@@ -28,6 +28,14 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Visualización móvil/tablet. No leer ni refrescar cookies: rotaría el token
+  // de la ventana principal. Una pestaña normal (sec-fetch-dest: document) sigue el gate.
+  if (isItPreviewFrameRequest(request)) {
+    const headers = new Headers(request.headers);
+    headers.delete('cookie');
+    return NextResponse.next({ request: { headers } });
+  }
+
   let response = NextResponse.next({ request });
 
   const supabaseUrl = getSupabaseUrl() ?? '';
@@ -65,6 +73,35 @@ export async function middleware(request: NextRequest) {
   }
 
   return response;
+}
+
+function requestHasPreviewMark(request: NextRequest) {
+  return (
+    request.nextUrl.searchParams.has('_itPreview') ||
+    request.nextUrl.searchParams.has('itPreviewRole')
+  );
+}
+
+function refererHasPreviewMark(request: NextRequest) {
+  const referer = request.headers.get('referer');
+  if (!referer) return false;
+  try {
+    const url = new URL(referer);
+    if (url.origin !== request.nextUrl.origin) return false;
+    return url.searchParams.has('_itPreview') || url.searchParams.has('itPreviewRole');
+  } catch {
+    return false;
+  }
+}
+
+function isItPreviewFrameRequest(request: NextRequest) {
+  const dest = request.headers.get('sec-fetch-dest');
+  if (dest === 'document') return false;
+  if (dest === 'iframe' && requestHasPreviewMark(request)) return true;
+  if (dest === 'empty' && (requestHasPreviewMark(request) || refererHasPreviewMark(request))) {
+    return true;
+  }
+  return false;
 }
 
 export const config = {

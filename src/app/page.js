@@ -9,10 +9,12 @@ import HomeQuickNav from '@/components/home/HomeQuickNav';
 import HomeStudentMobileBoard from '@/components/home/HomeStudentMobileBoard';
 import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
 import FoundingMemberSlotsBanner from '@/components/home/FoundingMemberSlotsBanner';
+import { useEffect, useState } from 'react';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { isStudentRole } from '@/utils/authRoles';
+import { supabase } from '@/utils/supabaseClient';
 
 const HomeInstallAppButton = dynamic(() => import('@/components/home/HomeInstallAppButton'), {
   ssr: false,
@@ -32,10 +34,28 @@ export default function Home() {
   const isStudentView = isRegistered && isStudentRole(userRole);
   /** Home de alumno en móvil: exige rol resuelto para esta misma sesión, no el valor por defecto. */
   const showStudentBoard = roleConfirmed && usesStudentContentRestrictions(confirmedRole);
+  /** null hasta leer la sesión; false = invitado, true = hay usuario. */
+  const [hasStoredUser, setHasStoredUser] = useState(null);
+  const isGuestHome = hasStoredUser === false && !session?.user;
+  /** Misma Home de app en móvil para alumno confirmado y para quien no ha iniciado sesión. */
+  const showAppHome = showStudentBoard || isGuestHome;
+
+  useEffect(() => {
+    let cancelled = false;
+    supabase.auth.getSession().then(({ data }) => {
+      if (cancelled) return;
+      setHasStoredUser(Boolean(data.session?.user));
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.user?.id]);
+
   return (
-    <main className={`home-page${showStudentBoard ? ' home-page--student-mobile' : ''}`}>
+    <main className={`home-page${showAppHome ? ' home-page--student-mobile' : ''}`}>
       <div className="home-page__inner">
         {isRegistered ? <InviteFriendPromoBanner /> : <FoundingMemberSlotsBanner />}
+        {isGuestHome ? <InviteFriendPromoBanner guest /> : null}
         <section className="home-hero" aria-labelledby="home-title">
           <HomeInstallAppButton />
 
@@ -67,7 +87,7 @@ export default function Home() {
           </div>
         </section>
 
-        {showStudentBoard ? <HomeStudentMobileBoard /> : null}
+        {showAppHome ? <HomeStudentMobileBoard guest={isGuestHome} /> : null}
 
         <blockquote className="home-quote">
           <DraloTagline />

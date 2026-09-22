@@ -10,6 +10,7 @@ import { DRALO_MENU_ITEMS, getGuestLoginHref } from '@/config/appNavMenu';
 export function DraloAiNavMenuItems({
   locked = false,
   guestRequiresLogin = false,
+  guestEntryHref = null,
   variant = 'desktop',
   onNavigate,
 }) {
@@ -27,7 +28,7 @@ export function DraloAiNavMenuItems({
           return (
             <NavLink
               key={item.href}
-              href={getGuestLoginHref(item.href)}
+              href={guestEntryHref || getGuestLoginHref(item.href)}
               role="menuitem"
               className={itemClass}
               onClick={onNavigate}

@@ -92,6 +92,7 @@ function DevicePreview({ device, src, reloadToken }) {
             key={`${device.id}-${src}`}
             title={`Vista ${device.label}`}
             src={src}
+            credentialless=""
             width={device.width}
             height={device.height}
             className="block bg-white"
@@ -168,9 +169,9 @@ export default function ItResponsivePreviewPanel() {
       <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-900">Visualización en móvil y tablet</h2>
         <p className="mt-1 max-w-3xl text-sm text-slate-600">
-          Previsualiza la web en móvil y tablet con la misma lógica de acceso que en escritorio:
-          Sin sesión, Exam Strategies, Exam practice y Dralo AI redirigen al login. Elige un rol para simular
-          menús y accesos; tu sesión real sigue teniendo permisos de admin o informático.
+          Dentro de móvil y tablet puedes iniciar y cerrar sesión con otras cuentas, o quedarte sin sesión.
+          Eso no cierra la tuya. Cada marco tiene su propia sesión. Visitante muestra la web sin login; el
+          resto de roles cambia los menús de esa vista.
         </p>
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">

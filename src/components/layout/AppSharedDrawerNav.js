@@ -36,6 +36,8 @@ export function AppSharedDrawerNav({
   onLogout,
   showNightMode = true,
   draloVariant = 'mobile',
+  /** Si viene informado, las opciones de la app (no el bloque legal) van aquí. Solo Home móvil sin sesión. */
+  guestEntryHref = null,
 }) {
   const pathname = usePathname();
   const searchParams = useMountedSearchParams();
@@ -76,7 +78,7 @@ export function AppSharedDrawerNav({
                 examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
               }`}
             >
-              <NavLink href={item.href} className={`${linkClass} app-nav__accordion-link`} onClick={onNavigate}>
+              <NavLink href={guestEntryHref || item.href} className={`${linkClass} app-nav__accordion-link`} onClick={onNavigate}>
                 {item.label}
               </NavLink>
               <button
@@ -94,6 +96,7 @@ export function AppSharedDrawerNav({
                 <ExamStrategiesNavMenuItems
                   locked={examStrategiesLocked}
                   guestRequiresLogin={guest}
+                  guestEntryHref={guestEntryHref}
                   variant={draloVariant}
                   onNavigate={onNavigate}
                 />
@@ -103,7 +106,7 @@ export function AppSharedDrawerNav({
         ) : (
           <NavLink
             key={item.href}
-            href={item.href}
+            href={guestEntryHref || item.href}
             className={linkClass}
             onClick={onNavigate}
             {...(item.tourId ? { 'data-tour': item.tourId } : {})}
@@ -132,6 +135,7 @@ export function AppSharedDrawerNav({
               <DraloAiNavMenuItems
                 locked={draloLocked}
                 guestRequiresLogin={guest}
+                guestEntryHref={guestEntryHref}
                 variant={draloVariant}
                 onNavigate={onNavigate}
               />

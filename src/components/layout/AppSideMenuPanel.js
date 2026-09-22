@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useUserRole } from '@/context/UserRoleContext';
 import { buildAppNavModel } from '@/config/appNavMenu';
 import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
@@ -19,6 +20,8 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
   const [draloOpen, setDraloOpen] = useState(false);
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
+  const [isPhone, setIsPhone] = useState(false);
+  const [portalReady, setPortalReady] = useState(false);
   const { locked: examStrategiesPlanLocked } = useExamStrategiesAccess({ userRole, session });
   const navModel = useMemo(() => {
     const base = buildAppNavModel(userRole, session);
@@ -34,6 +37,18 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
     setDraloOpen(false);
     setAdminPanelsOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    setPortalReady(true);
+  }, []);
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 639px)');
+    const sync = () => setIsPhone(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
 
   useEffect(() => {
     document.body.classList.add('has-home-side-menu');
@@ -53,7 +68,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
     void performLogout();
   };
 
-  return (
+  const menu = (
     <aside
       className={`app-side-menu${open ? ' app-side-menu--open' : ' app-side-menu--collapsed'}`}
       aria-label="Site menu"
@@ -99,9 +114,13 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             onLogout={handleLogout}
             showNightMode={false}
             draloVariant="side"
+            guestEntryHref={!session && isPhone ? '/registro' : null}
           />
         </nav>
       </div>
     </aside>
   );
+
+  if (!portalReady) return null;
+  return createPortal(menu, document.body);
 }

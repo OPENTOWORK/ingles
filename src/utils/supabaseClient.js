@@ -29,7 +29,51 @@ const supabaseAnonKey = !isPlaceholder(envSupabaseAnonKey)
   ? envSupabaseAnonKey
   : DEFAULT_SUPABASE_ANON_KEY;
 
-export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+/** Sesión de los iframes de visualización. No comparte cookies con la ventana principal. */
+const PREVIEW_AUTH_JAR_KEY = 'dralo-it-preview-auth-jar';
+
+function isEmbeddedPreviewFrame() {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.self !== window.top;
+  } catch {
+    return true;
+  }
+}
+
+function createPreviewAuthCookies() {
+  const readJar = () => {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(PREVIEW_AUTH_JAR_KEY) || '{}');
+      return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch {
+      return {};
+    }
+  };
+
+  return {
+    getAll() {
+      return Object.entries(readJar()).map(([name, value]) => ({
+        name,
+        value: String(value ?? ''),
+      }));
+    },
+    setAll(cookies) {
+      const jar = readJar();
+      cookies.forEach(({ name, value }) => {
+        if (!value) delete jar[name];
+        else jar[name] = value;
+      });
+      localStorage.setItem(PREVIEW_AUTH_JAR_KEY, JSON.stringify(jar));
+    },
+  };
+}
+
+export const supabase = createBrowserClient(
+  supabaseUrl,
+  supabaseAnonKey,
+  isEmbeddedPreviewFrame() ? { cookies: createPreviewAuthCookies() } : undefined,
+);
 
 // Compatibility layer: maps legacy frontend table names to current Supabase names.
 const TABLE_NAME_MAP = {

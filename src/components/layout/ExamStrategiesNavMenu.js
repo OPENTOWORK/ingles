@@ -10,6 +10,7 @@ import { EXAM_STRATEGIES_MENU_ITEMS, getGuestLoginHref } from '@/config/appNavMe
 export function ExamStrategiesNavMenuItems({
   locked = false,
   guestRequiresLogin = false,
+  guestEntryHref = null,
   variant = 'desktop',
   onNavigate,
 }) {
@@ -39,7 +40,7 @@ export function ExamStrategiesNavMenuItems({
         return (
           <NavLink
             key={item.href}
-            href={guestRequiresLogin ? getGuestLoginHref(item.href) : item.href}
+            href={guestRequiresLogin ? guestEntryHref || getGuestLoginHref(item.href) : item.href}
             role="menuitem"
             className={itemClass}
             onClick={onNavigate}

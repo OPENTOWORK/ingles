@@ -1746,16 +1746,43 @@ body.nav-open {
     background: #f8fafc;
   }
 
-  /* En el móvil el botón queda a la altura de la mascota, no en el centro de la pantalla. */
+  /* En el móvil la pestaña es pequeña, a la altura de la mascota y pegada al borde. */
   @media (max-width: 639px) {
+    .app-side-menu {
+      top: 11rem;
+      right: 0;
+      bottom: auto;
+      height: auto;
+      max-height: none;
+      z-index: 80;
+      overflow: visible;
+    }
+
     .app-side-menu__tab {
       align-self: flex-start;
-      margin-top: 6.75rem;
+      margin-top: 0;
+      flex-shrink: 0;
+      padding: 0.7rem 0.3rem;
+      border-radius: 12px 0 0 12px;
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 0.72rem;
+      letter-spacing: 0.02em;
+      box-shadow: -2px 0 10px rgba(15, 23, 42, 0.18);
+    }
+
+    /* Abierto, el panel arranca bajo la cabecera y no en la altura de la pestaña. */
+    .app-side-menu--open {
+      top: calc(env(safe-area-inset-top, 0px) + 4.5rem);
+      bottom: max(12px, env(safe-area-inset-bottom, 0px));
+      height: auto;
+      max-height: calc(100dvh - 5.25rem);
     }
   }
 
   .app-side-menu__panel {
     width: min(300px, 88vw);
+    min-width: 0;
+    flex-shrink: 0;
     background: #fff;
     color: #1e293b;
     border-radius: 14px 0 0 14px;
@@ -2413,21 +2440,49 @@ body.nav-open {
   display: none;
 }
 
+@media (min-width: 640px) {
+  .invite-promo-banner--guest {
+    display: none;
+  }
+}
+
 @media (max-width: 639px) {
-  /* El contenido cabe en la pantalla y, si no, el fondo claro del body asoma abajo. */
+  .it-preview-role-banner {
+    display: none;
+  }
+
+  /* La Home de app ocupa la pantalla y no se desplaza. El recorte va en la página, no en html/body, para no cortar el menú fijo. */
+  html:has(.home-page--student-mobile),
   body:has(.home-page--student-mobile) {
+    height: 100%;
+    overscroll-behavior: none;
     background-color: #5b4bb7;
   }
 
-  .page-content:has(> .home-page--student-mobile) {
+  body:has(.home-page--student-mobile) .page-content {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
+    min-height: 0;
+    overflow: visible;
   }
 
   .home-page--student-mobile {
     flex: 1 1 auto;
-    min-height: calc(100dvh - var(--site-header-height));
+    min-height: 0;
+    height: calc(100dvh - var(--site-header-height));
+    max-height: calc(100dvh - var(--site-header-height));
+    overflow: hidden;
+  }
+
+  .home-page--student-mobile .founding-slots-banner--home,
+  .home-page--student-mobile .home-hero__cta {
+    display: none;
+  }
+
+  /* La pestaña «Menu» es fija sobre el borde derecho: el banner no pasa por debajo. */
+  body.has-home-side-menu .home-page--student-mobile .invite-promo-banner--home {
+    padding-right: 1.6rem;
   }
 
   .home-page--student-mobile .home-student-board {

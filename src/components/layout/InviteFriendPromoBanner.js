@@ -41,19 +41,24 @@ function defaultCollapsed() {
  * Promo de referidos en la home (zona morada).
  * En móvil (<640px) empieza plegado. Al abrirlo o cerrarlo se recuerda en la sesión.
  */
-export default function InviteFriendPromoBanner() {
+export default function InviteFriendPromoBanner({ guest = false }) {
   const { session } = useUserRole();
   const [collapsed, setCollapsed] = useState(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    if (guest) {
+      setCollapsed(defaultCollapsed());
+      setReady(true);
+      return;
+    }
     if (!session?.user) {
       setReady(false);
       return;
     }
     setCollapsed(defaultCollapsed());
     setReady(true);
-  }, [session?.user]);
+  }, [guest, session?.user]);
 
   useEffect(() => {
     const {
@@ -77,11 +82,14 @@ export default function InviteFriendPromoBanner() {
     writeCollapsePreference(false);
   };
 
-  if (!session?.user || !ready) return null;
+  if ((!guest && !session?.user) || !ready) return null;
+
+  const inviteHref = guest ? '/registro' : '/perfil?tab=settings&invite=1';
+  const guestClass = guest ? ' invite-promo-banner--guest' : '';
 
   if (collapsed) {
     return (
-      <div className="invite-promo-banner invite-promo-banner--home invite-promo-banner--folded">
+      <div className={`invite-promo-banner invite-promo-banner--home invite-promo-banner--folded${guestClass}`}>
         <button
           type="button"
           className="invite-promo-banner__fold-trigger"
@@ -98,7 +106,7 @@ export default function InviteFriendPromoBanner() {
 
   return (
     <div
-      className="invite-promo-banner invite-promo-banner--home"
+      className={`invite-promo-banner invite-promo-banner--home${guestClass}`}
       role="region"
       aria-label="Referral offer"
       aria-expanded="true"
@@ -111,7 +119,7 @@ export default function InviteFriendPromoBanner() {
           <strong>Invite a friend and get 2 months free</strong>
           <span className="invite-promo-banner__detail">when they join a paid plan — you get 2 months free on PLUS.</span>
         </p>
-        <Link href="/perfil?tab=settings&invite=1" className="invite-promo-banner__cta">
+        <Link href={inviteHref} className="invite-promo-banner__cta">
           Invite now
         </Link>
         <button

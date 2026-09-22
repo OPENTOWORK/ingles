@@ -82,9 +82,9 @@ export function getItPreviewNavRoleName(option) {
   return option.roleName;
 }
 
-export function resolveItPreviewState(requestedRoleId, realRole, realSession) {
+export function resolveItPreviewState(requestedRoleId, realRole, realSession, { embedded = false } = {}) {
   const option = findItPreviewRoleOption(requestedRoleId);
-  const allowed = option && canApplyItPreviewRoleOverride(realRole);
+  const allowed = option && (embedded || canApplyItPreviewRoleOverride(realRole));
 
   if (!allowed) {
     return {
