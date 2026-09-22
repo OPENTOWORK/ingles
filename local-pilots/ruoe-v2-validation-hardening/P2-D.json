@@ -1,0 +1,298 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-D",
+    "direction": "A harbour office that posts the tide times by hand"
+  },
+  "savedAt": "2026-09-22T08:34:15.236Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "At the heart of the bustling seaside town lies the harbour office, a quaint building that plays a vital role in the local community. Each day, the dedicated staff take the time to post the tide times by hand, a tradition that has been upheld for generations. With a large chalkboard outside, they carefully write the times in clear, bold letters, ensuring that fishermen, sailors, and curious visitors alike can easily read them. \n\nThis manual process may seem old-fashioned in an age dominated by technology, but it fosters a sense of connection to the sea and its rhythms. Locals often stop by to chat with the staff, sharing stories about their adventures on the water. The harbour office not only provides essential information but also serves as a gathering place, where the community comes together to celebrate the tides that shape their lives. As the sun rises and sets, the tide times remain a constant reminder of the ever-changing nature of the sea, cherished by all who call this town home.",
+  "candidateItem": [
+    {
+      "number": 1,
+      "answer": "the"
+    },
+    {
+      "number": 2,
+      "answer": "the"
+    },
+    {
+      "number": 3,
+      "answer": "that"
+    },
+    {
+      "number": 4,
+      "answer": "the"
+    },
+    {
+      "number": 5,
+      "answer": "the"
+    },
+    {
+      "number": 6,
+      "answer": "that"
+    },
+    {
+      "number": 7,
+      "answer": "the"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "At the heart of the bustling seaside town lies the harbour office, a quaint building that plays a vital role in the local community. Each day, the dedicated staff take the time to post the tide times by hand, a tradition that has been upheld for generations. With a large chalkboard outside, they carefully write the times in clear, bold letters, ensuring that fishermen, sailors, and curious visitors alike can easily read them. \n\nThis manual process may seem old-fashioned in an age dominated by technology, but it fosters a sense of connection to the sea and its rhythms. Locals often stop by to chat with the staff, sharing stories about their adventures on the water. The harbour office not only provides essential information but also serves as a gathering place, where the community comes together to celebrate the tides that shape their lives. As the sun rises and sets, the tide times remain a constant reminder of the ever-changing nature of the sea, cherished by all who call this town home.",
+      "title": "The Harbour Office and Tide Times"
+    },
+    "gap-discovery": {
+      "sites": [
+        {
+          "sentence": "At the heart of the bustling seaside town lies the harbour office, a quaint building that plays a vital role in the local community.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Each day, the dedicated staff take the time to post the tide times by hand, a tradition that has been upheld for generations.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "With a large chalkboard outside, they carefully write the times in clear, bold letters, ensuring that fishermen, sailors, and curious visitors alike can easily read them.",
+          "word": "that",
+          "family": "relative words"
+        },
+        {
+          "sentence": "This manual process may seem old-fashioned in an age dominated by technology, but it fosters a sense of connection to the sea and its rhythms.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Locals often stop by to chat with the staff, sharing stories about their adventures on the water.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "The harbour office not only provides essential information but also serves as a gathering place, where the community comes together to celebrate the tides that shape their lives.",
+          "word": "that",
+          "family": "relative words"
+        },
+        {
+          "sentence": "As the sun rises and sets, the tide times remain a constant reminder of the ever-changing nature of the sea, cherished by all who call this town home.",
+          "word": "the",
+          "family": "articles"
+        }
+      ]
+    },
+    "select-eight": {
+      "gaps": [
+        {
+          "number": 1,
+          "word": "the",
+          "family": "articles",
+          "sentence": "At the heart of the bustling seaside town lies the harbour office, a quaint building that plays a vital role in the local community."
+        },
+        {
+          "number": 2,
+          "word": "the",
+          "family": "articles",
+          "sentence": "Each day, the dedicated staff take the time to post the tide times by hand, a tradition that has been upheld for generations."
+        },
+        {
+          "number": 3,
+          "word": "that",
+          "family": "relative words",
+          "sentence": "With a large chalkboard outside, they carefully write the times in clear, bold letters, ensuring that fishermen, sailors, and curious visitors alike can easily read them."
+        },
+        {
+          "number": 4,
+          "word": "the",
+          "family": "articles",
+          "sentence": "This manual process may seem old-fashioned in an age dominated by technology, but it fosters a sense of connection to the sea and its rhythms."
+        },
+        {
+          "number": 5,
+          "word": "the",
+          "family": "articles",
+          "sentence": "Locals often stop by to chat with the staff, sharing stories about their adventures on the water."
+        },
+        {
+          "number": 6,
+          "word": "that",
+          "family": "relative words",
+          "sentence": "The harbour office not only provides essential information but also serves as a gathering place, where the community comes together to celebrate the tides that shape their lives."
+        },
+        {
+          "number": 7,
+          "word": "the",
+          "family": "articles",
+          "sentence": "As the sun rises and sets, the tide times remain a constant reminder of the ever-changing nature of the sea, cherished by all who call this town home."
+        }
+      ]
+    },
+    "uniqueness": {
+      "gaps": [
+        {
+          "number": 1,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "In this context, 'the' is necessary to specify 'the harbour office' as a particular place.",
+          "confidence": 1
+        },
+        {
+          "number": 2,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "Here, 'the' is essential to indicate a specific tradition that has been upheld.",
+          "confidence": 1
+        },
+        {
+          "number": 3,
+          "intendedAnswer": "that",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'That' is required to introduce the relative clause describing the letters.",
+          "confidence": 1
+        },
+        {
+          "number": 4,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is crucial here to refer specifically to the manual process being discussed.",
+          "confidence": 1
+        },
+        {
+          "number": 5,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is necessary to specify the staff that locals are interacting with.",
+          "confidence": 1
+        },
+        {
+          "number": 6,
+          "intendedAnswer": "that",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'That' is needed to introduce the relative clause about the gathering place.",
+          "confidence": 1
+        },
+        {
+          "number": 7,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is important to refer specifically to the tide times being mentioned.",
+          "confidence": 1
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "HARD_FAIL",
+    "reason": "Part 2 must contain exactly 8 gaps (got 7).",
+    "candidateAlternative": null,
+    "repairRecommendation": "Select eight gaps from the finished prose. Do not rewrite the prose yet.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The blind solver did not show that an alternative search was performed."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences are generally well-structured and convey clear meaning, but they contain overly formal constructions and a lack of conversational tone that may not reflect natural speech patterns of a competent British English speaker. For example, phrases like 'plays a vital role' and 'may seem old-fashioned' could be simplified for more natural expression. Additionally, the use of 'the dedicated staff take the time' feels somewhat stilted and could be expressed in a more straightforward manner.",
+    "candidateAlternative": "At the heart of the busy seaside town is the harbour office, a charming building that is important to the local community."
+  },
+  "repairHistory": [
+    {
+      "action": "move-gap",
+      "scope": "failed-gap",
+      "instruction": "Close this gap and choose a different function word in the finished prose. Do not rewrite the passage yet."
+    },
+    {
+      "action": "move-gap",
+      "scope": "failed-gap",
+      "instruction": "Close this gap and choose a different function word in the finished prose. Do not rewrite the passage yet."
+    }
+  ],
+  "finalVerdict": "HARD_FAIL",
+  "trace": [
+    "prose",
+    "gap-discovery",
+    "select-eight",
+    "uniqueness",
+    "select-eight",
+    "select-eight"
+  ],
+  "layers": {
+    "mechanical": "HARD_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The blind solver did not show that an alternative search was performed."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences are generally well-structured and convey clear meaning, but they contain overly formal constructions and a lack of conversational tone that may not reflect natural speech patterns of a competent British English speaker. For example, phrases like 'plays a vital role' and 'may seem old-fashioned' could be simplified for more natural expression. Additionally, the use of 'the dedicated staff take the time' feels somewhat stilted and could be expressed in a more straightforward manner.",
+      "candidateAlternative": "At the heart of the busy seaside town is the harbour office, a charming building that is important to the local community."
+    }
+  }
+}

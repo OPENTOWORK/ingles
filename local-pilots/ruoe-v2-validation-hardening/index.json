@@ -1,0 +1,93 @@
+{
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "index": [
+    {
+      "id": "P1-C",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 1,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P1-C.json"
+    },
+    {
+      "id": "P1-D",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 1,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P1-D.json"
+    },
+    {
+      "id": "P1-E",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 1,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P1-E.json"
+    },
+    {
+      "id": "P2-C",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 2,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P2-C.json"
+    },
+    {
+      "id": "P2-D",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 2,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P2-D.json"
+    },
+    {
+      "id": "P2-E",
+      "ok": true,
+      "verdict": "QUALITY_FAIL",
+      "repairs": 2,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P2-E.json"
+    },
+    {
+      "id": "P3-C",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 2,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P3-C.json"
+    },
+    {
+      "id": "P3-D",
+      "ok": true,
+      "verdict": "QUALITY_FAIL",
+      "repairs": 1,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P3-D.json"
+    },
+    {
+      "id": "P3-E",
+      "ok": true,
+      "verdict": "QUALITY_FAIL",
+      "repairs": 1,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P3-E.json"
+    },
+    {
+      "id": "P4-C",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 2,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P4-C.json"
+    },
+    {
+      "id": "P4-D",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 2,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P4-D.json"
+    },
+    {
+      "id": "P4-E",
+      "ok": true,
+      "verdict": "HARD_FAIL",
+      "repairs": 2,
+      "file": "local-pilots\\ruoe-v2-validation-hardening\\P4-E.json"
+    }
+  ]
+}

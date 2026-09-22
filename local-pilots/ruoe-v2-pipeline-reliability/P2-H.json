@@ -1,0 +1,663 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-H",
+    "direction": "Learning to identify trees during a winter walk"
+  },
+  "savedAt": "2026-09-22T09:13:30.647Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 9757,
+    "completionTokens": 3625,
+    "totalTokens": 13382
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 355,
+        "completionTokens": 212,
+        "totalTokens": 567
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 614,
+        "completionTokens": 384,
+        "totalTokens": 998
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 848,
+        "completionTokens": 441,
+        "totalTokens": 1289
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1249,
+        "completionTokens": 645,
+        "totalTokens": 1894
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery-2",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1717,
+        "completionTokens": 7,
+        "totalTokens": 1724
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1674,
+        "completionTokens": 441,
+        "totalTokens": 2115
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1728,
+        "completionTokens": 645,
+        "totalTokens": 2373
+      }
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 769,
+        "completionTokens": 740,
+        "totalTokens": 1509
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 803,
+        "completionTokens": 110,
+        "totalTokens": 913
+      }
+    }
+  ],
+  "naturalSourceText": "Winter walks can be a delightful way to connect with nature, and learning to identify trees during this season adds an enriching layer to the experience. As the leaves fall and the landscape transforms, the unique characteristics of each tree become more apparent. Start by observing the bark; some trees, like the silver birch, have distinctive white, peeling bark, while others, such as the oak, display deep fissures. Pay attention to the shape of the branches too; the silhouette of a bare tree can reveal much about its species. For instance, the elegant, upward-reaching branches of a larch contrast sharply with the stout, sprawling limbs of a yew. Additionally, the presence of berries or cones can help in identification. Taking a field guide along can be beneficial, allowing you to compare your observations with illustrations. With practice, you’ll find that identifying trees in winter not only enhances your walks but also deepens your appreciation for the natural world around you.",
+  "candidateItem": [
+    {
+      "number": 9,
+      "answer": "the"
+    },
+    {
+      "number": 10,
+      "answer": "the"
+    },
+    {
+      "number": 11,
+      "answer": "the"
+    },
+    {
+      "number": 12,
+      "answer": "the"
+    },
+    {
+      "number": 13,
+      "answer": "the"
+    },
+    {
+      "number": 14,
+      "answer": "a"
+    },
+    {
+      "number": 15,
+      "answer": "the"
+    },
+    {
+      "number": 16,
+      "answer": "a"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "Winter walks can be a delightful way to connect with nature, and learning to identify trees during this season adds an enriching layer to the experience. As the leaves fall and the landscape transforms, the unique characteristics of each tree become more apparent. Start by observing the bark; some trees, like the silver birch, have distinctive white, peeling bark, while others, such as the oak, display deep fissures. Pay attention to the shape of the branches too; the silhouette of a bare tree can reveal much about its species. For instance, the elegant, upward-reaching branches of a larch contrast sharply with the stout, sprawling limbs of a yew. Additionally, the presence of berries or cones can help in identification. Taking a field guide along can be beneficial, allowing you to compare your observations with illustrations. With practice, you’ll find that identifying trees in winter not only enhances your walks but also deepens your appreciation for the natural world around you.",
+      "title": "Identifying Trees on a Winter Walk"
+    },
+    "gap-discovery": {
+      "sites": [
+        {
+          "sentence": "Winter walks can be a delightful way to connect with nature, and learning to identify trees during this season adds an enriching layer to the experience.",
+          "word": "a",
+          "family": "article"
+        },
+        {
+          "sentence": "As the leaves fall and the landscape transforms, the unique characteristics of each tree become more apparent.",
+          "word": "the",
+          "family": "article"
+        },
+        {
+          "sentence": "Start by observing the bark; some trees, like the silver birch, have distinctive white, peeling bark, while others, such as the oak, display deep fissures.",
+          "word": "the",
+          "family": "article"
+        },
+        {
+          "sentence": "Pay attention to the shape of the branches too; the silhouette of a bare tree can reveal much about its species.",
+          "word": "the",
+          "family": "article"
+        },
+        {
+          "sentence": "For instance, the elegant, upward-reaching branches of a larch contrast sharply with the stout, sprawling limbs of a yew.",
+          "word": "the",
+          "family": "article"
+        },
+        {
+          "sentence": "Additionally, the presence of berries or cones can help in identification.",
+          "word": "the",
+          "family": "article"
+        },
+        {
+          "sentence": "Taking a field guide along can be beneficial, allowing you to compare your observations with illustrations.",
+          "word": "a",
+          "family": "article"
+        },
+        {
+          "sentence": "With practice, you’ll find that identifying trees in winter not only enhances your walks but also deepens your appreciation for the natural world around you.",
+          "word": "the",
+          "family": "article"
+        }
+      ]
+    },
+    "select-eight": {
+      "gaps": [
+        {
+          "number": 9,
+          "word": "the",
+          "family": "article",
+          "sentence": "As the leaves fall and the landscape transforms, the unique characteristics of each tree become more apparent."
+        },
+        {
+          "number": 10,
+          "word": "the",
+          "family": "article",
+          "sentence": "Start by observing the bark; some trees, like the silver birch, have distinctive white, peeling bark, while others, such as the oak, display deep fissures."
+        },
+        {
+          "number": 11,
+          "word": "the",
+          "family": "article",
+          "sentence": "Pay attention to the shape of the branches too; the silhouette of a bare tree can reveal much about its species."
+        },
+        {
+          "number": 12,
+          "word": "the",
+          "family": "article",
+          "sentence": "For instance, the elegant, upward-reaching branches of a larch contrast sharply with the stout, sprawling limbs of a yew."
+        },
+        {
+          "number": 13,
+          "word": "the",
+          "family": "article",
+          "sentence": "Additionally, the presence of berries or cones can help in identification."
+        },
+        {
+          "number": 14,
+          "word": "a",
+          "family": "article",
+          "sentence": "Taking a field guide along can be beneficial, allowing you to compare your observations with illustrations."
+        },
+        {
+          "number": 15,
+          "word": "the",
+          "family": "article",
+          "sentence": "With practice, you’ll find that identifying trees in winter not only enhances your walks but also deepens your appreciation for the natural world around you."
+        },
+        {
+          "number": 16,
+          "word": "a",
+          "family": "article",
+          "sentence": "Winter walks can be a delightful way to connect with nature, and learning to identify trees during this season adds an enriching layer to the experience."
+        }
+      ]
+    },
+    "uniqueness": {
+      "gaps": [
+        {
+          "number": 9,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The use of 'the' specifies the unique characteristics of the trees being discussed.",
+          "confidence": 1
+        },
+        {
+          "number": 10,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "Here, 'the' is required to refer specifically to the bark of the trees mentioned.",
+          "confidence": 1
+        },
+        {
+          "number": 11,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The article 'the' is essential for identifying the branches of the specific trees.",
+          "confidence": 1
+        },
+        {
+          "number": 12,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "In this case, 'the' is needed to specify the branches of the larch and yew.",
+          "confidence": 1
+        },
+        {
+          "number": 13,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The article 'the' is necessary to refer to the specific presence of berries or cones.",
+          "confidence": 1
+        },
+        {
+          "number": 14,
+          "intendedAnswer": "a",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "Here, 'a' is appropriate to indicate one of many possible field guides.",
+          "confidence": 1
+        },
+        {
+          "number": 15,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The use of 'the' is necessary to specify the natural world being appreciated.",
+          "confidence": 1
+        },
+        {
+          "number": 16,
+          "intendedAnswer": "a",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "In this context, 'a' is necessary to indicate one of many possible delightful ways.",
+          "confidence": 1
+        }
+      ]
+    },
+    "gap-discovery-2": {
+      "sites": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "items": [
+      {
+        "number": 9,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 10,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 11,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 12,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 13,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 14,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 15,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 16,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      }
+    ],
+    "reason": "Blind-solver output was malformed or omitted required fields. The sentences provided are well-structured and coherent, but they lack the natural conversational tone that a competent British English speaker might use. They read more like a formal guide than casual speech, which detracts from their overall naturalness."
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Blind-solver output was malformed or omitted required fields."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences provided are well-structured and coherent, but they lack the natural conversational tone that a competent British English speaker might use. They read more like a formal guide than casual speech, which detracts from their overall naturalness.",
+    "candidateAlternative": "Consider using more informal language or phrasing that reflects everyday conversation, such as 'You might notice that as the leaves drop and the scenery changes, you can spot the unique traits of each tree more easily.'"
+  },
+  "repairHistory": [
+    {
+      "action": "gap-discovery-2",
+      "scope": "same-passage",
+      "instruction": "Find additional safe function-word sites in the existing article."
+    },
+    {
+      "action": "move-gap",
+      "scope": "failed-gap",
+      "instruction": "Close this gap and choose a different function word in the finished prose. Do not rewrite the passage yet."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "prose",
+    "gap-discovery",
+    "select-eight",
+    "uniqueness",
+    "gap-discovery-2",
+    "select-eight",
+    "uniqueness",
+    "move-gap"
+  ],
+  "stageRecords": [
+    {
+      "stage": "prose",
+      "status": "PASS",
+      "data": {
+        "passage": "Winter walks can be a delightful way to connect with nature, and learning to identify trees during this season adds an enriching layer to the experience. As the leaves fall and the landscape transforms, the unique characteristics of each tree become more apparent. Start by observing the bark; some trees, like the silver birch, have distinctive white, peeling bark, while others, such as the oak, display deep fissures. Pay attention to the shape of the branches too; the silhouette of a bare tree can reveal much about its species. For instance, the elegant, upward-reaching branches of a larch contrast sharply with the stout, sprawling limbs of a yew. Additionally, the presence of berries or cones can help in identification. Taking a field guide along can be beneficial, allowing you to compare your observations with illustrations. With practice, you’ll find that identifying trees in winter not only enhances your walks but also deepens your appreciation for the natural world around you.",
+        "title": "Identifying Trees on a Winter Walk"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "gap-discovery",
+      "status": "PASS",
+      "data": {
+        "sites": [
+          {
+            "sentence": "Winter walks can be a delightful way to connect with nature, and learning to identify trees during this season adds an enriching layer to the experience.",
+            "word": "a",
+            "family": "article"
+          },
+          {
+            "sentence": "As the leaves fall and the landscape transforms, the unique characteristics of each tree become more apparent.",
+            "word": "the",
+            "family": "article"
+          },
+          {
+            "sentence": "Start by observing the bark; some trees, like the silver birch, have distinctive white, peeling bark, while others, such as the oak, display deep fissures.",
+            "word": "the",
+            "family": "article"
+          },
+          {
+            "sentence": "Pay attention to the shape of the branches too; the silhouette of a bare tree can reveal much about its species.",
+            "word": "the",
+            "family": "article"
+          },
+          {
+            "sentence": "For instance, the elegant, upward-reaching branches of a larch contrast sharply with the stout, sprawling limbs of a yew.",
+            "word": "the",
+            "family": "article"
+          },
+          {
+            "sentence": "Additionally, the presence of berries or cones can help in identification.",
+            "word": "the",
+            "family": "article"
+          },
+          {
+            "sentence": "Taking a field guide along can be beneficial, allowing you to compare your observations with illustrations.",
+            "word": "a",
+            "family": "article"
+          },
+          {
+            "sentence": "With practice, you’ll find that identifying trees in winter not only enhances your walks but also deepens your appreciation for the natural world around you.",
+            "word": "the",
+            "family": "article"
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "select-eight",
+      "status": "PASS",
+      "data": {
+        "gaps": [
+          {
+            "number": 1,
+            "word": "a",
+            "family": "article",
+            "sentence": "Winter walks can be a delightful way to connect with nature, and learning to identify trees during this season adds an enriching layer to the experience."
+          },
+          {
+            "number": 2,
+            "word": "the",
+            "family": "article",
+            "sentence": "As the leaves fall and the landscape transforms, the unique characteristics of each tree become more apparent."
+          },
+          {
+            "number": 3,
+            "word": "the",
+            "family": "article",
+            "sentence": "Start by observing the bark; some trees, like the silver birch, have distinctive white, peeling bark, while others, such as the oak, display deep fissures."
+          },
+          {
+            "number": 4,
+            "word": "the",
+            "family": "article",
+            "sentence": "Pay attention to the shape of the branches too; the silhouette of a bare tree can reveal much about its species."
+          },
+          {
+            "number": 5,
+            "word": "the",
+            "family": "article",
+            "sentence": "For instance, the elegant, upward-reaching branches of a larch contrast sharply with the stout, sprawling limbs of a yew."
+          },
+          {
+            "number": 6,
+            "word": "the",
+            "family": "article",
+            "sentence": "Additionally, the presence of berries or cones can help in identification."
+          },
+          {
+            "number": 7,
+            "word": "a",
+            "family": "article",
+            "sentence": "Taking a field guide along can be beneficial, allowing you to compare your observations with illustrations."
+          },
+          {
+            "number": 8,
+            "word": "the",
+            "family": "article",
+            "sentence": "With practice, you’ll find that identifying trees in winter not only enhances your walks but also deepens your appreciation for the natural world around you."
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "uniqueness",
+      "status": "PASS",
+      "data": {
+        "gaps": [
+          {
+            "number": 1,
+            "intendedAnswer": "a",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "In this context, 'a' is necessary to indicate one of many possible delightful ways.",
+            "confidence": 1
+          },
+          {
+            "number": 2,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The use of 'the' specifies the unique characteristics of the trees being discussed.",
+            "confidence": 1
+          },
+          {
+            "number": 3,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "Here, 'the' is required to refer specifically to the bark of the trees mentioned.",
+            "confidence": 1
+          },
+          {
+            "number": 4,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The article 'the' is essential for identifying the branches of the specific trees.",
+            "confidence": 1
+          },
+          {
+            "number": 5,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "In this case, 'the' is needed to specify the branches of the larch and yew.",
+            "confidence": 1
+          },
+          {
+            "number": 6,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The article 'the' is necessary to refer to the specific presence of berries or cones.",
+            "confidence": 1
+          },
+          {
+            "number": 7,
+            "intendedAnswer": "a",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "Here, 'a' is appropriate to indicate one of many possible field guides.",
+            "confidence": 1
+          },
+          {
+            "number": 8,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The use of 'the' is necessary to specify the natural world being appreciated.",
+            "confidence": 1
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    }
+  ],
+  "layers": {
+    "mechanical": "QUALITY_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "PIPELINE_FAIL",
+      "reason": "Blind-solver output was malformed or omitted required fields."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences provided are well-structured and coherent, but they lack the natural conversational tone that a competent British English speaker might use. They read more like a formal guide than casual speech, which detracts from their overall naturalness.",
+      "candidateAlternative": "Consider using more informal language or phrasing that reflects everyday conversation, such as 'You might notice that as the leaves drop and the scenery changes, you can spot the unique traits of each tree more easily.'"
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-B",
+    "direction": "Arriving late for a community meeting",
+    "preferredFamily": "TF-05"
+  },
+  "arm": "v2",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:03:52.261Z",
+  "result": {
+    "version": "naturalness-first-v2",
+    "partNumber": 4,
+    "trace": [
+      "family-candidate",
+      "sentence-pair",
+      "semantic",
+      "naturalness",
+      "replace-family",
+      "semantic",
+      "naturalness"
+    ],
+    "outputs": {
+      "family": {
+        "familyId": "TF-05",
+        "keyword": "late",
+        "kept": true
+      },
+      "pair": {
+        "sentence1": "They arrived late to the party.",
+        "sentence2": "They got to the party late.",
+        "keyword": "late",
+        "answer": "late",
+        "abandonFamily": false
+      },
+      "semantic": {
+        "propositionsPreserved": true,
+        "agencyPreserved": true,
+        "referencePreserved": true,
+        "tenseAspectPreserved": true,
+        "modalityPreserved": true,
+        "comparisonScopePreserved": true,
+        "informationLost": false,
+        "informationAdded": false,
+        "natural": true
+      },
+      "naturalness": {
+        "natural": {
+          "sentence1": "They arrived late to the party.",
+          "sentence2": "They got to the party late."
+        }
+      },
+      "replacement": {
+        "family": {
+          "familyId": "TF-06",
+          "keyword": "delayed",
+          "kept": true
+        },
+        "pair": {
+          "sentence1": "They were delayed in arriving at the community meeting.",
+          "sentence2": "They arrived at the community meeting later than planned.",
+          "keyword": "delayed",
+          "answer": "delayed",
+          "abandonFamily": false
+        },
+        "semantic": {
+          "propositionsPreserved": true,
+          "agencyPreserved": true,
+          "referencePreserved": true,
+          "tenseAspectPreserved": true,
+          "modalityPreserved": true,
+          "comparisonScopePreserved": true,
+          "informationLost": false,
+          "informationAdded": false,
+          "natural": true
+        },
+        "naturalness": {
+          "natural": {
+            "sentence1": "They were delayed in arriving at the community meeting.",
+            "sentence2": "They arrived at the community meeting later than planned."
+          }
+        }
+      }
+    },
+    "adversarial": {
+      "verdict": "HARD_FAIL",
+      "reason": "The answer is not 2–5 Cambridge words.",
+      "candidateAlternative": null,
+      "repairRecommendation": "Replace the transformation family. Do not stretch the sentence to keep this keyword.",
+      "confidence": "high"
+    },
+    "repairs": [
+      {
+        "action": "replace-family",
+        "scope": "failed-item",
+        "instruction": "Drop this Transformation Family and try another route that keeps the same meaning in natural British English. Do not bend the sentences around the failed keyword."
+      }
+    ],
+    "answerKey": {
+      "keyword": "",
+      "wordCount": 0
+    }
+  }
+}

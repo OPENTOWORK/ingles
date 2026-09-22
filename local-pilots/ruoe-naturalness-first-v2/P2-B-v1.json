@@ -1,0 +1,108 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-B",
+    "direction": "A bakery that delivers bread by bicycle before dawn"
+  },
+  "arm": "v1",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:02:44.222Z",
+  "result": {
+    "version": "v1-code-prompt",
+    "partNumber": 2,
+    "note": "Code prompt only. Database overrides were not read.",
+    "generated": {
+      "partTitle": "Reading and Use of English Part 2: Open Cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "the"
+      },
+      "title": "Baking Before Dawn",
+      "passage": "In a small town, a bakery has become famous for delivering fresh bread by bicycle before dawn. (0) ___ the bakery's opening, the owner faced a significant challenge: how to ensure that the bread arrived warm and on time. Initially, the idea of using a car seemed practical, but it proved to be inefficient due to narrow streets and early morning traffic. (9) ___, the owner decided to try using bicycles instead. This solution not only reduced delivery time but also helped the environment. However, the early mornings were exhausting for the delivery team. (10) ___, they struggled to maintain their energy levels. To tackle this issue, the owner introduced a rotating schedule, allowing each team member to rest adequately. (11) ___ this change, deliveries improved significantly. Customers began to appreciate the fresh bread even more. (12) ___, word spread, and soon, the bakery had a loyal following. By embracing a sustainable delivery method, the bakery not only solved its initial problem but also became a beloved part of the community. (13) ___ the early hours may be challenging, the rewards of happy customers make it worthwhile.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "Therefore"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "Consequently"
+        },
+        {
+          "id": "q3",
+          "answer": "After"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "Eventually"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "Although"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "Despite"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "But"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "the"
+        }
+      ]
+    }
+  }
+}

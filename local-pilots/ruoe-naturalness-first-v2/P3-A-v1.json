@@ -1,0 +1,118 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-A",
+    "direction": "Restoring a Victorian bandstand in a public park"
+  },
+  "arm": "v1",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:03:10.069Z",
+  "result": {
+    "version": "v1-code-prompt",
+    "partNumber": 3,
+    "note": "Code prompt only. Database overrides were not read.",
+    "generated": {
+      "partTitle": "Reading and Use of English Part 3: Word Formation",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap.",
+      "example": {
+        "number": 0,
+        "stem": "STEM",
+        "answer": "stems"
+      },
+      "title": "Restoring a Victorian Bandstand",
+      "passage": "(0) ___ (STEM) in the heart of the park, the Victorian bandstand has long been a symbol of local culture. However, its recent state of disrepair has sparked a debate about its future. On one side, some argue for complete demolition, citing the high costs of restoration as an (17) ___ (EXPENSE) burden on taxpayers. They believe that modern structures could serve the community better. Conversely, advocates for preservation highlight the bandstand's historical (18) ___ (SIGNIFY) and its role in community events. They argue that restoring the bandstand would not only preserve a piece of history but also enhance the park's (19) ___ (ATTRACT) for visitors. The restoration project promises to use sustainable materials, ensuring that it remains (20) ___ (ENVIRONMENT) friendly. Local artists have been invited to contribute, fostering a sense of (21) ___ (COMMUNITY) involvement. As plans progress, the debate continues, with many hoping for a (22) ___ (BALANCE) between old and new. Ultimately, the decision will reflect the town's (23) ___ (VALUE) and vision for the future. The outcome may very well set a precedent for (24) ___ (PRESERVE) similar structures across the country.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "EXPENSE"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "SIGNIFY"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "ATTRACT"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "ENVIRONMENT"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "COMMUNITY"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "BALANCE"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "VALUE"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "PRESERVE"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "expensive"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "significance"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "attraction"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "environmentally"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "community"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "balance"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "values"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "preservation"
+        }
+      ]
+    }
+  }
+}

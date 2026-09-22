@@ -1,0 +1,115 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-B",
+    "direction": "Arriving late for a community meeting",
+    "preferredFamily": "TF-05"
+  },
+  "arm": "v1",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:03:59.142Z",
+  "result": {
+    "version": "v1-code-prompt",
+    "partNumber": 4,
+    "note": "Code prompt only. Database overrides were not read.",
+    "generated": {
+      "partTitle": "Key word transformations",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given.",
+      "example": {
+        "number": 0,
+        "sentence1": "She didn't want to attend the meeting.",
+        "keyword": "WANTED",
+        "sentence2Start": "She __________________ the meeting.",
+        "answer": "did not want to attend"
+      },
+      "questions": [
+        {
+          "id": 25,
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "I arrived late to the community meeting.",
+          "keyword": "BEEN",
+          "sentence2Start": "I should have __________________ late to the community meeting.",
+          "answer": "not been arriving"
+        },
+        {
+          "id": 26,
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "They were disappointed that I was late.",
+          "keyword": "HAD",
+          "sentence2Start": "They __________________ my late arrival.",
+          "answer": "not expected me to be"
+        },
+        {
+          "id": 27,
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "I wish I had left earlier.",
+          "keyword": "REGRET",
+          "sentence2Start": "I __________________ earlier.",
+          "answer": "regret not leaving"
+        },
+        {
+          "id": 28,
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "It was a mistake to forget about the meeting.",
+          "keyword": "SHOULD",
+          "sentence2Start": "I __________________ the meeting.",
+          "answer": "should not have forgotten"
+        },
+        {
+          "id": 29,
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "If I had known about the meeting, I would have been on time.",
+          "keyword": "ARRIVED",
+          "sentence2Start": "I would have __________________ if I had known.",
+          "answer": "arrived on time"
+        },
+        {
+          "id": 30,
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "I didn't mean to disrupt the meeting.",
+          "keyword": "INTENDED",
+          "sentence2Start": "I __________________ to disrupt the meeting.",
+          "answer": "did not intend"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": 25,
+          "number": 25,
+          "answer": "not been arriving"
+        },
+        {
+          "id": 26,
+          "number": 26,
+          "answer": "not expected me to be"
+        },
+        {
+          "id": 27,
+          "number": 27,
+          "answer": "regret not leaving"
+        },
+        {
+          "id": 28,
+          "number": 28,
+          "answer": "should not have forgotten"
+        },
+        {
+          "id": 29,
+          "number": 29,
+          "answer": "arrived on time"
+        },
+        {
+          "id": 30,
+          "number": 30,
+          "answer": "did not intend"
+        }
+      ]
+    }
+  }
+}

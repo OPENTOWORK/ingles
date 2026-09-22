@@ -1,0 +1,417 @@
+{
+  "brief": {
+    "partNumber": 1,
+    "id": "P1-H",
+    "direction": "A repair café that teaches people to mend small appliances"
+  },
+  "savedAt": "2026-09-22T09:11:50.041Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 6405,
+    "completionTokens": 2378,
+    "totalTokens": 8783
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "passage",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 382,
+        "completionTokens": 209,
+        "totalTokens": 591
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "positions",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 621,
+        "completionTokens": 387,
+        "totalTokens": 1008
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "keys",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 879,
+        "completionTokens": 491,
+        "totalTokens": 1370
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "distractors",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1242,
+        "completionTokens": 851,
+        "totalTokens": 2093
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "independent-substitution",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 3074,
+        "completionTokens": 423,
+        "totalTokens": 3497
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 207,
+        "completionTokens": 17,
+        "totalTokens": 224
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": [],
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Stage output failed pipeline validation (items: Array must contain at least 1 element(s)).",
+    "candidateAlternative": null,
+    "repairRecommendation": "The schema repair budget is spent. The item stays failed.",
+    "confidence": "high"
+  },
+  "blindSolve": null,
+  "adversarialValidation": null,
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "independent-substitution",
+      "instruction": "Correct the JSON shape once."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "passage",
+    "positions",
+    "keys",
+    "distractors",
+    "independent-substitution",
+    "schema-repair"
+  ],
+  "stageRecords": [
+    {
+      "stage": "passage",
+      "status": "PASS",
+      "data": {
+        "passage": "In an age of throwaway culture, a local repair café has emerged as a beacon of sustainability and community spirit. This innovative initiative invites residents to bring in their small appliances, from toasters to lamps, and learn how to mend them rather than discarding them. Each Saturday, volunteers with a wealth of repair experience gather to share their skills, guiding participants through the repair process. Not only does this help reduce waste, but it also empowers individuals with practical knowledge and fosters a sense of camaraderie among attendees.\n\nVisitors often leave with a sense of accomplishment, having successfully repaired their items, and many express newfound confidence in their ability to tackle future repairs. The café also serves as a platform for discussing broader environmental issues, encouraging conversations about sustainability and responsible consumption. By teaching people the art of mending, the repair café is not just fixing appliances; it’s also mending the relationship between communities and their environment.",
+        "title": "Reviving the Art of Repair: The Local Repair Café"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "positions",
+      "status": "PASS",
+      "data": {
+        "candidates": [
+          {
+            "sentence": "In an age of throwaway culture, a local repair café has emerged as a beacon of sustainability and community spirit.",
+            "word": "beacon",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "This innovative initiative invites residents to bring in their small appliances, from toasters to lamps, and learn how to mend them rather than discarding them.",
+            "word": "innovative",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Each Saturday, volunteers with a wealth of repair experience gather to share their skills, guiding participants through the repair process.",
+            "word": "wealth",
+            "knowledgeType": "lexical-precision"
+          },
+          {
+            "sentence": "Not only does this help reduce waste, but it also empowers individuals with practical knowledge and fosters a sense of camaraderie among attendees.",
+            "word": "empowers",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Visitors often leave with a sense of accomplishment, having successfully repaired their items, and many express newfound confidence in their ability to tackle future repairs.",
+            "word": "accomplishment",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The café also serves as a platform for discussing broader environmental issues, encouraging conversations about sustainability and responsible consumption.",
+            "word": "platform",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "By teaching people the art of mending, the repair café is not just fixing appliances; it’s also mending the relationship between communities and their environment.",
+            "word": "mending",
+            "knowledgeType": "lexical-precision"
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "keys",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "number": 1,
+            "sentence": "In an age of throwaway culture, a local repair café has emerged as a beacon of sustainability and community spirit.",
+            "key": "beacon",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 2,
+            "sentence": "This innovative initiative invites residents to bring in their small appliances, from toasters to lamps, and learn how to mend them rather than discarding them.",
+            "key": "innovative",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 3,
+            "sentence": "Each Saturday, volunteers with a wealth of repair experience gather to share their skills, guiding participants through the repair process.",
+            "key": "wealth",
+            "knowledgeType": "lexical-precision",
+            "obviousChunk": false
+          },
+          {
+            "number": 4,
+            "sentence": "Not only does this help reduce waste, but it also empowers individuals with practical knowledge and fosters a sense of camaraderie among attendees.",
+            "key": "empowers",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 5,
+            "sentence": "Visitors often leave with a sense of accomplishment, having successfully repaired their items, and many express newfound confidence in their ability to tackle future repairs.",
+            "key": "accomplishment",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 6,
+            "sentence": "The café also serves as a platform for discussing broader environmental issues, encouraging conversations about sustainability and responsible consumption.",
+            "key": "platform",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 7,
+            "sentence": "By teaching people the art of mending, the repair café is not just fixing appliances; it’s also mending the relationship between communities and their environment.",
+            "key": "mending",
+            "knowledgeType": "lexical-precision",
+            "obviousChunk": false
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "distractors",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "number": 1,
+            "options": [
+              {
+                "letter": "A",
+                "word": "beacon",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "light",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "signal",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "guide",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "options": [
+              {
+                "letter": "A",
+                "word": "innovative",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "creative",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "original",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "novel",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "options": [
+              {
+                "letter": "A",
+                "word": "wealth",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "abundance",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "plenty",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "richness",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 4,
+            "options": [
+              {
+                "letter": "A",
+                "word": "empowers",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "enables",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "encourages",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "supports",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 5,
+            "options": [
+              {
+                "letter": "A",
+                "word": "accomplishment",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "achievement",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "success",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "completion",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 6,
+            "options": [
+              {
+                "letter": "A",
+                "word": "platform",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "forum",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "stage",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "venue",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 7,
+            "options": [
+              {
+                "letter": "A",
+                "word": "mending",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "repairing",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "fixing",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "restoring",
+                "isKey": false
+              }
+            ]
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "independent-substitution",
+      "status": "PIPELINE_FAIL",
+      "data": {},
+      "issues": [
+        "items: Array must contain at least 1 element(s)"
+      ],
+      "repairable": true
+    }
+  ]
+}

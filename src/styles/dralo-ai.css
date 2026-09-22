@@ -23,6 +23,35 @@
   color: #4f46e5;
 }
 
+/* ——— Móvil: precios ocupa la pantalla y no se desplaza ——— */
+@media (max-width: 639px) {
+  html:has(.precios-page),
+  body:has(.precios-page) {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body:has(.precios-page) .page-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .precios-page {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    min-height: 0;
+    height: calc(100dvh - var(--site-header-height));
+    max-height: calc(100dvh - var(--site-header-height));
+    overflow: hidden;
+    padding: 10px 1rem 12px;
+  }
+}
+
 .dralo-ai-hub__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));

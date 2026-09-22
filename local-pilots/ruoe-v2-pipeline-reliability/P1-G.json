@@ -1,0 +1,489 @@
+{
+  "brief": {
+    "partNumber": 1,
+    "id": "P1-G",
+    "direction": "Why a local cinema introduced relaxed Sunday screenings"
+  },
+  "savedAt": "2026-09-22T09:11:24.809Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 6743,
+    "completionTokens": 2896,
+    "totalTokens": 9639
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "passage",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 380,
+        "completionTokens": 202,
+        "totalTokens": 582
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "positions",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 614,
+        "completionTokens": 570,
+        "totalTokens": 1184
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "keys",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 990,
+        "completionTokens": 500,
+        "totalTokens": 1490
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "distractors",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1344,
+        "completionTokens": 979,
+        "totalTokens": 2323
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "independent-substitution",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 3184,
+        "completionTokens": 393,
+        "totalTokens": 3577
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 231,
+        "completionTokens": 252,
+        "totalTokens": 483
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": [],
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Stage output failed pipeline validation (items.0.options: Array must contain exactly 4 element(s); items.0.options.0: Expected object, received string; items.0.options.1: Expected object, received string; items.0.options.2: Expected object, received string; items.1.options: Array must contain exactly 4 element(s); items.1.options.0: Expected object, received string; items.1.options.1: Expected object, received string; items.1.options.2: Expected object, received string; items.2.options: Array must contain exactly 4 element(s); items.2.options.0: Expected object, received string; items.2.options.1: Expected object, received string; items.2.options.2: Expected object, received string; items.3.options: Array must contain exactly 4 element(s); items.3.options.0: Expected object, received string; items.3.options.1: Expected object, received string; items.3.options.2: Expected object, received string).",
+    "candidateAlternative": null,
+    "repairRecommendation": "The schema repair budget is spent. The item stays failed.",
+    "confidence": "high"
+  },
+  "blindSolve": null,
+  "adversarialValidation": null,
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "independent-substitution",
+      "instruction": "Correct the JSON shape once."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "passage",
+    "positions",
+    "keys",
+    "distractors",
+    "independent-substitution",
+    "schema-repair"
+  ],
+  "stageRecords": [
+    {
+      "stage": "passage",
+      "status": "PASS",
+      "data": {
+        "passage": "In a bid to create a more inclusive environment, a local cinema has introduced relaxed Sunday screenings, catering to those who may find traditional cinema settings overwhelming. These special showings allow audiences to enjoy films in a more comfortable atmosphere, with adjustments such as reduced volume levels, dimmed lighting, and the freedom to move around or make noise. \n\nThe initiative aims to support individuals with sensory sensitivities, autism, or anxiety, as well as families with young children. By providing a welcoming space, the cinema hopes to encourage more people to experience the joy of film without the pressure of adhering to conventional cinema etiquette. \n\nFeedback from the community has been overwhelmingly positive, with many expressing gratitude for the opportunity to enjoy movies in a relaxed setting. This innovative approach not only enhances accessibility but also fosters a sense of belonging among diverse audiences, proving that cinema can be a shared experience for everyone.",
+        "title": "Local Cinema Introduces Relaxed Sunday Screenings"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "positions",
+      "status": "PASS",
+      "data": {
+        "candidates": [
+          {
+            "sentence": "In a bid to create a more inclusive environment, a local cinema has introduced relaxed Sunday screenings.",
+            "word": "inclusive",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "These special showings allow audiences to enjoy films in a more comfortable atmosphere.",
+            "word": "atmosphere",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The initiative aims to support individuals with sensory sensitivities, autism, or anxiety.",
+            "word": "initiative",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "By providing a welcoming space, the cinema hopes to encourage more people to experience the joy of film.",
+            "word": "encourage",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Feedback from the community has been overwhelmingly positive.",
+            "word": "overwhelmingly",
+            "knowledgeType": "lexical-precision"
+          },
+          {
+            "sentence": "This innovative approach not only enhances accessibility but also fosters a sense of belonging.",
+            "word": "innovative",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The initiative aims to support individuals with sensory sensitivities, autism, or anxiety.",
+            "word": "sensory",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The cinema hopes to encourage more people to experience the joy of film without the pressure of adhering to conventional cinema etiquette.",
+            "word": "etiquette",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "This innovative approach not only enhances accessibility but also fosters a sense of belonging among diverse audiences.",
+            "word": "accessibility",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "These special showings allow audiences to enjoy films in a more comfortable atmosphere, with adjustments such as reduced volume levels.",
+            "word": "adjustments",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The initiative aims to support individuals with sensory sensitivities, autism, or anxiety, as well as families with young children.",
+            "word": "families",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Feedback from the community has been overwhelmingly positive, with many expressing gratitude for the opportunity to enjoy movies in a relaxed setting.",
+            "word": "gratitude",
+            "knowledgeType": "lexical-meaning"
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "keys",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "number": 1,
+            "sentence": "In a bid to create a more inclusive environment, a local cinema has introduced relaxed Sunday screenings.",
+            "key": "inclusive",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 2,
+            "sentence": "These special showings allow audiences to enjoy films in a more comfortable atmosphere.",
+            "key": "atmosphere",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 3,
+            "sentence": "Feedback from the community has been overwhelmingly positive.",
+            "key": "overwhelmingly",
+            "knowledgeType": "lexical-precision",
+            "obviousChunk": false
+          },
+          {
+            "number": 4,
+            "sentence": "This innovative approach not only enhances accessibility but also fosters a sense of belonging.",
+            "key": "innovative",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 5,
+            "sentence": "The initiative aims to support individuals with sensory sensitivities, autism, or anxiety.",
+            "key": "sensory",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 6,
+            "sentence": "The cinema hopes to encourage more people to experience the joy of film without the pressure of adhering to conventional cinema etiquette.",
+            "key": "etiquette",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 7,
+            "sentence": "These special showings allow audiences to enjoy films in a more comfortable atmosphere, with adjustments such as reduced volume levels.",
+            "key": "adjustments",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 8,
+            "sentence": "Feedback from the community has been overwhelmingly positive, with many expressing gratitude for the opportunity to enjoy movies in a relaxed setting.",
+            "key": "gratitude",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "distractors",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "number": 1,
+            "options": [
+              {
+                "letter": "A",
+                "word": "inclusive",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "exclusive",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "passive",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "restrictive",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "options": [
+              {
+                "letter": "A",
+                "word": "atmosphere",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "environment",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "setting",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "location",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "options": [
+              {
+                "letter": "A",
+                "word": "overwhelmingly",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "moderately",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "occasionally",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "rarely",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 4,
+            "options": [
+              {
+                "letter": "A",
+                "word": "innovative",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "traditional",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "ordinary",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "common",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 5,
+            "options": [
+              {
+                "letter": "A",
+                "word": "sensory",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "physical",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "emotional",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "cognitive",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 6,
+            "options": [
+              {
+                "letter": "A",
+                "word": "etiquette",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "behaviour",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "conduct",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "manners",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 7,
+            "options": [
+              {
+                "letter": "A",
+                "word": "adjustments",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "changes",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "modifications",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "alterations",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 8,
+            "options": [
+              {
+                "letter": "A",
+                "word": "gratitude",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "appreciation",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "thankfulness",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "recognition",
+                "isKey": false
+              }
+            ]
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "independent-substitution",
+      "status": "PIPELINE_FAIL",
+      "data": {},
+      "issues": [
+        "items.0.options: Array must contain exactly 4 element(s)",
+        "items.0.options.0: Expected object, received string",
+        "items.0.options.1: Expected object, received string",
+        "items.0.options.2: Expected object, received string",
+        "items.1.options: Array must contain exactly 4 element(s)",
+        "items.1.options.0: Expected object, received string",
+        "items.1.options.1: Expected object, received string",
+        "items.1.options.2: Expected object, received string",
+        "items.2.options: Array must contain exactly 4 element(s)",
+        "items.2.options.0: Expected object, received string",
+        "items.2.options.1: Expected object, received string",
+        "items.2.options.2: Expected object, received string",
+        "items.3.options: Array must contain exactly 4 element(s)",
+        "items.3.options.0: Expected object, received string",
+        "items.3.options.1: Expected object, received string",
+        "items.3.options.2: Expected object, received string"
+      ],
+      "repairable": true
+    }
+  ]
+}

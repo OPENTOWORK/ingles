@@ -1,0 +1,716 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-F",
+    "direction": "Restoring painted signs at an old railway station"
+  },
+  "savedAt": "2026-09-22T09:13:55.316Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 4381,
+    "completionTokens": 2220,
+    "totalTokens": 6601
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 344,
+        "completionTokens": 204,
+        "totalTokens": 548
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "family-discovery",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 553,
+        "completionTokens": 379,
+        "totalTokens": 932
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 206,
+        "completionTokens": 35,
+        "totalTokens": 241
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "base-assignment",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 674,
+        "completionTokens": 670,
+        "totalTokens": 1344
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "derivation-check",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1113,
+        "completionTokens": 695,
+        "totalTokens": 1808
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "new-position",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 377,
+        "completionTokens": 86,
+        "totalTokens": 463
+      }
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 526,
+        "completionTokens": 6,
+        "totalTokens": 532
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 588,
+        "completionTokens": 145,
+        "totalTokens": 733
+      }
+    }
+  ],
+  "naturalSourceText": "The restoration of painted signs at an old railway station is a fascinating project that brings history back to life. These signs, often faded and weathered, tell stories of a bygone era when rail travel was the primary mode of transport. Skilled artisans carefully assess each sign, determining the best methods for cleaning and repainting without losing the original character. Using traditional techniques, they mix colours to match the original hues, ensuring authenticity. This meticulous process not only preserves the visual appeal but also maintains the historical significance of the station. Once restored, these signs serve as a reminder of the past, attracting visitors and railway enthusiasts alike. The project fosters a sense of community pride, as locals come together to support the preservation of their heritage. In a world increasingly dominated by modernity, such initiatives highlight the importance of remembering and cherishing our history, making the railway station a vibrant part of the local landscape once more.",
+  "candidateItem": [
+    {
+      "stem": "restore",
+      "answer": "restoration"
+    },
+    {
+      "stem": "fascinate",
+      "answer": "fascinating"
+    },
+    {
+      "stem": "preserve",
+      "answer": "preservation"
+    },
+    {
+      "stem": "sign",
+      "answer": "significance"
+    },
+    {
+      "stem": "community",
+      "answer": "communal"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "The restoration of painted signs at an old railway station is a fascinating project that brings history back to life. These signs, often faded and weathered, tell stories of a bygone era when rail travel was the primary mode of transport. Skilled artisans carefully assess each sign, determining the best methods for cleaning and repainting without losing the original character. Using traditional techniques, they mix colours to match the original hues, ensuring authenticity. This meticulous process not only preserves the visual appeal but also maintains the historical significance of the station. Once restored, these signs serve as a reminder of the past, attracting visitors and railway enthusiasts alike. The project fosters a sense of community pride, as locals come together to support the preservation of their heritage. In a world increasingly dominated by modernity, such initiatives highlight the importance of remembering and cherishing our history, making the railway station a vibrant part of the local landscape once more.",
+      "title": "Restoring Painted Signs at an Old Railway Station"
+    },
+    "family-discovery": {
+      "words": [],
+      "stage": "family-discovery",
+      "linguistic_judgement": "ordinary",
+      "boolean_value": true
+    },
+    "base-assignment": {
+      "items": [
+        {
+          "stem": "restore",
+          "answer": "restoration",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The noun 'restoration' is directly derived from the verb 'restore', and both belong to the same lexical family."
+          },
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "restorative",
+            "restorer"
+          ]
+        },
+        {
+          "stem": "fascinate",
+          "answer": "fascinating",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The adjective 'fascinating' is derived from the verb 'fascinate', and they are part of the same lexical family."
+          },
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "fascination",
+            "fascinated"
+          ]
+        },
+        {
+          "stem": "preserve",
+          "answer": "preservation",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The noun 'preservation' is directly derived from the verb 'preserve', and both are part of the same lexical family."
+          },
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "preserver",
+            "preservative"
+          ]
+        },
+        {
+          "stem": "sign",
+          "answer": "significance",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The noun 'significance' is derived from the base word 'sign', and they belong to the same lexical family."
+          },
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "significant",
+            "signify"
+          ]
+        },
+        {
+          "stem": "community",
+          "answer": "communal",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The adjective 'communal' is derived from the noun 'community', indicating they are part of the same lexical family."
+          },
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "communalism",
+            "communally"
+          ]
+        }
+      ]
+    },
+    "derivation-check": {
+      "items": [
+        {
+          "stem": "restore",
+          "answer": "restoration",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The noun 'restoration' is directly derived from the verb 'restore', and both belong to the same lexical family."
+          },
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "restorative",
+            "restorer"
+          ]
+        },
+        {
+          "stem": "fascinate",
+          "answer": "fascinating",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The adjective 'fascinating' is derived from the verb 'fascinate', and they are part of the same lexical family."
+          },
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "fascination",
+            "fascinated"
+          ]
+        },
+        {
+          "stem": "preserve",
+          "answer": "preservation",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The noun 'preservation' is directly derived from the verb 'preserve', and both are part of the same lexical family."
+          },
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "preserver",
+            "preservative"
+          ]
+        },
+        {
+          "stem": "sign",
+          "answer": "significance",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The noun 'significance' is derived from the base word 'sign', and they belong to the same lexical family."
+          },
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "significant",
+            "signify"
+          ]
+        },
+        {
+          "stem": "community",
+          "answer": "communal",
+          "lexicalFamilyValidation": {
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "legitimateBase": true,
+            "reason": "The adjective 'communal' is derived from the noun 'community', indicating they are part of the same lexical family."
+          },
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "communalism",
+            "communally"
+          ]
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "QUALITY_FAIL",
+    "items": [
+      {
+        "stem": "restore",
+        "answer": "restoration",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "Another family member also fits this context (restorative, restorer).",
+          "candidateAlternative": "restorative",
+          "repairRecommendation": "Discard the position. The context does not force one family member.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "restore",
+            "answer": "restoration",
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "artificialBase": false,
+            "reason": "The noun 'restoration' is directly derived from the verb 'restore', and both belong to the same lexical family.",
+            "validationSource": "linguistic-family-judgement"
+          }
+        }
+      },
+      {
+        "stem": "fascinate",
+        "answer": "fascinating",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "Another family member also fits this context (fascination, fascinated).",
+          "candidateAlternative": "fascination",
+          "repairRecommendation": "Discard the position. The context does not force one family member.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "fascinate",
+            "answer": "fascinating",
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "artificialBase": false,
+            "reason": "The adjective 'fascinating' is derived from the verb 'fascinate', and they are part of the same lexical family.",
+            "validationSource": "linguistic-family-judgement"
+          }
+        }
+      },
+      {
+        "stem": "preserve",
+        "answer": "preservation",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "Another family member also fits this context (preserver, preservative).",
+          "candidateAlternative": "preserver",
+          "repairRecommendation": "Discard the position. The context does not force one family member.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "preserve",
+            "answer": "preservation",
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "artificialBase": false,
+            "reason": "The noun 'preservation' is directly derived from the verb 'preserve', and both are part of the same lexical family.",
+            "validationSource": "linguistic-family-judgement"
+          }
+        }
+      },
+      {
+        "stem": "sign",
+        "answer": "significance",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "Another family member also fits this context (significant, signify).",
+          "candidateAlternative": "significant",
+          "repairRecommendation": "Discard the position. The context does not force one family member.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "sign",
+            "answer": "significance",
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "artificialBase": false,
+            "reason": "The noun 'significance' is derived from the base word 'sign', and they belong to the same lexical family.",
+            "validationSource": "linguistic-family-judgement"
+          }
+        }
+      },
+      {
+        "stem": "community",
+        "answer": "communal",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "Another family member also fits this context (communalism, communally).",
+          "candidateAlternative": "communalism",
+          "repairRecommendation": "Discard the position. The context does not force one family member.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "community",
+            "answer": "communal",
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "artificialBase": false,
+            "reason": "The adjective 'communal' is derived from the noun 'community', indicating they are part of the same lexical family.",
+            "validationSource": "linguistic-family-judgement"
+          }
+        }
+      }
+    ]
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "PASS",
+    "reason": "Blind solve matched the stored derivation."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences provided for each stem are incomplete and lack context, making them unnatural and ungrammatical. A competent British English speaker would not produce such fragmented sentences in ordinary conversation.",
+    "candidateAlternative": {
+      "restore": "They decided to restore the old railway station to its former glory.",
+      "fascinate": "The history of the railway station continues to fascinate many visitors.",
+      "preserve": "It's important to preserve the heritage of our local community.",
+      "sign": "The sign at the station has been beautifully restored.",
+      "community": "The community rallied together to support the restoration project."
+    }
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "family-discovery",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "new-position",
+      "scope": "failed-item",
+      "instruction": "Choose a different word already in the natural text. Do not force this sentence to keep the rejected base."
+    }
+  ],
+  "finalVerdict": "QUALITY_FAIL",
+  "trace": [
+    "prose",
+    "family-discovery",
+    "schema-repair",
+    "base-assignment",
+    "derivation-check",
+    "new-position"
+  ],
+  "stageRecords": [
+    {
+      "stage": "prose",
+      "status": "PASS",
+      "data": {
+        "passage": "The restoration of painted signs at an old railway station is a fascinating project that brings history back to life. These signs, often faded and weathered, tell stories of a bygone era when rail travel was the primary mode of transport. Skilled artisans carefully assess each sign, determining the best methods for cleaning and repainting without losing the original character. Using traditional techniques, they mix colours to match the original hues, ensuring authenticity. This meticulous process not only preserves the visual appeal but also maintains the historical significance of the station. Once restored, these signs serve as a reminder of the past, attracting visitors and railway enthusiasts alike. The project fosters a sense of community pride, as locals come together to support the preservation of their heritage. In a world increasingly dominated by modernity, such initiatives highlight the importance of remembering and cherishing our history, making the railway station a vibrant part of the local landscape once more.",
+        "title": "Restoring Painted Signs at an Old Railway Station"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "family-discovery",
+      "status": "PASS",
+      "data": {
+        "words": [],
+        "stage": "family-discovery",
+        "linguistic_judgement": "ordinary",
+        "boolean_value": true
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "base-assignment",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "stem": "restore",
+            "answer": "restoration",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The noun 'restoration' is directly derived from the verb 'restore', and both belong to the same lexical family."
+            },
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "restorative",
+              "restorer"
+            ]
+          },
+          {
+            "stem": "fascinate",
+            "answer": "fascinating",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The adjective 'fascinating' is derived from the verb 'fascinate', and they are part of the same lexical family."
+            },
+            "wordClass": "adjective",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "fascination",
+              "fascinated"
+            ]
+          },
+          {
+            "stem": "preserve",
+            "answer": "preservation",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The noun 'preservation' is directly derived from the verb 'preserve', and both are part of the same lexical family."
+            },
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "preserver",
+              "preservative"
+            ]
+          },
+          {
+            "stem": "sign",
+            "answer": "significance",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The noun 'significance' is derived from the base word 'sign', and they belong to the same lexical family."
+            },
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "significant",
+              "signify"
+            ]
+          },
+          {
+            "stem": "community",
+            "answer": "communal",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The adjective 'communal' is derived from the noun 'community', indicating they are part of the same lexical family."
+            },
+            "wordClass": "adjective",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "communalism",
+              "communally"
+            ]
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "derivation-check",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "stem": "restore",
+            "answer": "restoration",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The noun 'restoration' is directly derived from the verb 'restore', and both belong to the same lexical family."
+            },
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "restorative",
+              "restorer"
+            ]
+          },
+          {
+            "stem": "fascinate",
+            "answer": "fascinating",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The adjective 'fascinating' is derived from the verb 'fascinate', and they are part of the same lexical family."
+            },
+            "wordClass": "adjective",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "fascination",
+              "fascinated"
+            ]
+          },
+          {
+            "stem": "preserve",
+            "answer": "preservation",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The noun 'preservation' is directly derived from the verb 'preserve', and both are part of the same lexical family."
+            },
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "preserver",
+              "preservative"
+            ]
+          },
+          {
+            "stem": "sign",
+            "answer": "significance",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The noun 'significance' is derived from the base word 'sign', and they belong to the same lexical family."
+            },
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "significant",
+              "signify"
+            ]
+          },
+          {
+            "stem": "community",
+            "answer": "communal",
+            "lexicalFamilyValidation": {
+              "sameLexicalFamily": true,
+              "extraLexicalRootIntroduced": false,
+              "directDerivation": true,
+              "legitimateBase": true,
+              "reason": "The adjective 'communal' is derived from the noun 'community', indicating they are part of the same lexical family."
+            },
+            "wordClass": "adjective",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "communalism",
+              "communally"
+            ]
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    }
+  ],
+  "layers": {
+    "mechanical": "QUALITY_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "PASS",
+      "reason": "Blind solve matched the stored derivation."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences provided for each stem are incomplete and lack context, making them unnatural and ungrammatical. A competent British English speaker would not produce such fragmented sentences in ordinary conversation.",
+      "candidateAlternative": {
+        "restore": "They decided to restore the old railway station to its former glory.",
+        "fascinate": "The history of the railway station continues to fascinate many visitors.",
+        "preserve": "It's important to preserve the heritage of our local community.",
+        "sign": "The sign at the station has been beautifully restored.",
+        "community": "The community rallied together to support the restoration project."
+      }
+    }
+  }
+}

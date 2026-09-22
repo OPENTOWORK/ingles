@@ -1,0 +1,395 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-E",
+    "direction": "Learning to prune apple trees in a shared orchard"
+  },
+  "savedAt": "2026-09-22T08:34:46.149Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "Pruning apple trees is an essential skill for anyone involved in maintaining a shared orchard. Recently, a group of us gathered to learn the art of pruning, eager to enhance the health and productivity of our trees. Under the guidance of an experienced horticulturist, we discovered that proper pruning encourages better air circulation and sunlight penetration, which are crucial for fruit development.\n\nAs we donned our gloves and picked up our secateurs, we learned to identify the branches that needed trimming. The process involved cutting back overgrown limbs and removing any dead or diseased wood. It was fascinating to see how each cut could influence the tree's growth and fruit yield. \n\nWorking together in the orchard fostered a sense of community, as we shared tips and techniques. By the end of the day, not only had we gained valuable knowledge, but we also felt a deeper connection to the land and each other, united by our shared goal of nurturing these beautiful apple trees.",
+  "candidateItem": [
+    {
+      "number": 9,
+      "answer": "an"
+    },
+    {
+      "number": 10,
+      "answer": "the"
+    },
+    {
+      "number": 11,
+      "answer": "that"
+    },
+    {
+      "number": 12,
+      "answer": "that"
+    },
+    {
+      "number": 13,
+      "answer": "any"
+    },
+    {
+      "number": 14,
+      "answer": "the"
+    },
+    {
+      "number": 15,
+      "answer": "as"
+    },
+    {
+      "number": 16,
+      "answer": "the"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "Pruning apple trees is an essential skill for anyone involved in maintaining a shared orchard. Recently, a group of us gathered to learn the art of pruning, eager to enhance the health and productivity of our trees. Under the guidance of an experienced horticulturist, we discovered that proper pruning encourages better air circulation and sunlight penetration, which are crucial for fruit development.\n\nAs we donned our gloves and picked up our secateurs, we learned to identify the branches that needed trimming. The process involved cutting back overgrown limbs and removing any dead or diseased wood. It was fascinating to see how each cut could influence the tree's growth and fruit yield. \n\nWorking together in the orchard fostered a sense of community, as we shared tips and techniques. By the end of the day, not only had we gained valuable knowledge, but we also felt a deeper connection to the land and each other, united by our shared goal of nurturing these beautiful apple trees.",
+      "title": "Learning to Prune Apple Trees in a Shared Orchard"
+    },
+    "gap-discovery": {
+      "sites": [
+        {
+          "sentence": "Pruning apple trees is an essential skill for anyone involved in maintaining a shared orchard.",
+          "word": "an",
+          "family": "articles"
+        },
+        {
+          "sentence": "Recently, a group of us gathered to learn the art of pruning, eager to enhance the health and productivity of our trees.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Under the guidance of an experienced horticulturist, we discovered that proper pruning encourages better air circulation and sunlight penetration, which are crucial for fruit development.",
+          "word": "that",
+          "family": "relative words"
+        },
+        {
+          "sentence": "As we donned our gloves and picked up our secateurs, we learned to identify the branches that needed trimming.",
+          "word": "that",
+          "family": "relative words"
+        },
+        {
+          "sentence": "The process involved cutting back overgrown limbs and removing any dead or diseased wood.",
+          "word": "any",
+          "family": "determiners"
+        },
+        {
+          "sentence": "It was fascinating to see how each cut could influence the tree's growth and fruit yield.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Working together in the orchard fostered a sense of community, as we shared tips and techniques.",
+          "word": "as",
+          "family": "linkers"
+        },
+        {
+          "sentence": "By the end of the day, not only had we gained valuable knowledge, but we also felt a deeper connection to the land and each other, united by our shared goal of nurturing these beautiful apple trees.",
+          "word": "the",
+          "family": "articles"
+        }
+      ]
+    },
+    "select-eight": {
+      "gaps": [
+        {
+          "number": 9,
+          "word": "an",
+          "family": "articles",
+          "sentence": "Pruning apple trees is an essential skill for anyone involved in maintaining a shared orchard."
+        },
+        {
+          "number": 10,
+          "word": "the",
+          "family": "articles",
+          "sentence": "Recently, a group of us gathered to learn the art of pruning, eager to enhance the health and productivity of our trees."
+        },
+        {
+          "number": 11,
+          "word": "that",
+          "family": "relative words",
+          "sentence": "Under the guidance of an experienced horticulturist, we discovered that proper pruning encourages better air circulation and sunlight penetration, which are crucial for fruit development."
+        },
+        {
+          "number": 12,
+          "word": "that",
+          "family": "relative words",
+          "sentence": "As we donned our gloves and picked up our secateurs, we learned to identify the branches that needed trimming."
+        },
+        {
+          "number": 13,
+          "word": "any",
+          "family": "determiners",
+          "sentence": "The process involved cutting back overgrown limbs and removing any dead or diseased wood."
+        },
+        {
+          "number": 14,
+          "word": "the",
+          "family": "articles",
+          "sentence": "It was fascinating to see how each cut could influence the tree's growth and fruit yield."
+        },
+        {
+          "number": 15,
+          "word": "as",
+          "family": "linkers",
+          "sentence": "Working together in the orchard fostered a sense of community, as we shared tips and techniques."
+        },
+        {
+          "number": 16,
+          "word": "the",
+          "family": "articles",
+          "sentence": "By the end of the day, not only had we gained valuable knowledge, but we also felt a deeper connection to the land and each other, united by our shared goal of nurturing these beautiful apple trees."
+        }
+      ]
+    },
+    "uniqueness": {
+      "gaps": [
+        {
+          "number": 1,
+          "intendedAnswer": "an",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The article 'an' is necessary to indicate that the skill is one of many possible skills.",
+          "confidence": 1
+        },
+        {
+          "number": 2,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The article 'the' specifies which group is being referred to, making it essential.",
+          "confidence": 1
+        },
+        {
+          "number": 3,
+          "intendedAnswer": "that",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The relative pronoun 'that' is needed to introduce the clause explaining what was discovered.",
+          "confidence": 1
+        },
+        {
+          "number": 4,
+          "intendedAnswer": "that",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The relative pronoun 'that' connects the branches to the action of identifying them.",
+          "confidence": 1
+        },
+        {
+          "number": 5,
+          "intendedAnswer": "any",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The determiner 'any' is necessary to indicate the inclusion of all types of dead or diseased wood.",
+          "confidence": 1
+        },
+        {
+          "number": 6,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The article 'the' is important to specify which cut is being referred to in the context.",
+          "confidence": 1
+        },
+        {
+          "number": 7,
+          "intendedAnswer": "as",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The linker 'as' is used to indicate the simultaneous actions of fostering community and sharing tips.",
+          "confidence": 1
+        },
+        {
+          "number": 8,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The article 'the' is crucial to specify the connection being referred to in the context.",
+          "confidence": 1
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "QUALITY_FAIL",
+    "items": [
+      {
+        "number": 9,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 10,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 11,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 12,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 13,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 14,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 15,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 16,
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "An empty alternative list is not evidence of uniqueness. The search was not shown, the justification is empty, or confidence is too low.",
+          "candidateAlternative": null,
+          "repairRecommendation": "Search for other function words and record the search. Do not pass this gap on silence.",
+          "confidence": "high"
+        }
+      }
+    ]
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind solve answered \"pruning apple trees is an essential skill for anyone involved in maintaining a shared orchard.\", stored answer is \"an\"."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences are well-structured and coherent, but they lack a natural conversational tone that would be expected in everyday British English. They read more like a formal report than casual speech.",
+    "candidateAlternative": "Pruning apple trees is a key skill for anyone looking after a shared orchard."
+  },
+  "repairHistory": [
+    {
+      "action": "move-gap",
+      "scope": "failed-gap",
+      "instruction": "Close this gap and choose a different function word in the finished prose. Do not rewrite the passage yet."
+    },
+    {
+      "action": "move-gap",
+      "scope": "failed-gap",
+      "instruction": "Close this gap and choose a different function word in the finished prose. Do not rewrite the passage yet."
+    }
+  ],
+  "finalVerdict": "QUALITY_FAIL",
+  "trace": [
+    "prose",
+    "gap-discovery",
+    "select-eight",
+    "uniqueness",
+    "select-eight",
+    "move-gap"
+  ],
+  "layers": {
+    "mechanical": "QUALITY_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind solve answered \"pruning apple trees is an essential skill for anyone involved in maintaining a shared orchard.\", stored answer is \"an\"."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences are well-structured and coherent, but they lack a natural conversational tone that would be expected in everyday British English. They read more like a formal report than casual speech.",
+      "candidateAlternative": "Pruning apple trees is a key skill for anyone looking after a shared orchard."
+    }
+  }
+}

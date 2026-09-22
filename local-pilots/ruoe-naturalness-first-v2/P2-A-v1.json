@@ -1,0 +1,109 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-A",
+    "direction": "The volunteer who catalogues old photographs for a local museum"
+  },
+  "arm": "v1",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:02:24.233Z",
+  "result": {
+    "version": "v1-code-prompt",
+    "partNumber": 2,
+    "note": "Code prompt only. Database overrides were not read.",
+    "generated": {
+      "partTitle": "Reading and Use of English Part 2: Open Cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "a"
+      },
+      "title": "Preserving the Past: A Volunteer’s Journey",
+      "passage": "In a small town, a volunteer named Sarah has taken on the task of cataloguing old photographs for the local museum. (0) ___ she began, she faced numerous challenges. The photographs were in various conditions, some faded and others damaged. Initially, she tried to sort them by date, but this method proved ineffective because many lacked clear timestamps. After several attempts, Sarah realised that grouping them by subject matter worked better. She started categorising them into themes such as family events, local festivals, and historical landmarks. This approach not only made it easier to manage the collection but also helped her discover connections between different images. As she worked, Sarah also learned to use digital tools to enhance the photos, making them more accessible to the public. Now, thanks to her dedication, the museum has a rich archive that showcases the town's history. (9) ___ her efforts, the community has gained a renewed appreciation for its heritage.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "for"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "to"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "but"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "that"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "her"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "and"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "to"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "history"
+        }
+      ]
+    }
+  }
+}

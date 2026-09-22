@@ -1,0 +1,311 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-B",
+    "direction": "Learning to keep bees on a city rooftop"
+  },
+  "arm": "v2",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:03:21.314Z",
+  "result": {
+    "version": "naturalness-first-v2",
+    "partNumber": 3,
+    "trace": [
+      "prose",
+      "family-discovery",
+      "base-assignment",
+      "derivation-check",
+      "new-position"
+    ],
+    "outputs": {
+      "prose": {
+        "title": "Beekeeping on Rooftops: A Sweet Urban Adventure",
+        "passage": "In recent years, beekeeping has become increasingly popular among city dwellers, particularly those with rooftop access. Keeping bees on a rooftop not only helps support local ecosystems but also provides a rewarding hobby. Urban environments offer unique advantages for beekeeping; the abundance of flowering plants in gardens and parks can provide bees with a diverse diet.\n\nBefore starting, it’s essential to research local regulations regarding beekeeping, as some cities have specific guidelines. Investing in a good-quality beehive and protective gear is crucial for both the bees' health and personal safety. Beginners should consider joining a local beekeeping group, where they can gain valuable insights and support from experienced keepers.\n\nRegular maintenance, such as monitoring the hive for pests and ensuring the bees have enough food, is vital. The reward for this effort comes in the form of honey, which can be harvested and enjoyed or shared with friends and family. Rooftop beekeeping is not just about honey; it’s about connecting with nature in the heart of the city."
+      },
+      "family-discovery": {
+        "keywords": [
+          {
+            "word": "beekeeping",
+            "sentence": "In recent years, beekeeping has become increasingly popular among city dwellers, particularly those with rooftop access."
+          },
+          {
+            "word": "hobby",
+            "sentence": "Keeping bees on a rooftop not only helps support local ecosystems but also provides a rewarding hobby."
+          },
+          {
+            "word": "local",
+            "sentence": "Before starting, it’s essential to research local regulations regarding beekeeping, as some cities have specific guidelines."
+          },
+          {
+            "word": "investing",
+            "sentence": "Investing in a good-quality beehive and protective gear is crucial for both the bees' health and personal safety."
+          },
+          {
+            "word": "maintenance",
+            "sentence": "Regular maintenance, such as monitoring the hive for pests and ensuring the bees have enough food, is vital."
+          },
+          {
+            "word": "reward",
+            "sentence": "The reward for this effort comes in the form of honey, which can be harvested and enjoyed or shared with friends and family."
+          },
+          {
+            "word": "connecting",
+            "sentence": "Rooftop beekeeping is not just about honey; it’s about connecting with nature in the heart of the city."
+          }
+        ]
+      },
+      "base-assignment": {
+        "items": [
+          {
+            "stem": "beekeep",
+            "answer": "beekeeping",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "hobby",
+            "answer": "hobby",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "local",
+            "answer": "local",
+            "wordClass": "adjective",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "locally",
+              "locality"
+            ]
+          },
+          {
+            "stem": "invest",
+            "answer": "investing",
+            "wordClass": "verb",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "investment"
+            ]
+          },
+          {
+            "stem": "maintain",
+            "answer": "maintenance",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "reward",
+            "answer": "reward",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "rewarding",
+              "rewarded"
+            ]
+          },
+          {
+            "stem": "connect",
+            "answer": "connecting",
+            "wordClass": "verb",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "connection"
+            ]
+          }
+        ]
+      },
+      "derivation-check": {
+        "items": [
+          {
+            "stem": "beekeep",
+            "answer": "beekeeping",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "hobby",
+            "answer": "hobby",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "local",
+            "answer": "local",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "locally",
+              "locality"
+            ]
+          },
+          {
+            "stem": "invest",
+            "answer": "investing",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "investment"
+            ]
+          },
+          {
+            "stem": "maintain",
+            "answer": "maintenance",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "reward",
+            "answer": "reward",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "rewarding",
+              "rewarded"
+            ]
+          },
+          {
+            "stem": "connect",
+            "answer": "connecting",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "connection"
+            ]
+          }
+        ]
+      }
+    },
+    "adversarial": {
+      "verdict": "HARD_FAIL",
+      "items": [
+        {
+          "stem": "beekeep",
+          "answer": "beekeeping",
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "\"beekeeping\" is a direct, unique derivation of \"beekeep\" in a natural sentence.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "hobby",
+          "answer": "hobby",
+          "judgement": {
+            "verdict": "HARD_FAIL",
+            "reason": "The answer is identical to the stem. That is not word formation.",
+            "candidateAlternative": "hobby",
+            "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "local",
+          "answer": "local",
+          "judgement": {
+            "verdict": "HARD_FAIL",
+            "reason": "The answer is identical to the stem. That is not word formation.",
+            "candidateAlternative": "local",
+            "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "invest",
+          "answer": "investing",
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "Another family member also fits this context (investment).",
+            "candidateAlternative": "investment",
+            "repairRecommendation": "Discard the position. The context does not force one family member.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "maintain",
+          "answer": "maintenance",
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "\"maintenance\" is a direct, unique derivation of \"maintain\" in a natural sentence.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "reward",
+          "answer": "reward",
+          "judgement": {
+            "verdict": "HARD_FAIL",
+            "reason": "The answer is identical to the stem. That is not word formation.",
+            "candidateAlternative": "reward",
+            "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "connect",
+          "answer": "connecting",
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "Another family member also fits this context (connection).",
+            "candidateAlternative": "connection",
+            "repairRecommendation": "Discard the position. The context does not force one family member.",
+            "confidence": "high"
+          }
+        }
+      ]
+    },
+    "repairs": [
+      {
+        "action": "new-position",
+        "scope": "failed-item",
+        "instruction": "Choose a different word already in the natural text. Do not force this sentence to keep the rejected base."
+      }
+    ],
+    "answerKey": [
+      {
+        "stem": "beekeep",
+        "answer": "beekeeping"
+      },
+      {
+        "stem": "hobby",
+        "answer": "hobby"
+      },
+      {
+        "stem": "local",
+        "answer": "local"
+      },
+      {
+        "stem": "invest",
+        "answer": "investing"
+      },
+      {
+        "stem": "maintain",
+        "answer": "maintenance"
+      },
+      {
+        "stem": "reward",
+        "answer": "reward"
+      },
+      {
+        "stem": "connect",
+        "answer": "connecting"
+      }
+    ]
+  }
+}

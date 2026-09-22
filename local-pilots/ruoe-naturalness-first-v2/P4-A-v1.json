@@ -1,0 +1,115 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-A",
+    "direction": "Everyday misunderstandings about household recycling",
+    "preferredFamily": "TF-02"
+  },
+  "arm": "v1",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:03:45.023Z",
+  "result": {
+    "version": "v1-code-prompt",
+    "partNumber": 4,
+    "note": "Code prompt only. Database overrides were not read.",
+    "generated": {
+      "partTitle": "Key word transformations",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given.",
+      "example": {
+        "number": 0,
+        "sentence1": "She said she would help us with the recycling.",
+        "keyword": "PROMISED",
+        "sentence2Start": "She __________________ us with the recycling.",
+        "answer": "PROMISED to help"
+      },
+      "questions": [
+        {
+          "id": 25,
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "I didn't realise that plastic bags cannot be recycled.",
+          "keyword": "KNOW",
+          "sentence2Start": "I __________________ that plastic bags cannot be recycled.",
+          "answer": "did not know"
+        },
+        {
+          "id": 26,
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "It's important to check what can be recycled.",
+          "keyword": "NECESSARY",
+          "sentence2Start": "It is __________________ what can be recycled.",
+          "answer": "necessary to check"
+        },
+        {
+          "id": 27,
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "They told us to separate our waste properly.",
+          "keyword": "ADVISED",
+          "sentence2Start": "They __________________ us to separate our waste properly.",
+          "answer": "advised to tell"
+        },
+        {
+          "id": 28,
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "If you don't recycle, you waste resources.",
+          "keyword": "UNLESS",
+          "sentence2Start": "You waste resources __________________ recycle.",
+          "answer": "unless you do"
+        },
+        {
+          "id": 29,
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "I regret not checking the recycling guidelines.",
+          "keyword": "WISH",
+          "sentence2Start": "I __________________ the recycling guidelines.",
+          "answer": "wish I had checked"
+        },
+        {
+          "id": 30,
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "You should put glass in the designated bin.",
+          "keyword": "MUST",
+          "sentence2Start": "Glass __________________ in the designated bin.",
+          "answer": "must be put"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": 25,
+          "number": 25,
+          "answer": "did not know"
+        },
+        {
+          "id": 26,
+          "number": 26,
+          "answer": "necessary to check"
+        },
+        {
+          "id": 27,
+          "number": 27,
+          "answer": "advised to tell"
+        },
+        {
+          "id": 28,
+          "number": 28,
+          "answer": "unless you do"
+        },
+        {
+          "id": 29,
+          "number": 29,
+          "answer": "wish I had checked"
+        },
+        {
+          "id": 30,
+          "number": 30,
+          "answer": "must be put"
+        }
+      ]
+    }
+  }
+}

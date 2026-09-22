@@ -1,0 +1,120 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-G",
+    "direction": "Organising donated tools in a community workshop"
+  },
+  "savedAt": "2026-09-22T09:14:04.946Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 1796,
+    "completionTokens": 820,
+    "totalTokens": 2616
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 343,
+        "completionTokens": 214,
+        "totalTokens": 557
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "family-discovery",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 563,
+        "completionTokens": 179,
+        "totalTokens": 742
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 206,
+        "completionTokens": 35,
+        "totalTokens": 241
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "base-assignment",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 684,
+        "completionTokens": 392,
+        "totalTokens": 1076
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": [],
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Stage output failed pipeline validation (items.0.lexicalFamilyValidation.legitimateBase: Expected boolean, received string; items.1.lexicalFamilyValidation.legitimateBase: Expected boolean, received string; items.2.lexicalFamilyValidation.legitimateBase: Expected boolean, received string).",
+    "candidateAlternative": null,
+    "repairRecommendation": "The schema repair budget is spent. The item stays failed.",
+    "confidence": "high"
+  },
+  "blindSolve": null,
+  "adversarialValidation": null,
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "family-discovery",
+      "instruction": "Correct the JSON shape once."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "prose",
+    "family-discovery",
+    "schema-repair",
+    "base-assignment"
+  ],
+  "stageRecords": [
+    {
+      "stage": "prose",
+      "status": "PASS",
+      "data": {
+        "passage": "In a community workshop, organising donated tools is essential for creating an efficient and welcoming environment. First, it’s important to sort the tools into categories such as hand tools, power tools, and gardening equipment. This makes it easier for users to find what they need. Once sorted, each category can be assigned a specific storage area, ensuring that everything has its place.\n\nLabeling shelves and storage bins clearly can greatly enhance accessibility. Using colour-coded labels can also help users quickly identify the type of tool they are looking for. Regular maintenance checks should be scheduled to ensure that tools are in good working condition and to remove any that are damaged or no longer usable.\n\nAdditionally, involving community members in the organisation process can foster a sense of ownership and responsibility. Workshops can be held to teach proper tool usage and maintenance, further enhancing the skills of participants. By keeping the workshop organised, we create a space that encourages creativity and collaboration among community members.",
+        "title": "Organising Donated Tools in a Community Workshop"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "family-discovery",
+      "status": "PASS",
+      "data": {
+        "words": [],
+        "stage": "family-discovery",
+        "linguistic_judgement": "acceptable",
+        "boolean_value": true
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "base-assignment",
+      "status": "PIPELINE_FAIL",
+      "data": {},
+      "issues": [
+        "items.0.lexicalFamilyValidation.legitimateBase: Expected boolean, received string",
+        "items.1.lexicalFamilyValidation.legitimateBase: Expected boolean, received string",
+        "items.2.lexicalFamilyValidation.legitimateBase: Expected boolean, received string"
+      ],
+      "repairable": true
+    }
+  ]
+}

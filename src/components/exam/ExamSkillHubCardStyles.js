@@ -1,6 +1,11 @@
 export default function ExamSkillHubCardStyles() {
   return (
     <style jsx global>{`
+      @media (max-width: 639px) {
+        .exam-skill-hub .exam-practice-hub__exam-mode {
+          display: none;
+        }
+      }
       .exam-skill-hub .exam-practice-hub__skills-grid {
         display: grid;
         gap: 12px;

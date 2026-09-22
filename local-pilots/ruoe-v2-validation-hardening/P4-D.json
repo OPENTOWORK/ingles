@@ -1,0 +1,169 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-D",
+    "direction": "A parcel that arrived a day early",
+    "preferredFamily": "TF-07"
+  },
+  "savedAt": "2026-09-22T08:36:04.455Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "family-candidate",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "sentence-pair",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "replace-family",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": {
+    "keyword": "that",
+    "answer": "that",
+    "s1": "I received a parcel",
+    "completedS2": "I received a parcel that arrived a day early.",
+    "transformationFamily": "relative clause"
+  },
+  "generatorOutput": {
+    "family": {
+      "familyId": "TF-07",
+      "keyword": "parcel",
+      "kept": true
+    },
+    "pair": {
+      "s1": "The parcel arrived at my house yesterday.",
+      "keyword": "parcel",
+      "s2WithGap": "",
+      "answer": "parcel",
+      "completedS2": "Yesterday, the parcel was delivered to my home.",
+      "transformationFamily": "",
+      "acceptedVariants": []
+    },
+    "semantic": {
+      "propositionsPreserved": true,
+      "agencyPreserved": true,
+      "referencePreserved": true,
+      "tenseAspectPreserved": true,
+      "modalityPreserved": true,
+      "comparisonScopePreserved": true,
+      "informationLost": false,
+      "informationAdded": false,
+      "natural": true
+    },
+    "naturalness": {
+      "natural": true
+    },
+    "replacement": {
+      "s1": "I received a parcel",
+      "keyword": "that",
+      "s2WithGap": "I received a parcel ___ arrived a day early.",
+      "answer": "that",
+      "completedS2": "I received a parcel that arrived a day early.",
+      "transformationFamily": "relative clause",
+      "acceptedVariants": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "HARD_FAIL",
+    "reason": "Semantic or naturalness JSON was not a complete boolean record, so it cannot override or confirm the item.",
+    "candidateAlternative": null,
+    "repairRecommendation": "Return every semantic flag as true or false, and natural as a boolean.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "PASS",
+    "reason": "Blind solve matched the stored transformation."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentence 'I received a parcel that arrived a day early' is grammatically correct and natural, but the gap in 'I received a parcel ___ arrived a day early' does not allow for a smooth insertion of 'that' without making the sentence sound awkward. A more natural construction would be needed for the gap.",
+    "candidateAlternative": "I received a parcel which arrived a day early."
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "naturalness",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "replace-family",
+      "scope": "failed-item",
+      "instruction": "Drop this Transformation Family and try another route that keeps the same meaning in natural British English. Do not bend the sentences around the failed keyword."
+    }
+  ],
+  "finalVerdict": "HARD_FAIL",
+  "trace": [
+    "family-candidate",
+    "sentence-pair",
+    "semantic",
+    "naturalness",
+    "schema-repair",
+    "replace-family",
+    "semantic",
+    "naturalness"
+  ],
+  "layers": {
+    "mechanical": "HARD_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "PASS",
+      "reason": "Blind solve matched the stored transformation."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentence 'I received a parcel that arrived a day early' is grammatically correct and natural, but the gap in 'I received a parcel ___ arrived a day early' does not allow for a smooth insertion of 'that' without making the sentence sound awkward. A more natural construction would be needed for the gap.",
+      "candidateAlternative": "I received a parcel which arrived a day early."
+    }
+  }
+}

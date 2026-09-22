@@ -1,0 +1,224 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-G",
+    "direction": "A neighbour lending someone a ladder",
+    "preferredFamily": "TF-05"
+  },
+  "savedAt": "2026-09-22T09:14:33.856Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 3930,
+    "completionTokens": 442,
+    "totalTokens": 4372
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "family-candidate",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 386,
+        "completionTokens": 27,
+        "totalTokens": 413
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "sentence-pair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 402,
+        "completionTokens": 63,
+        "totalTokens": 465
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 502,
+        "completionTokens": 75,
+        "totalTokens": 577
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 369,
+        "completionTokens": 38,
+        "totalTokens": 407
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 209,
+        "completionTokens": 8,
+        "totalTokens": 217
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "replace-family",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 507,
+        "completionTokens": 81,
+        "totalTokens": 588
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 486,
+        "completionTokens": 75,
+        "totalTokens": 561
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 361,
+        "completionTokens": 30,
+        "totalTokens": 391
+      }
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 320,
+        "completionTokens": 6,
+        "totalTokens": 326
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 388,
+        "completionTokens": 39,
+        "totalTokens": 427
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": {
+    "keyword": "ladder",
+    "answer": "ladder",
+    "s1": "My neighbour offered to lend me a ladder.",
+    "completedS2": "I borrowed a ladder from my neighbour.",
+    "transformationFamily": "synonym replacement"
+  },
+  "generatorOutput": {
+    "family": {
+      "familyId": "TF-05",
+      "keyword": "ladder",
+      "kept": true
+    },
+    "pair": {
+      "s1": "The children climbed up the ladder to reach the treehouse.",
+      "keyword": "ladder",
+      "s2WithGap": "",
+      "answer": "ladder",
+      "completedS2": "The children ascended the ladder to get to the treehouse.",
+      "transformationFamily": "",
+      "acceptedVariants": []
+    },
+    "semantic": {
+      "propositionsPreserved": true,
+      "agencyPreserved": true,
+      "referencePreserved": true,
+      "tenseAspectPreserved": true,
+      "modalityPreserved": true,
+      "comparisonScopePreserved": true,
+      "informationLost": false,
+      "informationAdded": false,
+      "natural": true
+    },
+    "naturalness": {
+      "natural": true
+    },
+    "replacement": {
+      "s1": "My neighbour offered to lend me a ladder.",
+      "keyword": "ladder",
+      "s2WithGap": "I borrowed a _____ from my neighbour.",
+      "answer": "ladder",
+      "completedS2": "I borrowed a ladder from my neighbour.",
+      "transformationFamily": "synonym replacement",
+      "acceptedVariants": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Semantic or naturalness JSON was not a complete boolean record, so it cannot override or confirm the item.",
+    "candidateAlternative": null,
+    "repairRecommendation": "Return every semantic flag as true or false, and natural as a boolean.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "PASS",
+    "reason": "Blind solve matched the stored transformation."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "PASS",
+    "reason": "The sentence is natural and the gap can be filled with 'ladder', which is a suitable and logical word in this context.",
+    "candidateAlternative": null
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "naturalness",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "replace-family",
+      "scope": "failed-item",
+      "instruction": "Drop this Transformation Family and try another route that keeps the same meaning in natural British English. Do not bend the sentences around the failed keyword."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "family-candidate",
+    "sentence-pair",
+    "semantic",
+    "naturalness",
+    "schema-repair",
+    "replace-family",
+    "semantic",
+    "naturalness"
+  ],
+  "layers": {
+    "mechanical": "PIPELINE_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "PASS",
+      "reason": "Blind solve matched the stored transformation."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "PASS",
+      "reason": "The sentence is natural and the gap can be filled with 'ladder', which is a suitable and logical word in this context.",
+      "candidateAlternative": null
+    }
+  }
+}

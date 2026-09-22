@@ -1,0 +1,121 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-H",
+    "direction": "Recording the memories of retired fishing crews"
+  },
+  "savedAt": "2026-09-22T09:14:16.097Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 1793,
+    "completionTokens": 1008,
+    "totalTokens": 2801
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 342,
+        "completionTokens": 213,
+        "totalTokens": 555
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "family-discovery",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 562,
+        "completionTokens": 220,
+        "totalTokens": 782
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 206,
+        "completionTokens": 35,
+        "totalTokens": 241
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "base-assignment",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 683,
+        "completionTokens": 540,
+        "totalTokens": 1223
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": [],
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Stage output failed pipeline validation (items.0.lexicalFamilyValidation.legitimateBase: Expected boolean, received string; items.1.lexicalFamilyValidation.legitimateBase: Expected boolean, received string; items.2.lexicalFamilyValidation.legitimateBase: Expected boolean, received string; items.3.lexicalFamilyValidation.legitimateBase: Expected boolean, received string).",
+    "candidateAlternative": null,
+    "repairRecommendation": "The schema repair budget is spent. The item stays failed.",
+    "confidence": "high"
+  },
+  "blindSolve": null,
+  "adversarialValidation": null,
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "family-discovery",
+      "instruction": "Correct the JSON shape once."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "prose",
+    "family-discovery",
+    "schema-repair",
+    "base-assignment"
+  ],
+  "stageRecords": [
+    {
+      "stage": "prose",
+      "status": "PASS",
+      "data": {
+        "passage": "As the years pass, the stories of retired fishing crews become invaluable treasures of maritime history. These men and women, who once braved the unpredictable seas, hold a wealth of experiences that reflect not only their personal journeys but also the evolution of fishing practices over the decades. Recording their memories serves a dual purpose: it honours their contributions to the industry and preserves the rich tapestry of coastal communities.\n\nInitiatives to document these narratives often involve oral history projects, where volunteers interview former fishermen and women, capturing their tales of adventure, hardship, and camaraderie. These recordings can be transformed into books, documentaries, or even exhibitions, allowing future generations to connect with their heritage.\n\nMoreover, sharing these stories fosters a sense of community and respect for the ocean's challenges. By listening to the voices of those who have spent their lives at sea, we gain insights into sustainable practices and the importance of preserving our marine environments for years to come.",
+        "title": "Preserving the Tales of Retired Fishing Crews"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "family-discovery",
+      "status": "PASS",
+      "data": {
+        "words": [],
+        "stage": "family-discovery",
+        "linguistic_judgement": "acceptable",
+        "boolean_value": true
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "base-assignment",
+      "status": "PIPELINE_FAIL",
+      "data": {},
+      "issues": [
+        "items.0.lexicalFamilyValidation.legitimateBase: Expected boolean, received string",
+        "items.1.lexicalFamilyValidation.legitimateBase: Expected boolean, received string",
+        "items.2.lexicalFamilyValidation.legitimateBase: Expected boolean, received string",
+        "items.3.lexicalFamilyValidation.legitimateBase: Expected boolean, received string"
+      ],
+      "repairable": true
+    }
+  ]
+}

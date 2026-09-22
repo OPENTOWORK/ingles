@@ -1,0 +1,171 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-E",
+    "direction": "Choosing the quieter train",
+    "preferredFamily": "TF-04"
+  },
+  "savedAt": "2026-09-22T08:36:15.016Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "family-candidate",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "sentence-pair",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "replace-family",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": {
+    "keyword": "quieter",
+    "answer": "quieter",
+    "s1": "I decided to take the train that was less noisy.",
+    "completedS2": "I chose the train that was quieter.",
+    "transformationFamily": "TF-05"
+  },
+  "generatorOutput": {
+    "family": {
+      "familyId": "TF-04",
+      "keyword": "quieter",
+      "kept": true
+    },
+    "pair": {
+      "s1": "The room is quieter now than it was before.",
+      "keyword": "quieter",
+      "s2WithGap": "",
+      "answer": "quieter",
+      "completedS2": "Now, the room is quieter than it used to be.",
+      "transformationFamily": "",
+      "acceptedVariants": []
+    },
+    "semantic": {
+      "propositionsPreserved": true,
+      "agencyPreserved": true,
+      "referencePreserved": true,
+      "tenseAspectPreserved": true,
+      "modalityPreserved": true,
+      "comparisonScopePreserved": true,
+      "informationLost": false,
+      "informationAdded": false,
+      "natural": true
+    },
+    "naturalness": {
+      "natural": true
+    },
+    "replacement": {
+      "s1": "I decided to take the train that was less noisy.",
+      "keyword": "quieter",
+      "s2WithGap": "I chose the train that was __________.",
+      "answer": "quieter",
+      "completedS2": "I chose the train that was quieter.",
+      "transformationFamily": "TF-05",
+      "acceptedVariants": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "HARD_FAIL",
+    "reason": "Semantic or naturalness JSON was not a complete boolean record, so it cannot override or confirm the item.",
+    "candidateAlternative": null,
+    "repairRecommendation": "Return every semantic flag as true or false, and natural as a boolean.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind transformation was \"quieter.\", stored answer is \"quieter\".",
+    "candidateAlternative": "quieter."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentence with the gap does not naturally prompt the use of 'quieter' in a way that a competent British English speaker would typically phrase it. A more natural alternative would be 'I chose the quieter train.'",
+    "candidateAlternative": "I chose the quieter train."
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "naturalness",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "replace-family",
+      "scope": "failed-item",
+      "instruction": "Drop this Transformation Family and try another route that keeps the same meaning in natural British English. Do not bend the sentences around the failed keyword."
+    }
+  ],
+  "finalVerdict": "HARD_FAIL",
+  "trace": [
+    "family-candidate",
+    "sentence-pair",
+    "semantic",
+    "naturalness",
+    "schema-repair",
+    "replace-family",
+    "semantic",
+    "naturalness"
+  ],
+  "layers": {
+    "mechanical": "HARD_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind transformation was \"quieter.\", stored answer is \"quieter\".",
+      "candidateAlternative": "quieter."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentence with the gap does not naturally prompt the use of 'quieter' in a way that a competent British English speaker would typically phrase it. A more natural alternative would be 'I chose the quieter train.'",
+      "candidateAlternative": "I chose the quieter train."
+    }
+  }
+}

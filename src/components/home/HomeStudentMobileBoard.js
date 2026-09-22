@@ -8,12 +8,12 @@ import { getLevelExamSkillRoute, getLevelSkillNavLinks } from '@/data/nivelesLev
 import { nivelesPathToExamPractice } from '@/config/appRoutes';
 
 const LEVEL_SLUG = 'b2';
-const GUEST_REGISTER_HREF = '/registro';
+const GUEST_LOGIN_HREF = '/login';
 
 /**
  * Accesos a las skills de B2.
  * Solo visible por debajo de 640px (`.home-student-board` está oculto por defecto).
- * Sin sesión, cualquier skill lleva a registrarse y la tarjeta se ve igual.
+ * Sin sesión, cualquier skill lleva al login y la tarjeta se ve igual.
  */
 export default function HomeStudentMobileBoard({ guest = false }) {
   const { roleConfirmed, userRole } = useConfirmedUserRole();
@@ -47,7 +47,7 @@ export default function HomeStudentMobileBoard({ guest = false }) {
                   </span>
                 ) : (
                   <Link
-                    href={guest ? GUEST_REGISTER_HREF : nivelesPathToExamPractice(item.href)}
+                    href={guest ? GUEST_LOGIN_HREF : nivelesPathToExamPractice(item.href)}
                     className={`home-student-board__skill${comingSoon ? ' home-student-board__skill--locked' : ''}`}
                     data-skill={item.theme}
                     aria-label={comingSoon ? `${label}, coming soon` : undefined}

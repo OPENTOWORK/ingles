@@ -1,0 +1,576 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-C",
+    "direction": "Cataloguing a collection of old theatre programmes"
+  },
+  "savedAt": "2026-09-22T08:35:09.380Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "family-discovery",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "base-assignment",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "derivation-check",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "new-position",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "Cataloguing a collection of old theatre programmes can be a fascinating and rewarding task. Each programme tells a story, not just of the performance itself, but of the era in which it was produced. To begin, it’s essential to sort the programmes chronologically or by genre, allowing for a clearer understanding of the evolution of theatre over time. As you handle each item, take note of the production details, including the cast, crew, and any notable reviews. This information can enrich the context of your collection.\n\nDigital cataloguing is also an option, enabling you to create a searchable database that can be shared with fellow enthusiasts. High-quality scans of the programmes can preserve their visual appeal while making them accessible to a wider audience. Additionally, consider including personal anecdotes or historical insights related to the performances. Ultimately, this process not only safeguards the programmes but also celebrates the rich history of theatre, making it an enjoyable journey for both the cataloguer and future readers.",
+  "candidateItem": [
+    {
+      "stem": "catalogue",
+      "answer": "cataloguing"
+    },
+    {
+      "stem": "programme",
+      "answer": "programmes"
+    },
+    {
+      "stem": "theatre",
+      "answer": "theatre"
+    },
+    {
+      "stem": "detail",
+      "answer": "details"
+    },
+    {
+      "stem": "information",
+      "answer": "information"
+    },
+    {
+      "stem": "context",
+      "answer": "context"
+    },
+    {
+      "stem": "digital",
+      "answer": "digital"
+    },
+    {
+      "stem": "accessible",
+      "answer": "accessible"
+    },
+    {
+      "stem": "celebrate",
+      "answer": "celebrates"
+    },
+    {
+      "stem": "journey",
+      "answer": "journey"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "Cataloguing a collection of old theatre programmes can be a fascinating and rewarding task. Each programme tells a story, not just of the performance itself, but of the era in which it was produced. To begin, it’s essential to sort the programmes chronologically or by genre, allowing for a clearer understanding of the evolution of theatre over time. As you handle each item, take note of the production details, including the cast, crew, and any notable reviews. This information can enrich the context of your collection.\n\nDigital cataloguing is also an option, enabling you to create a searchable database that can be shared with fellow enthusiasts. High-quality scans of the programmes can preserve their visual appeal while making them accessible to a wider audience. Additionally, consider including personal anecdotes or historical insights related to the performances. Ultimately, this process not only safeguards the programmes but also celebrates the rich history of theatre, making it an enjoyable journey for both the cataloguer and future readers.",
+      "title": "The Art of Cataloguing Old Theatre Programmes"
+    },
+    "family-discovery": {
+      "words": [],
+      "stage": "family-discovery"
+    },
+    "base-assignment": {
+      "items": [
+        {
+          "stem": "catalogue",
+          "answer": "cataloguing",
+          "wordClass": "verb",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "catalogued",
+            "catalogues"
+          ]
+        },
+        {
+          "stem": "programme",
+          "answer": "programmes",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "programme's"
+          ]
+        },
+        {
+          "stem": "theatre",
+          "answer": "theatre",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "theatrical"
+          ]
+        },
+        {
+          "stem": "detail",
+          "answer": "details",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "detailed",
+            "detailing"
+          ]
+        },
+        {
+          "stem": "information",
+          "answer": "information",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "informative"
+          ]
+        },
+        {
+          "stem": "context",
+          "answer": "context",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "contextual"
+          ]
+        },
+        {
+          "stem": "digital",
+          "answer": "digital",
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "digitally"
+          ]
+        },
+        {
+          "stem": "accessible",
+          "answer": "accessible",
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "accessibility"
+          ]
+        },
+        {
+          "stem": "celebrate",
+          "answer": "celebrates",
+          "wordClass": "verb",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "celebration",
+            "celebrated"
+          ]
+        },
+        {
+          "stem": "journey",
+          "answer": "journey",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "journeys"
+          ]
+        }
+      ]
+    },
+    "derivation-check": {
+      "items": [
+        {
+          "stem": "catalogue",
+          "answer": "cataloguing",
+          "wordClass": "verb",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "catalogued",
+            "catalogues"
+          ]
+        },
+        {
+          "stem": "programme",
+          "answer": "programmes",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "programme's"
+          ]
+        },
+        {
+          "stem": "theatre",
+          "answer": "theatre",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "theatrical"
+          ]
+        },
+        {
+          "stem": "detail",
+          "answer": "details",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "detailed",
+            "detailing"
+          ]
+        },
+        {
+          "stem": "information",
+          "answer": "information",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "informative"
+          ]
+        },
+        {
+          "stem": "context",
+          "answer": "context",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "contextual"
+          ]
+        },
+        {
+          "stem": "digital",
+          "answer": "digital",
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "digitally"
+          ]
+        },
+        {
+          "stem": "accessible",
+          "answer": "accessible",
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "accessibility"
+          ]
+        },
+        {
+          "stem": "celebrate",
+          "answer": "celebrates",
+          "wordClass": "verb",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "celebration",
+            "celebrated"
+          ]
+        },
+        {
+          "stem": "journey",
+          "answer": "journey",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "journeys"
+          ]
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "HARD_FAIL",
+    "items": [
+      {
+        "stem": "catalogue",
+        "answer": "cataloguing",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"catalogue\" to \"cataloguing\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "cataloguing",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "catalogue",
+            "answer": "cataloguing",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"catalogue\" to \"cataloguing\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "programme",
+        "answer": "programmes",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"programme\" to \"programmes\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "programmes",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "programme",
+            "answer": "programmes",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"programme\" to \"programmes\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "theatre",
+        "answer": "theatre",
+        "judgement": {
+          "verdict": "HARD_FAIL",
+          "reason": "The answer is identical to the stem. That is not word formation.",
+          "candidateAlternative": "theatre",
+          "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "theatre",
+            "answer": "theatre",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "The answer is identical to the stem. That is not word formation."
+          }
+        }
+      },
+      {
+        "stem": "detail",
+        "answer": "details",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"detail\" to \"details\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "details",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "detail",
+            "answer": "details",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"detail\" to \"details\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "information",
+        "answer": "information",
+        "judgement": {
+          "verdict": "HARD_FAIL",
+          "reason": "The answer is identical to the stem. That is not word formation.",
+          "candidateAlternative": "information",
+          "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "information",
+            "answer": "information",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "The answer is identical to the stem. That is not word formation."
+          }
+        }
+      },
+      {
+        "stem": "context",
+        "answer": "context",
+        "judgement": {
+          "verdict": "HARD_FAIL",
+          "reason": "The answer is identical to the stem. That is not word formation.",
+          "candidateAlternative": "context",
+          "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "context",
+            "answer": "context",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "The answer is identical to the stem. That is not word formation."
+          }
+        }
+      },
+      {
+        "stem": "digital",
+        "answer": "digital",
+        "judgement": {
+          "verdict": "HARD_FAIL",
+          "reason": "The answer is identical to the stem. That is not word formation.",
+          "candidateAlternative": "digital",
+          "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "digital",
+            "answer": "digital",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "The answer is identical to the stem. That is not word formation."
+          }
+        }
+      },
+      {
+        "stem": "accessible",
+        "answer": "accessible",
+        "judgement": {
+          "verdict": "HARD_FAIL",
+          "reason": "The answer is identical to the stem. That is not word formation.",
+          "candidateAlternative": "accessible",
+          "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "accessible",
+            "answer": "accessible",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "The answer is identical to the stem. That is not word formation."
+          }
+        }
+      },
+      {
+        "stem": "celebrate",
+        "answer": "celebrates",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"celebrate\" to \"celebrates\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "celebrates",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "celebrate",
+            "answer": "celebrates",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"celebrate\" to \"celebrates\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "journey",
+        "answer": "journey",
+        "judgement": {
+          "verdict": "HARD_FAIL",
+          "reason": "The answer is identical to the stem. That is not word formation.",
+          "candidateAlternative": "journey",
+          "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "journey",
+            "answer": "journey",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "The answer is identical to the stem. That is not word formation."
+          }
+        }
+      }
+    ]
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind solve wrote \"catalogue\", stored answer is \"cataloguing\".",
+    "candidateAlternative": "catalogue"
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The item lacks natural sentences for the provided stems. For instance, 'catalogue' could be used in a sentence like 'I need to catalogue my books this weekend,' but it is not present. Similarly, the other stems do not have corresponding natural sentences that a competent British English speaker would use. The sentences feel forced and do not flow naturally.",
+    "candidateAlternative": null
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "family-discovery",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "new-position",
+      "scope": "failed-item",
+      "instruction": "Choose a different word already in the natural text. Do not force this sentence to keep the rejected base."
+    }
+  ],
+  "finalVerdict": "HARD_FAIL",
+  "trace": [
+    "prose",
+    "family-discovery",
+    "schema-repair",
+    "base-assignment",
+    "derivation-check",
+    "new-position"
+  ],
+  "layers": {
+    "mechanical": "HARD_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind solve wrote \"catalogue\", stored answer is \"cataloguing\".",
+      "candidateAlternative": "catalogue"
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The item lacks natural sentences for the provided stems. For instance, 'catalogue' could be used in a sentence like 'I need to catalogue my books this weekend,' but it is not present. Similarly, the other stems do not have corresponding natural sentences that a competent British English speaker would use. The sentences feel forced and do not flow naturally.",
+      "candidateAlternative": null
+    }
+  }
+}

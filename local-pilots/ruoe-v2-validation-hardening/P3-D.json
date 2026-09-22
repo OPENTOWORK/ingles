@@ -1,0 +1,353 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-D",
+    "direction": "Replacing the glass in a Victorian greenhouse"
+  },
+  "savedAt": "2026-09-22T08:35:24.122Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "family-discovery",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "base-assignment",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "derivation-check",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "new-position",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "Maintaining a Victorian greenhouse can be a rewarding yet challenging task, especially when it comes to replacing the glass. Over time, the glass panels can become cracked or broken, compromising the structure's integrity and the plants' well-being. To start, gather the necessary tools: safety gloves, a hammer, a putty knife, and replacement glass cut to size. Begin by carefully removing the damaged glass, taking care not to harm the surrounding panels. Use the putty knife to scrape away old putty, ensuring a clean surface for the new glass. Once the old glass is removed, place the new panel into position, securing it with fresh putty. This not only holds the glass in place but also provides insulation. Finally, smooth the putty for a neat finish, and allow it to cure properly. Regular maintenance, including checking for leaks and replacing any damaged glass promptly, will keep your Victorian greenhouse in excellent condition for years to come.",
+  "candidateItem": [
+    {
+      "stem": "maintain",
+      "answer": "maintenance"
+    },
+    {
+      "stem": "replace",
+      "answer": "replacement"
+    },
+    {
+      "stem": "secure",
+      "answer": "security"
+    },
+    {
+      "stem": "insulate",
+      "answer": "insulation"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "Maintaining a Victorian greenhouse can be a rewarding yet challenging task, especially when it comes to replacing the glass. Over time, the glass panels can become cracked or broken, compromising the structure's integrity and the plants' well-being. To start, gather the necessary tools: safety gloves, a hammer, a putty knife, and replacement glass cut to size. Begin by carefully removing the damaged glass, taking care not to harm the surrounding panels. Use the putty knife to scrape away old putty, ensuring a clean surface for the new glass. Once the old glass is removed, place the new panel into position, securing it with fresh putty. This not only holds the glass in place but also provides insulation. Finally, smooth the putty for a neat finish, and allow it to cure properly. Regular maintenance, including checking for leaks and replacing any damaged glass promptly, will keep your Victorian greenhouse in excellent condition for years to come.",
+      "title": "Replacing the Glass in a Victorian Greenhouse"
+    },
+    "family-discovery": {
+      "words": [
+        {
+          "word": "maintain",
+          "sentence": "Regular maintenance, including checking for leaks and replacing any damaged glass promptly, will keep your Victorian greenhouse in excellent condition for years to come."
+        },
+        {
+          "word": "replace",
+          "sentence": "Over time, the glass panels can become cracked or broken, compromising the structure's integrity and the plants' well-being."
+        },
+        {
+          "word": "secure",
+          "sentence": "Once the old glass is removed, place the new panel into position, securing it with fresh putty."
+        },
+        {
+          "word": "insulate",
+          "sentence": "This not only holds the glass in place but also provides insulation."
+        }
+      ]
+    },
+    "base-assignment": {
+      "items": [
+        {
+          "stem": "maintain",
+          "answer": "maintenance",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "maintains",
+            "maintained"
+          ]
+        },
+        {
+          "stem": "replace",
+          "answer": "replacement",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "replaces",
+            "replaced"
+          ]
+        },
+        {
+          "stem": "secure",
+          "answer": "security",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "secures",
+            "secured"
+          ]
+        },
+        {
+          "stem": "insulate",
+          "answer": "insulation",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "insulates",
+            "insulated"
+          ]
+        }
+      ]
+    },
+    "derivation-check": {
+      "items": [
+        {
+          "stem": "maintain",
+          "answer": "maintenance",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "maintains",
+            "maintained"
+          ]
+        },
+        {
+          "stem": "replace",
+          "answer": "replacement",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "replaces",
+            "replaced"
+          ]
+        },
+        {
+          "stem": "secure",
+          "answer": "security",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "secures",
+            "secured"
+          ]
+        },
+        {
+          "stem": "insulate",
+          "answer": "insulation",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "insulates",
+            "insulated"
+          ]
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "QUALITY_FAIL",
+    "items": [
+      {
+        "stem": "maintain",
+        "answer": "maintenance",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"maintain\" to \"maintenance\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "maintenance",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "maintain",
+            "answer": "maintenance",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"maintain\" to \"maintenance\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "replace",
+        "answer": "replacement",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"replace\" to \"replacement\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "replacement",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "replace",
+            "answer": "replacement",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"replace\" to \"replacement\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "secure",
+        "answer": "security",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"secure\" to \"security\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "security",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "secure",
+            "answer": "security",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"secure\" to \"security\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "insulate",
+        "answer": "insulation",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"insulate\" to \"insulation\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "insulation",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "insulate",
+            "answer": "insulation",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"insulate\" to \"insulation\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      }
+    ]
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind solve wrote \"maintain\", stored answer is \"maintenance\".",
+    "candidateAlternative": "maintain"
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences provided for the stems do not form complete, natural sentences in British English. They lack context and structure, making them feel incomplete and unnatural. For example, 'maintain' could be used in a sentence like 'It is important to maintain the greenhouse regularly,' which is more natural than simply stating 'maintain.'",
+    "candidateAlternative": [
+      {
+        "stem": "maintain",
+        "sentence": "It is important to maintain the greenhouse regularly."
+      },
+      {
+        "stem": "replace",
+        "sentence": "You should replace any broken glass panels as soon as possible."
+      },
+      {
+        "stem": "secure",
+        "sentence": "Make sure to secure the new glass panel properly."
+      },
+      {
+        "stem": "insulate",
+        "sentence": "The putty helps to insulate the greenhouse effectively."
+      }
+    ]
+  },
+  "repairHistory": [
+    {
+      "action": "new-position",
+      "scope": "failed-item",
+      "instruction": "Choose a different word already in the natural text. Do not force this sentence to keep the rejected base."
+    }
+  ],
+  "finalVerdict": "QUALITY_FAIL",
+  "trace": [
+    "prose",
+    "family-discovery",
+    "base-assignment",
+    "derivation-check",
+    "new-position"
+  ],
+  "layers": {
+    "mechanical": "QUALITY_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind solve wrote \"maintain\", stored answer is \"maintenance\".",
+      "candidateAlternative": "maintain"
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences provided for the stems do not form complete, natural sentences in British English. They lack context and structure, making them feel incomplete and unnatural. For example, 'maintain' could be used in a sentence like 'It is important to maintain the greenhouse regularly,' which is more natural than simply stating 'maintain.'",
+      "candidateAlternative": [
+        {
+          "stem": "maintain",
+          "sentence": "It is important to maintain the greenhouse regularly."
+        },
+        {
+          "stem": "replace",
+          "sentence": "You should replace any broken glass panels as soon as possible."
+        },
+        {
+          "stem": "secure",
+          "sentence": "Make sure to secure the new glass panel properly."
+        },
+        {
+          "stem": "insulate",
+          "sentence": "The putty helps to insulate the greenhouse effectively."
+        }
+      ]
+    }
+  }
+}

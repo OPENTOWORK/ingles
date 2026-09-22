@@ -1,0 +1,519 @@
+{
+  "brief": {
+    "partNumber": 1,
+    "id": "P1-B",
+    "direction": "Why some coastal paths are closed after winter storms"
+  },
+  "arm": "v2",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:01:55.375Z",
+  "result": {
+    "version": "naturalness-first-v2",
+    "partNumber": 1,
+    "trace": [
+      "passage",
+      "positions",
+      "keys",
+      "distractors",
+      "independent-substitution",
+      "repair-distractor",
+      "repair-sentence"
+    ],
+    "outputs": {
+      "passage": {
+        "title": "The Impact of Winter Storms on Coastal Paths",
+        "passage": "Coastal paths are vital for both locals and tourists, offering stunning views and a chance to connect with nature. However, after winter storms, many of these paths are closed for safety reasons. The harsh weather can cause significant damage, including erosion, landslides, and fallen debris. These hazards can make paths dangerous, with unstable ground and sharp drops posing a risk to walkers. \n\nLocal authorities often need to assess the extent of the damage before reopening the paths. This process can take time, as they must ensure that the area is safe and that any necessary repairs are made. In some cases, the damage may be so severe that paths remain closed for extended periods, impacting access to popular scenic spots. \n\nWhile closures can be frustrating for walkers, they are essential for ensuring public safety. It’s always wise to check for updates on path conditions before heading out, as safety must come first in the wake of winter storms."
+      },
+      "positions": {
+        "candidates": [
+          {
+            "sentence": "Coastal paths are vital for both locals and tourists, offering stunning views and a chance to connect with nature.",
+            "word": "vital",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "However, after winter storms, many of these paths are closed for safety reasons.",
+            "word": "closed",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The harsh weather can cause significant damage, including erosion, landslides, and fallen debris.",
+            "word": "debris",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "These hazards can make paths dangerous, with unstable ground and sharp drops posing a risk to walkers.",
+            "word": "hazards",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Local authorities often need to assess the extent of the damage before reopening the paths.",
+            "word": "assess",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "This process can take time, as they must ensure that the area is safe and that any necessary repairs are made.",
+            "word": "ensure",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "In some cases, the damage may be so severe that paths remain closed for extended periods, impacting access to popular scenic spots.",
+            "word": "impacting",
+            "knowledgeType": "lexical-precision"
+          },
+          {
+            "sentence": "While closures can be frustrating for walkers, they are essential for ensuring public safety.",
+            "word": "essential",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "It’s always wise to check for updates on path conditions before heading out, as safety must come first in the wake of winter storms.",
+            "word": "updates",
+            "knowledgeType": "lexical-meaning"
+          }
+        ]
+      },
+      "keys": {
+        "items": [
+          {
+            "number": 1,
+            "sentence": "Coastal paths are vital for both locals and tourists, offering stunning views and a chance to connect with nature.",
+            "key": "vital",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 2,
+            "sentence": "The harsh weather can cause significant damage, including erosion, landslides, and fallen debris.",
+            "key": "debris",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 3,
+            "sentence": "These hazards can make paths dangerous, with unstable ground and sharp drops posing a risk to walkers.",
+            "key": "hazards",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 4,
+            "sentence": "Local authorities often need to assess the extent of the damage before reopening the paths.",
+            "key": "assess",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 5,
+            "sentence": "This process can take time, as they must ensure that the area is safe and that any necessary repairs are made.",
+            "key": "ensure",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 6,
+            "sentence": "In some cases, the damage may be so severe that paths remain closed for extended periods, impacting access to popular scenic spots.",
+            "key": "impacting",
+            "knowledgeType": "lexical-precision",
+            "obviousChunk": false
+          },
+          {
+            "number": 7,
+            "sentence": "While closures can be frustrating for walkers, they are essential for ensuring public safety.",
+            "key": "essential",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 8,
+            "sentence": "It’s always wise to check for updates on path conditions before heading out, as safety must come first in the wake of winter storms.",
+            "key": "updates",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          }
+        ]
+      },
+      "distractors": {
+        "items": [
+          {
+            "number": 1,
+            "options": [
+              {
+                "letter": "A",
+                "word": "vital",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "crucial",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "important",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "necessary",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "options": [
+              {
+                "letter": "A",
+                "word": "debris",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "rubble",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "waste",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "remains",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "options": [
+              {
+                "letter": "A",
+                "word": "hazards",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "dangers",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "risks",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "threats",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 4,
+            "options": [
+              {
+                "letter": "A",
+                "word": "assess",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "evaluate",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "judge",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "examine",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 5,
+            "options": [
+              {
+                "letter": "A",
+                "word": "ensure",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "confirm",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "verify",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "guarantee",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 6,
+            "options": [
+              {
+                "letter": "A",
+                "word": "impacting",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "affecting",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "altering",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "changing",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 7,
+            "options": [
+              {
+                "letter": "A",
+                "word": "essential",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "crucial",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "vital",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "key",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 8,
+            "options": [
+              {
+                "letter": "A",
+                "word": "updates",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "news",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "information",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "notices",
+                "isKey": false
+              }
+            ]
+          }
+        ]
+      },
+      "independent-substitution": {
+        "items": [
+          {
+            "number": 1,
+            "options": {
+              "letter": "A",
+              "sentence": "Coastal paths are vital for both locals and tourists, offering stunning views and a chance to connect with nature.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          },
+          {
+            "number": 2,
+            "options": {
+              "letter": "A",
+              "sentence": "The harsh weather can cause significant damage, including erosion, landslides, and fallen debris.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          },
+          {
+            "number": 3,
+            "options": {
+              "letter": "A",
+              "sentence": "These hazards can make paths dangerous, with unstable ground and sharp drops posing a risk to walkers.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          },
+          {
+            "number": 4,
+            "options": {
+              "letter": "A",
+              "sentence": "Local authorities often need to assess the extent of the damage before reopening the paths.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          },
+          {
+            "number": 5,
+            "options": {
+              "letter": "A",
+              "sentence": "This process can take time, as they must ensure that the area is safe and that any necessary repairs are made.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          },
+          {
+            "number": 6,
+            "options": {
+              "letter": "A",
+              "sentence": "In some cases, the damage may be so severe that paths remain closed for extended periods, impacting access to popular scenic spots.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          },
+          {
+            "number": 7,
+            "options": {
+              "letter": "A",
+              "sentence": "While closures can be frustrating for walkers, they are essential for ensuring public safety.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          },
+          {
+            "number": 8,
+            "options": {
+              "letter": "A",
+              "sentence": "It’s always wise to check for updates on path conditions before heading out, as safety must come first in the wake of winter storms.",
+              "grammatical": true,
+              "naturalBritishEnglish": true,
+              "semanticallyDefensible": true,
+              "collocationalFit": true,
+              "contextuallyDefensible": true
+            }
+          }
+        ]
+      }
+    },
+    "variety": {
+      "ok": false,
+      "counts": {
+        "collocation": 0,
+        "phrasal-verb": 0,
+        "fixed-expression": 0,
+        "lexical-meaning": 7,
+        "dependent-preposition": 0,
+        "semantic-distinction": 0,
+        "lexical-precision": 1
+      },
+      "obvious": 0,
+      "problems": [
+        "Only 2 knowledge types are used. Cover at least five of: collocation, phrasal-verb, fixed-expression, lexical-meaning, dependent-preposition, semantic-distinction, lexical-precision.",
+        "lexical-meaning accounts for 7 items. No type may account for more than three."
+      ]
+    },
+    "adversarial": {
+      "verdict": "HARD_FAIL",
+      "items": [
+        {
+          "judgement": {
+            "verdict": "HARD_FAIL",
+            "reason": "Independent substitution was not completed for A, B, C and D (missing A, B, C, D).",
+            "candidateAlternative": null,
+            "repairRecommendation": "Run the four-way substitution again before any repair.",
+            "confidence": "high"
+          }
+        }
+      ]
+    },
+    "repairs": [
+      {
+        "action": "repair-distractor",
+        "scope": "failed-item",
+        "instruction": "Replace only the distractor that also survives. Leave every other item unchanged."
+      },
+      {
+        "action": "repair-sentence",
+        "scope": "failed-item",
+        "instruction": "If two natural words remain possible, move the gap inside this sentence only."
+      }
+    ],
+    "answerKey": [
+      {
+        "number": 1,
+        "answer": "vital"
+      },
+      {
+        "number": 2,
+        "answer": "debris"
+      },
+      {
+        "number": 3,
+        "answer": "hazards"
+      },
+      {
+        "number": 4,
+        "answer": "assess"
+      },
+      {
+        "number": 5,
+        "answer": "ensure"
+      },
+      {
+        "number": 6,
+        "answer": "impacting"
+      },
+      {
+        "number": 7,
+        "answer": "essential"
+      },
+      {
+        "number": 8,
+        "answer": "updates"
+      }
+    ]
+  }
+}

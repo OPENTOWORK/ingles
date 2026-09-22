@@ -756,7 +756,13 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   replacePartContent = false,
   persistDespiteValidation = false,
   useCodePrompts = false,
+  ruoeGenerationVersion = 'v1',
 }) {
+  if (ruoeGenerationVersion === 'naturalness-first-v2') {
+    throw new Error(
+      'naturalness-first-v2 is a local code path and cannot be persisted by the production generator.',
+    );
+  }
   if (!isDraloOpenAIConfigured()) {
     throw new Error('OPENAI_API_KEY is not configured.');
   }
@@ -942,7 +948,13 @@ export async function previewLevelExamPartGeneration({
   varietySeed,
   topic,
   adminDb,
+  ruoeGenerationVersion = 'v1',
 }) {
+  if (ruoeGenerationVersion === 'naturalness-first-v2') {
+    throw new Error(
+      'naturalness-first-v2 preview must call runNaturalnessFirstGeneration with code prompts. It does not use database overrides.',
+    );
+  }
   if (!isDraloOpenAIConfigured()) {
     throw new Error('OPENAI_API_KEY is not configured.');
   }

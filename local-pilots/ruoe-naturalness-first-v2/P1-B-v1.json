@@ -1,0 +1,156 @@
+{
+  "brief": {
+    "partNumber": 1,
+    "id": "P1-B",
+    "direction": "Why some coastal paths are closed after winter storms"
+  },
+  "arm": "v1",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:02:04.305Z",
+  "result": {
+    "version": "v1-code-prompt",
+    "partNumber": 1,
+    "note": "Code prompt only. Database overrides were not read.",
+    "generated": {
+      "partTitle": "Cambridge part title",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) closed",
+          "B) opened",
+          "C) blocked",
+          "D) restricted"
+        ],
+        "answer": "A",
+        "explanation": "The context suggests that the paths are not accessible, making 'closed' the most fitting choice."
+      },
+      "title": "The Impact of Winter Storms on Coastal Paths",
+      "passage": "After severe winter storms, many coastal paths are (0) ___ to ensure public safety. The intense waves and high winds can cause significant erosion, which may lead to dangerous conditions for walkers. Authorities often (1) ___ these paths to assess the damage and determine the necessary repairs. While some areas may reopen quickly, others might remain (2) ___ for longer periods, as extensive work is required. Local councils have a duty to (3) ___ that paths are safe before allowing access again. This often involves not only repairing the surface but also reinforcing the surrounding areas to prevent future erosion. The closures can be frustrating for walkers who enjoy the scenic views, but they are (4) ___ for safety reasons. In some cases, alternative routes are offered, which can still provide beautiful coastal experiences. However, these detours may not always (5) ___ the same charm as the original paths. As communities recover from storms, it is essential to (6) ___ the balance between accessibility and safety. Ultimately, the preservation of these paths is crucial for both (7) ___ and tourism. Therefore, while closures may be inconvenient, they are a necessary part of maintaining our coastal heritage.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) close",
+            "B) open",
+            "C) remove",
+            "D) block"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) closed",
+            "B) opened",
+            "C) available",
+            "D) open"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) prove",
+            "B) ensure",
+            "C) claim",
+            "D) suggest"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) necessary",
+            "B) optional",
+            "C) beneficial",
+            "D) harmful"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) provide",
+            "B) offer",
+            "C) deliver",
+            "D) present"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) maintain",
+            "B) create",
+            "C) find",
+            "D) strike"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) conservation",
+            "B) protection",
+            "C) preservation",
+            "D) restoration"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) closures",
+            "B) openings",
+            "C) repairs",
+            "D) paths"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "B"
+        },
+        {
+          "id": "q2",
+          "answer": "A"
+        },
+        {
+          "id": "q3",
+          "answer": "B"
+        },
+        {
+          "id": "q4",
+          "answer": "A"
+        },
+        {
+          "id": "q5",
+          "answer": "A"
+        },
+        {
+          "id": "q6",
+          "answer": "D"
+        },
+        {
+          "id": "q7",
+          "answer": "C"
+        },
+        {
+          "id": "q8",
+          "answer": "A"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 67848,
+    "completionTokens": 22564,
+    "totalTokens": 90412
+  },
+  "counts": {
+    "PASS": 0,
+    "PIPELINE_FAIL": 10,
+    "HARD_FAIL": 0,
+    "QUALITY_FAIL": 2
+  },
+  "index": [
+    {
+      "id": "P1-F",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 1,
+      "tokenUsage": {
+        "promptTokens": 7316,
+        "completionTokens": 3156,
+        "totalTokens": 10472
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P1-F.json"
+    },
+    {
+      "id": "P1-G",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 1,
+      "tokenUsage": {
+        "promptTokens": 6743,
+        "completionTokens": 2896,
+        "totalTokens": 9639
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P1-G.json"
+    },
+    {
+      "id": "P1-H",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 1,
+      "tokenUsage": {
+        "promptTokens": 6405,
+        "completionTokens": 2378,
+        "totalTokens": 8783
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P1-H.json"
+    },
+    {
+      "id": "P2-F",
+      "ok": true,
+      "verdict": "QUALITY_FAIL",
+      "repairs": 1,
+      "tokenUsage": {
+        "promptTokens": 9561,
+        "completionTokens": 2957,
+        "totalTokens": 12518
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P2-F.json"
+    },
+    {
+      "id": "P2-G",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 1,
+      "tokenUsage": {
+        "promptTokens": 8230,
+        "completionTokens": 2068,
+        "totalTokens": 10298
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P2-G.json"
+    },
+    {
+      "id": "P2-H",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 2,
+      "tokenUsage": {
+        "promptTokens": 9757,
+        "completionTokens": 3625,
+        "totalTokens": 13382
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P2-H.json"
+    },
+    {
+      "id": "P3-F",
+      "ok": true,
+      "verdict": "QUALITY_FAIL",
+      "repairs": 2,
+      "tokenUsage": {
+        "promptTokens": 4381,
+        "completionTokens": 2220,
+        "totalTokens": 6601
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P3-F.json"
+    },
+    {
+      "id": "P3-G",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 1,
+      "tokenUsage": {
+        "promptTokens": 1796,
+        "completionTokens": 820,
+        "totalTokens": 2616
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P3-G.json"
+    },
+    {
+      "id": "P3-H",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 1,
+      "tokenUsage": {
+        "promptTokens": 1793,
+        "completionTokens": 1008,
+        "totalTokens": 2801
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P3-H.json"
+    },
+    {
+      "id": "P4-F",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 2,
+      "tokenUsage": {
+        "promptTokens": 3942,
+        "completionTokens": 461,
+        "totalTokens": 4403
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P4-F.json"
+    },
+    {
+      "id": "P4-G",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 2,
+      "tokenUsage": {
+        "promptTokens": 3930,
+        "completionTokens": 442,
+        "totalTokens": 4372
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P4-G.json"
+    },
+    {
+      "id": "P4-H",
+      "ok": true,
+      "verdict": "PIPELINE_FAIL",
+      "repairs": 2,
+      "tokenUsage": {
+        "promptTokens": 3994,
+        "completionTokens": 533,
+        "totalTokens": 4527
+      },
+      "file": "local-pilots\\ruoe-v2-pipeline-reliability\\P4-H.json"
+    }
+  ]
+}

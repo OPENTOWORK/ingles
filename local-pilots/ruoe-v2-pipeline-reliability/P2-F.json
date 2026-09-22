@@ -1,0 +1,657 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-F",
+    "direction": "The volunteer who checks nesting boxes in a country park"
+  },
+  "savedAt": "2026-09-22T09:12:25.191Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 9561,
+    "completionTokens": 2957,
+    "totalTokens": 12518
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 357,
+        "completionTokens": 209,
+        "totalTokens": 566
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 611,
+        "completionTokens": 357,
+        "totalTokens": 968
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 818,
+        "completionTokens": 414,
+        "totalTokens": 1232
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1192,
+        "completionTokens": 688,
+        "totalTokens": 1880
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery-2",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1703,
+        "completionTokens": 7,
+        "totalTokens": 1710
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1660,
+        "completionTokens": 414,
+        "totalTokens": 2074
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1714,
+        "completionTokens": 688,
+        "totalTokens": 2402
+      }
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 736,
+        "completionTokens": 80,
+        "totalTokens": 816
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 770,
+        "completionTokens": 100,
+        "totalTokens": 870
+      }
+    }
+  ],
+  "naturalSourceText": "In the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds. Armed with a clipboard and a keen eye, she walks along the winding paths, stopping frequently to inspect each box. Her passion for wildlife conservation drives her to ensure that these homes are safe and suitable for the birds. \n\nEach box tells a story, and she notes any signs of activity, such as feathers or droppings. If a box is empty, she cleans it out, preparing it for new tenants. This routine not only helps the birds but also contributes to the park’s biodiversity. \n\nAs she works, she often encounters families enjoying the park, and she takes the opportunity to share her knowledge about the birds and their habitats. Her enthusiasm is infectious, inspiring others to appreciate the beauty of nature. Through her efforts, she plays a vital role in fostering a community that values and protects its natural surroundings.",
+  "candidateItem": [
+    {
+      "number": 9,
+      "answer": "the"
+    },
+    {
+      "number": 10,
+      "answer": "each"
+    },
+    {
+      "number": 11,
+      "answer": "that"
+    },
+    {
+      "number": 12,
+      "answer": "a"
+    },
+    {
+      "number": 13,
+      "answer": "the"
+    },
+    {
+      "number": 14,
+      "answer": "the"
+    },
+    {
+      "number": 15,
+      "answer": "the"
+    },
+    {
+      "number": 16,
+      "answer": "that"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "In the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds. Armed with a clipboard and a keen eye, she walks along the winding paths, stopping frequently to inspect each box. Her passion for wildlife conservation drives her to ensure that these homes are safe and suitable for the birds. \n\nEach box tells a story, and she notes any signs of activity, such as feathers or droppings. If a box is empty, she cleans it out, preparing it for new tenants. This routine not only helps the birds but also contributes to the park’s biodiversity. \n\nAs she works, she often encounters families enjoying the park, and she takes the opportunity to share her knowledge about the birds and their habitats. Her enthusiasm is infectious, inspiring others to appreciate the beauty of nature. Through her efforts, she plays a vital role in fostering a community that values and protects its natural surroundings.",
+      "title": "A Dedicated Volunteer in the Country Park"
+    },
+    "gap-discovery": {
+      "sites": [
+        {
+          "sentence": "In the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Armed with a clipboard and a keen eye, she walks along the winding paths, stopping frequently to inspect each box.",
+          "word": "each",
+          "family": "determiners"
+        },
+        {
+          "sentence": "Her passion for wildlife conservation drives her to ensure that these homes are safe and suitable for the birds.",
+          "word": "that",
+          "family": "relative words"
+        },
+        {
+          "sentence": "If a box is empty, she cleans it out, preparing it for new tenants.",
+          "word": "a",
+          "family": "articles"
+        },
+        {
+          "sentence": "This routine not only helps the birds but also contributes to the park’s biodiversity.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "As she works, she often encounters families enjoying the park, and she takes the opportunity to share her knowledge about the birds and their habitats.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Her enthusiasm is infectious, inspiring others to appreciate the beauty of nature.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Through her efforts, she plays a vital role in fostering a community that values and protects its natural surroundings.",
+          "word": "that",
+          "family": "relative words"
+        }
+      ]
+    },
+    "select-eight": {
+      "gaps": [
+        {
+          "number": 9,
+          "word": "the",
+          "family": "articles",
+          "sentence": "In the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds."
+        },
+        {
+          "number": 10,
+          "word": "each",
+          "family": "determiners",
+          "sentence": "Armed with a clipboard and a keen eye, she walks along the winding paths, stopping frequently to inspect each box."
+        },
+        {
+          "number": 11,
+          "word": "that",
+          "family": "relative words",
+          "sentence": "Her passion for wildlife conservation drives her to ensure that these homes are safe and suitable for the birds."
+        },
+        {
+          "number": 12,
+          "word": "a",
+          "family": "articles",
+          "sentence": "If a box is empty, she cleans it out, preparing it for new tenants."
+        },
+        {
+          "number": 13,
+          "word": "the",
+          "family": "articles",
+          "sentence": "This routine not only helps the birds but also contributes to the park’s biodiversity."
+        },
+        {
+          "number": 14,
+          "word": "the",
+          "family": "articles",
+          "sentence": "As she works, she often encounters families enjoying the park, and she takes the opportunity to share her knowledge about the birds and their habitats."
+        },
+        {
+          "number": 15,
+          "word": "the",
+          "family": "articles",
+          "sentence": "Her enthusiasm is infectious, inspiring others to appreciate the beauty of nature."
+        },
+        {
+          "number": 16,
+          "word": "that",
+          "family": "relative words",
+          "sentence": "Through her efforts, she plays a vital role in fostering a community that values and protects its natural surroundings."
+        }
+      ]
+    },
+    "uniqueness": {
+      "gaps": [
+        {
+          "number": 9,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "In this context, 'the' is necessary to specify which country park is being referred to, making it the only suitable article.",
+          "confidence": 1
+        },
+        {
+          "number": 10,
+          "intendedAnswer": "each",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'Each' is the only determiner that conveys the idea of inspecting every individual box, making it essential for clarity.",
+          "confidence": 1
+        },
+        {
+          "number": 11,
+          "intendedAnswer": "that",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'That' is necessary to introduce the relative clause, specifying which homes are being referred to, thus it is the only fitting option.",
+          "confidence": 1
+        },
+        {
+          "number": 12,
+          "intendedAnswer": "a",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'A' is the only article that correctly indicates a non-specific box in this context, making it essential.",
+          "confidence": 1
+        },
+        {
+          "number": 13,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is required to refer specifically to the routine that has already been mentioned, making it the only appropriate article.",
+          "confidence": 1
+        },
+        {
+          "number": 14,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is necessary to specify the knowledge about the birds and their habitats that she shares, making it indispensable.",
+          "confidence": 1
+        },
+        {
+          "number": 15,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is essential here to specify the enthusiasm being discussed, thus it is the only suitable article.",
+          "confidence": 1
+        },
+        {
+          "number": 16,
+          "intendedAnswer": "that",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'That' is crucial for introducing the relative clause that describes the community, making it the only appropriate choice.",
+          "confidence": 1
+        }
+      ]
+    },
+    "gap-discovery-2": {
+      "sites": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "QUALITY_FAIL",
+    "items": [
+      {
+        "number": 9,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"the\" remained defensible. In this context, 'the' is necessary to specify which country park is being referred to, making it the only suitable article.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 10,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"each\" remained defensible. 'Each' is the only determiner that conveys the idea of inspecting every individual box, making it essential for clarity.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 11,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"that\" remained defensible. 'That' is necessary to introduce the relative clause, specifying which homes are being referred to, thus it is the only fitting option.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 12,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"a\" remained defensible. 'A' is the only article that correctly indicates a non-specific box in this context, making it essential.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 13,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"the\" remained defensible. 'The' is required to refer specifically to the routine that has already been mentioned, making it the only appropriate article.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 14,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"the\" remained defensible. 'The' is necessary to specify the knowledge about the birds and their habitats that she shares, making it indispensable.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 15,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"the\" remained defensible. 'The' is essential here to specify the enthusiasm being discussed, thus it is the only suitable article.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      },
+      {
+        "number": 16,
+        "judgement": {
+          "verdict": "PASS",
+          "reason": "A search was recorded and only \"that\" remained defensible. 'That' is crucial for introducing the relative clause that describes the community, making it the only appropriate choice.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        }
+      }
+    ],
+    "reason": "Blind solve answered \"in the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds.\", stored answer is \"the\". The sentences provided are well-structured and natural in British English, but they lack a specific function word that could enhance their clarity or cohesion. The task does not specify a clear alternative function word to test, making it difficult to evaluate the effectiveness of the sentences in this context. Additionally, the focus on gaps without a clear target word leads to a lack of coherence in the evaluation process."
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind solve answered \"in the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds.\", stored answer is \"the\"."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences provided are well-structured and natural in British English, but they lack a specific function word that could enhance their clarity or cohesion. The task does not specify a clear alternative function word to test, making it difficult to evaluate the effectiveness of the sentences in this context. Additionally, the focus on gaps without a clear target word leads to a lack of coherence in the evaluation process.",
+    "candidateAlternative": null
+  },
+  "repairHistory": [
+    {
+      "action": "gap-discovery-2",
+      "scope": "same-passage",
+      "instruction": "Find additional safe function-word sites in the existing article."
+    }
+  ],
+  "finalVerdict": "QUALITY_FAIL",
+  "trace": [
+    "prose",
+    "gap-discovery",
+    "select-eight",
+    "uniqueness",
+    "gap-discovery-2",
+    "select-eight",
+    "uniqueness"
+  ],
+  "stageRecords": [
+    {
+      "stage": "prose",
+      "status": "PASS",
+      "data": {
+        "passage": "In the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds. Armed with a clipboard and a keen eye, she walks along the winding paths, stopping frequently to inspect each box. Her passion for wildlife conservation drives her to ensure that these homes are safe and suitable for the birds. \n\nEach box tells a story, and she notes any signs of activity, such as feathers or droppings. If a box is empty, she cleans it out, preparing it for new tenants. This routine not only helps the birds but also contributes to the park’s biodiversity. \n\nAs she works, she often encounters families enjoying the park, and she takes the opportunity to share her knowledge about the birds and their habitats. Her enthusiasm is infectious, inspiring others to appreciate the beauty of nature. Through her efforts, she plays a vital role in fostering a community that values and protects its natural surroundings.",
+        "title": "A Dedicated Volunteer in the Country Park"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "gap-discovery",
+      "status": "PASS",
+      "data": {
+        "sites": [
+          {
+            "sentence": "In the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "Armed with a clipboard and a keen eye, she walks along the winding paths, stopping frequently to inspect each box.",
+            "word": "each",
+            "family": "determiners"
+          },
+          {
+            "sentence": "Her passion for wildlife conservation drives her to ensure that these homes are safe and suitable for the birds.",
+            "word": "that",
+            "family": "relative words"
+          },
+          {
+            "sentence": "If a box is empty, she cleans it out, preparing it for new tenants.",
+            "word": "a",
+            "family": "articles"
+          },
+          {
+            "sentence": "This routine not only helps the birds but also contributes to the park’s biodiversity.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "As she works, she often encounters families enjoying the park, and she takes the opportunity to share her knowledge about the birds and their habitats.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "Her enthusiasm is infectious, inspiring others to appreciate the beauty of nature.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "Through her efforts, she plays a vital role in fostering a community that values and protects its natural surroundings.",
+            "word": "that",
+            "family": "relative words"
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "select-eight",
+      "status": "PASS",
+      "data": {
+        "gaps": [
+          {
+            "number": 1,
+            "word": "the",
+            "family": "articles",
+            "sentence": "In the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds."
+          },
+          {
+            "number": 2,
+            "word": "each",
+            "family": "determiners",
+            "sentence": "Armed with a clipboard and a keen eye, she walks along the winding paths, stopping frequently to inspect each box."
+          },
+          {
+            "number": 3,
+            "word": "that",
+            "family": "relative words",
+            "sentence": "Her passion for wildlife conservation drives her to ensure that these homes are safe and suitable for the birds."
+          },
+          {
+            "number": 4,
+            "word": "a",
+            "family": "articles",
+            "sentence": "If a box is empty, she cleans it out, preparing it for new tenants."
+          },
+          {
+            "number": 5,
+            "word": "the",
+            "family": "articles",
+            "sentence": "This routine not only helps the birds but also contributes to the park’s biodiversity."
+          },
+          {
+            "number": 6,
+            "word": "the",
+            "family": "articles",
+            "sentence": "As she works, she often encounters families enjoying the park, and she takes the opportunity to share her knowledge about the birds and their habitats."
+          },
+          {
+            "number": 7,
+            "word": "the",
+            "family": "articles",
+            "sentence": "Her enthusiasm is infectious, inspiring others to appreciate the beauty of nature."
+          },
+          {
+            "number": 8,
+            "word": "that",
+            "family": "relative words",
+            "sentence": "Through her efforts, she plays a vital role in fostering a community that values and protects its natural surroundings."
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "uniqueness",
+      "status": "PASS",
+      "data": {
+        "gaps": [
+          {
+            "number": 1,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "In this context, 'the' is necessary to specify which country park is being referred to, making it the only suitable article.",
+            "confidence": 1
+          },
+          {
+            "number": 2,
+            "intendedAnswer": "each",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "'Each' is the only determiner that conveys the idea of inspecting every individual box, making it essential for clarity.",
+            "confidence": 1
+          },
+          {
+            "number": 3,
+            "intendedAnswer": "that",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "'That' is necessary to introduce the relative clause, specifying which homes are being referred to, thus it is the only fitting option.",
+            "confidence": 1
+          },
+          {
+            "number": 4,
+            "intendedAnswer": "a",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "'A' is the only article that correctly indicates a non-specific box in this context, making it essential.",
+            "confidence": 1
+          },
+          {
+            "number": 5,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "'The' is required to refer specifically to the routine that has already been mentioned, making it the only appropriate article.",
+            "confidence": 1
+          },
+          {
+            "number": 6,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "'The' is necessary to specify the knowledge about the birds and their habitats that she shares, making it indispensable.",
+            "confidence": 1
+          },
+          {
+            "number": 7,
+            "intendedAnswer": "the",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "'The' is essential here to specify the enthusiasm being discussed, thus it is the only suitable article.",
+            "confidence": 1
+          },
+          {
+            "number": 8,
+            "intendedAnswer": "that",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "'That' is crucial for introducing the relative clause that describes the community, making it the only appropriate choice.",
+            "confidence": 1
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    }
+  ],
+  "layers": {
+    "mechanical": "PASS",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind solve answered \"in the heart of the country park, a dedicated volunteer spends her weekends checking nesting boxes for local birds.\", stored answer is \"the\"."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences provided are well-structured and natural in British English, but they lack a specific function word that could enhance their clarity or cohesion. The task does not specify a clear alternative function word to test, making it difficult to evaluate the effectiveness of the sentences in this context. Additionally, the focus on gaps without a clear target word leads to a lack of coherence in the evaluation process.",
+      "candidateAlternative": null
+    }
+  }
+}

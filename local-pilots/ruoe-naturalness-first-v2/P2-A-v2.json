@@ -1,0 +1,286 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-A",
+    "direction": "The volunteer who catalogues old photographs for a local museum"
+  },
+  "arm": "v2",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:02:18.021Z",
+  "result": {
+    "version": "naturalness-first-v2",
+    "partNumber": 2,
+    "trace": [
+      "prose",
+      "gap-discovery",
+      "select-eight",
+      "uniqueness"
+    ],
+    "outputs": {
+      "prose": {
+        "title": "Preserving Memories: A Volunteer’s Dedication",
+        "passage": "In a quaint local museum, a dedicated volunteer spends her afternoons cataloguing old photographs that tell the story of the community's past. With a keen eye for detail, she carefully sorts through boxes filled with black-and-white images, each one a glimpse into a bygone era. Her passion for history drives her to research the people and places captured in these photographs, often uncovering fascinating stories that have long been forgotten.\n\nAs she works, the volunteer meticulously labels each photo, noting the date, location, and any names she can find. This process not only helps preserve the images but also makes them accessible for future generations. Visitors to the museum often express their gratitude, as they find connections to their own family histories within the collection.\n\nThrough her efforts, the volunteer plays a crucial role in keeping the community's heritage alive. Her commitment to this project highlights the importance of preserving local history and the invaluable contributions of those who give their time to support such initiatives."
+      },
+      "gap-discovery": {
+        "sites": [
+          {
+            "sentence": "In a quaint local museum, a dedicated volunteer spends her afternoons cataloguing old photographs that tell the story of the community's past.",
+            "word": "a",
+            "family": "articles"
+          },
+          {
+            "sentence": "With a keen eye for detail, she carefully sorts through boxes filled with black-and-white images, each one a glimpse into a bygone era.",
+            "word": "a",
+            "family": "articles"
+          },
+          {
+            "sentence": "Her passion for history drives her to research the people and places captured in these photographs, often uncovering fascinating stories that have long been forgotten.",
+            "word": "that",
+            "family": "relative words"
+          },
+          {
+            "sentence": "As she works, the volunteer meticulously labels each photo, noting the date, location, and any names she can find.",
+            "word": "each",
+            "family": "determiners"
+          },
+          {
+            "sentence": "This process not only helps preserve the images but also makes them accessible for future generations.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "Visitors to the museum often express their gratitude, as they find connections to their own family histories within the collection.",
+            "word": "their",
+            "family": "pronouns"
+          },
+          {
+            "sentence": "Through her efforts, the volunteer plays a crucial role in keeping the community's heritage alive.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "Her commitment to this project highlights the importance of preserving local history and the invaluable contributions of those who give their time to support such initiatives.",
+            "word": "the",
+            "family": "articles"
+          }
+        ]
+      },
+      "select-eight": {
+        "gaps": [
+          {
+            "number": 1,
+            "word": "a",
+            "family": "articles",
+            "sentence": "In a quaint local museum, a dedicated volunteer spends her afternoons cataloguing old photographs that tell the story of the community's past."
+          },
+          {
+            "number": 2,
+            "word": "a",
+            "family": "articles",
+            "sentence": "With a keen eye for detail, she carefully sorts through boxes filled with black-and-white images, each one a glimpse into a bygone era."
+          },
+          {
+            "number": 3,
+            "word": "that",
+            "family": "relative words",
+            "sentence": "Her passion for history drives her to research the people and places captured in these photographs, often uncovering fascinating stories that have long been forgotten."
+          },
+          {
+            "number": 4,
+            "word": "each",
+            "family": "determiners",
+            "sentence": "As she works, the volunteer meticulously labels each photo, noting the date, location, and any names she can find."
+          },
+          {
+            "number": 5,
+            "word": "the",
+            "family": "articles",
+            "sentence": "This process not only helps preserve the images but also makes them accessible for future generations."
+          },
+          {
+            "number": 6,
+            "word": "their",
+            "family": "pronouns",
+            "sentence": "Visitors to the museum often express their gratitude, as they find connections to their own family histories within the collection."
+          },
+          {
+            "number": 7,
+            "word": "the",
+            "family": "articles",
+            "sentence": "Through her efforts, the volunteer plays a crucial role in keeping the community's heritage alive."
+          },
+          {
+            "number": 8,
+            "word": "the",
+            "family": "articles",
+            "sentence": "Her commitment to this project highlights the importance of preserving local history and the invaluable contributions of those who give their time to support such initiatives."
+          }
+        ]
+      },
+      "uniqueness": {
+        "gaps": [
+          {
+            "number": 1,
+            "keyedWord": "a",
+            "alternatives": []
+          },
+          {
+            "number": 2,
+            "keyedWord": "a",
+            "alternatives": []
+          },
+          {
+            "number": 3,
+            "keyedWord": "that",
+            "alternatives": []
+          },
+          {
+            "number": 4,
+            "keyedWord": "each",
+            "alternatives": []
+          },
+          {
+            "number": 5,
+            "keyedWord": "the",
+            "alternatives": []
+          },
+          {
+            "number": 6,
+            "keyedWord": "their",
+            "alternatives": []
+          },
+          {
+            "number": 7,
+            "keyedWord": "the",
+            "alternatives": []
+          },
+          {
+            "number": 8,
+            "keyedWord": "the",
+            "alternatives": []
+          }
+        ]
+      }
+    },
+    "adversarial": {
+      "verdict": "PASS",
+      "items": [
+        {
+          "number": 1,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"a\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 2,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"a\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 3,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"that\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 4,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"each\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 5,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"the\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 6,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"their\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 7,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"the\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 8,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"the\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        }
+      ]
+    },
+    "repairs": [],
+    "answerKey": [
+      {
+        "number": 1,
+        "answer": "a"
+      },
+      {
+        "number": 2,
+        "answer": "a"
+      },
+      {
+        "number": 3,
+        "answer": "that"
+      },
+      {
+        "number": 4,
+        "answer": "each"
+      },
+      {
+        "number": 5,
+        "answer": "the"
+      },
+      {
+        "number": 6,
+        "answer": "their"
+      },
+      {
+        "number": 7,
+        "answer": "the"
+      },
+      {
+        "number": 8,
+        "answer": "the"
+      }
+    ]
+  }
+}

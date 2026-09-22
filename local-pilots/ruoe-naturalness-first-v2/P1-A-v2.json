@@ -1,0 +1,756 @@
+{
+  "brief": {
+    "partNumber": 1,
+    "id": "P1-A",
+    "direction": "How a town library stayed open after its main grant was cut"
+  },
+  "arm": "v2",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:01:16.962Z",
+  "result": {
+    "version": "naturalness-first-v2",
+    "partNumber": 1,
+    "trace": [
+      "passage",
+      "positions",
+      "keys",
+      "distractors",
+      "independent-substitution",
+      "repair-distractor",
+      "repair-sentence"
+    ],
+    "outputs": {
+      "passage": {
+        "title": "A Community's Commitment: The Town Library's Resilience",
+        "passage": "When the town library faced significant funding cuts, the community rallied together to ensure it remained a vital resource. The local council announced that the main grant, which had supported the library for years, would no longer be available. Rather than accept defeat, library staff and patrons devised a plan to keep the doors open.\n\nVolunteers stepped up to help with daily operations, organising fundraising events and book sales. These initiatives not only generated much-needed funds but also strengthened community ties. Local businesses contributed by sponsoring events and donating supplies, showcasing their commitment to the library's future.\n\nAdditionally, the library began offering new services, such as digital literacy workshops and community events, which attracted more visitors. This innovative approach not only helped to sustain the library but also transformed it into a hub for learning and social interaction. The town's determination to preserve its library demonstrates the power of community spirit and the importance of local resources in everyday life."
+      },
+      "positions": {
+        "candidates": [
+          {
+            "sentence": "the community rallied together to ensure it remained a vital resource",
+            "word": "vital",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "the main grant, which had supported the library for years, would no longer be available",
+            "word": "available",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "library staff and patrons devised a plan to keep the doors open",
+            "word": "devised",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Volunteers stepped up to help with daily operations",
+            "word": "operations",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "These initiatives not only generated much-needed funds but also strengthened community ties",
+            "word": "initiatives",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Local businesses contributed by sponsoring events and donating supplies",
+            "word": "contributed",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "the library began offering new services, such as digital literacy workshops",
+            "word": "offering",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "This innovative approach not only helped to sustain the library",
+            "word": "innovative",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "the town's determination to preserve its library demonstrates the power of community spirit",
+            "word": "preserve",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "the importance of local resources in everyday life",
+            "word": "importance",
+            "knowledgeType": "lexical-meaning"
+          }
+        ]
+      },
+      "keys": {
+        "items": [
+          {
+            "number": 1,
+            "sentence": "the community rallied together to ensure it remained a vital resource",
+            "key": "vital",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 2,
+            "sentence": "the main grant, which had supported the library for years, would no longer be available",
+            "key": "available",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 3,
+            "sentence": "Volunteers stepped up to help with daily operations",
+            "key": "operations",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 4,
+            "sentence": "These initiatives not only generated much-needed funds but also strengthened community ties",
+            "key": "initiatives",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 5,
+            "sentence": "Local businesses contributed by sponsoring events and donating supplies",
+            "key": "contributed",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 6,
+            "sentence": "the library began offering new services, such as digital literacy workshops",
+            "key": "offering",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 7,
+            "sentence": "the town's determination to preserve its library demonstrates the power of community spirit",
+            "key": "preserve",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 8,
+            "sentence": "the importance of local resources in everyday life",
+            "key": "importance",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          }
+        ]
+      },
+      "distractors": {
+        "items": [
+          {
+            "number": 1,
+            "options": [
+              {
+                "letter": "A",
+                "word": "vital",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "essential",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "critical",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "necessary",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "options": [
+              {
+                "letter": "A",
+                "word": "available",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "accessible",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "attainable",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "present",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "options": [
+              {
+                "letter": "A",
+                "word": "operations",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "functions",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "activities",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "tasks",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 4,
+            "options": [
+              {
+                "letter": "A",
+                "word": "initiatives",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "projects",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "plans",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "programmes",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 5,
+            "options": [
+              {
+                "letter": "A",
+                "word": "contributed",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "donated",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "provided",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "supplied",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 6,
+            "options": [
+              {
+                "letter": "A",
+                "word": "offering",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "providing",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "presenting",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "delivering",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 7,
+            "options": [
+              {
+                "letter": "A",
+                "word": "preserve",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "maintain",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "protect",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "save",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 8,
+            "options": [
+              {
+                "letter": "A",
+                "word": "importance",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "significance",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "value",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "relevance",
+                "isKey": false
+              }
+            ]
+          }
+        ]
+      },
+      "independent-substitution": {
+        "items": [
+          {
+            "number": 1,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "the community rallied together to ensure it remained a vital resource",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "the community rallied together to ensure it remained an essential resource",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "C",
+                "sentence": "the community rallied together to ensure it remained a critical resource",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "D",
+                "sentence": "the community rallied together to ensure it remained a necessary resource",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "the main grant, which had supported the library for years, would no longer be available",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "the main grant, which had supported the library for years, would no longer be accessible",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "C",
+                "sentence": "the main grant, which had supported the library for years, would no longer be attainable",
+                "grammatical": true,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": true,
+                "collocationalFit": false,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "D",
+                "sentence": "the main grant, which had supported the library for years, would no longer be present",
+                "grammatical": true,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": true,
+                "collocationalFit": false,
+                "contextuallyDefensible": true
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "library staff and patrons devised a plan to keep the doors open",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "library staff and patrons functions a plan to keep the doors open",
+                "grammatical": false,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": false,
+                "collocationalFit": false,
+                "contextuallyDefensible": false
+              },
+              {
+                "letter": "C",
+                "sentence": "library staff and patrons activities a plan to keep the doors open",
+                "grammatical": false,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": false,
+                "collocationalFit": false,
+                "contextuallyDefensible": false
+              },
+              {
+                "letter": "D",
+                "sentence": "library staff and patrons tasks a plan to keep the doors open",
+                "grammatical": false,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": false,
+                "collocationalFit": false,
+                "contextuallyDefensible": false
+              }
+            ]
+          },
+          {
+            "number": 4,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "These initiatives not only generated much-needed funds but also strengthened community ties",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "These projects not only generated much-needed funds but also strengthened community ties",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "C",
+                "sentence": "These plans not only generated much-needed funds but also strengthened community ties",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "D",
+                "sentence": "These programmes not only generated much-needed funds but also strengthened community ties",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              }
+            ]
+          },
+          {
+            "number": 5,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "Local businesses contributed by sponsoring events and donating supplies",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "Local businesses donated by sponsoring events and donating supplies",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": false,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "C",
+                "sentence": "Local businesses provided by sponsoring events and donating supplies",
+                "grammatical": false,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": false,
+                "collocationalFit": false,
+                "contextuallyDefensible": false
+              },
+              {
+                "letter": "D",
+                "sentence": "Local businesses supplied by sponsoring events and donating supplies",
+                "grammatical": false,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": false,
+                "collocationalFit": false,
+                "contextuallyDefensible": false
+              }
+            ]
+          },
+          {
+            "number": 6,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "the library began offering new services, such as digital literacy workshops",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "the library began providing new services, such as digital literacy workshops",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "C",
+                "sentence": "the library began presenting new services, such as digital literacy workshops",
+                "grammatical": true,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": true,
+                "collocationalFit": false,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "D",
+                "sentence": "the library began delivering new services, such as digital literacy workshops",
+                "grammatical": true,
+                "naturalBritishEnglish": false,
+                "semanticallyDefensible": true,
+                "collocationalFit": false,
+                "contextuallyDefensible": true
+              }
+            ]
+          },
+          {
+            "number": 7,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "the town's determination to preserve its library demonstrates the power of community spirit",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "the town's determination to maintain its library demonstrates the power of community spirit",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "C",
+                "sentence": "the town's determination to protect its library demonstrates the power of community spirit",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "D",
+                "sentence": "the town's determination to save its library demonstrates the power of community spirit",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              }
+            ]
+          },
+          {
+            "number": 8,
+            "options": [
+              {
+                "letter": "A",
+                "sentence": "the importance of local resources in everyday life",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "B",
+                "sentence": "the significance of local resources in everyday life",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "C",
+                "sentence": "the value of local resources in everyday life",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              },
+              {
+                "letter": "D",
+                "sentence": "the relevance of local resources in everyday life",
+                "grammatical": true,
+                "naturalBritishEnglish": true,
+                "semanticallyDefensible": true,
+                "collocationalFit": true,
+                "contextuallyDefensible": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "variety": {
+      "ok": false,
+      "counts": {
+        "collocation": 0,
+        "phrasal-verb": 0,
+        "fixed-expression": 0,
+        "lexical-meaning": 8,
+        "dependent-preposition": 0,
+        "semantic-distinction": 0,
+        "lexical-precision": 0
+      },
+      "obvious": 0,
+      "problems": [
+        "Only 1 knowledge types are used. Cover at least five of: collocation, phrasal-verb, fixed-expression, lexical-meaning, dependent-preposition, semantic-distinction, lexical-precision.",
+        "lexical-meaning accounts for 8 items. No type may account for more than three."
+      ]
+    },
+    "adversarial": {
+      "verdict": "QUALITY_FAIL",
+      "items": [
+        {
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "More than one option is grammatical, natural British English, and semantically defensible (A, B, C). A key that is merely more idiomatic does not save the item.",
+            "candidateAlternative": "A",
+            "repairRecommendation": "Replace the surviving distractor. If the sentence itself allows two natural words, move the gap. Do not keep the item because the key is more idiomatic.",
+            "confidence": "high"
+          }
+        }
+      ]
+    },
+    "repairs": [
+      {
+        "action": "repair-distractor",
+        "scope": "failed-item",
+        "instruction": "Replace only the distractor that also survives. Leave every other item unchanged."
+      },
+      {
+        "action": "repair-sentence",
+        "scope": "failed-item",
+        "instruction": "If two natural words remain possible, move the gap inside this sentence only."
+      }
+    ],
+    "answerKey": [
+      {
+        "number": 1,
+        "answer": "vital"
+      },
+      {
+        "number": 2,
+        "answer": "available"
+      },
+      {
+        "number": 3,
+        "answer": "operations"
+      },
+      {
+        "number": 4,
+        "answer": "initiatives"
+      },
+      {
+        "number": 5,
+        "answer": "contributed"
+      },
+      {
+        "number": 6,
+        "answer": "offering"
+      },
+      {
+        "number": 7,
+        "answer": "preserve"
+      },
+      {
+        "number": 8,
+        "answer": "importance"
+      }
+    ]
+  }
+}

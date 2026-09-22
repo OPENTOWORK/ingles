@@ -158,6 +158,42 @@ function LevelHubStyles() {
         max-width: 100%;
         text-wrap: balance;
       }
+      @media (max-width: 639px) {
+        html:has(.niveles-level-page),
+        body:has(.niveles-level-page) {
+          height: 100%;
+          overflow: hidden;
+        }
+        body:has(.niveles-level-page) .page-content {
+          display: flex;
+          flex-direction: column;
+          min-height: 0;
+          overflow: hidden;
+        }
+        .niveles-level-page.shell,
+        .niveles-level-page--b2.shell {
+          flex: 1 1 auto;
+          min-height: 0;
+          height: calc(100dvh - var(--site-header-height));
+          max-height: calc(100dvh - var(--site-header-height));
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          padding: 10px 12px 12px;
+          box-sizing: border-box;
+        }
+        .niveles-level-page .levels-b2-page-content {
+          flex: 1 1 auto;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          overflow: hidden;
+        }
+        .niveles-level-page [data-tour='level-hub-hero'] {
+          flex: 0 0 auto;
+        }
+      }
     `}</style>
   );
 }

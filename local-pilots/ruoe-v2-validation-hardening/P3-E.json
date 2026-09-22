@@ -1,0 +1,495 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-E",
+    "direction": "Teaching adults to read a paper map"
+  },
+  "savedAt": "2026-09-22T08:35:45.073Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "family-discovery",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "base-assignment",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "derivation-check",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "new-position",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "In an age dominated by digital navigation, teaching adults to read a paper map can seem like a lost art. However, understanding how to interpret a physical map remains a valuable skill. First, it’s essential to familiarise learners with the map's key features, such as the legend, scale, and compass rose. These elements provide crucial information about distances and directions.\n\nNext, encourage adults to practice orienting the map with their surroundings. This involves aligning the map with the physical landscape, which helps in understanding how to navigate effectively. Engaging in practical exercises, such as planning a route from one location to another, can reinforce these skills. \n\nAdditionally, discussing common symbols and landmarks on the map can enhance comprehension. By incorporating real-life scenarios, learners can build confidence in their ability to use paper maps. Ultimately, the goal is to empower adults with the knowledge that, even in a digital world, traditional navigation skills can be both useful and enjoyable.",
+  "candidateItem": [
+    {
+      "stem": "navigate",
+      "answer": "navigation"
+    },
+    {
+      "stem": "skill",
+      "answer": "skilled"
+    },
+    {
+      "stem": "practice",
+      "answer": "practise"
+    },
+    {
+      "stem": "understand",
+      "answer": "understanding"
+    },
+    {
+      "stem": "exercise",
+      "answer": "exercising"
+    },
+    {
+      "stem": "discuss",
+      "answer": "discussion"
+    },
+    {
+      "stem": "confidence",
+      "answer": "confident"
+    },
+    {
+      "stem": "knowledge",
+      "answer": "knowledgeable"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "In an age dominated by digital navigation, teaching adults to read a paper map can seem like a lost art. However, understanding how to interpret a physical map remains a valuable skill. First, it’s essential to familiarise learners with the map's key features, such as the legend, scale, and compass rose. These elements provide crucial information about distances and directions.\n\nNext, encourage adults to practice orienting the map with their surroundings. This involves aligning the map with the physical landscape, which helps in understanding how to navigate effectively. Engaging in practical exercises, such as planning a route from one location to another, can reinforce these skills. \n\nAdditionally, discussing common symbols and landmarks on the map can enhance comprehension. By incorporating real-life scenarios, learners can build confidence in their ability to use paper maps. Ultimately, the goal is to empower adults with the knowledge that, even in a digital world, traditional navigation skills can be both useful and enjoyable.",
+      "title": "The Art of Reading a Paper Map"
+    },
+    "family-discovery": {
+      "words": [
+        {
+          "word": "navigate",
+          "sentence": "In an age dominated by digital navigation, teaching adults to read a paper map can seem like a lost art."
+        },
+        {
+          "word": "skill",
+          "sentence": "However, understanding how to interpret a physical map remains a valuable skill."
+        },
+        {
+          "word": "practice",
+          "sentence": "Next, encourage adults to practice orienting the map with their surroundings."
+        },
+        {
+          "word": "understand",
+          "sentence": "This involves aligning the map with the physical landscape, which helps in understanding how to navigate effectively."
+        },
+        {
+          "word": "exercise",
+          "sentence": "Engaging in practical exercises, such as planning a route from one location to another, can reinforce these skills."
+        },
+        {
+          "word": "discuss",
+          "sentence": "Additionally, discussing common symbols and landmarks on the map can enhance comprehension."
+        },
+        {
+          "word": "confidence",
+          "sentence": "By incorporating real-life scenarios, learners can build confidence in their ability to use paper maps."
+        },
+        {
+          "word": "knowledge",
+          "sentence": "Ultimately, the goal is to empower adults with the knowledge that, even in a digital world, traditional navigation skills can be both useful and enjoyable."
+        }
+      ]
+    },
+    "base-assignment": {
+      "items": [
+        {
+          "stem": "navigate",
+          "answer": "navigation",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "navigational"
+          ]
+        },
+        {
+          "stem": "skill",
+          "answer": "skilled",
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "skillful"
+          ]
+        },
+        {
+          "stem": "practice",
+          "answer": "practise",
+          "wordClass": "verb",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "practitioner"
+          ]
+        },
+        {
+          "stem": "understand",
+          "answer": "understanding",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "understandable"
+          ]
+        },
+        {
+          "stem": "exercise",
+          "answer": "exercising",
+          "wordClass": "verb",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "exerciser"
+          ]
+        },
+        {
+          "stem": "discuss",
+          "answer": "discussion",
+          "wordClass": "noun",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "discussive"
+          ]
+        },
+        {
+          "stem": "confidence",
+          "answer": "confident",
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "confidently"
+          ]
+        },
+        {
+          "stem": "knowledge",
+          "answer": "knowledgeable",
+          "wordClass": "adjective",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "knowledgeably"
+          ]
+        }
+      ]
+    },
+    "derivation-check": {
+      "items": [
+        {
+          "stem": "navigate",
+          "answer": "navigation",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "navigational"
+          ]
+        },
+        {
+          "stem": "skill",
+          "answer": "skilled",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "skillful"
+          ]
+        },
+        {
+          "stem": "practice",
+          "answer": "practise",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "practitioner"
+          ]
+        },
+        {
+          "stem": "understand",
+          "answer": "understanding",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "understandable"
+          ]
+        },
+        {
+          "stem": "exercise",
+          "answer": "exercising",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "exerciser"
+          ]
+        },
+        {
+          "stem": "discuss",
+          "answer": "discussion",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "discussive"
+          ]
+        },
+        {
+          "stem": "confidence",
+          "answer": "confident",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "confidently"
+          ]
+        },
+        {
+          "stem": "knowledge",
+          "answer": "knowledgeable",
+          "natural": true,
+          "forcedContext": false,
+          "alternativeFamilyMembers": [
+            "knowledgeably"
+          ]
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "QUALITY_FAIL",
+    "items": [
+      {
+        "stem": "navigate",
+        "answer": "navigation",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"navigate\" to \"navigation\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "navigation",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "navigate",
+            "answer": "navigation",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"navigate\" to \"navigation\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "skill",
+        "answer": "skilled",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"skill\" to \"skilled\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "skilled",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "skill",
+            "answer": "skilled",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"skill\" to \"skilled\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "practice",
+        "answer": "practise",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"practice\" to \"practise\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "practise",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "practice",
+            "answer": "practise",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"practice\" to \"practise\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "understand",
+        "answer": "understanding",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"understand\" to \"understanding\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "understanding",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "understand",
+            "answer": "understanding",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"understand\" to \"understanding\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "exercise",
+        "answer": "exercising",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"exercise\" to \"exercising\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "exercising",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "exercise",
+            "answer": "exercising",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"exercise\" to \"exercising\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "discuss",
+        "answer": "discussion",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"discuss\" to \"discussion\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "discussion",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "discuss",
+            "answer": "discussion",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"discuss\" to \"discussion\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "confidence",
+        "answer": "confident",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"confidence\" to \"confident\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "confident",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "confidence",
+            "answer": "confident",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"confidence\" to \"confident\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      },
+      {
+        "stem": "knowledge",
+        "answer": "knowledgeable",
+        "judgement": {
+          "verdict": "QUALITY_FAIL",
+          "reason": "No confirmed lexical-family link from \"knowledge\" to \"knowledgeable\". Uncertain derivations are not passed on spelling overlap.",
+          "candidateAlternative": "knowledgeable",
+          "repairRecommendation": "Choose a different base from a word already in the natural text.",
+          "confidence": "medium",
+          "lexicalFamily": {
+            "base": "knowledge",
+            "answer": "knowledgeable",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "No confirmed lexical-family link from \"knowledge\" to \"knowledgeable\". Uncertain derivations are not passed on spelling overlap."
+          }
+        }
+      }
+    ]
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind solve wrote \"navigate\", stored answer is \"navigation\".",
+    "candidateAlternative": "navigate"
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The item lacks clear and natural sentences for the provided stems. For example, the stem 'navigate' does not have a corresponding sentence that a competent British English speaker would naturally produce. Similarly, other stems like 'skill', 'practice', 'understand', 'exercise', 'discuss', 'confidence', and 'knowledge' are not represented in a way that feels organic or contextually appropriate. The sentences need to be more fluid and relevant to the context of the passage.",
+    "candidateAlternative": null
+  },
+  "repairHistory": [
+    {
+      "action": "new-position",
+      "scope": "failed-item",
+      "instruction": "Choose a different word already in the natural text. Do not force this sentence to keep the rejected base."
+    }
+  ],
+  "finalVerdict": "QUALITY_FAIL",
+  "trace": [
+    "prose",
+    "family-discovery",
+    "base-assignment",
+    "derivation-check",
+    "new-position"
+  ],
+  "layers": {
+    "mechanical": "QUALITY_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind solve wrote \"navigate\", stored answer is \"navigation\".",
+      "candidateAlternative": "navigate"
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The item lacks clear and natural sentences for the provided stems. For example, the stem 'navigate' does not have a corresponding sentence that a competent British English speaker would naturally produce. Similarly, other stems like 'skill', 'practice', 'understand', 'exercise', 'discuss', 'confidence', and 'knowledge' are not represented in a way that feels organic or contextually appropriate. The sentences need to be more fluid and relevant to the context of the passage.",
+      "candidateAlternative": null
+    }
+  }
+}

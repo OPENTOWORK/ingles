@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   ANNUAL_BILLING_DISCOUNT_PERCENT,
@@ -163,6 +163,8 @@ export default function SubscriptionPlansSection({
   const [billingCycle, setBillingCycle] = useState('monthly');
   const [checkoutPlan, setCheckoutPlan] = useState('');
   const [checkoutError, setCheckoutError] = useState('');
+  const [activeCard, setActiveCard] = useState(0);
+  const cardsRef = useRef(null);
   const isAnnual = billingCycle === 'annual';
   const { data: entitlementsData, planSlug: userPlanSlug, loading: planLoading } = usePlanEntitlements();
   const currentPlanSlug = enableCheckout && entitlementsData ? userPlanSlug : null;
@@ -185,6 +187,28 @@ export default function SubscriptionPlansSection({
       setCheckoutError(err?.message || 'No se pudo iniciar el pago.');
       setCheckoutPlan('');
     }
+  }
+
+  /** Paso del carrusel móvil: en escritorio las tarjetas son una rejilla y no hay desplazamiento. */
+  function cardStep(track) {
+    return track.scrollWidth / DRALO_SUBSCRIPTION_PLANS.length;
+  }
+
+  function handleCardsScroll(event) {
+    const track = event.currentTarget;
+    const step = cardStep(track);
+    if (!step) return;
+    const index = Math.min(
+      DRALO_SUBSCRIPTION_PLANS.length - 1,
+      Math.max(0, Math.round(track.scrollLeft / step)),
+    );
+    setActiveCard(index);
+  }
+
+  function goToCard(index) {
+    const track = cardsRef.current;
+    if (!track) return;
+    track.scrollTo({ left: cardStep(track) * index, behavior: 'smooth' });
   }
 
   return (
@@ -230,7 +254,7 @@ export default function SubscriptionPlansSection({
         ) : null}
       </div>
 
-      <div className={styles.cards}>
+      <div className={styles.cards} ref={cardsRef} onScroll={handleCardsScroll}>
         {DRALO_SUBSCRIPTION_PLANS.map((plan) => {
           const isSelected = selectedSlug === plan.slug;
           const isPremium = plan.recommended;
@@ -363,6 +387,21 @@ export default function SubscriptionPlansSection({
             </article>
           );
         })}
+      </div>
+
+      <div className={styles.cardsNav}>
+        {DRALO_SUBSCRIPTION_PLANS.map((plan, index) => (
+          <button
+            key={plan.slug}
+            type="button"
+            className={`${styles.cardsNavBtn}${index === activeCard ? ` ${styles.cardsNavBtnActive}` : ''}`}
+            aria-label={`Ver plan ${plan.nombre}`}
+            aria-current={index === activeCard}
+            onClick={() => goToCard(index)}
+          >
+            <span>{plan.nombre}</span>
+          </button>
+        ))}
       </div>
 
       {checkoutError ? (

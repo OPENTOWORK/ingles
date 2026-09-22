@@ -1,0 +1,72 @@
+{
+  "brief": {
+    "partNumber": 1,
+    "id": "P1-E",
+    "direction": "How a school orchestra raised money for new music stands"
+  },
+  "savedAt": "2026-09-22T08:32:53.071Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "passage",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "positions",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "keys",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "distractors",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "independent-substitution",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": [],
+  "deterministicValidation": {
+    "verdict": "HARD_FAIL",
+    "reason": "Stage JSON failed schema validation (items: Array must contain at least 1 element(s)).",
+    "candidateAlternative": null,
+    "repairRecommendation": "The schema repair budget is spent. The item stays failed.",
+    "confidence": "high"
+  },
+  "blindSolve": null,
+  "adversarialValidation": null,
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "independent-substitution",
+      "instruction": "Correct the JSON shape once."
+    }
+  ],
+  "finalVerdict": "HARD_FAIL",
+  "trace": [
+    "passage",
+    "positions",
+    "keys",
+    "distractors",
+    "independent-substitution",
+    "schema-repair"
+  ]
+}

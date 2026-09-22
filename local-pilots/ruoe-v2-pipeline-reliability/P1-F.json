@@ -1,0 +1,547 @@
+{
+  "brief": {
+    "partNumber": 1,
+    "id": "P1-F",
+    "direction": "How residents restored the noticeboard outside a village hall"
+  },
+  "savedAt": "2026-09-22T09:10:50.129Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 7316,
+    "completionTokens": 3156,
+    "totalTokens": 10472
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "passage",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 382,
+        "completionTokens": 232,
+        "totalTokens": 614
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "positions",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 644,
+        "completionTokens": 560,
+        "totalTokens": 1204
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "keys",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1023,
+        "completionTokens": 543,
+        "totalTokens": 1566
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "distractors",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1420,
+        "completionTokens": 1341,
+        "totalTokens": 2761
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "independent-substitution",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 3616,
+        "completionTokens": 425,
+        "totalTokens": 4041
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 231,
+        "completionTokens": 55,
+        "totalTokens": 286
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": [],
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Stage output failed pipeline validation (items.0.options: Array must contain exactly 4 element(s); items.1.options: Array must contain exactly 4 element(s); items.2.options: Array must contain exactly 4 element(s); items.3.options: Array must contain exactly 4 element(s)).",
+    "candidateAlternative": null,
+    "repairRecommendation": "The schema repair budget is spent. The item stays failed.",
+    "confidence": "high"
+  },
+  "blindSolve": null,
+  "adversarialValidation": null,
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "independent-substitution",
+      "instruction": "Correct the JSON shape once."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "passage",
+    "positions",
+    "keys",
+    "distractors",
+    "independent-substitution",
+    "schema-repair"
+  ],
+  "stageRecords": [
+    {
+      "stage": "passage",
+      "status": "PASS",
+      "data": {
+        "passage": "In a heartwarming display of community spirit, residents of the village came together to restore the noticeboard outside the local village hall. The noticeboard, which had fallen into disrepair over the years, was once a vital hub for sharing news and events. Recognising its importance, a group of villagers organised a restoration day, inviting everyone to lend a hand. Armed with paintbrushes, wood glue, and plenty of enthusiasm, they set to work. \n\nThe day began with a thorough clean-up, followed by the application of a fresh coat of paint. Local artists even contributed by adding colourful designs that reflect the village's character. As the sun shone down, laughter and chatter filled the air, creating a sense of camaraderie among participants. \n\nBy the end of the day, the noticeboard stood proudly restored, ready to once again serve as a focal point for the community. This initiative not only revitalised a key feature of the village but also strengthened the bonds among its residents, showcasing the power of collective effort.",
+        "title": "Community Spirit Shines in Village Hall Restoration"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "positions",
+      "status": "PASS",
+      "data": {
+        "candidates": [
+          {
+            "sentence": "In a heartwarming display of community spirit, residents of the village came together to restore the noticeboard outside the local village hall.",
+            "word": "restore",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The noticeboard, which had fallen into disrepair over the years, was once a vital hub for sharing news and events.",
+            "word": "disrepair",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "Recognising its importance, a group of villagers organised a restoration day, inviting everyone to lend a hand.",
+            "word": "organised",
+            "knowledgeType": "lexical-precision"
+          },
+          {
+            "sentence": "Armed with paintbrushes, wood glue, and plenty of enthusiasm, they set to work.",
+            "word": "enthusiasm",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "The day began with a thorough clean-up, followed by the application of a fresh coat of paint.",
+            "word": "application",
+            "knowledgeType": "lexical-precision"
+          },
+          {
+            "sentence": "Local artists even contributed by adding colourful designs that reflect the village's character.",
+            "word": "contributed",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "As the sun shone down, laughter and chatter filled the air, creating a sense of camaraderie among participants.",
+            "word": "camaraderie",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "By the end of the day, the noticeboard stood proudly restored, ready to once again serve as a focal point for the community.",
+            "word": "focal",
+            "knowledgeType": "lexical-precision"
+          },
+          {
+            "sentence": "This initiative not only revitalised a key feature of the village but also strengthened the bonds among its residents, showcasing the power of collective effort.",
+            "word": "revitalised",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "This initiative not only revitalised a key feature of the village but also strengthened the bonds among its residents, showcasing the power of collective effort.",
+            "word": "strengthened",
+            "knowledgeType": "lexical-meaning"
+          },
+          {
+            "sentence": "showcasing the power of collective effort.",
+            "word": "collective",
+            "knowledgeType": "lexical-precision"
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "keys",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "number": 1,
+            "sentence": "In a heartwarming display of community spirit, residents of the village came together to restore the noticeboard outside the local village hall.",
+            "key": "restore",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 2,
+            "sentence": "The noticeboard, which had fallen into disrepair over the years, was once a vital hub for sharing news and events.",
+            "key": "disrepair",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 3,
+            "sentence": "Recognising its importance, a group of villagers organised a restoration day, inviting everyone to lend a hand.",
+            "key": "organised",
+            "knowledgeType": "lexical-precision",
+            "obviousChunk": false
+          },
+          {
+            "number": 4,
+            "sentence": "Armed with paintbrushes, wood glue, and plenty of enthusiasm, they set to work.",
+            "key": "enthusiasm",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 5,
+            "sentence": "The day began with a thorough clean-up, followed by the application of a fresh coat of paint.",
+            "key": "application",
+            "knowledgeType": "lexical-precision",
+            "obviousChunk": false
+          },
+          {
+            "number": 6,
+            "sentence": "As the sun shone down, laughter and chatter filled the air, creating a sense of camaraderie among participants.",
+            "key": "camaraderie",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          },
+          {
+            "number": 7,
+            "sentence": "By the end of the day, the noticeboard stood proudly restored, ready to once again serve as a focal point for the community.",
+            "key": "focal",
+            "knowledgeType": "lexical-precision",
+            "obviousChunk": false
+          },
+          {
+            "number": 8,
+            "sentence": "This initiative not only revitalised a key feature of the village but also strengthened the bonds among its residents, showcasing the power of collective effort.",
+            "key": "revitalised",
+            "knowledgeType": "lexical-meaning",
+            "obviousChunk": false
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "distractors",
+      "status": "PASS",
+      "data": {
+        "items": [
+          {
+            "number": 1,
+            "options": [
+              {
+                "letter": "A",
+                "word": "restore",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "repair",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "fix",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "renew",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 2,
+            "options": [
+              {
+                "letter": "A",
+                "word": "disrepair",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "deterioration",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "damage",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "decline",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 3,
+            "options": [
+              {
+                "letter": "A",
+                "word": "organised",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "arranged",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "planned",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "coordinated",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 4,
+            "options": [
+              {
+                "letter": "A",
+                "word": "enthusiasm",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "excitement",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "interest",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "passion",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 5,
+            "options": [
+              {
+                "letter": "A",
+                "word": "application",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "use",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "implementation",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "process",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 6,
+            "options": [
+              {
+                "letter": "A",
+                "word": "contributed",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "added",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "donated",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "provided",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 7,
+            "options": [
+              {
+                "letter": "A",
+                "word": "camaraderie",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "friendship",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "solidarity",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "companionship",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 8,
+            "options": [
+              {
+                "letter": "A",
+                "word": "focal",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "central",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "main",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "key",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 9,
+            "options": [
+              {
+                "letter": "A",
+                "word": "revitalised",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "refreshed",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "renewed",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "rejuvenated",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 10,
+            "options": [
+              {
+                "letter": "A",
+                "word": "strengthened",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "enhanced",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "fortified",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "improved",
+                "isKey": false
+              }
+            ]
+          },
+          {
+            "number": 11,
+            "options": [
+              {
+                "letter": "A",
+                "word": "collective",
+                "isKey": true
+              },
+              {
+                "letter": "B",
+                "word": "joint",
+                "isKey": false
+              },
+              {
+                "letter": "C",
+                "word": "shared",
+                "isKey": false
+              },
+              {
+                "letter": "D",
+                "word": "communal",
+                "isKey": false
+              }
+            ]
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "independent-substitution",
+      "status": "PIPELINE_FAIL",
+      "data": {},
+      "issues": [
+        "items.0.options: Array must contain exactly 4 element(s)",
+        "items.1.options: Array must contain exactly 4 element(s)",
+        "items.2.options: Array must contain exactly 4 element(s)",
+        "items.3.options: Array must contain exactly 4 element(s)"
+      ],
+      "repairable": true
+    }
+  ]
+}

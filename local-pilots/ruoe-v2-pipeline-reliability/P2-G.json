@@ -1,0 +1,404 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-G",
+    "direction": "A bookshop that delivers orders by cargo bicycle"
+  },
+  "savedAt": "2026-09-22T09:12:48.821Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 8230,
+    "completionTokens": 2068,
+    "totalTokens": 10298
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 356,
+        "completionTokens": 208,
+        "totalTokens": 564
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 610,
+        "completionTokens": 264,
+        "totalTokens": 874
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 763,
+        "completionTokens": 300,
+        "totalTokens": 1063
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1068,
+        "completionTokens": 438,
+        "totalTokens": 1506
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery-2",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1391,
+        "completionTokens": 122,
+        "totalTokens": 1513
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1437,
+        "completionTokens": 137,
+        "totalTokens": 1574
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 1373,
+        "completionTokens": 187,
+        "totalTokens": 1560
+      }
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 599,
+        "completionTokens": 227,
+        "totalTokens": 826
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 633,
+        "completionTokens": 185,
+        "totalTokens": 818
+      }
+    }
+  ],
+  "naturalSourceText": "In the heart of the city, a charming bookshop has taken a unique approach to delivering its orders. This delightful establishment, known for its carefully curated selection of literature, has embraced sustainability by using cargo bicycles for all its deliveries. Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner.\n\nThe shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices. The friendly delivery riders, clad in bright uniforms, navigate the bustling streets with ease, ensuring that each parcel reaches its destination in perfect condition.\n\nThis innovative delivery method not only supports a greener planet but also fosters a sense of connection within the community. As the bookshop continues to thrive, it sets a wonderful example of how businesses can adapt to modern challenges while promoting sustainability.",
+  "candidateItem": [
+    {
+      "number": 9,
+      "answer": "that"
+    },
+    {
+      "number": 10,
+      "answer": "who"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "In the heart of the city, a charming bookshop has taken a unique approach to delivering its orders. This delightful establishment, known for its carefully curated selection of literature, has embraced sustainability by using cargo bicycles for all its deliveries. Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner.\n\nThe shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices. The friendly delivery riders, clad in bright uniforms, navigate the bustling streets with ease, ensuring that each parcel reaches its destination in perfect condition.\n\nThis innovative delivery method not only supports a greener planet but also fosters a sense of connection within the community. As the bookshop continues to thrive, it sets a wonderful example of how businesses can adapt to modern challenges while promoting sustainability.",
+      "title": "The Eco-Friendly Bookshop"
+    },
+    "gap-discovery": {
+      "sites": [
+        {
+          "sentence": "In the heart of the city, a charming bookshop has taken a unique approach to delivering its orders.",
+          "word": "a",
+          "family": "article"
+        },
+        {
+          "sentence": "This delightful establishment, known for its carefully curated selection of literature, has embraced sustainability by using cargo bicycles for all its deliveries.",
+          "word": "its",
+          "family": "pronoun"
+        },
+        {
+          "sentence": "Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner.",
+          "word": "that",
+          "family": "linker"
+        },
+        {
+          "sentence": "The shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices.",
+          "word": "who",
+          "family": "relative word"
+        },
+        {
+          "sentence": "As the bookshop continues to thrive, it sets a wonderful example of how businesses can adapt to modern challenges while promoting sustainability.",
+          "word": "how",
+          "family": "linker"
+        }
+      ]
+    },
+    "select-eight": {
+      "gaps": [
+        {
+          "number": 9,
+          "word": "that",
+          "family": "linker",
+          "sentence": "Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner."
+        },
+        {
+          "number": 10,
+          "word": "who",
+          "family": "relative word",
+          "sentence": "The shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices."
+        }
+      ]
+    },
+    "uniqueness": {
+      "gaps": [
+        {
+          "number": 3,
+          "intendedAnswer": "that",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": true,
+          "plausibleAlternatives": [
+            "which"
+          ],
+          "uniquenessJustification": "While 'that' is the most natural choice, 'which' can also function here, though it may slightly alter the emphasis.",
+          "confidence": 0.8
+        },
+        {
+          "number": 4,
+          "intendedAnswer": "who",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The relative pronoun 'who' is necessary to introduce the clause describing 'book lovers'.",
+          "confidence": 1
+        }
+      ]
+    },
+    "gap-discovery-2": {
+      "sites": [
+        {
+          "sentence": "Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner.",
+          "word": "that",
+          "family": "linker"
+        },
+        {
+          "sentence": "The shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices.",
+          "word": "who",
+          "family": "relative word"
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Part 2 must contain exactly 8 gaps (got 2). Blind-solver output was malformed or omitted required fields. The sentences provided are overly complex and somewhat formal, which may not reflect the natural conversational style of a competent British English speaker. For example, the phrase 'rest assured that their books will arrive promptly and in an environmentally friendly manner' could be simplified to sound more natural. Additionally, 'the shop's commitment to reducing its carbon footprint has resonated with the local community' feels somewhat stilted and could be expressed in a more straightforward manner. Overall, the sentences lack the casual flow typical of everyday speech.",
+    "candidateAlternative": null,
+    "repairRecommendation": "Select eight gaps from the finished prose. Do not rewrite the prose yet.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Blind-solver output was malformed or omitted required fields."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences provided are overly complex and somewhat formal, which may not reflect the natural conversational style of a competent British English speaker. For example, the phrase 'rest assured that their books will arrive promptly and in an environmentally friendly manner' could be simplified to sound more natural. Additionally, 'the shop's commitment to reducing its carbon footprint has resonated with the local community' feels somewhat stilted and could be expressed in a more straightforward manner. Overall, the sentences lack the casual flow typical of everyday speech.",
+    "candidateAlternative": "Customers can look through the large collection online or in the shop, and when they order, they can be sure their books will arrive quickly and in an eco-friendly way. The shop's efforts to cut down its carbon footprint have really struck a chord with the local community, drawing in book lovers who care about good reads and being kind to the planet."
+  },
+  "repairHistory": [
+    {
+      "action": "gap-discovery-2",
+      "scope": "same-passage",
+      "instruction": "Find additional safe function-word sites in the existing article."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "prose",
+    "gap-discovery",
+    "select-eight",
+    "uniqueness",
+    "gap-discovery-2",
+    "select-eight",
+    "uniqueness"
+  ],
+  "stageRecords": [
+    {
+      "stage": "prose",
+      "status": "PASS",
+      "data": {
+        "passage": "In the heart of the city, a charming bookshop has taken a unique approach to delivering its orders. This delightful establishment, known for its carefully curated selection of literature, has embraced sustainability by using cargo bicycles for all its deliveries. Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner.\n\nThe shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices. The friendly delivery riders, clad in bright uniforms, navigate the bustling streets with ease, ensuring that each parcel reaches its destination in perfect condition.\n\nThis innovative delivery method not only supports a greener planet but also fosters a sense of connection within the community. As the bookshop continues to thrive, it sets a wonderful example of how businesses can adapt to modern challenges while promoting sustainability.",
+        "title": "The Eco-Friendly Bookshop"
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "gap-discovery",
+      "status": "PASS",
+      "data": {
+        "sites": [
+          {
+            "sentence": "In the heart of the city, a charming bookshop has taken a unique approach to delivering its orders.",
+            "word": "a",
+            "family": "article"
+          },
+          {
+            "sentence": "This delightful establishment, known for its carefully curated selection of literature, has embraced sustainability by using cargo bicycles for all its deliveries.",
+            "word": "its",
+            "family": "pronoun"
+          },
+          {
+            "sentence": "Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner.",
+            "word": "that",
+            "family": "linker"
+          },
+          {
+            "sentence": "The shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices.",
+            "word": "who",
+            "family": "relative word"
+          },
+          {
+            "sentence": "As the bookshop continues to thrive, it sets a wonderful example of how businesses can adapt to modern challenges while promoting sustainability.",
+            "word": "how",
+            "family": "linker"
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "select-eight",
+      "status": "PASS",
+      "data": {
+        "gaps": [
+          {
+            "number": 1,
+            "word": "a",
+            "family": "article",
+            "sentence": "In the heart of the city, a charming bookshop has taken a unique approach to delivering its orders."
+          },
+          {
+            "number": 2,
+            "word": "its",
+            "family": "pronoun",
+            "sentence": "This delightful establishment, known for its carefully curated selection of literature, has embraced sustainability by using cargo bicycles for all its deliveries."
+          },
+          {
+            "number": 3,
+            "word": "that",
+            "family": "linker",
+            "sentence": "Customers can browse the extensive collection online or in-store, and when they place an order, they can rest assured that their books will arrive promptly and in an environmentally friendly manner."
+          },
+          {
+            "number": 4,
+            "word": "who",
+            "family": "relative word",
+            "sentence": "The shop's commitment to reducing its carbon footprint has resonated with the local community, attracting book lovers who appreciate both good literature and eco-conscious practices."
+          },
+          {
+            "number": 5,
+            "word": "how",
+            "family": "linker",
+            "sentence": "As the bookshop continues to thrive, it sets a wonderful example of how businesses can adapt to modern challenges while promoting sustainability."
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    },
+    {
+      "stage": "uniqueness",
+      "status": "PASS",
+      "data": {
+        "gaps": [
+          {
+            "number": 1,
+            "intendedAnswer": "a",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The article 'a' is necessary to introduce the noun 'charming bookshop' in this context.",
+            "confidence": 1
+          },
+          {
+            "number": 2,
+            "intendedAnswer": "its",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The pronoun 'its' correctly refers back to 'establishment', making it essential for clarity.",
+            "confidence": 1
+          },
+          {
+            "number": 3,
+            "intendedAnswer": "that",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": true,
+            "plausibleAlternatives": [
+              "which"
+            ],
+            "uniquenessJustification": "While 'that' is the most natural choice, 'which' can also function here, though it may slightly alter the emphasis.",
+            "confidence": 0.8
+          },
+          {
+            "number": 4,
+            "intendedAnswer": "who",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The relative pronoun 'who' is necessary to introduce the clause describing 'book lovers'.",
+            "confidence": 1
+          },
+          {
+            "number": 5,
+            "intendedAnswer": "how",
+            "intendedAnswerValid": true,
+            "alternativeSearchPerformed": false,
+            "plausibleAlternatives": [],
+            "uniquenessJustification": "The linker 'how' is essential to connect the example of the bookshop's adaptability to the broader statement about businesses.",
+            "confidence": 1
+          }
+        ]
+      },
+      "issues": [],
+      "repairable": false
+    }
+  ],
+  "layers": {
+    "mechanical": "HARD_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "PIPELINE_FAIL",
+      "reason": "Blind-solver output was malformed or omitted required fields."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences provided are overly complex and somewhat formal, which may not reflect the natural conversational style of a competent British English speaker. For example, the phrase 'rest assured that their books will arrive promptly and in an environmentally friendly manner' could be simplified to sound more natural. Additionally, 'the shop's commitment to reducing its carbon footprint has resonated with the local community' feels somewhat stilted and could be expressed in a more straightforward manner. Overall, the sentences lack the casual flow typical of everyday speech.",
+      "candidateAlternative": "Customers can look through the large collection online or in the shop, and when they order, they can be sure their books will arrive quickly and in an eco-friendly way. The shop's efforts to cut down its carbon footprint have really struck a chord with the local community, drawing in book lovers who care about good reads and being kind to the planet."
+    }
+  }
+}

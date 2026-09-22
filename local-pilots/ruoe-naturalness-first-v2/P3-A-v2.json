@@ -1,0 +1,281 @@
+{
+  "brief": {
+    "partNumber": 3,
+    "id": "P3-A",
+    "direction": "Restoring a Victorian bandstand in a public park"
+  },
+  "arm": "v2",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:03:02.036Z",
+  "result": {
+    "version": "naturalness-first-v2",
+    "partNumber": 3,
+    "trace": [
+      "prose",
+      "family-discovery",
+      "base-assignment",
+      "derivation-check",
+      "new-position"
+    ],
+    "outputs": {
+      "prose": {
+        "title": "Restoring a Victorian Bandstand in a Public Park",
+        "passage": "The restoration of a Victorian bandstand in our local park has become a community project that brings together residents of all ages. Originally built in the late 19th century, the bandstand has seen better days, with peeling paint and rust threatening its structure. The restoration effort aims not only to preserve this piece of history but also to revitalise the park as a vibrant gathering place.\n\nLocal volunteers have been instrumental in the project, dedicating their weekends to sanding down the wood and applying fresh coats of paint. Fundraising events, including bake sales and sponsored walks, have helped cover the costs of materials. The aim is to retain the bandstand's original charm while ensuring it meets modern safety standards.\n\nOnce completed, the bandstand will host concerts and community events, fostering a sense of togetherness. This initiative highlights the importance of preserving our heritage while encouraging community spirit, ensuring that future generations can enjoy this beautiful structure."
+      },
+      "family-discovery": {
+        "keywords": [
+          {
+            "word": "restore",
+            "sentence": "The restoration of a Victorian bandstand in our local park has become a community project that brings together residents of all ages."
+          },
+          {
+            "word": "preserve",
+            "sentence": "The restoration effort aims not only to preserve this piece of history but also to revitalise the park as a vibrant gathering place."
+          },
+          {
+            "word": "instrumental",
+            "sentence": "Local volunteers have been instrumental in the project, dedicating their weekends to sanding down the wood and applying fresh coats of paint."
+          },
+          {
+            "word": "retain",
+            "sentence": "The aim is to retain the bandstand's original charm while ensuring it meets modern safety standards."
+          },
+          {
+            "word": "community",
+            "sentence": "Once completed, the bandstand will host concerts and community events, fostering a sense of togetherness."
+          },
+          {
+            "word": "heritage",
+            "sentence": "This initiative highlights the importance of preserving our heritage while encouraging community spirit, ensuring that future generations can enjoy this beautiful structure."
+          }
+        ]
+      },
+      "base-assignment": {
+        "items": [
+          {
+            "stem": "restore",
+            "answer": "restoration",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "restorer",
+              "restorative"
+            ]
+          },
+          {
+            "stem": "preserve",
+            "answer": "preservation",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "preserver"
+            ]
+          },
+          {
+            "stem": "instrumental",
+            "answer": "instrument",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "retain",
+            "answer": "retention",
+            "wordClass": "noun",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "retainer"
+            ]
+          },
+          {
+            "stem": "community",
+            "answer": "communal",
+            "wordClass": "adjective",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "communitarian",
+              "communitas"
+            ]
+          },
+          {
+            "stem": "heritage",
+            "answer": "hereditary",
+            "wordClass": "adjective",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "heredity"
+            ]
+          }
+        ]
+      },
+      "derivation-check": {
+        "items": [
+          {
+            "stem": "restore",
+            "answer": "restoration",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "restorer",
+              "restorative"
+            ]
+          },
+          {
+            "stem": "preserve",
+            "answer": "preservation",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "preserver"
+            ]
+          },
+          {
+            "stem": "instrumental",
+            "answer": "instrument",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": []
+          },
+          {
+            "stem": "retain",
+            "answer": "retention",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "retainer"
+            ]
+          },
+          {
+            "stem": "community",
+            "answer": "communal",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "communitarian",
+              "communitas"
+            ]
+          },
+          {
+            "stem": "heritage",
+            "answer": "hereditary",
+            "natural": true,
+            "forcedContext": false,
+            "alternativeFamilyMembers": [
+              "heredity"
+            ]
+          }
+        ]
+      }
+    },
+    "adversarial": {
+      "verdict": "QUALITY_FAIL",
+      "items": [
+        {
+          "stem": "restore",
+          "answer": "restoration",
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "Another family member also fits this context (restorer, restorative).",
+            "candidateAlternative": "restorer",
+            "repairRecommendation": "Discard the position. The context does not force one family member.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "preserve",
+          "answer": "preservation",
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "Another family member also fits this context (preserver).",
+            "candidateAlternative": "preserver",
+            "repairRecommendation": "Discard the position. The context does not force one family member.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "instrumental",
+          "answer": "instrument",
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "\"instrument\" is a direct, unique derivation of \"instrumental\" in a natural sentence.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "retain",
+          "answer": "retention",
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "\"retention\" is not a recognisable direct derivation of \"retain\".",
+            "candidateAlternative": "retention",
+            "repairRecommendation": "Choose a different base from a word already in the natural text.",
+            "confidence": "medium"
+          }
+        },
+        {
+          "stem": "community",
+          "answer": "communal",
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "Another family member also fits this context (communitarian, communitas).",
+            "candidateAlternative": "communitarian",
+            "repairRecommendation": "Discard the position. The context does not force one family member.",
+            "confidence": "high"
+          }
+        },
+        {
+          "stem": "heritage",
+          "answer": "hereditary",
+          "judgement": {
+            "verdict": "QUALITY_FAIL",
+            "reason": "\"hereditary\" is not a recognisable direct derivation of \"heritage\".",
+            "candidateAlternative": "hereditary",
+            "repairRecommendation": "Choose a different base from a word already in the natural text.",
+            "confidence": "medium"
+          }
+        }
+      ]
+    },
+    "repairs": [
+      {
+        "action": "new-position",
+        "scope": "failed-item",
+        "instruction": "Choose a different word already in the natural text. Do not force this sentence to keep the rejected base."
+      }
+    ],
+    "answerKey": [
+      {
+        "stem": "restore",
+        "answer": "restoration"
+      },
+      {
+        "stem": "preserve",
+        "answer": "preservation"
+      },
+      {
+        "stem": "instrumental",
+        "answer": "instrument"
+      },
+      {
+        "stem": "retain",
+        "answer": "retention"
+      },
+      {
+        "stem": "community",
+        "answer": "communal"
+      },
+      {
+        "stem": "heritage",
+        "answer": "hereditary"
+      }
+    ]
+  }
+}

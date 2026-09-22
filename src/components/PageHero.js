@@ -339,6 +339,85 @@ export default function PageHero({
           .page-hero:not(.page-hero--align-left) .page-hero__stats {
             justify-content: center;
           }
+          .niveles-level-page .page-hero {
+            margin-bottom: 0;
+            border-radius: 16px;
+          }
+          .niveles-level-page .page-hero__inner {
+            padding: 12px 12px 10px;
+          }
+          .niveles-level-page .page-hero__body {
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px 10px;
+            text-align: left;
+          }
+          .niveles-level-page .page-hero__content,
+          .niveles-level-page .page-hero__desc {
+            margin-inline: 0;
+            text-align: left;
+          }
+          .niveles-level-page .page-hero__eyebrow {
+            margin-bottom: 6px;
+            padding: 2px 8px;
+            font-size: 9px;
+          }
+          .niveles-level-page .page-hero__title {
+            margin-bottom: 4px;
+            font-size: 1.2rem;
+          }
+          .niveles-level-page .page-hero__desc {
+            font-size: 0.72rem;
+            line-height: 1.3;
+          }
+          .niveles-level-page .page-hero__mascot {
+            margin: 0;
+            align-self: center;
+          }
+          .niveles-level-page .page-hero__mascot-img {
+            max-width: 72px !important;
+            max-height: 80px !important;
+          }
+          .precios-page .page-hero {
+            flex: 0 0 auto;
+            margin-bottom: 0;
+            border-radius: 16px;
+          }
+          .precios-page .page-hero__inner {
+            padding: 12px 14px 10px;
+          }
+          .precios-page .page-hero__body {
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 8px 10px;
+            text-align: left;
+          }
+          .precios-page .page-hero__content {
+            margin-inline: 0;
+            text-align: left;
+          }
+          .precios-page .page-hero__eyebrow {
+            margin-bottom: 6px;
+            padding: 2px 8px;
+            font-size: 9px;
+          }
+          .precios-page .page-hero__title {
+            margin-bottom: 0;
+            font-size: 1.15rem;
+          }
+          .precios-page .page-hero__stats {
+            display: none;
+          }
+          .precios-page .page-hero__mascot {
+            margin: 0;
+            align-self: center;
+          }
+          .precios-page .page-hero__mascot-img {
+            max-width: 64px !important;
+            max-height: 74px !important;
+          }
         }
       `}</style>
     </>

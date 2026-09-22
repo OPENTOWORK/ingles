@@ -1,0 +1,224 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-F",
+    "direction": "Missing the last bus after an evening class",
+    "preferredFamily": "TF-03"
+  },
+  "savedAt": "2026-09-22T09:14:25.267Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 3942,
+    "completionTokens": 461,
+    "totalTokens": 4403
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "family-candidate",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 388,
+        "completionTokens": 26,
+        "totalTokens": 414
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "sentence-pair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 401,
+        "completionTokens": 51,
+        "totalTokens": 452
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 482,
+        "completionTokens": 75,
+        "totalTokens": 557
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 359,
+        "completionTokens": 28,
+        "totalTokens": 387
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 209,
+        "completionTokens": 8,
+        "totalTokens": 217
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "replace-family",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 508,
+        "completionTokens": 95,
+        "totalTokens": 603
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 502,
+        "completionTokens": 75,
+        "totalTokens": 577
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 369,
+        "completionTokens": 38,
+        "totalTokens": 407
+      }
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 328,
+        "completionTokens": 5,
+        "totalTokens": 333
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 396,
+        "completionTokens": 60,
+        "totalTokens": 456
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": {
+    "keyword": "missed",
+    "answer": "missing",
+    "s1": "I missed the last bus after my evening class.",
+    "completedS2": "I was late and ended up missing the last bus after my evening class.",
+    "transformationFamily": "rephrasing"
+  },
+  "generatorOutput": {
+    "family": {
+      "familyId": "TF-03",
+      "keyword": "missing",
+      "kept": true
+    },
+    "pair": {
+      "s1": "The documents are missing from the file.",
+      "keyword": "missing",
+      "s2WithGap": "",
+      "answer": "missing",
+      "completedS2": "The file is missing the documents.",
+      "transformationFamily": "",
+      "acceptedVariants": []
+    },
+    "semantic": {
+      "propositionsPreserved": true,
+      "agencyPreserved": true,
+      "referencePreserved": true,
+      "tenseAspectPreserved": true,
+      "modalityPreserved": true,
+      "comparisonScopePreserved": true,
+      "informationLost": false,
+      "informationAdded": false,
+      "natural": true
+    },
+    "naturalness": {
+      "natural": true
+    },
+    "replacement": {
+      "s1": "I missed the last bus after my evening class.",
+      "keyword": "missed",
+      "s2WithGap": "I was late and ended up __________ the last bus after my evening class.",
+      "answer": "missing",
+      "completedS2": "I was late and ended up missing the last bus after my evening class.",
+      "transformationFamily": "rephrasing",
+      "acceptedVariants": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Semantic or naturalness JSON was not a complete boolean record, so it cannot override or confirm the item.",
+    "candidateAlternative": null,
+    "repairRecommendation": "Return every semantic flag as true or false, and natural as a boolean.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "PASS",
+    "reason": "Blind solve matched the stored transformation."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "PASS",
+    "reason": "The sentence is natural and the gap can be filled with 'missing', which fits the context appropriately. A competent British English speaker would likely produce this structure without issue.",
+    "candidateAlternative": "I was late and ended up missing the last bus after my evening class."
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "naturalness",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "replace-family",
+      "scope": "failed-item",
+      "instruction": "Drop this Transformation Family and try another route that keeps the same meaning in natural British English. Do not bend the sentences around the failed keyword."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "family-candidate",
+    "sentence-pair",
+    "semantic",
+    "naturalness",
+    "schema-repair",
+    "replace-family",
+    "semantic",
+    "naturalness"
+  ],
+  "layers": {
+    "mechanical": "PIPELINE_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "PASS",
+      "reason": "Blind solve matched the stored transformation."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "PASS",
+      "reason": "The sentence is natural and the gap can be filled with 'missing', which fits the context appropriately. A competent British English speaker would likely produce this structure without issue.",
+      "candidateAlternative": "I was late and ended up missing the last bus after my evening class."
+    }
+  }
+}

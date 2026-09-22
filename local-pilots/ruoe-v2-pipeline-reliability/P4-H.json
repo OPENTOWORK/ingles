@@ -1,0 +1,224 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-H",
+    "direction": "Choosing a cheaper ticket bought in advance",
+    "preferredFamily": "TF-07"
+  },
+  "savedAt": "2026-09-22T09:14:43.008Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "tokenUsage": {
+    "promptTokens": 3994,
+    "completionTokens": 533,
+    "totalTokens": 4527
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "family-candidate",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 387,
+        "completionTokens": 28,
+        "totalTokens": 415
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "sentence-pair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 403,
+        "completionTokens": 60,
+        "totalTokens": 463
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 492,
+        "completionTokens": 75,
+        "totalTokens": 567
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 364,
+        "completionTokens": 33,
+        "totalTokens": 397
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 209,
+        "completionTokens": 9,
+        "totalTokens": 218
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "replace-family",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 529,
+        "completionTokens": 99,
+        "totalTokens": 628
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 508,
+        "completionTokens": 75,
+        "totalTokens": 583
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 372,
+        "completionTokens": 41,
+        "totalTokens": 413
+      }
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 331,
+        "completionTokens": 7,
+        "totalTokens": 338
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "promptTokens": 399,
+        "completionTokens": 106,
+        "totalTokens": 505
+      }
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": {
+    "keyword": "cheaper ticket",
+    "answer": "cheaper ticket",
+    "s1": "If you book your ticket early, you can get a cheaper ticket.",
+    "completedS2": "If you book your ticket early, you can get a cheaper ticket.",
+    "transformationFamily": "TF-08"
+  },
+  "generatorOutput": {
+    "family": {
+      "familyId": "TF-07",
+      "keyword": "cheaper ticket",
+      "kept": true
+    },
+    "pair": {
+      "s1": "I found a ticket that costs less than the others.",
+      "keyword": "cheaper ticket",
+      "s2WithGap": "",
+      "answer": "cheaper ticket",
+      "completedS2": "I found a cheaper ticket than the others.",
+      "transformationFamily": "",
+      "acceptedVariants": []
+    },
+    "semantic": {
+      "propositionsPreserved": true,
+      "agencyPreserved": true,
+      "referencePreserved": true,
+      "tenseAspectPreserved": true,
+      "modalityPreserved": true,
+      "comparisonScopePreserved": true,
+      "informationLost": false,
+      "informationAdded": false,
+      "natural": true
+    },
+    "naturalness": null,
+    "replacement": {
+      "s1": "If you book your ticket early, you can get a cheaper ticket.",
+      "keyword": "cheaper ticket",
+      "s2WithGap": "If you book your ticket early, you can get a ____.",
+      "answer": "cheaper ticket",
+      "completedS2": "If you book your ticket early, you can get a cheaper ticket.",
+      "transformationFamily": "TF-08",
+      "acceptedVariants": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "PIPELINE_FAIL",
+    "reason": "Semantic or naturalness JSON was not a complete boolean record, so it cannot override or confirm the item.",
+    "candidateAlternative": null,
+    "repairRecommendation": "Return every semantic flag as true or false, and natural as a boolean.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind transformation was \"discounted ticket\", stored answer is \"cheaper ticket\".",
+    "candidateAlternative": "discounted ticket"
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentence with the gap does not naturally prompt a specific word that fits well in the context. A competent British English speaker might find it awkward to fill in the blank without additional context or guidance, as 'cheaper' is quite specific and may not be the first thought in a more open-ended sentence. A more natural alternative could be 'discounted ticket' or simply 'better deal'.",
+    "candidateAlternative": "If you book your ticket early, you can get a better deal."
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "naturalness",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "replace-family",
+      "scope": "failed-item",
+      "instruction": "Drop this Transformation Family and try another route that keeps the same meaning in natural British English. Do not bend the sentences around the failed keyword."
+    }
+  ],
+  "finalVerdict": "PIPELINE_FAIL",
+  "trace": [
+    "family-candidate",
+    "sentence-pair",
+    "semantic",
+    "naturalness",
+    "schema-repair",
+    "replace-family",
+    "semantic",
+    "naturalness"
+  ],
+  "layers": {
+    "mechanical": "PIPELINE_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind transformation was \"discounted ticket\", stored answer is \"cheaper ticket\".",
+      "candidateAlternative": "discounted ticket"
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentence with the gap does not naturally prompt a specific word that fits well in the context. A competent British English speaker might find it awkward to fill in the blank without additional context or guidance, as 'cheaper' is quite specific and may not be the first thought in a more open-ended sentence. A more natural alternative could be 'discounted ticket' or simply 'better deal'.",
+      "candidateAlternative": "If you book your ticket early, you can get a better deal."
+    }
+  }
+}

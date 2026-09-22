@@ -1,0 +1,171 @@
+{
+  "brief": {
+    "partNumber": 4,
+    "id": "P4-C",
+    "direction": "Forgetting a neighbour’s spare key",
+    "preferredFamily": "TF-03"
+  },
+  "savedAt": "2026-09-22T08:35:54.699Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "family-candidate",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "sentence-pair",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "schema-repair",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "replace-family",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "semantic",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "naturalness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "",
+  "candidateItem": {
+    "keyword": "forgetting",
+    "answer": "forgetting",
+    "s1": "I left my neighbour's spare key at home.",
+    "completedS2": "I regret forgetting my neighbour's spare key.",
+    "transformationFamily": "regret"
+  },
+  "generatorOutput": {
+    "family": {
+      "familyId": "TF-03",
+      "keyword": "forgetting",
+      "kept": true
+    },
+    "pair": {
+      "s1": "I keep forgetting to call my mum.",
+      "keyword": "forgetting",
+      "s2WithGap": "",
+      "answer": "forgetting",
+      "completedS2": "I often forget to call my mum.",
+      "transformationFamily": "",
+      "acceptedVariants": []
+    },
+    "semantic": {
+      "propositionsPreserved": true,
+      "agencyPreserved": true,
+      "referencePreserved": true,
+      "tenseAspectPreserved": true,
+      "modalityPreserved": true,
+      "comparisonScopePreserved": true,
+      "informationLost": false,
+      "informationAdded": false,
+      "natural": true
+    },
+    "naturalness": {
+      "natural": true
+    },
+    "replacement": {
+      "s1": "I left my neighbour's spare key at home.",
+      "keyword": "forgetting",
+      "s2WithGap": "I regret __________ my neighbour's spare key.",
+      "answer": "forgetting",
+      "completedS2": "I regret forgetting my neighbour's spare key.",
+      "transformationFamily": "regret",
+      "acceptedVariants": []
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "HARD_FAIL",
+    "reason": "Semantic or naturalness JSON was not a complete boolean record, so it cannot override or confirm the item.",
+    "candidateAlternative": null,
+    "repairRecommendation": "Return every semantic flag as true or false, and natural as a boolean.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "Blind transformation was \"forgetting about\", stored answer is \"forgetting\".",
+    "candidateAlternative": "forgetting about"
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentence 'I regret forgetting my neighbour's spare key.' is grammatically correct, but the use of 'forgetting' in this context feels somewhat awkward and unnatural. A more natural expression might involve a different verb or structure, such as 'I regret that I left my neighbour's spare key at home.'",
+    "candidateAlternative": "I regret that I left my neighbour's spare key at home."
+  },
+  "repairHistory": [
+    {
+      "action": "schema-repair",
+      "scope": "naturalness",
+      "instruction": "Correct the JSON shape once."
+    },
+    {
+      "action": "replace-family",
+      "scope": "failed-item",
+      "instruction": "Drop this Transformation Family and try another route that keeps the same meaning in natural British English. Do not bend the sentences around the failed keyword."
+    }
+  ],
+  "finalVerdict": "HARD_FAIL",
+  "trace": [
+    "family-candidate",
+    "sentence-pair",
+    "semantic",
+    "naturalness",
+    "schema-repair",
+    "replace-family",
+    "semantic",
+    "naturalness"
+  ],
+  "layers": {
+    "mechanical": "HARD_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "Blind transformation was \"forgetting about\", stored answer is \"forgetting\".",
+      "candidateAlternative": "forgetting about"
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentence 'I regret forgetting my neighbour's spare key.' is grammatically correct, but the use of 'forgetting' in this context feels somewhat awkward and unnatural. A more natural expression might involve a different verb or structure, such as 'I regret that I left my neighbour's spare key at home.'",
+      "candidateAlternative": "I regret that I left my neighbour's spare key at home."
+    }
+  }
+}

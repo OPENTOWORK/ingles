@@ -1,0 +1,226 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-B",
+    "direction": "A bakery that delivers bread by bicycle before dawn"
+  },
+  "arm": "v2",
+  "model": "gpt-4o-mini",
+  "savedAt": "2026-09-22T08:02:36.448Z",
+  "result": {
+    "version": "naturalness-first-v2",
+    "partNumber": 2,
+    "trace": [
+      "prose",
+      "gap-discovery",
+      "select-eight",
+      "uniqueness"
+    ],
+    "outputs": {
+      "prose": {
+        "title": "Dawn Deliveries: The Bicycle Bakery",
+        "passage": "In a quaint corner of the city, a small bakery has gained a loyal following for its unique approach to delivering fresh bread. Each morning before dawn, the bakery’s team sets out on bicycles, pedalling through the quiet streets to ensure that the aroma of freshly baked loaves fills the air as the sun begins to rise. This charming initiative not only supports a sustainable lifestyle but also fosters a sense of community. Customers eagerly await their deliveries, often leaving notes of appreciation for the bakers. The bakery prides itself on using locally sourced ingredients, and the bread is made with care, ensuring quality in every bite. As the city stirs to life, the sight of the bakers cycling with their baskets full of warm bread has become a beloved ritual. For many, it’s not just about the bread; it’s about the connection to the local community and the joy of receiving something special to start the day. This bicycle bakery truly embodies the spirit of a vibrant neighbourhood."
+      },
+      "gap-discovery": {
+        "sites": [
+          {
+            "sentence": "In a quaint corner of the city, a small bakery has gained a loyal following for its unique approach to delivering fresh bread.",
+            "word": "a",
+            "family": "articles"
+          },
+          {
+            "sentence": "Each morning before dawn, the bakery’s team sets out on bicycles, pedalling through the quiet streets to ensure that the aroma of freshly baked loaves fills the air as the sun begins to rise.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "This charming initiative not only supports a sustainable lifestyle but also fosters a sense of community.",
+            "word": "a",
+            "family": "articles"
+          },
+          {
+            "sentence": "Customers eagerly await their deliveries, often leaving notes of appreciation for the bakers.",
+            "word": "their",
+            "family": "pronouns"
+          },
+          {
+            "sentence": "As the city stirs to life, the sight of the bakers cycling with their baskets full of warm bread has become a beloved ritual.",
+            "word": "the",
+            "family": "articles"
+          },
+          {
+            "sentence": "For many, it’s not just about the bread; it’s about the connection to the local community and the joy of receiving something special to start the day.",
+            "word": "the",
+            "family": "articles"
+          }
+        ]
+      },
+      "select-eight": {
+        "gaps": [
+          {
+            "number": 1,
+            "word": "a",
+            "family": "articles",
+            "sentence": "In a quaint corner of the city, a small bakery has gained a loyal following for its unique approach to delivering fresh bread."
+          },
+          {
+            "number": 2,
+            "word": "the",
+            "family": "articles",
+            "sentence": "Each morning before dawn, the bakery’s team sets out on bicycles, pedalling through the quiet streets to ensure that the aroma of freshly baked loaves fills the air as the sun begins to rise."
+          },
+          {
+            "number": 3,
+            "word": "a",
+            "family": "articles",
+            "sentence": "This charming initiative not only supports a sustainable lifestyle but also fosters a sense of community."
+          },
+          {
+            "number": 4,
+            "word": "their",
+            "family": "pronouns",
+            "sentence": "Customers eagerly await their deliveries, often leaving notes of appreciation for the bakers."
+          },
+          {
+            "number": 5,
+            "word": "the",
+            "family": "articles",
+            "sentence": "As the city stirs to life, the sight of the bakers cycling with their baskets full of warm bread has become a beloved ritual."
+          },
+          {
+            "number": 6,
+            "word": "the",
+            "family": "articles",
+            "sentence": "For many, it’s not just about the bread; it’s about the connection to the local community and the joy of receiving something special to start the day."
+          }
+        ]
+      },
+      "uniqueness": {
+        "gaps": [
+          {
+            "number": 1,
+            "keyedWord": "a",
+            "alternatives": []
+          },
+          {
+            "number": 2,
+            "keyedWord": "the",
+            "alternatives": []
+          },
+          {
+            "number": 3,
+            "keyedWord": "a",
+            "alternatives": []
+          },
+          {
+            "number": 4,
+            "keyedWord": "their",
+            "alternatives": []
+          },
+          {
+            "number": 5,
+            "keyedWord": "the",
+            "alternatives": []
+          },
+          {
+            "number": 6,
+            "keyedWord": "the",
+            "alternatives": []
+          }
+        ]
+      }
+    },
+    "adversarial": {
+      "verdict": "PASS",
+      "items": [
+        {
+          "number": 1,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"a\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 2,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"the\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 3,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"a\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 4,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"their\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 5,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"the\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        },
+        {
+          "number": 6,
+          "judgement": {
+            "verdict": "PASS",
+            "reason": "Only \"the\" is defensible.",
+            "candidateAlternative": null,
+            "repairRecommendation": "None.",
+            "confidence": "high"
+          }
+        }
+      ]
+    },
+    "repairs": [],
+    "answerKey": [
+      {
+        "number": 1,
+        "answer": "a"
+      },
+      {
+        "number": 2,
+        "answer": "the"
+      },
+      {
+        "number": 3,
+        "answer": "a"
+      },
+      {
+        "number": 4,
+        "answer": "their"
+      },
+      {
+        "number": 5,
+        "answer": "the"
+      },
+      {
+        "number": 6,
+        "answer": "the"
+      }
+    ]
+  }
+}

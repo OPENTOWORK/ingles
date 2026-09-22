@@ -1,0 +1,322 @@
+{
+  "brief": {
+    "partNumber": 2,
+    "id": "P2-C",
+    "direction": "The person who winds the town hall clock every Monday"
+  },
+  "savedAt": "2026-09-22T08:33:35.522Z",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blind-solver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "stageLog": [
+    {
+      "role": "generator",
+      "stage": "prose",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "gap-discovery",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "uniqueness",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "generator",
+      "stage": "select-eight",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "blind-solver",
+      "stage": "blind-solve",
+      "model": "gpt-4o-mini"
+    },
+    {
+      "role": "adversary",
+      "stage": "adversary",
+      "model": "gpt-4o-mini"
+    }
+  ],
+  "naturalSourceText": "Every Monday morning, just as the sun begins to rise, Mr. Thompson makes his way to the town hall. He’s the man entrusted with winding the grand clock that has stood proudly in the tower for over a century. With a sturdy key in hand, he climbs the narrow staircase, the sound of his footsteps echoing against the stone walls. \n\nOnce he reaches the clock room, Mr. Thompson takes a moment to admire the intricate gears and mechanisms that keep the clock ticking. It’s a delicate job, requiring both precision and care. As he winds the clock, he reflects on the countless hours it has marked for the townsfolk, a silent witness to their lives. \n\nThe townspeople often stop to greet him, appreciating his dedication. They know that without Mr. Thompson’s weekly ritual, the clock might falter, leaving the town without its reliable timekeeper. For him, it’s not just a task; it’s a cherished tradition that connects him to the community.",
+  "candidateItem": [
+    {
+      "number": 1,
+      "answer": "the"
+    },
+    {
+      "number": 2,
+      "answer": "the"
+    },
+    {
+      "number": 3,
+      "answer": "the"
+    },
+    {
+      "number": 4,
+      "answer": "the"
+    },
+    {
+      "number": 5,
+      "answer": "a"
+    },
+    {
+      "number": 6,
+      "answer": "the"
+    },
+    {
+      "number": 7,
+      "answer": "the"
+    },
+    {
+      "number": 8,
+      "answer": "the"
+    }
+  ],
+  "generatorOutput": {
+    "prose": {
+      "passage": "Every Monday morning, just as the sun begins to rise, Mr. Thompson makes his way to the town hall. He’s the man entrusted with winding the grand clock that has stood proudly in the tower for over a century. With a sturdy key in hand, he climbs the narrow staircase, the sound of his footsteps echoing against the stone walls. \n\nOnce he reaches the clock room, Mr. Thompson takes a moment to admire the intricate gears and mechanisms that keep the clock ticking. It’s a delicate job, requiring both precision and care. As he winds the clock, he reflects on the countless hours it has marked for the townsfolk, a silent witness to their lives. \n\nThe townspeople often stop to greet him, appreciating his dedication. They know that without Mr. Thompson’s weekly ritual, the clock might falter, leaving the town without its reliable timekeeper. For him, it’s not just a task; it’s a cherished tradition that connects him to the community.",
+      "title": "The Keeper of Time"
+    },
+    "gap-discovery": {
+      "sites": [
+        {
+          "sentence": "Every Monday morning, just as the sun begins to rise, Mr. Thompson makes his way to the town hall.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "He’s the man entrusted with winding the grand clock that has stood proudly in the tower for over a century.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "With a sturdy key in hand, he climbs the narrow staircase, the sound of his footsteps echoing against the stone walls.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "Once he reaches the clock room, Mr. Thompson takes a moment to admire the intricate gears and mechanisms that keep the clock ticking.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "It’s a delicate job, requiring both precision and care.",
+          "word": "a",
+          "family": "articles"
+        },
+        {
+          "sentence": "As he winds the clock, he reflects on the countless hours it has marked for the townsfolk, a silent witness to their lives.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "The townspeople often stop to greet him, appreciating his dedication.",
+          "word": "the",
+          "family": "articles"
+        },
+        {
+          "sentence": "For him, it’s not just a task; it’s a cherished tradition that connects him to the community.",
+          "word": "the",
+          "family": "articles"
+        }
+      ]
+    },
+    "select-eight": {
+      "gaps": [
+        {
+          "number": 1,
+          "word": "the",
+          "family": "articles",
+          "sentence": "Every Monday morning, just as the sun begins to rise, Mr. Thompson makes his way to the town hall."
+        },
+        {
+          "number": 2,
+          "word": "the",
+          "family": "articles",
+          "sentence": "He’s the man entrusted with winding the grand clock that has stood proudly in the tower for over a century."
+        },
+        {
+          "number": 3,
+          "word": "the",
+          "family": "articles",
+          "sentence": "With a sturdy key in hand, he climbs the narrow staircase, the sound of his footsteps echoing against the stone walls."
+        },
+        {
+          "number": 4,
+          "word": "the",
+          "family": "articles",
+          "sentence": "Once he reaches the clock room, Mr. Thompson takes a moment to admire the intricate gears and mechanisms that keep the clock ticking."
+        },
+        {
+          "number": 5,
+          "word": "a",
+          "family": "articles",
+          "sentence": "It’s a delicate job, requiring both precision and care."
+        },
+        {
+          "number": 6,
+          "word": "the",
+          "family": "articles",
+          "sentence": "As he winds the clock, he reflects on the countless hours it has marked for the townsfolk, a silent witness to their lives."
+        },
+        {
+          "number": 7,
+          "word": "the",
+          "family": "articles",
+          "sentence": "The townspeople often stop to greet him, appreciating his dedication."
+        },
+        {
+          "number": 8,
+          "word": "the",
+          "family": "articles",
+          "sentence": "For him, it’s not just a task; it’s a cherished tradition that connects him to the community."
+        }
+      ]
+    },
+    "uniqueness": {
+      "gaps": [
+        {
+          "number": 1,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "In this context, 'the' is necessary to specify the particular town hall being referred to.",
+          "confidence": 1
+        },
+        {
+          "number": 2,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "Here, 'the' indicates a specific grand clock that is well-known in the context.",
+          "confidence": 1
+        },
+        {
+          "number": 3,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "The use of 'the' is essential to refer to the specific staircase and sound being described.",
+          "confidence": 1
+        },
+        {
+          "number": 4,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "In this case, 'the' is required to specify the clock room and its mechanisms.",
+          "confidence": 1
+        },
+        {
+          "number": 5,
+          "intendedAnswer": "a",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'A' is appropriate here as it introduces a non-specific job that could be any delicate job.",
+          "confidence": 1
+        },
+        {
+          "number": 6,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is necessary to refer to the specific hours marked by the clock for the townsfolk.",
+          "confidence": 1
+        },
+        {
+          "number": 7,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is used to specify the townspeople who are familiar with Mr. Thompson.",
+          "confidence": 1
+        },
+        {
+          "number": 8,
+          "intendedAnswer": "the",
+          "intendedAnswerValid": true,
+          "alternativeSearchPerformed": false,
+          "plausibleAlternatives": [],
+          "uniquenessJustification": "'The' is required to indicate the specific task and tradition being discussed.",
+          "confidence": 1
+        }
+      ]
+    }
+  },
+  "deterministicValidation": {
+    "verdict": "HARD_FAIL",
+    "reason": "Gap numbering must be 9–16 (missing 9, 10, 11, 12, 13, 14, 15, 16).",
+    "candidateAlternative": null,
+    "repairRecommendation": "Renumber the eight gaps from 9 to 16.",
+    "confidence": "high"
+  },
+  "blindSolve": {
+    "status": "DONE",
+    "verdict": "PASS",
+    "reason": "Blind solve found one function word."
+  },
+  "adversarialValidation": {
+    "status": "DONE",
+    "verdict": "QUALITY_FAIL",
+    "reason": "The sentences, while well-structured, do not contain any function words that could be tested separately in a natural context. The focus on the narrative overshadows the linguistic elements that could be evaluated. Additionally, the sentences are overly descriptive and lack the simplicity needed for a more straightforward linguistic analysis.",
+    "candidateAlternative": "Consider using simpler sentences that include more function words for testing purposes."
+  },
+  "repairHistory": [
+    {
+      "action": "move-gap",
+      "scope": "failed-gap",
+      "instruction": "Close this gap and choose a different function word in the finished prose. Do not rewrite the passage yet."
+    },
+    {
+      "action": "move-gap",
+      "scope": "failed-gap",
+      "instruction": "Close this gap and choose a different function word in the finished prose. Do not rewrite the passage yet."
+    }
+  ],
+  "finalVerdict": "HARD_FAIL",
+  "trace": [
+    "prose",
+    "gap-discovery",
+    "select-eight",
+    "uniqueness",
+    "select-eight",
+    "select-eight"
+  ],
+  "layers": {
+    "mechanical": "HARD_FAIL",
+    "selfCheck": "generator-trace",
+    "blind": {
+      "status": "DONE",
+      "verdict": "PASS",
+      "reason": "Blind solve found one function word."
+    },
+    "adversary": {
+      "status": "DONE",
+      "verdict": "QUALITY_FAIL",
+      "reason": "The sentences, while well-structured, do not contain any function words that could be tested separately in a natural context. The focus on the narrative overshadows the linguistic elements that could be evaluated. Additionally, the sentences are overly descriptive and lack the simplicity needed for a more straightforward linguistic analysis.",
+      "candidateAlternative": "Consider using simpler sentences that include more function words for testing purposes."
+    }
+  }
+}
