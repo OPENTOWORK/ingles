@@ -61,7 +61,13 @@ import { formatLevelsPartDisplayName, getSkillPartPracticeTitle, formatSkillPart
 import { formatSkillExerciseLabel, buildProgressBySlotWithLiveOverlay } from '@/utils/skillPartFirstProgress';
 import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
-import { B2ExamPracticeContent, B2ExamQuestionItem } from '@/components/b2/B2ExamPracticeContent';
+import {
+  B2ExamPracticeContent,
+  B2ExamQuestionItem,
+  SkillPartInstructionsPanel,
+  buildPracticeDirectionsBlocks,
+} from '@/components/b2/B2ExamPracticeContent';
+import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozePassage';
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
@@ -2124,6 +2130,35 @@ function B2ReadingExamsPageInner() {
     !isExamSimulationMode(practiceMode) &&
     Boolean(selectedQuestion?.preguntaId);
 
+  /**
+   * Móvil: las instrucciones se leen en un paso previo (mismo criterio que el chrome),
+   * así el ejercicio entra completo en pantalla.
+   */
+  const phoneViewport = usePhoneViewport();
+  const phoneSkillSteps =
+    phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
+  const directionsLabel = isUoeExamInlinePart || isUoePart1 ? 'Instructions' : 'Directions';
+
+  const phoneInstructionsEl = useMemo(() => {
+    if (!phoneSkillSteps) return null;
+    const blocks = buildPracticeDirectionsBlocks({
+      directionsText: selectedPartContent.enunciado,
+      hasTitle: Boolean(
+        selectedPartTitleParts.heading?.trim() || selectedPartTitleParts.subtitle?.trim(),
+      ),
+      stripExample: isUoeExamInlinePart,
+    });
+    if (!blocks.length) return null;
+    return <SkillPartInstructionsPanel label={directionsLabel} blocks={blocks} />;
+  }, [
+    phoneSkillSteps,
+    selectedPartContent.enunciado,
+    selectedPartTitleParts.heading,
+    selectedPartTitleParts.subtitle,
+    isUoeExamInlinePart,
+    directionsLabel,
+  ]);
+
   const exerciseFavoriteMeta = useMemo(() => {
     if (!showExerciseFavorite) return null;
     return buildExerciseFavoriteMeta({
@@ -2246,6 +2281,7 @@ function B2ReadingExamsPageInner() {
         }
         reportErrorContext={reportErrorContext}
         examModeSaveControls={examModeSaveControls}
+        phoneInstructions={phoneInstructionsEl}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
@@ -2310,7 +2346,8 @@ function B2ReadingExamsPageInner() {
                     : null
                 }
                 directionsText={selectedPartContent.enunciado}
-                directionsLabel={isUoeExamInlinePart || isUoePart1 ? 'Instructions' : 'Directions'}
+                directionsLabel={directionsLabel}
+                showDirections={!phoneSkillSteps}
                 textLabel={isUoeExamInlinePart || isPart6GappedText ? null : 'Text'}
                 questionsLabel="Questions"
                 stripExampleFromDirections={isUoeExamInlinePart}

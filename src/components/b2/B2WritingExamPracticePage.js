@@ -54,6 +54,7 @@ import {
 } from '@/utils/examModeSectionDraft';
 import { useExamModeHubNav } from '@/hooks/useExamModeHubNav';
 import { useNarrowWritingLayout } from '@/hooks/useNarrowWritingLayout';
+import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import {
   resolveExamPracticeMode,
   isPartPracticeMode,
@@ -704,6 +705,14 @@ function B2WritingExamPracticePageInner() {
 
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
+  /** Móvil: las instrucciones se leen en un paso previo (mismo criterio que el chrome). */
+  const phoneViewport = usePhoneViewport();
+  const phoneSkillSteps =
+    phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
+  const writingInstructionsEl = writingInstructionsBlocks.length ? (
+    <SkillPartInstructionsPanel label="Instructions" blocks={writingInstructionsBlocks} />
+  ) : null;
+
   const showExerciseFavorite =
     isSkillPracticeSession &&
     !isExamSimulationMode(practiceMode) &&
@@ -1059,6 +1068,7 @@ function B2WritingExamPracticePageInner() {
         studyNotesContextLabel="B2 Writing Practice"
         reportErrorContext={reportErrorContext}
         examModeSaveControls={examModeSaveControls}
+        phoneInstructions={phoneSkillSteps ? writingInstructionsEl : null}
       >
         {examModeActive && examSection ? (
           <ExamModeSectionBanner
@@ -1099,12 +1109,7 @@ function B2WritingExamPracticePageInner() {
                       }
                     />
                     <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                      {writingInstructionsBlocks.length ? (
-                        <SkillPartInstructionsPanel
-                          label="Instructions"
-                          blocks={writingInstructionsBlocks}
-                        />
-                      ) : null}
+                      {phoneSkillSteps ? null : writingInstructionsEl}
 
                   {partNumber === 8 ? (
                     <>

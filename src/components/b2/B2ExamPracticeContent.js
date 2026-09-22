@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
 import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
+import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { getFormattedEnunciado, omitPartTitleBlocks, omitExampleEnunciadoBlocks } from '@/utils/b2ExamPaperShared';
 
 const blockStyles = {
@@ -132,6 +134,20 @@ export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = []
 }
 
 /**
+ * Bloques de instrucciones de la parte, tal como los muestra la tarjeta de práctica.
+ * @param {{ directionsText?: string, hasTitle?: boolean, stripExample?: boolean }} options
+ * @returns {Array<{ type: string, text: string }>}
+ */
+export function buildPracticeDirectionsBlocks({
+  directionsText = '',
+  hasTitle = true,
+  stripExample = false,
+}) {
+  const blocks = omitPartTitleBlocks(getFormattedEnunciado(directionsText), hasTitle);
+  return stripExample ? omitExampleEnunciadoBlocks(blocks) : blocks;
+}
+
+/**
  * Unified exam practice card — Part 1 UoE visual format for all skills/parts.
  *
  * @param {{
@@ -191,13 +207,11 @@ export function B2ExamPracticeContent({
   const hasPassage =
     showPassagePanel && (Boolean(passageText?.trim()) || Boolean(passage));
   const useSplit = split === 'auto' ? hasPassage && Boolean(questions) : Boolean(split);
-  let directionBlocks = omitPartTitleBlocks(
-    getFormattedEnunciado(directionsText),
-    Boolean(title?.trim() || titleSubtitle?.trim()),
-  );
-  if (stripExampleFromDirections) {
-    directionBlocks = omitExampleEnunciadoBlocks(directionBlocks);
-  }
+  const directionBlocks = buildPracticeDirectionsBlocks({
+    directionsText,
+    hasTitle: Boolean(title?.trim() || titleSubtitle?.trim()),
+    stripExample: stripExampleFromDirections,
+  });
 
   return (
     <div className={useSplit ? 'levels-exam-split-page' : 'levels-exam-practice-page'}>

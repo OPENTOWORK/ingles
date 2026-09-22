@@ -10,6 +10,11 @@ import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
+import {
+  ExamPracticePhoneInstructions,
+  ExamPracticePhonePartPicker,
+  ExamPracticePhoneStepLoading,
+} from '@/components/exam/ExamPracticePhoneSteps';
 import ExamPracticeSkillPicker from '@/components/niveles/ExamPracticeSkillPicker';
 import SkillExerciseStarsBadge from '@/components/exam/SkillExerciseStarsBadge';
 import { getLevelSkillPracticeHref } from '@/data/nivelesLevelHub';
@@ -26,7 +31,9 @@ import { useUserRole } from '@/context/UserRoleContext';
 import { resolvePartFinishNoticeFromProgress } from '@/utils/partFinishNoticeDisplay';
 import { isAdminRole } from '@/utils/authRoles';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
+import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
+import { getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
 /** Split chrome titles like "B2 Reading and Use of English Practice" for structured header UI. */
@@ -256,18 +263,26 @@ export function B2ExamPracticeChrome({
   reportErrorContext = null,
   headerTools = null,
   examModeSaveControls = null,
+  /** Instrucciones de la parte seleccionada para el paso previo en móvil. */
+  phoneInstructions = null,
   children,
 }) {
   const { userRole } = useUserRole();
   const pathname = usePathname() || '';
   const [skillNavOpen, setSkillNavOpen] = useState(false);
   const [toolbarOpen, setToolbarOpen] = useState(false);
+  /** Móvil: 'parts' → 'instructions' → 'exercise'. */
+  const [phoneStep, setPhoneStep] = useState('parts');
   const planGating = useExamSlotPlanGating(progressBySlot);
 
   useEffect(() => {
     setSkillNavOpen(false);
     setToolbarOpen(false);
   }, [pathname, selectedPartId]);
+
+  useEffect(() => {
+    setPhoneStep('parts');
+  }, [pathname]);
   const handleSelectExamWithPlan = useCallback(
     (slot) => planGating.wrapSelectHandler(onSelectExam)(slot),
     [planGating, onSelectExam],
@@ -276,6 +291,13 @@ export function B2ExamPracticeChrome({
   const effectiveShowRefresh = showRefresh && isAdminRole(userRole);
   const parsedTitle = parsePracticeChromeTitle(title);
   const isExamSimulation = practiceMode === 'exam-simulation';
+  const phoneViewport = usePhoneViewport();
+  /**
+   * Práctica de skill en móvil: solo el ejercicio. Sin cabecera de skill, sin
+   * «Partes y navegación» y sin «Herramientas y temporizador». El examen real
+   * (exam-simulation) mantiene su cronómetro y su barra.
+   */
+  const phoneSkillChrome = phoneViewport && compactSkillHeader && !isExamSimulation;
   const effectiveShowStudyNotes = showStudyNotes && !isExamSimulation;
   const effectiveScoreVariant =
     scorePanelVariant === 'default' && !isExamSimulation ? 'practice' : scorePanelVariant;
@@ -308,8 +330,52 @@ export function B2ExamPracticeChrome({
     [partFinishNotice, progressBySlot, examSlot, skillExercisePartNumberEarly],
   );
 
+  /** Móvil: partes del skill para el paso de selección previo al ejercicio. */
+  const phonePartItems = useMemo(() => {
+    if (!phoneSkillChrome || !partsData?.length) return [];
+    return partsData.map((part) => {
+      const n = Number(
+        part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0,
+      );
+      return {
+        id: part.id,
+        part,
+        label: getPartTabLabel(part, lang, getPartTabLabelProp, partMinForTabLabels),
+        subtitle: getSkillPartPracticeTitle(levelSlug || 'b2', n, lang === 'en' ? 'en' : 'es')
+          .subtitle,
+        score: getPartSavedScoreLabel?.(part, examSlot) || null,
+      };
+    });
+  }, [
+    phoneSkillChrome,
+    partsData,
+    lang,
+    getPartTabLabelProp,
+    partMinForTabLabels,
+    levelSlug,
+    getPartSavedScoreLabel,
+    examSlot,
+  ]);
+
+  const phoneStepView = useMemo(() => {
+    if (!phoneSkillChrome || phoneStep === 'exercise') return 'exercise';
+    if (phoneStep === 'instructions') return 'instructions';
+    if (!phonePartItems.length) {
+      if (loading) return 'parts-loading';
+      return phoneInstructions ? 'instructions' : 'exercise';
+    }
+    return phonePartItems.length > 1 ? 'parts' : 'instructions';
+  }, [phoneSkillChrome, phoneStep, phonePartItems.length, loading, phoneInstructions]);
+
+  const phoneStepEyebrow = [parsedTitle.level, parsedTitle.headline || title]
+    .filter(Boolean)
+    .join(' · ');
+  const phoneSelectedItem = phonePartItems.find((item) => item.id === selectedPartId) || null;
+
+  /** Sin barra de herramientas el aviso de nota iría dentro de ella: lo pasamos al cuerpo. */
+  const effectiveFinishNoticePlacement = phoneSkillChrome ? 'main' : partFinishNoticePlacement;
   const showHeaderFinishNotice =
-    partFinishNoticePlacement === 'header' && resolvedPartFinishNotice;
+    effectiveFinishNoticePlacement === 'header' && resolvedPartFinishNotice;
   const showStudyNotesInHeader =
     effectiveShowStudyNotes && studyNotesPlacement === 'header';
   const showStatusRow =
@@ -625,6 +691,7 @@ export function B2ExamPracticeChrome({
             compactSkillHeader && skillPracticeTheme ? skillPracticeTheme : undefined
           }
         >
+          {phoneSkillChrome ? null : (
           <header className="levels-b2-practice__header">
             {compactSkillHeader ? (
               <div className="levels-b2-practice__title-block">
@@ -677,18 +744,53 @@ export function B2ExamPracticeChrome({
               </div>
             ) : null}
           </header>
+          )}
 
           <div
             ref={workPanelRef}
             className={[
               'levels-b2-practice__work-panel',
               showSidebarTopRail ? 'levels-b2-practice__work-panel--side-under-toolbar' : '',
+              phoneStepView !== 'exercise' ? 'levels-b2-practice__work-panel--phone-step' : '',
               workPanelClassName,
             ]
               .filter(Boolean)
               .join(' ')}
           >
-          {useFoldableSkillNav ? (
+          {phoneStepView === 'parts-loading' ? (
+            <ExamPracticePhoneStepLoading eyebrow={phoneStepEyebrow} lang={lang} />
+          ) : null}
+
+          {phoneStepView === 'parts' ? (
+            <ExamPracticePhonePartPicker
+              eyebrow={phoneStepEyebrow}
+              items={phonePartItems}
+              selectedPartId={selectedPartId}
+              lang={lang}
+              onSelect={(item) => {
+                if (item.id !== selectedPartId) onSelectPart?.(item.part);
+                setPhoneStep(phoneInstructions ? 'instructions' : 'exercise');
+              }}
+            />
+          ) : null}
+
+          {phoneStepView === 'instructions' ? (
+            <ExamPracticePhoneInstructions
+              eyebrow={[phoneStepEyebrow, phoneSelectedItem?.label].filter(Boolean).join(' · ')}
+              title={
+                phoneSelectedItem?.subtitle ||
+                phoneSelectedItem?.label ||
+                (lang === 'en' ? 'Instructions' : 'Instrucciones')
+              }
+              lang={lang}
+              onContinue={() => setPhoneStep('exercise')}
+              onBack={phonePartItems.length > 1 ? () => setPhoneStep('parts') : null}
+            >
+              {phoneInstructions}
+            </ExamPracticePhoneInstructions>
+          ) : null}
+
+          {phoneSkillChrome ? null : useFoldableSkillNav ? (
             <div className="exam-practice-skill-nav-disclosure">
               <button
                 type="button"
@@ -727,9 +829,13 @@ export function B2ExamPracticeChrome({
               overlayContainerRef={workPanelRef}
               sideRailMountRef={sideRailMountRef}
               portSideRailToToolbar={showSidebarTopRail}
-              sideRailToolbarMounted={!useFoldableToolbar || toolbarOpen}
+              sideRailToolbarMounted={
+                !phoneSkillChrome && (!useFoldableToolbar || toolbarOpen)
+              }
             >
           {(() => {
+            if (phoneSkillChrome) return null;
+
             const practiceStatusPanel = (
               <div
                 id={useFoldableToolbar ? 'exam-practice-toolbar-panel' : undefined}
@@ -876,7 +982,7 @@ export function B2ExamPracticeChrome({
             );
           })()}
 
-          {partFinishNoticePlacement === 'main' &&
+          {effectiveFinishNoticePlacement === 'main' &&
           resolvedPartFinishNotice &&
           !resolvedPartFinishNotice.error ? (
             <LevelsPartFinishBanner
@@ -887,7 +993,7 @@ export function B2ExamPracticeChrome({
               lang={lang}
             />
           ) : null}
-          {partFinishNoticePlacement === 'main' && resolvedPartFinishNotice?.error ? (
+          {effectiveFinishNoticePlacement === 'main' && resolvedPartFinishNotice?.error ? (
             <LevelsPartFinishBanner
               passed={false}
               correct={0}
@@ -898,7 +1004,9 @@ export function B2ExamPracticeChrome({
             />
           ) : null}
 
-          {!useFoldableSkillNav && partTabsVariant !== 'excel' ? partTabsEl : null}
+          {!phoneSkillChrome && !useFoldableSkillNav && partTabsVariant !== 'excel'
+            ? partTabsEl
+            : null}
 
               <div ref={workBodyRef} className="levels-b2-practice__work-body">
                 {children}

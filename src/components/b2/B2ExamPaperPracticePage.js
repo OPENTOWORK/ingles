@@ -6,6 +6,7 @@ import { useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useLevelExamPracticeSlot } from '@/hooks/useLevelExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
+import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { B2ExamPracticeContent, B2ExamQuestionItem, SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
 import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
@@ -3164,6 +3165,40 @@ function B2ExamPaperPracticePageInner({
     isExamSimulationMode(practiceMode) ? 'prominent' : isSkillPracticeSession ? 'session' : 'prominent';
   const compactChromeHeader = isSkillPracticeSession || isExamSimulationMode(practiceMode);
 
+  /**
+   * Móvil: las instrucciones se leen en un paso previo (mismo criterio que el chrome),
+   * así el ejercicio entra completo en pantalla.
+   */
+  const phoneViewport = usePhoneViewport();
+  const phoneSkillSteps =
+    phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
+
+  const partInstructionsEl =
+    selectedPartContent.enunciado && !hideListeningDirectionsDup ? (
+      <SkillPartInstructionsPanel
+        label={isSkillPracticeSession ? 'Instructions' : 'Directions'}
+        blocks={formatDirectionsBlocks(selectedPartContent.enunciado, true)}
+      />
+    ) : null;
+
+  const listeningBriefingEl =
+    showListeningBriefing && b2Exam1ListeningUx ? (
+      <B2ListeningPracticeBriefing
+        whatYouWillHear={b2Exam1ListeningUx.whatYouWillHear}
+        whatYouNeedToDo={b2Exam1ListeningUx.whatYouNeedToDo}
+        practiceNote={b2Exam1ListeningUx.practiceNote}
+        examSimulation={isExamSimulationMode(practiceMode)}
+      />
+    ) : null;
+
+  const phoneInstructionsEl =
+    phoneSkillSteps && (listeningBriefingEl || partInstructionsEl) ? (
+      <>
+        {listeningBriefingEl}
+        {partInstructionsEl}
+      </>
+    ) : null;
+
   const showExerciseFavorite =
     isSkillPracticeSession &&
     !isExamSimulationMode(practiceMode) &&
@@ -3443,6 +3478,7 @@ function B2ExamPaperPracticePageInner({
         studyNotesContextLabel={title}
         reportErrorContext={reportErrorContext}
         examModeSaveControls={examModeSaveControls}
+        phoneInstructions={phoneInstructionsEl}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
@@ -3782,22 +3818,10 @@ function B2ExamPaperPracticePageInner({
                   }
                 />
 
-                {showListeningBriefing && b2Exam1ListeningUx ? (
-                  <B2ListeningPracticeBriefing
-                    whatYouWillHear={b2Exam1ListeningUx.whatYouWillHear}
-                    whatYouNeedToDo={b2Exam1ListeningUx.whatYouNeedToDo}
-                    practiceNote={b2Exam1ListeningUx.practiceNote}
-                    examSimulation={isExamSimulationMode(practiceMode)}
-                  />
-                ) : null}
+                {phoneSkillSteps ? null : listeningBriefingEl}
 
                 <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                  {selectedPartContent.enunciado && !hideListeningDirectionsDup ? (
-                    <SkillPartInstructionsPanel
-                      label={isSkillPracticeSession ? 'Instructions' : 'Directions'}
-                      blocks={formatDirectionsBlocks(selectedPartContent.enunciado, true)}
-                    />
-                  ) : null}
+                  {phoneSkillSteps ? null : partInstructionsEl}
 
                 {showAudioFromEnunciado && preguntaAudiosError ? (
                   <p

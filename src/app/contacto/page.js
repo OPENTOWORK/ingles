@@ -694,6 +694,241 @@ function GlobalStyles() {
           min-width: 0;
         }
       }
+      @media (max-width: 639px) {
+        html:has(.contacto-page),
+        body:has(.contacto-page) {
+          height: 100%;
+          overflow: hidden;
+        }
+        body:has(.contacto-page) .full-page-layout {
+          height: 100%;
+          min-height: 0;
+          max-height: 100%;
+          overflow: hidden;
+        }
+        body:has(.contacto-page) .page-content {
+          display: flex;
+          flex-direction: column;
+          flex: 1 1 auto;
+          min-height: 0;
+          overflow: hidden;
+        }
+        body:has(.contacto-page) .footer {
+          display: none;
+        }
+        .contacto-page.shell {
+          flex: 1 1 auto;
+          min-height: 0 !important;
+          height: 100%;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          padding: 8px 10px 10px !important;
+          box-sizing: border-box;
+        }
+        .contacto-page .page-hero {
+          flex: 0 0 auto;
+          margin-bottom: 0 !important;
+          border-radius: 14px;
+        }
+        .contacto-page .page-hero__inner {
+          padding: 10px 12px 8px;
+        }
+        .contacto-page .page-hero__mascot,
+        .contacto-page .page-hero__stats,
+        .contacto-page .page-hero__desc {
+          display: none;
+        }
+        .contacto-page .page-hero__eyebrow {
+          margin-bottom: 4px;
+          padding: 2px 8px;
+          font-size: 9px;
+        }
+        .contacto-page .page-hero__title {
+          margin: 0;
+          font-size: 1.15rem;
+        }
+        .contacto-page .contact-section {
+          margin: 0;
+          padding: 8px 10px;
+          border-radius: 14px;
+          min-height: 0;
+          box-shadow: none;
+        }
+        .contacto-page .contact-section--internal {
+          flex: 0 0 auto;
+        }
+        .contacto-page .contact-section--internal:has(.internal-form) {
+          flex: 1 1 0;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        .contacto-page .internal-messages__header {
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 6px;
+        }
+        .contacto-page .internal-messages__icon {
+          width: 28px;
+          height: 28px;
+          font-size: 0.9rem;
+          border-radius: 8px;
+        }
+        .contacto-page .contact-section--internal h2,
+        .contacto-page .contact-section__copy h2,
+        .contacto-page .contact-faq-entry h2 {
+          margin: 0;
+          font-size: 0.95rem;
+        }
+        .contacto-page .internal-messages__header p,
+        .contacto-page .internal-messages__signin p,
+        .contacto-page .internal-form__hint,
+        .contacto-page .internal-channel__desc,
+        .contacto-page .contact-section__copy p,
+        .contacto-page .contact-meta,
+        .contacto-page .contact-faq-entry p,
+        .contacto-page .tickets-panel__head p,
+        .contacto-page .tickets-empty p {
+          display: none;
+        }
+        .contacto-page .internal-messages__signin {
+          margin: 0;
+          padding: 6px 10px;
+        }
+        .contacto-page .internal-messages__signin strong {
+          margin: 0;
+          font-size: 0.78rem;
+        }
+        .contacto-page .internal-channels {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 4px;
+          margin-bottom: 6px;
+        }
+        .contacto-page .internal-channel {
+          gap: 2px;
+          padding: 6px 4px;
+          border-radius: 10px;
+          border-width: 1px;
+        }
+        .contacto-page .internal-channel__icon {
+          font-size: 1rem;
+        }
+        .contacto-page .internal-channel__label {
+          font-size: 0.68rem;
+        }
+        .contacto-page .internal-form {
+          flex: 1 1 auto;
+          min-height: 0;
+          gap: 6px;
+          padding: 8px;
+          display: flex;
+          flex-direction: column;
+        }
+        .contacto-page .contact-section--support {
+          flex: 1 1 auto;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        .contacto-page .contact-section__head {
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 6px;
+        }
+        .contacto-page .contact-section__icon {
+          width: 28px;
+          height: 28px;
+          border-radius: 8px;
+        }
+        .contacto-page .contact-section__icon svg {
+          width: 16px;
+          height: 16px;
+        }
+        .contacto-page .contact-form {
+          flex: 1 1 auto;
+          min-height: 0;
+          min-width: 0;
+          width: 100%;
+          box-sizing: border-box;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          gap: 6px;
+          padding: 8px;
+          overflow: hidden;
+        }
+        .contacto-page .contact-form .two-cols {
+          display: contents;
+        }
+        .contacto-page .contact-form > .form-group:has(textarea),
+        .contacto-page .contact-form > .submit-btn,
+        .contacto-page .internal-form .form-group:has(textarea),
+        .contacto-page .internal-form__footer {
+          grid-column: 1 / -1;
+        }
+        .contacto-page .form-group {
+          gap: 2px;
+          min-height: 0;
+          min-width: 0;
+          max-width: 100%;
+        }
+        .contacto-page .form-group:has(textarea) {
+          display: flex;
+          flex-direction: column;
+          flex: 1 1 auto;
+        }
+        .contacto-page .form-group label {
+          font-size: 0.62rem;
+        }
+        .contacto-page .form-input,
+        .contacto-page .form-textarea,
+        .contacto-page .submit-btn {
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+        }
+        .contacto-page .form-input,
+        .contacto-page .form-textarea {
+          padding: 6px 8px;
+          border-radius: 8px;
+        }
+        .contacto-page .form-textarea {
+          flex: 1 1 auto;
+          min-height: 0;
+          resize: none;
+        }
+        .contacto-page .submit-btn {
+          padding: 8px 12px;
+          font-size: 0.82rem;
+          border-radius: 10px;
+          box-shadow: none;
+        }
+        .contacto-page .internal-form__footer {
+          padding-top: 0;
+          gap: 6px;
+        }
+        .contacto-page .tickets-panel {
+          display: none;
+        }
+        .contacto-page .contact-faq-entry {
+          flex: 0 0 auto;
+          flex-wrap: nowrap;
+          margin: 0;
+          padding: 8px 10px;
+          gap: 8px;
+          border-radius: 14px;
+          box-shadow: none;
+        }
+        .contacto-page .contact-faq-entry__btn {
+          flex-shrink: 0;
+          padding: 6px 10px;
+          font-size: 0.78rem;
+          box-shadow: none;
+        }
+      }
       @keyframes spin {
         to {
           transform: rotate(360deg);

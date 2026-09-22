@@ -5936,6 +5936,12 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   cursor: wait;
 }
 
+@media (max-width: 639px) {
+  .exercise-favorite-btn {
+    display: none;
+  }
+}
+
 .profile-favorites-empty {
   margin: 0;
   color: #64748b;
@@ -23448,4 +23454,319 @@ body.dark .profile-collapse--open .profile-collapse__head {
   font-size: 0.8125rem;
   line-height: 1.45;
   color: #475569;
+}
+
+/* ———————————————————————————————————————————————————————————
+   Móvil: práctica de skill a pantalla completa.
+   La página no se desplaza: la cabecera del sitio queda fija y solo
+   el cuerpo del ejercicio tiene scroll interno. El examen real
+   (sin `--skill-compact`) mantiene su cabecera y su barra.
+   ——————————————————————————————————————————————————————————— */
+@media (max-width: 639px) {
+  html:has(.levels-b2-practice--skill-compact),
+  body:has(.levels-b2-practice--skill-compact) {
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body:has(.levels-b2-practice--skill-compact) .page-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .levels-exam-practice-root:has(.levels-b2-practice--skill-compact) {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    height: calc(100dvh - var(--site-header-height));
+    max-height: calc(100dvh - var(--site-header-height));
+    overflow: hidden;
+    padding: 0.5rem 0.65rem 0.65rem;
+    box-sizing: border-box;
+  }
+
+  .levels-b2-practice--skill-compact {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  /* Sin marco doble: la tarjeta del ejercicio es la única superficie. */
+  .levels-b2-practice--skill-compact .levels-b2-practice__work-panel,
+  .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__work-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: hidden;
+  }
+
+  /* Envoltorio de las herramientas de texto: cadena flexible hasta el cuerpo. */
+  .levels-b2-practice--skill-compact
+    .levels-b2-practice__work-panel
+    > .exam-practice-tools-target {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .levels-b2-practice--skill-compact .levels-b2-practice__work-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  /**
+   * Part 1 (cloze en línea) libera el overflow del cuerpo para que no se corten los
+   * menús de cada hueco. En móvil esos menús van fijos al viewport, así que el
+   * cuerpo puede volver a ser el área de desplazamiento.
+   */
+  .levels-b2-practice--skill-compact
+    .levels-b2-practice__work-body:has(.levels-exam-mcq-cloze-inline) {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  .levels-b2-practice--skill-compact .levels-b2-practice__work-body::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .levels-b2-practice--skill-compact .levels-b2-practice__work-body::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(100, 116, 139, 0.35);
+  }
+
+  /* El resultado de la parte no se muestra en el móvil. El error de guardado sí. */
+  .levels-b2-practice--skill-compact .levels-b2-result--passed,
+  .levels-b2-practice--skill-compact .levels-b2-result--failed {
+    display: none !important;
+  }
+
+  /* Contenedores intermedios del ejercicio: que hereden la altura sin scroll propio. */
+  .levels-b2-practice--skill-compact .levels-b2-practice__work-body > .levels-listening-practice-layout,
+  .levels-b2-practice--skill-compact .levels-listening-practice-main {
+    min-height: 0;
+  }
+
+  /* ——— Pasos previos: elegir parte y leer instrucciones ——— */
+
+  /* El ejercicio sigue montado (conserva su estado) pero oculto. */
+  .levels-b2-practice__work-panel--phone-step > .exam-practice-tools-target {
+    display: none !important;
+  }
+
+  .phone-practice-step {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 0.85rem;
+    padding: 0.35rem 0.1rem 0;
+  }
+
+  .phone-practice-step__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .phone-practice-step__eyebrow {
+    margin: 0;
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--skill-accent, #2563eb);
+  }
+
+  .phone-practice-step__title {
+    margin: 0;
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--skill-ink, #0f172a);
+  }
+
+  .phone-practice-step__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1 1 auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0 0 0.35rem;
+    list-style: none;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .phone-practice-step__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .phone-practice-step__item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    width: 100%;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--skill-border, #e2e8f0);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .phone-practice-step__item:active {
+    transform: scale(0.99);
+  }
+
+  .phone-practice-step__item--current {
+    border-color: var(--skill-accent, #2563eb);
+    background: var(--skill-surface, #eff6ff);
+  }
+
+  .phone-practice-step__item-num {
+    flex: 0 0 auto;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: var(--skill-surface-2, #dbeafe);
+    color: var(--skill-ink, #1e3a8a);
+    font-size: 0.8rem;
+    font-weight: 800;
+  }
+
+  .phone-practice-step__item-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .phone-practice-step__item-label {
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    color: #0f172a;
+  }
+
+  .phone-practice-step__item-sub {
+    font-size: 0.78rem;
+    line-height: 1.3;
+    color: #64748b;
+  }
+
+  .phone-practice-step__item-score {
+    flex: 0 0 auto;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+    background: #f1f5f9;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #475569;
+    white-space: nowrap;
+  }
+
+  .phone-practice-step__item-chevron {
+    flex: 0 0 auto;
+    font-size: 1rem;
+    color: var(--skill-accent, #2563eb);
+  }
+
+  .phone-practice-step__scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .phone-practice-step__scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .phone-practice-step__empty {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #475569;
+  }
+
+  .phone-practice-step__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0 0.15rem;
+    border-top: 1px solid rgba(148, 163, 184, 0.25);
+  }
+
+  .phone-practice-step__cta {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 0;
+    border-radius: 14px;
+    background: var(--skill-accent, #2563eb);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .phone-practice-step__cta:active {
+    transform: translateY(1px);
+  }
+
+  .phone-practice-step__back {
+    padding: 0.35rem 0.5rem;
+    border: 0;
+    background: transparent;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #64748b;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  /* Dentro del paso, las instrucciones son el contenido principal. */
+  .phone-practice-step__scroll .levels-exam-split__enunciado {
+    margin: 0 0 0.6rem;
+    max-width: none;
+  }
+
+  .phone-practice-step__scroll .levels-exam-split__enunciado:last-child {
+    margin-bottom: 0;
+  }
 }

@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import { useSearchParams } from 'next/navigation';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
+import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { useB2ExamScoringSession } from '@/hooks/useB2ExamScoringSession';
 import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
@@ -765,6 +766,17 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
     );
   }, [selectedPart?.descripcion, selectedPart?.partNumber]);
 
+  /** Móvil: las instrucciones se leen en un paso previo (mismo criterio que el chrome). */
+  const phoneViewport = usePhoneViewport();
+  const phoneSkillSteps =
+    phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
+  const speakingInstructionsEl = speakingInstructionsBlocks.length ? (
+    <SkillPartInstructionsPanel
+      label={lang === 'es' ? 'Instrucciones' : 'Instructions'}
+      blocks={speakingInstructionsBlocks}
+    />
+  ) : null;
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -836,6 +848,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         lang={lang}
         reportErrorContext={reportErrorContext}
         examModeSaveControls={examModeSaveControls}
+        phoneInstructions={phoneSkillSteps ? speakingInstructionsEl : null}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
@@ -882,12 +895,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
                 }
               />
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                {speakingInstructionsBlocks.length ? (
-                  <SkillPartInstructionsPanel
-                    label={lang === 'es' ? 'Instrucciones' : 'Instructions'}
-                    blocks={speakingInstructionsBlocks}
-                  />
-                ) : null}
+                {phoneSkillSteps ? null : speakingInstructionsEl}
           <B2SpeakingPartSession
             key={`${selectedPart.id}-${examSlot}-${speakingDraftEpoch}`}
             part={selectedPart}
