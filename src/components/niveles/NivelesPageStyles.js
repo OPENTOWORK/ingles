@@ -217,6 +217,99 @@ export default function NivelesPageStyles() {
       .niveles-page .page-hero-wrap__breadcrumb .breadcrumb a:hover {
         text-decoration: underline;
       }
+      @media (max-width: 639px) {
+        html:has(.niveles-page--theory-hub.niveles-level-page--b2),
+        body:has(.niveles-page--theory-hub.niveles-level-page--b2) {
+          height: 100%;
+          overflow: hidden;
+        }
+        body:has(.niveles-page--theory-hub.niveles-level-page--b2) .page-content {
+          display: flex;
+          flex-direction: column;
+          min-height: 0;
+          overflow: hidden;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2.shell {
+          flex: 1 1 auto;
+          min-height: 0;
+          height: calc(100dvh - var(--site-header-height));
+          max-height: calc(100dvh - var(--site-header-height));
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .levels-b2-page-content,
+        .niveles-page--theory-hub.niveles-level-page--b2 .sections,
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-theory-section {
+          flex: 1 1 auto;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          overflow: hidden;
+          margin: 0;
+          padding: 0;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-theory-section__hero,
+        .niveles-page--theory-hub.niveles-level-page--b2 .page-hero {
+          flex: 0 0 auto;
+          margin-bottom: 0;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .page-hero__back-row {
+          display: none;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-theory-skills-hub,
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__skills-grid {
+          flex: 1 1 auto;
+          min-height: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__card {
+          flex: 1 1 0;
+          height: auto;
+          min-height: 0;
+          display: grid;
+          grid-template-columns: auto minmax(0, 1fr) auto;
+          grid-template-rows: auto auto;
+          align-items: center;
+          column-gap: 10px;
+          row-gap: 1px;
+          padding: 8px 12px;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__icon-wrap {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+          width: 2.15rem;
+          height: 2.15rem;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__label {
+          grid-column: 2;
+          grid-row: 1;
+          font-size: 0.92rem;
+          line-height: 1.2;
+          padding-right: 0;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__card-foot {
+          display: contents;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__hint,
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__badge {
+          grid-column: 2;
+          grid-row: 2;
+          font-size: 0.72rem;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-practice-hub__arrow {
+          grid-column: 3;
+          grid-row: 1 / span 2;
+          position: static;
+        }
+        .niveles-page--theory-hub.niveles-level-page--b2 .exam-theory-global-progress {
+          display: none;
+        }
+      }
     `}</style>
   );
 }

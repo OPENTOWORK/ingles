@@ -13,7 +13,7 @@ function ExamStrategiesInner() {
 
   return (
     <main
-      className="shell content-hub-shell niveles-page niveles-page--theory niveles-page--theory-hub niveles-level-page--b2"
+      className="shell content-hub-shell niveles-page niveles-page--theory niveles-page--theory-hub niveles-level-page niveles-level-page--b2"
     >
       <div className="levels-b2-page-content">
         <div className="sections">

@@ -269,6 +269,103 @@ function ExamPracticeHubLayoutStyles() {
       body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
         border-bottom-color: #475569;
       }
+      @media (max-width: 639px) {
+        .niveles-level-page .exam-practice-hub,
+        .niveles-level-page .exam-practice-hub--split,
+        .niveles-level-page .exam-practice-hub--quadrant {
+          flex: 1 1 auto;
+          min-height: 0;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .niveles-level-page .exam-practice-hub__skills-quadrant,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quadrant-inner,
+        .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__quadrant-inner,
+        .niveles-level-page .exam-practice-hub__body {
+          flex: 1 1 auto;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
+          display: none;
+        }
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__body,
+        .niveles-level-page .exam-practice-hub__body {
+          padding: 12px 10px 10px;
+        }
+        .niveles-level-page .exam-practice-hub__skills-grid,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid {
+          flex: 1 1 auto;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          grid-template-columns: none;
+        }
+        .niveles-level-page .exam-practice-hub__card,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__card {
+          flex: 1 1 0;
+          height: auto;
+          min-height: 0;
+          display: grid;
+          grid-template-columns: auto minmax(0, 1fr) auto;
+          grid-template-rows: auto auto;
+          align-items: center;
+          column-gap: 10px;
+          row-gap: 1px;
+          padding: 8px 12px;
+        }
+        .niveles-level-page .exam-practice-hub__icon-wrap {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+          width: 2.15rem;
+          height: 2.15rem;
+        }
+        .niveles-level-page .exam-practice-hub__label,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__label {
+          grid-column: 2;
+          grid-row: 1;
+          font-size: 0.92rem;
+          line-height: 1.2;
+        }
+        .niveles-level-page .exam-practice-hub__card-foot {
+          display: contents;
+        }
+        .niveles-level-page .exam-practice-hub__hint,
+        .niveles-level-page .exam-practice-hub__badge {
+          grid-column: 2;
+          grid-row: 2;
+          font-size: 0.72rem;
+        }
+        .niveles-level-page .exam-practice-hub__arrow {
+          grid-column: 3;
+          grid-row: 1 / span 2;
+          position: static;
+        }
+        .niveles-level-page .exam-practice-hub .exam-practice-hub__card--disabled .exam-practice-hub__badge {
+          position: absolute;
+          top: auto;
+          right: -2.35rem;
+          left: auto;
+          bottom: 1.35rem;
+          z-index: 2;
+          width: 8.6rem;
+          margin: 0;
+          padding: 0.28rem 0;
+          transform: rotate(-45deg);
+          background: var(--exam-card-accent, #db2777);
+          color: #fff;
+          text-align: center;
+          font-size: 0.58rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          line-height: 1.2;
+          box-shadow: 0 1px 2px rgba(15, 23, 42, 0.16);
+        }
+      }
     `}</style>
   );
 }

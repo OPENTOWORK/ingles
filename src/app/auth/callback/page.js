@@ -3,7 +3,11 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRedirectPathByUserId } from '@/utils/authRoles';
-import { normalizePostAuthPath } from '@/utils/postAuthNavigation';
+import {
+  destinationAfterLogin,
+  isPhoneViewport,
+  markOpenMainMenuAfterLogin,
+} from '@/utils/postAuthNavigation';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import toast from 'react-hot-toast';
 
@@ -62,7 +66,14 @@ function AuthCallbackInner() {
         await ensureAppUserProfile().catch(() => {});
 
         const redirectPath = await getRedirectPathByUserId(user?.id, user?.email);
-        const destination = normalizePostAuthPath(redirectPath);
+        const phone = isPhoneViewport();
+        const nextPath = searchParams.get('next');
+        if (!nextPath && phone) markOpenMainMenuAfterLogin();
+        const destination = destinationAfterLogin({
+          nextPath: nextPath && nextPath.startsWith('/') && !nextPath.startsWith('//') ? nextPath : null,
+          rolePath: redirectPath,
+          phone,
+        });
 
         if (cancelled) return;
         toast.success('Sesión iniciada correctamente');

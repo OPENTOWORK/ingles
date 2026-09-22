@@ -1332,6 +1332,35 @@ body {
   opacity: 0.92;
 }
 
+.app-nav__dralo-soon,
+.app-side-menu__link.app-nav__dralo-soon,
+.app-nav__link--mobile.app-nav__dralo-soon {
+  cursor: default;
+  color: #94a3b8;
+}
+
+.app-nav__dralo-soon:hover,
+.app-side-menu__link.app-nav__dralo-soon:hover,
+.app-nav__link--mobile.app-nav__dralo-soon:hover {
+  background: transparent;
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+.app-nav__dralo-soon-pill {
+  flex-shrink: 0;
+  padding: 0.16rem 0.48rem;
+  border-radius: 999px;
+  border: 1px solid rgba(217, 119, 6, 0.28);
+  background: linear-gradient(180deg, #fffbeb 0%, #ffedd5 100%);
+  color: #9a3412;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
 .app-nav__btn {
   padding: 0.5rem 1.1rem;
   border-radius: 9px;
@@ -1781,7 +1810,20 @@ body.nav-open {
 
   body.has-home-side-menu:has(.app-side-menu--open) .site-assistant-fab,
   body.has-home-side-menu:has(.app-side-menu--open) .study-session-launcher {
-    z-index: 80;
+    z-index: 90;
+  }
+}
+
+/* Fuera de la home el menú es el drawer de la cabecera: mismo criterio. */
+@media (max-width: 900px) {
+  body:not(.has-home-side-menu):not(.nav-open) .site-assistant-fab,
+  body:not(.has-home-side-menu):not(.nav-open) .site-assistant-panel,
+  body:not(.has-home-side-menu):not(.nav-open) .study-session-launcher {
+    display: none !important;
+  }
+
+  body:not(.has-home-side-menu).nav-open .study-session-launcher {
+    z-index: 1060;
   }
 }
 
@@ -3201,6 +3243,13 @@ body.nav-open {
   .home-quote {
     width: min(92%, 680px);
     padding: clamp(1.2rem, 4vw, 1.65rem) clamp(1rem, 3vw, 1.5rem);
+  }
+}
+
+@media (max-width: 639px) {
+  .niveles-page--theory-hub.niveles-level-page--b2 .page-hero__back-row,
+  .niveles-page--theory-hub.niveles-level-page--b2 .page-hero__stats {
+    display: none !important;
   }
 }
 

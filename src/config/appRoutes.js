@@ -5,6 +5,7 @@ export const APP_ROUTES = {
   examStrategies: '/exam-strategies',
   examPractice: '/exam-practice',
   examPracticeDefaultLevel: '/exam-practice/b2',
+  draloAi: '/dralo-ai',
   contact: '/contact',
   profile: '/profile',
   teoria: '/teoria',

@@ -28,8 +28,6 @@ function AppNavInner({ session, userRole, onLogout }) {
   const router = useRouter();
   const searchParams = useMountedSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
-  const [draloOpen, setDraloOpen] = useState(false);
   const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
   const [desktopHoverMenu, setDesktopHoverMenu] = useState(null);
 
@@ -57,8 +55,6 @@ function AppNavInner({ session, userRole, onLogout }) {
 
   useEffect(() => {
     setMobileOpen(false);
-    setExamStrategiesOpen(false);
-    setDraloOpen(false);
     setAdminPanelsMobileOpen(false);
     setDesktopHoverMenu(null);
     if (document.activeElement instanceof HTMLElement) {
@@ -68,8 +64,6 @@ function AppNavInner({ session, userRole, onLogout }) {
 
   const closeMobile = () => {
     setMobileOpen(false);
-    setExamStrategiesOpen(false);
-    setDraloOpen(false);
     setAdminPanelsMobileOpen(false);
   };
 
@@ -95,34 +89,8 @@ function AppNavInner({ session, userRole, onLogout }) {
     router.push(examStrategiesHubHref);
   };
 
-  const toggleExamStrategiesMobile = () => {
-    setExamStrategiesOpen((open) => {
-      if (!open) {
-        setDraloOpen(false);
-        setAdminPanelsMobileOpen(false);
-      }
-      return !open;
-    });
-  };
-
-  const toggleDraloMobile = () => {
-    setDraloOpen((open) => {
-      if (!open) {
-        setExamStrategiesOpen(false);
-        setAdminPanelsMobileOpen(false);
-      }
-      return !open;
-    });
-  };
-
   const toggleAdminMobile = () => {
-    setAdminPanelsMobileOpen((open) => {
-      if (!open) {
-        setExamStrategiesOpen(false);
-        setDraloOpen(false);
-      }
-      return !open;
-    });
+    setAdminPanelsMobileOpen((open) => !open);
   };
 
   const mobileLinkClass = 'app-nav__link app-nav__link--mobile';
@@ -359,10 +327,6 @@ function AppNavInner({ session, userRole, onLogout }) {
             navModel={navModel}
             linkClass={mobileLinkClass}
             onNavigate={closeMobile}
-            examStrategiesOpen={examStrategiesOpen}
-            onToggleExamStrategies={toggleExamStrategiesMobile}
-            draloOpen={draloOpen}
-            onToggleDralo={toggleDraloMobile}
             adminPanelsOpen={adminPanelsMobileOpen}
             onToggleAdminPanels={toggleAdminMobile}
             onLogout={onLogout}

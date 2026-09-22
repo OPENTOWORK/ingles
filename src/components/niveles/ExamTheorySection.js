@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import PageHero from '@/components/PageHero';
 import ExamSkillHubCard, { getExamSkillKindFromSlug } from '@/components/exam/ExamSkillHubCard';
 import ExamSkillHubCardStyles from '@/components/exam/ExamSkillHubCardStyles';
@@ -9,7 +10,22 @@ import { getExamTheoryUnlockStates } from '@/lib/examTheoryUnlock';
 import ExamTheoryProgressBar from '@/components/niveles/ExamTheoryProgressBar';
 import { APP_ROUTES, examStrategiesSkillPath } from '@/config/appRoutes';
 
+function useIsPhoneLayout() {
+  const [isPhone, setIsPhone] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia('(max-width: 639px)');
+    const sync = () => setIsPhone(query.matches);
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
+
+  return isPhone;
+}
+
 export default function ExamTheorySection({ userId, accessToken, isStudent = false }) {
+  const isPhone = useIsPhoneLayout();
   const { globalPercent, units } = useExamTheoryProgress(userId, accessToken);
   const unlockStates = getExamTheoryUnlockStates(units, isStudent);
   const unlockBySlug = Object.fromEntries(unlockStates.map((state) => [state.slug, state]));
@@ -21,19 +37,23 @@ export default function ExamTheorySection({ userId, accessToken, isStudent = fal
     <section className="section exam-theory-section" id="exam-theory" data-tour="exam-theory-hub">
       <div className="exam-theory-section__hero" data-tour="exam-theory-hub-hero">
         <PageHero
-          backHref={APP_ROUTES.home}
+          backHref={isPhone ? undefined : APP_ROUTES.home}
           backLabel="Back"
           contentAlign="left"
           eyebrow="Reading · Writing · Listening · Speaking"
           title="Exam Strategies"
           description={introDescription}
           accent="violet"
-          stats={[
-            {
-              value: String(EXAM_THEORY_CATALOG.length),
-              label: 'Exam skills',
-            },
-          ]}
+          stats={
+            isPhone
+              ? []
+              : [
+                  {
+                    value: String(EXAM_THEORY_CATALOG.length),
+                    label: 'Exam skills',
+                  },
+                ]
+          }
         />
       </div>
 

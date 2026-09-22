@@ -200,6 +200,13 @@ export const NAV_LINK_CONTACT = {
   tourId: 'nav-contact',
 };
 
+/** Hub de Dralo AI: enlace directo en los menús móviles (sin desplegable). */
+export const NAV_LINK_DRALO_AI = {
+  href: APP_ROUTES.draloAi,
+  label: 'Dralo AI',
+  tourId: 'nav-dralo-ai',
+};
+
 export const NAV_LINK_PROFILE = {
   href: APP_ROUTES.profile,
   label: 'Profile',

@@ -4,14 +4,11 @@ import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
-import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
-import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
-import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import {
   NAV_LINK_CONTACT,
+  NAV_LINK_DRALO_AI,
   NAV_LINK_PRICING,
   NAV_LINK_PROFILE,
-  HOME_PRICING_LINK,
   isStaffPanelsNavActive,
   shouldShowAdminShell,
 } from '@/config/appNavMenu';
@@ -19,31 +16,25 @@ import {
 /**
  * Bloques compartidos del menú drawer (móvil) y menú lateral (home tablet/móvil).
  * Usa buildAppNavModel para que todos los roles vean lo mismo en cada viewport.
+ * Sin desplegables: cada sección es un enlace directo a su hub.
  */
 export function AppSharedDrawerNav({
   navModel,
   linkClass,
   onNavigate,
-  examStrategiesOpen,
-  onToggleExamStrategies,
-  draloOpen,
-  onToggleDralo,
   adminPanelsOpen,
   onToggleAdminPanels,
   onLogout,
-  showNightMode = true,
   draloVariant = 'mobile',
-  /** Si viene informado, las opciones de la app (no el bloque legal) van aquí. Solo Home móvil sin sesión. */
+  /** Si viene informado, las opciones de la app (no el bloque legal) van aquí. Solo Home móvil sin sesión: login. */
   guestEntryHref = null,
 }) {
   const pathname = usePathname();
   const searchParams = useMountedSearchParams();
   const showMobileLegal = draloVariant === 'mobile' || draloVariant === 'side';
   const {
-    guest,
     sectionLinks,
     showDralo,
-    draloLocked,
     examStrategiesLocked,
     showPricing,
     showContact,
@@ -65,88 +56,26 @@ export function AppSharedDrawerNav({
 
   return (
     <>
-      {sectionLinks.map((item) =>
-        item.menuItems && !guestEntryHref ? (
-          <div key={item.href} {...(item.tourId ? { 'data-tour': item.tourId } : {})}>
-            <div
-              className={`app-nav__accordion-row${examStrategiesOpen ? ' is-open' : ''}${
-                examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
-              }`}
-            >
-              <NavLink href={item.href} className={`${linkClass} app-nav__accordion-link`} onClick={onNavigate}>
-                {item.label}
-              </NavLink>
-              <button
-                type="button"
-                className="app-nav__accordion-toggle"
-                onClick={onToggleExamStrategies}
-                aria-expanded={examStrategiesOpen}
-                aria-label={`Show ${item.label} skills`}
-              >
-                <span aria-hidden>{examStrategiesOpen ? '▲' : '▼'}</span>
-              </button>
-            </div>
-            {examStrategiesOpen ? (
-              <div className="app-nav__sub">
-                <ExamStrategiesNavMenuItems
-                  locked={examStrategiesLocked}
-                  guestRequiresLogin={guest}
-                  guestEntryHref={guestEntryHref}
-                  variant={draloVariant}
-                  onNavigate={onNavigate}
-                />
-              </div>
-            ) : null}
-          </div>
-        ) : (
-          <NavLink
-            key={item.href}
-            href={guestEntryHref || item.href}
-            className={linkClass}
-            onClick={onNavigate}
-            {...(item.tourId ? { 'data-tour': item.tourId } : {})}
-          >
-            {item.label}
-          </NavLink>
-        ),
-      )}
+      {sectionLinks.map((item) => (
+        <NavLink
+          key={item.href}
+          href={guestEntryHref || item.href}
+          className={`${linkClass}${
+            item.menuItems && examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
+          }`}
+          onClick={onNavigate}
+          {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+        >
+          {item.label}
+        </NavLink>
+      ))}
 
       {showDralo ? (
-        guestEntryHref ? (
-          <NavLink href={guestEntryHref} className={linkClass} onClick={onNavigate} data-tour="nav-dralo-ai">
-            Dralo AI
-          </NavLink>
-        ) : (
-          <>
-            <button
-              type="button"
-              className={`${linkClass} app-nav__accordion${draloOpen ? ' is-open' : ''}${
-                draloLocked ? ' app-nav__link--locked-preview' : ''
-              }`}
-              onClick={onToggleDralo}
-              aria-expanded={draloOpen}
-              data-tour="nav-dralo-ai"
-            >
-              Dralo AI
-              <span aria-hidden>{draloOpen ? '▲' : '▼'}</span>
-            </button>
-            {draloOpen ? (
-              <div className={`app-nav__sub${draloLocked ? ' app-nav__sub--locked' : ''}`}>
-                <DraloAiNavMenuItems
-                  locked={draloLocked}
-                  guestRequiresLogin={guest}
-                  guestEntryHref={guestEntryHref}
-                  variant={draloVariant}
-                  onNavigate={onNavigate}
-                />
-                {draloLocked ? <DraloAiComingSoonRibbon /> : null}
-              </div>
-            ) : null}
-          </>
-        )
+        <span className={`${linkClass} app-nav__dralo-soon`} aria-disabled="true">
+          <span>{NAV_LINK_DRALO_AI.label}</span>
+          <span className="app-nav__dralo-soon-pill">Coming soon</span>
+        </span>
       ) : null}
-
-      {showNightMode ? <ReadingNightModeToggle variant="mobile" /> : null}
 
       {showPricing ? (
         <NavLink
@@ -155,7 +84,7 @@ export function AppSharedDrawerNav({
           onClick={onNavigate}
           {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
         >
-          {HOME_PRICING_LINK.label}
+          {NAV_LINK_PRICING.label}
         </NavLink>
       ) : null}
 

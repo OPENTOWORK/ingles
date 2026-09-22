@@ -8,6 +8,10 @@ import { buildAppNavModel } from '@/config/appNavMenu';
 import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import { performLogout } from '@/utils/logout';
+import {
+  clearOpenMainMenuAfterLogin,
+  peekOpenMainMenuAfterLogin,
+} from '@/utils/postAuthNavigation';
 
 /**
  * Menú lateral derecho desplegable (home, móvil/tablet).
@@ -17,8 +21,6 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const pathname = usePathname();
   const { userRole, session } = useUserRole();
   const [open, setOpen] = useState(defaultOpen);
-  const [examStrategiesOpen, setExamStrategiesOpen] = useState(false);
-  const [draloOpen, setDraloOpen] = useState(false);
   const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const [isPhone, setIsPhone] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
@@ -33,8 +35,17 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
   const linkClass = 'app-side-menu__link';
 
   useEffect(() => {
-    setExamStrategiesOpen(false);
-    setDraloOpen(false);
+    if (defaultOpen) setOpen(true);
+  }, [defaultOpen]);
+
+  useEffect(() => {
+    if (!peekOpenMainMenuAfterLogin()) return undefined;
+    setOpen(true);
+    const timeoutId = window.setTimeout(clearOpenMainMenuAfterLogin, 1000);
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
     setAdminPanelsOpen(false);
   }, [pathname]);
 
@@ -105,16 +116,11 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             navModel={navModel}
             linkClass={linkClass}
             onNavigate={closeMenu}
-            examStrategiesOpen={examStrategiesOpen}
-            onToggleExamStrategies={() => setExamStrategiesOpen((v) => !v)}
-            draloOpen={draloOpen}
-            onToggleDralo={() => setDraloOpen((v) => !v)}
             adminPanelsOpen={adminPanelsOpen}
             onToggleAdminPanels={() => setAdminPanelsOpen((v) => !v)}
             onLogout={handleLogout}
-            showNightMode={false}
             draloVariant="side"
-            guestEntryHref={!session && isPhone ? '/registro' : null}
+            guestEntryHref={!session && isPhone ? '/login' : null}
           />
         </nav>
       </div>
