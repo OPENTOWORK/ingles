@@ -11,6 +11,14 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/contacto',
   '/contact',
   '/blog',
+  '/legal',
+  '/terminos-condiciones',
+  '/aviso-legal',
+  '/politica-reembolsos',
+  '/normas-comunidad',
+  '/politica-privacidad',
+  '/politica-cookies',
+  '/proteccion-datos',
   /** Encuesta founding: se abre desde el correo, con token y sin iniciar sesión. */
   '/founding/encuesta',
   /** OAuth / enlaces de recuperación de contraseña (no son contenido de la app). */

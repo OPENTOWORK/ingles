@@ -1613,6 +1613,95 @@ body {
   min-height: 44px;
 }
 
+.app-nav__legal-foot {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .app-nav__legal-foot {
+    display: flex;
+    margin-top: auto;
+    padding: 0.35rem 1.15rem 0.85rem;
+  }
+
+  .app-nav__legal-foot .app-nav__legal-foot-link {
+    min-height: 0;
+    width: auto;
+    justify-content: flex-start;
+    padding: 0.2rem 0;
+    font-size: 0.72rem;
+    font-weight: 400;
+    line-height: 1.35;
+    color: #94a3b8;
+    background: transparent;
+    text-decoration: none;
+  }
+
+  .app-nav__legal-foot .app-nav__legal-foot-link:hover {
+    background: transparent;
+    color: #64748b;
+  }
+}
+
+.legal-hub {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.2rem 3rem;
+}
+
+.legal-hub h1 {
+  margin: 0 0 1.25rem;
+  font-size: 1.45rem;
+  color: #1e293b;
+}
+
+.legal-hub__group + .legal-hub__group {
+  margin-top: 1.35rem;
+}
+
+.legal-hub__title {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.legal-hub__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.legal-hub__list a,
+.legal-hub__list button {
+  display: block;
+  width: 100%;
+  padding: 0.55rem 0;
+  border: none;
+  border-bottom: 1px solid #e2e8f0;
+  background: transparent;
+  color: #334155;
+  font: inherit;
+  font-size: 0.95rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.legal-hub__note,
+.legal-hub__tagline {
+  margin: 1.25rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #64748b;
+}
+
+.legal-hub__tagline p {
+  margin: 0.35rem 0 0;
+}
+
 .app-nav__legal-note,
 .app-side-menu__sub .app-nav__legal-note {
   margin: 0.35rem 1.25rem 0.5rem 2rem;
@@ -2483,6 +2572,22 @@ body.nav-open {
   /* La pestaña «Menu» es fija sobre el borde derecho: el banner no pasa por debajo. */
   body.has-home-side-menu .home-page--student-mobile .invite-promo-banner--home {
     padding-right: 1.6rem;
+  }
+
+  .invite-promo-banner--folded .invite-promo-banner__fold-trigger {
+    width: auto;
+    max-width: calc(100% - 0.4rem);
+    gap: 5px;
+    padding: 4px 9px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    line-height: 1.2;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
+  }
+
+  .invite-promo-banner--folded .invite-promo-banner__fold-trigger svg {
+    width: 12px;
+    height: 12px;
   }
 
   .home-page--student-mobile .home-student-board {
