@@ -4014,8 +4014,21 @@ function B2ExamPaperPracticePageInner({
                               group.options.find((o) => rawMatchingSelection === o.id) || {},
                             ) || '';
 
+                        const answerLocked =
+                          phoneViewport &&
+                          Boolean(selectedOptions[questionKey] || checkedQuestions[questionKey]);
+
                         const applyListeningMcqOption = (option) => {
-                          setSelectedOptions((prev) => ({ ...prev, [questionKey]: option.id }));
+                          if (answerLocked) return;
+                          let alreadyChosen = false;
+                          setSelectedOptions((prev) => {
+                            if (phoneViewport && prev[questionKey]) {
+                              alreadyChosen = true;
+                              return prev;
+                            }
+                            return { ...prev, [questionKey]: option.id };
+                          });
+                          if (alreadyChosen) return;
                           if (hideFeedbackResolved) return;
                           const wasChecked = checkedQuestions[questionKey];
                           const nextChecked = { ...checkedQuestions, [questionKey]: true };
@@ -4178,7 +4191,9 @@ function B2ExamPaperPracticePageInner({
                                   id={`matching-select-${questionKey}`}
                                   className="levels-listening-matching-select"
                                   value={selectedLetter}
+                                  disabled={answerLocked}
                                   onChange={(e) => {
+                                    if (answerLocked) return;
                                     const letter = e.target.value;
                                     if (!letter) {
                                       setSelectedOptions((prev) => {
@@ -4220,6 +4235,7 @@ function B2ExamPaperPracticePageInner({
                                       <button
                                         key={option.id}
                                         type="button"
+                                        disabled={answerLocked}
                                         onClick={() => applyListeningMcqOption(option)}
                                         className={getListeningMcqOptionClassName({
                                           isSelected,
@@ -4725,6 +4741,7 @@ function B2ExamPaperPracticePageInner({
                           checkedQuestions={checkedQuestions}
                           hideFeedback={hideFeedbackResolved}
                           onOptionSelect={handleA2McqOptionSelect}
+                          lockChosenAnswer={phoneViewport}
                           aiHintsByKey={aiHintsByKey}
                         />
                       ) : useA2ListeningPictureUi ? (

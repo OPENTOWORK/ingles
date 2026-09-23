@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireSupportAgent } from '@/lib/supportAuth';
+import { assertSupportAssignee, attachAssigneeNames } from '@/lib/supportAssignees';
 import { parseTicketMeta } from '@/lib/supportTicketParse';
 import { TICKET_STATUS } from '@/utils/contactModuleConfig';
 
@@ -41,10 +42,15 @@ export async function GET(req, { params }) {
   }
 
   const meta = parseTicketMeta(ticket);
+  let [withAssignee] = await attachAssigneeNames(auth.db, [ticket]).catch((attachError) => {
+    console.error('[support/ticket GET assignee]', attachError);
+    return [ticket];
+  });
+  withAssignee = withAssignee || ticket;
 
   return NextResponse.json({
     ticket: {
-      ...ticket,
+      ...withAssignee,
       solicitante_email: ticket.solicitante_email || meta.email,
       solicitante_nombre: ticket.solicitante_nombre || meta.name,
       mensaje_inicial: meta.body,
@@ -87,6 +93,19 @@ export async function PATCH(req, { params }) {
     if (body.resuelto) {
       patch.estado = TICKET_STATUS.CLOSED;
       patch.cerrado_en = new Date().toISOString();
+    }
+  }
+
+  if (Object.prototype.hasOwnProperty.call(body || {}, 'asignado_a')) {
+    const rawAssignee = body.asignado_a;
+    if (rawAssignee == null || String(rawAssignee).trim() === '') {
+      patch.asignado_a = null;
+    } else {
+      const assigneeCheck = await assertSupportAssignee(auth.db, rawAssignee);
+      if (!assigneeCheck.ok) {
+        return NextResponse.json({ error: assigneeCheck.error }, { status: 400 });
+      }
+      patch.asignado_a = assigneeCheck.assignee.id;
     }
   }
 

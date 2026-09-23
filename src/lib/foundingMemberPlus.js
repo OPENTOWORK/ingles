@@ -30,11 +30,16 @@ function isMissingTableError(error) {
 /**
  * Reclama cupo de founding member (2–50) y, si aplica, asigna Plan Plus + correo.
  * El cupo 1 está reservado manualmente (Belén).
+ * Con `sendEmail: false` reserva cupo y plan; el aviso sale en la siguiente
+ * llamada que no lo desactive.
  *
  * @param {import('@supabase/supabase-js').SupabaseClient} adminClient
- * @param {{ userId: string, email: string, nombre?: string, createdAt?: string }} params
+ * @param {{ userId: string, email: string, nombre?: string, createdAt?: string, sendEmail?: boolean }} params
  */
-export async function maybeGrantFoundingMemberPlus(adminClient, { userId, email, nombre, createdAt }) {
+export async function maybeGrantFoundingMemberPlus(
+  adminClient,
+  { userId, email, nombre, createdAt, sendEmail = true },
+) {
   if (!adminClient || !userId || !email) {
     return { granted: false, reason: 'missing_params' };
   }
@@ -55,6 +60,16 @@ export async function maybeGrantFoundingMemberPlus(adminClient, { userId, email,
     }
 
     await assignUserPlan(adminClient, userId, PLUS_PLAN_SLUG);
+
+    if (!sendEmail) {
+      return {
+        granted: true,
+        slotNumber,
+        planSlug: PLUS_PLAN_SLUG,
+        emailSent: false,
+        reason: 'email_deferred',
+      };
+    }
 
     const alreadyEmailed = await hasFoundingPlusEmailBeenSent(adminClient, userId, email);
     if (alreadyEmailed) {

@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import { isSchemaNotReadyError } from '@/lib/coordinatorAccess';
 import { authenticateStaffTasksRequest } from '@/lib/staffTasksAccess';
-import { canDeleteStaffTask } from '@/lib/staffTasksPermissions';
+import { canDeleteStaffTask, canRemindStaffTask } from '@/lib/staffTasksPermissions';
 import { filterTasksClientSide } from '@/lib/staffTaskHelpers';
-import { sendStaffTaskAssignedEmail } from '@/lib/sendStaffTaskAssignedEmail';
+import {
+  sendStaffTaskAssignedEmail,
+  sendStaffTaskReminderEmail,
+} from '@/lib/sendStaffTaskAssignedEmail';
 import {
   buildTaskInsertRow,
   buildTaskUpdatePatch,
@@ -216,6 +219,58 @@ export async function POST(req) {
         success: true,
         task,
         emailSent: Boolean(mail.sent || mail.queued),
+      });
+    }
+
+    if (action === 'remind') {
+      const role = await getRoleNameByUserId(auth.user.id, auth.user.email);
+      if (!canRemindStaffTask(role)) {
+        return NextResponse.json(
+          { error: 'Solo un administrador puede enviar recordatorios.' },
+          { status: 403 },
+        );
+      }
+
+      const { data: source, error: readErr } = await auth.db
+        .from(TASKS_TABLE)
+        .select('*')
+        .eq('id', id)
+        .maybeSingle();
+      if (readErr || !source) {
+        return NextResponse.json({ error: 'Tarea no encontrada.' }, { status: 404 });
+      }
+      if (source.estado === 'completada' || source.estado === 'cancelada') {
+        return NextResponse.json(
+          { error: 'Esta tarea ya no está pendiente.' },
+          { status: 400 },
+        );
+      }
+
+      const [task] = await enrichTasksList(auth.db, [source]);
+      const profiles = await loadProfilesByIds(auth.db, [auth.user.id]);
+      const creator = profiles[auth.user.id];
+      const creatorName = creator?.nombre || auth.user.email || 'Administración';
+      const mail = await sendStaffTaskReminderEmail({
+        adminClient: auth.db,
+        task,
+        creatorName,
+      });
+
+      if (!mail.sent && !mail.queued) {
+        return NextResponse.json(
+          { error: mail.error || 'No se pudo enviar el recordatorio.' },
+          { status: mail.skipped ? 400 : 502 },
+        );
+      }
+
+      const assigneeLabel = task?.asignado?.nombre || task?.asignado?.email || 'la persona asignada';
+      return NextResponse.json({
+        success: true,
+        emailSent: Boolean(mail.sent),
+        emailQueued: Boolean(mail.queued),
+        message: mail.queued
+          ? `El recordatorio para ${assigneeLabel} queda en cola y se enviará en breve.`
+          : `Recordatorio enviado a ${assigneeLabel}.`,
       });
     }
 

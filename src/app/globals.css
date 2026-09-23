@@ -3248,7 +3248,8 @@ body.nav-open {
 
 @media (max-width: 639px) {
   .niveles-page--theory-hub.niveles-level-page--b2 .page-hero__back-row,
-  .niveles-page--theory-hub.niveles-level-page--b2 .page-hero__stats {
+  .niveles-page--theory-hub.niveles-level-page--b2 .page-hero__stats,
+  .exam-theory-topics-page:has(.exam-strategies-index--hub) .page-hero__back-row {
     display: none !important;
   }
 }
@@ -12513,6 +12514,14 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   background: #f7fafc;
 }
 
+.a2-p8-choice:disabled {
+  cursor: default;
+}
+
+.a2-p8-choice:disabled:not(.a2-p8-choice--selected):not(.a2-p8-choice--correct):not(.a2-p8-choice--wrong) {
+  opacity: 0.55;
+}
+
 .a2-p8-choice--selected {
   border-color: #3182ce;
   background: #ebf8ff;
@@ -15048,12 +15057,15 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 }
 
 .exam-listening-audio__element {
+  /* Safari iOS no reproduce un <audio> sacado de la pantalla (left negativo). */
   position: absolute;
-  left: -10000px;
-  top: auto;
-  width: 300px;
-  height: 32px;
-  opacity: 0.001;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0.02;
+  overflow: hidden;
   pointer-events: none;
 }
 
@@ -15168,9 +15180,18 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   line-height: 1.45;
 }
 
-.levels-listening-mcq-option:hover {
+.levels-listening-mcq-option:hover:not(:disabled) {
   border-color: #cbd5e1;
   background: #f8fafc;
+}
+
+.levels-listening-mcq-option:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.levels-listening-mcq-option:disabled:not(.levels-listening-mcq-option--selected):not(.levels-listening-mcq-option--correct):not(.levels-listening-mcq-option--incorrect) {
+  opacity: 0.55;
 }
 
 .levels-listening-mcq-option--selected {
@@ -18563,7 +18584,7 @@ body.reading-night-mode .levels-listening-mcq-option {
   color: #e2e8f0;
 }
 
-body.reading-night-mode .levels-listening-mcq-option:hover {
+body.reading-night-mode .levels-listening-mcq-option:hover:not(:disabled) {
   background: #475569;
   border-color: #94a3b8;
 }

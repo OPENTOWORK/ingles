@@ -21,6 +21,7 @@ export { assessPart1Variety } from './variety.js';
 export {
   TEACHER_REPAIR_SCOPES,
   applyTeacherRepairPlan,
+  buildPart1DistractorOnlyPatch,
   classifyTeacherRepairScope,
   createTeacherRepairPlan,
 } from './teacherRepair.js';

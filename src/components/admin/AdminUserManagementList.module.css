@@ -184,6 +184,24 @@
   border-color: #e2e8f0;
 }
 
+.badgeEmailYes {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #86efac;
+  min-width: 1.7rem;
+  justify-content: center;
+  font-weight: 800;
+}
+
+.badgeEmailNo {
+  background: #fef2f2;
+  color: #b91c1c;
+  border-color: #fecaca;
+  min-width: 1.7rem;
+  justify-content: center;
+  font-weight: 800;
+}
+
 .statusDot {
   width: 0.42rem;
   height: 0.42rem;

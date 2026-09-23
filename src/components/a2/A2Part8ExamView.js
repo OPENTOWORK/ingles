@@ -16,6 +16,7 @@ export function A2Part8ExamView({
   checkedQuestions,
   hideFeedback,
   onOptionSelect,
+  lockChosenAnswer = false,
   aiHintsByKey = {},
 }) {
   const directionLines = String(directions || `Part 1\n\n${A2_LISTENING_DIRECTIONS[1]}`)
@@ -87,6 +88,7 @@ export function A2Part8ExamView({
                   const imageUrl = option.imageUrl || '';
                   const caption = option.caption || (letter ? `Picture ${letter}` : 'Picture');
                   const isSelected = selectedOptions[questionKey] === option.id;
+                  const choiceLocked = lockChosenAnswer && Boolean(selectedOptions[questionKey]);
                   const showCorrect = !hideFeedback && isChecked && option.correcta;
                   const showIncorrect =
                     !hideFeedback && isChecked && isSelected && !option.correcta;
@@ -103,9 +105,11 @@ export function A2Part8ExamView({
                       ]
                         .filter(Boolean)
                         .join(' ')}
-                      onClick={() =>
-                        onOptionSelect({ group, groupIndex, option, questionKey })
-                      }
+                      disabled={choiceLocked}
+                      onClick={() => {
+                        if (choiceLocked) return;
+                        onOptionSelect({ group, groupIndex, option, questionKey });
+                      }}
                     >
                       <span className="a2-p8-choice__letter">{letter}</span>
                       <span className="a2-p8-choice__picture">

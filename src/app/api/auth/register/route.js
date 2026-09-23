@@ -21,7 +21,7 @@ const supabaseServiceRoleKey = getSupabaseServiceRoleKey();
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 40;
 const MAX_BUCKETS = 5000;
-/** Espera máxima por los correos: nunca deben tumbar el registro. */
+/** Espera máxima por el correo de confirmación: nunca debe tumbar el registro. */
 const SIGNUP_EMAIL_TIMEOUT_MS = 15000;
 /** Dónde aterriza quien pulsa el enlace de confirmación. */
 const CONFIRMATION_NEXT_PATH = '/perfil';
@@ -268,7 +268,6 @@ export async function POST(req) {
 
     // A partir de aquí la cuenta ya existe: ningún fallo posterior puede
     // devolver error, o el usuario quedaría sin poder registrarse ni entrar.
-    let welcomeEmailSent = false;
     let confirmationEmailSent = false;
 
     try {
@@ -329,7 +328,12 @@ export async function POST(req) {
     }
 
     try {
-      const founding = await maybeGrantFoundingMemberPlus(adminClient, { userId, email, nombre });
+      const founding = await maybeGrantFoundingMemberPlus(adminClient, {
+        userId,
+        email,
+        nombre,
+        sendEmail: false,
+      });
       if (founding.granted) {
         console.info(
           `api/auth/register founding plus: slot ${founding.slotNumber} → ${email}`,
@@ -339,40 +343,29 @@ export async function POST(req) {
       console.error('api/auth/register founding plus:', err);
     }
 
+    // Solo la confirmación: la bienvenida y el aviso de Plan Plus los envía
+    // /api/auth/ensure-profile cuando el alumno entra con el email ya confirmado.
     try {
-      const dispatch = (triggerEvent, variables) =>
-        withTimeout(
-          dispatchAutomatedEmail({ adminClient, triggerEvent, to: email, variables }).catch((err) => {
-            console.error(`api/auth/register ${triggerEvent}:`, err);
-            return null;
-          }),
-          SIGNUP_EMAIL_TIMEOUT_MS,
-        );
-
-      const [welcomeMail, confirmationMail] = await Promise.all([
-        dispatch(AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED, { email, nombre }),
-        dispatch(AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION, {
-          email,
-          nombre,
-          action_url: signup.url,
+      const confirmationMail = await withTimeout(
+        dispatchAutomatedEmail({
+          adminClient,
+          triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION,
+          to: email,
+          variables: { email, nombre, action_url: signup.url },
         }),
-      ]);
-
-      welcomeEmailSent = Boolean(welcomeMail?.sent || welcomeMail?.queued);
+        SIGNUP_EMAIL_TIMEOUT_MS,
+      );
       confirmationEmailSent = Boolean(confirmationMail?.sent || confirmationMail?.queued);
-
-      if (!welcomeEmailSent) console.error('api/auth/register welcome email:', welcomeMail?.error);
       if (!confirmationEmailSent) {
         console.error('api/auth/register confirmation email:', confirmationMail?.error);
       }
     } catch (err) {
-      console.error('api/auth/register signup emails:', err);
+      console.error('api/auth/register confirmation email:', err);
     }
 
     return NextResponse.json({
       ok: true,
       userId,
-      welcomeEmailSent,
       confirmationEmailSent,
       requiresEmailConfirmation: true,
       message: confirmationEmailSent

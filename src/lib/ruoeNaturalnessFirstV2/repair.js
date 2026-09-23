@@ -42,9 +42,9 @@ export function nextPart2Repair({ gapMoved = false } = {}) {
 
 export function nextPart3Repair() {
   return {
-    action: 'new-position',
+    action: 'replace-target',
     scope: 'failed-item',
-    instruction: 'Choose a different word already in the natural text. Do not force this sentence to keep the rejected base.',
+    instruction: 'Replace the defective target. You may change the gapped word, supplied base, and immediate sentence wording. Preserve the surrounding passage and every other question.',
   };
 }
 

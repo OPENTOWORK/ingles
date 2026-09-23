@@ -72,3 +72,37 @@ export async function sendStaffTaskAssignedEmail({
     error: result.error || 'Correo de asignación no configurado.',
   };
 }
+
+/**
+ * Recordatorio manual: un administrador avisa a la persona asignada de una tarea pendiente.
+ */
+export async function sendStaffTaskReminderEmail({
+  task,
+  creatorName = '',
+  adminClient = null,
+}) {
+  const to = String(task?.asignado?.email || '').trim().toLowerCase();
+  if (!to) {
+    return { sent: false, skipped: true, error: 'La tarea no tiene persona asignada con email.' };
+  }
+
+  const result = await dispatchAutomatedEmail({
+    adminClient,
+    triggerEvent: AUTOMATED_EMAIL_TRIGGERS.STAFF_TASK_REMINDER,
+    to,
+    variables: buildTaskAssignedVariables(task, creatorName),
+  });
+
+  if (result.sent || result.queued) {
+    return {
+      sent: true,
+      queued: result.queued,
+      channel: result.results?.[0]?.channel,
+    };
+  }
+
+  return {
+    sent: false,
+    error: result.error || 'No se pudo enviar el recordatorio.',
+  };
+}

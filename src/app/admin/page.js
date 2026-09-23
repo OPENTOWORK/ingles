@@ -153,6 +153,7 @@ export default function AdminDashboard() {
     },
   });
   const [userActivityByUser, setUserActivityByUser] = useState({});
+  const [emailConfirmedByUser, setEmailConfirmedByUser] = useState(null);
   const [sessionChart, setSessionChart] = useState([]);
   const [chartPeriod, setChartPeriod] = useState('meses');
   const [chartStartDate, setChartStartDate] = useState('');
@@ -310,6 +311,23 @@ export default function AdminDashboard() {
         };
       }),
     );
+    await loadEmailConfirmation();
+  };
+
+  const loadEmailConfirmation = async () => {
+    try {
+      const res = await fetch('/api/admin/users/email-status', {
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'No se pudo cargar la confirmación de correo.');
+      }
+      setEmailConfirmedByUser(payload.emailConfirmedByUser || {});
+    } catch (error) {
+      console.error('Error loading email confirmation:', error);
+    }
   };
 
   const loadUserPlans = async () => {
@@ -1572,6 +1590,7 @@ export default function AdminDashboard() {
               plansByUser={plansByUser}
               placementByUser={placementByUser}
               userActivityByUser={userActivityByUser}
+              emailConfirmedByUser={emailConfirmedByUser}
               selectedUserIds={selectedUserIds}
               savingByUser={savingByUser}
               mailing={mailing}

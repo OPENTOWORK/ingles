@@ -31,6 +31,104 @@ function locateQuestionContainer(exam, partNumber) {
   return null;
 }
 
+function locateModelAnswerContainer(exam, partNumber) {
+  if (Array.isArray(exam?.modelAnswers)) return { owner: exam, key: 'modelAnswers' };
+  if (Array.isArray(exam?.parts)) {
+    const part = exam.parts.find((row) => Number(row.partNumber ?? row.number ?? row.part) === Number(partNumber));
+    if (part && Array.isArray(part.modelAnswers)) return { owner: part, key: 'modelAnswers' };
+  }
+  if (exam?.content && Array.isArray(exam.content.modelAnswers)) {
+    return { owner: exam.content, key: 'modelAnswers' };
+  }
+  return null;
+}
+
+function answerValue(question) {
+  return question?.answer ?? question?.key ?? question?.correctAnswer ?? question?.modelAnswer;
+}
+
+function optionLetter(option) {
+  if (typeof option === 'string') return option.trim().match(/^([A-D])(?:\)|[.:\s])/i)?.[1]?.toUpperCase() || '';
+  return String(option?.letter ?? option?.option ?? '').toUpperCase();
+}
+
+function replaceOptionWord(option, word) {
+  if (typeof option === 'string') {
+    const label = optionLetter(option);
+    return `${label}) ${word}`;
+  }
+  if (option && typeof option === 'object') {
+    return { ...option, word };
+  }
+  return option;
+}
+
+function optionWord(option) {
+  if (typeof option === 'string') return option.replace(/^[A-D](?:\)|[.:\s])\s*/i, '').trim().toLowerCase();
+  return String(option?.word ?? option?.value ?? '').trim().toLowerCase();
+}
+
+function part1JudgementSurvives(row) {
+  return Boolean(
+    row?.grammatical &&
+    row?.naturalBritishEnglish &&
+    row?.semanticallyDefensible &&
+    (row?.collocationallyValid ?? row?.collocationalFit) &&
+    (row?.contextuallyDefensible ?? true),
+  );
+}
+
+export function buildPart1DistractorOnlyPatch({
+  options,
+  judgements,
+  keyLetter,
+  replacementWord,
+  targetLetter,
+} = {}) {
+  const rows = Array.isArray(judgements) ? judgements : [];
+  const sourceOptions = Array.isArray(options) ? options : [];
+  const key = String(keyLetter || '').toUpperCase();
+  if (sourceOptions.length !== 4 || rows.length !== 4 || !['A', 'B', 'C', 'D'].includes(key)) {
+    return { status: 'PIPELINE_FAIL', reason: 'Four options, four independent judgements, and a key letter are required.' };
+  }
+  const alternatives = rows
+    .filter(part1JudgementSurvives)
+    .map(optionLetter)
+    .filter((letter) => letter && letter !== key);
+  const uniqueAlternatives = [...new Set(alternatives)];
+  const requested = String(targetLetter || '').toUpperCase();
+  const target = requested || (uniqueAlternatives.length === 1 ? uniqueAlternatives[0] : '');
+  if (!target || !uniqueAlternatives.includes(target)) {
+    return {
+      status: 'QUALITY_FAIL',
+      reason: uniqueAlternatives.length
+        ? `Choose exactly one surviving distractor to replace (${uniqueAlternatives.join(', ')}).`
+        : 'No surviving non-key distractor was identified.',
+      survivingDistractors: uniqueAlternatives,
+    };
+  }
+  const word = String(replacementWord || '').trim();
+  if (!/^[A-Za-z'-]+$/.test(word)) {
+    return { status: 'PIPELINE_FAIL', reason: 'The replacement distractor must be one word.' };
+  }
+  const index = sourceOptions.findIndex((option) => optionLetter(option) === target);
+  if (index === -1) return { status: 'PIPELINE_FAIL', reason: `Option ${target} was not found.` };
+  const otherWords = sourceOptions
+    .filter((_, optionIndex) => optionIndex !== index)
+    .map(optionWord);
+  if (otherWords.includes(word.toLowerCase())) {
+    return { status: 'HARD_FAIL', reason: `The replacement would duplicate the option word "${word}".` };
+  }
+  const patched = clone(sourceOptions);
+  patched[index] = replaceOptionWord(patched[index], word);
+  return {
+    status: 'PASS',
+    targetLetter: target,
+    survivingDistractors: uniqueAlternatives,
+    proposedQuestion: { options: patched },
+  };
+}
+
 export function classifyTeacherRepairScope({
   partNumber,
   teacherComment,
@@ -174,6 +272,7 @@ export async function applyTeacherRepairPlan({
   plan,
   proposedQuestion,
   revisedPassage,
+  localPassageEdit,
   newVersion,
   validatorsByPart = {},
 } = {}) {
@@ -210,6 +309,58 @@ export async function applyTeacherRepairPlan({
     return { status: 'PIPELINE_FAIL', reason: 'Repair changed or removed the question number.' };
   }
   container.owner[container.key][plan.locator.index] = revisedQuestion;
+  const revisedAnswer = answerValue(revisedQuestion);
+  if (revisedAnswer !== undefined) {
+    const answerContainer = locateModelAnswerContainer(candidateExam, plan.partNumber);
+    const answerIndex = answerContainer?.owner[answerContainer.key].findIndex(
+      (answer) =>
+        questionNumber(answer) === plan.questionNumber ||
+        (answer?.id && revisedQuestion?.id && answer.id === revisedQuestion.id),
+    ) ?? -1;
+    if (answerContainer && answerIndex !== -1) {
+      answerContainer.owner[answerContainer.key][answerIndex] = {
+        ...answerContainer.owner[answerContainer.key][answerIndex],
+        answer: revisedAnswer,
+        ...(revisedQuestion.transformationFamily
+          ? { transformationFamily: revisedQuestion.transformationFamily }
+          : {}),
+      };
+    }
+  }
+  if (localPassageEdit !== undefined) {
+    if (![TEACHER_REPAIR_SCOPES.LOCAL_CONTEXT, TEACHER_REPAIR_SCOPES.TARGET_REPLACEMENT].includes(scope)) {
+      return { status: 'PIPELINE_FAIL', reason: `${scope} cannot apply a local passage edit.` };
+    }
+    const originalText = String(localPassageEdit?.original || '');
+    const revisedText = String(localPassageEdit?.revised || '');
+    if (!originalText || !revisedText) {
+      return { status: 'PIPELINE_FAIL', reason: 'A local passage edit requires non-empty original and revised text.' };
+    }
+    const passageOwner = typeof candidateExam.passage === 'string'
+      ? candidateExam
+      : candidateExam.content && typeof candidateExam.content.passage === 'string'
+        ? candidateExam.content
+        : null;
+    if (!passageOwner) return { status: 'PIPELINE_FAIL', reason: 'No passage field exists for the local edit.' };
+    const occurrences = passageOwner.passage.split(originalText).length - 1;
+    if (occurrences !== 1) {
+      return { status: 'PIPELINE_FAIL', reason: `The original local sentence occurred ${occurrences} times; exactly one is required.` };
+    }
+    const markerPattern = /\(\d+\)/g;
+    const originalMarkers = originalText.match(markerPattern) || [];
+    const revisedMarkers = revisedText.match(markerPattern) || [];
+    if (JSON.stringify(originalMarkers) !== JSON.stringify(revisedMarkers)) {
+      return { status: 'PIPELINE_FAIL', reason: 'A local passage edit cannot add, remove, or renumber question markers.' };
+    }
+    if (plan.partNumber === 3 && revisedQuestion.stem) {
+      const printedBases = revisedText.match(/\(([A-Z]+)\)/g) || [];
+      const expectedBase = `(${String(revisedQuestion.stem).toUpperCase()})`;
+      if (!printedBases.includes(expectedBase)) {
+        return { status: 'PIPELINE_FAIL', reason: `The revised local sentence does not preserve the structured Part 3 base ${expectedBase}.` };
+      }
+    }
+    passageOwner.passage = passageOwner.passage.replace(originalText, revisedText);
+  }
   if (scope === TEACHER_REPAIR_SCOPES.PASSAGE_LEVEL) {
     if ('passage' in candidateExam) candidateExam.passage = revisedPassage;
     else if (candidateExam.content && 'passage' in candidateExam.content) candidateExam.content.passage = revisedPassage;
@@ -260,7 +411,8 @@ export async function applyTeacherRepairPlan({
     repairClassification: scope,
     revisedContent: clone(revisedQuestion),
     originalAnswer: plan.currentAnswer,
-    revisedAnswer: revisedQuestion.answer ?? revisedQuestion.key ?? revisedQuestion.correctAnswer ?? null,
+    revisedAnswer: answerValue(revisedQuestion) ?? null,
+    localPassageEdit: localPassageEdit ? clone(localPassageEdit) : null,
     reasonForChange: plan.classification.reason,
     validatorsRun: validatorResults,
     finalStatus: status,

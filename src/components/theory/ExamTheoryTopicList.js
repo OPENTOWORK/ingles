@@ -296,6 +296,133 @@ function ExamTheoryTopicListStyles() {
         text-align: center;
         line-height: 1.35;
       }
+      @media (max-width: 639px) {
+        html:has(.exam-theory-topics-page .exam-strategies-index--hub),
+        body:has(.exam-theory-topics-page .exam-strategies-index--hub) {
+          height: 100%;
+          overflow: hidden;
+        }
+        body:has(.exam-theory-topics-page .exam-strategies-index--hub) .full-page-layout {
+          height: 100%;
+          min-height: 0;
+          max-height: 100%;
+          overflow: hidden;
+        }
+        body:has(.exam-theory-topics-page .exam-strategies-index--hub) .page-content {
+          display: flex;
+          flex-direction: column;
+          flex: 1 1 auto;
+          min-height: 0;
+          overflow: hidden;
+        }
+        body:has(.exam-theory-topics-page .exam-strategies-index--hub) .footer {
+          display: none;
+        }
+        .exam-theory-topics-page.shell:has(.exam-strategies-index--hub) {
+          flex: 1 1 auto;
+          min-height: 0 !important;
+          height: 100%;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          padding: 8px 10px !important;
+        }
+        .exam-theory-topics-page:has(.exam-strategies-index--hub) .levels-b2-page-content {
+          flex: 1 1 auto;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          overflow: hidden;
+        }
+        .exam-theory-topics-page:has(.exam-strategies-index--hub) .page-hero {
+          flex: 0 0 auto;
+          margin-bottom: 0 !important;
+          border-radius: 16px;
+        }
+        .exam-theory-topics-page:has(.exam-strategies-index--hub) .page-hero__inner {
+          padding: 10px 12px 8px;
+        }
+        .exam-theory-topics-page:has(.exam-strategies-index--hub) .page-hero__back-row {
+          display: none !important;
+        }
+        .exam-theory-topics-page:has(.exam-strategies-index--hub) .page-hero__eyebrow {
+          margin-bottom: 4px;
+          padding: 2px 8px;
+          font-size: 9px;
+        }
+        .exam-theory-topics-page:has(.exam-strategies-index--hub) .page-hero__title {
+          margin-bottom: 4px;
+          font-size: 1.15rem;
+          line-height: 1.15;
+        }
+        .exam-theory-topics-page:has(.exam-strategies-index--hub) .page-hero__desc {
+          font-size: 0.72rem;
+          line-height: 1.3;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub {
+          flex: 1 1 auto;
+          min-height: 0;
+          margin: 0;
+          padding: 8px 10px;
+          display: flex;
+          flex-direction: column;
+          overflow: hidden;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__head {
+          flex: 0 0 auto;
+          margin-bottom: 6px;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__title {
+          font-size: 1rem;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__list,
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__sublist {
+          flex: 1 1 auto;
+          min-height: 0;
+          gap: 6px;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__sublist {
+          margin-top: 4px;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__item {
+          flex: 1 1 0;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__item--group {
+          flex-grow: 4.5;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__group-head {
+          flex: 0 0 auto;
+          margin-bottom: 2px;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__link,
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__link--static {
+          flex: 1 1 auto;
+          min-height: 0;
+          padding: 4px 10px;
+          border-radius: 12px;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__link-text {
+          flex-wrap: nowrap;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__link-label {
+          font-size: 0.84rem;
+          white-space: nowrap;
+        }
+        .exam-theory-topics-page .exam-strategies-index--hub .exam-strategies-index__part-name {
+          font-size: 0.72rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
     `}</style>
   );
 }

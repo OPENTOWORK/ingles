@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { Bell } from 'lucide-react';
 import { getStaffRoleLabel } from '@/utils/staffBuzon';
 import { staffTasksFetch } from '@/lib/staffTasksClient';
 import {
@@ -24,6 +25,7 @@ import {
   canCancelStaffTask,
   canDeleteStaffTask,
   canManageStaffPhases,
+  canRemindStaffTask,
   canPickAnyAssignee,
   getStaffDepartmentLabel,
   shouldShowSchemaSetupHint,
@@ -178,6 +180,34 @@ function subphaseToForm(subphase) {
   };
 }
 
+function taskCanBeReminded(task) {
+  return task?.estado !== 'completada' && task?.estado !== 'cancelada';
+}
+
+function TaskReminderButton({ task, busy, onRemind, className }) {
+  if (!taskCanBeReminded(task)) return null;
+  const assignee = task.asignado?.nombre || task.asignado?.email;
+  const label = assignee
+    ? `Enviar recordatorio a ${assignee}`
+    : 'Esta tarea no tiene persona asignada';
+  return (
+    <button
+      type="button"
+      onPointerDown={(event) => event.stopPropagation()}
+      onClick={(event) => {
+        event.stopPropagation();
+        onRemind(task);
+      }}
+      disabled={busy}
+      title={label}
+      aria-label={label}
+      className={className}
+    >
+      <Bell size={15} aria-hidden="true" />
+    </button>
+  );
+}
+
 function formatPhaseResponsablesLabel(phase) {
   if (phase.responsables_todos) return 'Todo el equipo';
   const list = phase.responsables?.length
@@ -200,6 +230,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const canPickAssignee = canPickAnyAssignee(userRole);
   const canManagePhases = canManageStaffPhases(userRole);
   const canDelete = canDeleteStaffTask(userRole);
+  const canRemind = canRemindStaffTask(userRole);
   const canCancel = canCancelStaffTask(userRole);
 
   const [assignees, setAssignees] = useState([]);
@@ -215,6 +246,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const [templatesReady, setTemplatesReady] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [remindingId, setRemindingId] = useState(null);
   const [error, setError] = useState('');
 
   const [filters, setFilters] = useState({
@@ -515,6 +547,34 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
       alert(e.message);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const remindTask = async (task) => {
+    if (!taskCanBeReminded(task)) return;
+    const assigneeName = task.asignado?.nombre || task.asignado?.email;
+    if (!assigneeName) {
+      alert('Esta tarea no tiene persona asignada.');
+      return;
+    }
+    if (
+      !window.confirm(
+        `¿Enviar un recordatorio a ${assigneeName} sobre la tarea «${task.titulo}»?`,
+      )
+    ) {
+      return;
+    }
+    setRemindingId(task.id);
+    try {
+      const data = await staffTasksFetch('/api/coordinator/tasks', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'remind', id: task.id }),
+      });
+      alert(data.message || `Recordatorio enviado a ${assigneeName}.`);
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      setRemindingId(null);
     }
   };
 
@@ -1069,14 +1129,24 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                     {task.fecha_limite ? (
                       <p className={kanbanStyles.cardMeta}>{task.timeRemaining}</p>
                     ) : null}
-                    <button
-                      type="button"
-                      className={kanbanStyles.cardAction}
-                      onPointerDown={(e) => e.stopPropagation()}
-                      onClick={() => setDetailTask(task)}
-                    >
-                      Ver detalle
-                    </button>
+                    <div className={kanbanStyles.cardActions}>
+                      <button
+                        type="button"
+                        className={kanbanStyles.cardAction}
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={() => setDetailTask(task)}
+                      >
+                        Ver detalle
+                      </button>
+                      {canRemind ? (
+                        <TaskReminderButton
+                          task={task}
+                          busy={remindingId === task.id}
+                          onRemind={remindTask}
+                          className={kanbanStyles.cardBell}
+                        />
+                      ) : null}
+                    </div>
                   </>
                 )}
               />
@@ -1375,7 +1445,15 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                             </option>
                           ))}
                         </select>
-                        <div className="flex flex-wrap justify-end gap-x-3 gap-y-1">
+                        <div className="flex flex-wrap justify-end items-center gap-x-3 gap-y-1">
+                          {canRemind ? (
+                            <TaskReminderButton
+                              task={task}
+                              busy={remindingId === task.id}
+                              onRemind={remindTask}
+                              className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 disabled:opacity-50"
+                            />
+                          ) : null}
                           <button
                             type="button"
                             onClick={() => openEditTask(task)}
@@ -1464,7 +1542,15 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
 
               <StaffTaskConversation taskId={detailTask.id} taskEstado={detailTask.estado} />
 
-              <div className="flex gap-2 pt-2">
+              <div className="flex flex-wrap gap-2 pt-2">
+                {canRemind ? (
+                  <TaskReminderButton
+                    task={detailTask}
+                    busy={remindingId === detailTask.id}
+                    onRemind={remindTask}
+                    className="inline-flex items-center justify-center w-8 h-8 rounded-full border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 disabled:opacity-50"
+                  />
+                ) : null}
                 <button
                   type="button"
                   onClick={() => {

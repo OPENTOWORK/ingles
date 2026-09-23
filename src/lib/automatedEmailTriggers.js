@@ -8,6 +8,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   SUPPORT_REPLY_SENT: 'support_reply_sent',
   FRIEND_INVITED: 'friend_invited',
   STAFF_TASK_ASSIGNED: 'staff_task_assigned',
+  STAFF_TASK_REMINDER: 'staff_task_reminder',
   STAFF_TASK_MESSAGE: 'staff_task_message',
   FOUNDING_MEMBER_PLUS_GRANTED: 'founding_member_plus_granted',
   FOUNDING_MEMBER_SURVEY: 'founding_member_survey',
@@ -20,7 +21,7 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
   {
     value: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
     label: 'Registro de usuario',
-    description: 'Cuando un alumno se registra en la plataforma.',
+    description: 'La primera vez que el alumno entra con su email ya confirmado.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION,
@@ -58,6 +59,12 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     description: 'Cuando se crea una tarea y se asigna a una persona del equipo.',
   },
   {
+    value: AUTOMATED_EMAIL_TRIGGERS.STAFF_TASK_REMINDER,
+    label: 'Recordatorio de tarea (staff)',
+    description:
+      'Cuando un administrador pulsa la campana de una tarea pendiente para avisar a la persona asignada.',
+  },
+  {
     value: AUTOMATED_EMAIL_TRIGGERS.STAFF_TASK_MESSAGE,
     label: 'Mensaje en chat de tarea',
     description:
@@ -67,7 +74,7 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_PLUS_GRANTED,
     label: 'Plan Plus founding (50 primeras inscripciones)',
     description:
-      'Se envía automáticamente a las inscripciones 2–50 con Plan Plus gratuito e indefinido.',
+      'Se envía automáticamente a las inscripciones 2–50 con Plan Plus gratuito e indefinido, cuando confirman su email.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_SURVEY,

@@ -130,6 +130,61 @@ You may also include sentence1 and sentence2, but the answer must be a top-level
 Return JSON for the repaired item only.`);
 }
 
+export function teacherPart1DistractorRepairPrompt({
+  passage,
+  sentence,
+  options,
+  judgements,
+  keyLetter,
+  targetLetter,
+} = {}) {
+  return withContract(`Repair exactly one surviving distractor in an existing Part 1 item.
+The intended key ${keyLetter} may be preserved only if it remains the sole survivor after independent validation.
+Replace option ${targetLetter} only. Do not change the sentence, key, or any other option.
+The replacement must be the same word class and plausible as a distractor, but it must fail at least one decisive test in this complete passage context.
+The replacement must not duplicate any existing option word.
+Do not return a synonym or another adjective that remains a natural, collocationally valid and contextually defensible completion.
+It is acceptable to use an adjective that is grammatical with the noun but contradicts the explicit passage meaning; in that case it is a plausible semantic distractor and must be marked contextually indefensible.
+Do not merely change the degree of the same positive meaning (for example, from strong to significant, notable, major, powerful or beneficial).
+Return {"letter":"${targetLetter}","word":"one word","reason":"..."}.
+
+PASSAGE:
+${passage}
+
+SENTENCE:
+${sentence}
+
+OPTIONS:
+${JSON.stringify(options)}
+
+INDEPENDENT JUDGEMENTS:
+${JSON.stringify(judgements)}`);
+}
+
+export function teacherPart3TargetReplacementPrompt({
+  passage,
+  sentence,
+  base,
+  answer,
+  validatorFeedback,
+} = {}) {
+  return withContract(`Repair one defective Part 3 target in an existing passage.
+The rejected target is ${base} -> ${answer}.
+You may change the gapped word, supplied base, and immediate sentence wording. Do not change surrounding sentences or any other question.
+Prefer retaining the sentence only if a unique, natural, direct one-word derivation already fits it. Otherwise write one replacement sentence with the same local meaning and coherence.
+The supplied base must be a legitimate lexical item; the answer must be a direct one-word family member, must differ from the base, and must introduce no extra lexical root.
+Return exactly {"originalSentence":"...","revisedSentence":"...","stem":"...","answer":"...","transformationFamily":"...","reason":"..."}.
+
+PASSAGE:
+${passage}
+
+ORIGINAL SENTENCE:
+${sentence}
+
+VALIDATOR FEEDBACK:
+${validatorFeedback}`);
+}
+
 export function blindSolvePrompt(partNumber, view) {
   const task = {
     1: 'Judge every option on its own. Return every letter that is grammatical, natural British English, semantically defensible, and collocationally valid. Do not pick a single best answer. Return {"defensibleOptions":["A"]}.',

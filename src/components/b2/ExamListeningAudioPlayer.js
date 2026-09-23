@@ -7,6 +7,30 @@ const MAX_PLAYS = 2;
 /** Only one listening clip may play at a time across the page. */
 const activeListeningAudios = new Set();
 
+/** iPhone/iPad, incluido el modo escritorio de Safari. */
+function isAppleTouchDevice() {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  return (
+    /iPad|iPhone|iPod/i.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  );
+}
+
+/**
+ * Safari en iOS silencia el `<audio>` con el interruptor de silencio y solo
+ * acepta play() dentro del toque. Hay que marcarlo antes de reproducir.
+ */
+function enableIosPlaybackSession() {
+  try {
+    if (navigator.audioSession && navigator.audioSession.type !== 'playback') {
+      navigator.audioSession.type = 'playback';
+    }
+  } catch {
+    /* Safari antiguo no expone audioSession */
+  }
+}
+
 function pauseOtherListeningAudios(current) {
   for (const audio of activeListeningAudios) {
     if (audio !== current && !audio.paused) {
@@ -109,20 +133,20 @@ export default function ExamListeningAudioPlayer({
       }
 
       if (audio.paused) {
-        void audio.play().catch(() => {
-          playingRef.current = false;
-          stopTick();
-          setIsPlaying(false);
-          setError(isEn ? 'Playback was interrupted.' : 'Se interrumpió la reproducción.');
-        });
+        // iOS rechaza play() lanzado desde un temporizador. No reintentar.
         return;
       }
 
-      if (maxTimeRef.current > 0.05 && audio.currentTime < maxTimeRef.current - 0.05) {
+      // En iPhone, rebobinar currentTime desde un timer pausa el audio.
+      if (
+        !isAppleTouchDevice() &&
+        maxTimeRef.current > 0.05 &&
+        audio.currentTime < maxTimeRef.current - 0.05
+      ) {
         audio.currentTime = maxTimeRef.current;
       }
     }, 100);
-  }, [finishPlayback, isEn, stopTick, syncProgressFromAudio]);
+  }, [finishPlayback, stopTick, syncProgressFromAudio]);
 
   useEffect(() => {
     maxTimeRef.current = 0;
@@ -178,6 +202,10 @@ export default function ExamListeningAudioPlayer({
       }
     };
 
+    audio.setAttribute('playsinline', 'true');
+    audio.setAttribute('webkit-playsinline', 'true');
+    if (isAppleTouchDevice()) audio.preload = 'metadata';
+
     audio.addEventListener('loadedmetadata', onMeta);
     audio.addEventListener('durationchange', onMeta);
     if (audio.readyState >= 1) onMeta();
@@ -193,15 +221,24 @@ export default function ExamListeningAudioPlayer({
     if (!audio || playLocked || attemptsUsed >= MAX_PLAYS || playingRef.current) return;
 
     setError(null);
+    enableIosPlaybackSession();
 
     try {
       pauseOtherListeningAudios(audio);
-      audio.pause();
-      audio.currentTime = 0;
+      if (!audio.paused) audio.pause();
+      // Buscar antes de que haya buffer hace fallar play() en Safari.
+      if (audio.readyState >= 1 && audio.currentTime > 0) {
+        try {
+          audio.currentTime = 0;
+        } catch {
+          /* iOS lanza si aún no hay un frame decodificado */
+        }
+      }
       maxTimeRef.current = 0;
       setCurrentTime(0);
 
-      await audio.play();
+      const playPromise = audio.play();
+      await playPromise;
 
       playingRef.current = true;
       setIsPlaying(true);
@@ -229,7 +266,16 @@ export default function ExamListeningAudioPlayer({
 
   if (!examMode) {
     return (
-      <audio ref={audioRef} controls src={src} className={className} style={{ width: '100%' }}>
+      <audio
+        ref={audioRef}
+        controls
+        src={src}
+        playsInline
+        preload="metadata"
+        className={className}
+        style={{ width: '100%' }}
+        onPointerDown={enableIosPlaybackSession}
+      >
         <track kind="captions" />
       </audio>
     );
@@ -255,9 +301,10 @@ export default function ExamListeningAudioPlayer({
       <audio
         ref={audioRef}
         src={src}
-        preload="auto"
+        preload="metadata"
         playsInline
         className="exam-listening-audio__element"
+        onPointerDown={enableIosPlaybackSession}
       />
 
       <div className="exam-listening-audio__bar" aria-live="polite">
@@ -267,6 +314,7 @@ export default function ExamListeningAudioPlayer({
             className={`exam-listening-audio__play${
               playbackBlocked ? ' exam-listening-audio__play--locked' : ''
             }`}
+            onPointerDown={enableIosPlaybackSession}
             onClick={() => void startPlayback()}
             disabled={playbackBlocked}
             aria-label={isEn ? 'Play audio' : 'Reproducir audio'}
@@ -314,6 +362,7 @@ export default function ExamListeningAudioPlayer({
           className={`exam-listening-audio__replay${
             playbackBlocked ? ' exam-listening-audio__replay--locked' : ''
           }`}
+          onPointerDown={enableIosPlaybackSession}
           onClick={() => void startPlayback()}
           disabled={playbackBlocked}
         >

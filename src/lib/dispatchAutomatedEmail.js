@@ -11,6 +11,7 @@ const CTA_LABEL_BY_TRIGGER = {
   friend_invited: 'Aceptar invitación',
   admin_user_created: 'Iniciar sesión',
   staff_task_assigned: 'Ver tareas',
+  staff_task_reminder: 'Ver la tarea',
   staff_task_message: 'Ver conversación',
   user_email_confirmation: 'Confirmar mi email',
   password_reset_requested: 'Crear nueva contraseña',

@@ -30,6 +30,21 @@ function PlanBadge({ planSlug, getPlanLabel }) {
   );
 }
 
+function EmailConfirmedMark({ confirmed }) {
+  if (confirmed == null) return null;
+  const yes = Boolean(confirmed);
+  const label = yes ? 'Correo confirmado' : 'Correo sin confirmar';
+  return (
+    <span
+      className={`${styles.badge} ${yes ? styles.badgeEmailYes : styles.badgeEmailNo}`}
+      title={label}
+      aria-label={label}
+    >
+      {yes ? 'V' : 'X'}
+    </span>
+  );
+}
+
 const TABLE_SORT_COLUMNS = {
   usuario: 'usuario',
   rol: 'rol',
@@ -89,6 +104,7 @@ function UserDrawer({
   plansByUser,
   placement,
   activity,
+  emailConfirmed,
   saving,
   mailing,
   mailReady,
@@ -242,6 +258,12 @@ function UserDrawer({
                 </span>
               </div>
               <div className={styles.infoItem}>
+                <span className={styles.infoLabel}>Correo</span>
+                <span className={styles.infoValue}>
+                  {emailConfirmed == null ? '—' : emailConfirmed ? 'Confirmado (V)' : 'Sin confirmar (X)'}
+                </span>
+              </div>
+              <div className={styles.infoItem}>
                 <span className={styles.infoLabel}>Comercial</span>
                 <span className={styles.infoValue}>{user.marketingAccepted ? 'Sí (V)' : 'No (X)'}</span>
               </div>
@@ -296,6 +318,7 @@ export default function AdminUserManagementList({
   plansByUser,
   placementByUser,
   userActivityByUser,
+  emailConfirmedByUser = null,
   selectedUserIds,
   savingByUser,
   mailing,
@@ -474,6 +497,13 @@ export default function AdminUserManagementList({
                       />
                       {activity?.online ? 'Conectado' : 'Desconectado'}
                     </span>
+                    <EmailConfirmedMark
+                      confirmed={
+                        emailConfirmedByUser == null
+                          ? null
+                          : Boolean(emailConfirmedByUser[item.id])
+                      }
+                    />
                   </div>
 
                   <dl className={styles.cardMeta}>
@@ -570,6 +600,7 @@ export default function AdminUserManagementList({
                   sortDirection={sortDirection}
                   onSort={handleSort}
                 />
+                <th>Correo</th>
                 <th />
               </tr>
             </thead>
@@ -606,6 +637,15 @@ export default function AdminUserManagementList({
                     <td>{activity?.totalSessionLabel || formatSessionDuration(0)}</td>
                     <td className="text-gray-600">{item.email}</td>
                     <td>
+                      <EmailConfirmedMark
+                        confirmed={
+                          emailConfirmedByUser == null
+                            ? null
+                            : Boolean(emailConfirmedByUser[item.id])
+                        }
+                      />
+                    </td>
+                    <td>
                       <button
                         type="button"
                         className={styles.openBtn}
@@ -619,7 +659,7 @@ export default function AdminUserManagementList({
               })}
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="text-center text-gray-500 py-6">
+                  <td colSpan={10} className="text-center text-gray-500 py-6">
                     No hay usuarios que coincidan con los filtros.
                   </td>
                 </tr>
@@ -635,6 +675,11 @@ export default function AdminUserManagementList({
         plansByUser={plansByUser}
         placement={activeUser ? placementByUser[activeUser.id] : null}
         activity={activeUser ? userActivityByUser[activeUser.id] : null}
+        emailConfirmed={
+          !activeUser || emailConfirmedByUser == null
+            ? null
+            : Boolean(emailConfirmedByUser[activeUser.id])
+        }
         saving={activeUser ? Boolean(savingByUser[activeUser.id]) : false}
         mailing={mailing}
         mailReady={mailReady}

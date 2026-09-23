@@ -21,25 +21,26 @@ async function loadProfile(db, userId) {
     'id, email, nombre, rol_id, creado_en',
   ];
 
-  for (const selectClause of variants) {
-    const { data, error } = await db
-      .from('user_profiles')
-      .select(selectClause)
-      .eq('id', userId)
-      .maybeSingle();
+  let lastError = null;
+  for (const table of ['user_profiles', 'Usuarios_y_Perfil_users']) {
+    for (const selectClause of variants) {
+      const { data, error } = await db
+        .from(table)
+        .select(selectClause)
+        .eq('id', userId)
+        .maybeSingle();
 
-    if (!error && data) return data;
-    if (error && !String(error.message || '').includes('column')) break;
+      if (!error) {
+        if (data) return data;
+        break;
+      }
+      lastError = error;
+      if (!String(error.message || '').includes('column')) break;
+    }
   }
 
-  const { data, error } = await db
-    .from('Usuarios_y_Perfil_users')
-    .select('id, email, nombre, rol_id, creado_en, activo, metadata')
-    .eq('id', userId)
-    .maybeSingle();
-
-  if (error) throw error;
-  return data;
+  if (lastError && String(lastError.message || '').includes('column')) throw lastError;
+  return null;
 }
 
 async function deleteAppUserRows(db, userId) {

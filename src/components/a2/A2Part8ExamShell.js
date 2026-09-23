@@ -13,6 +13,7 @@ export default function A2Part8ExamShell({
   checkedQuestions,
   hideFeedback,
   onOptionSelect,
+  lockChosenAnswer = false,
   aiHintsByKey = {},
 }) {
   return (
@@ -32,6 +33,7 @@ export default function A2Part8ExamShell({
         checkedQuestions={checkedQuestions}
         hideFeedback={hideFeedback}
         onOptionSelect={onOptionSelect}
+        lockChosenAnswer={lockChosenAnswer}
         aiHintsByKey={aiHintsByKey}
       />
     </div>

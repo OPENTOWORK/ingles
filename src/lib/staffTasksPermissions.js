@@ -26,6 +26,10 @@ export function canDeleteStaffTask(userRole = '') {
   return isAdminRole(userRole);
 }
 
+export function canRemindStaffTask(userRole = '') {
+  return isAdminRole(userRole);
+}
+
 export function canCancelStaffTask(userRole = '') {
   return !isAdminRole(userRole);
 }

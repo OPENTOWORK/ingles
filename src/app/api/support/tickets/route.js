@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireSupportAgent } from '@/lib/supportAuth';
+import { attachAssigneeNames } from '@/lib/supportAssignees';
 import { parseTicketMeta } from '@/lib/supportTicketParse';
 
 export async function GET(req) {
@@ -14,7 +15,7 @@ export async function GET(req) {
   let query = auth.db
     .from('contacto_soporte')
     .select(
-      'id, user_id, asunto, descripcion, estado, creado_en, cerrado_en, ultimo_mensaje_en, tipo_problema, prioridad, resuelto, solicitante_email, solicitante_nombre',
+      'id, user_id, asunto, descripcion, estado, creado_en, cerrado_en, ultimo_mensaje_en, tipo_problema, prioridad, resuelto, solicitante_email, solicitante_nombre, asignado_a',
     )
     .order('creado_en', { ascending: false })
     .limit(100);
@@ -30,7 +31,7 @@ export async function GET(req) {
     return NextResponse.json({ error: 'No se pudieron cargar los tickets.' }, { status: 500 });
   }
 
-  const tickets = (data || []).map((row) => {
+  let tickets = (data || []).map((row) => {
     const meta = parseTicketMeta(row);
     return {
       ...row,
@@ -39,6 +40,12 @@ export async function GET(req) {
       mensaje_inicial: meta.body,
     };
   });
+
+  try {
+    tickets = await attachAssigneeNames(auth.db, tickets);
+  } catch (attachError) {
+    console.error('[support/tickets GET assignees]', attachError);
+  }
 
   const pendingCount = tickets.filter(
     (t) => t.estado === 'Sin responder' || t.estado === 'Abierto',

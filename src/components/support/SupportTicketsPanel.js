@@ -42,6 +42,8 @@ export default function SupportTicketsPanel() {
   const [reply, setReply] = useState('');
   const [sending, setSending] = useState(false);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [assignees, setAssignees] = useState([]);
+  const [assigning, setAssigning] = useState(false);
 
   const loadTickets = useCallback(async () => {
     try {
@@ -77,6 +79,12 @@ export default function SupportTicketsPanel() {
   }, [loadTickets]);
 
   useEffect(() => {
+    apiFetch('/api/support/assignees')
+      .then((data) => setAssignees(data.assignees || []))
+      .catch((e) => toast.error(e.message));
+  }, []);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       loadTickets();
       if (selectedId) loadDetail(selectedId);
@@ -109,6 +117,25 @@ export default function SupportTicketsPanel() {
       await loadDetail(selectedId);
     } catch (e) {
       toast.error(e.message);
+    }
+  };
+
+  const assignTicket = async (asignadoA) => {
+    if (!selectedId) return;
+    setAssigning(true);
+    try {
+      await apiFetch(`/api/support/tickets/${selectedId}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ asignado_a: asignadoA || null }),
+      });
+      const person = assignees.find((item) => item.id === asignadoA);
+      toast.success(person ? `Asignado a ${person.nombre || person.email}` : 'Asignación quitada');
+      await loadTickets();
+      await loadDetail(selectedId);
+    } catch (e) {
+      toast.error(e.message);
+    } finally {
+      setAssigning(false);
     }
   };
 
@@ -211,6 +238,13 @@ export default function SupportTicketsPanel() {
                       </span>
                       <span>{formatActiveDuration(t.creado_en, t.cerrado_en)}</span>
                     </span>
+                    <span
+                      className={`support-ticket-row__assignee${
+                        t.asignado_nombre || t.asignado_email ? '' : ' is-empty'
+                      }`}
+                    >
+                      {t.asignado_nombre || t.asignado_email || 'Sin asignar'}
+                    </span>
                   </button>
                 </li>
               ))}
@@ -238,6 +272,28 @@ export default function SupportTicketsPanel() {
                   · Activo: {formatActiveDuration(detail.creado_en, detail.cerrado_en)}
                 </p>
               </div>
+
+              <label className="support-assign">
+                <span>Asignado a</span>
+                <select
+                  value={detail.asignado_a || ''}
+                  disabled={assigning}
+                  onChange={(event) => assignTicket(event.target.value)}
+                >
+                  <option value="">Sin asignar</option>
+                  {assignees.map((person) => (
+                    <option key={person.id} value={person.id}>
+                      {person.nombre || person.email}
+                    </option>
+                  ))}
+                  {detail.asignado_a &&
+                  !assignees.some((person) => person.id === detail.asignado_a) ? (
+                    <option value={detail.asignado_a}>
+                      {detail.asignado_nombre || detail.asignado_email || 'Persona asignada'}
+                    </option>
+                  ) : null}
+                </select>
+              </label>
 
               <div className="support-detail__actions">
                 <button type="button" onClick={() => patchStatus('pendiente')}>
@@ -417,6 +473,39 @@ export default function SupportTicketsPanel() {
           display: flex;
           justify-content: space-between;
           gap: 0.5rem;
+        }
+        .support-ticket-row__assignee {
+          display: inline-block;
+          margin-top: 0.4rem;
+          font-size: 0.75rem;
+          font-weight: 700;
+          color: #1d4ed8;
+        }
+        .support-ticket-row__assignee.is-empty {
+          color: #9ca3af;
+          font-weight: 600;
+        }
+        .support-assign {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          margin-top: 0.85rem;
+          max-width: 22rem;
+        }
+        .support-assign span {
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: #374151;
+        }
+        .support-assign select {
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          padding: 0.45rem 0.6rem;
+          background: #fff;
+          font-size: 0.9rem;
+        }
+        .support-assign select:disabled {
+          opacity: 0.6;
         }
         .support-status {
           font-weight: 600;

@@ -29,8 +29,8 @@ export async function resolveStarredTeamUserIds(db) {
   return ids;
 }
 
-/** @param {Set<string>} starredIds */
+/** @param {Set<string> | null | undefined} starredIds */
 export function isStarredTeamMember(starredIds, userId) {
-  if (!userId) return false;
+  if (!userId || !starredIds) return false;
   return starredIds.has(String(userId));
 }
