@@ -92,7 +92,7 @@ export async function POST(req) {
     type: 'signup',
     email,
     origin: getPublicSiteOrigin(req),
-    next: '/perfil',
+    next: '/exam-practice/b2/exam-reading-and-use-of-english',
   });
 
   if (link.alreadyRegistered) {

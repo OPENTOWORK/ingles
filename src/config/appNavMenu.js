@@ -324,7 +324,7 @@ const STAFF_PANEL_BY_KEY = {
   informatico: { href: '/informatico', label: 'Informático' },
   buzon: STAFF_BUZON_PANEL_ITEM,
   tareas: STAFF_TASKS_PANEL_ITEM,
-  planObjetivos: { href: '/admin/plan-objetivos', label: 'Objetivos' },
+  planObjetivos: { href: '/admin/plan-objetivos', label: 'Formularios' },
   planFinanciero: { href: '/admin/plan-financiero', label: 'Financiero' },
   ejercicios: { href: '/admin/ejercicios', label: 'Ejercicios' },
   blog: { href: '/admin/blog', label: 'Blog' },

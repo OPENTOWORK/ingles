@@ -154,6 +154,17 @@ export default function AdminDashboard() {
   });
   const [userActivityByUser, setUserActivityByUser] = useState({});
   const [emailConfirmedByUser, setEmailConfirmedByUser] = useState(null);
+  const loadUserFormResponses = useCallback(async (userId) => {
+    const res = await fetch(`/api/admin/users/formularios/?userId=${encodeURIComponent(userId)}`, {
+      credentials: 'include',
+      headers: await getAdminFetchHeaders(),
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(payload.error || 'No se pudieron cargar los formularios.');
+    }
+    return payload.respuestas || [];
+  }, []);
   const [sessionChart, setSessionChart] = useState([]);
   const [chartPeriod, setChartPeriod] = useState('meses');
   const [chartStartDate, setChartStartDate] = useState('');
@@ -1591,6 +1602,7 @@ export default function AdminDashboard() {
               placementByUser={placementByUser}
               userActivityByUser={userActivityByUser}
               emailConfirmedByUser={emailConfirmedByUser}
+              loadFormResponses={loadUserFormResponses}
               selectedUserIds={selectedUserIds}
               savingByUser={savingByUser}
               mailing={mailing}

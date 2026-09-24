@@ -538,6 +538,68 @@
   text-decoration: underline;
 }
 
+.formResponses {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.formResponse {
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #eef2f7;
+  border-radius: 0.7rem;
+  background: #f8fafc;
+}
+
+.formResponseTitle {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.formResponseDate {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.formAnswers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.formAnswer dt {
+  margin-bottom: 0.1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+.formAnswer dd {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #1e293b;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.formError {
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #b91c1c;
+}
+
 .stripeNote {
   margin: 0.35rem 0 0;
   font-size: 0.78rem;

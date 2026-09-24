@@ -1,0 +1,34 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: max(1.25rem, env(safe-area-inset-top)) 1rem max(1.25rem, env(safe-area-inset-bottom));
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.panel {
+  width: min(680px, 100%);
+  margin: auto 0;
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  background: #f8fafc;
+  box-shadow: 0 30px 60px rgba(15, 23, 42, 0.3);
+}
+
+@media (max-width: 480px) {
+  .panel {
+    padding: 1rem;
+    border-radius: 1.1rem;
+  }
+}
+
+:global(body.reading-night-mode) .panel {
+  background: #0f172a;
+}

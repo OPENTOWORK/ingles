@@ -67,13 +67,15 @@ function AuthCallbackInner() {
 
         const redirectPath = await getRedirectPathByUserId(user?.id, user?.email);
         const phone = isPhoneViewport();
-        const nextPath = searchParams.get('next');
-        if (!nextPath && phone) markOpenMainMenuAfterLogin();
+        const nextRaw = searchParams.get('next');
+        const nextPath =
+          nextRaw && nextRaw.startsWith('/') && !nextRaw.startsWith('//') ? nextRaw : null;
         const destination = destinationAfterLogin({
-          nextPath: nextPath && nextPath.startsWith('/') && !nextPath.startsWith('//') ? nextPath : null,
+          nextPath,
           rolePath: redirectPath,
           phone,
         });
+        if (destination === '/' && phone) markOpenMainMenuAfterLogin();
 
         if (cancelled) return;
         toast.success('Sesión iniciada correctamente');

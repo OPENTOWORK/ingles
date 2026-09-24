@@ -1,3 +1,5 @@
+import { APP_ROUTES } from '@/config/appRoutes';
+
 const OPEN_MAIN_MENU_KEY = 'dralo_open_main_menu';
 const PHONE_MEDIA = '(max-width: 639px)';
 
@@ -33,13 +35,17 @@ export function clearOpenMainMenuAfterLogin() {
 }
 
 /**
- * Destino tras login. En el móvil, sin `next`, es la home (menú principal).
- * Con `next` se respeta la página pedida.
+ * Destino tras login. Con `next` se respeta la página pedida.
+ * Un estudiante va a Exam Practice (Reading and Use of English) en cualquier
+ * tamaño de pantalla. En el móvil, el resto de roles sigue entrando por la home.
  */
 export function destinationAfterLogin({ nextPath, rolePath, phone }) {
   if (nextPath) return normalizePostAuthPath(nextPath);
+  const resolved = normalizePostAuthPath(rolePath || '/perfil/');
+  const studentEntry = normalizePostAuthPath(APP_ROUTES.examPracticeStudentEntry);
+  if (resolved === studentEntry) return studentEntry;
   if (phone) return '/';
-  return normalizePostAuthPath(rolePath || '/perfil/');
+  return resolved;
 }
 
 /**

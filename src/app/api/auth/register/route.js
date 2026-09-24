@@ -24,7 +24,7 @@ const MAX_BUCKETS = 5000;
 /** Espera máxima por el correo de confirmación: nunca debe tumbar el registro. */
 const SIGNUP_EMAIL_TIMEOUT_MS = 15000;
 /** Dónde aterriza quien pulsa el enlace de confirmación. */
-const CONFIRMATION_NEXT_PATH = '/perfil';
+const CONFIRMATION_NEXT_PATH = '/exam-practice/b2/exam-reading-and-use-of-english';
 
 /** El envío se hace dentro de la petición: en serverless nada sobrevive a la respuesta. */
 function withTimeout(promise, ms) {

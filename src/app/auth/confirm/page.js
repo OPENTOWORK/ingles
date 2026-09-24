@@ -4,7 +4,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
-import { normalizePostAuthPath } from '@/utils/postAuthNavigation';
+import { getRedirectPathByUserId } from '@/utils/authRoles';
+import {
+  destinationAfterLogin,
+  isPhoneViewport,
+  normalizePostAuthPath,
+} from '@/utils/postAuthNavigation';
 import SiteMascot from '@/components/SiteMascot';
 
 /**
@@ -20,8 +25,8 @@ const VALID_TYPES = ['signup', 'magiclink', 'recovery', 'invite', 'email', 'emai
 
 const DEFAULT_NEXT_BY_TYPE = {
   recovery: '/update-password',
-  signup: '/perfil',
-  magiclink: '/perfil',
+  signup: '/exam-practice/b2/exam-reading-and-use-of-english',
+  magiclink: '/exam-practice/b2/exam-reading-and-use-of-english',
   invite: '/perfil',
   email: '/perfil',
   email_change: '/perfil',
@@ -120,7 +125,19 @@ function AuthConfirmInner() {
         await ensureAppUserProfile().catch(() => {});
       }
 
-      router.replace(next);
+      let destination = next;
+      if (linkType !== 'recovery' && normalizePostAuthPath(next) === '/perfil/') {
+        const { data } = await supabase.auth.getSession();
+        const user = data?.session?.user;
+        if (user) {
+          destination = destinationAfterLogin({
+            rolePath: await getRedirectPathByUserId(user.id, user.email),
+            phone: isPhoneViewport(),
+          });
+        }
+      }
+
+      router.replace(destination);
     };
 
     run().catch((err) => {

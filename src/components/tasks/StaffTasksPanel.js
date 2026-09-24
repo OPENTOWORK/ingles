@@ -77,6 +77,88 @@ function getActiveMetricKey(filters = {}) {
   return filters.estado;
 }
 
+function RemindTaskDialog({ notice, onClose, onConfirm }) {
+  if (!notice) return null;
+
+  const sending = notice.status === 'sending';
+  const sent = notice.status === 'sent';
+  const failed = notice.status === 'error';
+  const title = sent
+    ? 'Recordatorio enviado'
+    : failed
+      ? 'No se ha podido enviar'
+      : 'Enviar recordatorio';
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/45"
+      onClick={() => {
+        if (!sending) onClose();
+      }}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-xl w-full max-w-md border border-slate-200"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="remind-task-title"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="px-6 pt-6 pb-2">
+          <p className="text-xs font-semibold uppercase tracking-wide text-violet-700">Tareas</p>
+          <h2 id="remind-task-title" className="mt-1 text-lg font-semibold text-slate-900">
+            {title}
+          </h2>
+        </div>
+        <div className="px-6 py-3 text-sm leading-relaxed text-slate-600">
+          {sent ? (
+            <p>
+              El aviso ya está en camino para <strong className="text-slate-900">{notice.assigneeName}</strong>.
+            </p>
+          ) : failed ? (
+            <p>{notice.message}</p>
+          ) : (
+            <p>
+              Se enviará un correo a <strong className="text-slate-900">{notice.assigneeName}</strong> para
+              recordar la tarea{' '}
+              <strong className="text-slate-900">«{notice.task.titulo}»</strong>.
+            </p>
+          )}
+        </div>
+        <div className="px-6 pb-6 pt-2 flex justify-end gap-2">
+          {sent || failed ? (
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 rounded-lg bg-violet-600 text-white text-sm font-medium hover:bg-violet-700"
+            >
+              Entendido
+            </button>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={onClose}
+                disabled={sending}
+                className="px-4 py-2 rounded-lg border border-slate-200 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={onConfirm}
+                disabled={sending}
+                className="px-4 py-2 rounded-lg bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 disabled:opacity-60"
+              >
+                {sending ? 'Enviando…' : 'Enviar recordatorio'}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MetricCard({ label, value, hint, accent = 'violet', active = false, onClick }) {
   const accents = {
     violet: {
@@ -247,6 +329,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [remindingId, setRemindingId] = useState(null);
+  const [remindNotice, setRemindNotice] = useState(null);
   const [error, setError] = useState('');
 
   const [filters, setFilters] = useState({
@@ -550,29 +633,38 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     }
   };
 
-  const remindTask = async (task) => {
+  const remindTask = (task) => {
     if (!taskCanBeReminded(task)) return;
     const assigneeName = task.asignado?.nombre || task.asignado?.email;
     if (!assigneeName) {
-      alert('Esta tarea no tiene persona asignada.');
-      return;
-    }
-    if (
-      !window.confirm(
-        `¿Enviar un recordatorio a ${assigneeName} sobre la tarea «${task.titulo}»?`,
-      )
-    ) {
-      return;
-    }
-    setRemindingId(task.id);
-    try {
-      const data = await staffTasksFetch('/api/coordinator/tasks', {
-        method: 'POST',
-        body: JSON.stringify({ action: 'remind', id: task.id }),
+      setRemindNotice({
+        task,
+        assigneeName: '',
+        status: 'error',
+        message: 'Esta tarea no tiene a nadie asignado, así que no se puede avisar.',
       });
-      alert(data.message || `Recordatorio enviado a ${assigneeName}.`);
+      return;
+    }
+    setRemindNotice({ task, assigneeName, status: 'confirm', message: '' });
+  };
+
+  const confirmRemindTask = async () => {
+    const notice = remindNotice;
+    if (!notice?.task || notice.status === 'sending') return;
+    setRemindNotice({ ...notice, status: 'sending' });
+    setRemindingId(notice.task.id);
+    try {
+      await staffTasksFetch('/api/coordinator/tasks', {
+        method: 'POST',
+        body: JSON.stringify({ action: 'remind', id: notice.task.id }),
+      });
+      setRemindNotice({ ...notice, status: 'sent', message: '' });
     } catch (e) {
-      alert(e.message);
+      setRemindNotice({
+        ...notice,
+        status: 'error',
+        message: e.message || 'No se ha podido enviar el recordatorio. Inténtalo de nuevo en unos minutos.',
+      });
     } finally {
       setRemindingId(null);
     }
@@ -1630,6 +1722,15 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           />
         </>
       ) : null}
+
+      <RemindTaskDialog
+        notice={remindNotice}
+        onClose={() => {
+          if (remindNotice?.status === 'sending') return;
+          setRemindNotice(null);
+        }}
+        onConfirm={() => void confirmRemindTask()}
+      />
     </div>
   );
 }

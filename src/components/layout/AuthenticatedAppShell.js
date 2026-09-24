@@ -16,9 +16,9 @@ import { shouldShowAdminShell } from '@/config/appNavMenu';
 import StudySessionBarGate from '@/components/study/StudySessionBarGate';
 import ProfileStudyTimerPill from '@/components/study/ProfileStudyTimerPill';
 
-function SiteHeaderBrand({ nav = null }) {
+function SiteHeaderBrand({ nav = null, homeSideMenu = false }) {
   return (
-    <header className="site-header">
+    <header className={`site-header${homeSideMenu ? ' site-header--home-side' : ''}`}>
       <div className="site-header__bar">
         <a href="/" className="site-header__logo">
           <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
@@ -49,6 +49,7 @@ export default function AuthenticatedAppShell({
       {preview.isActive ? <ItPreviewRoleBanner option={preview.option} /> : null}
 
       <SiteHeaderBrand
+        homeSideMenu={pathname === '/'}
         nav={<AppNav session={preview.session} userRole={preview.userRole} onLogout={onLogout} />}
       />
       <ProfileStudyTimerPill />

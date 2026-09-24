@@ -1833,6 +1833,9 @@ body.nav-open {
 }
 
 @media (max-width: 1099px) {
+  /* La clase va en el HTML de la home, así el botón antiguo no aparece
+     antes de que el menú lateral se monte. */
+  .site-header--home-side .app-nav__toggle,
   body.has-home-side-menu .app-nav__toggle {
     display: none !important;
   }
@@ -11107,6 +11110,9 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   top: auto;
   left: auto;
   z-index: 10000;
+  max-height: min(70dvh, 320px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .levels-exam-inline-mcq-gap__menu--above {
@@ -11367,6 +11373,14 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   border: 1px solid #e2e8f0;
   background: #ffffff;
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+}
+
+.levels-exam-inline-mcq-gap__menu.levels-exam-inline-mcq-gap__menu--fixed {
+  position: fixed;
+  z-index: 10000;
+  max-height: min(70dvh, 320px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .levels-exam-inline-mcq-gap__option {

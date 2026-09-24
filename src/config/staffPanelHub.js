@@ -51,7 +51,7 @@ export const STAFF_PANEL_HUB_META = {
   '/admin/plan-objetivos': {
     icon: 'objectives',
     accent: 'rose',
-    description: 'Plan de estudio y objetivos',
+    description: 'Formularios de la encuesta de objetivos',
   },
   '/admin/plan-financiero': {
     icon: 'finance',

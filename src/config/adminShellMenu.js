@@ -41,7 +41,7 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
     items: [
       { href: '/admin/profesor', label: 'Profesor' },
       COORDINATOR_ADMIN_PANEL_ITEM,
-      { href: '/admin/plan-objetivos', label: 'Objetivos' },
+      { href: '/admin/plan-objetivos', label: 'Formularios' },
       { href: '/admin/ejercicios', label: 'Ejercicios' },
     ],
   },

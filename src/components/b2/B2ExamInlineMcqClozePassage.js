@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
@@ -33,29 +34,58 @@ export default function B2ExamInlineMcqClozePassage({
 }) {
   const [openQuestionNumber, setOpenQuestionNumber] = useState(null);
   const [openMenuStyle, setOpenMenuStyle] = useState(null);
+  const openTriggerRef = useRef(null);
+  const openOptionCountRef = useRef(4);
   const session = useReadingPracticeSession();
 
   const estimateMenuHeight = useCallback((optionCount = 4) => Math.max(168, optionCount * 44 + 24), []);
 
-  const openGapMenu = useCallback(
-    (questionNumber, triggerEl, optionCount) => {
+  const positionGapMenu = useCallback(
+    (triggerEl, optionCount) => {
       if (!triggerEl) return;
       const rect = triggerEl.getBoundingClientRect();
+      const viewport = window.visualViewport;
+      const viewTop = viewport?.offsetTop ?? 0;
+      const viewLeft = viewport?.offsetLeft ?? 0;
+      const viewHeight = viewport?.height ?? window.innerHeight;
+      const viewWidth = viewport?.width ?? window.innerWidth;
+      const margin = 8;
       const menuHeight = estimateMenuHeight(optionCount);
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const opensAbove = spaceBelow < menuHeight + 10;
-      const left = Math.min(Math.max(8, rect.left), window.innerWidth - 236);
+      const maxHeight = Math.max(160, Math.min(menuHeight, viewHeight - margin * 2));
+      const spaceBelow = viewTop + viewHeight - rect.bottom;
+      const spaceAbove = rect.top - viewTop;
+      const opensAbove = spaceBelow < Math.min(menuHeight, maxHeight) + margin && spaceAbove > spaceBelow;
+      const top = opensAbove
+        ? Math.max(viewTop + margin, rect.top - maxHeight - 6)
+        : Math.min(rect.bottom + 6, viewTop + viewHeight - maxHeight - margin);
+      const width = Math.min(320, viewWidth - margin * 2);
+      const left = Math.min(
+        Math.max(viewLeft + margin, rect.left),
+        viewLeft + viewWidth - width - margin,
+      );
       setOpenMenuStyle({
         position: 'fixed',
         left,
-        top: opensAbove ? Math.max(8, rect.top - menuHeight - 6) : rect.bottom + 6,
-        minWidth: Math.max(rect.width, 220),
-        maxWidth: Math.min(320, window.innerWidth - 16),
+        top: Math.max(viewTop + margin, top),
+        minWidth: Math.min(Math.max(rect.width, 220), width),
+        maxWidth: width,
+        maxHeight,
+        overflowY: 'auto',
         zIndex: 10000,
       });
-      setOpenQuestionNumber(questionNumber);
     },
     [estimateMenuHeight],
+  );
+
+  const openGapMenu = useCallback(
+    (questionNumber, triggerEl, optionCount) => {
+      if (!triggerEl) return;
+      openTriggerRef.current = triggerEl;
+      openOptionCountRef.current = optionCount;
+      positionGapMenu(triggerEl, optionCount);
+      setOpenQuestionNumber(questionNumber);
+    },
+    [positionGapMenu],
   );
 
   const groupByNumber = useMemo(() => {
@@ -83,7 +113,9 @@ export default function B2ExamInlineMcqClozePassage({
     };
 
     const onPointerDown = (event) => {
-      if (event.target?.closest?.('.levels-exam-inline-mcq-gap')) return;
+      if (event.target?.closest?.('.levels-exam-inline-mcq-gap, .levels-exam-inline-mcq-gap__menu')) {
+        return;
+      }
       closeMenu();
     };
 
@@ -91,13 +123,25 @@ export default function B2ExamInlineMcqClozePassage({
       if (event.key === 'Escape') closeMenu();
     };
 
+    const reposition = () => {
+      if (openTriggerRef.current) {
+        positionGapMenu(openTriggerRef.current, openOptionCountRef.current);
+      }
+    };
+
     document.addEventListener('mousedown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('scroll', reposition, true);
+    window.visualViewport?.addEventListener('resize', reposition);
+    window.visualViewport?.addEventListener('scroll', reposition);
     return () => {
       document.removeEventListener('mousedown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('scroll', reposition, true);
+      window.visualViewport?.removeEventListener('resize', reposition);
+      window.visualViewport?.removeEventListener('scroll', reposition);
     };
-  }, [openQuestionNumber]);
+  }, [openQuestionNumber, positionGapMenu]);
 
   const lines = text
     .split('\n')
@@ -260,44 +304,47 @@ export default function B2ExamInlineMcqClozePassage({
                     </span>
                   </button>
 
-                  {isOpen ? (
-                    <span
-                      className="levels-exam-inline-mcq-gap__menu levels-exam-inline-mcq-gap__menu--fixed"
-                      style={openMenuStyle || undefined}
-                      role="listbox"
-                      aria-label={`Options for question ${questionNumber}`}
-                    >
-                      {group.options.map((option) => {
-                        const isSelected = selectedId === option.id;
-                        const isEliminated = session.isOptionEliminated(questionKey, option.id);
-                        return (
-                          <button
-                            key={option.id}
-                            type="button"
-                            role="option"
-                            aria-selected={isSelected}
-                            className={`levels-exam-inline-mcq-gap__option question-option${isSelected ? ' levels-exam-inline-mcq-gap__option--selected' : ''}${isEliminated ? ' eliminated' : ''}`}
-                            onClick={() => {
-                              if (session.answerEliminatorEnabled) {
-                                session.toggleEliminatedAnswer(questionKey, option.id);
-                                return;
-                              }
-                              setOpenQuestionNumber(null);
-                              setOpenMenuStyle(null);
-                              onOptionSelect?.({
-                                group,
-                                groupIndex,
-                                option,
-                                questionKey,
-                              });
-                            }}
-                          >
-                            {option.formattedText || option.respuesta}
-                          </button>
-                        );
-                      })}
-                    </span>
-                  ) : null}
+                  {isOpen && typeof document !== 'undefined'
+                    ? createPortal(
+                        <span
+                          className="levels-exam-inline-mcq-gap__menu levels-exam-inline-mcq-gap__menu--fixed"
+                          style={openMenuStyle || undefined}
+                          role="listbox"
+                          aria-label={`Options for question ${questionNumber}`}
+                        >
+                          {group.options.map((option) => {
+                            const isSelected = selectedId === option.id;
+                            const isEliminated = session.isOptionEliminated(questionKey, option.id);
+                            return (
+                              <button
+                                key={option.id}
+                                type="button"
+                                role="option"
+                                aria-selected={isSelected}
+                                className={`levels-exam-inline-mcq-gap__option question-option${isSelected ? ' levels-exam-inline-mcq-gap__option--selected' : ''}${isEliminated ? ' eliminated' : ''}`}
+                                onClick={() => {
+                                  if (session.answerEliminatorEnabled) {
+                                    session.toggleEliminatedAnswer(questionKey, option.id);
+                                    return;
+                                  }
+                                  setOpenQuestionNumber(null);
+                                  setOpenMenuStyle(null);
+                                  onOptionSelect?.({
+                                    group,
+                                    groupIndex,
+                                    option,
+                                    questionKey,
+                                  });
+                                }}
+                              >
+                                {option.formattedText || option.respuesta}
+                              </button>
+                            );
+                          })}
+                        </span>,
+                        document.body,
+                      )
+                    : null}
 
                 </span>
               );

@@ -28,6 +28,9 @@ const Toaster = dynamic(
   () => import('react-hot-toast').then((mod) => ({ default: mod.Toaster })),
   { ssr: false },
 );
+const WelcomeFormGate = dynamic(() => import('@/components/formularios/WelcomeFormGate'), {
+  ssr: false,
+});
 import AuthenticatedAppShell from '@/components/layout/AuthenticatedAppShell';
 import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
 import { useLevelsStarsBackfill } from '@/hooks/useLevelsStarsBackfill';
@@ -457,6 +460,14 @@ function RootLayoutClientInner({ children }) {
       )}
 
       <DeferredSiteAssistant enabled={Boolean(session) && !isMinimalLanding} />
+
+      {session && !isMinimalLanding ? (
+        <WelcomeFormGate
+          session={session}
+          userRole={userRole}
+          roleConfirmedForUserId={roleConfirmedForUserId}
+        />
+      ) : null}
 
       {cookieConsentHydrated && !cookieConsent && (
         <div

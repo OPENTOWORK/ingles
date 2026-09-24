@@ -98,6 +98,69 @@ function SortableHeader({ column, label, sortColumn, sortDirection, onSort }) {
   );
 }
 
+function UserFormResponses({ userId, loadFormResponses, formatRegistrationDate }) {
+  const [state, setState] = useState({ loading: true, items: [], error: '' });
+
+  useEffect(() => {
+    let cancelled = false;
+    setState({ loading: true, items: [], error: '' });
+    loadFormResponses(userId)
+      .then((items) => {
+        if (!cancelled) setState({ loading: false, items, error: '' });
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setState({
+            loading: false,
+            items: [],
+            error: err.message || 'No se pudieron cargar los formularios.',
+          });
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [userId, loadFormResponses]);
+
+  return (
+    <section className={styles.section}>
+      <h3 className={styles.sectionTitle}>Formularios</h3>
+      {state.loading ? (
+        <p className={styles.stripeNote}>Cargando…</p>
+      ) : state.error ? (
+        <p className={styles.formError}>{state.error}</p>
+      ) : state.items.length === 0 ? (
+        <p className={styles.stripeNote}>Todavía no ha respondido ningún formulario.</p>
+      ) : (
+        <div className={styles.formResponses}>
+          {state.items.map((item) => (
+            <div key={item.id} className={styles.formResponse}>
+              <p className={styles.formResponseTitle}>
+                <span>{item.formulario_titulo}</span>
+                <span className={styles.formResponseDate}>
+                  {formatRegistrationDate(item.completado_en)}
+                </span>
+              </p>
+              {item.respuestas?.length ? (
+                <dl className={styles.formAnswers}>
+                  {item.respuestas.map((answer) => (
+                    <div key={answer.pregunta_id} className={styles.formAnswer}>
+                      <dt>{answer.pregunta}</dt>
+                      <dd>{answer.texto || '—'}</dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : (
+                <p className={styles.stripeNote}>Visto, sin preguntas que responder.</p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
+
 function UserDrawer({
   user,
   roles,
@@ -105,6 +168,7 @@ function UserDrawer({
   placement,
   activity,
   emailConfirmed,
+  loadFormResponses,
   saving,
   mailing,
   mailReady,
@@ -274,6 +338,14 @@ function UserDrawer({
             </div>
           </section>
 
+          {loadFormResponses ? (
+            <UserFormResponses
+              userId={user.id}
+              loadFormResponses={loadFormResponses}
+              formatRegistrationDate={formatRegistrationDate}
+            />
+          ) : null}
+
           <section className={styles.section}>
             <h3 className={styles.sectionTitle}>Acciones</h3>
             <div className={styles.drawerActions}>
@@ -319,6 +391,7 @@ export default function AdminUserManagementList({
   placementByUser,
   userActivityByUser,
   emailConfirmedByUser = null,
+  loadFormResponses = null,
   selectedUserIds,
   savingByUser,
   mailing,
@@ -497,13 +570,6 @@ export default function AdminUserManagementList({
                       />
                       {activity?.online ? 'Conectado' : 'Desconectado'}
                     </span>
-                    <EmailConfirmedMark
-                      confirmed={
-                        emailConfirmedByUser == null
-                          ? null
-                          : Boolean(emailConfirmedByUser[item.id])
-                      }
-                    />
                   </div>
 
                   <dl className={styles.cardMeta}>
@@ -526,6 +592,16 @@ export default function AdminUserManagementList({
                     <div className={styles.metaItem}>
                       <dt>Comercial</dt>
                       <dd>{item.marketingAccepted ? 'Sí' : 'No'}</dd>
+                    </div>
+                    <div className={styles.metaItem}>
+                      <dt>Correo confirmado</dt>
+                      <dd>
+                        {emailConfirmedByUser == null ? (
+                          '—'
+                        ) : (
+                          <EmailConfirmedMark confirmed={Boolean(emailConfirmedByUser[item.id])} />
+                        )}
+                      </dd>
                     </div>
                   </dl>
 
@@ -680,6 +756,7 @@ export default function AdminUserManagementList({
             ? null
             : Boolean(emailConfirmedByUser[activeUser.id])
         }
+        loadFormResponses={loadFormResponses}
         saving={activeUser ? Boolean(savingByUser[activeUser.id]) : false}
         mailing={mailing}
         mailReady={mailReady}

@@ -27,22 +27,20 @@ function getSafeNextPath(searchParams) {
 async function resolvePostLoginPath(user, searchParams) {
   const nextPath = getSafeNextPath(searchParams);
   const phone = isPhoneViewport();
-  if (!nextPath && phone) markOpenMainMenuAfterLogin();
 
-  if (nextPath) return destinationAfterLogin({ nextPath, phone });
-
-  const cachedRole = peekCachedRoleName(user.id);
-  if (cachedRole) {
-    return destinationAfterLogin({
-      rolePath: getRedirectPathByRoleName(cachedRole),
-      phone,
-    });
+  let path;
+  if (nextPath) {
+    path = destinationAfterLogin({ nextPath, phone });
+  } else {
+    const cachedRole = peekCachedRoleName(user.id);
+    const rolePath = cachedRole
+      ? getRedirectPathByRoleName(cachedRole)
+      : await getRedirectPathByUserId(user.id, user.email);
+    path = destinationAfterLogin({ rolePath, phone });
   }
 
-  return destinationAfterLogin({
-    rolePath: await getRedirectPathByUserId(user.id, user.email),
-    phone,
-  });
+  if (path === '/' && phone) markOpenMainMenuAfterLogin();
+  return path;
 }
 
 /** Mensajes de /auth/confirm cuando un enlace de correo no se puede canjear. */

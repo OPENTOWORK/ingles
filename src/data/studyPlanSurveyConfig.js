@@ -1,61 +1,61 @@
 /** Study plan survey config (student flow after placement test). */
 
 export const STUDY_PLAN_GOALS = [
-  { id: 'travel', name: 'Travel and communicate' },
-  { id: 'work', name: 'Professional English' },
-  { id: 'study', name: 'Academic studies' },
-  { id: 'exam', name: 'Pass a Cambridge exam' },
-  { id: 'conversation', name: 'Fluent conversation' },
-  { id: 'hobby', name: 'Personal learning' },
+  { id: 'travel', name: 'Viajar y comunicarme' },
+  { id: 'work', name: 'Inglés profesional' },
+  { id: 'study', name: 'Estudios académicos' },
+  { id: 'exam', name: 'Aprobar un examen de Cambridge' },
+  { id: 'conversation', name: 'Conversación fluida' },
+  { id: 'hobby', name: 'Aprendizaje personal' },
 ];
 
 export const STUDY_PLAN_SKILLS = [
-  { id: 'listening', name: 'Listening' },
-  { id: 'reading', name: 'Reading' },
-  { id: 'writing', name: 'Writing' },
-  { id: 'speaking', name: 'Speaking' },
-  { id: 'use_of_english', name: 'Use of English / Grammar' },
-  { id: 'vocabulary', name: 'Vocabulary' },
+  { id: 'listening', name: 'Comprensión oral' },
+  { id: 'reading', name: 'Comprensión lectora' },
+  { id: 'writing', name: 'Expresión escrita' },
+  { id: 'speaking', name: 'Expresión oral' },
+  { id: 'use_of_english', name: 'Gramática (Use of English)' },
+  { id: 'vocabulary', name: 'Vocabulario' },
 ];
 
 export const STUDY_PLAN_HOUR_OPTIONS = [
-  { value: 3, label: '3 h', hint: 'Light pace' },
-  { value: 5, label: '5 h', hint: 'Recommended minimum' },
-  { value: 7, label: '7 h', hint: '1 h per day' },
-  { value: 10, label: '10 h', hint: 'Intensive' },
-  { value: 15, label: '15 h', hint: 'Very intensive' },
-  { value: 20, label: '20+ h', hint: 'Full preparation' },
+  { value: 3, label: '3 h', hint: 'Ritmo suave' },
+  { value: 5, label: '5 h', hint: 'Mínimo recomendado' },
+  { value: 7, label: '7 h', hint: '1 h al día' },
+  { value: 10, label: '10 h', hint: 'Intensivo' },
+  { value: 15, label: '15 h', hint: 'Muy intensivo' },
+  { value: 20, label: '20+ h', hint: 'Preparación completa' },
 ];
 
 export const STUDY_PLAN_SURVEY_STEPS = [
   {
     id: 'goals',
-    title: 'What do you want to achieve?',
-    desc: 'Choose one or more goals for your English.',
+    title: '¿Qué quieres conseguir?',
+    desc: 'Elige uno o más objetivos para tu inglés.',
   },
   {
     id: 'hours',
-    title: 'Real study time',
-    desc: 'How many hours can you realistically dedicate each week?',
+    title: 'Tiempo real de estudio',
+    desc: '¿Cuántas horas puedes dedicar de verdad cada semana?',
   },
   {
     id: 'exam',
-    title: 'Exam date',
-    desc: 'When would you like to take the exam? (approximate)',
+    title: 'Fecha del examen',
+    desc: '¿Cuándo te gustaría presentarte al examen? (aproximada)',
   },
   {
     id: 'strengths',
-    title: 'Your strengths',
-    desc: 'Which skills do you feel most comfortable with?',
+    title: 'Tus puntos fuertes',
+    desc: '¿Con qué habilidades te sientes más cómodo?',
   },
   {
     id: 'weaknesses',
-    title: 'Areas to improve',
-    desc: 'Which skills do you want to prioritise in your plan?',
+    title: 'Áreas a mejorar',
+    desc: '¿Qué habilidades quieres priorizar en tu plan?',
   },
   {
     id: 'notes',
-    title: 'Anything else',
-    desc: 'Schedules, constraints or comments (optional).',
+    title: 'Algo más',
+    desc: 'Horarios, limitaciones o comentarios (opcional).',
   },
 ];

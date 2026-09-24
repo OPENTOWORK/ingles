@@ -116,12 +116,12 @@ export default function StudyPlanSurvey({
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(json.error || 'Could not save the survey.');
+        setError(json.error || 'No se ha podido guardar la encuesta.');
         return;
       }
       onComplete?.(json.plan);
     } catch {
-      setError('Connection error. Please try again.');
+      setError('Error de conexión. Inténtalo de nuevo.');
     } finally {
       setSaving(false);
     }
@@ -131,9 +131,9 @@ export default function StudyPlanSurvey({
     <div className={styles.wrap}>
       {!compact && (
         <p className="text-sm text-indigo-700 font-medium mb-3">
-          Placement level: <strong>{placementLevel || '—'}</strong>
+          Nivel del placement: <strong>{placementLevel || '—'}</strong>
           {previewMode && (
-            <span className="text-amber-700"> (preview example)</span>
+            <span className="text-amber-700"> (ejemplo de vista previa)</span>
           )}
         </p>
       )}
@@ -187,7 +187,7 @@ export default function StudyPlanSurvey({
             value={examGoalDate}
             min={new Date().toISOString().slice(0, 10)}
             onChange={(e) => setExamGoalDate(e.target.value)}
-            aria-label="Target exam date"
+            aria-label="Fecha objetivo del examen"
           />
         )}
 
@@ -230,7 +230,7 @@ export default function StudyPlanSurvey({
         {current.id === 'notes' && (
           <textarea
             className={styles.textarea}
-            placeholder="E.g. I can only study in the evenings, I have B2 First in June…"
+            placeholder="Por ejemplo: solo puedo estudiar por las tardes, tengo el B2 First en junio…"
             value={otherNotes}
             onChange={(e) => setOtherNotes(e.target.value)}
           />
@@ -240,17 +240,17 @@ export default function StudyPlanSurvey({
 
         <div className={styles.actions}>
           <span className={styles.stepHint}>
-            Step {step + 1} of {STUDY_PLAN_SURVEY_STEPS.length}
+            Paso {step + 1} de {STUDY_PLAN_SURVEY_STEPS.length}
           </span>
           <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
             {step > 0 && (
               <button type="button" className={styles.btnSecondary} onClick={() => setStep(step - 1)}>
-                Back
+                Atrás
               </button>
             )}
             {onSkip && step === 0 && !previewMode && (
               <button type="button" className={styles.btnSecondary} onClick={onSkip}>
-                Later
+                Más tarde
               </button>
             )}
             <button
@@ -261,13 +261,13 @@ export default function StudyPlanSurvey({
             >
               {previewMode
                 ? step === STUDY_PLAN_SURVEY_STEPS.length - 1
-                  ? 'View preview summary'
-                  : 'Next'
+                  ? 'Ver resumen'
+                  : 'Siguiente'
                 : saving
-                  ? 'Saving…'
+                  ? 'Guardando…'
                   : step === STUDY_PLAN_SURVEY_STEPS.length - 1
-                    ? 'Save survey'
-                    : 'Next'}
+                    ? 'Guardar encuesta'
+                    : 'Siguiente'}
             </button>
           </div>
         </div>

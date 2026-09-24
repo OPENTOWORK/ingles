@@ -5,6 +5,8 @@ export const APP_ROUTES = {
   examStrategies: '/exam-strategies',
   examPractice: '/exam-practice',
   examPracticeDefaultLevel: '/exam-practice/b2',
+  /** Destino tras el login de un estudiante, en móvil, tablet y ordenador. */
+  examPracticeStudentEntry: '/exam-practice/b2/exam-reading-and-use-of-english',
   draloAi: '/dralo-ai',
   contact: '/contact',
   profile: '/profile',
