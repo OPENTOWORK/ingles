@@ -35,7 +35,6 @@ export function buildReviewExercise(review, cefrLevel = 'b2', skill = 'use-of-en
         ...item,
         type: 'gap_fill',
         exerciseId: `b2-review-${String(review.n).padStart(2, '0')}`,
-        instruction: `Review what you have already practised in ${review.sectionTitle}.`,
         itemId: `${review.key}-${item.itemId}`,
       });
     });
@@ -43,7 +42,7 @@ export function buildReviewExercise(review, cefrLevel = 'b2', skill = 'use-of-en
   if (!items.length) return null;
   return {
     exerciseId: items[0].exerciseId,
-    instruction: items[0].instruction,
+    instruction: `Review what you have already practised in ${review.sectionTitle}.`,
     items,
   };
 }

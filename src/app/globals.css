@@ -2595,6 +2595,13 @@ body.nav-open {
     display: none;
   }
 
+  /* Welcome comercial de invitado: no debe verse ni un frame antes del menú de app. */
+  .home-page .founding-slots-banner--home,
+  .home-page .home-hero__cta,
+  .home-page .home-page__features {
+    display: none !important;
+  }
+
   /* La Home de app ocupa la pantalla y no se desplaza. El recorte va en la página, no en html/body, para no cortar el menú fijo. */
   html:has(.home-page--student-mobile),
   body:has(.home-page--student-mobile) {

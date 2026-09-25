@@ -168,9 +168,9 @@
 }
 
 .gapOk {
-  color: #9455e3;
-  background: #d4ccf0;
-  border-bottom-color: #9455e3;
+  color: #15803d;
+  background: #dcfce7;
+  border-bottom-color: #16a34a;
 }
 
 .gapWrong {
@@ -221,13 +221,31 @@
 }
 
 .feedbackOk {
-  border-color: #cb55be;
-  background: #d4ccf0;
+  border-color: #86efac;
+  background: #dcfce7;
+}
+
+.feedbackOk .feedbackTitle {
+  color: #15803d;
+}
+
+.feedbackOk .primaryBtn {
+  background: linear-gradient(180deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
 }
 
 .feedbackWrong {
   border-color: #fca5a5;
-  background: #fef2f2;
+  background: #fee2e2;
+}
+
+.feedbackWrong .feedbackTitle {
+  color: #b91c1c;
+}
+
+.feedbackWrong .primaryBtn {
+  background: linear-gradient(180deg, #f87171 0%, #dc2626 100%);
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
 }
 
 .feedbackRetry {
@@ -252,6 +270,21 @@
   margin: 0 0 0.5rem;
   font-size: 0.95rem;
   color: #0f172a;
+}
+
+.solutionList {
+  margin: 0.35rem 0 0;
+  padding-left: 1.1rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.transcript {
+  margin: 0 0 0.5rem;
+  color: #334155;
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.45;
 }
 
 .actions {
@@ -434,9 +467,9 @@
 }
 
 .optionOk {
-  border-color: #9455e3;
-  background: #d4ccf0;
-  color: #9455e3;
+  border-color: #16a34a;
+  background: #dcfce7;
+  color: #15803d;
 }
 
 .optionBad {
@@ -597,6 +630,11 @@
     overflow: hidden;
   }
 
+  /* Dralo's bubble holds the instruction, so long questions scroll rather than squash him. */
+  .body:not(:has(.feedbackOk)):not(:has(.feedbackWrong)) .mascotSlot {
+    min-height: 6rem;
+  }
+
   .body > .primaryBtn,
   .body > .feedback {
     margin-top: 0;
@@ -635,5 +673,21 @@
   .body:has(.feedbackOk) .actions,
   .body:has(.feedbackWrong) .actions {
     margin-top: 0.75rem;
+  }
+
+  /* A long key (steps, pairs, groups) scrolls inside the box instead of being cut off. */
+  .body:has(.feedbackOk) .feedback,
+  .body:has(.feedbackWrong) .feedback {
+    flex-shrink: 0.0001;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .body:has(.feedbackOk) .solutionList,
+  .body:has(.feedbackWrong) .solutionList,
+  .body:has(.feedbackOk) .transcript,
+  .body:has(.feedbackWrong) .transcript {
+    font-size: 0.85rem;
+    line-height: 1.3;
   }
 }

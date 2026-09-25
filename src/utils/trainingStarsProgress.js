@@ -3,6 +3,16 @@ import { getTrainingPathLevelCount } from '@/data/trainingPathCurriculum';
 
 export const TRAINING_CEFR_LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
 
+export const TRAINING_CEFR_OPTIONS = TRAINING_CEFR_LEVELS.map((id) => ({
+  id,
+  label: id.toUpperCase(),
+}));
+
+export function normalizeTrainingCefr(value) {
+  const id = String(value || '').toLowerCase();
+  return TRAINING_CEFR_LEVELS.includes(id) ? id : 'b2';
+}
+
 export const TRAINING_SKILL_IDS = [
   'use-of-english',
   'writing',
@@ -15,6 +25,36 @@ export const TRAINING_SKILL_IDS = [
 ];
 
 export const TRAINING_DIFFICULTY_IDS = ['basico', 'intermedio', 'avanzado'];
+
+export const TRAINING_DIFFICULTY_OPTIONS = [
+  { id: 'basico', label: 'Basic' },
+  { id: 'intermedio', label: 'Intermediate' },
+  { id: 'avanzado', label: 'Hard' },
+];
+
+export function normalizeTrainingDifficulty(value) {
+  return TRAINING_DIFFICULTY_IDS.includes(value) ? value : 'basico';
+}
+
+/** B2 Basic no lleva query, para no cambiar los enlaces actuales. */
+function trainingSearch(difficulty = 'basico', cefr = 'b2') {
+  const params = new URLSearchParams();
+  const level = normalizeTrainingCefr(cefr);
+  const band = normalizeTrainingDifficulty(difficulty);
+  if (level !== 'b2') params.set('cefr', level);
+  if (band !== 'basico') params.set('difficulty', band);
+  const query = params.toString();
+  return query ? `?${query}` : '';
+}
+
+export function trainingHomePath(difficulty = 'basico', cefr = 'b2') {
+  return `/training/${trainingSearch(difficulty, cefr)}`;
+}
+
+export function trainingNodePath(baseHref, node, difficulty = 'basico', cefr = 'b2') {
+  const path = `${String(baseHref).replace(/\/$/, '')}/${node}/`;
+  return `${path}${trainingSearch(difficulty, cefr)}`;
+}
 
 export const MAX_STARS_PER_PATH_LEVEL = 3;
 

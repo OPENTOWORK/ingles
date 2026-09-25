@@ -3,6 +3,20 @@
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import TrainingDraloCompanion from '@/components/training/TrainingDraloCompanion';
+import {
+  ClassifyBoard,
+  ItemExtras,
+  MatchBoard,
+  MultiPick,
+  OptionAudio,
+  RichText,
+  SelectGapText,
+  SequenceBoard,
+  ShortAnswer,
+  SlotBoard,
+  TokenPicker,
+  TypedGapText,
+} from '@/components/training/TrainingItemWidgets';
 import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebration';
 import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/trainingFeedbackSounds';
 import {
@@ -11,6 +25,15 @@ import {
   parseGapFillSentence,
   summariseGapFillErrors,
 } from '@/lib/trainingGapFillGrading';
+import {
+  TRAINING_TYPE_FORMATS,
+  canSubmitTrainingItem,
+  isTrainingListeningItem,
+  trainingDisplayOrder,
+  trainingFormatFamily,
+  trainingItemPromptText,
+  trainingSolutionLines,
+} from '@/lib/trainingItemFormats';
 import { expandItem } from '@/lib/trainingQuestionVariants';
 import { saveExerciseResult } from '@/utils/progressTracker';
 import { saveTrainingLevelStars } from '@/utils/trainingStarsProgress';
@@ -38,6 +61,9 @@ function itemFormat(item) {
 
 const SESSION_SIZE = 10;
 
+/** True/False keeps its order; every other new choice type is shown shuffled. */
+const SHUFFLED_CHOICE_FORMATS = new Set(TRAINING_TYPE_FORMATS.filter((format) => format !== 'listen_true_false'));
+
 function shuffle(list) {
   const pool = [...list];
   for (let i = pool.length - 1; i > 0; i -= 1) {
@@ -56,18 +82,8 @@ function pickSession(list, size = SESSION_SIZE) {
     const pool = fresh.length ? fresh : variants;
     const chosen = pool[Math.floor(Math.random() * pool.length)];
     usedFormats.add(itemFormat(chosen));
-    return chosen;
+    return { ...chosen, displaySeed: Math.random().toString(36).slice(2) };
   });
-}
-
-function canSubmitItem(item, values) {
-  const format = itemFormat(item);
-  if (format === 'gap') {
-    return (item?.gaps || []).every((_, position) => String(values[position + 1] ?? '').trim());
-  }
-  if (format === 'transform') return Boolean(String(values.text || '').trim());
-  if (format === 'order') return (values.sequence || []).length === (item.words || []).length;
-  return Boolean(values.selected);
 }
 
 function GapSentence({ item, values, onChange, disabled, inputRef, onSubmit, gapStates }) {
@@ -141,6 +157,7 @@ export default function TrainingGapFillExercise({
   const [attempt, setAttempt] = useState(1);
   /** 'answering' | 'correct' | 'retry' | 'revealed' */
   const [status, setStatus] = useState('answering');
+  const [draloReaction, setDraloReaction] = useState(0);
   const [results, setResults] = useState([]);
   const [finished, setFinished] = useState(false);
   const [reviewing, setReviewing] = useState(false);
@@ -176,8 +193,32 @@ export default function TrainingGapFillExercise({
     );
   }, [grade, status]);
 
-  const readyToCheck = canSubmitItem(item, values);
+  const readyToCheck = canSubmitTrainingItem(item, values);
   const format = itemFormat(item);
+  const family = trainingFormatFamily(item);
+  const locked = status === 'correct' || status === 'revealed';
+
+  const gapMarks = useMemo(() => {
+    if (!grade) return {};
+    if (status === 'retry') {
+      return Object.fromEntries(grade.gaps.filter((gap) => !gap.correct).map((gap) => [gap.index, 'wrong']));
+    }
+    return Object.fromEntries(grade.gaps.map((gap) => [gap.index, gap.correct ? 'ok' : 'wrong']));
+  }, [grade, status]);
+
+  const optionOrder = useMemo(() => {
+    const count = family === 'choice' ? item?.options?.length || 0 : 0;
+    if (!SHUFFLED_CHOICE_FORMATS.has(format)) return Array.from({ length: count }, (_, position) => position);
+    return trainingDisplayOrder(item, count, 'options');
+  }, [item, family, format]);
+
+  const updateValues = useCallback(
+    (next) => {
+      setValues(next);
+      if (status === 'retry') setStatus('answering');
+    },
+    [status],
+  );
 
   const recordResult = useCallback(
     (result) => {
@@ -203,6 +244,7 @@ export default function TrainingGapFillExercise({
     if (outcome.correct) {
       playTrainingAnswerSound(true);
       setStatus('correct');
+      setDraloReaction((n) => n + 1);
       recordResult({ item, answers: { ...values }, firstTry: attempt === 1, solved: true, attempts: attempt });
       return;
     }
@@ -212,10 +254,12 @@ export default function TrainingGapFillExercise({
     if (attempt < MAX_ATTEMPTS) {
       setAttempt(attempt + 1);
       setStatus('retry');
+      setDraloReaction((n) => n + 1);
       return;
     }
 
     setStatus('revealed');
+    setDraloReaction((n) => n + 1);
     recordResult({ item, answers: { ...values }, firstTry: false, solved: false, attempts: attempt });
   }, [status, readyToCheck, item, values, attempt, recordResult]);
 
@@ -307,11 +351,15 @@ export default function TrainingGapFillExercise({
     (format === 'gap'
       ? 'Complete the sentence with the correct form of the verb in brackets.'
       : exercise.instruction);
+  const solutionLines = locked ? trainingSolutionLines(item) : [];
 
   if (finished) {
     return (
       <main className={styles.page}>
-        <TrainingDraloCompanion mood={stars >= 2 ? 'correct' : 'wrong'} />
+        <TrainingDraloCompanion
+          mood={stars >= 2 ? 'correct' : 'wrong'}
+          reactionKey={draloReaction}
+        />
         {celebration ? (
           <TrainingStarsCelebration
             stars={celebration.stars}
@@ -379,10 +427,13 @@ export default function TrainingGapFillExercise({
                               </strong>
                             ),
                           )
-                        : result.item.sentence}
+                        : trainingItemPromptText(result.item)}
                     </p>
                     <p className={styles.reviewMeta}>
-                      Answer: <em>{formatTrainingSolution(result.item)}</em>
+                      Answer:{' '}
+                      <em>
+                        <RichText text={formatTrainingSolution(result.item)} />
+                      </em>
                     </p>
                     <p className={styles.reviewExplanation}>{result.item.explanation}</p>
                   </li>
@@ -428,6 +479,8 @@ export default function TrainingGapFillExercise({
           </header>
 
           <div className={styles.body}>
+            <ItemExtras key={`extras-${index}`} item={item} collapsed={locked} />
+
             {format === 'gap' ? (
               <GapSentence
                 item={item}
@@ -441,21 +494,65 @@ export default function TrainingGapFillExercise({
                   if (status === 'retry') setStatus('answering');
                 }}
               />
+            ) : family === 'gaps' ? (
+              <TypedGapText
+                key={`gaps-${index}`}
+                item={item}
+                values={values}
+                marks={gapMarks}
+                disabled={locked}
+                collapsed={locked}
+                inputRef={firstGapRef}
+                onSubmit={checkAnswer}
+                onChange={(gapIndex, value) => updateValues((current) => ({ ...current, [gapIndex]: value }))}
+              />
+            ) : family === 'select_gaps' ? (
+              <SelectGapText
+                key={`select-${index}`}
+                item={item}
+                values={values}
+                marks={gapMarks}
+                disabled={locked}
+                collapsed={locked}
+                onChange={(gapIndex, value) => updateValues((current) => ({ ...current, [gapIndex]: value }))}
+              />
             ) : item.sentence ? (
-              <p className={styles.sentence}>{item.sentence}</p>
+              <p className={styles.sentence}>
+                <RichText text={item.sentence} />
+              </p>
             ) : null}
 
-            {format === 'transform' ? (
+            {family === 'text' ? (
               <textarea
                 className={styles.rewrite}
                 value={values.text || ''}
-                onChange={(event) => {
-                  setValues({ text: event.target.value });
-                  if (status === 'retry') setStatus('answering');
+                onChange={(event) => updateValues({ text: event.target.value })}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    checkAnswer();
+                  }
                 }}
-                disabled={status === 'correct' || status === 'revealed'}
+                disabled={locked}
                 rows={3}
+                placeholder={format === 'dictation' ? 'Type what you hear' : 'Write your sentence'}
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
                 aria-label="Your sentence"
+              />
+            ) : null}
+
+            {family === 'short_text' ? (
+              <ShortAnswer
+                key={`short-${index}`}
+                item={item}
+                value={values.text || ''}
+                mark={locked ? (grade?.correct ? 'ok' : 'wrong') : ''}
+                disabled={locked}
+                inputRef={firstGapRef}
+                onSubmit={checkAnswer}
+                onChange={(text) => updateValues({ text })}
               />
             ) : null}
 
@@ -499,9 +596,86 @@ export default function TrainingGapFillExercise({
               </div>
             ) : null}
 
-            {format !== 'gap' && format !== 'transform' && format !== 'order' ? (
+            {family === 'sequence' ? (
+              <SequenceBoard
+                key={`sequence-${index}`}
+                item={item}
+                sequence={values.sequence || []}
+                onChange={(sequence) => updateValues({ sequence })}
+                disabled={locked}
+                showKey={locked}
+                collapsed={locked}
+              />
+            ) : null}
+
+            {family === 'tap' ? (
+              <TokenPicker
+                key={`tap-${index}`}
+                item={item}
+                value={values.token}
+                onPick={(token) => updateValues({ token })}
+                disabled={locked}
+                showKey={locked}
+              />
+            ) : null}
+
+            {family === 'multi' ? (
+              <MultiPick
+                key={`multi-${index}`}
+                item={item}
+                picked={values.picked || []}
+                onToggle={(id) =>
+                  updateValues((current) => {
+                    const picked = current.picked || [];
+                    return { picked: picked.includes(id) ? picked.filter((value) => value !== id) : [...picked, id] };
+                  })
+                }
+                disabled={locked}
+                showKey={locked}
+                collapsed={locked}
+              />
+            ) : null}
+
+            {family === 'match' ? (
+              <MatchBoard
+                key={`match-${index}`}
+                item={item}
+                pairs={values.pairs || {}}
+                onChange={(pairs) => updateValues({ pairs })}
+                disabled={locked}
+                showKey={locked}
+                collapsed={locked}
+              />
+            ) : null}
+
+            {family === 'classify' ? (
+              <ClassifyBoard
+                key={`classify-${index}`}
+                item={item}
+                assign={values.assign || {}}
+                onChange={(assign) => updateValues({ assign })}
+                disabled={locked}
+                showKey={locked}
+                collapsed={locked}
+              />
+            ) : null}
+
+            {family === 'slots' ? (
+              <SlotBoard
+                key={`slots-${index}`}
+                item={item}
+                slots={values.slots || {}}
+                onChange={(slots) => updateValues({ slots })}
+                disabled={locked}
+                showKey={locked}
+                collapsed={locked}
+              />
+            ) : null}
+
+            {family === 'choice' ? (
               <div className={styles.options} role="listbox" aria-label="Answers">
-                {item.options.map((option) => {
+                {optionOrder.map((optionIndex) => {
+                  const option = item.options[optionIndex];
                   const picked = values.selected === option.id;
                   const showKey = status === 'correct' || status === 'revealed';
                   const isKey = option.id === item.correctId;
@@ -515,18 +689,19 @@ export default function TrainingGapFillExercise({
                       ? styles.optionOn
                       : styles.option;
                   return (
-                    <button
-                      key={option.id}
-                      type="button"
-                      className={optionClass}
-                      disabled={showKey}
-                      onClick={() => {
-                        setValues({ selected: option.id });
-                        if (status === 'retry') setStatus('answering');
-                      }}
-                    >
-                      {option.text}
-                    </button>
+                    <OptionAudio key={option.id} text={option.text} show={format === 'odd_sound' && showKey}>
+                      <button
+                        type="button"
+                        className={optionClass}
+                        disabled={showKey}
+                        onClick={() => {
+                          setValues({ selected: option.id });
+                          if (status === 'retry') setStatus('answering');
+                        }}
+                      >
+                        <RichText text={option.text} />
+                      </button>
+                    </OptionAudio>
                   );
                 })}
               </div>
@@ -535,7 +710,12 @@ export default function TrainingGapFillExercise({
             {item.promptWord ? <p className={styles.promptWord}>({item.promptWord})</p> : null}
 
             <div className={styles.mascotSlot}>
-              <TrainingDraloCompanion mood={draloMood} dock prompt={instruction} />
+              <TrainingDraloCompanion
+                mood={draloMood}
+                dock
+                prompt={instruction}
+                reactionKey={draloReaction}
+              />
             </div>
 
             {status === 'answering' || status === 'retry' ? (
@@ -569,9 +749,26 @@ export default function TrainingGapFillExercise({
                   {status === 'correct' ? '✓ Correct' : '✗ Not quite'}
                 </p>
                 {status === 'revealed' ? (
-                  <p className={styles.solution}>
-                    Answer: <strong>{formatTrainingSolution(item)}</strong>
-                  </p>
+                  solutionLines.length > 1 ? (
+                    <div className={styles.solution}>
+                      Answer:
+                      <ul className={styles.solutionList}>
+                        {solutionLines.map((line, lineIndex) => (
+                          <li key={lineIndex}>{line}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p className={styles.solution}>
+                      Answer:{' '}
+                      <strong>
+                        <RichText text={formatTrainingSolution(item)} />
+                      </strong>
+                    </p>
+                  )
+                ) : null}
+                {isTrainingListeningItem(item) ? (
+                  <p className={styles.transcript}>You heard: “{item.audio}”</p>
                 ) : null}
                 <p className={styles.feedbackText}>{item.explanation}</p>
                 <div className={styles.actions}>

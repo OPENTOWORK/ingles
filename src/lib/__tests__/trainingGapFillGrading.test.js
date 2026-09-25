@@ -1,7 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import {
   formatGapFillSolution,
+  formatTrainingSolution,
   gapFillAnswerMatches,
   gradeGapFillItem,
   gradeTrainingItem,
@@ -9,7 +12,14 @@ import {
   summariseGapFillErrors,
   validateGapFillExercise,
 } from '../trainingGapFillGrading.js';
+import {
+  TRAINING_TYPE_FORMATS,
+  canSubmitTrainingItem,
+  canonicalTrainingValues,
+  trainingItemFormat,
+} from '../trainingItemFormats.js';
 import { B2_BASIC_01_PRESENT_SIMPLE, getGapFillExercise } from '../../data/trainingGapFillContent.js';
+import { B2_BASIC_TYPE_ITEMS } from '../../data/trainingTypes/index.js';
 import { expandItem } from '../trainingQuestionVariants.js';
 
 const items = B2_BASIC_01_PRESENT_SIMPLE.items;
@@ -103,8 +113,11 @@ test('an item with two gaps needs both of them right', () => {
   assert.equal(formatGapFillSolution(item), 'does / review');
 });
 
+const TYPE_FORMATS = new Set(TRAINING_TYPE_FORMATS);
+
 function answerFor(item) {
   const format = item.format || 'gap';
+  if (TYPE_FORMATS.has(format)) return canonicalTrainingValues(item);
   if (format === 'gap') {
     return Object.fromEntries(item.gaps.map((gap, index) => [index + 1, gap.canonicalAnswer]));
   }
@@ -215,4 +228,195 @@ test('authoring checks catch broken items', () => {
   assert.match(joined, /acceptedAnswers must include the canonical answer/);
   assert.match(joined, /no negative item/);
   assert.match(joined, /no question item/);
+});
+
+const typeItem = (format, level = 1) => B2_BASIC_TYPE_ITEMS[level].find((item) => item.format === format);
+
+test('every basic level offers each of the 45 task types exactly once, in order', () => {
+  for (let level = 1; level <= 25; level += 1) {
+    const exercise = getGapFillExercise('b2', 'use-of-english', 'basico', level);
+    const counts = {};
+    for (const item of exercise.items) {
+      const format = trainingItemFormat(item);
+      if (TYPE_FORMATS.has(format)) counts[format] = (counts[format] || 0) + 1;
+    }
+    for (const format of TRAINING_TYPE_FORMATS) {
+      assert.equal(counts[format], 1, `level ${level}: ${format}`);
+    }
+    const prefix = `b2-basic-${String(level).padStart(2, '0')}-t`;
+    B2_BASIC_TYPE_ITEMS[level].forEach((item, index) => {
+      assert.equal(item.itemId, `${prefix}${String(index + 1).padStart(2, '0')}`);
+      assert.equal(item.format, TRAINING_TYPE_FORMATS[index], item.itemId);
+    });
+  }
+});
+
+test('the pilot keeps its fifty items and the task types come on top', () => {
+  assert.equal(B2_BASIC_01_PRESENT_SIMPLE.items.length, 50);
+  const level1 = getGapFillExercise('b2', 'use-of-english', 'basico', 1);
+  assert.equal(level1.items.length, 50 + TRAINING_TYPE_FORMATS.length);
+});
+
+test('every picture question points at an image that exists', () => {
+  for (let level = 1; level <= 25; level += 1) {
+    for (const item of B2_BASIC_TYPE_ITEMS[level].filter((entry) => entry.format === 'image_choice')) {
+      assert.ok(existsSync(path.join(process.cwd(), 'public', item.image)), `${item.itemId}: ${item.image}`);
+    }
+  }
+});
+
+test('a task cannot be sent until every part has an answer', () => {
+  for (const item of B2_BASIC_TYPE_ITEMS[1]) {
+    assert.equal(canSubmitTrainingItem(item, {}), false, item.itemId);
+    assert.equal(canSubmitTrainingItem(item, canonicalTrainingValues(item)), true, item.itemId);
+    assert.ok(formatTrainingSolution(item), `${item.itemId} has a key to show`);
+  }
+});
+
+test('written sentences ignore punctuation and case, but not grammar', () => {
+  const item = typeItem('error_correction');
+  assert.equal(gradeTrainingItem(item, { text: 'how often does your team review its targets' }).correct, true);
+  assert.equal(gradeTrainingItem(item, { text: 'How often does your team review their targets?' }).correct, true);
+  assert.equal(gradeTrainingItem(item, { text: 'How often does your team reviews its targets?' }).correct, false);
+  assert.equal(gradeTrainingItem(item, { text: '   ' }).correct, false);
+});
+
+test('written sentences accept the full form of a contraction; a dictation does not', () => {
+  const negative = {
+    format: 'polarity',
+    target: 'negative',
+    sentence: 'It works.',
+    canonicalAnswer: "It doesn't work.",
+    acceptedAnswers: ["It doesn't work."],
+  };
+  assert.equal(gradeTrainingItem(negative, { text: 'It does not work' }).correct, true);
+  assert.equal(gradeTrainingItem(negative, { text: 'It not works.' }).correct, false);
+
+  const dictation = typeItem('dictation');
+  assert.equal(
+    gradeTrainingItem(dictation, { text: "she doesn't usually check her emails before breakfast" }).correct,
+    true,
+  );
+  assert.equal(
+    gradeTrainingItem(dictation, { text: 'She does not usually check her emails before breakfast.' }).correct,
+    false,
+  );
+});
+
+test('matching, grouping and placing need every piece in the right place', () => {
+  const pairs = typeItem('match');
+  assert.equal(gradeTrainingItem(pairs, { pairs: { 0: 0, 1: 1, 2: 2, 3: 3 } }).correct, true);
+  assert.equal(gradeTrainingItem(pairs, { pairs: { 0: 0, 1: 1, 2: 3, 3: 2 } }).correct, false);
+
+  const groups = typeItem('classify');
+  const assign = canonicalTrainingValues(groups).assign;
+  assert.equal(gradeTrainingItem(groups, { assign }).correct, true);
+  assert.equal(gradeTrainingItem(groups, { assign: { ...assign, 0: 1 } }).correct, false);
+
+  const gapped = typeItem('gapped_text');
+  assert.equal(gradeTrainingItem(gapped, { slots: { 0: 0, 1: 1, 2: 2 } }).correct, true);
+  assert.equal(gradeTrainingItem(gapped, { slots: { 0: 1, 1: 0, 2: 2 } }).correct, false);
+  assert.equal(gradeTrainingItem(gapped, { slots: { 0: 0, 1: 1, 2: 3 } }).correct, false);
+
+  const people = typeItem('multiple_matching');
+  assert.equal(gradeTrainingItem(people, { slots: { 0: 1, 1: 2, 2: 0, 3: 3 } }).correct, true);
+  assert.equal(gradeTrainingItem(people, { slots: { 0: 1, 1: 1, 2: 0, 3: 3 } }).correct, false);
+
+  const steps = typeItem('sequence');
+  assert.equal(gradeTrainingItem(steps, { sequence: [0, 1, 2, 3, 4] }).correct, true);
+  assert.equal(gradeTrainingItem(steps, { sequence: [1, 0, 2, 3, 4] }).correct, false);
+});
+
+test('several right answers must all be chosen, and nothing else', () => {
+  const item = typeItem('multi_select');
+  const right = item.correctIds;
+  assert.equal(gradeTrainingItem(item, { picked: [...right].reverse() }).correct, true);
+  assert.equal(gradeTrainingItem(item, { picked: right.slice(1) }).correct, false);
+  const wrong = item.options.find((option) => !right.includes(option.id)).id;
+  assert.equal(gradeTrainingItem(item, { picked: [...right, wrong] }).correct, false);
+});
+
+test('tapping grades only the part with the mistake or the stress', () => {
+  const spot = typeItem('spot_error');
+  assert.equal(gradeTrainingItem(spot, { token: 1 }).correct, true);
+  assert.equal(gradeTrainingItem(spot, { token: 0 }).correct, false);
+  assert.equal(formatTrainingSolution(spot), 'have → has');
+
+  const stressed = typeItem('stress');
+  assert.equal(gradeTrainingItem(stressed, { token: 1 }).correct, true);
+  assert.equal(gradeTrainingItem(stressed, { token: 0 }).correct, false);
+  assert.equal(formatTrainingSolution(stressed), 'pho·TO·gra·pher');
+});
+
+test('authoring checks catch broken task-type items', () => {
+  const base = { subFocus: 'x', explanation: 'Why.', errorTag: 'present_simple_choice', instruction: 'Do it.' };
+  const broken = {
+    exerciseId: 'test',
+    instruction: 'Complete.',
+    items: [
+      {
+        ...base,
+        itemId: 'kw',
+        subFocus: 'kw',
+        format: 'key_word',
+        lead: 'I rarely go out.',
+        keyword: 'OFTEN',
+        sentence: 'I {1} out.',
+        gaps: [{ canonicalAnswer: 'hardly ever go', acceptedAnswers: ['hardly ever go'] }],
+      },
+      {
+        ...base,
+        itemId: 'mu',
+        subFocus: 'mu',
+        format: 'multi_select',
+        sentence: 'Pick.',
+        options: ['a', 'b', 'c', 'd'].map((id) => ({ id, text: id })),
+        correctIds: ['a'],
+      },
+      {
+        ...base,
+        itemId: 'im',
+        subFocus: 'im',
+        format: 'image_choice',
+        image: '/images/cat.jpg',
+        sentence: 'What?',
+        options: [
+          { id: 'a', text: 'One.' },
+          { id: 'b', text: 'Two.' },
+        ],
+        correctId: 'c',
+      },
+      {
+        ...base,
+        itemId: 'dc',
+        subFocus: 'dc',
+        format: 'dictation',
+        audio: 'The train leaves at 8.',
+        canonicalAnswer: 'The train leaves at eight.',
+        acceptedAnswers: ['The train leaves at eight.'],
+      },
+      {
+        ...base,
+        itemId: 'uk',
+        subFocus: 'uk',
+        format: 'mcq',
+        sentence: 'What is your favorite color?',
+        options: [
+          { id: 'a', text: 'Red.' },
+          { id: 'b', text: 'Blue.' },
+        ],
+        correctId: 'a',
+      },
+    ],
+  };
+
+  const joined = validateGapFillExercise(broken, { expectedItemCount: 5 }).findings.join('\n');
+  assert.match(joined, /does not use the key word/);
+  assert.match(joined, /at least two right answers/);
+  assert.match(joined, /image must live in \/training\/images\//);
+  assert.match(joined, /missing image description/);
+  assert.match(joined, /correctId is not one of the options/);
+  assert.match(joined, /a dictation answer is exactly the audio/);
+  assert.match(joined, /write numbers as words/);
+  assert.match(joined, /non-British spelling/);
 });

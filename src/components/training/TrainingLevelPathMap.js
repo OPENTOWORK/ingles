@@ -13,6 +13,11 @@ import {
   isTrainingLevelLocked,
   isTrainingReviewLocked,
 } from '@/lib/trainingPathUnlock';
+import {
+  TRAINING_CEFR_OPTIONS,
+  TRAINING_DIFFICULTY_OPTIONS,
+  trainingNodePath,
+} from '@/utils/trainingStarsProgress';
 import styles from './TrainingLevelPathMap.module.css';
 
 const WIDE_ROW = 4;
@@ -253,6 +258,8 @@ function ReviewStation({ review, side, stars, locked }) {
  *   cefrLevel: string,
  *   difficulty: string,
  *   skill?: string,
+ *   onDifficultyChange?: (id: string) => void,
+ *   onCefrChange?: (id: string) => void,
  * }} props
  */
 export default function TrainingLevelPathMap({
@@ -261,6 +268,8 @@ export default function TrainingLevelPathMap({
   cefrLevel,
   difficulty,
   skill = 'use-of-english',
+  onDifficultyChange,
+  onCefrChange,
 }) {
   const { userRole } = useUserRole();
   const gradientId = `path-progress-${useId().replace(/:/g, '')}`;
@@ -298,7 +307,7 @@ export default function TrainingLevelPathMap({
             n,
             topic: level.topic ?? `Level ${n}`,
             stars,
-            href: `${baseHref}/level-${n}`,
+            href: trainingNodePath(baseHref, `level-${n}`, difficulty, cefrLevel),
             isCompleted,
             isMastered,
             isCurrent: n === currentLevel && !isCompleted,
@@ -308,7 +317,7 @@ export default function TrainingLevelPathMap({
           };
         }),
       })),
-    [curriculum, levelStars, baseHref, currentLevel, userRole, total],
+    [curriculum, levelStars, baseHref, currentLevel, userRole, total, difficulty, cefrLevel],
   );
 
   const reviews = useMemo(
@@ -317,12 +326,12 @@ export default function TrainingLevelPathMap({
         const stars = Number(levelStars[review.key]) || 0;
         return {
           ...review,
-          href: `${baseHref}/${review.key}`,
+          href: trainingNodePath(baseHref, review.key, difficulty, cefrLevel),
           stars,
           isLocked: isTrainingReviewLocked(review, levelStars, userRole),
         };
       }),
-    [curriculum, levelStars, baseHref, userRole],
+    [curriculum, levelStars, baseHref, userRole, difficulty, cefrLevel],
   );
 
   const layout = useMemo(() => buildLayout(parts, rowSize), [parts, rowSize]);
@@ -392,7 +401,44 @@ export default function TrainingLevelPathMap({
 
   return (
     <section className={styles.stage} aria-label="Level path">
-      <div className={styles.progress}>
+      <div className={styles.progressRow}>
+        <div className={styles.filters}>
+          <div className={styles.difficulties} role="radiogroup" aria-label="Level">
+            {TRAINING_CEFR_OPTIONS.map((option) => {
+              const current = option.id === cefrLevel;
+              return (
+                <button
+                  key={option.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={current}
+                  className={`${styles.difficulty} ${current ? styles.difficultyCurrent : ''}`}
+                  onClick={() => onCefrChange?.(option.id)}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
+          <div className={styles.difficulties} role="radiogroup" aria-label="Difficulty">
+          {TRAINING_DIFFICULTY_OPTIONS.map((option) => {
+            const current = option.id === difficulty;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                role="radio"
+                aria-checked={current}
+                className={`${styles.difficulty} ${current ? styles.difficultyCurrent : ''}`}
+                onClick={() => onDifficultyChange?.(option.id)}
+              >
+                {option.label}
+              </button>
+            );
+          })}
+          </div>
+        </div>
+        <div className={styles.progress}>
         <div
           className={styles.progressBar}
           role="progressbar"
@@ -410,6 +456,7 @@ export default function TrainingLevelPathMap({
           </span>
           {progressPct}% complete
         </p>
+        </div>
       </div>
 
       <div className={styles.canvas}>

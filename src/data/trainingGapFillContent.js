@@ -18,6 +18,7 @@ import { B2_BASIC_LEVELS_C } from './b2BasicTrainingBankC.js';
 import { B2_BASIC_LEVELS_D } from './b2BasicTrainingBankD.js';
 import { B2_BASIC_LEVELS_E } from './b2BasicTrainingBankE.js';
 import { B2_BASIC_01_MIXED_ITEMS } from './trainingLevel1MixedItems.js';
+import { B2_BASIC_TYPE_ITEMS } from './trainingTypes/index.js';
 
 /** B2 · Basic · Use of English · level 1 — present simple, mixed tasks. */
 const B2_BASIC_01_PRESENT_SIMPLE = {
@@ -169,10 +170,15 @@ const B2_BASIC_LEVELS = {
   ...B2_BASIC_LEVELS_E,
 };
 
+function withTaskTypes(exercise, typeItems) {
+  if (!typeItems?.length) return exercise;
+  return { ...exercise, items: [...exercise.items, ...typeItems] };
+}
+
 const GAP_FILL_EXERCISES = Object.fromEntries(
   Object.entries(B2_BASIC_LEVELS).map(([level, exercise]) => [
     `b2|use-of-english|basico|${level}`,
-    exercise,
+    withTaskTypes(exercise, B2_BASIC_TYPE_ITEMS[level]),
   ]),
 );
 

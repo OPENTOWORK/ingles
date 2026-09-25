@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useMemo, useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import AudioPlayer from '@/components/AudioPlayer';
 import TrainingGapFillExercise from '@/components/training/TrainingGapFillExercise';
 import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebration';
@@ -15,27 +15,33 @@ import { getPathReview, buildReviewExercise } from '@/data/trainingReviews';
 import { isTrainingLevelLocked, isTrainingReviewLocked } from '@/lib/trainingPathUnlock';
 import { saveExerciseResult, getUserProgressForExercises, progressTracker } from '@/utils/progressTracker';
 import { supabase } from '@/utils/supabaseClient';
-import { notifyTrainingStarsUpdated } from '@/utils/trainingStarsProgress';
+import {
+  normalizeTrainingCefr,
+  normalizeTrainingDifficulty,
+  notifyTrainingStarsUpdated,
+  trainingHomePath,
+  trainingNodePath,
+} from '@/utils/trainingStarsProgress';
 import styles from './page.module.css';
 
-const TRAINING_CEFR = 'b2';
 const TRAINING_SKILL = 'use-of-english';
-const TRAINING_DIFFICULTY = 'basico';
 
 export default function ExercisePage({ params }) {
   const { levelNumber } = params;
-  const level = TRAINING_CEFR;
+  const searchParams = useSearchParams();
+  const level = normalizeTrainingCefr(searchParams.get('cefr'));
   const skill = TRAINING_SKILL;
-  const difficulty = TRAINING_DIFFICULTY;
+  const difficulty = normalizeTrainingDifficulty(searchParams.get('difficulty'));
+  const homeHref = trainingHomePath(difficulty, level);
   const router = useRouter();
 
   useEffect(() => {
     const isLevel = /^level-\d+$/.test(levelNumber || '');
     const isReview = /^review-\d+$/.test(levelNumber || '');
     if (!isLevel && !isReview) {
-      router.replace('/training');
+      router.replace(homeHref);
     }
-  }, [levelNumber, router]);
+  }, [levelNumber, router, homeHref]);
   const { userRole } = useUserRole();
   
   // Convertir level-1 a level1 para la función getExercisesByLevel
@@ -84,18 +90,18 @@ export default function ExercisePage({ params }) {
       const savedStars = JSON.parse(localStorage.getItem(storageKey) || '{}');
       if (reviewNum) {
         if (!review || isTrainingReviewLocked(review, savedStars, userRole)) {
-          router.replace('/training');
+          router.replace(homeHref);
         }
         return;
       }
       const levelNum = parseInt(levelNumber.replace('level-', ''), 10);
       if (isTrainingLevelLocked(levelNum, savedStars, userRole, pathLevelCount)) {
-        router.replace('/training');
+        router.replace(homeHref);
       }
     } catch {
       /* ignore */
     }
-  }, [level, skill, difficulty, levelNumber, userRole, router, pathLevelCount, review, reviewNum]);
+  }, [level, skill, difficulty, levelNumber, userRole, router, pathLevelCount, review, reviewNum, homeHref]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -200,10 +206,12 @@ export default function ExercisePage({ params }) {
         }}>
           <h1 style={{ color: "#e74c3c", marginBottom: "1rem" }}>⚠️ No Exercises Available</h1>
           <p style={{ color: "#64748b", marginBottom: "2rem" }}>
-            No exercises found for level {levelNumber.replace('level-', '')}
+            {level === 'b2' && difficulty === 'basico'
+              ? `No exercises found for level ${levelNumber.replace('level-', '')}`
+              : 'Exercises for this level are not ready yet.'}
           </p>
           <Link
-            href="/training"
+            href={homeHref}
             style={{
               backgroundColor: "#6b7280",
               color: "white",
@@ -361,7 +369,7 @@ export default function ExercisePage({ params }) {
         levelNum={review ? review.n : levelNumInt}
         completeLabel={review ? `Review ${review.n}` : ''}
         sessionSize={review ? 20 : 10}
-        backHref="/training"
+        backHref={homeHref}
         cefrLevel={level}
         skill={skill}
         difficulty={difficulty}
@@ -396,7 +404,7 @@ export default function ExercisePage({ params }) {
             The requested exercise could not be loaded.
           </p>
           <Link
-            href="/training"
+            href={homeHref}
             style={{
               backgroundColor: "#6b7280",
               color: "white",
@@ -613,14 +621,14 @@ export default function ExercisePage({ params }) {
                     </button>
                     {getNextLevel() && (
                       <Link
-                        href={`/training/${getNextLevel()}`}
+                        href={trainingNodePath('/training', getNextLevel(), difficulty, level)}
                         className={styles.btnNext}
                       >
                         Next level →
                       </Link>
                     )}
                     <Link
-                      href="/training"
+                      href={homeHref}
                       className={styles.btnBack}
                     >
                       Back to map
@@ -634,7 +642,7 @@ export default function ExercisePage({ params }) {
         </div>
 
         <footer className={styles.footer}>
-          <Link href="/training" className={styles.btnBack}>
+          <Link href={homeHref} className={styles.btnBack}>
             ← Back to levels
           </Link>
         </footer>

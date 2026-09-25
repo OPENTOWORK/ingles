@@ -55,9 +55,8 @@ async function loadGapFillExercises(level, skill, difficulty, levelNumber, baseI
       cefr: exercise.cefr,
       category: exercise.category,
       grammarFocus: exercise.grammarFocus,
-      instruction: exercise.instruction,
       /** Legacy fields so any generic consumer still sees a question and a key. */
-      question: exercise.instruction,
+      question: item.instruction || exercise.instruction,
       correct:
         item.solution ||
         item.canonicalAnswer ||
@@ -160,13 +159,10 @@ async function generateExercisesBySkill(level, skill, difficulty, levelNumber, c
   const a2Set = await loadA2BasicoExercises(level, skill, difficulty, levelNumber, count, baseId, difficultyNum);
   if (a2Set) return a2Set;
 
+  // The other level and difficulty paths exist on the map, but their questions are not written yet.
+  if (normalizedSkill === 'use_of_english') return [];
+
   switch (normalizedSkill) {
-    case 'use_of_english':
-      return withFallback(
-        await loadSkillExerciseList(normalizedSkill, level, skill, difficulty, levelNum),
-        ['use_of_english', 'grammar', difficulty],
-        45,
-      );
     case 'vocabulary':
       return withFallback(
         await loadSkillExerciseList(normalizedSkill, level, skill, difficulty, levelNum),

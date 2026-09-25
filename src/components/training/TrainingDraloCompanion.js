@@ -8,29 +8,25 @@ const STORAGE_KEY = 'dralo-training-companion-pos';
 const WIDTH = 168;
 const HEIGHT = 200;
 
-const POOLS = {
-  idle: [{ src: '/mascot/6.png', line: '' }],
+const POSES = {
+  idle: [{ src: '/mascot/poses/think.png', line: '' }],
   correct: [
-    { src: '/mascot/2.png', line: 'Yes!' },
-    { src: '/mascot/7.png', line: 'Nice!' },
-    { src: '/mascot/13.png', line: 'Great!' },
-    { src: '/mascot/17.png', line: 'Yes!' },
-    { src: '/training/dralo/cheer.png', line: 'Yes!' },
-    { src: '/training/dralo/clap.png', line: 'Nice!' },
+    { src: '/mascot/poses/cheer.png', line: 'Yes!' },
+    { src: '/mascot/poses/clap.png', line: 'Nice!' },
   ],
   wrong: [
-    { src: '/mascot/14.png', line: 'Not quite' },
-    { src: '/training/dralo/sad.png', line: 'Not quite' },
-    { src: '/training/dralo/oops.png', line: 'Oops' },
-    { src: '/training/dralo/shrug.png', line: 'Hmm' },
+    { src: '/mascot/poses/sad.png', line: 'Not quite' },
+    { src: '/mascot/poses/oops.png', line: 'Oops' },
+    { src: '/mascot/poses/shrug.png', line: 'Hmm' },
   ],
-  wave: [
-    { src: '/mascot/3.png', line: 'Hi!' },
-    { src: '/mascot/7.png', line: 'Hey!' },
-    { src: '/mascot/8.png', line: 'Hi!' },
-    { src: '/training/dralo/clap.png', line: 'Hello!' },
-  ],
+  wave: [{ src: '/mascot/poses/clap.png', line: 'Hi!' }],
 };
+
+function poseKey(mood, wave) {
+  if (wave) return 'wave';
+  if (mood === 'correct' || mood === 'wrong') return mood;
+  return 'idle';
+}
 
 function pickPose(pool, previousSrc) {
   const options = pool.filter((item) => item.src !== previousSrc);
@@ -64,12 +60,17 @@ function readStoredPosition() {
   }
 }
 
-export default function TrainingDraloCompanion({ mood = 'idle', dock = false, prompt = '' }) {
+export default function TrainingDraloCompanion({
+  mood = 'idle',
+  dock = false,
+  prompt = '',
+  reactionKey = 0,
+}) {
   const [pos, setPos] = useState(null);
   const [wave, setWave] = useState(false);
   const [lineOn, setLineOn] = useState(false);
-  const [frame, setFrame] = useState(POOLS.idle[0]);
-  const frameRef = useRef(POOLS.idle[0]);
+  const [frame, setFrame] = useState(POSES.idle[0]);
+  const frameRef = useRef(POSES.idle[0]);
   const dragRef = useRef(null);
   const waveTimer = useRef(0);
 
@@ -99,12 +100,12 @@ export default function TrainingDraloCompanion({ mood = 'idle', dock = false, pr
     setWave(false);
     const timer = window.setTimeout(() => setLineOn(false), 1600);
     return () => window.clearTimeout(timer);
-  }, [mood]);
+  }, [mood, reactionKey]);
 
   useEffect(() => {
-    const key = wave ? 'wave' : mood === 'correct' || mood === 'wrong' ? mood : 'idle';
-    setFrame(pickPose(POOLS[key], frameRef.current.src));
-  }, [mood, wave]);
+    const key = poseKey(mood, wave);
+    setFrame(pickPose(POSES[key], frameRef.current.src));
+  }, [mood, wave, reactionKey]);
 
   const onPointerDown = useCallback((event) => {
     if (event.button !== 0) return;
@@ -152,7 +153,7 @@ export default function TrainingDraloCompanion({ mood = 'idle', dock = false, pr
 
   if (!pos) return null;
 
-  const pose = wave ? 'wave' : mood === 'correct' || mood === 'wrong' ? mood : 'idle';
+  const pose = poseKey(mood, wave);
   const showingPrompt = pose === 'idle' && Boolean(prompt);
   const caption = pose === 'wave' || lineOn ? frame.line : showingPrompt ? prompt : '';
 
@@ -175,6 +176,7 @@ export default function TrainingDraloCompanion({ mood = 'idle', dock = false, pr
         src={sitePublicPath(frame.src)}
         alt=""
         width={WIDTH}
+        height={HEIGHT}
         draggable={false}
       />
     </div>

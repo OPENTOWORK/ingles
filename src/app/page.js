@@ -37,8 +37,10 @@ export default function Home() {
   /** null hasta leer la sesión; false = invitado, true = hay usuario. */
   const [hasStoredUser, setHasStoredUser] = useState(null);
   const isGuestHome = hasStoredUser === false && !session?.user;
-  /** Misma Home de app en móvil para alumno confirmado y para quien no ha iniciado sesión. */
-  const showAppHome = showStudentBoard || isGuestHome;
+  const authPending = hasStoredUser === null && !session?.user;
+  const rolePending = Boolean(session?.user) && !roleConfirmed;
+  /** Misma Home de app en móvil: no pintar el welcome de invitado ni un frame. */
+  const showAppHome = showStudentBoard || isGuestHome || authPending || rolePending;
 
   useEffect(() => {
     let cancelled = false;
@@ -54,7 +56,8 @@ export default function Home() {
   return (
     <main className={`home-page${showAppHome ? ' home-page--student-mobile' : ''}`}>
       <div className="home-page__inner">
-        {isRegistered ? <InviteFriendPromoBanner /> : <FoundingMemberSlotsBanner />}
+        {isRegistered ? <InviteFriendPromoBanner /> : null}
+        {isGuestHome ? <FoundingMemberSlotsBanner /> : null}
         {isGuestHome ? <InviteFriendPromoBanner guest /> : null}
         <section className="home-hero" aria-labelledby="home-title">
           <HomeInstallAppButton />
@@ -87,7 +90,7 @@ export default function Home() {
           </div>
         </section>
 
-        {showAppHome ? <HomeStudentMobileBoard guest={isGuestHome} /> : null}
+        {showAppHome ? <HomeStudentMobileBoard guest={isGuestHome || authPending} /> : null}
 
         <blockquote className="home-quote">
           <DraloTagline />
