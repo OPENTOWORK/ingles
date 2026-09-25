@@ -62,8 +62,13 @@ function openMobileNavIfNeeded() {
   if (!window.matchMedia(MOBILE_NAV_MQ).matches) return;
   const drawer = document.querySelector('.app-nav__drawer.is-open');
   if (drawer) return;
+  if (document.querySelector('.app-side-menu--open')) return;
   const toggle = document.querySelector('.app-nav__toggle');
-  if (toggle) toggle.click();
+  if (toggle) {
+    toggle.click();
+    return;
+  }
+  document.querySelector('.app-side-menu--collapsed .app-side-menu__tab')?.click();
 }
 
 function closeMobileNavIfOpen() {

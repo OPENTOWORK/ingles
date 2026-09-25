@@ -36,6 +36,10 @@
   padding-inline: 0.55rem;
 }
 
+:global(body.admin-responses-full) .sidebar {
+  display: none;
+}
+
 .sidebarTop {
   display: flex;
   align-items: flex-start;

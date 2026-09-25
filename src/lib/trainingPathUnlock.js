@@ -1,35 +1,53 @@
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
-import { canAccessTeacherPanel } from '@/utils/authRoles';
+import { canAccessTeacherPanel, isAdminRole } from '@/utils/authRoles';
 
-/** Primer nivel sin completar (o último+1 si todo hecho). */
+/** Estrellas del nivel anterior necesarias para abrir el siguiente. */
+export const TRAINING_UNLOCK_STARS = 2;
+
+/** Estrellas que dejan el nivel en amarillo. */
+export const TRAINING_MASTERY_STARS = 3;
+
+function starsAt(levelStars, levelNum) {
+  return Number(levelStars[`level-${levelNum}`]) || 0;
+}
+
+/** Primer nivel que aún no tiene las estrellas para avanzar. */
 export function getTrainingCurrentLevelNumber(
   levelStars = {},
   maxLevel = TRAINING_LEVEL_COUNT,
 ) {
   const total = Math.max(1, Number(maxLevel) || TRAINING_LEVEL_COUNT);
-  let lastCompleted = 0;
-  for (let n = 1; n <= total; n++) {
-    const stars = Number(levelStars[`level-${n}`]) || 0;
-    if (stars > 0) lastCompleted = n;
+  for (let n = 1; n <= total; n += 1) {
+    if (starsAt(levelStars, n) < TRAINING_UNLOCK_STARS) return n;
   }
-  if (lastCompleted >= total) return total;
-  return lastCompleted + 1;
+  return total;
 }
 
 export function isTrainingPathStaffBypass(userRole = '') {
   return canAccessTeacherPanel(userRole);
 }
 
-/** Estudiantes: solo niveles hasta el actual; admin/profesor: todos. */
+/** El nivel 1 está abierto. Cada siguiente pide 2 estrellas en el anterior. Un admin entra en cualquiera. */
 export function isTrainingLevelLocked(
   levelNum,
   levelStars = {},
   userRole = '',
   maxLevel = TRAINING_LEVEL_COUNT,
 ) {
-  if (isTrainingPathStaffBypass(userRole)) return false;
   const num = Number(levelNum);
-  if (!num || num < 1) return true;
-  const current = getTrainingCurrentLevelNumber(levelStars, maxLevel);
-  return num > current;
+  const total = Math.max(1, Number(maxLevel) || TRAINING_LEVEL_COUNT);
+  if (!num || num < 1 || num > total) return true;
+  if (isAdminRole(userRole)) return false;
+  if (num === 1) return false;
+  return starsAt(levelStars, num - 1) < TRAINING_UNLOCK_STARS;
+}
+
+/**
+ * A review sits beside the path and opens once the block it covers is done.
+ * It is not a level, so it never changes the 1–25 count.
+ */
+export function isTrainingReviewLocked(review, levelStars = {}, userRole = '') {
+  if (!review?.to) return true;
+  if (isAdminRole(userRole)) return false;
+  return starsAt(levelStars, review.to) < TRAINING_UNLOCK_STARS;
 }

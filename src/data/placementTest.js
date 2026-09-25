@@ -74,27 +74,27 @@ export function levelFromScoreOutcomes(score, total = 50) {
 export const levelRecommendations = {
   A1: {
     title: "Level A1 (Beginner)",
-    link: "/training/a1",
+    link: "/training",
   },
   A2: {
     title: "Level A2 (Elementary)",
-    link: "/training/a2",
+    link: "/training",
   },
   B1: {
     title: "Level B1 (Intermediate)",
-    link: "/training/b1",
+    link: "/training",
   },
   B2: {
     title: "Level B2 (Upper Intermediate)",
-    link: "/training/b2",
+    link: "/training",
   },
   C1: {
     title: "Level C1 (Advanced)",
-    link: "/training/c1",
+    link: "/training",
   },
   C2: {
     title: "Level C2 (Proficiency)",
-    link: "/training/c2",
+    link: "/training",
   },
 };
 

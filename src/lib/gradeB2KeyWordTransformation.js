@@ -2,7 +2,8 @@ import {
   countCambridgeKeyWordWords,
   isCambridgeKeyWordWordCountValid,
 } from '@/lib/countCambridgeKeyWordWords';
-import { normalizeB2KeyWordAnswer, tokenizeB2KeyWordAnswer } from '@/lib/normalizeB2KeyWordAnswer';
+import { tokenizeB2KeyWordAnswer } from '@/lib/normalizeB2KeyWordAnswer';
+import { expandRuoeAnswerForms } from '@/lib/ruoeContractionEquivalence';
 import { evaluateB2KeyWordKeywordStatus } from '@/lib/gradeB2KeyWordKeyword';
 import {
   B2KeyWordAnswerKeyValidationError,
@@ -71,10 +72,27 @@ function findTokenSubsequence(haystack, needle) {
  * @param {string} variant
  * @returns {{ start: number, end: number } | null}
  */
+function variantNeedles(variant) {
+  const needles = [tokenizeB2KeyWordAnswer(variant)];
+  for (const form of expandRuoeAnswerForms(variant)) {
+    needles.push(tokenizeB2KeyWordAnswer(form));
+  }
+  const seen = new Set();
+  return needles.filter((needle) => {
+    if (!needle.length) return false;
+    const key = needle.join('\0');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 function findVariantMatch(tokens, variant) {
-  const needle = tokenizeB2KeyWordAnswer(variant);
-  if (!needle.length) return null;
-  return findTokenSubsequence(tokens, needle);
+  for (const needle of variantNeedles(variant)) {
+    const span = findTokenSubsequence(tokens, needle);
+    if (span) return span;
+  }
+  return null;
 }
 
 /**
@@ -94,20 +112,19 @@ function gradeMarkingPoints(tokens, markingPoints) {
     let matchedEnd = -1;
 
     for (const variant of mp.accepted || []) {
-      const needle = tokenizeB2KeyWordAnswer(variant);
-      if (!needle.length) continue;
-
       const haystack = tokens.slice(searchFrom);
-      const span = findTokenSubsequence(haystack, needle);
-      if (!span) continue;
+      for (const needle of variantNeedles(variant)) {
+        const span = findTokenSubsequence(haystack, needle);
+        if (!span) continue;
 
-      const absoluteStart = searchFrom + span.start;
-      const absoluteEnd = searchFrom + span.end;
+        const absoluteStart = searchFrom + span.start;
+        const absoluteEnd = searchFrom + span.end;
 
-      if (absoluteStart < bestStart) {
-        matchedVariant = variant;
-        matchedEnd = absoluteEnd;
-        bestStart = absoluteStart;
+        if (absoluteStart < bestStart) {
+          matchedVariant = variant;
+          matchedEnd = absoluteEnd;
+          bestStart = absoluteStart;
+        }
       }
     }
 
@@ -162,9 +179,9 @@ export function markingPointsCoverAnswerExactly(tokens, mpResults, markingPoints
  * @returns {string | null}
  */
 function matchFullAnswer(studentAnswer, fullAnswers) {
-  const normalizedStudent = normalizeB2KeyWordAnswer(studentAnswer);
+  const studentForms = new Set(expandRuoeAnswerForms(studentAnswer));
   for (const candidate of fullAnswers || []) {
-    if (normalizeB2KeyWordAnswer(candidate) === normalizedStudent) {
+    if (expandRuoeAnswerForms(candidate).some((form) => studentForms.has(form))) {
       return candidate;
     }
   }
@@ -221,7 +238,6 @@ export function gradeB2KeyWordTransformation(studentAnswer, answerKey) {
     });
   }
 
-  const tokens = tokenizeB2KeyWordAnswer(studentAnswer);
   const wordCount = countCambridgeKeyWordWords(studentAnswer);
   const emptyMpResults = (answerKey.markingPoints || []).map((mp) => ({
     id: mp.id,
@@ -241,6 +257,27 @@ export function gradeB2KeyWordTransformation(studentAnswer, answerKey) {
     });
   }
 
+  const forms = expandRuoeAnswerForms(studentAnswer);
+  let best = null;
+  for (const form of forms) {
+    const graded = gradeExpandedAnswer(form, answerKey, wordCount, emptyMpResults);
+    if (!best || graded.score > best.score || (graded.score === best.score && graded.reason === 'full_match' && best.reason !== 'full_match')) {
+      best = graded;
+    }
+  }
+  return best;
+}
+
+/**
+ * Grade one already-expanded reading of the student answer.
+ * Word count stays the surface Cambridge count from the raw answer.
+ * @param {string} expandedAnswer
+ * @param {B2KeyWordAnswerKey} answerKey
+ * @param {number} wordCount
+ * @param {Array<{ id: number, correct: boolean, matchedVariant: string | null }>} emptyMpResults
+ */
+function gradeExpandedAnswer(expandedAnswer, answerKey, wordCount, emptyMpResults) {
+  const tokens = tokenizeB2KeyWordAnswer(expandedAnswer);
   const keywordEval = evaluateB2KeyWordKeywordStatus(answerKey.keyword, tokens);
   const { status: keywordStatus, occurrences: keywordOccurrences } = keywordEval;
 
@@ -267,7 +304,7 @@ export function gradeB2KeyWordTransformation(studentAnswer, answerKey) {
     });
   }
 
-  const matchedFullAnswer = matchFullAnswer(studentAnswer, answerKey.fullAnswers);
+  const matchedFullAnswer = matchFullAnswer(expandedAnswer, answerKey.fullAnswers);
   if (matchedFullAnswer) {
     return buildBaseResult({
       score: 2,

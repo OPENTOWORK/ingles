@@ -90,7 +90,7 @@ const ADMIN_EXTRA_SECTIONS = `
 ## Secciones adicionales (administrador en la home)
 - **Theory** (/teoria): teoría y ejercicios por tema (también enlaces en la home para admin).
 - **Placement Test** (/prueba-nivel): test de nivel inicial.
-- **Training** (/training): entrenamiento por nivel y habilidad.
+- **Training** (/training): camino de gramática.
 - **Precios** (/precios): comparativa de planes (solo administradores, oculto para estudiantes de momento).
 - **Plan financiero** (/admin/plan-financiero): monetización, sincronización del catálogo, suscripciones e ingresos (solo admin).
 - **Plan de marketing** (/admin/plan-marketing): promociones, resultados de captación y atribución de leads (admin y marketing).

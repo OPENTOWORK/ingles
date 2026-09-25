@@ -551,6 +551,26 @@
   background: #f8fafc;
 }
 
+.formResponseLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.7rem;
+  background: #fff;
+  color: #4338ca;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.formResponseLink:hover {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+}
+
 .formResponseTitle {
   display: flex;
   justify-content: space-between;

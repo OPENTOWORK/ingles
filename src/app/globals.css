@@ -1600,6 +1600,16 @@ body {
   cursor: pointer;
 }
 
+.app-nav__group-label {
+  display: block;
+  padding: 0.85rem 1.25rem 0.2rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
 .app-nav__drawer-nav {
   flex: 1;
   overflow-y: auto;

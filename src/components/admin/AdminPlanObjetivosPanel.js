@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
@@ -9,6 +9,7 @@ import { canAccessPlanObjetivosAdminPanel, getRoleNameByUserId } from '@/utils/a
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import FormularioRunner from '@/components/formularios/FormularioRunner';
+import AdminFormularioRespuestas from '@/components/admin/AdminFormularioRespuestas';
 import { WELCOME_FORM_MOMENT } from '@/lib/formularioRespuestas';
 import styles from './AdminPlanObjetivosPanel.module.css';
 
@@ -92,6 +93,8 @@ function FormularioPreview({ form }) {
 
 export default function AdminPlanObjetivosPanel() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const vista = searchParams.get('vista') === 'respuestas' ? 'respuestas' : 'editar';
   const [loading, setLoading] = useState(true);
   const [forms, setForms] = useState([]);
   const [selectedId, setSelectedId] = useState('');
@@ -188,6 +191,19 @@ export default function AdminPlanObjetivosPanel() {
     setMode('edit');
   }, [selected?.id]);
 
+  const openVista = (nextVista, extra = {}) => {
+    const params = new URLSearchParams();
+    if (nextVista === 'respuestas') {
+      params.set('vista', 'respuestas');
+      const formulario = extra.formularioId ?? searchParams.get('formulario') ?? '';
+      const usuario = extra.userId ?? searchParams.get('usuario') ?? '';
+      if (formulario) params.set('formulario', formulario);
+      if (usuario) params.set('usuario', usuario);
+    }
+    const query = params.toString();
+    router.replace(query ? `/admin/plan-objetivos/?${query}` : '/admin/plan-objetivos/');
+  };
+
   const openQuestionEditor = (question) => {
     setMode('edit');
     if (question) {
@@ -274,13 +290,51 @@ export default function AdminPlanObjetivosPanel() {
   }
 
   return (
-    <div className="admin-module admin-module--narrow">
+    <div className={`admin-module${vista === 'respuestas' ? '' : ' admin-module--narrow'}`}>
       <PanelPageHeader
         title="Formularios"
-        subtitle="Crea, edita o borra formularios y sus preguntas. La vista previa no guarda respuestas."
+        subtitle={
+          vista === 'respuestas'
+            ? 'Filtra quién ha contestado y qué ha respondido.'
+            : 'Crea, edita o borra formularios y sus preguntas. La vista previa no guarda respuestas.'
+        }
         mascotVariant={8}
       />
 
+      <div className={styles.mainTabs} role="tablist" aria-label="Secciones de formularios">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={vista === 'respuestas'}
+          className={`${styles.tab} ${vista === 'respuestas' ? styles.tabActive : ''}`}
+          onClick={() => openVista('respuestas')}
+        >
+          Respuestas
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={vista === 'editar'}
+          className={`${styles.tab} ${vista === 'editar' ? styles.tabActive : ''}`}
+          onClick={() => openVista('editar')}
+        >
+          Editar formularios
+        </button>
+      </div>
+
+      {vista === 'respuestas' ? (
+        <AdminFormularioRespuestas
+          forms={forms}
+          formularioId={searchParams.get('formulario') || ''}
+          userId={searchParams.get('usuario') || ''}
+          onFiltersChange={({ formularioId, userId }) =>
+            openVista('respuestas', { formularioId, userId })
+          }
+        />
+      ) : null}
+
+      {vista === 'editar' ? (
+      <>
       <div className={styles.toolbar}>
         <div className={styles.tabs} role="tablist" aria-label="Formularios">
           {forms.map((form) => (
@@ -373,8 +427,8 @@ export default function AdminPlanObjetivosPanel() {
             </label>
             {draftMoment === WELCOME_FORM_MOMENT && (
               <p className={styles.momentNote}>
-                Se muestra una sola vez a cada alumno y no puede cerrarlo sin enviarlo. Sus respuestas
-                aparecen en su ficha de Administración, en «Formularios».
+                Se muestra una sola vez a cada alumno y no puede cerrarlo sin enviarlo. Las respuestas
+                se consultan en la pestaña Respuestas.
               </p>
             )}
             <div className={styles.rowActions}>
@@ -470,6 +524,8 @@ export default function AdminPlanObjetivosPanel() {
           )}
         </>
       )}
+      </>
+      ) : null}
 
       {confirmDelete && (
         <div className={styles.overlay} role="presentation" onClick={() => setConfirmDelete(null)}>

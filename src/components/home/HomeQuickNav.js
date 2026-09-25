@@ -20,7 +20,7 @@ export default function HomeQuickNav() {
   if (links.length === 0) return null;
 
   return (
-    <nav className="home-quick-nav" aria-label="Theory, placement test, training and plans">
+    <nav className="home-quick-nav" aria-label="Theory, placement test and plans">
       <ul className="home-quick-nav__list">
         {links.map((item) => (
           <li key={item.href}>

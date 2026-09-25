@@ -17,6 +17,8 @@ import {
   gradeLegacyB2KeyWordTransformation,
   markingPointsCoverAnswerExactly,
 } from '@/lib/gradeB2KeyWordTransformation';
+import { expandRuoeAnswerForms } from '@/lib/ruoeContractionEquivalence';
+import { normalizeText, openGapAnswerMatches } from '@/utils/b2ExamPaperShared';
 
 /** @returns {import('@/lib/gradeB2KeyWordTransformation').B2KeyWordAnswerKey} */
 function meanDeleteKey() {
@@ -649,5 +651,158 @@ describe('gradeLegacyB2KeyWordTransformation', () => {
       acceptedFullAnswers: accepted,
     });
     assert.equal(r.score, 0);
+  });
+});
+
+function contractionKey({ keyword, full, mp1, mp2 }) {
+  return {
+    type: 'b2_key_word_transformation',
+    version: 1,
+    keyword,
+    fullAnswers: [full],
+    markingPoints: [
+      { id: 1, accepted: [mp1] },
+      { id: 2, accepted: [mp2] },
+    ],
+  };
+}
+
+describe('RUOE contraction equivalence', () => {
+  it("wasn't as relaxed as matches was not as relaxed as and counts as 5", () => {
+    const key = contractionKey({
+      keyword: { text: 'AS', requiredOccurrences: 2 },
+      full: 'was not as relaxed as',
+      mp1: 'was not',
+      mp2: 'as relaxed as',
+    });
+    const r = gradeB2KeyWordTransformation("wasn't as relaxed as", key);
+    assert.equal(r.score, 2);
+    assert.equal(r.reason, 'full_match');
+    assert.equal(r.wordCount, 5);
+    assert.equal(countCambridgeKeyWordWords("wasn't as relaxed as"), countCambridgeKeyWordWords('was not as relaxed as'));
+  });
+
+  it("didn't have to matches did not have to", () => {
+    const key = contractionKey({
+      keyword: 'HAVE',
+      full: 'did not have to',
+      mp1: 'did not',
+      mp2: 'have to',
+    });
+    const r = gradeB2KeyWordTransformation("didn't have to", key);
+    assert.equal(r.score, 2);
+    assert.equal(r.reason, 'full_match');
+    assert.equal(r.wordCount, 4);
+  });
+
+  it("couldn't have been matches could not have been", () => {
+    const key = contractionKey({
+      keyword: 'BEEN',
+      full: 'could not have been',
+      mp1: 'could not',
+      mp2: 'have been',
+    });
+    const r = gradeB2KeyWordTransformation("couldn't have been", key);
+    assert.equal(r.score, 2);
+    assert.equal(r.wordCount, 4);
+  });
+
+  it("hasn't been matches has not been", () => {
+    const key = contractionKey({
+      keyword: 'BEEN',
+      full: 'has not been',
+      mp1: 'has not',
+      mp2: 'been',
+    });
+    const r = gradeB2KeyWordTransformation("hasn't been", key);
+    assert.equal(r.score, 2);
+    assert.equal(r.wordCount, 3);
+  });
+
+  it("wasn't relaxed as is not the canonical answer", () => {
+    const key = contractionKey({
+      keyword: { text: 'AS', requiredOccurrences: 2 },
+      full: 'was not as relaxed as',
+      mp1: 'was not',
+      mp2: 'as relaxed as',
+    });
+    const r = gradeB2KeyWordTransformation("wasn't relaxed as", key);
+    assert.equal(r.score, 0);
+    assert.notEqual(r.reason, 'full_match');
+  });
+
+  it("couldn't have went is not could not have gone", () => {
+    const key = contractionKey({
+      keyword: 'GONE',
+      full: 'could not have gone',
+      mp1: 'could not',
+      mp2: 'have gone',
+    });
+    const r = gradeB2KeyWordTransformation("couldn't have went", key);
+    assert.equal(r.score, 0);
+    assert.notEqual(r.reason, 'full_match');
+  });
+
+  it("can't counts as one word and matches cannot, not can not", () => {
+    assert.equal(countCambridgeKeyWordWords("can't have gone"), 3);
+    assert.equal(countCambridgeKeyWordWords('cannot have gone'), 3);
+    assert.equal(countCambridgeKeyWordWords('can not have gone'), 4);
+    const key = contractionKey({
+      keyword: 'CAN',
+      full: 'cannot have gone',
+      mp1: 'cannot',
+      mp2: 'have gone',
+    });
+    assert.equal(gradeB2KeyWordTransformation("can't have gone", key).score, 2);
+    assert.notEqual(gradeB2KeyWordTransformation('can not have gone', key).score, 2);
+  });
+
+  it('does not expand ambiguous contractions into the wrong auxiliary', () => {
+    const had = contractionKey({
+      keyword: 'HAD',
+      full: 'he had left',
+      mp1: 'he had',
+      mp2: 'left',
+    });
+    const would = contractionKey({
+      keyword: 'WOULD',
+      full: 'he would leave',
+      mp1: 'he would',
+      mp2: 'leave',
+    });
+    assert.equal(gradeB2KeyWordTransformation("he'd left", had).score, 2);
+    assert.notEqual(gradeB2KeyWordTransformation("he'd left", would).score, 2);
+    assert.deepEqual(expandRuoeAnswerForms("he's finished").sort(), ['he has finished', 'he is finished']);
+    const has = contractionKey({
+      keyword: 'HAS',
+      full: 'he has finished',
+      mp1: 'he has',
+      mp2: 'finished',
+    });
+    const isTired = contractionKey({
+      keyword: 'IS',
+      full: 'he is tired',
+      mp1: 'he is',
+      mp2: 'tired',
+    });
+    assert.equal(gradeB2KeyWordTransformation("he's finished", has).score, 2);
+    assert.notEqual(gradeB2KeyWordTransformation("he's finished", isTired).score, 2);
+    assert.equal(gradeB2KeyWordTransformation("it's been", contractionKey({
+      keyword: 'BEEN',
+      full: 'it has been',
+      mp1: 'it has',
+      mp2: 'been',
+    })).score, 2);
+  });
+
+  it("open cloze accepts cannot for can't and rejects a two-word expansion", () => {
+    const expected = new Set([normalizeText("can't")]);
+    assert.equal(openGapAnswerMatches('cannot', expected), true);
+    assert.equal(openGapAnswerMatches("can't", expected), true);
+    assert.equal(openGapAnswerMatches('can not', expected), false);
+    const wasNot = new Set([normalizeText('was not')]);
+    assert.equal(openGapAnswerMatches("wasn't", wasNot), false);
+    const didnt = new Set([normalizeText("didn't")]);
+    assert.equal(openGapAnswerMatches('did not', didnt), false);
   });
 });

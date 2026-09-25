@@ -11,7 +11,7 @@ import {
 import { hasEntitlement } from '@/lib/subscriptionPlans';
 
 /** When true, Training paths show COMING SOON for students only. */
-export const STUDENT_TRAINING_COMING_SOON = true;
+export const STUDENT_TRAINING_COMING_SOON = false;
 
 /** CEFR levels on /niveles that show COMING SOON for students (B2 stays open). */
 export const STUDENT_NIVELES_COMING_SOON_LEVELS = new Set(['A2', 'B1', 'C1', 'C2']);

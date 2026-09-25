@@ -37,6 +37,39 @@ function stableBaseId(level, skill, difficulty, levelNumber) {
   return levelNum * 10000 + (Math.abs(hash) % 1000);
 }
 
+/**
+ * Authored typed gap-fill levels (grammar path). Items keep their blueprint metadata
+ * (gaps, acceptedAnswers, errorTag) on top of the shared exercise shape.
+ */
+async function loadGapFillExercises(level, skill, difficulty, levelNumber, baseId, difficultyNum) {
+  const { getGapFillExercise } = await import('./trainingGapFillContent.js');
+  const skillKey = skill.replace(/_/g, '-');
+  const exercise = getGapFillExercise(level, skillKey, difficulty, levelNumber);
+  if (!exercise) return null;
+
+  return mapExerciseList(
+    exercise.items.map((item) => ({
+      ...item,
+      type: 'gap_fill',
+      exerciseId: exercise.exerciseId,
+      cefr: exercise.cefr,
+      category: exercise.category,
+      grammarFocus: exercise.grammarFocus,
+      instruction: exercise.instruction,
+      /** Legacy fields so any generic consumer still sees a question and a key. */
+      question: exercise.instruction,
+      correct:
+        item.solution ||
+        item.canonicalAnswer ||
+        (item.gaps || []).map((gap) => gap.canonicalAnswer).join(' / '),
+    })),
+    baseId,
+    difficultyNum,
+    [level, difficulty, skill.replace(/-/g, '_'), exercise.category, exercise.grammarFocus],
+    45,
+  );
+}
+
 async function loadA2BasicoExercises(level, skill, difficulty, levelNumber, count, baseId, difficultyNum) {
   const { getA2BasicoExerciseTemplates, isA2BasicoTraining } = await import('./a2TrainingContent.js');
   const normalizedSkill = skill.replace(/-/g, '_');
@@ -120,6 +153,9 @@ async function generateExercisesBySkill(level, skill, difficulty, levelNumber, c
     }
     return createPlaceholderExercises(level, skill, difficulty, levelNumber, count, baseId, difficultyNum);
   };
+
+  const gapFillSet = await loadGapFillExercises(level, skill, difficulty, levelNumber, baseId, difficultyNum);
+  if (gapFillSet) return gapFillSet;
 
   const a2Set = await loadA2BasicoExercises(level, skill, difficulty, levelNumber, count, baseId, difficultyNum);
   if (a2Set) return a2Set;

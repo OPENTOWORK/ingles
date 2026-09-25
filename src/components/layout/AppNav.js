@@ -23,7 +23,7 @@ import {
 } from '@/config/appNavMenu';
 import { APP_ROUTES } from '@/config/appRoutes';
 
-function AppNavInner({ session, userRole, onLogout }) {
+function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useMountedSearchParams();
@@ -104,18 +104,20 @@ function AppNavInner({ session, userRole, onLogout }) {
 
   return (
     <>
-      <button
-        type="button"
-        className="app-nav__toggle"
-        aria-expanded={mobileOpen}
-        aria-controls="app-mobile-nav"
-        aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-        onClick={() => setMobileOpen((open) => !open)}
-      >
-        <span className="app-nav__toggle-bar" />
-        <span className="app-nav__toggle-bar" />
-        <span className="app-nav__toggle-bar" />
-      </button>
+      {hideMobileToggle ? null : (
+        <button
+          type="button"
+          className="app-nav__toggle"
+          aria-expanded={mobileOpen}
+          aria-controls="app-mobile-nav"
+          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          onClick={() => setMobileOpen((open) => !open)}
+        >
+          <span className="app-nav__toggle-bar" />
+          <span className="app-nav__toggle-bar" />
+          <span className="app-nav__toggle-bar" />
+        </button>
+      )}
 
       <nav className="app-nav app-nav--desktop" aria-label="Main navigation">
         <div className="app-nav__primary" role="group" aria-label="Sections">
@@ -125,17 +127,25 @@ function AppNavInner({ session, userRole, onLogout }) {
                   <div
                     key={item.href}
                     className={`app-nav__dropdown-wrap app-nav__dropdown-wrap--hover${desktopHoverMenuClass(
-                      'exam-strategies',
+                      item.menuId,
                     )}`}
-                    {...bindDesktopHoverMenu('exam-strategies')}
+                    {...bindDesktopHoverMenu(item.menuId)}
                     {...(item.tourId ? { 'data-tour': item.tourId } : {})}
                   >
                     <NavLink
-                      href={examStrategiesHubHref}
+                      href={
+                        item.menuId === 'exam-strategies'
+                          ? examStrategiesHubHref
+                          : resolveNavItemHref(item.href, session)
+                      }
                       className={`${desktopLinkClass(item.href)} app-nav__link--has-menu app-nav__link--dropdown-trigger${
-                        navModel.examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
+                        item.menuId === 'exam-strategies' && navModel.examStrategiesLocked
+                          ? ' app-nav__link--locked-preview'
+                          : ''
                       }`}
-                      onClick={goToExamStrategiesHub}
+                      onClick={
+                        item.menuId === 'exam-strategies' ? goToExamStrategiesHub : closeDesktopDropdowns
+                      }
                     >
                       {item.label}
                       <span className="app-nav__chevron" aria-hidden>
@@ -143,12 +153,26 @@ function AppNavInner({ session, userRole, onLogout }) {
                       </span>
                     </NavLink>
                     <div className="app-nav__dropdown app-nav__dropdown--hover" role="menu">
-                      <ExamStrategiesNavMenuItems
-                        locked={navModel.examStrategiesLocked}
-                        guestRequiresLogin={navModel.guest}
-                        variant="desktop"
-                        onNavigate={closeDesktopDropdowns}
-                      />
+                      {item.menuId === 'exam-strategies' ? (
+                        <ExamStrategiesNavMenuItems
+                          locked={navModel.examStrategiesLocked}
+                          guestRequiresLogin={navModel.guest}
+                          variant="desktop"
+                          onNavigate={closeDesktopDropdowns}
+                        />
+                      ) : (
+                        item.menuItems.map((sub) => (
+                          <NavLink
+                            key={sub.href}
+                            href={resolveNavItemHref(sub.href, session)}
+                            role="menuitem"
+                            className="app-nav__dropdown-item"
+                            onClick={closeDesktopDropdowns}
+                          >
+                            {sub.label}
+                          </NavLink>
+                        ))
+                      )}
                     </div>
                   </div>
                 ) : (
@@ -302,6 +326,7 @@ function AppNavInner({ session, userRole, onLogout }) {
         </div>
       </nav>
 
+      {hideMobileToggle ? null : (
       <button
         type="button"
         className={`app-nav__backdrop${mobileOpen ? ' is-visible' : ''}`}
@@ -309,7 +334,9 @@ function AppNavInner({ session, userRole, onLogout }) {
         tabIndex={mobileOpen ? 0 : -1}
         onClick={closeMobile}
       />
+      )}
 
+      {hideMobileToggle ? null : (
       <aside
         id="app-mobile-nav"
         className={`app-nav__drawer${mobileOpen ? ' is-open' : ''}`}
@@ -333,6 +360,7 @@ function AppNavInner({ session, userRole, onLogout }) {
           />
         </nav>
       </aside>
+      )}
     </>
   );
 }

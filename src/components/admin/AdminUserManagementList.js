@@ -133,28 +133,25 @@ function UserFormResponses({ userId, loadFormResponses, formatRegistrationDate }
         <p className={styles.stripeNote}>Todavía no ha respondido ningún formulario.</p>
       ) : (
         <div className={styles.formResponses}>
-          {state.items.map((item) => (
-            <div key={item.id} className={styles.formResponse}>
-              <p className={styles.formResponseTitle}>
-                <span>{item.formulario_titulo}</span>
+          {state.items.map((item) => {
+            const params = new URLSearchParams({
+              vista: 'respuestas',
+              usuario: userId,
+            });
+            if (item.formulario_id) params.set('formulario', item.formulario_id);
+            return (
+              <Link
+                key={item.id}
+                href={`/admin/plan-objetivos/?${params.toString()}`}
+                className={styles.formResponseLink}
+              >
+                <span>Contestado: {item.formulario_titulo || 'Formulario'}</span>
                 <span className={styles.formResponseDate}>
                   {formatRegistrationDate(item.completado_en)}
                 </span>
-              </p>
-              {item.respuestas?.length ? (
-                <dl className={styles.formAnswers}>
-                  {item.respuestas.map((answer) => (
-                    <div key={answer.pregunta_id} className={styles.formAnswer}>
-                      <dt>{answer.pregunta}</dt>
-                      <dd>{answer.texto || '—'}</dd>
-                    </div>
-                  ))}
-                </dl>
-              ) : (
-                <p className={styles.stripeNote}>Visto, sin preguntas que responder.</p>
-              )}
-            </div>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       )}
     </section>

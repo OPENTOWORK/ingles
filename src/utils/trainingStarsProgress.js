@@ -227,6 +227,32 @@ export function computeAllCefrStarProgress() {
   );
 }
 
+export function getTrainingStarsStorageKey(cefrLevel, skill, difficulty) {
+  return `stars_${String(cefrLevel || '').toLowerCase()}_${skill}_${difficulty}`;
+}
+
+/**
+ * Keeps the best result for a path level. Stars never go down on a retry.
+ * @returns {{ previous: number, saved: boolean }}
+ */
+export function saveTrainingLevelStars({ cefrLevel, skill, difficulty, levelNumber, stars }) {
+  if (typeof window === 'undefined') return { previous: 0, saved: false };
+
+  const storageKey = getTrainingStarsStorageKey(cefrLevel, skill, difficulty);
+  try {
+    const saved = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    const previous = Number(saved[levelNumber]) || 0;
+    if (stars <= previous) return { previous, saved: false };
+
+    saved[levelNumber] = stars;
+    localStorage.setItem(storageKey, JSON.stringify(saved));
+    notifyTrainingStarsUpdated(storageKey);
+    return { previous, saved: true };
+  } catch {
+    return { previous: 0, saved: false };
+  }
+}
+
 export const TRAINING_STARS_UPDATED_EVENT = 'training-stars-updated';
 
 /** @param {string} [updatedStorageKey] When set, refresh only that key in the index. */

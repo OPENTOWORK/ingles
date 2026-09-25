@@ -772,3 +772,86 @@
   line-height: 1.55;
   color: #312e81;
 }
+
+.registrationToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1.25rem 0 0.85rem;
+}
+
+.registrationFilter {
+  appearance: none;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.registrationFilterActive {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #3730a3;
+}
+
+.registrationTableWrap {
+  overflow: auto;
+  max-height: calc(100vh - 18rem);
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+}
+
+.registrationTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.registrationTable th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.registrationTable td {
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #0f172a;
+  vertical-align: middle;
+}
+
+.registrationTable tbody tr:hover td {
+  background: #f8fafc;
+}
+
+.statusYes,
+.statusNo {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.statusYes {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.statusNo {
+  background: #fffbeb;
+  color: #b45309;
+}

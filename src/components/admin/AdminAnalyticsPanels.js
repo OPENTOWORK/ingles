@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { supabase } from '@/utils/supabaseClient';
 import {
   Bar,
   BarChart,
@@ -26,6 +27,7 @@ import {
   Users,
 } from 'lucide-react';
 import { formatSessionDuration } from '@/lib/userActivity';
+import { isStudentRole } from '@/utils/authRoles';
 import styles from './AdminAnalyticsPanels.module.css';
 
 const PERIOD_LABELS = {
@@ -700,8 +702,10 @@ export default function AdminAnalyticsPanels({
   trackingEndDate = '',
   setTrackingEndDate,
   onRunStudyTrackingQuery,
+  users = [],
 }) {
   const [activeTab, setActiveTab] = useState('growth');
+  const [visitStats, setVisitStats] = useState(null);
 
   const totalIncorporaciones = analytics.incorporaciones.reduce((acc, row) => acc + row.total, 0);
   const selectedConnectionRole =
@@ -712,6 +716,80 @@ export default function AdminAnalyticsPanels({
   const excludeStaff = platformAnalyticsAudience === 'sin_staff';
 
   const sortedLevels = [...(analytics.usuariosPorNivel || [])].sort((a, b) => b.total - a.total);
+
+  const registrationReport = useMemo(() => {
+    const roleById = new Map(roles.map((role) => [String(role.id), role.nombre || '']));
+    const rows = users
+      .filter((item) => {
+        const roleName = roleById.get(String(item.rol_id)) || '';
+        return !roleName || isStudentRole(roleName);
+      })
+      .map((item) => {
+        const created = item.creado_en ? new Date(item.creado_en) : null;
+        return {
+          id: item.id,
+          nombre: item.nombre?.trim() || 'Sin nombre',
+          email: item.email || '—',
+          creadoEn: created && !Number.isNaN(created.getTime()) ? created : null,
+        };
+      })
+      .sort((a, b) => (b.creadoEn?.getTime() || 0) - (a.creadoEn?.getTime() || 0));
+
+    const firstDate = rows.reduce((earliest, row) => {
+      if (!row.creadoEn) return earliest;
+      if (!earliest || row.creadoEn < earliest) return row.creadoEn;
+      return earliest;
+    }, null);
+
+    const byMonth = new Map();
+    for (const row of rows) {
+      if (!row.creadoEn) continue;
+      const key = `${row.creadoEn.getFullYear()}-${String(row.creadoEn.getMonth() + 1).padStart(2, '0')}`;
+      const bucket = byMonth.get(key) || { key, registrados: 0 };
+      bucket.registrados += 1;
+      byMonth.set(key, bucket);
+    }
+    const months = [...byMonth.values()]
+      .sort((a, b) => a.key.localeCompare(b.key))
+      .map((bucket) => ({
+        ...bucket,
+        label: new Date(`${bucket.key}-01T12:00:00`).toLocaleDateString('es-ES', {
+          month: 'short',
+          year: '2-digit',
+        }),
+      }));
+
+    return {
+      rows,
+      total: rows.length,
+      firstDate,
+      months,
+    };
+  }, [users, roles]);
+
+  useEffect(() => {
+    if (activeTab !== 'entries') return undefined;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+        const res = await fetch('/api/admin/visitors/summary/', {
+          credentials: 'include',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        const payload = await res.json().catch(() => ({}));
+        if (!cancelled && res.ok) setVisitStats(payload);
+      } catch {
+        if (!cancelled) setVisitStats(null);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTab]);
 
   return (
     <section className={styles.panel}>
@@ -724,6 +802,15 @@ export default function AdminAnalyticsPanels({
           </p>
         </div>
         <div className={styles.tabList} role="tablist" aria-label="Secciones de analíticas">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'entries'}
+            className={`${styles.tab} ${activeTab === 'entries' ? styles.tabActive : ''}`}
+            onClick={() => setActiveTab('entries')}
+          >
+            Entradas
+          </button>
           <button
             type="button"
             role="tab"
@@ -755,6 +842,119 @@ export default function AdminAnalyticsPanels({
       </header>
 
       <div className={styles.panelBody}>
+        {activeTab === 'entries' ? (
+          <>
+            <p className={styles.sectionIntro}>
+              Desde ahora se guarda cada visita, también sin cuenta. Si esa misma persona se
+              registra después, pasa al grupo de registrados. El equipo no cuenta.
+              {visitStats?.since
+                ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}.`
+                : ' Todavía no hay ninguna visita guardada.'}
+            </p>
+
+            <div className={styles.kpiGrid}>
+              <KpiCard
+                icon={Users}
+                label="Entraron"
+                value={visitStats ? visitStats.entered.toLocaleString('es-ES') : '…'}
+                hint="Visitas distintas desde ahora"
+                accent="#6366f1"
+                iconBg="#eef2ff"
+              />
+              <KpiCard
+                icon={UserPlus}
+                label="Se registraron"
+                value={visitStats ? visitStats.registered.toLocaleString('es-ES') : '…'}
+                hint="De esas visitas, crearon cuenta"
+                accent="#10b981"
+                iconBg="#ecfdf5"
+              />
+              <KpiCard
+                icon={UserMinus}
+                label="Sin registrarse"
+                value={visitStats ? visitStats.unregistered.toLocaleString('es-ES') : '…'}
+                hint="Entraron y no crearon cuenta"
+                accent="#f59e0b"
+                iconBg="#fffbeb"
+              />
+            </div>
+
+            <div className={styles.chartCard}>
+              <h3 className={styles.chartCardTitle}>
+                Cuentas creadas desde el inicio
+                {registrationReport.firstDate
+                  ? ` (${registrationReport.firstDate.toLocaleDateString('es-ES', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    })})`
+                  : ''}
+              </h3>
+              {registrationReport.months.length === 0 ? (
+                <p className={styles.emptyState}>Sin cuentas en este corte.</p>
+              ) : (
+                <div className={styles.chartBox}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={registrationReport.months}
+                      margin={{ top: 8, right: 8, left: -12, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                      <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#64748b' }} />
+                      <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                      <Tooltip
+                        content={({ active, payload, label }) => (
+                          <ChartTooltip active={active} payload={payload} label={label} />
+                        )}
+                      />
+                      <Bar dataKey="registrados" name="Se registraron" fill="#10b981" radius={[6, 6, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </div>
+
+            {registrationReport.rows.length === 0 ? (
+              <p className={styles.emptyState}>Nadie en este corte.</p>
+            ) : (
+              <div className={styles.registrationTableWrap}>
+                <table className={styles.registrationTable}>
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Correo</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {registrationReport.rows.map((row) => (
+                      <tr key={row.id}>
+                        <td>{row.nombre}</td>
+                        <td>{row.email}</td>
+                        <td>
+                          {row.creadoEn
+                            ? row.creadoEn.toLocaleDateString('es-ES', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric',
+                              })
+                            : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </>
+        ) : null}
+
         {activeTab === 'growth' ? (
           <>
             <p className={styles.sectionIntro}>

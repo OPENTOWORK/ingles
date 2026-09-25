@@ -49,7 +49,7 @@ import {
   extractLegacyPart2InlineExample,
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
-  normalizeText,
+  openGapAnswerMatches,
   resolveB2KeyWordPartContent,
 } from '@/utils/b2ExamPaperShared';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
@@ -1065,7 +1065,7 @@ function UseOfEnglishExamsPageInner() {
 
       if (typeof openChecks[questionKey] === 'boolean') return;
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
-      const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+      const isCorrect = openGapAnswerMatches(currentValue, expectedAnswers);
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
       void (async () => {

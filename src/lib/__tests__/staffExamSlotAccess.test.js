@@ -54,6 +54,7 @@ describe('staff exam slot access', () => {
     }
 
     assert.equal(usesStudentContentRestrictions('alumno'), true);
+    assert.equal(isTrainingLockedForUser('alumno'), false);
     assert.equal(isNivelesLevelComingSoonForUser('alumno', 'C1'), true);
     assert.equal(isExamModeSectionKeyBlockedForStudent('alumno', 'listening'), false);
     assert.equal(isExamModeSectionKeyBlockedForStudent('alumno', 'speaking'), true);

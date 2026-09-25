@@ -11,6 +11,8 @@ const CONFETTI_COLORS = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#f43f5e'];
  *   levelNum: number,
  *   topicLabel?: string,
  *   improved?: boolean,
+ *   badge?: string,
+ *   levelLabel?: string,
  *   onClose: () => void,
  * }} props
  */
@@ -19,6 +21,8 @@ export default function TrainingStarsCelebration({
   levelNum,
   topicLabel = '',
   improved = true,
+  badge = 'Level complete',
+  levelLabel = '',
   onClose,
 }) {
   const particles = useMemo(
@@ -68,12 +72,12 @@ export default function TrainingStarsCelebration({
           </div>
         ) : null}
 
-        <span className={styles.badge}>Level complete</span>
+        <span className={styles.badge}>{badge}</span>
         <h2 id="training-celebration-title" className={styles.title}>
           {stars > 0 ? 'Great work!' : 'Level finished'}
         </h2>
         <p className={styles.subtitle}>
-          Level {levelNum}
+          {levelLabel || `Level ${levelNum}`}
           {topicLabel ? ` · ${topicLabel}` : ''}
           {stars > 0 ? ` — you earned ${stars} star${stars === 1 ? '' : 's'}.` : '.'}
         </p>

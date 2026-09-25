@@ -7,7 +7,7 @@ export const B2_BASICO_SECTIONS = [
   {
     title: 'Verb Tenses',
     topics: [
-      'Present simple gaps',
+      'Present simple',
       'Present continuous gaps',
       'Past simple drills',
       'Past continuous practice',

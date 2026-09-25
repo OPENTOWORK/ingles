@@ -149,6 +149,7 @@ import {
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
   normalizeText,
+  openGapAnswerMatches,
   splitEnunciadoAndTextFallback,
   extractFirstAudioUrl,
   isStandaloneAudioLine,
@@ -1544,7 +1545,7 @@ function B2ExamPaperPracticePageInner({
   const handleListeningGapCheck = useCallback(
     (qn, questionKey, currentValue) => {
       const expectedAnswers = openAnswerMap.get(qn) || new Set();
-      const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+      const isCorrect = openGapAnswerMatches(currentValue, expectedAnswers);
       const prevResult = openChecks[questionKey];
       setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
       if (typeof prevResult !== 'boolean') {
@@ -1629,7 +1630,7 @@ function B2ExamPaperPracticePageInner({
         if (!String(value ?? '').trim()) return;
         if (typeof next[questionKey] === 'boolean') return;
         const expected = openAnswerMap.get(questionNumber) || new Set();
-        next[questionKey] = expected.has(normalizeText(value));
+        next[questionKey] = openGapAnswerMatches(value, expected);
         changed = true;
       });
       return changed ? next : prev;
@@ -4573,7 +4574,7 @@ function B2ExamPaperPracticePageInner({
                                 type="button"
                                 onClick={() => {
                                   const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
-                                  const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+                                  const isCorrect = openGapAnswerMatches(currentValue, expectedAnswers);
                                   const prevResult = openChecks[questionKey];
                                   const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
                                   setOpenChecks(nextOpenChecks);

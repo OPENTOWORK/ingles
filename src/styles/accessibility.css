@@ -55,6 +55,14 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5) !important;
 }
 
+/* Path stations already show the current step on the circle. */
+.focus-indicators [data-path-station]:focus,
+.focus-indicators [data-quiet-nav]:focus {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+}
+
 .simplified-ui {
   --border-radius: 4px;
   --box-shadow: none;
@@ -133,7 +141,8 @@
   pointer-events: none;
 }
 
-.audio-description {
+.keyboard-nav [data-path-station]:focus::after,
+.keyboard-nav [data-quiet-nav]:focus::after {
   position: absolute;
   left: -10000px;
   width: 1px;

@@ -51,6 +51,7 @@ import {
   getOpenAnswerMap,
   inferOpenQuestionNumbersFromPrompt,
   normalizeText,
+  openGapAnswerMatches,
   resolveB2KeyWordPartContent,
   buildReadingSyntheticMcqGroups,
   buildPart6ReadingMcqGroups,
@@ -1605,7 +1606,7 @@ function B2ReadingExamsPageInner() {
 
       if (typeof openChecks[questionKey] === 'boolean') return;
       const expectedAnswers = openAnswerMap.get(questionNumber) || new Set();
-      const isCorrect = expectedAnswers.has(normalizeText(currentValue));
+      const isCorrect = openGapAnswerMatches(currentValue, expectedAnswers);
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
       readingSession.incrementCheckAttempts();

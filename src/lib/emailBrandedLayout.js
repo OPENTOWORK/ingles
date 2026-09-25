@@ -166,12 +166,14 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
           </tr>
           <tr>
             <td style="padding:22px 10px 0;text-align:center;font-size:12px;line-height:1.7;color:#64748b;">
+              <p style="margin:0 0 10px;color:#475569;">
+                Este correo no admite respuesta. Si quieres escribirnos, usa
+                <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;font-weight:600;">Contacto</a>.
+              </p>
               <p style="margin:0 0 8px;">
-                <a href="https://dralo.es" style="color:#4f46e5;text-decoration:none;font-weight:600;">dralo.es</a>
+                <a href="https://www.dralo.es" style="color:#4f46e5;text-decoration:none;font-weight:600;">dralo.es</a>
                 &nbsp;·&nbsp;
-                <a href="https://dralo.es/contacto" style="color:#4f46e5;text-decoration:none;">Contacto</a>
-                &nbsp;·&nbsp;
-                <a href="mailto:draloenglish@gmail.com" style="color:#4f46e5;text-decoration:none;">Soporte</a>
+                <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;">Contacto</a>
               </p>
               <p style="margin:0;color:#94a3b8;">© ${new Date().getFullYear()} Dralo English. Todos los derechos reservados.</p>
             </td>

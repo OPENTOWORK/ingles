@@ -19,6 +19,7 @@ import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
 import ClientAnalyticsLoader from '@/components/analytics/ClientAnalyticsLoader';
+import VisitorPresence from '@/components/analytics/VisitorPresence';
 import { isClarityExcludedPath } from '@/lib/clarity';
 import { SITE_FOOTER_TAGLINE } from '@/lib/siteSeo';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
@@ -459,6 +460,7 @@ function RootLayoutClientInner({ children }) {
         </AuthenticatedAppShell>
       )}
 
+      <VisitorPresence />
       <DeferredSiteAssistant enabled={Boolean(session) && !isMinimalLanding} />
 
       {session && !isMinimalLanding ? (

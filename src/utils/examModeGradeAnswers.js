@@ -17,7 +17,7 @@ import {
 } from '@/utils/b2ScoringV2Engine';
 import {
   getOpenAnswerMap,
-  normalizeText,
+  openGapAnswerMatches,
   resolveExamModePartScoringMode,
 } from '@/utils/b2ExamPaperShared';
 import { isMcqSelectionCorrect } from '@/utils/b2ExamTextBlocks';
@@ -40,7 +40,7 @@ export function computeSilentOpenChecks(openInputs, openAnswerMap, getQuestionKe
     const value = openInputs[key] || '';
     const expected = openAnswerMap.get(qn) || new Set();
     if (!value.trim()) continue;
-    checks[key] = expected.has(normalizeText(value));
+    checks[key] = openGapAnswerMatches(value, expected);
   }
   return checks;
 }

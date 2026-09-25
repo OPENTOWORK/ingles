@@ -28,6 +28,7 @@ export function shouldShowCheckAnswersButton({
 }
 
 import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
+import { openGapAnswerMatches } from '@/utils/b2ExamPaperShared';
 
 export function buildBulkAnswerCheckUpdate({
   openQuestionNumbers = [],
@@ -65,7 +66,7 @@ export function buildBulkAnswerCheckUpdate({
 
     if (typeof nextOpenChecks[questionKey] === 'boolean') return;
     const expected = openAnswerMap?.get?.(questionNumber) || new Set();
-    nextOpenChecks[questionKey] = expected.has(normalizeText(value));
+    nextOpenChecks[questionKey] = openGapAnswerMatches(value, expected);
   });
 
   mcqGroups.forEach((group, groupIndex) => {

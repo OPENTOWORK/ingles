@@ -56,19 +56,42 @@ export function AppSharedDrawerNav({
 
   return (
     <>
-      {sectionLinks.map((item) => (
-        <NavLink
-          key={item.href}
-          href={guestEntryHref || item.href}
-          className={`${linkClass}${
-            item.menuItems && examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
-          }`}
-          onClick={onNavigate}
-          {...(item.tourId ? { 'data-tour': item.tourId } : {})}
-        >
-          {item.label}
-        </NavLink>
-      ))}
+      {sectionLinks.map((item) => {
+        if (item.menuId === 'practice' && item.menuItems?.length) {
+          const subClass = draloVariant === 'side' ? 'app-side-menu__sub' : 'app-nav__sub';
+          return (
+            <div key={item.label} {...(item.tourId ? { 'data-tour': item.tourId } : {})}>
+              <span className="app-nav__group-label">{item.label}</span>
+              <div className={subClass}>
+                {item.menuItems.map((sub) => (
+                  <NavLink
+                    key={sub.href}
+                    href={guestEntryHref || sub.href}
+                    className={linkClass}
+                    onClick={onNavigate}
+                  >
+                    {sub.label}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+        return (
+          <NavLink
+            key={item.href}
+            href={guestEntryHref || item.href}
+            className={`${linkClass}${
+              item.menuItems && examStrategiesLocked ? ' app-nav__link--locked-preview' : ''
+            }`}
+            onClick={onNavigate}
+            {...(item.tourId ? { 'data-tour': item.tourId } : {})}
+          >
+            {item.label}
+          </NavLink>
+        );
+      })}
 
       {showDralo ? (
         <span className={`${linkClass} app-nav__dralo-soon`} aria-disabled="true">

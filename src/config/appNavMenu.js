@@ -30,7 +30,7 @@ import {
 /** Theory solo en la home (inferior, oculto para estudiantes). */
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
 
-/** Enlaces inferiores de la home (placement/training solo admin). */
+/** Enlaces inferiores de la home (placement solo admin). */
 export const NAV_LINK_PLACEMENT = {
   href: '/prueba-nivel',
   label: 'Placement Test',
@@ -39,27 +39,36 @@ export const NAV_LINK_PLACEMENT = {
 
 export const NAV_LINK_TRAINING = {
   href: '/training',
-  label: 'Training',
+  label: 'Training Practice',
   tourId: 'nav-training',
 };
 
-export const NAV_LINKS_LEARNING = [NAV_LINK_PLACEMENT, NAV_LINK_TRAINING];
+/** Practice: simulacros de examen y training. */
+export const PRACTICE_MENU_ITEMS = [
+  { href: APP_ROUTES.examPracticeDefaultLevel, label: 'Exam Practice' },
+  { href: NAV_LINK_TRAINING.href, label: NAV_LINK_TRAINING.label },
+];
 
-/** Placement Test y Training: solo administradores (todos los dispositivos). */
-export function canViewPlacementAndTraining(userRole) {
-  return isAdminRole(userRole);
-}
-
-export function getAdminLearningLinks(userRole) {
-  return canViewPlacementAndTraining(userRole) ? NAV_LINKS_LEARNING : [];
-}
+export const NAV_LINK_PRACTICE = {
+  href: APP_ROUTES.examPracticeDefaultLevel,
+  label: 'Practice',
+  tourId: 'nav-levels',
+  menuId: 'practice',
+  menuItems: PRACTICE_MENU_ITEMS,
+};
 
 /** Planes en home: usuarios con sesión excepto estudiantes. */
 export const HOME_PRICING_LINK = { href: '/precios', label: 'Planes', tourId: 'nav-pricing' };
 
-/** Enlaces de home: placement/training solo admin; planes no para estudiantes. */
+/** Placement Test en la home: solo administradores. */
+export function canViewPlacementAndTraining(userRole) {
+  return isAdminRole(userRole);
+}
+
+/** Enlaces de home: placement solo admin; planes no para estudiantes. Training vive en Practice. */
 export function getHomeQuickLinksForRole(userRole) {
-  const links = [...getAdminLearningLinks(userRole)];
+  const links = [];
+  if (canViewPlacementAndTraining(userRole)) links.push(NAV_LINK_PLACEMENT);
   if (canViewPricing(userRole) && !isStudentRole(userRole)) links.push(HOME_PRICING_LINK);
   return links;
 }
@@ -71,13 +80,11 @@ export const NAV_LINK_EXAM_STRATEGIES = {
   href: APP_ROUTES.examStrategies,
   label: 'Exam Strategies',
   tourId: 'nav-exam-theory',
+  menuId: 'exam-strategies',
   menuItems: EXAM_STRATEGIES_MENU_ITEMS,
 };
 
-export const NAV_LINKS_BEFORE_DRALO = [
-  { href: APP_ROUTES.examPracticeDefaultLevel, label: 'Exam Practice', tourId: 'nav-levels' },
-  NAV_LINK_EXAM_STRATEGIES,
-];
+export const NAV_LINKS_BEFORE_DRALO = [NAV_LINK_PRACTICE, NAV_LINK_EXAM_STRATEGIES];
 
 export const NAV_LINK_HOME = { href: '/', label: 'Home' };
 
@@ -102,7 +109,9 @@ export function resolveNavItemHref(href, session) {
 /** Extras de home visibles solo para admin en drawer / menú lateral (no barra desktop). */
 export function getAdminDrawerExtraLinks(userRole) {
   if (!isAdminRole(userRole)) return [];
-  return [HOME_THEORY_LINK, ...getAdminLearningLinks(userRole)];
+  const links = [HOME_THEORY_LINK];
+  if (canViewPlacementAndTraining(userRole)) links.push(NAV_LINK_PLACEMENT);
+  return links;
 }
 
 /**
@@ -116,6 +125,10 @@ export function getNavLinksForMobileDrawer(userRole, session) {
   return links.map((item) => ({
     ...item,
     href: resolveNavItemHref(item.href, session),
+    menuItems: item.menuItems?.map((sub) => ({
+      ...sub,
+      href: resolveNavItemHref(sub.href, session),
+    })),
   }));
 }
 
@@ -178,6 +191,7 @@ export function isNavLinkActive(href, pathname, searchParams) {
   }
 
   if (href === APP_ROUTES.examPracticeDefaultLevel) {
+    if (path === '/training' || path.startsWith('/training/')) return true;
     if (path === '/niveles' && searchParams?.get('tab') !== 'theory') return true;
     if (isExamPracticeAppPath(path)) return true;
     if (path.startsWith('/niveles/')) return true;

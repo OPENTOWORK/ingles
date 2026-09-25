@@ -70,6 +70,16 @@ const StudyActivityHeatmap = dynamic(
   },
 );
 
+const TrainingStatistics = dynamic(
+  () => import('@/components/training/TrainingStatistics').then((mod) => mod.default),
+  {
+    ssr: false,
+    loading: () => (
+      <p className="section-desc">Loading training statistics…</p>
+    ),
+  },
+);
+
 const UserErrorTrackerPanel = dynamicImport(
   () => import('@/components/profile/UserErrorTrackerPanel'),
 );
@@ -1031,14 +1041,20 @@ export default function ProfilePage() {
           ) : null}
 
           {showProgressTracking ? (
-            <>
-              <ProfileCollapsibleSection
-                title="Exam statistics"
-                className="profile-section--nested-exam-stats profile-section--exam-practice-combined"
-              >
-                <ExamStatistics userId={user?.id} embedded />
-              </ProfileCollapsibleSection>
+            <ProfileCollapsibleSection
+              title="Exam statistics"
+              className="profile-section--nested-exam-stats profile-section--exam-practice-combined"
+            >
+              <ExamStatistics userId={user?.id} embedded />
+            </ProfileCollapsibleSection>
+          ) : null}
 
+          <ProfileCollapsibleSection title="Training statistics">
+            <TrainingStatistics />
+          </ProfileCollapsibleSection>
+
+          {showProgressTracking ? (
+            <>
               <ProfileCollapsibleSection title="Study activity">
                 <StudyActivityHeatmap accessToken={layoutSession?.access_token} />
               </ProfileCollapsibleSection>

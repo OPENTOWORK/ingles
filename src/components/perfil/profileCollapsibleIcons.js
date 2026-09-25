@@ -18,6 +18,7 @@ import {
   LayoutList,
   LineChart,
   Mail,
+  Map,
   MapPin,
   Medal,
   MessageCircle,
@@ -70,6 +71,7 @@ function sectionIconKey(title) {
 const SECTION_ICONS = {
   'dralo-ia-experience': Sparkles,
   'exam-statistics': FileText,
+  'training-statistics': Map,
   'study-activity': Calendar,
   'practice-times': Timer,
   'skills-analysis': Target,

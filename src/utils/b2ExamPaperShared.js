@@ -19,6 +19,7 @@ import {
   parsePart7NumberedStems,
   parsePart7PeopleProfiles,
 } from '@/utils/b2ExamTextBlocks';
+import { openGapAnswerMatches as contractionOpenGapMatch } from '@/lib/ruoeContractionEquivalence';
 
 /**
  * Parte 4 (Key Word Transformations): separa instrucciones del bloque Questions.
@@ -1270,6 +1271,16 @@ export function normalizeText(value = '') {
     .replace(/\s+/g, ' ')
     .trim()
     .toLowerCase();
+}
+
+/**
+ * Open-gap check. Exact normalised match, plus the one-word pair can't/cannot.
+ * Multi-word expansions are not accepted here: Part 2 allows one written word.
+ * @param {string} studentValue
+ * @param {Set<string>} expectedNormalized
+ */
+export function openGapAnswerMatches(studentValue, expectedNormalized) {
+  return contractionOpenGapMatch(studentValue, expectedNormalized, normalizeText);
 }
 
 /** Display text for instant-feedback correct answers (grading still uses normalizeText). */

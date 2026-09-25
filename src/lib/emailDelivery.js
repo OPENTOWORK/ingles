@@ -8,13 +8,21 @@ function isForceResendSandbox() {
   return v === 'true' || v === '1' || v === 'yes';
 }
 
+/** Visible name so inboxes show this is not a mailbox to write back to. */
+export function formatNoReplyFrom(address) {
+  const raw = String(address || '').trim();
+  if (!raw) return raw;
+  const email = raw.includes('<') ? raw.replace(/^.*<([^>]+)>.*$/, '$1').trim() : raw;
+  return `Dralo · no responder <${email}>`;
+}
+
 /** @returns {Promise<string | null>} */
 export async function getResendFromAddress() {
   if (await isResendDomainReady()) {
-    return process.env.RESEND_FROM_EMAIL?.trim() || 'soporte@dralo.es';
+    return formatNoReplyFrom(process.env.RESEND_FROM_EMAIL?.trim() || 'soporte@dralo.es');
   }
   if (isForceResendSandbox()) {
-    return 'onboarding@resend.dev';
+    return formatNoReplyFrom('onboarding@resend.dev');
   }
   return null;
 }
@@ -27,6 +35,24 @@ export async function canUseResend() {
 /**
  * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string }} params
  */
+const NO_REPLY_TEXT =
+  'Este correo no admite respuesta. Si quieres escribirnos, usa Contacto: https://www.dralo.es/contacto';
+
+function withNoReplyNotice(text, html) {
+  const body = String(text || '').trim();
+  const nextText = body.includes('Este correo no admite respuesta')
+    ? body
+    : `${body}\n\n—\n${NO_REPLY_TEXT}`;
+
+  if (!html) return { text: nextText, html };
+  if (String(html).includes('Este correo no admite respuesta')) {
+    return { text: nextText, html };
+  }
+
+  const notice = `<p style="margin:24px 0 0;font-size:12px;line-height:1.6;color:#64748b;">Este correo no admite respuesta. Si quieres escribirnos, usa <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;font-weight:600;">Contacto</a>.</p>`;
+  return { text: nextText, html: `${html}${notice}` };
+}
+
 export async function sendEmailViaResend({ to, subject, text, html, replyTo }) {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = await getResendFromAddress();
@@ -112,6 +138,10 @@ function buildConfigError() {
  * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string }} params
  */
 export async function deliverTransactionalEmail({ to, subject, text, html, replyTo }) {
+  const noticed = withNoReplyNotice(text, html);
+  text = noticed.text;
+  html = noticed.html;
+
   if (await canUseResend()) {
     const resend = await sendEmailViaResend({ to, subject, text, html, replyTo });
     if (resend.ok) return resend;

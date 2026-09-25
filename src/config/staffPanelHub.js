@@ -71,7 +71,7 @@ export const STAFF_PANEL_HUB_META = {
   '/admin/marketing': {
     icon: 'finance',
     accent: 'rose',
-    description: 'Adquisición, customer journey, campañas y ROI',
+    description: 'Calendario, campañas, adquisición y ROI',
   },
   '/admin/marketing/promociones': {
     icon: 'finance',

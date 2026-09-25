@@ -1327,6 +1327,7 @@ export default function AdminDashboard() {
             connectionQueryKey={connectionQueryKey}
             connectionQueryLoading={connectionQueryLoading}
             roles={roles}
+            users={users}
             platformAnalyticsAudience={platformAnalyticsAudience}
             setPlatformAnalyticsAudience={setPlatformAnalyticsAudience}
             starredTeamCount={starredTeamCount}

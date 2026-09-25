@@ -45,7 +45,7 @@ const PRESET_ROUTES = [
   { label: 'B2 — Listening', path: '/exam-practice/b2/exam-listening', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Speaking', path: '/exam-practice/b2/exam-speaking', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Placement Test', path: '/prueba-nivel', roles: ['admin'] },
-  { label: 'Training', path: '/training', roles: ['admin'] },
+  { label: 'Training', path: '/training', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Planes / Pricing', path: '/precios', roles: ['admin'] },
   { label: 'Dralo AI', path: '/dralo-ai', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Contacto', path: '/contact', roles: ['guest', 'student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
@@ -136,7 +136,7 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
   if (pathname === '/soporte' && !canAccessSupportPanel(roleId)) return false;
   if (pathname === '/informatico' && !canAccessItPanel(roleId)) return false;
   if (pathname === '/precios' && !canViewPricing(roleId)) return false;
-  if ((pathname === '/prueba-nivel' || pathname.startsWith('/training')) && !canViewPlacementAndTraining(roleId)) {
+  if (pathname === '/prueba-nivel' && !canViewPlacementAndTraining(roleId)) {
     return false;
   }
 
@@ -161,6 +161,11 @@ export function getItPreviewNavSummary(roleId = 'student') {
   if (model.showPrimaryNav) {
     model.sectionLinks.forEach((link) => {
       if (!items.includes(link.label)) items.push(link.label);
+      if (link.menuId === 'practice') {
+        link.menuItems?.forEach((sub) => {
+          if (!items.includes(sub.label)) items.push(sub.label);
+        });
+      }
       if (link.label === 'Exam Strategies' && model.examStrategiesLocked) {
         items.push('(Coming soon)');
       }

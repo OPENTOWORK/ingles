@@ -14,10 +14,10 @@ export const GUIDED_TOUR_STEPS_STUDENT = [
   },
   {
     id: 'exam-practice-nav',
-    title: 'Exam Practice',
-    sectionLabel: 'Top menu → Exam Practice',
+    title: 'Practice',
+    sectionLabel: 'Top menu → Practice',
     description:
-      'Your main workspace. Open Exam Practice to reach the B2 hub — Reading and Use of English, Writing, Listening, and Speaking papers with timed tasks and feedback.',
+      'Open Practice and choose Exam Practice for mock papers, or Training Practice for the skill path.',
     target: '[data-tour="nav-levels"]',
     route: '/',
     href: '/niveles/b2',

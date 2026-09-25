@@ -1,64 +1,38 @@
 .stage {
   position: relative;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 920px;
+  max-width: 1320px;
   margin: 0 auto 2rem;
-  padding: 0 0.25rem 2rem;
+  padding: 0 clamp(1rem, 3vw, 2rem) 2rem;
 }
 
-.metaRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem 0.75rem;
-  margin-bottom: 1rem;
-}
+/* ——— Progress ——— */
 
-.metaBadge {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #0f172a;
-  background: #fff;
-  border: 1px solid #cbd5e1;
-  border-radius: 999px;
-  padding: 0.35rem 0.85rem;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
-}
-
-.metaTrail {
-  font-size: 0.72rem;
-  color: #64748b;
-  font-weight: 600;
+.progress {
+  max-width: 34rem;
+  margin: 0 auto 1.75rem;
 }
 
 .progressBar {
-  max-width: 480px;
-  margin: 0 auto 1.35rem;
-}
-
-.progressBarTrack {
-  height: 7px;
+  height: 6px;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: #e8eaf4;
   overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
 }
 
 .progressBarFill {
   height: 100%;
   border-radius: inherit;
-  transition: width 0.45s ease;
+  background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+  transition: width 0.5s ease;
 }
 
 .progressHint {
-  margin: 0.55rem 0 0;
-  font-size: 0.875rem;
-  color: #475569;
+  margin: 0.65rem 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
   text-align: center;
-  line-height: 1.45;
 }
 
 .progressHint strong {
@@ -66,321 +40,490 @@
   font-weight: 700;
 }
 
+.progressDot {
+  margin: 0 0.45rem;
+  color: #cbd5e1;
+}
+
+/* ——— Board ——— */
+
 .canvas {
   position: relative;
   width: 100%;
-  aspect-ratio: 10 / 17;
-  min-height: 740px;
-  max-height: 1120px;
-  margin: 0 auto;
-  border-radius: 20px;
-  background: linear-gradient(165deg, #f8fafc 0%, #f1f5f9 48%, #eef2ff 100%);
-  border: 1px solid #e2e8f0;
+  border-radius: 28px;
+  background:
+    radial-gradient(120% 55% at 50% 0%, rgba(99, 102, 241, 0.06), transparent 62%),
+    #fff;
+  border: 1px solid #eceef5;
   box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 20px 50px -20px rgba(15, 23, 42, 0.12);
-  overflow: visible;
+    0 1px 2px rgba(15, 23, 42, 0.04),
+    0 32px 64px -44px rgba(30, 27, 75, 0.35);
 }
 
-.sectionLegend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.45rem 0.55rem;
-  max-width: 720px;
-  margin: 0 auto 1rem;
-  padding: 0 0.25rem;
-}
-
-.legendItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 999px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-}
-
-.legendDot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: var(--legend-color, #64748b);
-  flex-shrink: 0;
-}
-
-.legendTitle {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #334155;
-  letter-spacing: 0.02em;
-}
-
-.legendRange {
-  font-size: 0.62rem;
-  font-weight: 600;
-  color: #94a3b8;
-}
-
-.sectionBand {
-  position: absolute;
-  z-index: 0;
-  border-radius: 16px;
-  background: var(--band-light, #e2e8f0);
-  background: color-mix(in srgb, var(--band-light, #e2e8f0) 42%, transparent);
-  border: 1px solid var(--band-color, #cbd5e1);
-  border: 1px solid color-mix(in srgb, var(--band-color, #cbd5e1) 12%, transparent);
-  pointer-events: none;
-  opacity: 0.55;
+/* The side padding holds the path's U-turns. */
+.track {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2.5rem 4.75rem 3rem;
 }
 
 .pathSvg {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: visible;
   pointer-events: none;
-  z-index: 0;
 }
 
 .pathTrack {
   fill: none;
-  stroke-width: 8;
+  stroke: #e8eaf8;
+  stroke-width: 10;
   stroke-linecap: round;
   stroke-linejoin: round;
-  opacity: 0.95;
-}
-
-.pathSegment {
-  fill: none;
-  stroke-width: 3.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  opacity: 0.9;
+  animation: pathFade 0.5s ease both;
 }
 
 .pathProgress {
   fill: none;
-  stroke-width: 2.5;
+  stroke-width: 10;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: stroke-dasharray 0.45s ease;
-  opacity: 0.95;
+  stroke-dasharray: 1;
+  animation: pathDraw 1.1s cubic-bezier(0.65, 0, 0.35, 1) 0.15s both;
 }
 
-.node {
-  position: absolute;
-  z-index: 3;
-  display: flex;
-  text-decoration: none;
-  color: inherit;
-  transform: translate(-50%, -50%);
+.pathCap {
+  fill: #fff;
+  stroke: #e8eaf8;
+  stroke-width: 4;
 }
 
-.nodeEnter {
-  animation: nodeFadeIn 0.2s ease-out both;
+.pathCapActive {
+  stroke: #6366f1;
 }
 
-@keyframes nodeFadeIn {
-  from {
-    opacity: 0;
-    transform: translate(-50%, calc(-50% + 6px));
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
+/* ——— Parts ——— */
 
-.nodeCard {
+.part {
   position: relative;
+  z-index: 1;
+}
+
+.part + .part {
+  margin-top: 2.4rem;
+}
+
+.partHead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  margin: 0 0 0.5rem;
+}
+
+.partRule {
+  flex: 0 1 10rem;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0), rgba(99, 102, 241, 0.4));
+}
+
+.partRuleEnd {
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.4), rgba(99, 102, 241, 0));
+}
+
+.partLabel {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.2rem;
-  width: 5.35rem;
-  min-height: 4.6rem;
-  padding: 0.55rem 0.45rem 0.4rem;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
-  border-top: 3px solid var(--section-color, #3b82f6);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease,
-    border-color 0.22s ease;
+  gap: 0.25rem;
+  min-width: 0;
+  text-align: center;
 }
 
-.node:hover .nodeCard,
-.node:focus-visible .nodeCard {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px color-mix(in srgb, var(--section-color, #3b82f6) 22%, transparent);
+.partIndex {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #6366f1;
 }
 
-.node:focus-visible .nodeCard {
-  outline: 2px solid var(--section-color, #3b82f6);
-  outline-offset: 2px;
-}
-
-.node:focus-visible {
-  outline: none;
-}
-
-.badge {
-  position: absolute;
-  top: -0.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.58rem;
-  font-weight: 800;
-  color: #fff;
-  background: var(--section-color);
-  border: 2px solid #fff;
-  border-radius: 6px;
-  padding: 0.12rem 0.38rem;
-  line-height: 1.2;
-  letter-spacing: 0.06em;
-}
-
-.topic {
-  margin-top: 0.55rem;
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: #1e293b;
+.partTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
   line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: #0f172a;
+}
+
+/* ——— Stations ——— */
+
+.row {
+  display: grid;
+  align-items: start;
+  column-gap: 0.75rem;
+  padding: 1.75rem 0 0.85rem;
+}
+
+.station {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
+  margin: 0;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  animation: stationIn 0.45s ease both;
+  animation-delay: calc(var(--i, 0) * 22ms);
+}
+
+.station:hover,
+.station:focus,
+.station:focus-visible,
+.station:active {
+  text-decoration: none;
+  outline: none;
+  box-shadow: none;
+}
+
+.stationDot {
+  position: relative;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid #e0e4f5;
+  color: #475569;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06),
+    0 12px 24px -16px rgba(30, 27, 75, 0.45);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.stationNum {
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.station:hover .stationDot {
+  transform: scale(1.07);
+  border-color: #a5b4fc;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06),
+    0 16px 30px -16px rgba(79, 70, 229, 0.55);
+}
+
+.stationTopic {
+  max-width: 11rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1e293b;
   text-align: center;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.1em;
+  transition: color 0.2s ease;
+}
+
+.station:hover .stationTopic {
+  color: #4338ca;
 }
 
 .stars {
   display: flex;
-  gap: 0.06rem;
-  margin-top: auto;
+  gap: 0.15rem;
+  margin-top: -0.3rem;
 }
 
 .star {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
+  line-height: 1;
   color: #e2e8f0;
 }
 
 .starOn {
+  color: #f59e0b;
+}
+
+.nodeCompleted .stationDot {
+  border-color: transparent;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+}
+
+.nodeMastered .stationDot {
+  border-color: transparent;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #fff;
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06),
+    0 16px 30px -16px rgba(217, 119, 6, 0.7);
+}
+
+.nodeMastered .stationCheck {
   color: #d97706;
 }
 
-.nodeCompleted .nodeCard {
-  background: linear-gradient(
-    180deg,
-    #fff 0%,
-    color-mix(in srgb, var(--section-color-light, #e0f2fe) 40%, #fff) 100%
-  );
+.stationCheck {
+  position: absolute;
+  right: -0.2rem;
+  bottom: -0.2rem;
+  display: grid;
+  place-items: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #4f46e5;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
 }
 
-.nodeCurrent .nodeCard {
-  border-color: var(--section-color, #3b82f6);
+.stationCheck svg {
+  width: 0.72rem;
+  height: 0.72rem;
+}
+
+.nodeCurrent .stationDot {
+  border: 3px solid #6366f1;
+  color: #4338ca;
   box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--section-color, #3b82f6) 22%, transparent),
-    0 8px 20px color-mix(in srgb, var(--section-color, #3b82f6) 28%, transparent);
+    0 0 0 6px rgba(99, 102, 241, 0.12),
+    0 16px 30px -16px rgba(79, 70, 229, 0.6);
 }
 
-.nodeCurrent .topic {
-  color: var(--section-color);
+.nodeCurrent .stationDot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  border: 2px solid rgba(99, 102, 241, 0.5);
+  animation: stationPulse 2.4s ease-out infinite;
+  pointer-events: none;
 }
 
-.nodeUpcoming {
-  opacity: 0.88;
+.stationTag {
+  position: absolute;
+  bottom: calc(100% + 0.6rem);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.22rem 0.6rem;
+  border-radius: 999px;
+  background: #1e1b4b;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow: 0 8px 18px -10px rgba(30, 27, 75, 0.8);
+  pointer-events: none;
 }
 
-.nodeUpcoming .nodeCard {
-  background: #fafbfc;
-  border-color: #e8ecf1;
-}
-
-.nodeUpcoming .topic {
-  color: #64748b;
+.stationTag::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #1e1b4b;
 }
 
 .nodeLocked {
   cursor: not-allowed;
-  pointer-events: none;
 }
 
-.nodeLocked .nodeCard {
-  background: #f1f5f9;
-  border-color: #dbe1e8;
-  border-top-color: #cbd5e1;
-  opacity: 0.72;
-  filter: grayscale(0.35);
+.nodeLocked .stationDot {
+  background: #f5f6fa;
+  border-color: #e6e8f0;
+  color: #a3adbd;
   box-shadow: none;
 }
 
-.nodeLocked .topic {
-  color: #94a3b8;
+.nodeLocked:hover .stationDot {
+  transform: none;
+  border-color: #e6e8f0;
+  box-shadow: none;
 }
 
-.nodeLocked .badge {
-  background: #94a3b8;
+.nodeLocked .stationTopic,
+.nodeLocked:hover .stationTopic {
+  color: #9aa5b5;
 }
 
-.lockIcon {
+.review {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -30%);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: #64748b;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+  z-index: 3;
+  top: calc(100% - 0.15rem);
+  width: 4.8rem;
+}
+
+.review .stationTopic {
+  max-width: 4.8rem;
+  font-size: 0.68rem;
+}
+
+.reviewLeft {
+  left: 0;
+  transform: translate(calc(-100% - 3.15rem), -46%);
+}
+
+.reviewRight {
+  right: 0;
+  transform: translate(calc(100% + 3.15rem), -46%);
+}
+
+.reviewKicker {
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6366f1;
+}
+
+.nodeReview .stationDot {
+  border-style: dashed;
+  border-color: #a5b4fc;
+  background: #f5f3ff;
+  color: #4338ca;
+}
+
+.nodeReview .stationNum {
+  font-size: 0.78rem;
+}
+
+.nodeReview.nodeLocked .stationDot {
+  border-style: dashed;
+  background: #f5f6fa;
+  border-color: #e6e8f0;
+  color: #a3adbd;
+}
+
+.nodeReview.nodeCompleted .stationDot,
+.nodeReview.nodeMastered .stationDot {
+  border-style: solid;
 }
 
 .lockSvg {
-  width: 0.95rem;
-  height: 0.95rem;
+  width: 1.05rem;
+  height: 1.05rem;
 }
 
-.staffHint {
-  position: relative;
-  z-index: 4;
-  margin: 1rem 0 0;
-  text-align: center;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: #64748b;
+@keyframes stationIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-@media (max-width: 720px) {
+@keyframes stationPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes pathFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes pathDraw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (max-width: 640px) {
   .canvas {
-    aspect-ratio: 10 / 20;
-    min-height: 840px;
-    max-height: none;
+    border-radius: 22px;
   }
 
-  .nodeCard {
-    width: 4.65rem;
-    min-height: 4.2rem;
+  .track {
+    padding: 1.9rem 1.35rem 2.25rem;
   }
 
-  .topic {
-    font-size: 0.62rem;
+  .review,
+  .reviewLeft,
+  .reviewRight {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: auto;
+    margin: 0.85rem auto 0;
+    transform: none;
+  }
+
+  .row {
+    column-gap: 0.4rem;
+    padding-top: 1.6rem;
+  }
+
+  .stationDot {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+
+  .stationNum {
+    font-size: 0.8rem;
+  }
+
+  .stationTopic {
+    max-width: 6.75rem;
+    font-size: 0.7rem;
+  }
+
+  .partRule {
+    flex-basis: 2.5rem;
+  }
+
+  .partTitle {
+    font-size: 0.92rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .nodeEnter,
+  .station,
+  .pathTrack,
+  .pathProgress,
   .progressBarFill,
-  .pathProgress {
+  .stationDot,
+  .nodeCurrent .stationDot::after {
     animation: none !important;
     transition: none !important;
   }

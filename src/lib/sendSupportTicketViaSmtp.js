@@ -24,7 +24,7 @@ export async function sendSupportTicketViaSmtp({ to, subject, text, html, replyT
     });
 
     await transporter.sendMail({
-      from: `Dralo English <${user}>`,
+      from: `Dralo · no responder <${user}>`,
       to,
       replyTo: replyTo || undefined,
       subject,

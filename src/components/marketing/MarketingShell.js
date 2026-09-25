@@ -13,6 +13,7 @@ export const MARKETING_NAV = [
   { href: '/admin/marketing', label: 'Dashboard', exact: true },
   { href: '/admin/marketing/adquisicion', label: 'Adquisición' },
   { href: '/admin/marketing/customer-journey', label: 'Customer Journey' },
+  { href: '/admin/marketing/calendario', label: 'Calendario' },
   { href: '/admin/marketing/campanas', label: 'Campañas' },
   { href: '/admin/marketing/conversiones', label: 'Conversiones' },
   { href: '/admin/marketing/roi', label: 'ROI' },

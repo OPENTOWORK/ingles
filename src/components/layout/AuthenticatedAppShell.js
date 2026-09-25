@@ -39,6 +39,7 @@ export default function AuthenticatedAppShell({
   children,
 }) {
   const pathname = usePathname();
+  const homeSideMenu = pathname === '/';
   const preview = useItPreviewRole(userRole, session);
   useItPreviewAdminBuzonLayout();
   const showAdminShell = shouldShowAdminShell(pathname, preview.userRole);
@@ -49,8 +50,15 @@ export default function AuthenticatedAppShell({
       {preview.isActive ? <ItPreviewRoleBanner option={preview.option} /> : null}
 
       <SiteHeaderBrand
-        homeSideMenu={pathname === '/'}
-        nav={<AppNav session={preview.session} userRole={preview.userRole} onLogout={onLogout} />}
+        homeSideMenu={homeSideMenu}
+        nav={
+          <AppNav
+            session={preview.session}
+            userRole={preview.userRole}
+            onLogout={onLogout}
+            hideMobileToggle={homeSideMenu}
+          />
+        }
       />
       <ProfileStudyTimerPill />
 
@@ -70,8 +78,8 @@ export default function AuthenticatedAppShell({
                   children
                 )}
               </ExamNavigationGuard>
-              {pathname === '/' && <DeferredAppSideMenu defaultOpen={false} />}
             </main>
+            {homeSideMenu ? <DeferredAppSideMenu defaultOpen={false} /> : null}
             {showStudyBar ? (
               <StudySessionBarGate session={preview.session} userRole={preview.userRole} />
             ) : null}
