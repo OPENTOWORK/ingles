@@ -137,6 +137,10 @@
   text-align: left;
 }
 
+.mascotSlot {
+  display: contents;
+}
+
 .gapInput {
   width: 9.5rem;
   max-width: 100%;
@@ -584,9 +588,18 @@
     min-height: 0;
   }
 
+  .mascotSlot {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+  }
+
   .body > .primaryBtn,
   .body > .feedback {
-    margin-top: auto;
+    margin-top: 0;
   }
 
   .body > .primaryBtn + .feedback {

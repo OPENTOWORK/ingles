@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import TrainingDraloCompanion from '@/components/training/TrainingDraloCompanion';
 import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebration';
+import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/trainingFeedbackSounds';
 import {
   formatTrainingSolution,
   gradeTrainingItem,
@@ -199,10 +201,13 @@ export default function TrainingGapFillExercise({
 
     const outcome = gradeTrainingItem(item, values);
     if (outcome.correct) {
+      playTrainingAnswerSound(true);
       setStatus('correct');
       recordResult({ item, answers: { ...values }, firstTry: attempt === 1, solved: true, attempts: attempt });
       return;
     }
+
+    playTrainingAnswerSound(false);
 
     if (attempt < MAX_ATTEMPTS) {
       setAttempt(attempt + 1);
@@ -214,6 +219,10 @@ export default function TrainingGapFillExercise({
     recordResult({ item, answers: { ...values }, firstTry: false, solved: false, attempts: attempt });
   }, [status, readyToCheck, item, values, attempt, recordResult]);
 
+  const correctCount = results.filter((result) => result.firstTry).length;
+  const accuracy = total ? Math.round((correctCount / total) * 100) : 0;
+  const stars = starsForAccuracy(accuracy);
+
   const goNext = useCallback(() => {
     if (index < total - 1) {
       setIndex(index + 1);
@@ -223,11 +232,8 @@ export default function TrainingGapFillExercise({
       return;
     }
     setFinished(true);
-  }, [index, total]);
-
-  const correctCount = results.filter((result) => result.firstTry).length;
-  const accuracy = total ? Math.round((correctCount / total) * 100) : 0;
-  const stars = starsForAccuracy(accuracy);
+    playTrainingFinishSound(stars);
+  }, [index, total, stars]);
   const mistakes = results.filter((result) => !result.firstTry);
   const errorAreas = useMemo(
     () => summariseGapFillErrors(mistakes.map((result) => result.item)),
@@ -294,9 +300,18 @@ export default function TrainingGapFillExercise({
     </header>
   );
 
+  const draloMood =
+    status === 'correct' ? 'correct' : status === 'revealed' || status === 'retry' ? 'wrong' : 'idle';
+  const instruction =
+    item?.instruction ||
+    (format === 'gap'
+      ? 'Complete the sentence with the correct form of the verb in brackets.'
+      : exercise.instruction);
+
   if (finished) {
     return (
       <main className={styles.page}>
+        <TrainingDraloCompanion mood={stars >= 2 ? 'correct' : 'wrong'} />
         {celebration ? (
           <TrainingStarsCelebration
             stars={celebration.stars}
@@ -412,13 +427,6 @@ export default function TrainingGapFillExercise({
             </div>
           </header>
 
-          <p className={styles.instruction}>
-            {item.instruction ||
-              (format === 'gap'
-                ? 'Complete the sentence with the correct form of the verb in brackets.'
-                : exercise.instruction)}
-          </p>
-
           <div className={styles.body}>
             {format === 'gap' ? (
               <GapSentence
@@ -525,6 +533,10 @@ export default function TrainingGapFillExercise({
             ) : null}
 
             {item.promptWord ? <p className={styles.promptWord}>({item.promptWord})</p> : null}
+
+            <div className={styles.mascotSlot}>
+              <TrainingDraloCompanion mood={draloMood} dock prompt={instruction} />
+            </div>
 
             {status === 'answering' || status === 'retry' ? (
               <button
