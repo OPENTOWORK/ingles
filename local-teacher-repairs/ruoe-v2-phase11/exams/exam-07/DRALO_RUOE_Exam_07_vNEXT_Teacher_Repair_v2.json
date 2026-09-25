@@ -1,0 +1,1125 @@
+{
+  "version": "DRALO_RUOE_Exam_07_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 7,
+  "sourceGeneratedAt": "2026-08-31T19:57:44.942Z",
+  "reviewFile": "DRALO_RUOE_Exam_3_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) taken",
+          "B) made",
+          "C) become",
+          "D) turned"
+        ],
+        "answer": "C",
+        "explanation": "The fixed expression is \"have become popular\"."
+      },
+      "title": "From Strange to Mainstream",
+      "passage": "A few years ago, sports such as underwater hockey and extreme ironing seemed too unusual to attract a wide audience. Yet both have (0) ___ popular enough to appear regularly on social media, where short videos can quickly (1) ___ interest. One reason is that people are always looking for fresh experiences, especially if they can (2) ___ them with friends online. Another factor is that many unusual sports are more (3) ___ than their names suggest. Participants often need only basic equipment, and clubs are keen to welcome beginners. As a result, these activities are no longer seen as jokes. In fact, some are beginning to (4) ___ in serious sponsorship deals and organised competitions. Supporters say unusual sports also give beginners a sense of (5) ___ , because newcomers and experts mix more easily than in traditional games. Of course, not every trend will last, and some sports may fade (6) ___ once the novelty disappears. Still, their recent success shows that people are open (7) ___ trying something different, provided it is safe, social and fun. What once looked ridiculous may soon be a familiar (8) ___ at local sports centres.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) attract",
+            "B) receive",
+            "C) collect",
+            "D) obtain"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) post",
+            "B) send",
+            "C) pass",
+            "D) share"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) tell",
+            "B) speak",
+            "C) suggest",
+            "D) talk"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) lead",
+            "B) end",
+            "C) arrive",
+            "D) result"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) owning",
+            "B) belonging",
+            "C) joining",
+            "D) fitting"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) out",
+            "B) away",
+            "C) over",
+            "D) down"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) for",
+            "B) with",
+            "C) to",
+            "D) by"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) sight",
+            "B) scene",
+            "C) view",
+            "D) vision"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "D",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "C",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "B",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "A",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "B2 First Reading and Use of English Part 2",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "if"
+      },
+      "title": "Smart devices at home and on the move",
+      "passage": "A few years ago, smart devices were seen as luxuries, but now many people wonder (0) ___ they could manage without them. Phones can control lights, speakers and heating, while watches record how far we have walked and remind us to stand up. For busy people, this can seem convenient, as everything is designed (9) ___ save time.\n\nHowever, smart devices are not always as helpful (10) ___ they appear. Notifications may interrupt us at work, and some people become so dependent (11) ___ their phones that they feel anxious when the battery runs low. Another issue is privacy. Users are often asked to agree to terms and conditions without reading all of (12) ___, so they may not realise how much personal data is being collected.\n\nEven so, experts say the answer is not to avoid smart technology completely, (13) ___ to use it more carefully. If people switch (14) ___ alerts they do not need and think twice before buying another device, they may find that technology works for them rather (15) ___ the other way round. After all, the smartest homes should make life easier, not turn (16) ___ a source of stress.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "to"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "as"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "on"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "them"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "but"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "off"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "than"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "into"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "descriptive_title"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "USUAL",
+        "answer": "unusual",
+        "transformationFamily": "prefix"
+      },
+      "title": "A Week Offline",
+      "passage": "For many people, the idea of leaving home without a smartphone seems (0) ___ (USUAL). Yet journalist Sam Briggs recently tried it for a week and wrote about the experience. His first feeling was one of (17) ___ (NERVOUS), especially on the journey to work, when he could not check messages every few minutes. However, he soon noticed an (18) ___ (EXPECT) benefit: he paid more attention to the world around him. Streets he had walked along for years suddenly seemed more interesting. There were, of course, some (19) ___ (PRACTICE) difficulties. He got lost twice because he had no maps, and making plans with friends required careful (20) ___ (ORGANISE) in advance. Still, Sam argues that the constant (21) ___ (AVAILABLE) of information can be a problem in itself. Without his phone, he became less (22) ___ (DISTRACT) and far more aware of how often people turn to screens out of habit rather than need. By the end of the week, he had developed a greater (23) ___ (APPRECIATE) of quiet moments and a stronger (24) ___ (BELIEVE) that occasional disconnection is good for us.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "NERVOUS",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EXPECT",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "PRACTICE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "ORGANISE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "AVAILABLE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "DISTRACT",
+          "transformationFamily": "negative"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "APPRECIATE",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "BELIEVE",
+          "transformationFamily": "other"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "nervousness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "unexpected",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "practical",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "arrangements",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "availability",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "distracted",
+          "transformationFamily": "negative"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "deeply",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "belief",
+          "transformationFamily": "other"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "B2 First Reading and Use of English Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "People throw away millions of plastic bottles every week.",
+        "keyword": "THROWN",
+        "sentence2Start": "Millions of plastic bottles __________________ every week.",
+        "answer": "are thrown away"
+      },
+      "questions": [
+        {
+          "id": "b2p4q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "The council said it would introduce more recycling bins next year.",
+          "keyword": "ANNOUNCED",
+          "sentence2Start": "The council __________________ more recycling bins the following year.",
+          "answer": "announced it would introduce",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "ANNOUNCED",
+            "fullAnswers": [
+              "announced it would introduce"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "reporting verb with clause",
+                "accepted": [
+                  "announced it would"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "main verb complement",
+                "accepted": [
+                  "introduce"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "reported statement with tense backshift",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 tests reported-speech framing; MP2 tests correct infinitive verb choice.",
+            "alternative_route_check": "Only one defendable route is allowed because the sentence stem requires a full reported clause beginning with the given verb."
+          }
+        },
+        {
+          "id": "b2p4q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "We regret buying so many drinks in plastic bottles for the event.",
+          "keyword": "WISH",
+          "sentence2Start": "We __________________ so many drinks in plastic bottles for the event.",
+          "answer": "wish we had not bought",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISH",
+            "fullAnswers": [
+              "wish we had not bought",
+              "wish we'd not bought"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish + past perfect subject phrase",
+                "accepted": [
+                  "wish we had",
+                  "wish we'd"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "negative past participle complement",
+                "accepted": [
+                  "not bought"
+                ]
+              }
+            ],
+            "family_id": "TF-11",
+            "target_structure": "present regret using wish + past perfect",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "multi_step_transformation",
+            "marking_point_plan": "MP1 tests the regret frame; MP2 tests the negative past perfect meaning.",
+            "alternative_route_check": "Alternatives such as 'wish we hadn't bought' are blocked to keep controlled superficial variants only and preserve a stable marking split."
+          }
+        },
+        {
+          "id": "b2p4q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "Using a reusable cup is cheaper than buying a new plastic one every day.",
+          "keyword": "AS",
+          "sentence2Start": "Buying a new plastic cup every day __________________ using a reusable one.",
+          "answer": "is not as cheap as",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "AS",
+            "fullAnswers": [
+              "is not as cheap as",
+              "isn't as cheap as"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "negative comparative frame",
+                "accepted": [
+                  "is not as",
+                  "isn't as"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "adjective plus final as",
+                "accepted": [
+                  "cheap as"
+                ]
+              }
+            ],
+            "family_id": "TF-05",
+            "target_structure": "not as ... as comparative",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "minor_grammatical",
+            "marking_point_plan": "MP1 tests comparative structure; MP2 tests adjective completion.",
+            "alternative_route_check": "Only one route is defendable because the stem already fixes the comparison direction and the keyword 'AS'."
+          }
+        },
+        {
+          "id": "b2p4q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "I only understood how serious plastic pollution was after I watched the documentary.",
+          "keyword": "UNTIL",
+          "sentence2Start": "It __________________ the documentary that I understood how serious plastic pollution was.",
+          "answer": "was not until I watched",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "UNTIL",
+            "fullAnswers": [
+              "was not until I watched",
+              "wasn't until I watched"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "not until emphatic frame",
+                "accepted": [
+                  "was not until",
+                  "wasn't until"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "clause with subject and verb",
+                "accepted": [
+                  "I watched"
+                ]
+              }
+            ],
+            "family_id": "TF-14",
+            "target_structure": "it was not until ... that emphasis",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 tests the emphatic structure; MP2 tests the required subordinate clause.",
+            "alternative_route_check": "Other routes are blocked by the fixed sentence stem beginning with 'It ... the documentary that'."
+          }
+        },
+        {
+          "id": "b2p4q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "You should avoid buying fruit wrapped in unnecessary plastic.",
+          "keyword": "BETTER",
+          "sentence2Start": "You __________________ fruit wrapped in unnecessary plastic.",
+          "answer": "had better avoid buying",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BETTER",
+            "fullAnswers": [
+              "had better avoid buying"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "advisory modal expression",
+                "accepted": [
+                  "had better"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "verb pattern complement",
+                "accepted": [
+                  "avoid buying"
+                ]
+              }
+            ],
+            "family_id": "TF-08",
+            "target_structure": "had better for advice",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "lexical_substitution",
+            "marking_point_plan": "MP1 tests modal advice phrase; MP2 tests the following verb pattern.",
+            "alternative_route_check": "Only one defendable route fits naturally because 'better' requires the fixed expression 'had better' here."
+          }
+        },
+        {
+          "id": "b2p4q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "The shop gave customers paper bags because it wanted to reduce plastic waste.",
+          "keyword": "ORDER",
+          "sentence2Start": "The shop gave customers paper bags __________________ plastic waste.",
+          "answer": "in order to reduce",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "ORDER",
+            "fullAnswers": [
+              "in order to reduce"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "purpose linker",
+                "accepted": [
+                  "in order"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive of purpose",
+                "accepted": [
+                  "to reduce"
+                ]
+              }
+            ],
+            "family_id": "TF-03",
+            "target_structure": "purpose with in order to",
+            "difficulty_band": "B2-Core",
+            "transformation_distance": "minor_grammatical",
+            "marking_point_plan": "MP1 tests the fixed linker; MP2 tests the infinitive complement.",
+            "alternative_route_check": "Only one route is allowed because the keyword fixes the purpose expression and the stem supplies the rest of the sentence."
+          }
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "b2p4q25",
+          "number": 25,
+          "answer": "announced it would introduce"
+        },
+        {
+          "id": "b2p4q26",
+          "number": 26,
+          "answer": "wish we had not bought"
+        },
+        {
+          "id": "b2p4q27",
+          "number": 27,
+          "answer": "is not as cheap as"
+        },
+        {
+          "id": "b2p4q28",
+          "number": 28,
+          "answer": "was not until I watched"
+        },
+        {
+          "id": "b2p4q29",
+          "number": 29,
+          "answer": "had better avoid buying"
+        },
+        {
+          "id": "b2p4q30",
+          "number": 30,
+          "answer": "in order to reduce"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 26
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 27
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Strong",
+            "number": 28
+          },
+          {
+            "distance": "lexical_substitution",
+            "band": "B2-Standard",
+            "number": 29
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Core",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 0,
+          "4": 3,
+          "5": 3
+        },
+        "answerLengths": [
+          4,
+          5,
+          5,
+          5,
+          4,
+          4
+        ]
+      },
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-TOO-EASY] Q27: Sentence 2 is too parallel to Sentence 1 — little restructuring required."
+          },
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-LOW-TRANSFORMATION-DISTANCE] Q29: Transformation distance is too low for a demanding B2 Part 4 item."
+          }
+        ],
+        "detectedAt": "2026-08-31T20:02:01.699Z"
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "Fitness That Fits Real Life",
+      "passageWordCount": 589,
+      "passage": "Many people decide to get fitter in the same dramatic way: they buy expensive trainers, join a gym and promise themselves they will go five times a week. Two weeks later, the trainers are by the door, the gym card is in a drawer and the plan has quietly disappeared. This cycle is so common that it is easy to believe staying fit must involve a huge effort. In fact, the opposite is often true. The routines that last are usually the ones that fit into daily life so neatly that they barely feel like routines at all.\n\nOne reason people give up is that they choose exercise that looks impressive rather than exercise they will actually do. A friend may be training for a half marathon, and social media is full of intense workout videos, but that does not mean running long distances or lifting heavy weights is the right starting point for everyone. If your first plan already feels like punishment, you are unlikely to repeat it. Walking to work, cycling to the shops or doing a short online class in the living room may sound less exciting, but they are far easier to keep doing when work gets busy or the weather changes.\n\nThis does not mean easy exercise has little value. In recent years, health experts have become much more interested in ordinary movement spread across the day. Climbing stairs, carrying shopping bags and standing up regularly from a desk can all make a difference, especially for people who spend hours sitting down. Ten minutes here and there may not look important in isolation, yet the effect adds up. The point is not that a brisk walk is equal to a serious training session, but that people often ignore useful activity because it does not match their image of what exercise should look like.\n\nThere is also a psychological advantage in keeping things simple. Large fitness goals can be inspiring, but they can also create an uncomfortable feeling of failure before you have properly begun. If the target is to become a different person by next month, any missed session seems to prove you were never committed. Smaller goals work differently. Promising yourself a short walk after dinner or a few stretches before breakfast makes success more likely, and success matters because it changes identity. Once people start seeing themselves as someone who moves regularly, they often become more willing to do a little more.\n\nOf course, convenience should not be confused with carelessness. People sometimes use the idea of \"keeping active\" to avoid anything that raises the heart rate or requires planning. Fetching a cup of tea from the kitchen is movement, but it is not enough on its own. The most helpful approach is probably a mixture: build more activity into ordinary life, then protect a small number of moments each week for something slightly harder. That could mean a swim on Saturday, a longer bike ride or a dance class with a friend. The details matter less than the fact that the habit is realistic.\n\nPerhaps the most useful change, then, is not in the body but in the story people tell themselves about fitness. If exercise is treated as a test of discipline, many will delay starting until they have the right clothes, enough time or stronger motivation. If it is seen instead as a practical part of everyday life, the barrier becomes lower. You do not have to wait for a perfect Monday or a burst of enthusiasm. You can begin with the journey to work, the stairs at the station or ten minutes before bed, and let consistency do the rest.",
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "What point does the writer make in the opening paragraph?",
+          "options": [
+            "A) People often spend too much money before deciding what kind of exercise they enjoy.",
+            "B) Fitness plans usually fail because they are based on sudden, unrealistic changes.",
+            "C) Gym memberships are less useful than people expect them to be.",
+            "D) The hardest part of getting fit is finding time in a busy schedule."
+          ],
+          "evidence": "The writer describes people buying equipment, joining a gym and planning major change, then giving up quickly, before saying lasting routines fit naturally into daily life.",
+          "rationale": "B is correct because the paragraph contrasts dramatic plans with small routines that last, showing the problem is unrealistic change. A is too narrow because money is only one detail. C overfocuses on gyms; the writer criticises a whole approach, not gyms specifically. D is mentioned later as one possible difficulty, but it is not the opening paragraph's main idea."
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "questionType": "inference",
+          "prompt": "In the second paragraph, the writer suggests that some people choose certain forms of exercise mainly because they",
+          "options": [
+            "A) want results as quickly as possible.",
+            "B) have been advised to copy fitter friends.",
+            "C) are influenced by what seems admirable or fashionable.",
+            "D) believe easier activities are suitable only for beginners."
+          ],
+          "evidence": "The paragraph says people choose exercise that 'looks impressive' rather than what they will really do, and mentions a friend training and intense workout videos on social media.",
+          "rationale": "C is correct because the examples show social influence and the appeal of impressive-looking exercise. A is plausible but the paragraph is not mainly about speed of results. B distorts the idea: the writer mentions a friend as an influence, not direct advice to copy them. D is not stated; easier activities are presented as more sustainable, not merely for beginners."
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "questionType": "purpose",
+          "prompt": "Why does the writer mention climbing stairs, carrying shopping bags and standing up from a desk?",
+          "options": [
+            "A) to argue that these should replace more demanding exercise completely",
+            "B) to show that useful physical activity can be built into ordinary routines",
+            "C) to explain why office workers need different advice from other people",
+            "D) to prove that short periods of exercise are better than longer ones"
+          ],
+          "evidence": "The third paragraph explains that ordinary movement throughout the day can make a difference and that people often ignore useful activity because it does not match their idea of exercise.",
+          "rationale": "B is correct because the examples support the idea that everyday actions can contribute to fitness. A is wrong because the writer explicitly says a brisk walk is not equal to serious training. C is too limited; office workers are one example only. D misreads the point, as the writer says short activity adds up, not that it is better than longer exercise."
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "questionType": "attitude",
+          "prompt": "What is the writer's attitude towards large fitness goals in the fourth paragraph?",
+          "options": [
+            "A) They are helpful only when supported by professional coaching.",
+            "B) They are mostly unnecessary once people have formed good habits.",
+            "C) They are motivating for everyone despite the pressure they create.",
+            "D) They can be useful, but they may also discourage people at the start."
+          ],
+          "evidence": "The writer says large goals can be inspiring, but can also create a feeling of failure before someone has properly begun.",
+          "rationale": "D is correct because it reflects the balanced view in the paragraph. A introduces coaching, which is not discussed. B goes beyond the text, which does not say large goals become unnecessary. C ignores the warning that such goals may discourage people."
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "questionType": "reference",
+          "prompt": "In the fifth paragraph, what does 'That' refer to in the sentence 'That could mean a swim on Saturday, a longer bike ride or a dance class with a friend'?",
+          "options": [
+            "A) using everyday tasks as the only form of exercise",
+            "B) avoiding activities that need any preparation",
+            "C) setting aside time for a more demanding activity",
+            "D) increasing the amount of movement done at work"
+          ],
+          "evidence": "Just before the sentence, the writer recommends protecting a small number of moments each week for 'something slightly harder'.",
+          "rationale": "C is correct because 'That' refers back to doing something slightly harder during protected weekly moments. A is the opposite of the writer's mixed approach. B misreads the paragraph, which argues against avoiding planned effort. D focuses too narrowly on work and does not match the examples given."
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "questionType": "global",
+          "prompt": "Which statement best summarises the writer's overall message?",
+          "options": [
+            "A) People should wait until they feel highly motivated before starting to exercise seriously.",
+            "B) Fitness becomes easier to maintain when it is treated as a normal part of daily life.",
+            "C) The best way to get fit is to combine social activities with strict weekly targets.",
+            "D) Small changes are worthwhile only if they eventually lead to an ambitious training plan."
+          ],
+          "evidence": "The final paragraph says exercise should be seen as a practical part of everyday life, and that people can begin with small daily actions and let consistency do the rest.",
+          "rationale": "B is correct because it captures the central argument running through the whole article. A contradicts the final paragraph, which says not to wait for perfect motivation. C introduces 'strict weekly targets', which the writer does not recommend. D adds a condition not present in the text; small changes are presented as valuable in themselves."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "B"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "C"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "B"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "D"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "C"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "B"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "6": {
+      "partTitle": "Part 6: Gapped text",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Always Connected?",
+      "passage": "A generation ago, staying in touch usually meant planning ahead. People arranged a time to call, wrote letters that took days to arrive, or waited until they met face to face. Today, a message can cross the world in seconds, and that speed has changed not only how often we communicate but also what we expect from one another. Friends, relatives and colleagues can now reach us almost whenever they want, wherever we happen to be.\n\nFor many people, the biggest change is the disappearance of distance as a real obstacle. Video calls allow grandparents to read bedtime stories from another country, while work teams can discuss a project without sharing an office. (37) As a result, people often maintain relationships that might once have become weaker over time. Regular contact no longer depends on living in the same place, or even in the same time zone.\n\nAnother major shift is the movement from delayed replies to instant reactions. In the past, silence usually had a practical explanation: a person was out, a letter had not arrived, or a phone line was busy. Now, when someone sees a message and does not answer, others may read meaning into that pause. (38) Technology has therefore created a new form of social pressure, in which speed itself can seem like a sign of care, interest or respect.\n\nAt the same time, digital communication has changed the style of everyday language. Emails were once seen as quite formal, but messaging apps have encouraged shorter sentences, quicker exchanges and a more relaxed tone. (39) Although some critics worry that this makes writing less careful, others point out that people are actually writing far more often than previous generations did. Teenagers who rarely send letters may still produce thousands of words a week on their phones.\n\nThe rise of group chats has brought its own advantages and problems. Families use them to share news, sports teams organise lifts there, and groups of friends make plans without sending ten separate messages. (40) Yet these spaces can also be exhausting. Conversations continue all day, jokes arrive too quickly for everyone to follow, and some members feel obliged to react even when they have nothing useful to add.\n\nPublic communication has changed as well. Social media allows individuals, companies and public figures to speak directly to large audiences without relying on traditional newspapers or broadcasters. (41) A funny post, a short video or a personal comment can reach millions within hours. This has made communication more democratic in some ways, but it has also made mistakes more visible and harder to control once they begin to spread.\n\nDespite all these developments, older forms of communication have not completely disappeared. Important conversations are still often saved for face-to-face meetings, especially when emotions are involved or decisions are difficult. (42) In the end, technology has not replaced human communication; it has expanded it. We now have more ways to connect than ever before, but choosing the right one has become a skill in itself.",
+      "passageWordCount": 548,
+      "sentencePool": [
+        "A) The same tool that keeps everyone informed, however, can make it almost impossible to escape constant updates.",
+        "B) For that reason, a handwritten note or a carefully timed phone call can still feel more meaningful than a stream of short messages.",
+        "C) In many cases, that can strengthen family life and make international friendships feel surprisingly ordinary.",
+        "D) Some experts believe that voice technology will soon replace keyboards for most online conversations.",
+        "E) Even punctuation has taken on new roles, with emojis and gifs helping to show feelings that plain text may hide.",
+        "F) This is why a quick text can sometimes create more anxiety than comfort, despite its convenience.",
+        "G) This has completely altered who gets heard and how quickly ideas move from private conversation into public debate."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "C"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "F"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "E"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "A"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "G"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "B"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "question_title"
+    },
+    "7": {
+      "partTitle": "B2 Reading and Use of English Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Leah Morgan",
+          "text": "At first, I thought trying to live more sustainably meant making huge sacrifices, so I kept putting it off. Then my electricity bill rose sharply, and that finally pushed me to act. I started with ordinary habits: switching devices off properly, washing clothes at lower temperatures and carrying a flask instead of buying takeaway coffee. None of it felt dramatic, yet after a few months the changes became routine. Meanwhile, my neighbours set up a chat group where we exchange tips, and that has helped me stick to my plans. I still fly to visit my brother once a year, so I would never claim to be perfect. However, I have stopped worrying about getting every decision right. For me, the biggest lesson is that practical changes matter more than guilt, especially when they save money as well."
+        },
+        {
+          "letter": "B",
+          "name": "Nikhil Patel",
+          "text": "My interest in climate action began for a different reason. I work as a chef, so I see every day how much food gets thrown away in homes and restaurants. Initially, I focused on composting and planning meals better, but since then I have become more ambitious. These days, I cycle to work most mornings, even though the traffic can be unpleasant, and I have cut down sharply on meat. Friends sometimes assume I enjoy setting strict rules for myself, yet that is not really true. In fact, I get annoyed when people turn small changes into a competition about who is the greenest. Even so, I do think convenience is often just an excuse. Once I learnt a few basic recipes and started using leftovers creatively, wasting less food turned out to be easier than I had expected."
+        },
+        {
+          "letter": "C",
+          "name": "Sophie Green",
+          "text": "I came to everyday climate action through my children. They returned from school full of ideas and immediately questioned why our family drove such short distances. To be honest, I resisted at first because my timetable already felt impossible. Since then, though, walking more and borrowing things instead of buying them have changed how I think about daily life. What surprised me most was the social side of it. Our street now runs occasional repair evenings, and people who barely spoke before now share tools and fix lamps, zips and bikes together. That sense of community matters to me as much as the environmental benefit. I am still doubtful about some trends online, especially expensive products marketed as essential for a greener lifestyle. If an action creates pressure to spend more, I usually question whether it is really the best solution."
+        },
+        {
+          "letter": "D",
+          "name": "Owen Kerr",
+          "text": "For years I read articles about the climate and agreed with them in theory, yet I carried on living exactly as before. What changed was joining a local river-cleaning day. It was only a Saturday morning, but seeing piles of litter beside water I had known since childhood made the issue feel immediate rather than abstract. Since then, I have tried to reduce packaging, use public transport more often and buy fewer new clothes. I am not naturally organised, so I need systems: a shopping list, a reusable bag kept by the door, and reminders on my phone. Without those, I slip back into old habits surprisingly fast. I also think some campaigns ask too much from individuals while ignoring larger companies. Even so, taking action myself has stopped me feeling powerless, which is why I encourage other people to begin somewhere, however small."
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "prompt": "Who was motivated to change partly because of a financial consideration?"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "prompt": "Who suggests that people sometimes pretend something is difficult simply because it suits them?"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "prompt": "Who values an unexpected improvement in relationships with other people?"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "prompt": "Who says they are likely to fall back into old habits unless they organise practical ways to keep themselves on track?"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "prompt": "Who says they avoid judging themselves for not managing to do everything perfectly?"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "prompt": "Who was influenced by younger family members to reconsider daily travel habits?"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "prompt": "Who became more concerned after taking part in a single event in the local area?"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "prompt": "Who dislikes the way some people treat green living as a chance to compare themselves with others?"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "prompt": "Who is unconvinced by products presented as necessary for an environmentally responsible lifestyle?"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "prompt": "Who found that making changes was less hard than they had imagined?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "answer": "A"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "answer": "B"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "answer": "C"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "answer": "A"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "answer": "C"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "answer": "D"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "answer": "B"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "answer": "C"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "answer": "B"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

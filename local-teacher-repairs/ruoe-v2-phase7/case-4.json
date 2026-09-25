@@ -1,0 +1,14 @@
+{
+  "caseId": 4,
+  "repairResult": {
+    "status": "PIPELINE_FAIL",
+    "reason": "Stopped: the supplied historical direction (BEEN / has been using) does not match the located pre-patch Q25, whose subject is flexible hours and whose predicate is make a difference. Applying it would invent a different item."
+  },
+  "source": "scripts\\generated\\b2-exams\\exam-11\\part-04.json",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "savedAt": "2026-09-22T15:14:20.255Z"
+}

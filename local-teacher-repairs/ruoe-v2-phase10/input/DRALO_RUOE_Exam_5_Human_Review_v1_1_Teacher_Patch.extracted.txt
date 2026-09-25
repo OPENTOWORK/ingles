@@ -1,0 +1,908 @@
+DRALO
+
+RUOE EXAM 5
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+Theme map
+
+Exam 9 continues the rotation of topics after Exam 5. This paper moves across home cooking, careers, AI in education, home organisation, thoughtful travel, teenagers and social media, and hobbies that become meaningful parts of everyday life.
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Home cooking & changing habits
+
+2
+
+Open cloze
+
+Careers & working preferences
+
+3
+
+Word formation
+
+AI as a study tool
+
+4
+
+Key word transformations
+
+Home organisation & decluttering
+
+5
+
+Multiple choice reading
+
+Travel beyond the tourist trail
+
+6
+
+Gapped text
+
+Teenagers & social media
+
+7
+
+Multiple matching
+
+Hobbies, confidence & connection
+
+Distribution note: compared with Exam 8, the emphasis shifts away from medicine, space and transport. Travel appears once, but through tourist behaviour and local experience rather than transport choice; technology appears through AI and social media rather than smart devices.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Overall thematic variety
+
+
+
+Balance across Parts
+
+
+
+Repeated theme risk vs Exams 6–8
+
+
+
+Overall B2 authenticity
+
+
+
+General reviewer decision
+
+
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Home cooking & changing habits
+
+VISTA ALUMNO
+
+Example: Some people ___ pleasure in preparing meals from scratch.
+
+A) make    B) take    C) do    D) have
+
+Answer: B
+
+Text
+
+Back in the kitchen
+
+A few years ago, many people had little time for cooking and relied heavily on ready meals. Now, however, more families are taking an interest in preparing food at home again. One reason is cost: with prices rising, home cooking is often seen as a practical way to (1) ___ money. Another is health. After years of eating food high in salt and sugar, people have become more (2) ___ of what they eat.
+
+Social media has also played a part. Short videos can (3) ___ even simple recipes to life, and home cooks are quick to share tips for using basic ingredients well. As a result, cooking no longer seems like a skill reserved (4) ___ experts. For some, it has even turned into a hobby that helps them slow down after a busy day.
+
+Of course, not everyone has time to cook every evening, and takeaways still have their (5) ___. But many people now plan meals more (6) ___, cook larger amounts, and freeze portions for later. This means they can (7) ___ on convenience less often while still eating food they enjoy. Home cooking may not solve everything, but it is clearly making a (8) ___ comeback.
+
+Questions
+
+1
+
+A win
+
+B save
+
+C keep
+
+D spare
+
+2
+
+A familiar
+
+B sensitive
+
+C alert
+
+D aware
+
+3
+
+A show
+
+B put
+
+C bring
+
+D turn
+
+4
+
+A by
+
+B with
+
+C to
+
+D for
+
+5
+
+A side
+
+B point
+
+C place
+
+D area
+
+6
+
+A carefully
+
+B deeply
+
+C closely
+
+D largely
+
+7
+
+A trust
+
+B depend
+
+C rest
+
+D hold
+
+8
+
+A heavy
+
+B hard
+
+C strong
+
+D firm
+
+Part 1 — Reviewer view
+
+ANSWER KEY
+
+1
+
+B · save
+
+2
+
+D · aware
+
+3
+
+C · bring
+
+4
+
+D · for
+
+5
+
+C · place
+
+6
+
+A · carefully
+
+7
+
+B · depend
+
+8
+
+C · strong
+
+TEACHER ATTENTION
+
+• Teacher feedback patch applied: the broken example has been replaced with an independent example that does not alter any scored item.
+
+• Q3 has been rebuilt as “bring ... to life”, giving one natural answer while preserving the original option set. The remaining scored items are unchanged.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Example replaced; Q3 rebuilt (key C · bring).
+
+
+
+Part 2 — Open cloze
+
+Theme: Careers & working preferences
+
+VISTA ALUMNO
+
+Example: Answer: 0 → at
+
+Text
+
+Finding Work That Fits
+
+Many teenagers are told to decide (0) ___ an early age what they want to do in the future. In reality, choosing a career path is rarely as simple as picking the job that sounds most exciting. People often know what they are good (9) ___, but they may not realise how important it is to think about the kind of working life they want as well. Some enjoy teamwork, while others would rather work (10) ___ their own.
+
+Experts suggest trying different experiences before making a final decision. A weekend job, for example, can teach you more about yourself (11) ___ a long list of online quizzes. It can also show whether you are willing (12) ___ deal with pressure, customers or strict deadlines. Even if a job turns out not to suit you, that is useful too, because you have learned what to avoid.
+
+In the end, the best career choice is usually the one that matches both your abilities and your values. (13) ___ you may not find the perfect role immediately, each step can still teach you something useful. You are responsible (14) ___ deciding which opportunities fit your values best. What matters most is staying open-minded, so (15) ___ opportunities appear, you are ready to take advantage (16) ___ them.
+
+Part 2 — Reviewer view
+
+ANSWER KEY
+
+9
+
+at
+
+10
+
+on
+
+11
+
+than
+
+12
+
+to
+
+13
+
+although
+
+14
+
+for
+
+15
+
+when
+
+16
+
+of
+
+TEACHER ATTENTION
+
+• Teacher feedback patch applied: Q13 and Q14 were rewritten to remove the repeated answers “than” and “to”. The new sequence is at · on · than · to · although · for · when · of, with slightly broader grammatical variety. Q9–Q12 and Q15–Q16 are unchanged.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Teacher feedback patch applied to Q13 and Q14 for answer variety and a slightly stronger B2 spread.
+
+
+
+Part 3 — Word formation
+
+Theme: AI as a study tool
+
+VISTA ALUMNO
+
+Example: (0) ___ (SCIENCE)   Answer: 0 → scientific
+
+Text
+
+AI as a Study Partner
+
+Artificial intelligence is no longer limited to research labs. It has become a normal tool in many classrooms, and some teachers now see it as a (0) ___ (SCIENCE) innovation that can improve daily study habits. One of its main strengths is the speed with which it provides (17) ___ (RESPOND) to students' questions, allowing them to continue working instead of waiting for help. This can be especially useful for learners who are shy and may feel (18) ___ (COMFORT) about asking for support in front of others. AI systems can also offer (19) ___ (PERSON) practice activities based on a student's recent mistakes.
+
+Used (20) ___ (WISE), such tools can build confidence and encourage regular revision. However, there is also a risk of (21) ___ (DEPEND) if students begin to trust every answer without checking it. Teachers therefore need to discuss the (22) ___ (LIMIT) of these systems and remind learners that not all information is equally reliable. The most (23) ___ (VALUE) use of AI may be as a guide that supports human teaching rather than becoming a (24) ___ (PLACE) for it.
+
+Part 3 — Reviewer view
+
+ANSWER KEY
+
+17
+
+responses
+
+18
+
+uncomfortable
+
+19
+
+personalised
+
+20
+
+wisely
+
+21
+
+dependence
+
+22
+
+limitations
+
+23
+
+valuable
+
+24
+
+replacement
+
+TEACHER ATTENTION
+
+• Teacher feedback patch applied: the example now uses the more natural phrase “scientific innovation”.
+
+• Q24 has been rebuilt to restore grammatical parallelism and genuine word formation: PLACE → replacement in “becoming a replacement for it”. Q17–Q23 are unchanged.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Teacher feedback patch applied to example wording and Q24; re-review derivational balance.
+
+
+
+Part 4 — Key word transformations
+
+Theme: Home organisation & decluttering
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example: 0. Mia enjoys sorting her books every weekend.PLEASUREMia __________________ sorting her books every weekend.Answer: 0 → takes pleasure in
+
+25. People say that clearing out a room helps them feel calmer.SAIDClearing out a room __________________ people feel calmer.
+
+26. Organising the kitchen was quicker than I had expected.EXPECTEDOrganising the kitchen took __________________ it would.
+
+27. Ella regrets throwing away the old storage boxes now.WISHESElla __________________ away the old storage boxes.
+
+28. It isn't necessary for us to label every drawer straight away.HAVEWe __________________ every drawer straight away.
+
+29. Tom started enjoying housework when he discovered a simple routine.UNTILTom didn't enjoy housework __________________ a simple routine.
+
+30. A tidy hallway is more welcoming than a cluttered one.ASA cluttered hallway is __________________ a tidy one.
+
+Part 4 — Reviewer view
+
+ANSWER KEY
+
+25
+
+is said to help
+
+26
+
+less time than I expected
+
+27
+
+wishes she had not thrown
+
+28
+
+do not have to label
+
+29
+
+until he discovered
+
+30
+
+not as welcoming as
+
+TEACHER ATTENTION
+
+• Teacher feedback patch applied: Q26 has been replaced to eliminate the as/so ambiguity. New target: EXPECTED → “less time than I expected”, producing the unique sentence “Organising the kitchen took less time than I expected it would.”
+
+• The remaining five items are unchanged. The set still contains familiar B2 patterns, so overall transformation distance should be checked during final human review.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Q26 rebuilt for uniqueness and stronger restructuring; other items unchanged.
+
+
+
+Part 5 — Multiple choice reading
+
+Theme: Travel beyond the tourist trail
+
+VISTA ALUMNO
+
+Text
+
+Beyond the Crowds
+
+There was a time when travelling somewhere unfamiliar meant arriving with only a paper map and a few suggestions copied from a guidebook. Now, before most people have even booked a train, they have already watched videos of the best viewpoints, read reviews of the most photogenic cafés and saved a list of "hidden gems" that are, in reality, known to millions. As a result, many travellers have started looking for places that feel less performed and more real. The idea of going "off the tourist trail" has become a goal in itself.
+
+That phrase sounds simple, but it can be misleading. A place does not become more meaningful just because it is harder to find, and avoiding famous sights entirely can be as limiting as following the crowd everywhere. Some visitors become so determined to discover what others have missed that they treat local streets like a competition, measuring success by how few foreign voices they hear. The more thoughtful travellers are usually those who are less interested in claiming discovery and more interested in paying attention. They understand that being somewhere quietly is often more rewarding than announcing that they have found the one part of a city nobody else knows about.
+
+This shift in attitude has practical reasons as well. In many popular destinations, residents are tired of neighbourhoods being turned into backgrounds for other people's photos. Small bakeries that once served local customers can suddenly find queues forming outside because an image went viral. Rent rises, everyday routines become harder and the character visitors came to admire begins to disappear. Choosing lesser-known areas can reduce pressure on the busiest streets, but only if travellers behave differently there too. If people arrive expecting an untouched version of the centre, complete with cheap coffee and picturesque corners, they may simply repeat the same damage in a new location.
+
+So what does exploring beyond the obvious actually involve? Often, it means adjusting expectations rather than travelling further. In Lisbon, for example, many visitors rush between the historic centre and the famous tram routes, while missing ordinary districts where life happens at a slower pace. These areas may not offer perfect views at every turn, but they can reveal how a city fits together: where children play after school, which parks fill up at lunch, how old workshops survive next to new businesses. None of this is dramatic, yet for some travellers that is precisely the attraction. They return home with a stronger sense of place, even if their photos attract less attention online.
+
+Of course, not everyone wants this kind of experience every day. There is nothing wrong with visiting major landmarks, and famous places are often famous for good reasons. The problem begins when travel turns into a checklist or when people confuse novelty with understanding. A spectacular square seen at sunrise can teach you something about a city; so can a quiet market where you understand almost nothing that is being said. What matters is the quality of attention you bring. If you move through a place only searching for confirmation that you are adventurous, you will probably miss what is in front of you.
+
+Perhaps that is why the most satisfying discoveries are often modest. They are not always remote beaches or secret mountain paths, but moments when a place stops feeling like a product and starts feeling inhabited. You notice a mechanic greeting three generations of the same family, or a football match beginning on a patch of rough ground at the edge of town. These scenes are easy to overlook because they do not fit a neat travel story. Yet they may stay in the memory longer than the celebrated attraction nearby. Going beyond the tourist trail, then, is less about geography than about learning to look with patience, respect and curiosity.
+
+
+
+Questions
+
+31. What is the writer's main point in the article?A. Travellers should avoid well-known attractions because they are no longer authentic.B. Real travel experiences depend more on attitude than on reaching secret locations.C. Social media has made it impossible to discover places that feel genuinely local.D. Residents benefit when visitors move from city centres to quieter neighbourhoods.
+
+32. In the second paragraph, what criticism does the writer make of some travellers?A. They treat unfamiliar places as something to show off about.B. They expect local people to help them find unusual sights.C. They complain when destinations are difficult to reach.D. They rely too heavily on guidebooks when planning trips.
+
+33. What does the writer suggest about visiting lesser-known areas?A. It usually allows travellers to spend less money than in central districts.B. It only helps local communities if visitors also change their behaviour.C. It guarantees a more accurate picture of daily life than famous landmarks do.D. It works best in destinations that have already become popular online.
+
+34. Why does the writer mention Lisbon in the fourth paragraph?A. To recommend a city that still has many undiscovered attractionsB. To show that public transport can shape visitors' travel choicesC. To give an example of how ordinary neighbourhoods can deepen understanding of a placeD. To explain why some cities are harder to explore without social media
+
+35. What point does the writer make in the fifth paragraph about choosing between famous sights and quieter places?A. Either can be worthwhile if the traveller pays proper attention.B. Quieter places are more rewarding only when visitors stay for longer.C. Famous sights are useful mainly when they are visited before the crowds arrive.D. The choice of location matters more than the way the traveller behaves.
+
+36. In the final paragraph, what does the writer mean by saying a place 'stops feeling like a product'?A. It no longer seems designed mainly to be consumed by visitors.B. It becomes difficult for tourists to pay for goods and services there.C. It loses the traditional features that once attracted travellers.D. It starts to offer more activities than the guidebooks describe.
+
+Part 5 — Reviewer view
+
+ANSWER KEY
+
+31
+
+B
+
+32
+
+A
+
+33
+
+B
+
+34
+
+C
+
+35
+
+A
+
+36
+
+A
+
+TEACHER ATTENTION
+
+• Teacher feedback patch applied: the unrelated paragraph about astronauts has been removed, restoring article integrity and making Q36’s “final paragraph” reference accurate. Q35 has also been refined so the key links more directly to the paragraph’s contrast between famous and quieter places.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Teacher feedback patch applied: intrusive paragraph removed; Q35 refined; keys remain 35 A and 36 A.
+
+
+
+Part 6 — Gapped text
+
+Theme: Teenagers & social media
+
+VISTA ALUMNO
+
+Text
+
+Growing Up Online
+
+For today’s teenagers, social media is not a separate activity that begins when homework is finished. It is woven into everyday life, shaping how friendships are maintained, how news is discovered and even how people see themselves. Adults often focus on the dangers, while young users point to the fun and freedom these platforms provide. In reality, both views contain some truth. To understand the effect of social media on teenagers, it is necessary to look beyond headlines and examine how it influences daily habits.
+
+One reason these apps matter so much is that they offer a constant connection to other people. A teenager can share a joke, post a photo or ask for advice within seconds, and the response is often immediate. (37) That ability to share everyday worries can be especially valuable after moving to a new area or changing schools. Keeping in touch online may help them feel less isolated and more confident about starting conversations in person.
+
+However, the same tools that create connection can also increase pressure. Many teenagers are highly aware of how their posts will be judged, not only by close friends but by classmates and even strangers. (38) As a result, a simple photo can be edited repeatedly before it is shared, and a message may be rewritten several times to avoid sounding awkward. What appears to be relaxed communication can involve a surprising amount of performance.
+
+Another issue is the speed at which ideas spread online. Trends, opinions and rumours can travel through a school year group in minutes, leaving little time to check whether they are true. (39) A minor disagreement that might once have ended after school can continue late into the evening through group chats and comment sections. When there is no clear break from the conversation, small problems can quickly feel much bigger.
+
+Sleep is affected too, though not always for the reasons adults imagine. It is not simply that teenagers choose entertainment over rest. Notifications, fear of missing out and the habit of checking one more post can make it hard to stop. (40) Over time, this broken pattern may leave students tired in lessons and less able to concentrate, even if they believe they slept for a reasonable number of hours.
+
+That said, social media is not only a source of distraction or anxiety. Many teenagers use it to explore interests that are not shared by people around them. They can find artists, sports fans or young activists from other parts of the world and learn from them. (41) In some cases, online spaces also allow quieter students to express ideas more comfortably than they would in a busy classroom.
+
+So what should parents and schools do? Banning social media completely is unlikely to succeed, partly because online interaction has become a normal part of modern social life. (42) Teenagers need practical strategies, such as turning off alerts at night, checking sources before sharing stories and recognising when an app is affecting their mood. The goal is not to persuade young people to reject social media, but to help them use it with more awareness and control.
+
+Sentences
+
+A  In addition, when upsetting content appears, it can reach a large audience before anyone has time to calm the situation down.
+
+B  This sense of instant contact can make distance feel less important and everyday worries easier to share.
+
+C  Instead, experts increasingly argue that teenagers should be taught how to manage these platforms wisely.
+
+D  That can make online approval seem far more important than it really is.
+
+E  For a teenager waiting for replies, even a few silent minutes can feel unusually long.
+
+F  In this way, social media can support identity as well as entertainment.
+
+G  This often means phones remain nearby long after lights have been turned out.
+
+Part 6 — Reviewer view
+
+STORED ANSWER KEY
+
+37
+
+B
+
+38
+
+D
+
+39
+
+A
+
+40
+
+G
+
+41
+
+F
+
+42
+
+C
+
+TEACHER ATTENTION
+
+• Teacher feedback patch applied at Q37: the following sentence now explicitly refers to “that ability to share everyday worries”, creating a forward link that only option B supplies. Option E remains the extra sentence and is no longer a credible competitor at gap 37.
+
+• The remaining gaps and answer key are unchanged. Review overall difficulty, but there is no other blocking cohesion issue identified.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Q37 strengthened through forward-reference cohesion; key sequence unchanged.
+
+
+
+Part 7 — Multiple matching
+
+Theme: Hobbies, confidence & connection
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+43 Who discovered that the activity mattered most because of the relationships it created?
+
+44 Who says they began the hobby for someone else's benefit rather than their own?
+
+45 Who mentions feeling discouraged at first because others appeared more capable?
+
+46 Who found that the hobby first helped during a period when normal life had suddenly become limited?
+
+47 Who suggests the activity improved an ability to observe small details?
+
+48 Who explains that a change in attitude towards mistakes influenced life beyond the hobby itself?
+
+49 Who admits they originally expected their interest in the activity to be short-lived?
+
+50 Who refers to other people as being more certain than they are about the hobby's emotional effect?
+
+51 Who values the time spent doing the hobby more than the result produced at the end?
+
+52 Who says another informal event persuaded them not to give up the activity?
+
+A – Leah Morgan
+
+I took up pottery by accident after a friend dragged me to an evening class. At the time, my job in events meant I was constantly dealing with last-minute problems, so I liked the idea of making something slowly with my hands. Initially, I was terrible at it and felt ridiculous sitting beside people who seemed to know exactly what they were doing. However, the teacher never corrected us too quickly, and that made me less afraid of getting things wrong. Since then, pottery has altered the way I deal with the rest of my life. I still rush around at work, yet I no longer expect everything to be perfect straight away. Oddly enough, the best part isn't taking finished bowls home, but the quiet concentration in the studio, where nobody asks anything of me for two hours.
+
+B – Owen Patel
+
+For years, I laughed at people who spent weekends watching birds through binoculars. Then my daughter asked for help with a school project on garden wildlife, and I went along with it just to support her. Meanwhile, I found myself getting up early to see what landed in the park near our flat. What began as a favour turned into a habit that changed my routine completely. Before, I used to spend Sundays checking emails and worrying about Monday; now I leave my phone behind and head outdoors. I wouldn't claim birdwatching has made me calmer in every situation, although my family says it has. What it has certainly done is sharpen my attention. I notice weather, sound and movement far more than I ever used to, and that sense of being properly present has stayed with me.
+
+C – Rosa Bell
+
+When I started running, it was mainly because my doctor told me I needed regular exercise. I wasn't inspired by stories of marathon runners, and in truth I expected to give up within a month. Yet joining a local group changed everything. There were people of every age and ability, and no one made me feel slow. Gradually, training runs became the point around which I organised my week. The biggest surprise, though, was not the physical change but the social one. After moving to a new town, I had found it hard to meet people beyond work, whereas through running I built real friendships. We still talk about races, of course, but we also help one another through ordinary life. These days I still enjoy improving my times, although I know companionship is the reason I keep going back.
+
+D – Marcus Reid
+
+I bought a second-hand guitar during a difficult winter when I'd been told to stay home and recover from an injury. At first, learning online felt frustrating because I couldn't ask anyone what I was doing wrong, and progress seemed painfully slow. Even so, practising gave shape to days that had previously felt empty. Later, when I was able to leave the house again, I nearly stopped. Then a neighbour invited me to a small music night at a café, and hearing amateurs play without embarrassment convinced me to carry on. I still wouldn't perform alone, yet I've joined them a few times and discovered I enjoy contributing to something shared. In that sense, guitar changed my life twice: first by helping me through isolation, and later by giving me the confidence to take part instead of standing at the edge.
+
+Part 7 — Reviewer view
+
+ANSWER KEY
+
+43
+
+C
+
+44
+
+B
+
+45
+
+A
+
+46
+
+D
+
+47
+
+B
+
+48
+
+A
+
+49
+
+C
+
+50
+
+B
+
+51
+
+A
+
+52
+
+D
+
+TEACHER ATTENTION
+
+• Teacher review found no blocking issue in Part 7. The profiles and keys remain unchanged; the main check is still whether the paraphrase distance is sufficient at B2 speed.
+
+• Q43/Q51 remain distinguishable: C focuses on relationships created by the activity, while A focuses on valuing the process over the finished product.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+No content changes requested; Part 7 retained as reviewed.
+
+
+
+Final human review sheet
+
+Complete this page after reviewing all seven Parts. Mechanical/database keys are not a substitute for pedagogical approval.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Part 1 decision
+
+
+
+Part 2 decision
+
+
+
+Part 3 decision
+
+
+
+Part 4 decision
+
+
+
+Part 5 decision
+
+
+
+Part 6 decision
+
+
+
+Part 7 decision
+
+
+
+Overall theme variety
+
+
+
+Overall Cambridge B2 authenticity
+
+
+
+Final decision: APPROVE / ADJUST / REPLACE
+
+
+
+Teacher feedback patch applied: Part 1 example + Q3 corrected; Part 2 Q13/Q14 diversified; Part 3 example + Q24 repaired; Part 4 Q26 rebuilt; Part 5 intrusive paragraph removed and Q35 refined; Part 6 Q37 cohesion strengthened; Part 7 unchanged.
+
+Status: PENDING HUMAN REVIEW
+

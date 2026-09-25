@@ -1,0 +1,255 @@
+[
+  {
+    "exam": 5,
+    "question": 2,
+    "status": "PASS",
+    "action": "none",
+    "key": "C",
+    "options": [
+      "A) stayed",
+      "B) delayed",
+      "C) remained",
+      "D) lasted"
+    ],
+    "sentence": "Recent advances in technology have allowed researchers to (1) ___ out surveys in parts of the sea once thought unreachable, uncovering secrets that have long (2) ___ hidden from human eyes.",
+    "survivors": [
+      "C"
+    ],
+    "reason": "Only C survives independent substitution."
+  },
+  {
+    "exam": 5,
+    "question": 5,
+    "status": "PASS",
+    "action": "none",
+    "key": "B",
+    "options": [
+      "A) bring",
+      "B) offer",
+      "C) supply",
+      "D) suggest"
+    ],
+    "sentence": "Scientists are particularly interested in them because they may (5) ___ clues about the origins of life on Earth.",
+    "survivors": [
+      "B"
+    ],
+    "reason": "Only B survives independent substitution."
+  },
+  {
+    "exam": 5,
+    "question": 7,
+    "status": "PASS",
+    "action": "none",
+    "key": "C",
+    "options": [
+      "A) persist",
+      "B) inhabit",
+      "C) exist",
+      "D) dwell"
+    ],
+    "sentence": "Each discovery adds to our understanding of the complex relationships that (7) ___ in these remote places.",
+    "survivors": [
+      "C"
+    ],
+    "reason": "Only C survives independent substitution."
+  },
+  {
+    "exam": 5,
+    "question": 8,
+    "status": "PASS",
+    "action": "none",
+    "key": "B",
+    "options": [
+      "A) attraction",
+      "B) fascination",
+      "C) interest",
+      "D) attention"
+    ],
+    "sentence": "As exploration continues, more sites are being found, and each one deepens our (8) ___ with what lies beneath the sea.",
+    "survivors": [
+      "B"
+    ],
+    "reason": "Only B survives independent substitution."
+  },
+  {
+    "exam": 6,
+    "question": 2,
+    "status": "PASS",
+    "action": "none",
+    "key": "A",
+    "options": [
+      "A) fed",
+      "B) tired",
+      "C) bored",
+      "D) sick"
+    ],
+    "sentence": "People often start by getting rid of broken items or clothes they are (2) ___ up with wearing.",
+    "survivors": [
+      "A"
+    ],
+    "reason": "Only A survives independent substitution."
+  },
+  {
+    "exam": 6,
+    "question": 4,
+    "status": "UNREPAIRED",
+    "action": "reverted",
+    "key": "C",
+    "options": [
+      "A) aside",
+      "B) off",
+      "C) away",
+      "D) out"
+    ],
+    "sentence": "They also find it easier to keep their homes tidy, since there is less stuff to put (4) ___ .",
+    "survivors": [
+      "D"
+    ],
+    "reason": "Still D after the bounded distractor and sentence repairs. Key C."
+  },
+  {
+    "exam": 6,
+    "question": 6,
+    "status": "PASS",
+    "action": "none",
+    "key": "B",
+    "options": [
+      "A) length",
+      "B) run",
+      "C) distance",
+      "D) period"
+    ],
+    "sentence": "In the long (6) ___ , this habit may also reduce the amount of rubbish we (7) ___ away.",
+    "survivors": [
+      "B"
+    ],
+    "reason": "Only B survives independent substitution."
+  },
+  {
+    "exam": 6,
+    "question": 7,
+    "status": "PASS",
+    "action": "none",
+    "key": "A",
+    "options": [
+      "A) throw",
+      "B) push",
+      "C) drop",
+      "D) pass"
+    ],
+    "sentence": "In the long (6) ___ , this habit may also reduce the amount of rubbish we (7) ___ away.",
+    "survivors": [
+      "A"
+    ],
+    "reason": "Only A survives independent substitution."
+  },
+  {
+    "exam": 7,
+    "question": 1,
+    "status": "PASS",
+    "action": "none",
+    "key": "A",
+    "options": [
+      "A) attract",
+      "B) receive",
+      "C) collect",
+      "D) obtain"
+    ],
+    "sentence": "Yet both have (0) ___ popular enough to appear regularly on social media, where short videos can quickly (1) ___ interest.",
+    "survivors": [
+      "A"
+    ],
+    "reason": "Only A survives independent substitution."
+  },
+  {
+    "exam": 8,
+    "question": 7,
+    "status": "PASS",
+    "action": "distractor",
+    "key": "C",
+    "options": [
+      "A) fact",
+      "B) issue",
+      "C) matter",
+      "D) situation"
+    ],
+    "sentence": "It is more a (7) ___ of making sensible choices and getting the most out (8) ___ the food you buy.",
+    "survivors": [
+      "C"
+    ],
+    "reason": "Only C survives independent substitution."
+  },
+  {
+    "exam": 10,
+    "question": 7,
+    "status": "PASS",
+    "action": "none",
+    "key": "C",
+    "options": [
+      "A) thoroughly",
+      "B) absolutely",
+      "C) altogether",
+      "D) utterly"
+    ],
+    "sentence": "The aim is not to remove it (7) ___, but to keep it at a level that does not (8) ___ with everyday life.",
+    "survivors": [
+      "C"
+    ],
+    "reason": "Only C survives independent substitution."
+  },
+  {
+    "exam": 10,
+    "question": 8,
+    "status": "PASS",
+    "action": "none",
+    "key": "D",
+    "options": [
+      "A) interrupt",
+      "B) disturb",
+      "C) prevent",
+      "D) interfere"
+    ],
+    "sentence": "The aim is not to remove it (7) ___, but to keep it at a level that does not (8) ___ with everyday life.",
+    "survivors": [
+      "D"
+    ],
+    "reason": "Only D survives independent substitution."
+  },
+  {
+    "exam": 13,
+    "question": 1,
+    "status": "UNREPAIRED",
+    "action": "reverted",
+    "key": "A",
+    "options": [
+      "A) difference",
+      "B) change",
+      "C) progress",
+      "D) improvement"
+    ],
+    "sentence": "In fact, a few simple habits can make a real (1) ___ to your health.",
+    "survivors": [
+      "A",
+      "B"
+    ],
+    "reason": "Still A, B after the bounded distractor and sentence repairs. Key A."
+  },
+  {
+    "exam": 14,
+    "question": 4,
+    "status": "UNREPAIRED",
+    "action": "reverted",
+    "key": "C",
+    "options": [
+      "A) bring",
+      "B) take",
+      "C) carry",
+      "D) hand"
+    ],
+    "sentence": "Since supplies cannot easily be replaced, meals must stay fresh for long periods and be easy to (4) ___ out.",
+    "survivors": [
+      "B"
+    ],
+    "reason": "Still B after the bounded distractor and sentence repairs. Key C."
+  }
+]

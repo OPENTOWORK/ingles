@@ -1,0 +1,1119 @@
+{
+  "version": "DRALO_RUOE_Exam_12_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 12,
+  "sourceGeneratedAt": "2026-08-31T21:28:15.378Z",
+  "reviewFile": "DRALO_RUOE_Exam_8_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) kept",
+          "B) carried",
+          "C) taken",
+          "D) held"
+        ],
+        "answer": "C",
+        "explanation": "The fixed expression is \"take steps\"."
+      },
+      "title": "Saving the Past for the Future",
+      "passage": "Across Europe, many towns are now taking (0) ___ to protect old buildings before they fall into disrepair. In the past, historic streets were often knocked down to make (1) ___ for modern development. Today, however, local councils are more likely to recognise the value of preserving a city's unique (2) ___. Visitors are not only attracted by museums but also by ordinary houses, shops and squares that (3) ___ a story about earlier generations.\n\nRestoring such places is rarely cheap, and some projects depend (4) ___ private donations as well as public money. Even so, supporters argue that the long-term benefits far (5) ___ the initial cost. A carefully repaired market hall, for instance, can bring people (6) ___ to the town centre and encourage small businesses to open.\n\nOf course, preservation must be handled with (7) ___. If every change is refused, historic areas may become lifeless. The real challenge is to strike a (8) ___ between protecting the past and allowing communities to grow.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) room",
+            "B) space",
+            "C) place",
+            "D) area"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) figure",
+            "B) character",
+            "C) nature",
+            "D) appearance"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) say",
+            "B) speak",
+            "C) tell",
+            "D) mention"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) from",
+            "B) with",
+            "C) by",
+            "D) on"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) defeat",
+            "B) outweigh",
+            "C) exceed",
+            "D) overcome"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) over",
+            "B) through",
+            "C) round",
+            "D) back"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) concern",
+            "B) attention",
+            "C) care",
+            "D) caution"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) balance",
+            "B) limit",
+            "C) border",
+            "D) match"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "B",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "C",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "D",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "A",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "descriptive_title"
+    },
+    "2": {
+      "partTitle": "B2 First Reading and Use of English Part 2",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "as"
+      },
+      "title": "Working with Smart Machines",
+      "passage": "A few years ago, artificial intelligence was often discussed (0) ___ something that might affect the workplace in the distant future. Now, however, it is already changing the way people work in offices, shops and hospitals. In many companies, AI tools can deal with routine tasks (9) ___ greater speed than humans, which allows staff to spend time on work that requires creativity or personal contact. This does not mean that people will disappear from the workplace. In fact, many managers say that AI works best when it is used to support employees rather (10) ___ replace them. A chatbot, for example, may answer simple customer questions, but difficult cases still need (11) ___ be handled by a person. Workers are also being asked to learn new skills so that they can work effectively (12) ___ these systems. Some are excited, while others worry (13) ___ whether their jobs will change too much. What seems clear is that AI is unlikely to succeed on (14) ___ own. The most successful workplaces will probably be those (15) ___ people and machines learn from each other and prepare (16) ___ new demands together.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "than"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "than"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "to"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "with"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "about"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "its"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "where"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "to"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "DEPEND",
+        "answer": "independence",
+        "transformationFamily": "noun"
+      },
+      "title": "Going Solo",
+      "passage": "For many people, the idea of travelling alone is closely linked to a sense of (0) ___ (DEPEND). Without friends or family nearby, every decision, from choosing a train to finding somewhere to stay, becomes your own responsibility. At first, that can feel slightly (17) ___ (COMFORT), especially if you are used to sharing plans with others. However, many solo travellers soon discover that this early anxiety is replaced by a growing feeling of (18) ___ (CONFIDENT). One of the main benefits is the (19) ___ (FREE) to change your plans whenever you like. If a town surprises you, you can stay longer; if somewhere feels dull, you can leave immediately. This kind of flexibility often leads to more (20) ___ (MEMORY) experiences. Travelling alone can also encourage more (21) ___ (SOCIETY) behaviour, because you are more likely to start conversations with strangers. Of course, a little (22) ___ (CAUTIOUS) is still necessary, particularly in unfamiliar places. Yet with sensible preparation, solo travel can be a deeply (23) ___ (REWARD) experience and, for many, the (24) ___ (DISCOVER) of how capable they really are.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "COMFORT",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "CONFIDENT",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "FREE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "MEMORY",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "SOCIETY",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "CAUTIOUS",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "REWARD",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "DISCOVER",
+          "transformationFamily": "negative"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "uncomfortable",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "confidence",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "freedom",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "memorable",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "sociable",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "caution",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "rewarding",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "discovery",
+          "transformationFamily": "negative"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "I last checked my messages three days ago.",
+        "keyword": "FOR",
+        "sentence2Start": "I have __________________ three days.",
+        "answer": "not checked my messages for"
+      },
+      "questions": [
+        {
+          "id": "B2-RUE-P4-25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "Mia said she felt much calmer after spending the weekend without any screens.",
+          "keyword": "MADE",
+          "sentence2Start": "Spending the weekend without any screens __________________ much calmer, according to Mia.",
+          "answer": "made Mia feel",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "MADE",
+            "fullAnswers": [
+              "made Mia feel"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "causative verb plus object",
+                "accepted": [
+                  "made Mia"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "bare infinitive complement",
+                "accepted": [
+                  "feel"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "causative make + object + bare infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests correct use of 'made' with the object; MP2 tests the required bare infinitive after 'make'.",
+          "alternative_route_check": "Alternative routes such as 'left Mia feeling' are blocked because the keyword must be MADE and the sentence frame requires a finite verb phrase before 'much calmer'."
+        },
+        {
+          "id": "B2-RUE-P4-26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "It wasn't necessary for us to take our laptops on the retreat.",
+          "keyword": "NEED",
+          "sentence2Start": "We __________________ our laptops on the retreat.",
+          "answer": "did not need to take",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "NEED",
+            "fullAnswers": [
+              "did not need to take",
+              "didn't need to take"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "past negative need structure",
+                "accepted": [
+                  "did not need",
+                  "didn't need"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement with object",
+                "accepted": [
+                  "to take"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "did not need to + infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests the past negative modal-like structure; MP2 tests the infinitive complement after 'need'.",
+          "alternative_route_check": "Using 'needn't have taken' changes the meaning to unnecessary but performed action, so only one defendable route remains."
+        },
+        {
+          "id": "B2-RUE-P4-27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "Leo started sleeping better only after he stopped using his phone at night.",
+          "keyword": "UNTIL",
+          "sentence2Start": "Leo didn't start sleeping better __________________ using his phone at night.",
+          "answer": "until he stopped",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "UNTIL",
+            "fullAnswers": [
+              "until he stopped"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "time linker with subject",
+                "accepted": [
+                  "until he"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past simple verb",
+                "accepted": [
+                  "stopped"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "not ... until + past clause",
+          "difficulty_band": "B2-Core",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 checks the linker and clause subject; MP2 checks the correct past verb completing the clause.",
+          "alternative_route_check": "Alternatives like 'before he stopped' are blocked by the keyword UNTIL and would not fit the negative sentence frame as precisely."
+        },
+        {
+          "id": "B2-RUE-P4-28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "I regret posting every photo from my holiday straight away.",
+          "keyword": "WISH",
+          "sentence2Start": "I __________________ every photo from my holiday straight away.",
+          "answer": "wish I had not posted",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISH",
+            "fullAnswers": [
+              "wish I had not posted",
+              "wish I'd not posted"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish + subject + had",
+                "accepted": [
+                  "wish I had",
+                  "wish I'd"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "negative past participle clause",
+                "accepted": [
+                  "not posted"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "wish + past perfect for present regret about past action",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests the regret structure with 'wish' and past perfect auxiliary; MP2 tests the negative participle phrase.",
+          "alternative_route_check": "Routes such as 'wish I hadn't posted' are intentionally blocked because Cambridge counting would make it too short and the accepted contraction variant is controlled as 'wish I'd not posted'."
+        },
+        {
+          "id": "B2-RUE-P4-29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "People often say that a short break from social media improves concentration.",
+          "keyword": "SAID",
+          "sentence2Start": "A short break from social media __________________ concentration.",
+          "answer": "is often said to improve",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SAID",
+            "fullAnswers": [
+              "is often said to improve"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "impersonal passive reporting structure",
+                "accepted": [
+                  "is often said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive reporting complement",
+                "accepted": [
+                  "to improve"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "subject + be said + to infinitive",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the passive reporting frame; MP2 tests the infinitive complement after 'said'.",
+          "alternative_route_check": "Alternatives like 'it is often said that' are blocked by the sentence opening, which requires the noun phrase subject transformation."
+        },
+        {
+          "id": "B2-RUE-P4-30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "The weekend without wi-fi was more enjoyable than Dan had expected.",
+          "keyword": "AS",
+          "sentence2Start": "Dan had not expected the weekend without wi-fi to be __________________ it was.",
+          "answer": "as enjoyable as",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "AS",
+            "fullAnswers": [
+              "as enjoyable as"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "first part of comparative structure",
+                "accepted": [
+                  "as Dan"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past auxiliary completing clause",
+                "accepted": [
+                  "had"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-02",
+          "target_structure": "not as ... as expected comparative pattern",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the comparative frame with 'as'; MP2 tests the auxiliary needed to complete the clause before 'expected'.",
+          "alternative_route_check": "The only natural completion is 'as Dan had' because 'expected' is already provided after the gap, blocking alternatives such as 'than Dan had'."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "B2-RUE-P4-25",
+          "number": 25,
+          "answer": "made Mia feel"
+        },
+        {
+          "id": "B2-RUE-P4-26",
+          "number": 26,
+          "answer": "did not need to take"
+        },
+        {
+          "id": "B2-RUE-P4-27",
+          "number": 27,
+          "answer": "until he stopped"
+        },
+        {
+          "id": "B2-RUE-P4-28",
+          "number": 28,
+          "answer": "wish I had not posted"
+        },
+        {
+          "id": "B2-RUE-P4-29",
+          "number": 29,
+          "answer": "is often said to improve"
+        },
+        {
+          "id": "B2-RUE-P4-30",
+          "number": 30,
+          "answer": "as enjoyable as"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 26
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Core",
+            "number": 27
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 28
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Strong",
+            "number": 29
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 3,
+          "4": 0,
+          "5": 3
+        },
+        "answerLengths": [
+          3,
+          5,
+          3,
+          5,
+          5,
+          3
+        ]
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "When the Weekend Job Becomes Your Real One",
+      "passageWordCount": 595,
+      "passage": "People often say, half-jokingly, that they would happily do their hobby for a living if only someone would pay them. It sounds like a fantasy: spending each day baking, repairing bicycles, taking photographs or training dogs instead of answering emails in an office. Yet for a growing number of people, this is not simply a daydream. Online platforms, specialist markets and social media have made it easier than ever to reach customers directly. At the same time, the idea of a single career for life has weakened, and many workers now expect to change direction at least once.\n\nEven so, the move from hobby to profession is rarely as simple as outsiders imagine. What begins as a relaxing escape from daily pressures can quickly acquire deadlines, invoices and awkward customer requests. The ceramic artist who once enjoyed shaping bowls at midnight whenever inspiration appeared may suddenly need to produce thirty matching mugs by Friday. A guitarist who loved experimenting alone may find that teaching beginners pays the bills better than performing does. In other words, earning money from a hobby does not just add income; it changes the activity itself.\n\nThat shift can be uncomfortable, especially at the start. Some new business owners discover that the part they most enjoyed is now surrounded by tasks they had never considered. Selling handmade soap, for instance, may involve packaging rules, photography, stock records and constant communication with buyers. There is also the emotional difficulty of attaching a price to something personal. Charging friends for portraits or asking strangers to pay for cakes based on family recipes can feel less like business and more like self-exposure. For that reason, people who succeed are not always the most talented. Often, they are the ones who can tolerate uncertainty and keep going while they learn unfamiliar skills.\n\nFinancially, caution matters. Stories about overnight success attract attention, but they hide the slower reality. Many people begin by working evenings and weekends, testing whether customers will return before leaving a secure salary. That approach can be exhausting, but it provides useful information. It reveals whether the product is genuinely wanted, whether prices cover costs and whether enthusiasm survives repetition. A person may love making jewellery, for example, yet feel very differently after producing the same popular design fifty times in one month. Better to discover that while the hobby is still optional than after rent depends on it.\n\nThere is another less obvious challenge: identity. When people ask what you do, saying \"I'm trying to make a living from restoring old furniture\" can sound uncertain even if the business is developing well. Society still tends to respect conventional job titles more than self-created ones, particularly during the messy middle stage when income is irregular. Family members may worry that a sensible career is being thrown away, while former colleagues assume the change is temporary. Such reactions can make people doubt themselves, not because the new path is wrong, but because it has fewer recognised milestones.\n\nNone of this means turning a hobby into a career is a mistake. For some, it leads to a more satisfying working life precisely because it combines personal interest with independence. But the most successful people are usually those who treat passion as a starting point, not a guarantee. They accept that professionalising a hobby means protecting what they love while also submitting it to market forces. The reward is not endless enjoyment untouched by pressure. It is the chance to build work that feels meaningful, provided they are willing to see the hobby clearly, not romantically.",
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "What point does the writer make in the first two paragraphs about turning a hobby into a career?",
+          "options": [
+            "A) It has become more possible, but it changes the nature of the activity.",
+            "B) It is mainly attractive to people who are tired of office life.",
+            "C) It usually succeeds because online tools remove most of the risks.",
+            "D) It works best when the hobby already involves dealing with other people."
+          ],
+          "evidence": "The writer says it is easier than ever to reach customers directly, but also that earning money from a hobby changes the activity itself through deadlines and customer demands.",
+          "rationale": "A is correct because the opening presents both greater opportunity and the idea that professionalising a hobby alters it. B is too narrow: office work is only one example. C distorts the text, which stresses risks and complications. D adds a condition the writer never states."
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "questionType": "inference",
+          "prompt": "In the third paragraph, what does the writer suggest about people who manage this kind of career change well?",
+          "options": [
+            "A) They are comfortable promoting themselves in public.",
+            "B) They are realistic about having to learn beyond their original hobby.",
+            "C) They have usually worked in business before.",
+            "D) They avoid charging people they know for their work."
+          ],
+          "evidence": "The paragraph explains that success often depends not on talent alone but on tolerating uncertainty and learning unfamiliar skills such as records, rules and customer communication.",
+          "rationale": "B is correct because the writer highlights resilience and willingness to develop new skills. A is only partly related to the idea of self-exposure and is not the main suggestion. C is not mentioned. D misunderstands the point about the emotional difficulty of pricing personal work."
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "questionType": "purpose",
+          "prompt": "Why does the writer mention making the same jewellery design many times in one month?",
+          "options": [
+            "A) To show that customer demand can rise faster than expected.",
+            "B) To argue that creative work is harder to price than practical work.",
+            "C) To illustrate how repeating a successful item may reduce the pleasure of making it.",
+            "D) To explain why jewellery is a risky hobby to turn into a business."
+          ],
+          "evidence": "The example follows the point that testing a business shows whether enthusiasm survives repetition and that it is better to learn this before depending on the income.",
+          "rationale": "C is correct because the jewellery example demonstrates that turning a hobby into paid work may replace enjoyment with repetitive production. A is secondary and not the writer's purpose. B is unrelated to the example. D wrongly treats jewellery as a special case."
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "questionType": "attitude",
+          "prompt": "What is the writer's attitude in the fifth paragraph towards other people's reactions to an unusual career path?",
+          "options": [
+            "A) amused that they are often based on jealousy",
+            "B) critical of their failure to notice creative talent",
+            "C) sympathetic to the pressure they can put on someone",
+            "D) surprised that they remain so negative nowadays"
+          ],
+          "evidence": "The writer notes that society respects conventional job titles more, and that family and colleagues can cause doubt because the path has fewer recognised milestones.",
+          "rationale": "C is correct because the writer presents these reactions as a source of understandable pressure on the person making the change. A introduces jealousy, which is absent. B focuses on talent, not the social uncertainty described. D is incorrect because the tone is explanatory rather than surprised."
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "questionType": "reference",
+          "prompt": "In the final paragraph, what does the word \"It\" in \"It is the chance to build work that feels meaningful\" refer back to?",
+          "options": [
+            "A) the chance to build work that feels meaningful",
+            "B) endless enjoyment untouched by pressure",
+            "C) the market force affecting the hobby",
+            "D) a mistake in changing career direction"
+          ],
+          "evidence": "The sentence before says, \"The reward is not endless enjoyment untouched by pressure. It is the chance to build work that feels meaningful...\"",
+          "rationale": "A is correct because \"it\" refers back to the real reward described by the writer. B is specifically rejected as not being the reward. C is part of the broader situation, not the referent of \"it\". D is mentioned earlier in the paragraph in a different context."
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "questionType": "global",
+          "prompt": "Which statement best summarises the writer's overall message in the article?",
+          "options": [
+            "A) A hobby should remain separate from paid work unless demand is guaranteed.",
+            "B) Creative hobbies are easier to turn into careers than practical ones.",
+            "C) The main difficulty is persuading other people to take the new career seriously.",
+            "D) Passion can lead to satisfying work, but only if it is supported by realism and adaptability."
+          ],
+          "evidence": "Across the article, the writer balances the attraction of meaningful independent work with warnings about pressure, repetition, business skills, financial caution and social doubt.",
+          "rationale": "D is correct because it captures the article's balanced conclusion: passion matters, but success depends on practical thinking and flexibility. A is too absolute and contradicts the final paragraph. B makes an unsupported comparison. C focuses too heavily on one challenge rather than the whole message."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "A"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "B"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "C"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "C"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "A"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "D"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "when_x"
+    },
+    "6": {
+      "partTitle": "Part 6",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Beyond the Usual Game",
+      "passage": "For years, unusual sports were often treated as little more than internet curiosities: fun to watch for a minute, but too strange to be taken seriously. That view is changing quickly. Across Europe and beyond, activities once known only to small groups of enthusiasts are attracting larger crowds, more media attention and a steady flow of newcomers. (37) As a result, sports such as underwater hockey, bike polo and ultimate frisbee are no longer seen as passing trends.\n\nPart of the appeal is that these sports offer people a fresh experience in a world where many leisure activities already feel heavily organised and familiar. New players are often surprised by how welcoming the atmosphere can be. In mainstream sports, beginners may feel pressure to perform well immediately, especially if teams are focused on results. (38) That makes it easier for people to try something without worrying that they will be judged.\n\nThe growth of social media has also played an important role. Twenty years ago, a local group might have struggled to find enough members to survive. Today, one short video of a fast-moving match can reach thousands of viewers in a few hours, and many of them will share it with friends. (39) In other words, online platforms do not simply advertise these sports; they help create the communities that keep them alive.\n\nAnother reason for their popularity is practical rather than cultural. Some unusual sports are easier to organise than people expect, especially in cities where space is limited. Bike polo, for example, can be played on a hard court that might otherwise sit empty in the evening. (40) For adults with busy schedules, that flexibility can make the difference between taking part regularly and giving up after a few weeks.\n\nEven so, becoming more visible brings difficulties. Once a sport begins to attract sponsorship, formal competitions and governing bodies, arguments often follow about what should happen next. Some players welcome clearer rules and better funding, saying these changes make the sport safer and more sustainable. Others worry that the original spirit will be lost. (41) What began as an informal activity can start to resemble the very sports it once offered an alternative to.\n\nThis tension is especially clear when schools and universities become involved. On the one hand, official recognition can provide equipment, coaching and reliable places to train. It can also introduce young people to sports they might never otherwise discover. (42) If every session is turned into preparation for a tournament, there is less room for the creativity and experimentation that attracted many early participants in the first place.\n\nFor now, though, the rise of unusual sports seems likely to continue. People are searching for activities that combine exercise with friendship, challenge and a sense of discovery. Whether they remain proudly unconventional or slowly become part of the sporting mainstream, they are already changing ideas about what a sport can look like. That may be the most interesting development of all.",
+      "passageWordCount": 546,
+      "sentencePool": [
+        "A) Yet many clubs in smaller sports place greater value on enthusiasm, cooperation and learning the basics.",
+        "B) This has allowed scattered players to find one another and arrange training sessions, tournaments and even international events.",
+        "C) At the same time, teachers who prefer structure may unintentionally remove the playful side of the activity.",
+        "D) Similar patterns can be seen in sports that require little equipment and can be adapted to different public spaces.",
+        "E) Much of that growth has been driven by people looking for sport to feel more social, creative and less predictable.",
+        "F) As soon as money and status become involved, decisions that were once simple can suddenly become controversial.",
+        "G) In some mountain regions, however, older snow-based competitions are actually declining despite renewed tourist interest."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "E"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "A"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "B"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "D"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "F"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[P6-H07] gap (42): Correct option shows weak backward/forward cohesion clues (heuristic)."
+          }
+        ],
+        "detectedAt": "2026-08-31T21:37:08.898Z"
+      }
+    },
+    "7": {
+      "partTitle": "Part 7",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person...? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Rosa Mendez",
+          "text": "I used to laugh at people who checked their phones every few minutes, yet now I rely on a smartwatch more than I expected. I bought it initially because I kept missing messages while cycling across town to my bakery. Since then, though, it has quietly changed my routine in other ways. The reminders to stand up or drink water are useful, and paying for ingredients with a tap feels quicker than searching for coins with flour on my hands. However, I switched off most notifications after a few weeks. I realised I was letting tiny vibrations interrupt conversations with customers. My brother says these devices make life easier only if you control them, and I think he is right. I still enjoy the health tracking, but I refuse to wear the watch in the evening. Home should feel different from work."
+        },
+        {
+          "letter": "B",
+          "name": "Gareth Cole",
+          "text": "For me, smart devices became essential during a long recovery after a knee operation. Before that, I had seen them as expensive toys. A friend persuaded me to try a voice-controlled speaker and a sleep monitor, and I was surprised by how much independence they gave me. From bed, I could adjust the lights, listen to the news and even make shopping lists without asking for help. Meanwhile, the sleep data helped me notice a pattern I would otherwise have ignored: pain medication was affecting my rest. That said, I am uneasy about how much personal information these gadgets collect. I read every privacy setting carefully, although I know most people never bother. Even so, I have kept the devices because they solved practical problems at a time when I really needed support, and they still save me effort now."
+        },
+        {
+          "letter": "C",
+          "name": "Leila Hassan",
+          "text": "As a secondary school teacher, I spend all day asking teenagers to put their phones away, so friends find it amusing that my flat is full of connected devices. Still, I am selective about what deserves space in my life. I love my smart thermostat because it learns when I am usually home and stops me wasting money on heating. By contrast, I returned a robot vacuum after a month. It was entertaining at first, yet it constantly got stuck under a chair and demanded more attention than an ordinary broom. What annoys me most is the assumption that newer always means better. Sometimes the simplest option is still the most sensible one. Even so, I admit that when my train is delayed and my lights turn on automatically before I arrive, it feels oddly reassuring rather than unnecessary."
+        },
+        {
+          "letter": "D",
+          "name": "Noah Price",
+          "text": "I review consumer technology for a local website, so people expect me to fill my house with the latest devices. Actually, I try to live with only a few, because testing too many products has made me less easily impressed. At first, every new feature seems clever; later, you notice how many are solutions to problems nobody had. The exception for me is a tiny tracker attached to my keys and wallet. I travel constantly for work, and before buying it I wasted ridiculous amounts of time searching hotel rooms and train seats. Now I can locate things in seconds, which lowers my stress more than any fancy entertainment system could. Yet I never recommend buying smart devices simply because they are fashionable. If a product does not remove a real frustration from your day, the excitement usually disappears fast."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q43",
+          "number": 43,
+          "prompt": "Who changed their opinion after using smart technology in difficult personal circumstances?"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "prompt": "Who decided that a device should not be allowed to affect time away from their job?"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "prompt": "Who mentions that one piece of technology turned out to require more effort than a basic alternative?"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "prompt": "Who believes smart products are worthwhile only when they deal with an actual everyday problem?"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "prompt": "Who says they became aware of a health-related issue because of information collected by a device?"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "prompt": "Who mentions using a smart device to make everyday tasks easier while moving around their town?"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "prompt": "Who is careful not to accept the idea that the most modern option is automatically the best one?"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "prompt": "Who suggests that experience with many devices has made them harder to impress?"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "prompt": "Who mentions taking action to reduce interruptions caused by a device?"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "prompt": "Who values a device mainly because it reduces the need to depend on other people?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q43",
+          "number": 43,
+          "answer": "B"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "answer": "A"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "answer": "C"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "answer": "B"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "answer": "A"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "answer": "C"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "answer": "D"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "answer": "A"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "answer": "B"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

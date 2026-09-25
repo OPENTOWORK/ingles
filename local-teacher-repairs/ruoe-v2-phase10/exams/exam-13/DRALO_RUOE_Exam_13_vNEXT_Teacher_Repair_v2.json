@@ -1,0 +1,1121 @@
+{
+  "version": "DRALO_RUOE_Exam_13_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 13,
+  "sourceGeneratedAt": "2026-08-31T21:39:47.550Z",
+  "reviewFile": "DRALO_RUOE_Exam_9_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) make",
+          "B) keep",
+          "C) stay",
+          "D) hold"
+        ],
+        "answer": "C",
+        "explanation": "The natural collocation is \"stay fit\"."
+      },
+      "title": "Small Changes, Big Results",
+      "passage": "Many people want to (0) ___ fit, but they often imagine they need expensive equipment or hours at the gym. In fact, a few simple habits can make a real (1) ___ to your health. One easy idea is to walk more. If you get (2) ___ the bus one stop early or take the stairs, you can add exercise to your day without changing your routine too much. It also helps to choose an activity you actually enjoy, because you are more likely to keep it (3) ___. Some people join a class, while others prefer to work (4) ___ at home with an online video. The important thing is to set goals that are realistic. If you aim too high, you may (5) ___ up feeling disappointed. Finally, do not (6) ___ the value of rest. Your body needs time to recover, and sleep plays a key (7) ___ in staying healthy. With a sensible plan, getting fitter can become part of daily life rather than an extra (8) ___ on your already busy schedule.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) difference",
+            "B) change",
+            "C) progress",
+            "D) improvement"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) down",
+            "B) away",
+            "C) out",
+            "D) off"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) over",
+            "B) on",
+            "C) up",
+            "D) out"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) single",
+            "B) separate",
+            "C) private",
+            "D) alone"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) finish",
+            "B) turn",
+            "C) end",
+            "D) bring"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) miss",
+            "B) fail",
+            "C) underestimate",
+            "D) refuse"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) role",
+            "B) task",
+            "C) point",
+            "D) duty"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) pressure",
+            "B) burden",
+            "C) effort",
+            "D) challenge"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "D",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "C",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "C",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "A",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "B",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "Part 2: Open cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "for"
+      },
+      "title": "Messages in a Digital Age",
+      "passage": "Not long ago, people mainly used phones (0) ___ urgent conversations and letters for news that could wait. Today, communication happens across several devices, and messages can be sent in seconds to friends, colleagues or relatives who may live thousands of miles away. This change has brought many benefits, (9) ___ as faster access to information and the chance to keep in touch more easily. At the same time, it has changed expectations. People are often surprised if a reply does not arrive (10) ___ away, even though the person they contacted may be busy. Another effect is that written messages now have to do the job that tone of voice once did, (11) ___ is why people use emojis and punctuation more carefully. Experts also point (12) ___ that digital tools can create pressure to be available all the time. As a result, some users choose (13) ___ turn off notifications during the evening. Technology has clearly made communication quicker, but whether it has made it better depends (14) ___ how thoughtfully we use it. If we learn when to reply and when to wait, we may communicate just (15) ___ effectively online as we do face to face, rather (16) ___ allowing our devices to control us.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "such"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "straight"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "which"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "out"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "to"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "on"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "as"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "than"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "RESPOND",
+        "answer": "response",
+        "transformationFamily": "other"
+      },
+      "title": "Small Habits, Big Difference",
+      "passage": "Many people feel that climate change is too large a problem for one person to solve. Yet a practical (0) ___ (RESPOND) begins with ordinary habits at home, at work and while travelling. One of the easiest steps is to make more (17) ___ (CARE) choices about energy use. Turning off lights and chargers may seem (18) ___ (IMPORTANT), but over time it reduces waste. Transport is another area where small changes matter. A short car journey can often be replaced by a walk, and regular cycle use brings health benefits in (19) ___ (ADD) to lower emissions. Food also plays a role. Planning meals helps people shop more (20) ___ (EFFICIENT), so less food is thrown away. It is also worth checking product labels. Companies sometimes make (21) ___ (MISLEAD) claims about how green their goods are, so consumers need to read with care. Finally, reusing and repairing items can extend their (22) ___ (LONG) and cut demand for new products. Taking part in local environmental projects can also encourage greater (23) ___ (SOCIAL), because people meet neighbours they might not otherwise speak to. Together, these habits can have a surprisingly (24) ___ (BENEFIT) effect on the planet.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "CARE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "IMPORTANT",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "ADD",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "EFFICIENT",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "MISLEAD",
+          "transformationFamily": "negative"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "LONG",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "SOCIAL",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "BENEFIT",
+          "transformationFamily": "adjective"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "careful",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "unimportant",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "addition",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "efficiently",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "misleading",
+          "transformationFamily": "negative"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "lifespan",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "powerless",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "beneficial",
+          "transformationFamily": "adjective"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "It is unnecessary for remote workers to travel to the office every day.",
+        "keyword": "NEED",
+        "sentence2Start": "Remote workers __________________ travel to the office every day.",
+        "answer": "do not need to"
+      },
+      "questions": [
+        {
+          "id": "B2RUEP4Q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "Working from home was less stressful for Marta than commuting into the city every day.",
+          "keyword": "AS",
+          "sentence2Start": "Commuting into the city every day was __________________ working from home for Marta.",
+          "answer": "not as stressful as",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "AS",
+            "fullAnswers": [
+              "not as stressful as"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "comparative structure",
+                "accepted": [
+                  "not as"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "adjective plus comparison ending",
+                "accepted": [
+                  "stressful as"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "not as + adjective + as comparative transformation",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the negative equality comparison frame; MP2 tests the adjective and final comparison element.",
+          "alternative_route_check": "Only one defendable route is allowed because the sentence frame before and after the gap fixes the comparative pattern and blocks alternatives such as 'more stressful than'."
+        },
+        {
+          "id": "B2RUEP4Q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "The manager said it would be a good idea for remote staff to switch off their work phones in the evening.",
+          "keyword": "SUGGESTED",
+          "sentence2Start": "The manager __________________ their work phones in the evening.",
+          "answer": "suggested remote staff switch off",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SUGGESTED",
+            "fullAnswers": [
+              "suggested remote staff switch off"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "reporting verb plus subject",
+                "accepted": [
+                  "suggested remote staff"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "base verb recommendation pattern",
+                "accepted": [
+                  "switch off"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-10",
+          "target_structure": "suggested + subject + base verb",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests the reporting verb with the embedded subject; MP2 tests the bare infinitive recommendation pattern.",
+          "alternative_route_check": "Alternatives such as 'suggested that remote staff should switch off' are blocked by the five-word limit and the fixed sentence opening."
+        },
+        {
+          "id": "B2RUEP4Q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "Sophie regrets not setting clearer boundaries between work and free time.",
+          "keyword": "WISHES",
+          "sentence2Start": "Sophie __________________ clearer boundaries between work and free time.",
+          "answer": "wishes she had set",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISHES",
+            "fullAnswers": [
+              "wishes she had set"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish clause opening",
+                "accepted": [
+                  "wishes she"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past perfect regret form",
+                "accepted": [
+                  "had set"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-07",
+          "target_structure": "wish + past perfect for present regret about past action",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the wish construction with subject; MP2 tests the past perfect form needed for regret.",
+          "alternative_route_check": "Only one natural route fits the meaning and the gap position; alternatives like 'wishes she set' would change the time reference."
+        },
+        {
+          "id": "B2RUEP4Q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "Daniel answered emails during his holiday even though it wasn't necessary.",
+          "keyword": "HAVE",
+          "sentence2Start": "Daniel __________________ emails during his holiday, but he did.",
+          "answer": "did not have to answer",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "HAVE",
+            "fullAnswers": [
+              "did not have to answer"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "past lack of necessity structure",
+                "accepted": [
+                  "did not have",
+                  "didn't have"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to answer"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-05",
+          "target_structure": "did not have to + infinitive for past lack of necessity",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests the past negative necessity form; MP2 tests the required infinitive complement.",
+          "alternative_route_check": "The keyword fixes the route to 'have to'; alternatives such as 'needn't have answered' are blocked because they do not include the given word unchanged."
+        },
+        {
+          "id": "B2RUEP4Q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "Because Amir's internet connection was unreliable, he missed part of the online meeting.",
+          "keyword": "RESULTED",
+          "sentence2Start": "Amir's unreliable internet connection __________________ part of the online meeting.",
+          "answer": "resulted in him missing",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "RESULTED",
+            "fullAnswers": [
+              "resulted in him missing"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "verb plus dependent preposition",
+                "accepted": [
+                  "resulted in"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "object plus gerund complement",
+                "accepted": [
+                  "him missing"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-14",
+          "target_structure": "resulted in + object + gerund",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests the fixed expression with preposition; MP2 tests the pronoun plus -ing complement.",
+          "alternative_route_check": "The sentence frame and keyword require the causative result structure; alternatives like 'caused him to miss' are blocked by the keyword."
+        },
+        {
+          "id": "B2RUEP4Q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "Nina started remote work three years ago and she still works from home now.",
+          "keyword": "HAS",
+          "sentence2Start": "Nina __________________ for three years.",
+          "answer": "has worked from home",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "HAS",
+            "fullAnswers": [
+              "has worked from home"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "present perfect auxiliary plus participle",
+                "accepted": [
+                  "has worked"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "place expression",
+                "accepted": [
+                  "from home"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-01",
+          "target_structure": "present perfect for an action continuing up to now",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the present perfect form; MP2 tests the location phrase needed to preserve meaning.",
+          "alternative_route_check": "Only one defendable route is available because the sentence ending 'for three years' strongly requires present perfect and the keyword fixes the auxiliary."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "B2RUEP4Q25",
+          "number": 25,
+          "answer": "not as stressful as"
+        },
+        {
+          "id": "B2RUEP4Q26",
+          "number": 26,
+          "answer": "suggested remote staff switch off"
+        },
+        {
+          "id": "B2RUEP4Q27",
+          "number": 27,
+          "answer": "wishes she had set"
+        },
+        {
+          "id": "B2RUEP4Q28",
+          "number": 28,
+          "answer": "did not have to answer"
+        },
+        {
+          "id": "B2RUEP4Q29",
+          "number": 29,
+          "answer": "resulted in him missing"
+        },
+        {
+          "id": "B2RUEP4Q30",
+          "number": 30,
+          "answer": "has worked from home"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 26
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 27
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 28
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 29
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 0,
+          "4": 4,
+          "5": 2
+        },
+        "answerLengths": [
+          4,
+          5,
+          4,
+          5,
+          4,
+          4
+        ]
+      },
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-TOO-EASY] Q25: Sentence 2 is too parallel to Sentence 1 — little restructuring required."
+          },
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-TOO-EASY] Q29: Sentence 2 is too parallel to Sentence 1 — little restructuring required."
+          }
+        ],
+        "detectedAt": "2026-08-31T21:42:35.892Z"
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "The Things We Never Planned to Buy",
+      "passage": "Most of us know the feeling. We go into a shop for toothpaste and come out carrying a candle, a notebook and a packet of biscuits as well. We click online to replace a phone charger and somehow end up paying for trainers we had not even considered a minute earlier. Later, when the excitement has gone, we may wonder why we wanted any of it. Yet this pattern is so common that businesses spend huge amounts trying to understand it. Their success does not depend only on making useful products. It also relies on recognising the small psychological nudges that can turn a passing glance into a purchase.\n\nOne of the strongest nudges is the hope that an object might improve not just our lives but our identities. People do not only buy running shoes because they need something on their feet. They may also be buying a picture of themselves as healthier, busier or more disciplined. The same thing happens with kitchen equipment, expensive pens and travel bags. A product can seem to promise a future version of us, and that future can be more attractive than the object itself. This helps explain why unopened items often gather dust in cupboards: they were bought for the person we meant to become, not the one we already were.\n\nShops and websites are skilled at making that imagined future feel close. Online stores, for example, recommend items by suggesting that people similar to us chose them, too. This can be useful, but it also removes some of the pause in which we might ask whether we need the item at all. Physical shops do something similar through layout. Essentials are rarely near the entrance, so customers travel past rows of things they never intended to see. None of this forces anyone to buy. But the environment quietly increases the number of moments in which buying feels easy and saying no feels like an unnecessary effort.\n\nAnother reason we overspend is that modern shopping often separates the pleasure of choosing from the pain of paying. Cash once made the cost visible and immediate. Now many purchases happen with a quick tap, and online payments may be completed before we have properly noticed the total. Subscription services push this even further. A small monthly charge can feel harmless, even if several of them together cost far more than a single larger payment would. People are not foolish for missing this. Our brains tend to notice immediate rewards more clearly than slow, repeated losses.\n\nEmotions matter just as much. Buying can create a brief sense of control, comfort or reward, especially after a difficult day. That is why boredom, stress and loneliness are such powerful shopping partners. The item itself may be almost irrelevant; what matters is the lift that comes from deciding, receiving and opening. Companies are well aware of this and often design the process to feel smooth and satisfying, from attractive packaging to messages announcing that an order is on its way. These details may appear minor, but together they turn shopping into an experience rather than a simple exchange.\n\nNone of this means that people are helpless or that all unplanned buying is a mistake. Pleasure has value, and an unexpected purchase can sometimes be a good one. The problem starts when buying becomes our automatic response to every mood or every clever suggestion. The most effective solution is not usually strict self-denial. It is to create enough delay for thought to return: leaving an online basket overnight, unsubscribing from marketing emails, or deciding in advance what kind of shopper we want to be. The aim is not to remove enjoyment from spending, but to make sure our money follows our decisions instead of somebody else's design.",
+      "passageWordCount": 611,
+      "questions": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "What is the writer doing in the article as a whole?",
+          "options": [
+            "A) warning readers that modern products are usually poor value",
+            "B) explaining why people often buy more than they intended",
+            "C) arguing that online shopping has replaced shopping in stores",
+            "D) suggesting that advertising should be controlled more strictly"
+          ],
+          "evidence": "The article introduces common unplanned buying and then explores identity, store design, payment methods and emotion as reasons for it, before suggesting ways to slow the process down.",
+          "rationale": "B is correct because the whole text analyses several causes of unnecessary or unplanned buying. A is too narrow because the focus is not mainly on product quality or value. C distorts the text, which compares online and physical shopping rather than claiming one has replaced the other. D is unsupported because the writer offers personal strategies, not a policy argument about stricter control."
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "questionType": "inference",
+          "prompt": "In the second paragraph, what point does the writer make about items such as running shoes and travel bags?",
+          "options": [
+            "A) People often choose them because they are practical and long-lasting.",
+            "B) They are bought mainly to match what friends and colleagues own.",
+            "C) They can appeal because of the kind of person buyers hope to become.",
+            "D) Buyers usually regret spending too much on goods they rarely use."
+          ],
+          "evidence": "The writer says a product can seem to promise 'a future version of us' and that items are often bought for 'the person we meant to become'.",
+          "rationale": "C is correct because the paragraph is about identity and aspiration rather than practical need. A focuses on usefulness, which the writer contrasts with the real attraction. B brings in social copying, which is mentioned later in relation to recommendations, not as the main point here. D refers to a possible result, such as unused items in cupboards, but not the paragraph's central idea."
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "questionType": "purpose",
+          "prompt": "Why does the writer mention the layout of physical shops in the third paragraph?",
+          "options": [
+            "A) to show one way in which businesses increase opportunities for impulse buying",
+            "B) to argue that customers should avoid large shops whenever possible",
+            "C) to explain why essential goods are usually more expensive than other items",
+            "D) to suggest that shoppers are more easily influenced in stores than online"
+          ],
+          "evidence": "The writer explains that essentials are placed away from the entrance so customers pass items they did not intend to see, increasing moments when buying feels easy.",
+          "rationale": "A is correct because the example of store layout supports the broader point that shopping environments are designed to create extra chances to buy. B goes beyond the text; the writer does not advise avoiding large shops. C is not discussed at all. D is wrong because the writer says both online stores and physical shops use similar techniques, not that stores are more influential."
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "questionType": "detail",
+          "prompt": "According to the fourth paragraph, why can subscription services encourage people to spend too much?",
+          "options": [
+            "A) They persuade people to pay in cash more often than they expect.",
+            "B) They make it difficult for people to compare brands properly.",
+            "C) They offer immediate rewards that disappear very quickly.",
+            "D) They hide the overall cost behind charges that seem small on their own."
+          ],
+          "evidence": "The writer says 'A small monthly charge can feel harmless, even if several of them together cost far more than a single larger payment would.'",
+          "rationale": "D is correct because the paragraph stresses how repeated small payments reduce awareness of total spending. A is the opposite of the text, which contrasts subscriptions with the old visibility of cash. B is irrelevant because brand comparison is not mentioned. C partly echoes the idea of immediate rewards, but in this paragraph the focus is specifically on payment structure and cumulative cost."
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "questionType": "attitude",
+          "prompt": "According to the final paragraph, what does the writer describe as the real reward of turning a hobby into a career?",
+          "options": [
+            "A) impatient, because they should have learnt from past mistakes",
+            "B) sympathetic, because this reflects a normal human tendency",
+            "C) doubtful, because many people exaggerate how little they realise",
+            "D) amused, because shopping habits are often slightly ridiculous"
+          ],
+          "evidence": "The writer states, 'People are not foolish for missing this. Our brains tend to notice immediate rewards more clearly than slow, repeated losses.'",
+          "rationale": "B is correct because the writer presents overspending as understandable and linked to common mental habits. A is too critical and does not match the reassuring tone. C suggests suspicion that is absent from the passage. D misreads the tone; although the examples are familiar, the writer is explanatory rather than amused."
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "questionType": "global",
+          "prompt": "What conclusion does the writer reach in the final paragraph?",
+          "options": [
+            "A) Unplanned purchases are best prevented by making strict rules about spending.",
+            "B) Enjoying occasional impulse buys is harmless if income is high enough.",
+            "C) The key is to build in time to think before deciding to buy.",
+            "D) People should stop companies from collecting information about their habits."
+          ],
+          "evidence": "The writer says the most effective solution is not strict self-denial but creating delay, for example by leaving an online basket overnight or unsubscribing from marketing emails.",
+          "rationale": "C is correct because the final paragraph recommends practical ways to restore reflection before buying. A is wrong because the writer explicitly rejects strict self-denial as the main solution. B introduces the idea of income, which the text never uses as the deciding factor. D focuses narrowly on data collection, whereas the conclusion is broader and centred on personal decision-making."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "answer": "B"
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "answer": "C"
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "answer": "A"
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "answer": "D"
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "answer": "B"
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "descriptive_title"
+    },
+    "6": {
+      "partTitle": "Part 6: Gapped text",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Eating Well for Less",
+      "passage": "For many people, healthy eating seems to belong in the same category as luxury gym memberships and expensive kitchen gadgets. Fresh ingredients are often seen as something for shoppers with plenty of time and money. Yet nutrition experts repeatedly point out that eating well does not depend on buying the most fashionable products in the supermarket. (37) Once that idea changes, planning cheaper and healthier meals becomes much more realistic.\n\nOne reason healthy food appears costly is that people compare individual items rather than whole meals. A ready-made pizza may look cheaper than buying vegetables, rice and chicken separately. However, the pizza usually feeds fewer people and leaves nothing for the next day. (38) In other words, the better comparison is not product against product, but meal against meal.\n\nPlanning is one of the simplest ways to control food spending. People who decide what they will cook before shopping are less likely to buy snacks, duplicate ingredients or food they never use. A short list also helps shoppers ignore special offers that are not really useful. (39) That way, ingredients bought for one dish can often be used in another later in the week.\n\nSome of the best-value foods are ones many shoppers walk past without much thought. Dried lentils, oats, eggs, frozen peas and tinned tomatoes are rarely advertised as exciting, but they are versatile and nutritious. They can become soups, pasta sauces, curries or quick lunches with very little effort. (40) Choosing a few reliable basics like these can reduce both cost and stress.\n\nAnother useful habit is being flexible about where nutrition comes from. Many people build meals around meat and then add vegetables to the side. That can work, but it is often the most expensive approach. Beans, chickpeas and eggs provide protein at a much lower price, and they can still produce filling meals. (41) The point is not to give up meat completely, but to use it more carefully.\n\nOf course, even careful shoppers waste money if food ends up in the bin. Leftovers are not exciting, which is why they are often forgotten until it is too late. But a small amount of cooked rice, roast vegetables or chicken can easily become lunch the next day. (42) Besides saving money, this habit also saves the time and energy needed to cook from the beginning again.\n\nIn the end, healthy eating on a budget is less about finding one perfect shopping trick and more about building several sensible habits. None of them is especially complicated: compare meals, plan ahead, keep basic ingredients at home and use what you buy. Taken together, those choices can make home cooking cheaper than many people expect. They also show that eating well is not reserved for people with unusually large food budgets.",
+      "passageWordCount": 501,
+      "sentencePool": [
+        "A) In fact, meals based on ordinary ingredients are often cheaper than heavily processed convenience food.",
+        "B) A large pot of soup or curry, for example, can provide several portions at a reasonable cost.",
+        "C) It is often smarter to think about how a week of meals will fit together before entering the shop.",
+        "D) They also last for a long time, so there is less pressure to use them immediately.",
+        "E) For example, a small amount added to a vegetable stir-fry or pasta dish can go much further.",
+        "F) With a little imagination, those leftovers can be turned into something that feels like a new meal.",
+        "G) Some shoppers save money by visiting several different supermarkets in a single afternoon."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "A"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "B"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "C"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "D"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "E"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "F"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "7": {
+      "partTitle": "B2 Reading and Use of English Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Luca Ferris, café owner",
+          "text": "When the first budget flights began using the airport nearby, our town changed almost overnight. Initially, I was delighted: I run a small café on the harbour, and extra visitors meant I could stay open all year instead of closing every winter. Since then, however, the success has had awkward side effects. Rents have risen so sharply that two of my staff now share a flat an hour away. I also miss recognising faces in the street. Yet I would be dishonest if I pretended tourism had brought nothing but problems. The council finally repaired the seafront because holidaymakers complained online, and local fishermen now sell directly to restaurants rather than through middlemen. What bothers me most is not the number of tourists, but the way decisions are made without asking those of us who live and work here."
+        },
+        {
+          "letter": "B",
+          "name": "Hannah Price, volunteer guide",
+          "text": "I moved to the village ten years ago for a quieter life, so I was sceptical when coaches started arriving every weekend. Meanwhile, the old mill, which had stood empty for years, was turned into a visitor centre, and I agreed to help there one afternoon a week. To my surprise, meeting travellers has made me appreciate the place more, because their questions force me to notice details I had ignored. Even so, I worry that some businesses now present a polished version of local life that residents barely recognise. The summer craft market, for instance, used to be where neighbours swapped homemade goods; now it can feel like a performance. Still, I would rather manage tourism carefully than try to stop it. People will keep coming, and if locals take part, we have a better chance of protecting what matters."
+        },
+        {
+          "letter": "C",
+          "name": "Sanjay Mehta, secondary school teacher",
+          "text": "Our mountain region has long depended on farming, but poor harvests pushed many families into tourist work. At first, I welcomed that shift because several parents finally had a stable income. Yet after a few seasons, I noticed something less obvious in school. Teenagers were leaving classes early to help in guesthouses, especially during peak months, and some no longer saw education as worthwhile. There is also pressure to learn only the kind of English needed for serving visitors, which seems far too narrow to me. On the other hand, tourism has funded a new sports hall that the whole community uses, and a few former students have returned after university to start walking tours with real respect for local traditions. So I am not against visitors; I simply think short-term earnings should not decide the region’s future."
+        },
+        {
+          "letter": "D",
+          "name": "Marta Zielińska, town councillor",
+          "text": "By the time I joined the council, residents were already angry about crowded buses and noisy holiday flats, so any proposal linked to tourism was bound to cause arguments. I understood the frustration, yet I also knew the town could not rely on its declining fishing industry forever. We introduced limits on short-term rentals and changed rubbish collection times, which helped a little. What surprised me was how quickly tempers cooled once people saw that complaints led to action. Even now, though, I am uneasy when campaigners talk as if tourism itself were the enemy. In my view, the real issue is whether profits stay locally or disappear into companies based elsewhere. If more small firms were owned by residents, the conversation would be far less bitter. Since then, I have become convinced that control matters more than growth."
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "prompt": "Who believes local people are most frustrated because they are left out of important choices?"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "prompt": "Who admits that contact with outsiders changed their own attitude towards the place where they live?"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "prompt": "Who is concerned that young people may make limited plans because of jobs linked to visitors?"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "prompt": "Who suggests that public anger reduced when residents noticed practical improvements?"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "prompt": "Who says tourism led to worthwhile investment after pressure from people visiting the area?"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "prompt": "Who feels that an activity once valued mainly by residents has lost some of its original character?"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "prompt": "Who thinks the key question is not the presence of tourists, but who benefits financially?"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "prompt": "Who accepts that tourism brings advantages, while regretting a weaker sense of community?"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "prompt": "Who argues that local people should stay involved because tourism is unlikely to disappear?"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "prompt": "Who warns against allowing immediate economic needs to shape long-term decisions?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "answer": "A"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "answer": "B"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "answer": "C"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "answer": "A"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "answer": "B"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "answer": "D"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "answer": "A"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "answer": "B"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "answer": "C"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

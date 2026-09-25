@@ -1,0 +1,404 @@
+[
+  {
+    "exam": 5,
+    "part": 1,
+    "question": 2,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "C",
+    "survivors": [
+      "A",
+      "C"
+    ],
+    "options": [
+      "A) stayed",
+      "B) delayed",
+      "C) remained",
+      "D) lasted"
+    ],
+    "reason": "Independent substitution still leaves A, C survivor(s). Key is C."
+  },
+  {
+    "exam": 5,
+    "part": 1,
+    "question": 3,
+    "status": "RESOLVED",
+    "repaired": true,
+    "key": "D",
+    "survivors": [
+      "D"
+    ],
+    "options": [
+      "A) failed",
+      "B) struggled",
+      "C) accomplished",
+      "D) managed"
+    ],
+    "reason": "Replaced a surviving distractor. Only D survives."
+  },
+  {
+    "exam": 5,
+    "part": 1,
+    "question": 5,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "B",
+    "survivors": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "options": [
+      "A) bring",
+      "B) offer",
+      "C) supply",
+      "D) suggest"
+    ],
+    "reason": "Independent substitution still leaves A, B, C, D survivor(s). Key is B."
+  },
+  {
+    "exam": 5,
+    "part": 1,
+    "question": 6,
+    "status": "RESOLVED",
+    "repaired": false,
+    "key": "A",
+    "survivors": [
+      "A"
+    ],
+    "options": [
+      "A) contribute",
+      "B) assist",
+      "C) support",
+      "D) promote"
+    ],
+    "reason": "Original options already leave only A."
+  },
+  {
+    "exam": 5,
+    "part": 1,
+    "question": 7,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "C",
+    "survivors": [
+      "C",
+      "D"
+    ],
+    "options": [
+      "A) persist",
+      "B) inhabit",
+      "C) exist",
+      "D) dwell"
+    ],
+    "reason": "Independent substitution still leaves C, D survivor(s). Key is C."
+  },
+  {
+    "exam": 5,
+    "part": 1,
+    "question": 8,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "B",
+    "survivors": [
+      "B",
+      "C"
+    ],
+    "options": [
+      "A) attraction",
+      "B) fascination",
+      "C) interest",
+      "D) attention"
+    ],
+    "reason": "Independent substitution still leaves B, C survivor(s). Key is B."
+  },
+  {
+    "exam": 6,
+    "part": 1,
+    "question": 2,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "A",
+    "survivors": [
+      "A",
+      "B",
+      "C"
+    ],
+    "options": [
+      "A) fed",
+      "B) tired",
+      "C) bored",
+      "D) sick"
+    ],
+    "reason": "Independent substitution still leaves A, B, C survivor(s). Key is A."
+  },
+  {
+    "exam": 6,
+    "part": 1,
+    "question": 4,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "C",
+    "survivors": [
+      "A",
+      "C"
+    ],
+    "options": [
+      "A) aside",
+      "B) off",
+      "C) away",
+      "D) out"
+    ],
+    "reason": "Independent substitution still leaves A, C survivor(s). Key is C."
+  },
+  {
+    "exam": 6,
+    "part": 1,
+    "question": 6,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "B",
+    "survivors": [
+      "A",
+      "B"
+    ],
+    "options": [
+      "A) length",
+      "B) run",
+      "C) distance",
+      "D) period"
+    ],
+    "reason": "Independent substitution still leaves A, B survivor(s). Key is B."
+  },
+  {
+    "exam": 6,
+    "part": 1,
+    "question": 7,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "A",
+    "survivors": [
+      "A",
+      "C"
+    ],
+    "options": [
+      "A) throw",
+      "B) push",
+      "C) drop",
+      "D) pass"
+    ],
+    "reason": "Independent substitution still leaves A, C survivor(s). Key is A."
+  },
+  {
+    "exam": 7,
+    "part": 1,
+    "question": 1,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "A",
+    "survivors": [
+      "A",
+      "B"
+    ],
+    "options": [
+      "A) attract",
+      "B) receive",
+      "C) collect",
+      "D) obtain"
+    ],
+    "reason": "Independent substitution still leaves A, B survivor(s). Key is A."
+  },
+  {
+    "exam": 7,
+    "part": 1,
+    "question": 5,
+    "status": "RESOLVED",
+    "repaired": false,
+    "key": "B",
+    "survivors": [
+      "B"
+    ],
+    "options": [
+      "A) owning",
+      "B) belonging",
+      "C) joining",
+      "D) fitting"
+    ],
+    "reason": "Original options already leave only B."
+  },
+  {
+    "exam": 8,
+    "part": 1,
+    "question": 2,
+    "status": "RESOLVED",
+    "repaired": false,
+    "key": "C",
+    "survivors": [
+      "C"
+    ],
+    "options": [
+      "A) at",
+      "B) on",
+      "C) for",
+      "D) to"
+    ],
+    "reason": "Original options already leave only C."
+  },
+  {
+    "exam": 8,
+    "part": 1,
+    "question": 7,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "C",
+    "survivors": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "options": [
+      "A) fact",
+      "B) point",
+      "C) matter",
+      "D) case"
+    ],
+    "reason": "Independent substitution still leaves A, B, C, D survivor(s). Key is C."
+  },
+  {
+    "exam": 9,
+    "part": 1,
+    "question": 1,
+    "status": "RESOLVED",
+    "repaired": false,
+    "key": "A",
+    "survivors": [
+      "A"
+    ],
+    "options": [
+      "A) save",
+      "B) win",
+      "C) keep",
+      "D) spare"
+    ],
+    "reason": "Original options already leave only A."
+  },
+  {
+    "exam": 10,
+    "part": 1,
+    "question": 6,
+    "status": "RESOLVED",
+    "repaired": false,
+    "key": "B",
+    "survivors": [
+      "B"
+    ],
+    "options": [
+      "A) empty",
+      "B) clear",
+      "C) free",
+      "D) open"
+    ],
+    "reason": "Original options already leave only B."
+  },
+  {
+    "exam": 10,
+    "part": 1,
+    "question": 7,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "C",
+    "survivors": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "options": [
+      "A) thoroughly",
+      "B) absolutely",
+      "C) altogether",
+      "D) utterly"
+    ],
+    "reason": "Independent substitution still leaves A, B, C, D survivor(s). Key is C."
+  },
+  {
+    "exam": 10,
+    "part": 1,
+    "question": 8,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "D",
+    "survivors": [
+      "A",
+      "D"
+    ],
+    "options": [
+      "A) interrupt",
+      "B) disturb",
+      "C) prevent",
+      "D) interfere"
+    ],
+    "reason": "Independent substitution still leaves A, D survivor(s). Key is D."
+  },
+  {
+    "exam": 13,
+    "part": 1,
+    "question": 1,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "A",
+    "survivors": [
+      "A",
+      "B",
+      "C"
+    ],
+    "options": [
+      "A) difference",
+      "B) change",
+      "C) progress",
+      "D) improvement"
+    ],
+    "reason": "Independent substitution still leaves A, B, C survivor(s). Key is A."
+  },
+  {
+    "exam": 14,
+    "part": 1,
+    "question": 4,
+    "status": "UNRESOLVED",
+    "repaired": false,
+    "key": "C",
+    "survivors": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "options": [
+      "A) bring",
+      "B) take",
+      "C) carry",
+      "D) hand"
+    ],
+    "reason": "Independent substitution still leaves A, B, C, D survivor(s). Key is C."
+  },
+  {
+    "exam": 16,
+    "part": 1,
+    "question": 6,
+    "status": "RESOLVED",
+    "repaired": false,
+    "key": "D",
+    "survivors": [
+      "D"
+    ],
+    "options": [
+      "A) negative",
+      "B) weak",
+      "C) certain",
+      "D) positive"
+    ],
+    "reason": "Original options already leave only D."
+  }
+]

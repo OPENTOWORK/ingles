@@ -1,0 +1,184 @@
+[
+  {
+    "exam": 6,
+    "part": 6,
+    "question": 42,
+    "status": "RESOLVED",
+    "reason": "Replaced only option B. Keys 37–42 unchanged."
+  },
+  {
+    "exam": 8,
+    "part": 6,
+    "question": 39,
+    "status": "RESOLVED",
+    "reason": "Replaced only option D. Key D and the other options unchanged."
+  },
+  {
+    "exam": 9,
+    "part": 6,
+    "question": 37,
+    "status": "RESOLVED",
+    "reason": "Replaced the sentence after gap 37. Pool and keys unchanged."
+  },
+  {
+    "exam": 10,
+    "part": 6,
+    "question": "37/40",
+    "status": "RESOLVED",
+    "reason": "Replaced options B and D. Other options and keys unchanged."
+  },
+  {
+    "exam": 7,
+    "part": 6,
+    "question": "37-42",
+    "status": "RESOLVED",
+    "reason": "Applied the printed sentence pool and key 37 C, 38 F, 39 E, 40 A, 41 G, 42 B. Passage unchanged."
+  },
+  {
+    "exam": 13,
+    "part": 6,
+    "question": "37-42",
+    "status": "RESOLVED",
+    "reason": "Relabelled the existing sentences. Key 37 B, 38 F, 39 D, 40 A, 41 G, 42 C. Passage unchanged."
+  },
+  {
+    "exam": 11,
+    "part": 5,
+    "question": 31,
+    "status": "RESOLVED",
+    "reason": "Applied the review options. Key remains B."
+  },
+  {
+    "exam": 11,
+    "part": 4,
+    "question": 25,
+    "status": "UNRESOLVED",
+    "reason": "Review Q25 is a different sentence from the source morale item. Restored the source item; the replacement needs a teacher decision."
+  },
+  {
+    "exam": 11,
+    "part": 3,
+    "question": 22,
+    "status": "RESOLVED",
+    "reason": "Local sentence still supports unequal. Key unequal kept."
+  },
+  {
+    "exam": 13,
+    "part": 5,
+    "question": 35,
+    "status": "UNRESOLVED",
+    "reason": "The printed replacement asks about turning a hobby into a career, which is not this impulse-buying article. Source question restored."
+  },
+  {
+    "exam": 5,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Q32 options already match the review. The rest of Part 5 was left unchanged."
+  },
+  {
+    "exam": 5,
+    "part": 6,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review requested no Part 6 content change."
+  },
+  {
+    "exam": 6,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review requested no Part 5 content change."
+  },
+  {
+    "exam": 7,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review requested no Part 5 content change."
+  },
+  {
+    "exam": 8,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review requested no Part 5 rewrite."
+  },
+  {
+    "exam": 9,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "No astronaut paragraph is in the source. The Q35 prompt already matches the review."
+  },
+  {
+    "exam": 10,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review left Part 5 unchanged."
+  },
+  {
+    "exam": 11,
+    "part": 6,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review left Part 6 unchanged."
+  },
+  {
+    "exam": 12,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Q35 already cites the sentence that is in the passage. Key A unchanged."
+  },
+  {
+    "exam": 12,
+    "part": 6,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review requested no Part 6 content change."
+  },
+  {
+    "exam": 14,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review applied no Part 5 content change."
+  },
+  {
+    "exam": 14,
+    "part": 6,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review applied no Part 6 content change."
+  },
+  {
+    "exam": 15,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review applied no Part 5 content change."
+  },
+  {
+    "exam": 15,
+    "part": 6,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review applied no Part 6 content change."
+  },
+  {
+    "exam": 16,
+    "part": 5,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review requested no Part 5 content change."
+  },
+  {
+    "exam": 16,
+    "part": 6,
+    "question": 0,
+    "status": "RESOLVED",
+    "reason": "Review requested no Part 6 content change."
+  }
+]

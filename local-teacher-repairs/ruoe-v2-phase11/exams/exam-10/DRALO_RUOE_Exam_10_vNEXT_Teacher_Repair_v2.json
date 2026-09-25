@@ -1,0 +1,1110 @@
+{
+  "version": "DRALO_RUOE_Exam_10_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 10,
+  "sourceGeneratedAt": "2026-08-31T20:41:40.192Z",
+  "reviewFile": "DRALO_RUOE_Exam_6_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) held",
+          "B) set",
+          "C) under",
+          "D) placed"
+        ],
+        "answer": "C",
+        "explanation": "The fixed expression is \"under pressure\"."
+      },
+      "title": "Small Changes, Less Stress",
+      "passage": "Many people say they are constantly (0) ___ pressure, but experts believe that stress can often be reduced through small daily habits. One useful idea is to (1) ___ aside a few minutes each morning to plan the day. This can stop minor problems from building (2) ___ and becoming harder to deal with later on. Another helpful technique is to pay attention to what causes stress in the first (3) ___. Some people feel anxious because they take (4) ___ too many tasks, while others simply do not leave enough time between activities. Once you understand your own patterns, it becomes easier to make sensible changes. Physical movement also has a positive (5) ___ on mood. A short walk, for example, can help you calm down and (6) ___ your head before returning to work. Finally, it is worth remembering that nobody manages stress perfectly all the time. The aim is not to remove it (7) ___, but to keep it at a level that does not (8) ___ with everyday life.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) put",
+            "B) keep",
+            "C) take",
+            "D) set"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) up",
+            "B) over",
+            "C) out",
+            "D) off"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) place",
+            "B) point",
+            "C) part",
+            "D) section"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) in",
+            "B) up",
+            "C) on",
+            "D) over"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) result",
+            "B) effect",
+            "C) response",
+            "D) benefit"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) empty",
+            "B) clear",
+            "C) free",
+            "D) open"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) thoroughly",
+            "B) absolutely",
+            "C) altogether",
+            "D) utterly"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) interrupt",
+            "B) disturb",
+            "C) prevent",
+            "D) interfere"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "D",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "A",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "A",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "C",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "B",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "D",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "Part 2: Open cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "of"
+      },
+      "title": "Saving Species Together",
+      "passage": "Many people think protecting endangered animals is the job (0) ___ scientists or governments alone. In fact, conservation works best when local people are involved, because they know the land better than anyone (9) ___. In some regions, farmers are paid to leave space for wild animals, while tourists are asked not (10) ___ disturb nesting areas. These measures may seem small, but they can make a real difference.\n\nOne reason some projects fail is that they focus only on a single species, instead of the whole environment it depends (11) ___. If a forest is cut down, for example, birds may survive for a short time, but they will eventually have nowhere (12) ___ go. Successful programmes therefore try to protect habitats as well as animals.\n\nThere is also growing evidence that young people can contribute more than many adults expect. Schools that teach children about wildlife often find that families become (13) ___ willing to support local projects. As a result, communities are more likely to take pride (14) ___ nearby species and report illegal hunting. Without public support, even the best plans may not succeed, no matter (15) ___ carefully they are designed. Protecting species is something we all have a part (16) ___ play in.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "else"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "to"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "on"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "to"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "more"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "in"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "how"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "to"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "SCIENCE",
+        "answer": "scientific",
+        "transformationFamily": "adjective"
+      },
+      "title": "Learning through play",
+      "passage": "For years, the idea that video games could support learning was dismissed as unproven. However, recent (0) ___ (SCIENCE) research suggests that some games may offer real educational value. Good games demand close attention, quick decisions and the (17) ___ (ABLE) to solve problems under pressure. Players often improve through repeated failure, which encourages a (18) ___ (WILL) to try new strategies rather than give up. In classrooms, teachers have used historical adventure games to increase students' (19) ___ (CURIOUS) about the past. In language learning, online games can create a more (20) ___ (INTERACT) experience than traditional exercises, especially when players need to cooperate. This kind of active involvement may lead to better (21) ___ (RETAIN) of new words and ideas. Of course, not every game is useful. Some are purely entertaining, while others contain material that is (22) ___ (SUIT) for younger learners. Success also depends on careful planning. Without clear goals, the educational benefits may disappear (23) ___ (ENTIRE). Even so, the continued (24) ___ (INCLUDE) of games in education seems increasingly likely.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "ABLE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "WILL",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "CURIOUS",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "INTERACT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "RETAIN",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "SUIT",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "ENTIRE",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "INCLUDE",
+          "transformationFamily": "noun"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "ability",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "willingness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "curiosity",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "interactive",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "retention",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "unsuitable",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "entirely",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "likelihood",
+          "transformationFamily": "noun"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "Part 4: Key word transformations",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "It was too late to book a table at the famous seafood restaurant.",
+        "keyword": "ENOUGH",
+        "sentence2Start": "We were not __________________ a table at the famous seafood restaurant.",
+        "answer": "early enough to book"
+      },
+      "questions": [
+        {
+          "id": "b2p4-q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "The restaurant was so popular that we had to book three days ahead.",
+          "keyword": "SUCH",
+          "sentence2Start": "It was __________________ we had to book three days ahead.",
+          "answer": "such a popular restaurant that",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SUCH",
+            "fullAnswers": [
+              "such a popular restaurant that"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive reporting structure",
+                "accepted": [
+                  "is said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to be"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-02",
+          "target_structure": "passive reporting verb with infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests passive reporting form; MP2 tests infinitive complement.",
+          "alternative_route_check": "Other routes such as 'people say that...' are blocked because the keyword must be used unchanged and the gap position requires a passive reporting structure."
+        },
+        {
+          "id": "b2p4-q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "I regret not asking the market seller how to cook those beans.",
+          "keyword": "WISH",
+          "sentence2Start": "I __________________ the market seller how to cook those beans.",
+          "answer": "wish I had asked",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISH",
+            "fullAnswers": [
+              "wish I had asked"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish + subject structure",
+                "accepted": [
+                  "wish I"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past perfect for regret",
+                "accepted": [
+                  "had asked"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-14",
+          "target_structure": "wish + past perfect for past regret",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 establishes the wish frame; MP2 supplies the past perfect verb phrase.",
+          "alternative_route_check": "Only one route is possible: the gap follows 'I' and precedes the object, so WISH forces 'wish I had asked' and no other regret pattern fits the frame."
+        },
+        {
+          "id": "b2p4-q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "The soup in that mountain village was better than any other dish I tried on the trip.",
+          "keyword": "BEST",
+          "sentence2Start": "That soup in the mountain village __________________ I tried on the trip.",
+          "answer": "was the best dish",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BEST",
+            "fullAnswers": [
+              "was the best dish"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "superlative noun phrase",
+                "accepted": [
+                  "was the best"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "head noun completion",
+                "accepted": [
+                  "dish"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-05",
+          "target_structure": "comparative to superlative reformulation",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests superlative reformulation; MP2 completes the noun phrase naturally.",
+          "alternative_route_check": "Options like 'was the best one of' would exceed the available structure before the fixed continuation and are therefore blocked."
+        },
+        {
+          "id": "b2p4-q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "We arrived at the bakery too late to try its famous almond pastries.",
+          "keyword": "ENOUGH",
+          "sentence2Start": "We did not arrive __________________ its famous almond pastries.",
+          "answer": "early enough to try",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "ENOUGH",
+            "fullAnswers": [
+              "early enough to try"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "concessive preposition phrase",
+                "accepted": [
+                  "in spite"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "preposition plus determiner",
+                "accepted": [
+                  "of the"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-06",
+          "target_structure": "although clause converted to in spite of plus noun phrase",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 supplies the concessive phrase; MP2 supplies the preposition and determiner the noun phrase needs.",
+          "alternative_route_check": "Only one route is valid: 'despite the' would not use the keyword, and 'in spite of' must be completed by a determiner because the gap ends before 'long queue'."
+        },
+        {
+          "id": "b2p4-q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "It wasn't necessary for us to order dessert because the host had already brought fruit.",
+          "keyword": "NEED",
+          "sentence2Start": "We __________________ dessert because the host had already brought fruit.",
+          "answer": "did not need to order",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "NEED",
+            "fullAnswers": [
+              "did not need to order",
+              "didn't need to order"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "past negative need structure",
+                "accepted": [
+                  "did not need",
+                  "didn't need"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to order"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-11",
+          "target_structure": "it wasn't necessary to to didn't need to",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests past negative need; MP2 tests the infinitive complement.",
+          "alternative_route_check": "A route with 'needn't have ordered' changes the meaning because it implies the dessert was actually ordered, so it is excluded."
+        },
+        {
+          "id": "b2p4-q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "The market closed before we arrived.",
+          "keyword": "BY",
+          "sentence2Start": "The market __________________ we arrived.",
+          "answer": "had closed by the time",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BY",
+            "fullAnswers": [
+              "had closed by the time"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "reported advice subject and modal",
+                "accepted": [
+                  "we should",
+                  "we shouldn't"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "negative advice completion",
+                "accepted": [
+                  "not miss",
+                  "miss"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-08",
+          "target_structure": "reported advice with should",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests reported advice using should; MP2 completes the negative meaning in the appropriate form.",
+          "alternative_route_check": "Other routes like 'advised us against missing' are blocked by the fixed keyword and by the sentence frame after 'said'."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "b2p4-q25",
+          "number": 25,
+          "answer": "such a popular restaurant that"
+        },
+        {
+          "id": "b2p4-q26",
+          "number": 26,
+          "answer": "wish I had asked"
+        },
+        {
+          "id": "b2p4-q27",
+          "number": 27,
+          "answer": "was the best dish"
+        },
+        {
+          "id": "b2p4-q28",
+          "number": 28,
+          "answer": "early enough to try"
+        },
+        {
+          "id": "b2p4-q29",
+          "number": 29,
+          "answer": "did not need to order"
+        },
+        {
+          "id": "b2p4-q30",
+          "number": 30,
+          "answer": "had closed by the time"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 26
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 27
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Strong",
+            "number": 28
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 29
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 0,
+          "4": 5,
+          "5": 1
+        },
+        "answerLengths": [
+          4,
+          4,
+          4,
+          4,
+          5,
+          4
+        ]
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "The Unexpected Value of Volunteering",
+      "passage": "When students think about improving their job prospects, they often imagine expensive courses, polished CVs and hours spent online searching for internships. Volunteering rarely appears at the top of the list. It is still seen by some as something generous but separate from professional life, a pleasant extra for people with spare time. Yet employers are increasingly interested in applicants who have chosen to work without pay, not because unpaid work is automatically impressive, but because it can reveal qualities that are difficult to teach in a classroom.\n\nOne reason is that volunteering places people in situations where they must act rather than simply discuss. A university seminar may explore teamwork in theory, but helping to organise a local sports event or supporting staff in a charity shop demands cooperation in real time. Volunteers often have to solve small problems quickly, speak to strangers and deal with the unexpected. None of this turns someone instantly into the ideal employee, of course. However, it does provide evidence that a person can cope when instructions are incomplete and conditions are less than perfect.\n\nThis practical side matters because many employers are cautious about grades on their own. A strong academic record suggests intelligence and determination, but not necessarily reliability or initiative. Managers know that a new recruit may understand the theory of customer service and still struggle when faced with an impatient customer or a busy office. Volunteering can help close that gap. A candidate who has spent Saturday mornings coordinating food-bank deliveries or running activities for children is able to point to specific experience rather than offering vague claims about being organised and good with people.\n\nThere is another, less obvious advantage. Volunteering can widen a person's view of work itself. Someone helping at an environmental project may discover that they enjoy planning tasks more than carrying them out, while a volunteer role in a museum might lead to an interest in communications rather than history. In this sense, unpaid work is not just useful for getting a job; it can also prevent people from chasing the wrong one. Career advisers often talk about finding your strengths, but many people only recognise them when they are doing something that feels meaningful.\n\nThat said, volunteering is not a magic key that opens every door. Employers can usually tell when applicants mention it simply because they think they should. Listing a single afternoon spent planting trees will not transform a weak application, and pretending to care about a cause is risky in interview, where enthusiasm is difficult to fake for long. The real benefit comes when people reflect on what they learned. Even routine tasks can become valuable examples if applicants explain clearly how they developed patience, confidence or judgement.\n\nFor this reason, students should perhaps think less about which volunteer role will look most impressive and more about which one they are likely to take seriously. The best experiences are often local and ordinary: helping at a youth club, assisting at a community festival or supporting an elderly neighbour with shopping and technology. Such activities may sound modest, but they involve trust, consistency and contact with others. In a competitive job market, those qualities can matter as much as technical knowledge. Volunteering will not replace qualifications, but it can give them a more human shape.",
+      "passageWordCount": 592,
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "questionType": "main-idea / global",
+          "prompt": "What is the writer's main point in the article?",
+          "options": [
+            "A) Volunteering is becoming more valuable to employers because it can show personal qualities that qualifications alone may not reveal.",
+            "B) Volunteering is now a more effective route into employment than formal education for most young people.",
+            "C) Students should avoid spending money on career courses until they have completed some volunteer work.",
+            "D) Employers mainly use volunteering to decide whether an applicant is suitable for customer-facing roles."
+          ],
+          "evidence": "The writer says employers are interested in volunteering because it can reveal qualities difficult to teach, and concludes that it will not replace qualifications but can give them a more human shape.",
+          "rationale": "A is correct because it captures the overall argument running through the whole article. B is too strong: the writer never says volunteering is more effective than education. C distorts the opening contrast and adds advice not given. D is too narrow, since the article discusses wider employability, not only customer-facing jobs."
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "questionType": "detail",
+          "prompt": "In the second paragraph, what does the writer suggest is especially useful about volunteering?",
+          "options": [
+            "A) It allows volunteers to receive clear guidance from experienced staff.",
+            "B) It gives people the chance to apply skills in unpredictable real-life situations.",
+            "C) It teaches technical abilities that are rarely covered in university courses.",
+            "D) It offers a safer environment for making mistakes than paid employment does."
+          ],
+          "evidence": "The paragraph contrasts theory with helping at events or in charity shops, where volunteers must solve problems quickly, speak to strangers and cope when instructions are incomplete.",
+          "rationale": "B is correct because the paragraph focuses on action in real time and dealing with unexpected situations. A is the opposite of 'instructions are incomplete'. C is not mentioned; the emphasis is on practical soft skills, not technical training. D may sound plausible but the writer does not discuss safety or reduced risk."
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "questionType": "inference",
+          "prompt": "Why does the writer mention 'an impatient customer or a busy office' in the third paragraph?",
+          "options": [
+            "A) To argue that customer service experience is more useful than academic success.",
+            "B) To criticise managers who expect too much from inexperienced workers.",
+            "C) To illustrate the kind of pressure that academic achievement does not always prepare people for.",
+            "D) To show that volunteering usually provides better training than most entry-level jobs."
+          ],
+          "evidence": "The writer says employers are cautious about grades alone and that recruits may know the theory but still struggle in demanding workplace situations.",
+          "rationale": "C is correct because these examples show the limits of academic knowledge by itself. A overstates the comparison and shifts the point to customer service in particular. B invents criticism of managers that is not in the text. D goes beyond the passage, which says volunteering can help close the gap, not that it is usually better training."
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "questionType": "purpose",
+          "prompt": "What is the purpose of the fourth paragraph?",
+          "options": [
+            "A) To explain why some volunteer roles are more demanding than they first appear.",
+            "B) To suggest that volunteering can help people understand which careers suit them.",
+            "C) To show that unpaid work is most useful when it leads directly to a job offer.",
+            "D) To warn readers that career advisers often give unhelpful advice about employment."
+          ],
+          "evidence": "The paragraph describes people discovering preferences through environmental or museum work and says unpaid work can prevent people from chasing the wrong job.",
+          "rationale": "B is correct because the paragraph is about self-discovery and clearer career direction. A is not the focus; difficulty is not the main idea here. C contradicts the paragraph, which values insight rather than direct job offers. D misreads the brief reference to career advisers, which is not a criticism of them."
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "questionType": "attitude / opinion / tone",
+          "prompt": "What is the writer's attitude towards mentioning volunteering on a job application?",
+          "options": [
+            "A) It is worthwhile only if the role involved major responsibility.",
+            "B) It is generally unnecessary unless the employer specifically asks for it.",
+            "C) It is useful, but only when applicants can genuinely explain what they gained from it.",
+            "D) It is risky because interviewers tend to distrust all unpaid work."
+          ],
+          "evidence": "The writer says volunteering is not a magic key, that employers can tell when it is included just for effect, and that the real benefit comes when people reflect on what they learned.",
+          "rationale": "C is correct because it reflects the writer's balanced view: volunteering helps if it is genuine and thoughtfully presented. A is too limited; even routine tasks can be valuable examples. B is unsupported. D exaggerates the warning; the problem is insincerity, not volunteering itself."
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "questionType": "reference / global",
+          "prompt": "In the final paragraph, what does 'those qualities' refer to?",
+          "options": [
+            "A) The ability to choose volunteer roles that seem impressive to employers",
+            "B) A combination of trustworthiness, regular commitment and dealing with people",
+            "C) Experience of working in youth clubs, festivals and neighbourhood projects",
+            "D) Technical knowledge developed through local community activities"
+          ],
+          "evidence": "Just before the phrase, the writer says local activities involve trust, consistency and contact with others.",
+          "rationale": "B is correct because it paraphrases the exact qualities named in the sentence before. A refers to an idea the writer advises against. C lists settings, not the qualities themselves. D is wrong because the paragraph contrasts those qualities with technical knowledge rather than equating them."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "A"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "B"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "C"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "B"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "C"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "B"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "6": {
+      "partTitle": "Part 6",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "What the Sea Keeps Hidden",
+      "passage": "For centuries, the deep sea was imagined as an empty and rather lifeless place. Divers could only reach shallow water, and early maps showed huge areas of ocean floor as blank spaces. That picture has changed dramatically in the last few decades, as better submarines, cameras and sensors have allowed researchers to explore further than ever before. (37) As a result, the seabed is now seen not as a flat desert, but as a varied landscape full of life, movement and surprising discoveries.\n\nOne of the most dramatic moments came when scientists first found hydrothermal vents in the Pacific Ocean. These are cracks in the seabed where extremely hot water, rich in minerals, pours out from below the Earth's surface. (38) Yet around these dark openings, researchers discovered thick communities of tube worms, crabs and bacteria that were thriving without any sunlight at all.\n\nThat finding forced biologists to rethink one of their most basic assumptions. Until then, nearly all known ecosystems were thought to depend, directly or indirectly, on energy from the Sun. In vent communities, however, bacteria gain energy from chemicals released by the Earth itself, and other creatures feed on them. (39) It also raised new questions about whether similar forms of life might exist on other planets or moons with oceans beneath ice.\n\nDiscoveries beneath the sea are not limited to living things. Shipwrecks, tools and even entire lost settlements have been found underwater, preserved in mud or cold, dark conditions. Marine archaeologists say the sea can act like a giant storage room, protecting objects that would quickly rot or break apart on land. (40) In some cases, a wreck does more than reveal a single disaster: it can offer a detailed picture of trade, diet and daily routine in a past society.\n\nModern technology has made this kind of work far more precise. Remotely operated vehicles can stay underwater for hours, collecting samples and sending back high-quality images. Powerful scanning systems can also build detailed maps of the seabed before anyone decides where to explore more closely. (41) Instead of relying on chance, research teams can now compare data, identify unusual shapes and return to exact spots again and again.\n\nHowever, greater access brings new problems. Deep-sea tourism, fishing and plans for underwater mining are expanding into places that were once difficult to reach. Scientists worry that habitats could be damaged before they are properly understood, especially because many deep-sea species grow slowly and may take decades to recover. (42) For that reason, several research groups are calling for stronger international rules to protect vulnerable areas before commercial activity increases.\n\nThe sea still covers more than two thirds of the planet, and much of it remains unexplored. Each expedition adds a few more details to a picture that is still incomplete. What lies below is not simply a collection of strange creatures or sunken objects, but a record of how Earth works and how people have lived on it. The more we discover, the clearer it becomes that the ocean floor is one of the world's last great frontiers.",
+      "passageWordCount": 542,
+      "sentencePool": [
+        "A) This changed ideas not only about the deep ocean, but about the possible limits of life itself.",
+        "B) Among the items recovered are ordinary objects such as bowls, ropes and seeds, which can reveal far more about daily life than treasure can.",
+        "C) Before that, many experts believed nothing could survive in such heat and darkness.",
+        "D) These tools have revealed mountains, trenches and living communities in places that earlier maps showed only as blank space.",
+        "E) This has transformed underwater research from a largely uncertain search into something much more systematic.",
+        "F) Once damage is done in the deep ocean, it may be almost impossible to reverse.",
+        "G) By contrast, many coastal towns now use underwater museums to attract visitors during the summer season."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "D"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "C"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "A"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "B"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "E"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "F"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "7": {
+      "partTitle": "Part 7",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Leah Morton, junior doctor",
+          "text": "During medical school, I treated sleep as optional. If I had an early placement, I stayed up revising and assumed coffee would solve everything. Initially, that seemed true, yet once I started work in a hospital, the effect of poor sleep became impossible to ignore. I wasn't just tired; I was slower, less patient and far too likely to forget small details. One night shift, I wrote down a dosage and then immediately checked it again because I no longer trusted my own concentration. Since then, I've become quite protective of my routine. I still can't control every shift pattern, of course, but I prepare for busy weeks by going to bed earlier and keeping my phone out of reach. Friends joke that I've become boring. However, feeling alert at work matters more to me than late-night messages or another episode of a series."
+        },
+        {
+          "letter": "B",
+          "name": "Noah Price, university rowing coach",
+          "text": "People assume my athletes need speeches about discipline, whereas what they often need is permission to rest. A few years ago, I used to praise anyone who trained before dawn and studied late into the evening. Meanwhile, several of them were getting ill, arguing with teammates and performing worse in races. It took one frank conversation with our team physiotherapist to make me reconsider. She pointed out that we were planning recovery sessions carefully but ignoring the simplest kind of recovery there is. Since then, I ask students about their sleeping habits as seriously as I ask about nutrition. I still admire determination, although I'm no longer impressed by people who boast that they manage on four or five hours. In my experience, that attitude sounds tough but usually leads to poor decisions, especially when pressure builds before a competition."
+        },
+        {
+          "letter": "C",
+          "name": "Priya Shah, software designer",
+          "text": "For years, I believed my best ideas arrived after midnight. My flat was quiet then, emails stopped, and I enjoyed the feeling that everyone else had switched off while I was still creating. The problem was that mornings became a blur. I worked from home, so I could hide it for a while, yet during online meetings I sometimes missed obvious points or sounded uninterested when I was simply exhausted. Last winter, I agreed to join a colleague for an early walk before work. I expected it to last a week; instead, it changed my routine completely. I now shut my laptop at a sensible time, and although I occasionally lose an evening of work, I gain much clearer thinking the next day. Strangely, better sleep hasn't made me less imaginative. If anything, it has helped me turn ideas into plans I can actually follow."
+        },
+        {
+          "letter": "D",
+          "name": "Gareth Ellis, long-distance lorry driver",
+          "text": "I've spent most of my working life on the road, so I know exactly how tempting it is to keep going when you're only an hour from home. Earlier in my career, I did that far too often. I told myself opening the window or turning up the radio was enough. It wasn't. Nothing serious happened, thankfully, but there were moments when the motorway signs seemed to appear out of nowhere, which frightened me more than I admitted at the time. Nowadays I plan breaks before I set off and use service stations without feeling guilty about lost time. Some drivers still see sleep as something that gets in the way of earning money. Yet I think that's short-sighted. Being awake for long stretches doesn't prove commitment; it simply increases the chance of mistakes. My family certainly prefers the calmer version of me that arrives home after proper rest."
+        }
+      ],
+      "questions": [
+        {
+          "id": 43,
+          "number": 43,
+          "prompt": "Who changed their mind after a specialist explained the importance of rest?"
+        },
+        {
+          "id": 44,
+          "number": 44,
+          "prompt": "Who realised they could no longer rely on their attention to detail?"
+        },
+        {
+          "id": 45,
+          "number": 45,
+          "prompt": "Who says sleeping well improved their ability to make practical use of their ideas?"
+        },
+        {
+          "id": 46,
+          "number": 46,
+          "prompt": "Who mentions that people close to them have noticed a positive difference?"
+        },
+        {
+          "id": 47,
+          "number": 47,
+          "prompt": "Who admits they once admired behaviour that they now consider unwise?"
+        },
+        {
+          "id": 48,
+          "number": 48,
+          "prompt": "Who decided that responding to entertainment or social contact was less important than being ready for work?"
+        },
+        {
+          "id": 49,
+          "number": 49,
+          "prompt": "Who refers to a habit that seemed productive because it happened when there were fewer interruptions?"
+        },
+        {
+          "id": 50,
+          "number": 50,
+          "prompt": "Who warns that trying to continue for too long can create danger even if nothing goes wrong in the end?"
+        },
+        {
+          "id": 51,
+          "number": 51,
+          "prompt": "Who says that a regular change in daily routine began as something they did not expect to continue?"
+        },
+        {
+          "id": 52,
+          "number": 52,
+          "prompt": "Who changes access to a device as part of preparing for particularly demanding periods at work?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": 43,
+          "number": 43,
+          "answer": "B"
+        },
+        {
+          "id": 44,
+          "number": 44,
+          "answer": "A"
+        },
+        {
+          "id": 45,
+          "number": 45,
+          "answer": "C"
+        },
+        {
+          "id": 46,
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": 47,
+          "number": 47,
+          "answer": "B"
+        },
+        {
+          "id": 48,
+          "number": 48,
+          "answer": "A"
+        },
+        {
+          "id": 49,
+          "number": 49,
+          "answer": "C"
+        },
+        {
+          "id": 50,
+          "number": 50,
+          "answer": "D"
+        },
+        {
+          "id": 51,
+          "number": 51,
+          "answer": "C"
+        },
+        {
+          "id": 52,
+          "number": 52,
+          "answer": "B"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

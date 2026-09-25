@@ -1,0 +1,1123 @@
+{
+  "version": "DRALO_RUOE_Exam_15_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 15,
+  "sourceGeneratedAt": "2026-08-31T21:57:51.817Z",
+  "reviewFile": "DRALO_RUOE_Exam_11_Human_Review_v1_1_Teacher_Patch (1).docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) made",
+          "B) held",
+          "C) spent",
+          "D) passed"
+        ],
+        "answer": "C",
+        "explanation": "We say 'spend a weekend' to talk about using time in a particular place or activity."
+      },
+      "title": "Beyond the Guidebook",
+      "passage": "Last spring, I (0) ___ a weekend in a mountain village that rarely appears in travel guides. I had first heard (1) ___ it from a photographer who said the place was at its best before sunrise. Unlike famous beauty spots, it does not depend (2) ___ tour buses and souvenir shops. Instead, visitors are drawn by quieter pleasures: narrow paths, home-cooked food and conversations with local people.\n\nReaching the village takes some effort. After the train, you still have to (3) ___ a bus that only runs twice a day, and then walk for twenty minutes. Yet this extra trouble gives the village much of its (4) ___. Nothing has been redesigned to meet tourists' expectations, so daily life continues at its own (5) ___. Farmers still gather in the square at dawn, and children race each other home from school.\n\nOf course, places like this can quickly (6) ___ their charm once they become fashionable online. That is why some travellers now make a conscious (7) ___ to leave certain locations off social media. If we want such places to survive, we should learn to explore with care rather than simply (8) ___ up wherever a post tells us to go.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) about",
+            "B) by",
+            "C) on",
+            "D) with"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) at",
+            "B) on",
+            "C) from",
+            "D) in"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) fetch",
+            "B) catch",
+            "C) grasp",
+            "D) seize"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) feature",
+            "B) nature",
+            "C) character",
+            "D) quality"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) speed",
+            "B) step",
+            "C) rate",
+            "D) pace"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) lose",
+            "B) miss",
+            "C) fail",
+            "D) drop"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) choice",
+            "B) plan",
+            "C) opinion",
+            "D) decision"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) show",
+            "B) come",
+            "C) turn",
+            "D) get"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "B",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "C",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "D",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "A",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "D",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "C",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "B2 Reading and Use of English Part 2: Open cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "as"
+      },
+      "title": "Scrolling Through the Teenage Years",
+      "passage": "For many teenagers, social media is now just as (0) ___ normal as sending a text message. It offers a place to share photos, follow trends and stay in touch with friends who may live far away. Used well, it can even help shy students take part in conversations they might avoid in person.\n\nProblems appear, however, when online activity begins to take up more time than other parts of life. Some teenagers say they check their phones without thinking, even when they had promised themselves not (9) ___ do so. Others compare themselves with people whose posts seem perfect, although those images may have been carefully edited.\n\nAs a result, experts advise young people to ask (10) ___ whether a particular app is improving their mood or damaging it. Parents can help too, not by banning everything, (11) ___ by discussing limits and setting an example. A phone does not have to be switched off completely, but there should be times (12) ___ it is put away. This allows teenagers to focus (13) ___ schoolwork, sleep and face-to-face friendships, all of (14) ___ remain essential. In the end, social media is a tool, and the effect it has depends (15) ___ how it is used and (16) ___ is using it.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "to"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "themselves"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "but"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "when"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "on"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "which"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "on"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "who"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "EXPECT",
+        "answer": "unexpected",
+        "transformationFamily": "prefix"
+      },
+      "title": "A Camera and a New Direction",
+      "passage": "When Lena accepted an (0) ___ (EXPECT) invitation to join a weekend photography class, she thought it would simply be a relaxing break from her office job. At first, she doubted whether she had enough (17) ___ (CREATE) to take interesting pictures. However, her teacher's calm advice and clear (18) ___ (EXPLAIN) soon gave her confidence. Lena began walking around the city before work, noticing details she had previously been (19) ___ (AWARE) of. Within a few months, photography had become more than a hobby; it was a daily source of (20) ___ (MOTIVATE). She also found herself speaking more (21) ___ (CONFIDENT) to new people while asking if she could photograph them. Her growing online audience brought increasing (22) ___ (RECOGNISE), and local businesses started requesting her images. What began as a simple pastime slowly changed her professional life. Two years later, she made the (23) ___ (DECIDE) to leave her old job and work as a photographer full-time. She now says that curiosity, not natural talent, is the most (24) ___ (VALUE) quality a beginner can have.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "CREATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EXPLAIN",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "AWARE",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "MOTIVATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "CONFIDENT",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "RECOGNISE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "DECIDE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "VALUE",
+          "transformationFamily": "adjective"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "creativity",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "explanations",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "unaware",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "motivation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "confidently",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "encouraging",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "decision",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "valuable",
+          "transformationFamily": "adjective"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "descriptive_title"
+    },
+    "4": {
+      "partTitle": "B2 First Reading and Use of English Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "It was too dark for us to see the owl clearly.",
+        "keyword": "ENOUGH",
+        "sentence2Start": "It was not __________________ see the owl clearly.",
+        "answer": "bright enough for us to"
+      },
+      "questions": [
+        {
+          "id": "q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "People believe that some parrots can remember hundreds of words.",
+          "keyword": "BELIEVED",
+          "sentence2Start": "Some parrots __________________ hundreds of words.",
+          "answer": "are believed to remember",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BELIEVED",
+            "fullAnswers": [
+              "are believed to remember"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive reporting structure",
+                "accepted": [
+                  "are believed"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to remember"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "passive reporting verb with infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests passive reporting form; MP2 tests infinitive verb complement.",
+          "alternative_route_check": "Only one defendable route is intended because the sentence opening forces a passive reporting structure with BELIEVED."
+        },
+        {
+          "id": "q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "No other animal in the rescue centre could swim as quickly as the dolphin.",
+          "keyword": "FASTEST",
+          "sentence2Start": "The dolphin was __________________ the rescue centre.",
+          "answer": "the fastest swimmer in",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "FASTEST",
+            "fullAnswers": [
+              "the fastest swimmer in"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "superlative structure",
+                "accepted": [
+                  "the fastest"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "noun and preposition phrase",
+                "accepted": [
+                  "animal in"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-05",
+          "target_structure": "comparative to superlative transformation",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests superlative form with article; MP2 completes the noun phrase naturally.",
+          "alternative_route_check": "Alternative routes are blocked by the fixed sentence ending 'the rescue centre', making 'the fastest animal in' the only natural completion."
+        },
+        {
+          "id": "q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "I regret not taking my camera when we saw the octopus change colour.",
+          "keyword": "WISH",
+          "sentence2Start": "I __________________ my camera when we saw the octopus change colour.",
+          "answer": "wish I had taken",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISH",
+            "fullAnswers": [
+              "wish I had taken"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish plus subject",
+                "accepted": [
+                  "wish I"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past perfect regret form",
+                "accepted": [
+                  "had taken"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-09",
+          "target_structure": "wish plus past perfect for past regret",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 establishes the wish structure; MP2 supplies the past perfect needed for regret about the past.",
+          "alternative_route_check": "Only one main route is acceptable because the keyword WISH and the sentence frame require a past-regret structure."
+        },
+        {
+          "id": "q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "It wasn't necessary for the zookeepers to wake the sloth because it was already active.",
+          "keyword": "NEED",
+          "sentence2Start": "The zookeepers __________________ the sloth because it was already active.",
+          "answer": "did not need to wake",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "NEED",
+            "fullAnswers": [
+              "did not need to wake",
+              "didn't need to wake"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "negative need structure",
+                "accepted": [
+                  "did not need",
+                  "didn't need"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to wake"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-11",
+          "target_structure": "lack of necessity in the past",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests past negative necessity; MP2 tests the infinitive verb pattern after need.",
+          "alternative_route_check": "A competing route with 'needn't have woken' is excluded because it changes the meaning to an unnecessary completed action."
+        },
+        {
+          "id": "q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "The scientist said that the bat was capable of finding its way in complete darkness.",
+          "keyword": "COULD",
+          "sentence2Start": "According to the scientist, the bat __________________ in complete darkness.",
+          "answer": "could find its way",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "COULD",
+            "fullAnswers": [
+              "could find its way"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "modal verb for ability",
+                "accepted": [
+                  "could find"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "object phrase",
+                "accepted": [
+                  "its way"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-14",
+          "target_structure": "reported meaning with modal of ability",
+          "difficulty_band": "B2-Core",
+          "transformation_distance": "lexical_substitution",
+          "marking_point_plan": "MP1 tests the modal reformulation of capability; MP2 completes the fixed expression.",
+          "alternative_route_check": "Only one natural route is intended because 'capable of finding its way' is best expressed as 'could find its way' in this sentence."
+        },
+        {
+          "id": "q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "The trainer showed the border collie how to open the gate.",
+          "keyword": "TAUGHT",
+          "sentence2Start": "The trainer __________________ open the gate.",
+          "answer": "taught the border collie to",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "TAUGHT",
+            "fullAnswers": [
+              "taught the border collie to"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive form with keyword",
+                "accepted": [
+                  "was taught"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive and agent phrase",
+                "accepted": [
+                  "to open by"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-02",
+          "target_structure": "active to passive with infinitive pattern",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests passive conversion; MP2 tests retention of the infinitive complement plus agent phrase.",
+          "alternative_route_check": "Other routes are blocked by the sentence ending 'a trainer', which requires the passive with 'by'."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q25",
+          "number": 25,
+          "answer": "are believed to remember"
+        },
+        {
+          "id": "q26",
+          "number": 26,
+          "answer": "the fastest swimmer in"
+        },
+        {
+          "id": "q27",
+          "number": 27,
+          "answer": "wish I had taken"
+        },
+        {
+          "id": "q28",
+          "number": 28,
+          "answer": "did not need to wake"
+        },
+        {
+          "id": "q29",
+          "number": 29,
+          "answer": "could find its way"
+        },
+        {
+          "id": "q30",
+          "number": 30,
+          "answer": "taught the border collie to"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 26
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 27
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 28
+          },
+          {
+            "distance": "lexical_substitution",
+            "band": "B2-Core",
+            "number": 29
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 0,
+          "4": 4,
+          "5": 2
+        },
+        "answerLengths": [
+          4,
+          4,
+          4,
+          5,
+          4,
+          5
+        ]
+      },
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-ALTERNATIVE-ROUTE] Q27: Keyword + sentence1 pattern may allow a second grammatical route."
+          },
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-LOW-TRANSFORMATION-DISTANCE] Q29: Transformation distance is too low for a demanding B2 Part 4 item."
+          }
+        ],
+        "detectedAt": "2026-08-31T22:04:55.492Z"
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "When the Steering Wheel Lets Go",
+      "passageWordCount": 595,
+      "passage": "For years, images of driverless transport belonged to science fiction: silent vehicles gliding through cities while passengers read, sleep or work. Recently, however, that future has begun to look less distant. In several places, buses already follow fixed routes without a human driver, and robot taxis are being tested on public roads. Yet if you ask transport engineers when driverless travel will become normal, many give a careful answer. The technology has advanced quickly, they say, but the bigger challenge is fitting it into the untidy reality of everyday life.\n\nA machine can be trained to recognise traffic lights, lane markings and road signs with impressive accuracy. What causes trouble is not the ordinary journey but the unusual one: the child who runs into the street chasing a ball, the roadworks that force traffic into a temporary lane, the police officer waving drivers through a red light after an accident. Human drivers are not perfect in such situations, of course, but they are often good at guessing what others are about to do. Teaching that kind of judgement to software has proved far harder than early developers expected.\n\nBecause of this, some companies have moved away from grand promises. Instead of trying to build vehicles that can handle every road in every weather condition, they are concentrating on limited environments where fewer surprises appear. This is why airports, business parks and ports have become important testing grounds. A shuttle that drives slowly around a predictable route may not sound revolutionary, but supporters argue that such services matter. They can cut costs, reduce emissions and provide useful evidence about how people respond when no one is sitting behind the wheel.\n\nPublic reaction, in fact, may shape the future of the technology as much as computer design does. Surveys often show a contradiction: people like the idea of fewer crashes caused by tired or distracted drivers, but they also say they would feel nervous entering a vehicle controlled entirely by software. That hesitation is not simply fear of new technology. It also reflects a difficult question of responsibility. If a driverless bus makes a serious mistake, who should be blamed: the passenger, the operator, the manufacturer or the programmer who wrote the code? Until governments answer that clearly, widespread public trust will remain hard to win.\n\nThere is also the risk of expecting too much too soon. Some transport experts worry that the phrase driverless transport creates the false impression that humans will soon disappear from the system altogether. In reality, remote supervisors may still need to monitor vehicles, maintenance teams will have to check sensors constantly, and control-room staff may be required to step in when conditions become too complex. In that sense, automation may change human work rather than remove it. The jobs may look different, but people are unlikely to become irrelevant.\n\nEven so, the long-term effects could be significant. For older people or disabled passengers, autonomous services might offer greater independence, especially in areas with poor public transport. Freight companies are also interested in self-driving lorries that could travel long motorway stretches more efficiently. Still, the most sensible view is probably neither excitement nor disappointment. Driverless transport is unlikely to arrive all at once in a dramatic leap. More probably, it will appear bit by bit, in places where it solves specific problems better than existing systems do. The future may indeed be driverless, but only in parts, and only after a great deal of patient human effort.",
+      "questions": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "questionType": "main-idea / global",
+          "prompt": "What point does the writer make in the opening paragraph about driverless transport?",
+          "options": [
+            "A) It is developing, but becoming part of daily life is more complicated than people first thought.",
+            "B) It has already changed transport systems in most major cities more rapidly than expected.",
+            "C) It is attracting engineers mainly because passengers want more time to relax during journeys.",
+            "D) It will remain limited to science-fiction ideas unless governments invest far more money."
+          ],
+          "evidence": "The writer says the future looks less distant and mentions current trials, but adds that 'the bigger challenge is fitting it into the untidy reality of everyday life.'",
+          "rationale": "A is correct because it captures both progress and the warning that real-world use is difficult. B exaggerates the current level of change. C focuses on a minor image from the first sentence rather than the writer's main point. D is unsupported because the paragraph does not claim lack of government investment is the key obstacle."
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "questionType": "inference",
+          "prompt": "In the second paragraph, the writer suggests that early developers misjudged",
+          "options": [
+            "A) how often traffic systems would need updating.",
+            "B) how expensive it would be to train software engineers.",
+            "C) how difficult it would be to prepare vehicles for unexpected events.",
+            "D) how willing human drivers would be to share roads with machines."
+          ],
+          "evidence": "The paragraph contrasts easy recognition of signs and lights with difficult unusual situations, ending with 'Teaching that kind of judgement to software has proved far harder than early developers expected.'",
+          "rationale": "C is correct because the whole paragraph is about rare, messy situations that require judgement. A is not discussed. B introduces cost and staff training, which are absent. D is about human attitudes, which appear later, not here."
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "questionType": "purpose",
+          "prompt": "Why does the writer mention airports, business parks and ports in the third paragraph?",
+          "options": [
+            "A) to show where driverless transport has already replaced ordinary vehicles completely",
+            "B) to illustrate the type of controlled settings that suit present-day experiments",
+            "C) to criticise companies for avoiding places where transport problems are most serious",
+            "D) to explain why passengers prefer short automated journeys to longer ones"
+          ],
+          "evidence": "The writer says companies are concentrating on 'limited environments where fewer surprises appear' and that this is why such places have become testing grounds.",
+          "rationale": "B is correct because those examples support the idea of predictable, restricted environments. A is wrong because the text describes testing grounds, not complete replacement. C misreads the writer's neutral explanation as criticism. D adds a claim about passenger preference that the paragraph does not make."
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "questionType": "attitude / opinion / tone",
+          "prompt": "What is the writer's attitude to the public's concerns in the fourth paragraph?",
+          "options": [
+            "A) They are exaggerated because machines are already safer than people in most situations.",
+            "B) They are disappointing because they slow progress that would clearly benefit everyone.",
+            "C) They are understandable because important questions have not yet been settled.",
+            "D) They are misplaced because passengers should accept responsibility for their own choices."
+          ],
+          "evidence": "The writer says hesitation is 'not simply fear of new technology' and links it to the unresolved question of responsibility, adding that trust will be hard to win until governments answer it clearly.",
+          "rationale": "C is correct because the writer treats public doubt as reasonable and connected to legal responsibility. A is too dismissive and not stated. B suggests frustration and certainty about benefits, which the writer avoids. D contradicts the paragraph, which asks who should be blamed rather than saying passengers should be."
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "questionType": "reference",
+          "prompt": "In the fifth paragraph, what does 'that sense' refer to?",
+          "options": [
+            "A) the belief that transport experts are expecting too much from the technology",
+            "B) the possibility that vehicles will still need checking when conditions are difficult",
+            "C) the claim that the term driverless transport creates confusion for the public",
+            "D) the idea that automation is more likely to alter jobs than remove people entirely"
+          ],
+          "evidence": "The sentence before 'In that sense' states that supervisors, maintenance teams and control-room staff will still be needed; then the writer concludes that automation may change human work rather than remove it.",
+          "rationale": "D is correct because 'that sense' points back to the examples showing continued human involvement in new roles. A refers to a broader warning, not the immediate meaning. B is only one example within the list, not the overall reference. C mentions the misleading phrase but not what 'that sense' specifically sums up."
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "questionType": "main-idea / global",
+          "prompt": "Which statement best summarises the writer's overall view in the final paragraph?",
+          "options": [
+            "A) Driverless freight services are likely to be more successful than public transport schemes.",
+            "B) The benefits of autonomous transport are so great that delays should not discourage developers.",
+            "C) Driverless transport will probably spread gradually where it offers practical advantages.",
+            "D) The main future role of autonomous vehicles will be to support elderly and disabled travellers."
+          ],
+          "evidence": "The writer says the sensible view is neither excitement nor disappointment and concludes that the technology will appear 'bit by bit' in places where it solves 'specific problems better than existing systems do.'",
+          "rationale": "C is correct because it reflects the writer's balanced conclusion about gradual, selective adoption. A overemphasises freight, which is just one example. B introduces a strongly positive attitude the writer does not express. D narrows the future role too much to one group mentioned as a possible beneficiary."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "answer": "A"
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "answer": "C"
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "answer": "B"
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "answer": "C"
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "answer": "D"
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "when_x"
+    },
+    "6": {
+      "partTitle": "Part 6",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Small Changes, Less Pressure",
+      "passage": "Stress is often described as a modern problem, yet it is really a normal human response to pressure. A busy week, an argument with a friend or an approaching deadline can all make the body react as if danger is near. Heart rate increases, attention narrows and muscles tighten. In the short term, that response can be useful, because it helps us focus and take action. Problems begin when the feeling remains long after the difficult moment has passed.\n\nOne reason stress feels hard to manage is that it rarely arrives in one dramatic event. More often, it builds through a series of small demands: messages that need answering, chores left unfinished and plans that keep changing. (37) As a result, people may tell themselves they are coping perfectly well, even while they become less patient, sleep less deeply and find simple decisions unusually tiring.\n\nA common reaction is to search for a quick solution. People often imagine that stress will disappear after a holiday, a free weekend or a more organised week. These things can certainly help, but they do not always change daily habits. (38) If someone checks work messages late at night, skips meals and agrees to every request, pressure soon returns, no matter how restful the weekend was.\n\nFor that reason, many experts suggest paying attention to routine before looking for dramatic answers. The most effective habits are not always impressive. Getting up at a similar time each day, preparing lunch in advance or taking ten quiet minutes without a screen can all make a difference. (39) When the mind knows what to expect, it spends less energy dealing with unnecessary uncertainty.\n\nMovement matters too, although it does not have to mean hard training at the gym. A brisk walk, a cycle to the shops or even stretching between tasks can interrupt the physical side of stress. (40) That shift is important, because many people remain seated and tense for hours without noticing how uncomfortable they have become.\n\nAnother useful skill is learning when to protect your attention. Many of us treat every notification as urgent, even when it is not. (41) Turning off unnecessary alerts for an hour may feel risky at first, but it often reveals that very few things truly require an immediate response. This can be especially helpful for students and workers who need long periods of concentration.\n\nNone of this means stress can be removed completely, and that should not be the goal. Some pressure is part of caring about work, relationships and future plans. (42) By noticing patterns and making small adjustments, people can stop stress from controlling the whole day. Managing it is less about becoming calm all the time and more about recovering balance more quickly when life becomes demanding.",
+      "passageWordCount": 506,
+      "sentencePool": [
+        "A) In other words, a few days off cannot compensate for a pattern that is exhausting in the first place.",
+        "B) Because each task seems minor, the overall weight of them may go unnoticed for quite a long time.",
+        "C) Instead, the aim is to recognise it early and keep it within reasonable limits.",
+        "D) This regularity creates a sense of safety, even on days that are particularly demanding.",
+        "E) Physical activity signals that the body can release some of the tension it has been storing.",
+        "F) This constant interruption trains the brain to expect distraction rather than focus.",
+        "G) Some people deal with stress by discussing it immediately with everyone around them."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "B"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "A"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "D"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "E"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "F"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "7": {
+      "partTitle": "B2 Reading and Use of English Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Lena Morris",
+          "text": "Initially, I joined a local group that monitored otters simply because I enjoyed being outdoors. I had no plan to get involved in conservation in a serious way. However, after one winter survey, I realised how little people noticed what was happening along the riverbanks near our town. Since then, I’ve spent most weekends giving short talks to walkers and anglers, explaining why small disturbances can matter. What surprises me is that success often depends less on dramatic rescue stories and more on dull tasks like recording water quality and persuading landowners to move fencing. It can be frustratingly slow, yet I prefer that to quick campaigns that attract attention for a month and then disappear. If anything, I’ve become more patient, although I still find it hard when funding is cut just as a project begins to show results."
+        },
+        {
+          "letter": "B",
+          "name": "Tariq Shah",
+          "text": "For years I photographed rare birds for travel magazines, and at first I saw endangered species mainly as subjects for striking images. Meanwhile, guides in several countries kept telling me the same thing: tourists wanted close views, but the pressure was changing the animals’ behaviour. That made me rethink my own role. Now I still take pictures, yet I work under much stricter rules and often put the camera down entirely. Oddly enough, the most useful thing I do is train younger photographers to recognise when they are too near a nest or feeding site. Some complain that the limits spoil the experience, but I remember making similar excuses myself. I’m not against tourism; in fact, local communities may depend on it. Even so, if visitors leave with only one lesson, I hope it is that admiration should never become interference."
+        },
+        {
+          "letter": "C",
+          "name": "Megan Doyle",
+          "text": "When our fishing business was asked to support a marine protection zone, my first reaction was suspicion. Like many others on the harbour, I assumed the scientists had arrived with tidy theories and no understanding of how families here earn a living. Yet one of them kept coming back, listening rather than lecturing, and gradually a few of us agreed to test seasonal no-fishing areas. The early months were difficult, especially when catches fell and neighbours said we had been naive. Since then, however, the evidence has become harder to ignore: some species are returning, and younger fish are appearing in places that had seemed empty. I still dislike being told what to do by people from outside the community, but I’ve accepted that protecting wildlife and protecting jobs are not always opposite aims. The challenge is convincing others before they see the proof for themselves."
+        },
+        {
+          "letter": "D",
+          "name": "Sofia Petrescu",
+          "text": "I run a small rescue centre for injured hedgehogs, so people assume I spend my time doing practical work with animals. In reality, a large part of the job is answering messages from well-meaning members of the public who have picked up healthy young ones by mistake. Although that can be exhausting, I try not to sound annoyed, because their concern comes from a good place. What troubles me more is the expectation that a centre like ours can solve the wider problem alone. We patch up the damage, certainly, but road design, garden fencing and pesticide use matter far more in the long term. Recently, I’ve started visiting schools, as children often persuade adults to change habits more effectively than leaflets do. It’s not glamorous, and donations usually increase only after a dramatic story appears online, yet prevention remains the part of the work I value most."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q43",
+          "number": 43,
+          "prompt": "Who began with a fairly limited reason for taking part, but later developed a deeper commitment?"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "prompt": "Who believes that educating others is now a more valuable use of time than the activity they were first known for?"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "prompt": "Who admits they were doubtful about expert advice until a relationship of trust was built?"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "prompt": "Who says that public attention tends to focus on the most dramatic aspect of the issue rather than the most effective one?"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "prompt": "Who prefers steady, less visible progress to high-profile action that may not last?"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "prompt": "Who changed their working methods after recognising that their own behaviour might be part of the problem?"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "prompt": "Who mentions finding it difficult to persuade people until there is clear evidence in front of them?"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "prompt": "Who points out that support from local people can depend on economic realities?"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "prompt": "Who feels that concern from inexperienced people should be treated sympathetically, even when it creates extra work?"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "prompt": "Who has become more willing to accept slow results, despite disappointment when resources are reduced?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q43",
+          "number": 43,
+          "answer": "A"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "answer": "B"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "answer": "C"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "answer": "A"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "answer": "B"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "answer": "C"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "answer": "B"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "answer": "D"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "answer": "A"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

@@ -1,0 +1,1074 @@
+DRALO
+
+RUOE EXAM 8
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Exam ID
+
+B2 · Exam 8
+
+Source
+
+ENGLISH_PROD · current stored RUOE Parts 1–7
+
+Status
+
+PENDING_HUMAN_REVIEW
+
+Language
+
+British English
+
+Purpose
+
+Teacher review before approval / correction / publication
+
+Theme map
+
+The paper is internally varied, but several themes repeat topics already used in earlier exams. Those overlaps are explicitly flagged below so the 5–20 set can remain genuinely varied.
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Heritage preservation
+
+2
+
+Open cloze
+
+AI in the workplace
+
+3
+
+Word formation
+
+Solo travel
+
+4
+
+Key word transformations
+
+Digital detox
+
+5
+
+Multiple-choice reading
+
+Turning a hobby into a career
+
+6
+
+Gapped text
+
+Unusual sports
+
+7
+
+Multiple matching
+
+Smart devices in daily life
+
+Theme-variety alert: Parts 3, 6 and 7 are the clearest repetitions across the existing exam bank (solo travel, unusual sports and smart devices). Keep the content unchanged for review, but consider replacing those themes before final publication if strong exam-to-exam differentiation is required.
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Heritage preservation
+
+VISTA ALUMNO
+
+Example:
+
+A) kept
+
+B) carried
+
+C) taken
+
+D) held
+
+Answer: C
+
+Text
+
+Saving the Past for the Future
+
+Across Europe, many towns are now taking (0) ___ to protect old buildings before they fall into disrepair. In the past, historic streets were often knocked down to make (1) ___ for modern development. Today, however, local councils are more likely to recognise the value of preserving a city's unique (2) ___. Visitors are not only attracted by museums but also by ordinary houses, shops and squares that (3) ___ a story about earlier generations.
+
+Restoring such places is rarely cheap, and some projects depend (4) ___ private donations as well as public money. Even so, supporters argue that the long-term benefits far (5) ___ the initial cost. A carefully repaired market hall, for instance, can bring people (6) ___ to the town centre and encourage small businesses to open.
+
+Of course, preservation must be handled with (7) ___. If every change is refused, historic areas may become lifeless. The real challenge is to strike a (8) ___ between protecting the past and allowing communities to grow.
+
+Questions
+
+1
+
+A room
+
+B capacity
+
+C place
+
+D area
+
+2
+
+A figure
+
+B character
+
+C nature
+
+D appearance
+
+3
+
+A say
+
+B speak
+
+C tell
+
+D mention
+
+4
+
+A from
+
+B with
+
+C by
+
+D on
+
+5
+
+A defeat
+
+B outweigh
+
+C exceed
+
+D overcome
+
+6
+
+A over
+
+B through
+
+C round
+
+D back
+
+7
+
+A concern
+
+B attention
+
+C care
+
+D caution
+
+8
+
+A balance
+
+B limit
+
+C border
+
+D match
+
+Part 1 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 12
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+1
+
+A · room
+
+2
+
+B · character
+
+3
+
+C · tell
+
+4
+
+D · on
+
+5
+
+B · outweigh
+
+6
+
+D · back
+
+7
+
+C · care
+
+8
+
+A · balance
+
+TEACHER ATTENTION
+
+• Q1 distractor “space” has been replaced with “capacity” so that “make room for” is the only clearly natural collocation. The remaining seven scored items are unchanged.
+
+• VARIETY NOTE — Part 1 remains valid, but the set is heavily concentrated on collocations/fixed expressions. Keep this as a blueprint constraint for future generation: distribute collocations, phrasal verbs, dependent prepositions, lexical sets and semantic distinctions more evenly.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 2 — Open cloze
+
+Theme: AI in the workplace
+
+VISTA ALUMNO
+
+Example:
+
+Answer: 0 → as
+
+Text
+
+Working with Smart Machines
+
+A few years ago, artificial intelligence was often discussed (0) ___ something that might affect the workplace in the distant future. Now, however, it is already changing the way people work in offices, shops and hospitals. In many companies, AI tools can deal with routine tasks (9) ___ greater speed than humans, which allows staff to spend time on work that requires creativity or personal contact.
+
+This does not mean that people will disappear from the workplace. In fact, many managers say that AI works best when it is used to support employees rather (10) ___ replace them. A chatbot, for example, may answer simple customer questions, but difficult cases still need (11) ___ be handled by a person.
+
+Workers are also being asked to learn new skills so that they can work effectively (12) ___ these systems. Some are excited, while others worry (13) ___ whether their jobs will change too much. What seems clear is that AI is unlikely to succeed on (14) ___ own. The most successful workplaces will probably be those (15) ___ people and machines learn from each other and prepare (16) ___ new demands together.
+
+Part 2 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 12
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+9
+
+with
+
+10
+
+than
+
+11
+
+to
+
+12
+
+with
+
+13
+
+about
+
+14
+
+its
+
+15
+
+where
+
+16
+
+for
+
+TEACHER ATTENTION
+
+• Q9 has been rewritten to “with greater speed than humans”, giving WITH instead of a second consecutive THAN. Q10 remains THAN.
+
+• Q16 has been rewritten as “prepare for new demands”, giving FOR instead of a second TO. The final answer set is now: WITH, THAN, TO, WITH, ABOUT, ITS, WHERE, FOR.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 3 — Word formation
+
+Theme: Solo travel
+
+VISTA ALUMNO
+
+Example:
+
+(0) ___ (DEPEND)
+
+Answer: 0 → independence
+
+Text
+
+Going Solo
+
+For many people, the idea of travelling alone is closely linked to a sense of (0) ___ (DEPEND). Without friends or family nearby, every decision, from choosing a train to finding somewhere to stay, becomes your own responsibility. At first, that can feel slightly (17) ___ (COMFORT), especially if you are used to sharing plans with others. However, many solo travellers soon discover that this early anxiety is replaced by a growing feeling of (18) ___ (CONFIDENT).
+
+One of the main benefits is the (19) ___ (FREE) to change your plans whenever you like. If a town surprises you, you can stay longer; if somewhere feels dull, you can leave immediately. This kind of flexibility often leads to more (20) ___ (MEMORY) experiences. Travelling alone can also encourage more (21) ___ (SOCIETY) behaviour, because you are more likely to start conversations with strangers. Of course, a little (22) ___ (CAUTIOUS) is still necessary, particularly in unfamiliar places. Yet with sensible preparation, solo travel can be a deeply (23) ___ (REWARD) experience and, for many, the (24) ___ (DISCOVER) of how capable they really are.
+
+Part 3 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 12
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+17
+
+uncomfortable
+
+18
+
+confidence
+
+19
+
+freedom
+
+20
+
+memorable
+
+21
+
+social
+
+22
+
+caution
+
+23
+
+rewarding
+
+24
+
+discovery
+
+TEACHER ATTENTION
+
+• Q21 has been reconstructed as SOCIETY → social in “more social behaviour”. This removes the SOCIAL → sociable/social ambiguity while preserving the intended meaning and genuine word formation.
+
+• Solo travel is a direct thematic repeat of Exam 6 Part 7. Strong candidate for replacement if the exams are intended to feel clearly distinct from one another.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 4 — Key word transformations
+
+Theme: Digital detox
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+
+0. I last checked my messages three days ago.
+
+FOR
+
+I have __________________ three days.
+
+Answer: 0 → not checked my messages for
+
+Questions
+
+25. Mia said she felt much calmer after spending the weekend without any screens.
+
+MADE
+
+Spending the weekend without any screens __________________ much calmer, according to Mia.
+
+26. It wasn't necessary for us to take our laptops on the retreat.
+
+NEED
+
+We __________________ our laptops on the retreat.
+
+27. Leo started sleeping better only after he stopped using his phone at night.
+
+UNTIL
+
+Leo didn't start sleeping better __________________ using his phone at night.
+
+28. I regret posting every photo from my holiday straight away.
+
+WISH
+
+I __________________ every photo from my holiday straight away.
+
+29. People often say that a short break from social media improves concentration.
+
+SAID
+
+A short break from social media __________________ concentration.
+
+30. The weekend without wi-fi was more enjoyable than Dan had expected.
+
+AS
+
+Dan had not expected the weekend without wi-fi to be __________________ it was.
+
+Part 4 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 12
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+25
+
+made Mia feel
+
+26
+
+did not need to take
+
+27
+
+until he stopped
+
+28
+
+wish I had not posted
+
+29
+
+is often said to improve
+
+30
+
+as enjoyable as
+
+TEACHER ATTENTION
+
+• Q30 has been rebuilt so the keyword AS is used unchanged and the meaning is preserved exactly. Correct answer: “as enjoyable as”.
+
+• Q25–29 remain unchanged; Q30 now avoids the previous missing-adjective/equivalence problem.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 5 — Multiple-choice reading
+
+Theme: Turning a hobby into a career
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+When the Weekend Job Becomes Your Real One
+
+People often say, half-jokingly, that they would happily do their hobby for a living if only someone would pay them. It sounds like a fantasy: spending each day baking, repairing bicycles, taking photographs or training dogs instead of answering emails in an office. Yet for a growing number of people, this is not simply a daydream. Online platforms, specialist markets and social media have made it easier than ever to reach customers directly. At the same time, the idea of a single career for life has weakened, and many workers now expect to change direction at least once.
+
+Even so, the move from hobby to profession is rarely as simple as outsiders imagine. What begins as a relaxing escape from daily pressures can quickly acquire deadlines, invoices and awkward customer requests. The ceramic artist who once enjoyed shaping bowls at midnight whenever inspiration appeared may suddenly need to produce thirty matching mugs by Friday. A guitarist who loved experimenting alone may find that teaching beginners pays the bills better than performing does. In other words, earning money from a hobby does not just add income; it changes the activity itself.
+
+That shift can be uncomfortable, especially at the start. Some new business owners discover that the part they most enjoyed is now surrounded by tasks they had never considered. Selling handmade soap, for instance, may involve packaging rules, photography, stock records and constant communication with buyers. There is also the emotional difficulty of attaching a price to something personal. Charging friends for portraits or asking strangers to pay for cakes based on family recipes can feel less like business and more like self-exposure. For that reason, people who succeed are not always the most talented. Often, they are the ones who can tolerate uncertainty and keep going while they learn unfamiliar skills.
+
+Financially, caution matters. Stories about overnight success attract attention, but they hide the slower reality. Many people begin by working evenings and weekends, testing whether customers will return before leaving a secure salary. That approach can be exhausting, but it provides useful information. It reveals whether the product is genuinely wanted, whether prices cover costs and whether enthusiasm survives repetition. A person may love making jewellery, for example, yet feel very differently after producing the same popular design fifty times in one month. Better to discover that while the hobby is still optional than after rent depends on it.
+
+There is another less obvious challenge: identity. When people ask what you do, saying "I'm trying to make a living from restoring old furniture" can sound uncertain even if the business is developing well. Society still tends to respect conventional job titles more than self-created ones, particularly during the messy middle stage when income is irregular. Family members may worry that a sensible career is being thrown away, while former colleagues assume the change is temporary. Such reactions can make people doubt themselves, not because the new path is wrong, but because it has fewer recognised milestones.
+
+None of this means turning a hobby into a career is a mistake. For some, it leads to a more satisfying working life precisely because it combines personal interest with independence. But the most successful people are usually those who treat passion as a starting point, not a guarantee. They accept that professionalising a hobby means protecting what they love while also submitting it to market forces. The reward is not endless enjoyment untouched by pressure. It is the chance to build work that feels meaningful, provided they are willing to see the hobby clearly, not romantically.
+
+Questions
+
+31. What point does the writer make in the first two paragraphs about turning a hobby into a career? A. It has become more possible, but it changes the nature of the activity. B. It is mainly attractive to people who are tired of office life. C. It usually succeeds because online tools remove most of the risks. D. It works best when the hobby already involves dealing with other people.
+
+32. In the third paragraph, what does the writer suggest about people who manage this kind of career change well? A. They are comfortable promoting themselves in public. B. They are realistic about having to learn beyond their original hobby. C. They have usually worked in business before. D. They avoid charging people they know for their work.
+
+33. Why does the writer mention making the same jewellery design many times in one month? A. To show that customer demand can rise faster than expected. B. To argue that creative work is harder to price than practical work. C. To illustrate how repeating a successful item may reduce the pleasure of making it. D. To explain why jewellery is a risky hobby to turn into a business.
+
+34. What is the writer's attitude in the fifth paragraph towards other people's reactions to an unusual career path? A. amused that they are often based on jealousy B. critical of their failure to notice creative talent C. sympathetic to the pressure they can put on someone D. surprised that they remain so negative nowadays
+
+35. In the final paragraph, what does the word “It” in “It is the chance to build work that feels meaningful” refer back to? A. the reward of turning a hobby into a career B. endless enjoyment untouched by pressure C. the market forces affecting the hobby D. the decision to change career direction
+
+36. Which statement best summarises the writer's overall message in the article? A. A hobby should remain separate from paid work unless demand is guaranteed. B. Creative hobbies are easier to turn into careers than practical ones. C. The main difficulty is persuading other people to take the new career seriously. D. Passion can lead to satisfying work, but only if it is supported by realism and adaptability.
+
+Part 5 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 12
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+31
+
+A
+
+32
+
+B
+
+33
+
+C
+
+34
+
+C
+
+35
+
+A
+
+36
+
+D
+
+TEACHER ATTENTION
+
+• Q35 has been rewritten so the quoted “It” actually appears in the cited sentence. It refers back to “the reward”, represented by option A: the reward of turning a hobby into a career.
+
+• Theme is turning a hobby into a career. This is distinct from the immediate previous paper, but it overlaps the wider hobby/career cluster used elsewhere in the product; keep an eye on bank-level repetition.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 6 — Gapped text
+
+Theme: Unusual sports
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+Beyond the Usual Game
+
+For years, unusual sports were often treated as little more than internet curiosities: fun to watch for a minute, but too strange to be taken seriously. That view is changing quickly. Across Europe and beyond, activities once known only to small groups of enthusiasts are attracting larger crowds, more media attention and a steady flow of newcomers. (37) As a result, sports such as underwater hockey, bike polo and ultimate frisbee are no longer seen as passing trends.
+
+Part of the appeal is that these sports offer people a fresh experience in a world where many leisure activities already feel heavily organised and familiar. New players are often surprised by how welcoming the atmosphere can be. In mainstream sports, beginners may feel pressure to perform well immediately, especially if teams are focused on results. (38) That makes it easier for people to try something without worrying that they will be judged.
+
+The growth of social media has also played an important role. Twenty years ago, a local group might have struggled to find enough members to survive. Today, one short video of a fast-moving match can reach thousands of viewers in a few hours, and many of them will share it with friends. (39) In other words, online platforms do not simply advertise these sports; they help create the communities that keep them alive.
+
+Another reason for their popularity is practical rather than cultural. Some unusual sports are easier to organise than people expect, especially in cities where space is limited. Bike polo, for example, can be played on a hard court that might otherwise sit empty in the evening. (40) For adults with busy schedules, that flexibility can make the difference between taking part regularly and giving up after a few weeks.
+
+Even so, becoming more visible brings difficulties. Once a sport begins to attract sponsorship, formal competitions and governing bodies, arguments often follow about what should happen next. Some players welcome clearer rules and better funding, saying these changes make the sport safer and more sustainable. Others worry that the original spirit will be lost. (41) What began as an informal activity can start to resemble the very sports it once offered an alternative to.
+
+This tension is especially clear when schools and universities become involved. On the one hand, official recognition can provide equipment, coaching and reliable places to train. It can also introduce young people to sports they might never otherwise discover. (42) If every session is turned into preparation for a tournament, there is less room for the creativity and experimentation that attracted many early participants in the first place.
+
+For now, though, the rise of unusual sports seems likely to continue. People are searching for activities that combine exercise with friendship, challenge and a sense of discovery. Whether they remain proudly unconventional or slowly become part of the sporting mainstream, they are already changing ideas about what a sport can look like. That may be the most interesting development of all.
+
+Sentences
+
+A Yet many clubs in smaller sports place greater value on enthusiasm, cooperation and learning the basics.
+
+B This has allowed scattered players to find one another and arrange training sessions, tournaments and even international events.
+
+C At the same time, teachers who prefer structure may unintentionally remove the playful side of the activity.
+
+D Similar patterns can be seen in sports that require little equipment and can be adapted to different public spaces.
+
+E Much of that growth has been driven by people looking for sport to feel more social, creative and less predictable.
+
+F As soon as money and status become involved, decisions that were once simple can suddenly become controversial.
+
+G In some mountain regions, however, older snow-based competitions are actually declining despite renewed tourist interest.
+
+Part 6 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 12
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+37
+
+E
+
+38
+
+A
+
+39
+
+B
+
+40
+
+D
+
+41
+
+F
+
+42
+
+C
+
+TEACHER ATTENTION
+
+• No content change requested. The cohesion and stored key E-A-B-D-F-C remain valid; some connectors make individual gaps relatively accessible, so keep overall difficulty under review.
+
+• Theme-variety alert remains: unusual sports overlap with Exam 7 Part 1, but this teacher patch does not replace the Part.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 7 — Multiple matching
+
+Theme: Smart devices in daily life
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+Which person...? The people may be chosen more than once.
+
+43 Who changed their opinion after using smart technology in difficult personal circumstances?
+
+44 Who decided that a device should not be allowed to affect time away from their job?
+
+45 Who mentions that one piece of technology turned out to require more effort than a basic alternative?
+
+46 Who believes smart products are worthwhile only when they deal with an actual everyday problem?
+
+47 Who says they became aware of a health-related issue because of information collected by a device?
+
+48 Who mentions using a smart device to make everyday tasks easier while moving around their town?
+
+49 Who is careful not to accept the idea that the most modern option is automatically the best one?
+
+50 Who suggests that experience with many devices has made them harder to impress?
+
+51 Who mentions taking action to reduce interruptions caused by a device?
+
+52 Who values a device mainly because it reduces the need to depend on other people?
+
+Texts
+
+A – Rosa Mendez
+
+I used to laugh at people who checked their phones every few minutes, yet now I rely on a smartwatch more than I expected. I bought it initially because I kept missing messages while cycling across town to my bakery. Since then, though, it has quietly changed my routine in other ways. The reminders to stand up or drink water are useful, and paying for ingredients with a tap feels quicker than searching for coins with flour on my hands. However, I switched off most notifications after a few weeks. I realised I was letting tiny vibrations interrupt conversations with customers. My brother says these devices make life easier only if you control them, and I think he is right. I still enjoy the health tracking, but I refuse to wear the watch in the evening. Home should feel different from work.
+
+B – Gareth Cole
+
+For me, smart devices became essential during a long recovery after a knee operation. Before that, I had seen them as expensive toys. A friend persuaded me to try a voice-controlled speaker and a sleep monitor, and I was surprised by how much independence they gave me. From bed, I could adjust the lights, listen to the news and even make shopping lists without asking for help. Meanwhile, the sleep data helped me notice a pattern I would otherwise have ignored: pain medication was affecting my rest. That said, I am uneasy about how much personal information these gadgets collect. I read every privacy setting carefully, although I know most people never bother. Even so, I have kept the devices because they solved practical problems at a time when I really needed support, and they still save me effort now.
+
+C – Leila Hassan
+
+As a secondary school teacher, I spend all day asking teenagers to put their phones away, so friends find it amusing that my flat is full of connected devices. Still, I am selective about what deserves space in my life. I love my smart thermostat because it learns when I am usually home and stops me wasting money on heating. By contrast, I returned a robot vacuum after a month. It was entertaining at first, yet it constantly got stuck under a chair and demanded more attention than an ordinary broom. What annoys me most is the assumption that newer always means better. Sometimes the simplest option is still the most sensible one. Even so, I admit that when my train is delayed and my lights turn on automatically before I arrive, it feels oddly reassuring rather than unnecessary.
+
+D – Noah Price
+
+I review consumer technology for a local website, so people expect me to fill my house with the latest devices. Actually, I try to live with only a few, because testing too many products has made me less easily impressed. At first, every new feature seems clever; later, you notice how many are solutions to problems nobody had. The exception for me is a tiny tracker attached to my keys and wallet. I travel constantly for work, and before buying it I wasted ridiculous amounts of time searching hotel rooms and train seats. Now I can locate things in seconds, which lowers my stress more than any fancy entertainment system could. Yet I never recommend buying smart devices simply because they are fashionable. If a product does not remove a real frustration from your day, the excitement usually disappears fast.
+
+Part 7 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 12
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+43
+
+B
+
+44
+
+A
+
+45
+
+C
+
+46
+
+D
+
+47
+
+B
+
+48
+
+A
+
+49
+
+C
+
+50
+
+D
+
+51
+
+A
+
+52
+
+B
+
+TEACHER ATTENTION
+
+• Q48 has been reformulated to match Rosa’s evidence more precisely: using a smartwatch while cycling around town and making everyday tasks such as payments easier. Key remains A.
+
+• Theme-variety alert remains: smart devices overlap with Exam 7 Part 2; no thematic replacement is made in this controlled patch.
+
+• Q44 and Q51 both map to Rosa (A) and both involve managing the smartwatch; they test different ideas (work/life boundary vs interruptions), but check that the distinction is sufficiently clear to candidates.
+
+
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Final exam review
+
+Use this page only after all seven Parts have been reviewed.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+LANGUAGE
+
+☐ Natural British English throughout
+
+LEVEL
+
+☐ Consistently B2 First
+
+AUTHENTICITY
+
+☐ Cambridge-style task behaviour and difficulty
+
+THEME VARIETY
+
+☐ Sufficient variety within Exam 12 and against Exams 5–11
+
+KEYS
+
+☐ All keys verified manually
+
+DISTRACTORS
+
+☐ Plausible but clearly wrong
+
+PART 4
+
+☐ Part 1 Q1 distractor fixed · Part 2 Q9/Q16 varied · Part 3 Q21 rebuilt · Part 4 Q30 rebuilt · Part 5 Q35 fixed · Part 7 Q48 refined
+
+CRITICAL FIXES
+
+☐ Part 4 Q30 rebuilt · Part 5 Q35 wording fixed
+
+FINAL DECISION
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Reviewer: ________________________________    Date: __________________
+

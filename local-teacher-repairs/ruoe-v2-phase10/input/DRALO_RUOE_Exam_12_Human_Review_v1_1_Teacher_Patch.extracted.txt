@@ -1,0 +1,960 @@
+DRALO
+
+RUOE EXAM 12
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+Theme map
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Volunteering & employability
+
+2
+
+Open cloze
+
+Underwater archaeology
+
+3
+
+Word formation
+
+Sleep & wellbeing
+
+4
+
+Key word transformations
+
+Young entrepreneurship
+
+5
+
+Multiple-choice reading
+
+Technology in hotels
+
+6
+
+Gapped text
+
+Language learning beyond class
+
+7
+
+Multiple matching
+
+Everyday inventions
+
+Distribution note: Exam 12 contains several strong repetitions from earlier papers in this batch: volunteering (Exam 10), underwater archaeology/deep-sea discovery (Exams 5/10), sleep (Exams 10/15), language learning beyond class (Exam 11) and everyday inventions (Exam 11). The hotel-technology angle is comparatively fresher. Consider replacing repeated themes before final bank approval.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Volunteering & employability
+
+VISTA ALUMNO
+
+Example:
+
+A) make
+
+B) do
+
+C) gain
+
+D) win
+
+Answer: C
+
+Text
+
+Volunteering and Your Future
+
+Many students take part in volunteer projects because they want to help others, but they may also (0) ___ valuable experience at the same time. Employers often look for people who have shown they can work in a team, solve problems and deal (1) ___ unfamiliar situations. Volunteering offers the (2) ___ to develop these qualities in real life rather than simply reading about them in a textbook.
+
+For example, someone helping at a local charity shop might be asked to (3) ___ responsibility for training new volunteers. This not only builds confidence, but also shows future employers that the person can be relied on. In addition, volunteer work can (4) ___ to useful contacts, especially if the organisation works closely with businesses or public services. Some young people even find that volunteering helps them (5) ___ up their minds about which career to follow.
+
+Although unpaid, this kind of work can have a very (6) ___ effect on job prospects. It proves that applicants are willing to make an effort, and that they (7) ___ initiative instead of waiting for others to tell them what to do. As a result, their CVs often (8) ___ out from the crowd.
+
+Questions
+
+1
+
+A with
+
+B by
+
+C for
+
+D to
+
+2
+
+A occasion
+
+B possibility
+
+C opportunity
+
+D probability
+
+3
+
+A bring
+
+B take
+
+C hold
+
+D carry
+
+4
+
+A reach
+
+B move
+
+C connect
+
+D lead
+
+5
+
+A decide
+
+B make
+
+C think
+
+D set
+
+6
+
+A valuable
+
+B negative 
+
+C certain
+
+D positive
+
+7
+
+A create
+
+B give
+
+C show
+
+D put
+
+8
+
+A stand
+
+B come
+
+C point
+
+D break
+
+Part 1 — Reviewer view
+
+STORED ANSWER KEY
+
+1
+
+A · with
+
+2
+
+C · opportunity
+
+3
+
+B · take
+
+4
+
+D · lead
+
+5
+
+B · make
+
+6
+
+D · positive
+
+7
+
+C · show
+
+8
+
+A · stand
+
+TEACHER ATTENTION
+
+• Q6 uniqueness strengthened: STRONG has been replaced as a distractor because 'a very strong effect on job prospects' was also natural. POSITIVE remains the intended key. No other Part 1 content changes applied.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 2 — Open cloze
+
+Theme: Underwater archaeology
+
+VISTA ALUMNO
+
+Example:
+
+Answer: 0 → been
+
+Text
+
+Secrets in the Sand
+
+For centuries, discoveries in the deepest parts of the ocean were thought to have (0) ___ mostly the result of chance. Today, however, new technology allows scientists to return to the same area again and again, and what they are finding is changing our view of history. In several parts of the Mediterranean, for example, robots have discovered ancient ships lying far deeper (9) ___ divers can safely reach.
+
+One recent expedition found a trading vessel that appears (10) ___ have sunk nearly 2,000 years ago. Because it was quickly covered in sand, many objects inside it remained in excellent condition. Researchers were not only impressed by the jars and tools recovered, (11) ___ also by traces of food still stored on board.
+
+Such discoveries matter because they can show (12) ___ people lived, travelled and traded. They may even reveal links between cultures that historians had not previously been aware (13) ___. Although the sea destroys some evidence, it can protect other things so well (14) ___ they survive for centuries. As a result, scientists hope that many more secrets are still waiting (15) ___ be found beneath the waves, no matter (16) ___ difficult they are to reach.
+
+Part 2 — Reviewer view
+
+STORED ANSWER KEY
+
+9
+
+than
+
+10
+
+to
+
+11
+
+but
+
+12
+
+how
+
+13
+
+of
+
+14
+
+that
+
+15
+
+to
+
+16
+
+how
+
+TEACHER ATTENTION
+
+• Opening revised for semantic precision and naturalness: 'discoveries ... were thought to have been mostly the result of chance'. The example answer BEEN remains valid. The eight real items are unchanged.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 3 — Word formation
+
+Theme: Sleep & wellbeing
+
+VISTA ALUMNO
+
+Example:
+
+(0) ___ (SCIENCE)
+
+Answer: 0 → scientific
+
+Text
+
+Why Good Sleep Matters
+
+Although sleep was once seen as a simple period of rest, (0) ___ (SCIENCE) research now shows that it plays a central role in our daily lives. A good night's sleep improves our mood, sharpens our memory and supports better (17) ___ (DECIDE) during the day. It also helps the body recover from physical activity and strengthens the immune system.
+
+By contrast, regular sleep loss can have serious (18) ___ (CONSEQUENT). People who are tired often become less (19) ___ (PRODUCT) at work or school, and they may react more (20) ___ (IMPULSE) in stressful situations. Over time, poor sleep can even increase the (21) ___ (LIKELY) of health problems such as heart disease.
+
+Experts say that a more restful night often depends on simple habits. For example, keeping a regular bedtime and limiting screen use before bed can be highly (22) ___ (BENEFIT). It is also (23) ___ (ADVICE) to avoid heavy meals late at night. In the end, sleep is not a luxury but a (24) ___ (NECESSARY) for a healthy, balanced life.
+
+Part 3 — Reviewer view
+
+STORED ANSWER KEY
+
+17
+
+decisions
+
+18
+
+consequences
+
+19
+
+productive
+
+20
+
+impulsively
+
+21
+
+likelihood
+
+22
+
+beneficial
+
+23
+
+advisable
+
+24
+
+necessity
+
+TEACHER ATTENTION
+
+• Q17 rebuilt to DECIDE → decisions in 'supports better decisions during the day'. This now follows standard Cambridge-style Word Formation mechanics without adding a second lexeme.
+
+• Theme repeats sleep/wellbeing from earlier papers.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 4 — Key word transformations
+
+Theme: Young entrepreneurship
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+
+0. It was unnecessary for Mia to borrow money from her parents to start her online shop.
+
+NEED
+
+Mia __________________ borrow money from her parents to start her online shop.
+
+Answer: 0 → did not need to
+
+Questions
+
+25. People say that Noah built his business from his bedroom while he was still at school.
+
+SAID
+
+Noah __________________ his business from his bedroom while he was still at school.
+
+26. Ella regretted not asking her brother for advice before launching the app.
+
+WISHED
+
+Ella __________________ her brother for advice before launching the app.
+
+27. Tom only succeeded because his friends helped him promote the product online.
+
+WITHOUT
+
+Tom would not have succeeded __________________ promoting the product online.
+
+28. The magazine interview was less interesting than the podcast with the teenage business owner.
+
+AS
+
+The magazine interview was __________________ the podcast with the teenage business owner.
+
+29. A local investor will probably offer Jay some financial support.
+
+LIKELY
+
+Jay __________________ some financial support from a local investor.
+
+30. Sofia started her clothing brand three years ago and she still runs it today.
+
+BEEN
+
+Sofia __________________ her clothing brand for three years.
+
+Part 4 — Reviewer view
+
+STORED ANSWER KEY
+
+25
+
+is said to have built
+
+26
+
+wished she had asked
+
+27
+
+without his friends' help
+
+28
+
+not as interesting as
+
+29
+
+is likely to receive
+
+30
+
+has been running
+
+TEACHER ATTENTION
+
+• Q27 rebuilt to satisfy the 2–5 word rule while preserving meaning: 'Tom would not have succeeded without his friends' help promoting the product online.' Answer: WITHOUT HIS FRIENDS' HELP (4 words).
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 5 — Multiple-choice reading
+
+Theme: Technology in hotels
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+Hotels Check In to the Future
+
+A decade ago, checking into a hotel often meant standing in a queue, handing over a passport and hoping the room looked like the photos online. Today, many hotels are trying to remove those moments of friction with technology. Guests can unlock doors with their phones, ask a speaker to close the curtains and receive restaurant recommendations from a chatbot before they even arrive. For hotel companies, these tools promise greater efficiency. For travellers, they suggest a stay that is quicker, easier and more personalised.
+
+Yet the industry has discovered that modernising a hotel is not as simple as filling it with screens. Hoteliers learned this the hard way when some early self-service systems created fresh irritation. A machine in the lobby might save time for a guest travelling light, but it can feel unhelpful to a tired family dealing with luggage, children and a booking problem. In other words, technology works best when it quietly removes obstacles rather than drawing attention to itself. The most successful systems are often the ones guests barely notice.
+
+One area where change has been especially rapid is pricing. Hotels now use software that constantly adjusts room rates according to demand, local events, weather and even flight cancellations. In the past, managers often relied on experience and instinct; now, data can suggest exactly when to lower prices to fill rooms or raise them because a music festival has brought thousands of visitors into town. This may sound coldly mathematical, but supporters argue that better forecasting helps hotels avoid waste. If a hotel can predict demand more accurately, it can plan staffing, food orders and energy use with less guesswork.
+
+Technology is also reshaping parts of the hotel that guests rarely see. Sensors can report which rooms are empty, whether air conditioning is running unnecessarily or when a lift may need maintenance before it breaks down. Supporters say these systems reduce costs and improve comfort at the same time. Critics, however, warn that the excitement around so-called smart hotels sometimes hides basic truths: if the shower is weak or the room is noisy, no app will rescue the experience. Digital tools may improve operations, but they do not replace the fundamentals of hospitality.
+
+The biggest question concerns staff. Whenever automation enters a workplace, people fear job losses, and hotels are no exception. Some tasks certainly need fewer employees than before. A guest who checks in online and uses digital room keys may never visit reception. But many hotel groups say technology is changing roles rather than simply removing them. Staff who once handled repetitive paperwork can spend more time solving unusual problems or giving local advice. That argument sounds convincing in theory, although it depends on hotels investing in training instead of treating technology as an excuse to cut costs.
+
+There is also a less obvious risk. Hotels are collecting more information than ever: arrival times, room preferences, spending habits and, in some cases, data from connected devices inside the room. Used carefully, this can make a stay smoother. Used badly, it can feel intrusive. Guests may appreciate a hotel remembering that they prefer a quiet room, but feel uncomfortable if it seems to know too much about their movements. The challenge for the industry is not only to gather data, but to decide what should be left unknown.
+
+Perhaps that is why the most thoughtful hoteliers no longer talk about technology as a replacement for service. Instead, they describe it as a tool that should support human judgement. Few travellers choose a hotel because its software sounds impressive. They return because the whole stay feels easy, calm and welcoming. In that sense, the future of hotels may depend less on how much technology they install than on how wisely they use it.
+
+Questions
+
+31. What point does the writer make in the first two paragraphs about technology in hotels? A. It is most effective when it improves the stay without becoming the main focus. B. It mainly benefits guests who are already confident with digital systems. C. It has solved the traditional problems connected with hotel arrival procedures. D. It is generally more useful for families than for people travelling alone.
+
+32. Why does the writer mention music festivals and flight cancellations in the third paragraph? A. To show that hotels are often forced to react to events they cannot predict B. To explain how software can respond to different factors when setting prices C. To suggest that managers used to make poor decisions about room rates D. To argue that travellers should book earlier to avoid sudden price increases
+
+33. What is the writer's attitude towards so-called smart hotels in the fourth paragraph? A. They have been unfairly criticised for problems they did not create. B. They are likely to become less popular as guests grow tired of them. C. They can be useful, but claims made for them should be treated with caution. D. They matter most in hotels where the traditional service is already excellent.
+
+34. What does the writer suggest about the claim that technology changes jobs rather than removes them? A. It is already clearly true across the hotel industry. B. It depends on whether hotels are willing to support staff properly. C. It will only apply in larger hotels with enough money to experiment. D. It is mainly a way of persuading guests to accept more automation.
+
+35. In the sixth paragraph, what does 'this' refer to in the sentence 'Used carefully, this can make a stay smoother'? A. the growth in the number of connected devices in hotel rooms B. the information hotels collect about their guests C. the practice of remembering a guest's preferred type of room D. the challenge of deciding what information should remain private
+
+36. Which idea best summarises the writer's overall view of technology in the hotel industry? A. Hotels should adopt as much technology as possible in order to stay competitive. B. Digital systems are valuable mainly because they reduce running costs for hotels. C. The industry needs clearer rules so guests know exactly how their data is used. D. Technology should be judged by how well it supports a comfortable human experience.
+
+Part 5 — Reviewer view
+
+STORED ANSWER KEY
+
+31
+
+A
+
+32
+
+B
+
+33
+
+C
+
+34
+
+B
+
+35
+
+B
+
+36
+
+D
+
+TEACHER ATTENTION
+
+• No teacher-requested content changes applied. Part 5 remains strong and is retained as reviewed.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 6 — Gapped text
+
+Theme: Language learning beyond class
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+The Language Lesson That Starts After Class
+
+For many learners, language study still means a textbook, a teacher and a weekly lesson. Those things matter, of course, but they are only part of the picture. Real progress often begins when students leave the classroom and start noticing how the language appears in ordinary life. Whether they are watching videos, following online creators or chatting while gaming, learners now meet English in places that did not exist for earlier generations. (37) As a result, practice can happen in short, regular moments instead of being limited to formal study time.
+
+That does not mean every activity outside class is equally useful. Simply surrounding yourself with a language is not enough if you are only half paying attention. People sometimes believe improvement will happen automatically, but most successful learners do something more active than that. (38) In this way, a casual activity becomes a source of repeated learning rather than background noise.
+
+One reason these informal methods work is that they are connected to personal interest. A student who loves cooking may happily watch recipe videos in Italian for half an hour, while the same person would lose focus after ten minutes with a grammar book. Interest keeps attention steady, and attention helps memory. (39) Because the content matters to them, learners are often willing to hear or read the same expressions again and again without getting bored.
+
+Another advantage is that language outside the classroom is often more current. Course materials take time to produce, so examples can feel slightly distant from the way people actually speak. Online spaces, by contrast, change quickly and reflect everyday habits, jokes and reactions. (40) Learners begin to understand not just dictionary meanings but also tone, timing and what sounds natural in a real exchange.
+
+However, there is a risk in depending only on this kind of exposure. The language people meet online is not always clear, accurate or suitable for every situation. Slang can be useful, but it may also be limited to one group or disappear within months. (41) Without some guidance, learners may copy forms that confuse listeners or seem rude in more formal settings.
+
+For that reason, many teachers now encourage students to bring their outside learning back into class. A phrase heard in a podcast or a comment seen on social media can become the starting point for discussion. The classroom then provides what the internet often cannot: careful explanation, correction and comparison. (42) Instead, each side supports the other, and learners gain both confidence and control.
+
+The most effective language learners, then, are not always the ones who spend the longest doing exercises. They are often the ones who build small habits around the language and keep returning to it during the week. Five minutes spent reading posts, repeating useful expressions or writing a message can have more impact than a long session that feels disconnected from daily life. Outside the classroom, learning becomes less of an event and more of a routine.
+
+Sentences
+
+A They pause to check a phrase, save a useful expression or try to guess meaning from context before moving on.
+
+B This is especially valuable when a language is used in fast, informal conversations rather than in carefully prepared examples.
+
+C In other words, motivation is not just about working harder; it is also about staying with the language for longer.
+
+D Yet this new variety of contact has changed one important thing: languages can become part of a learner's daily routine.
+
+E This does not mean that lessons become less important or that teachers are replaced by apps and videos.
+
+F Some even assume that every native speaker is a reliable model, which is clearly not the case.
+
+G In the past, many schools organised exchange trips abroad at the end of the academic year.
+
+Part 6 — Reviewer view
+
+STORED ANSWER KEY
+
+37
+
+D
+
+38
+
+A
+
+39
+
+C
+
+40
+
+B
+
+41
+
+F
+
+42
+
+E
+
+TEACHER ATTENTION
+
+• No teacher-requested content changes applied. Part 6 remains strong; key sequence D–A–C–B–F–E is retained.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 7 — Multiple matching
+
+Theme: Everyday inventions
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+Which person mentions the following? The people may be chosen more than once.
+
+43 Who came to appreciate an invention only after managing without it for a short period?
+
+44 Who accepts that a useful invention may also reduce a skill people once had?
+
+45 Who believes the true value of an invention is not always the most obvious one?
+
+46 Who chose an invention partly because it still works well without modern digital systems?
+
+47 Who describes changing their opinion after realising how much unnecessary effort had previously been involved?
+
+48 Who warns that one development linked to an invention can make human contact less pleasant?
+
+49 Who says an invention helps by freeing attention for another task?
+
+50 Who values an invention because it had a wider effect on how people organised their lives?
+
+51 Who started using an invention for one reason but continued because of an unexpected benefit?
+
+52 Who suggests that the importance of an invention is often overlooked because it is not especially impressive?
+
+Texts
+
+A – Leila Khan
+
+When people ask which invention changed daily life most, I always say the washing machine. That sounds unexciting beside smartphones or electric cars, yet in my family it made the biggest difference. My grandmother grew up hand-washing everything, and she still talks about winter mornings with cracked hands and endless sheets. Initially, I thought she was exaggerating, but after our machine broke for a week, I understood. What struck me wasn't only the labour involved, but how much time disappeared. Since then, I've seen the appliance differently: not just as a convenience, but as something that quietly gave people, especially women, far more control over their day. However, I dislike how easily we take it for granted. We praise glamorous inventions, while this one transformed ordinary routines without demanding attention.
+
+B – Oliver Grant
+
+For me, the satnav has altered everyday life more than any other device. I work as a furniture maker and spend half my week driving to clients' homes, often in unfamiliar towns. Before I started using one, I relied on printed maps and scribbled directions, which meant arriving stressed or late. At first, I treated satnav instructions as absolute truth, and that was a mistake; once it led me down a farm track that certainly wasn't designed for a van. Even so, I wouldn't give it up. What matters is not that it makes journeys more exciting, but that it removes a layer of mental effort. Meanwhile, I can concentrate on traffic and timing instead of constantly checking road names. Some friends complain it has weakened people's sense of direction, and they may be right, yet I think the trade-off is worth it.
+
+C – Rosa Mendez
+
+The barcode seems too ordinary to deserve much attention, although I think it changed modern life in a remarkable way. I manage a small supermarket, so I see its effect every day. Customers notice the quick beep at the checkout, but they rarely think beyond that. Before our current system, stock checks took ages and mistakes were common. Now we can track what sells, spot problems quickly and order more accurately. Initially, I admired the speed alone; since then, I've come to value the information behind it even more. That said, I do feel uneasy when people assume technology always improves shopping. Self-service tills, for example, can make the experience colder. Still, the barcode itself solved practical problems without pretending to be clever. In my view, its success lies in being almost invisible while supporting an entire chain of everyday decisions.
+
+D – Nathan Reed
+
+If I had to choose one invention, I'd go for the bicycle. That may sound nostalgic in an age of apps and streaming, but I mean the ordinary bike as a tool for everyday freedom. I started cycling to work during a train strike, expecting it to be a temporary solution. Instead, it completely changed my routine. Initially, I noticed the obvious benefits: lower costs, no waiting for delayed services and a chance to avoid crowded carriages. Yet the real surprise was psychological. I arrived feeling more awake and less irritated, even in bad weather. Of course, cycling isn't practical for everyone, and poor road design puts many people off. However, I admire inventions that remain useful without requiring updates, passwords or subscriptions. The bicycle still does exactly what it was designed to do, and for many people that is enough.
+
+Part 7 — Reviewer view
+
+STORED ANSWER KEY
+
+43
+
+A
+
+44
+
+B
+
+45
+
+C
+
+46
+
+D
+
+47
+
+A
+
+48
+
+C
+
+49
+
+B
+
+50
+
+A
+
+51
+
+D
+
+52
+
+C
+
+TEACHER ATTENTION
+
+• No teacher-requested content changes applied. Part 7 remains strong and the stored answer key is retained.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity / multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Final human review — Exam 16
+
+Teacher feedback patch applied: Part 1 Q6 distractor strengthened; Part 2 opening revised; Part 3 Q17 rebuilt; Part 4 Q27 rebuilt within the 2–5 word limit. Parts 5–7 unchanged. Status remains PENDING HUMAN REVIEW.
+
+AREA
+
+REVIEWER DECISION / NOTES
+
+Part 1 decision
+
+
+
+Part 2 decision
+
+
+
+Part 3 decision
+
+
+
+Part 4 decision
+
+
+
+Part 5 decision
+
+
+
+Part 6 decision
+
+
+
+Part 7 decision
+
+
+
+Theme variety across bank
+
+
+
+Overall B2 level
+
+
+
+Overall Cambridge authenticity
+
+
+
+FINAL DECISION
+
+
+
+
+

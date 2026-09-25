@@ -1,0 +1,839 @@
+{
+  "caseId": 1,
+  "source": "scripts\\generated\\b2-exams\\exam-16\\part-01.json",
+  "original": {
+    "sentence": "Although unpaid, this kind of work can have a very ___ effect on job prospects.",
+    "options": [
+      "A) strong",
+      "B) powerful",
+      "C) certain",
+      "D) positive"
+    ],
+    "key": "D) positive"
+  },
+  "previousPhase7Attempts": [
+    [
+      "significant",
+      "influential",
+      "beneficial",
+      "positive"
+    ],
+    [
+      "feeble",
+      "detrimental",
+      "inconsequential",
+      "positive"
+    ]
+  ],
+  "attempts": [
+    {
+      "kind": "original-validation",
+      "options": [
+        "A) strong",
+        "B) powerful",
+        "C) certain",
+        "D) positive"
+      ],
+      "adversary": {
+        "judgements": [
+          {
+            "letter": "A",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "The term 'strong effect' is commonly used to describe a significant impact, making it compatible with the passage's emphasis on the positive outcomes of volunteering."
+          },
+          {
+            "letter": "B",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "The phrase 'powerful effect' conveys a significant influence, aligning well with the passage's assertion about the benefits of volunteering on job prospects."
+          },
+          {
+            "letter": "C",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": false,
+            "reason": "'Certain effect' does not convey a clear impact on job prospects, making it less compatible with the passage's focus on the positive influence of volunteering."
+          },
+          {
+            "letter": "D",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "'Positive effect' directly aligns with the passage's message about the beneficial outcomes of volunteering, making it contextually defensible."
+          }
+        ]
+      },
+      "judgement": {
+        "verdict": "QUALITY_FAIL",
+        "reason": "More than one option is grammatical, natural British English, and semantically defensible (A, B, D). A key that is merely more idiomatic does not save the item.",
+        "candidateAlternative": "A",
+        "repairRecommendation": "Replace the surviving distractor. If the sentence itself allows two natural words, move the gap. Do not keep the item because the key is more idiomatic.",
+        "confidence": "high"
+      }
+    },
+    {
+      "kind": "distractor-repair",
+      "targetLetter": "A",
+      "proposed": {
+        "letter": "A",
+        "word": "significant",
+        "reason": "The term 'significant effect' does not align with the passage's emphasis on the positive outcomes of volunteering, as it suggests a level of importance that may not directly relate to job prospects."
+      },
+      "options": [
+        "A) significant",
+        "B) powerful",
+        "C) certain",
+        "D) positive"
+      ],
+      "adversary": {
+        "judgements": [
+          {
+            "letter": "A",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "The term 'significant effect' aligns with the idea that volunteering can positively influence job prospects."
+          },
+          {
+            "letter": "B",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "The phrase 'powerful effect' suggests a strong influence on job prospects, which is compatible with the passage's claims."
+          },
+          {
+            "letter": "C",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": false,
+            "reason": "'Certain effect' does not convey a clear positive influence on job prospects, making it less compatible with the passage."
+          },
+          {
+            "letter": "D",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "'Positive effect' directly supports the idea that volunteering enhances job prospects, aligning well with the passage."
+          }
+        ]
+      },
+      "judgement": {
+        "verdict": "QUALITY_FAIL",
+        "reason": "More than one option is grammatical, natural British English, and semantically defensible (A, B, D). A key that is merely more idiomatic does not save the item.",
+        "candidateAlternative": "A",
+        "repairRecommendation": "Replace the surviving distractor. If the sentence itself allows two natural words, move the gap. Do not keep the item because the key is more idiomatic.",
+        "confidence": "high"
+      }
+    },
+    {
+      "kind": "distractor-repair",
+      "targetLetter": "A",
+      "proposed": {
+        "letter": "A",
+        "word": "negative",
+        "reason": "The term 'negative effect' contradicts the passage's assertion that volunteering has a beneficial impact on job prospects."
+      },
+      "options": [
+        "A) negative",
+        "B) powerful",
+        "C) certain",
+        "D) positive"
+      ],
+      "adversary": {
+        "judgements": [
+          {
+            "letter": "A",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": false,
+            "reason": "The passage discusses the positive impact of volunteer work on job prospects, making a negative effect incompatible with the claims made."
+          },
+          {
+            "letter": "B",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "A powerful effect aligns with the passage's emphasis on the significant benefits of volunteering for job prospects."
+          },
+          {
+            "letter": "C",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": false,
+            "reason": "The term 'certain' does not convey the strong positive impact implied in the passage regarding job prospects."
+          },
+          {
+            "letter": "D",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "A positive effect is directly supported by the passage, which highlights the benefits of volunteering on job prospects."
+          }
+        ]
+      },
+      "judgement": {
+        "verdict": "QUALITY_FAIL",
+        "reason": "More than one option is grammatical, natural British English, and semantically defensible (B, D). A key that is merely more idiomatic does not save the item.",
+        "candidateAlternative": "B",
+        "repairRecommendation": "Replace the surviving distractor. If the sentence itself allows two natural words, move the gap. Do not keep the item because the key is more idiomatic.",
+        "confidence": "high"
+      }
+    },
+    {
+      "kind": "distractor-repair",
+      "targetLetter": "B",
+      "proposed": {
+        "letter": "B",
+        "word": "weak",
+        "reason": "The term 'weak' contradicts the passage's emphasis on the positive impact of volunteer work on job prospects, making it contextually indefensible."
+      },
+      "options": [
+        "A) negative",
+        "B) weak",
+        "C) certain",
+        "D) positive"
+      ],
+      "adversary": {
+        "judgements": [
+          {
+            "letter": "A",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": false,
+            "reason": "The passage discusses the positive impact of volunteering on job prospects, making a negative effect incompatible with the claims made."
+          },
+          {
+            "letter": "B",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": false,
+            "reason": "The passage implies that volunteering has a significant positive impact, thus a weak effect contradicts this."
+          },
+          {
+            "letter": "C",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": false,
+            "reason": "The passage suggests a clear positive outcome from volunteering, making a certain effect ambiguous and not aligned with the context."
+          },
+          {
+            "letter": "D",
+            "grammatical": true,
+            "naturalBritishEnglish": true,
+            "semanticallyDefensible": true,
+            "collocationallyValid": true,
+            "contextuallyDefensible": true,
+            "reason": "The passage supports the idea that volunteering has a positive effect on job prospects, making this option compatible with the claims made."
+          }
+        ]
+      },
+      "judgement": {
+        "verdict": "PASS",
+        "reason": "Only D survives independent substitution.",
+        "candidateAlternative": null,
+        "repairRecommendation": "None.",
+        "confidence": "high"
+      }
+    }
+  ],
+  "finalOptions": [
+    "A) negative",
+    "B) weak",
+    "C) certain",
+    "D) positive"
+  ],
+  "blindSolve": {
+    "answer": "D",
+    "reason": "The context suggests that volunteer work has a beneficial impact on job prospects, indicating a positive effect."
+  },
+  "repairResult": {
+    "status": "PASS",
+    "originalExam": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) make",
+          "B) do",
+          "C) gain",
+          "D) win"
+        ],
+        "answer": "C",
+        "explanation": "The natural collocation is \"gain experience\"."
+      },
+      "title": "Volunteering and Your Future",
+      "passage": "Many students take part in volunteer projects because they want to help others, but they may also (0) ___ valuable experience at the same time. Employers often look for people who have shown they can work in a team, solve problems and deal (1) ___ unfamiliar situations. Volunteering offers the (2) ___ to develop these qualities in real life rather than simply reading about them in a textbook.\n\nFor example, someone helping at a local charity shop might be asked to (3) ___ responsibility for training new volunteers. This not only builds confidence, but also shows future employers that the person can be relied on. In addition, volunteer work can (4) ___ to useful contacts, especially if the organisation works closely with businesses or public services. Some young people even find that volunteering helps them (5) ___ up their minds about which career to follow.\n\nAlthough unpaid, this kind of work can have a very (6) ___ effect on job prospects. It proves that applicants are willing to make an effort, and that they (7) ___ initiative instead of waiting for others to tell them what to do. As a result, their CVs often (8) ___ out from the crowd.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) with",
+            "B) by",
+            "C) for",
+            "D) to"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) occasion",
+            "B) possibility",
+            "C) opportunity",
+            "D) probability"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) bring",
+            "B) take",
+            "C) hold",
+            "D) carry"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) reach",
+            "B) move",
+            "C) connect",
+            "D) lead"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) decide",
+            "B) make",
+            "C) think",
+            "D) set"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) strong",
+            "B) powerful",
+            "C) certain",
+            "D) positive"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) create",
+            "B) give",
+            "C) show",
+            "D) put"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) stand",
+            "B) come",
+            "C) point",
+            "D) break"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "C",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "D",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "A",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-16-part-1",
+      "version": "pre-teacher-patch-2026-08-31T22:12:31.044Z"
+    },
+    "candidateExam": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) make",
+          "B) do",
+          "C) gain",
+          "D) win"
+        ],
+        "answer": "C",
+        "explanation": "The natural collocation is \"gain experience\"."
+      },
+      "title": "Volunteering and Your Future",
+      "passage": "Many students take part in volunteer projects because they want to help others, but they may also (0) ___ valuable experience at the same time. Employers often look for people who have shown they can work in a team, solve problems and deal (1) ___ unfamiliar situations. Volunteering offers the (2) ___ to develop these qualities in real life rather than simply reading about them in a textbook.\n\nFor example, someone helping at a local charity shop might be asked to (3) ___ responsibility for training new volunteers. This not only builds confidence, but also shows future employers that the person can be relied on. In addition, volunteer work can (4) ___ to useful contacts, especially if the organisation works closely with businesses or public services. Some young people even find that volunteering helps them (5) ___ up their minds about which career to follow.\n\nAlthough unpaid, this kind of work can have a very (6) ___ effect on job prospects. It proves that applicants are willing to make an effort, and that they (7) ___ initiative instead of waiting for others to tell them what to do. As a result, their CVs often (8) ___ out from the crowd.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) with",
+            "B) by",
+            "C) for",
+            "D) to"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) occasion",
+            "B) possibility",
+            "C) opportunity",
+            "D) probability"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) bring",
+            "B) take",
+            "C) hold",
+            "D) carry"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) reach",
+            "B) move",
+            "C) connect",
+            "D) lead"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) decide",
+            "B) make",
+            "C) think",
+            "D) set"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) negative",
+            "B) weak",
+            "C) certain",
+            "D) positive"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) create",
+            "B) give",
+            "C) show",
+            "D) put"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) stand",
+            "B) come",
+            "C) point",
+            "D) break"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "C",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "D",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "A",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-16-part-1",
+      "version": "exam-16-part-1-v2-phase8-case-1",
+      "derivedFromVersion": "pre-teacher-patch-2026-08-31T22:12:31.044Z"
+    },
+    "acceptedExam": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) make",
+          "B) do",
+          "C) gain",
+          "D) win"
+        ],
+        "answer": "C",
+        "explanation": "The natural collocation is \"gain experience\"."
+      },
+      "title": "Volunteering and Your Future",
+      "passage": "Many students take part in volunteer projects because they want to help others, but they may also (0) ___ valuable experience at the same time. Employers often look for people who have shown they can work in a team, solve problems and deal (1) ___ unfamiliar situations. Volunteering offers the (2) ___ to develop these qualities in real life rather than simply reading about them in a textbook.\n\nFor example, someone helping at a local charity shop might be asked to (3) ___ responsibility for training new volunteers. This not only builds confidence, but also shows future employers that the person can be relied on. In addition, volunteer work can (4) ___ to useful contacts, especially if the organisation works closely with businesses or public services. Some young people even find that volunteering helps them (5) ___ up their minds about which career to follow.\n\nAlthough unpaid, this kind of work can have a very (6) ___ effect on job prospects. It proves that applicants are willing to make an effort, and that they (7) ___ initiative instead of waiting for others to tell them what to do. As a result, their CVs often (8) ___ out from the crowd.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) with",
+            "B) by",
+            "C) for",
+            "D) to"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) occasion",
+            "B) possibility",
+            "C) opportunity",
+            "D) probability"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) bring",
+            "B) take",
+            "C) hold",
+            "D) carry"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) reach",
+            "B) move",
+            "C) connect",
+            "D) lead"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) decide",
+            "B) make",
+            "C) think",
+            "D) set"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) negative",
+            "B) weak",
+            "C) certain",
+            "D) positive"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) create",
+            "B) give",
+            "C) show",
+            "D) put"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) stand",
+            "B) come",
+            "C) point",
+            "D) break"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "C",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "D",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "A",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-16-part-1",
+      "version": "exam-16-part-1-v2-phase8-case-1",
+      "derivedFromVersion": "pre-teacher-patch-2026-08-31T22:12:31.044Z"
+    },
+    "changeRecord": {
+      "examId": "exam-16",
+      "sourceVersion": "pre-teacher-patch-2026-08-31T22:12:31.044Z",
+      "newVersion": "exam-16-part-1-v2-phase8-case-1",
+      "part": 1,
+      "question": 6,
+      "originalContent": {
+        "id": "q6",
+        "number": 6,
+        "type": "mcq",
+        "options": [
+          "A) strong",
+          "B) powerful",
+          "C) certain",
+          "D) positive"
+        ]
+      },
+      "teacherFeedback": "strong is another natural and defensible option; the distractor set is ambiguous.",
+      "repairClassification": "DISTRACTOR_ONLY_FIX",
+      "revisedContent": {
+        "id": "q6",
+        "number": 6,
+        "type": "mcq",
+        "options": [
+          "A) negative",
+          "B) weak",
+          "C) certain",
+          "D) positive"
+        ]
+      },
+      "originalAnswer": "D",
+      "revisedAnswer": null,
+      "localPassageEdit": null,
+      "reasonForChange": "Part 1 ambiguity should be repaired at distractor level first.",
+      "validatorsRun": [
+        {
+          "verdict": "PASS",
+          "reason": "All four option words are distinct."
+        },
+        {
+          "verdict": "PASS",
+          "reason": "Only D survives independent substitution.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high"
+        },
+        {
+          "verdict": "PASS",
+          "reason": "Blind solver selected D."
+        },
+        {
+          "verdict": "PASS",
+          "reason": "Adversarial A-D substitution found exactly one survivor."
+        }
+      ],
+      "finalStatus": "PASS"
+    }
+  },
+  "preservation": {
+    "unchangedQuestions": true
+  },
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "savedAt": "2026-09-22T15:49:36.558Z"
+}

@@ -1,0 +1,608 @@
+{
+  "caseId": 5,
+  "source": "scripts\\generated\\b2-exams\\exam-11\\part-03.json",
+  "original": {
+    "sentence": "However, experts warn that progress is not always (22) ___ (EQUAL) across a city.",
+    "stem": "EQUAL",
+    "answer": "unequal"
+  },
+  "historicalPatch": {
+    "answer": "equal",
+    "classification": "INVALID UNDER CURRENT RULES"
+  },
+  "scope": "SENTENCE_LOCAL_CONTEXT_FIX",
+  "proposal": {
+    "originalSentence": "However, experts warn that progress is not always (22) ___ (EQUAL) across a city.",
+    "revisedSentence": "However, experts warn that progress can be (22) ___ (EQUAL) across a city.",
+    "stem": "EQUAL",
+    "answer": "unequal",
+    "transformationFamily": "prefix",
+    "reason": "The revision clarifies that progress can vary, aligning with the context of inequality described in the following sentence."
+  },
+  "blindSolve": {
+    "answer": "unequal",
+    "reason": "The word 'unequal' is formed by adding the prefix 'un-' to the base 'equal', indicating a lack of equality in progress across a city."
+  },
+  "adversarialValidation": {
+    "natural": true,
+    "forcedContext": false,
+    "alternativeFamilyMembers": [],
+    "lexicalFamilyValidation": {
+      "sameLexicalFamily": true,
+      "extraLexicalRootIntroduced": false,
+      "directDerivation": true,
+      "legitimateBase": true,
+      "reason": "The candidate answer 'unequal' is a direct derivation from the base 'EQUAL', maintaining the same lexical family and appropriately fitting the context of the sentence."
+    }
+  },
+  "repairResult": {
+    "status": "PASS",
+    "originalExam": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "COLOUR",
+        "answer": "colourful",
+        "transformationFamily": "adjective"
+      },
+      "title": "A greener future for cities",
+      "passage": "For many people, a truly green city is not only full of parks and trees, but also a more (0) ___ (COLOUR) and pleasant place to live. In recent years, city planners have shown growing (17) ___ (AWARE) of the need to design streets that are healthier for both people and wildlife. One (18) ___ (EFFECT) solution has been to replace areas of concrete with plants that absorb rainwater and cool the air.\n\nThese changes can bring real (19) ___ (IMPROVE) to daily life. Green roofs, for example, reduce noise and offer a home to insects and birds. In some places, local councils have even turned car parks into small community gardens, encouraging residents to become actively (20) ___ (INVOLVE) in their neighbourhoods. This kind of (21) ___ (PARTICIPATE) often leads to stronger communities.\n\nHowever, experts warn that progress is not always (22) ___ (EQUAL) across a city. Poorer areas may receive less investment, which is deeply (23) ___ (FAIR). To create lasting change, leaders must plan carefully and act (24) ___ (RESPONSIBLE), ensuring that everyone benefits from a greener urban environment.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "AWARE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EFFECT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "IMPROVE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "INVOLVE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "PARTICIPATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EQUAL",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "FAIR",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "RESPONSIBLE",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "awareness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "effective",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "improvements",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "involved",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "participation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "unequal",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "unfair",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "responsibly",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-11-part-3",
+      "version": "pre-teacher-patch-2026-08-31T21:08:52.079Z"
+    },
+    "candidateExam": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "COLOUR",
+        "answer": "colourful",
+        "transformationFamily": "adjective"
+      },
+      "title": "A greener future for cities",
+      "passage": "For many people, a truly green city is not only full of parks and trees, but also a more (0) ___ (COLOUR) and pleasant place to live. In recent years, city planners have shown growing (17) ___ (AWARE) of the need to design streets that are healthier for both people and wildlife. One (18) ___ (EFFECT) solution has been to replace areas of concrete with plants that absorb rainwater and cool the air.\n\nThese changes can bring real (19) ___ (IMPROVE) to daily life. Green roofs, for example, reduce noise and offer a home to insects and birds. In some places, local councils have even turned car parks into small community gardens, encouraging residents to become actively (20) ___ (INVOLVE) in their neighbourhoods. This kind of (21) ___ (PARTICIPATE) often leads to stronger communities.\n\nHowever, experts warn that progress can be (22) ___ (EQUAL) across a city. Poorer areas may receive less investment, which is deeply (23) ___ (FAIR). To create lasting change, leaders must plan carefully and act (24) ___ (RESPONSIBLE), ensuring that everyone benefits from a greener urban environment.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "AWARE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EFFECT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "IMPROVE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "INVOLVE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "PARTICIPATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EQUAL",
+          "transformationFamily": "prefix",
+          "answer": "unequal"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "FAIR",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "RESPONSIBLE",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "awareness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "effective",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "improvements",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "involved",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "participation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "unequal",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "unfair",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "responsibly",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-11-part-3",
+      "version": "exam-11-part-3-v2-phase9-case-5",
+      "derivedFromVersion": "pre-teacher-patch-2026-08-31T21:08:52.079Z"
+    },
+    "acceptedExam": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "COLOUR",
+        "answer": "colourful",
+        "transformationFamily": "adjective"
+      },
+      "title": "A greener future for cities",
+      "passage": "For many people, a truly green city is not only full of parks and trees, but also a more (0) ___ (COLOUR) and pleasant place to live. In recent years, city planners have shown growing (17) ___ (AWARE) of the need to design streets that are healthier for both people and wildlife. One (18) ___ (EFFECT) solution has been to replace areas of concrete with plants that absorb rainwater and cool the air.\n\nThese changes can bring real (19) ___ (IMPROVE) to daily life. Green roofs, for example, reduce noise and offer a home to insects and birds. In some places, local councils have even turned car parks into small community gardens, encouraging residents to become actively (20) ___ (INVOLVE) in their neighbourhoods. This kind of (21) ___ (PARTICIPATE) often leads to stronger communities.\n\nHowever, experts warn that progress can be (22) ___ (EQUAL) across a city. Poorer areas may receive less investment, which is deeply (23) ___ (FAIR). To create lasting change, leaders must plan carefully and act (24) ___ (RESPONSIBLE), ensuring that everyone benefits from a greener urban environment.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "AWARE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EFFECT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "IMPROVE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "INVOLVE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "PARTICIPATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EQUAL",
+          "transformationFamily": "prefix",
+          "answer": "unequal"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "FAIR",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "RESPONSIBLE",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "awareness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "effective",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "improvements",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "involved",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "participation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "unequal",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "unfair",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "responsibly",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-11-part-3",
+      "version": "exam-11-part-3-v2-phase9-case-5",
+      "derivedFromVersion": "pre-teacher-patch-2026-08-31T21:08:52.079Z"
+    },
+    "changeRecord": {
+      "examId": "exam-11",
+      "sourceVersion": "pre-teacher-patch-2026-08-31T21:08:52.079Z",
+      "newVersion": "exam-11-part-3-v2-phase9-case-5",
+      "part": 3,
+      "question": 22,
+      "originalContent": {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "EQUAL",
+        "transformationFamily": "prefix"
+      },
+      "teacherFeedback": "The stored answer contradicts the sentence because the local negative framing reverses the intended inequality.",
+      "repairClassification": "SENTENCE_LOCAL_CONTEXT_FIX",
+      "revisedContent": {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "EQUAL",
+        "transformationFamily": "prefix",
+        "answer": "unequal"
+      },
+      "originalAnswer": "unequal",
+      "revisedAnswer": "unequal",
+      "localPassageEdit": {
+        "original": "However, experts warn that progress is not always (22) ___ (EQUAL) across a city.",
+        "revised": "However, experts warn that progress can be (22) ___ (EQUAL) across a city."
+      },
+      "reasonForChange": "Use the smallest sentence/local-context repair unless stronger scope is explicit.",
+      "validatorsRun": [
+        {
+          "verdict": "PASS",
+          "reason": "One local sentence changed; marker, base, and answer identity were preserved."
+        },
+        {
+          "verdict": "PASS",
+          "reason": "\"unequal\" is a direct, unique derivation of \"equal\" in a natural sentence.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "equal",
+            "answer": "unequal",
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "artificialBase": false,
+            "reason": "The candidate answer 'unequal' is a direct derivation from the base 'EQUAL', maintaining the same lexical family and appropriately fitting the context of the sentence.",
+            "validationSource": "linguistic-family-judgement"
+          }
+        },
+        {
+          "verdict": "PASS",
+          "reason": "Blind solver independently supplied unequal."
+        },
+        {
+          "verdict": "PASS",
+          "reason": "Adversarial lexical-family and contextual-uniqueness checks found no defect."
+        }
+      ],
+      "finalStatus": "PASS"
+    }
+  },
+  "preservation": {
+    "unchangedQuestions": true,
+    "unchangedAnswers": true
+  },
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "usage": {
+    "promptTokens": 656,
+    "completionTokens": 254,
+    "totalTokens": 910
+  },
+  "calls": [
+    {
+      "role": "generator",
+      "stage": "case-5-local-context-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 439,
+        "completion_tokens": 107,
+        "total_tokens": 546,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "output": {
+        "originalSentence": "However, experts warn that progress is not always (22) ___ (EQUAL) across a city.",
+        "revisedSentence": "However, experts warn that progress can be (22) ___ (EQUAL) across a city.",
+        "stem": "EQUAL",
+        "answer": "unequal",
+        "transformationFamily": "prefix",
+        "reason": "The revision clarifies that progress can vary, aligning with the context of inequality described in the following sentence."
+      }
+    },
+    {
+      "role": "blindSolver",
+      "stage": "case-5-blind",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 84,
+        "completion_tokens": 41,
+        "total_tokens": 125,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "output": {
+        "answer": "unequal",
+        "reason": "The word 'unequal' is formed by adding the prefix 'un-' to the base 'equal', indicating a lack of equality in progress across a city."
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "case-5-adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 133,
+        "completion_tokens": 106,
+        "total_tokens": 239,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "output": {
+        "natural": true,
+        "forcedContext": false,
+        "alternativeFamilyMembers": [],
+        "lexicalFamilyValidation": {
+          "sameLexicalFamily": true,
+          "extraLexicalRootIntroduced": false,
+          "directDerivation": true,
+          "legitimateBase": true,
+          "reason": "The candidate answer 'unequal' is a direct derivation from the base 'EQUAL', maintaining the same lexical family and appropriately fitting the context of the sentence."
+        }
+      }
+    }
+  ],
+  "savedAt": "2026-09-22T17:52:08.615Z"
+}

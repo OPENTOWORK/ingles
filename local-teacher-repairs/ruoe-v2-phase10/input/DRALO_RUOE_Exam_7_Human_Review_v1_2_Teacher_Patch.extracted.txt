@@ -1,0 +1,946 @@
+DRALO
+
+RUOE EXAM 7
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.2 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+Version
+
+v1.2 — teacher-feedback patch applied locally; unaffected content preserved
+
+Source
+
+ENGLISH_PROD · Exam 7 B2
+
+Student view
+
+Patched review copy; only teacher-requested changes applied
+
+Reviewer focus
+
+Natural British English · B2 difficulty · Cambridge authenticity · key quality
+
+Important
+
+Preliminary flags are not final teacher decisions.
+
+Theme map
+
+Exam 11 covers language learning, everyday inventions, greener cities, workplace culture, future human skills, minimalism and the return to reading. Several themes overlap with earlier bank exams, so the reviewer should also assess topic repetition at bank level.
+
+PART 1
+
+Theme: Language learning beyond the classroom
+
+VISTA ALUMNO
+
+Example:
+
+A) say
+
+B) tell
+
+C) learn
+
+D) train
+
+Answer: C
+
+Text
+
+Beyond the classroom
+
+Many people start to (0) ___ a language in lessons, but real progress often happens outside the classroom. In recent years, learners have had easier (1) ___ to films, podcasts and online communities in other languages. As a result, they can hear how people really speak and pick (2) ___ useful expressions that do not always appear in textbooks.
+
+However, simply watching videos is not enough. Experts point (3) ___ that students improve faster when they actively use new words. One effective habit is keeping a small notebook and writing down phrases in (4) ___, rather than single words on their own. Another is to set clear goals, such as following one social-media account each week or sending short messages to a language partner.
+
+This kind of regular contact can also build (5) ___. Learners become less afraid of making mistakes and more willing to (6) ___ part in conversations. Over time, they begin to (7) ___ patterns for themselves instead of waiting for a teacher to explain everything. In that (8) ___, learning becomes part of everyday life.
+
+Questions
+
+1
+
+A access
+
+B approach
+
+C entrance
+
+D admission
+
+2
+
+A out
+
+B on
+
+C up
+
+D over
+
+3
+
+A up
+
+B out
+
+C off
+
+D over
+
+4
+
+A detail
+
+B brief
+
+C company
+
+D context
+
+5
+
+A confidence
+
+B courage
+
+C trust
+
+D spirit
+
+6
+
+A make
+
+B do
+
+C put
+
+D take
+
+7
+
+A watch
+
+B notice
+
+C regard
+
+D stare
+
+8
+
+A route
+
+B manner
+
+C way
+
+D method
+
+Reviewer view
+
+Stored answer key
+
+Q
+
+Stored key
+
+Q
+
+Stored key
+
+1
+
+A access
+
+5
+
+A confidence
+
+2
+
+C up
+
+6
+
+D take
+
+3
+
+B out
+
+7
+
+B notice
+
+4
+
+D context
+
+8
+
+C way
+
+Reviewer notes
+
+Review field
+
+Notes
+
+Natural British English
+
+Check wording, collocation and register.
+
+B2 level / difficulty
+
+Check realistic B2 challenge and discrimination.
+
+Exam authenticity
+
+Check Cambridge-style mechanics and task feel.
+
+Distractor / key quality
+
+Confirm one defensible key and plausible wrong options.
+
+Ambiguity / multiple answers
+
+Check for alternative answers or unintended readings.
+
+Suggested change
+
+Record the final teacher-approved edit, if any.
+
+TEACHER ATTENTION
+
+• Teacher review found no required Part 1 changes. Student content and stored key remain unchanged.
+
+PART 2
+
+Theme: Everyday inventions
+
+VISTA ALUMNO
+
+Example:
+
+Answer: 0 → of
+
+Text
+
+Small Objects, Big Changes
+
+Many inventions are famous because (0) ___ their advanced technology, but some changed daily life through simple ideas. Take the zip fastener, for example. Before it became common, people had to spend far longer doing (9) ___ their clothes. The zip was not perfect at first, and manufacturers were slow to trust it. However, once it proved reliable, it spread quickly from boots to jackets and bags.
+
+Another overlooked invention is the ballpoint pen. Earlier pens needed constant attention and were likely to leak, which meant users had to write carefully if they did not want ink (10) ___ stain their work. The new design solved this problem so effectively (11) ___ it soon became a classroom essential.
+
+A similar story can be told about the electric kettle. Not only does it save time, but it also uses no more water (12) ___ necessary. As a result, people can make hot drinks more efficiently, without having to wait (13) ___ long. Such inventions may seem ordinary now, yet modern routines would be hard to imagine (14) ___ them. We rely on them so completely that we rarely stop to think about (15) ___ much effort they have saved us, or (16) ___ life was like before they existed.
+
+Reviewer view
+
+Stored answer key
+
+Q
+
+Stored key
+
+Q
+
+Stored key
+
+9
+
+up
+
+13
+
+as
+
+10
+
+to
+
+14
+
+without
+
+11
+
+that
+
+15
+
+how
+
+12
+
+than
+
+16
+
+what
+
+Reviewer notes
+
+Review field
+
+Notes
+
+Natural British English
+
+Check wording, collocation and register.
+
+B2 level / difficulty
+
+Check realistic B2 challenge and discrimination.
+
+Exam authenticity
+
+Check Cambridge-style mechanics and task feel.
+
+Distractor / key quality
+
+Confirm one defensible key and plausible wrong options.
+
+Ambiguity / multiple answers
+
+Check for alternative answers or unintended readings.
+
+Suggested change
+
+Record the final teacher-approved edit, if any.
+
+TEACHER ATTENTION
+
+• Q13 has been locally rewritten so the answer is AS ('without having to wait as long'), removing the repeated TO while preserving the paragraph's meaning and B2 level.
+
+PART 3
+
+Theme: Greener cities and urban design
+
+VISTA ALUMNO
+
+Example:
+
+(0) ___ (COLOUR)
+
+Answer: 0 → colourful
+
+Text
+
+A greener future for cities
+
+For many people, a truly green city is not only full of parks and trees, but also a more (0) ___ (COLOUR) and pleasant place to live. In recent years, city planners have shown growing (17) ___ (AWARE) of the need to design streets that are healthier for both people and wildlife. One (18) ___ (EFFECT) solution has been to replace areas of concrete with plants that absorb rainwater and cool the air.
+
+These changes can bring several noticeable (19) ___ (IMPROVE) to daily life. Green roofs, for example, reduce noise and offer a home to insects and birds. In some places, local councils have even turned car parks into small community gardens, encouraging residents to become actively (20) ___ (INVOLVE) in their neighbourhoods. This kind of (21) ___ (PARTICIPATE) often leads to stronger communities.
+
+However, experts warn that progress is not always (22) ___ (EQUAL) across a city. Poorer areas may receive less investment, which is deeply (23) ___ (FAIR). To create lasting change, leaders must plan carefully and act (24) ___ (RESPONSIBLE), ensuring that everyone benefits from a greener urban environment.
+
+Reviewer view
+
+Stored answer key
+
+Q
+
+Stored key
+
+Q
+
+Stored key
+
+17
+
+awareness
+
+21
+
+participation
+
+18
+
+effective
+
+22
+
+equal
+
+19
+
+improvements
+
+23
+
+unfair
+
+20
+
+involved
+
+24
+
+responsibly
+
+Reviewer notes
+
+Review field
+
+Notes
+
+Natural British English
+
+Check wording, collocation and register.
+
+B2 level / difficulty
+
+Check realistic B2 challenge and discrimination.
+
+Exam authenticity
+
+Check Cambridge-style mechanics and task feel.
+
+Distractor / key quality
+
+Confirm one defensible key and plausible wrong options.
+
+Ambiguity / multiple answers
+
+Check for alternative answers or unintended readings.
+
+Suggested change
+
+Record the final teacher-approved edit, if any.
+
+TEACHER ATTENTION
+
+• Q22 BLOCKING ISSUE corrected in this review copy: the answer is EQUAL, giving 'progress is not always equal across a city', which matches the contrast developed in the following sentence.
+
+• Q19 has been strengthened with 'several noticeable ___', which now requires the plural answer IMPROVEMENTS and removes the singular alternative.
+
+PART 4
+
+Theme: Workplace culture and boundaries
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+
+0. It is impossible for everyone in the office to agree about the perfect working environment.
+
+LIKELY
+
+Not everyone in the office __________________ about the perfect working environment.
+
+Answer: 0 → is likely to agree
+
+Questions
+
+25. The company started using flexible working arrangements three years ago and still uses them today.
+
+BEEN
+
+The company __________________ flexible working arrangements for three years.
+
+26. The company does not allow employees to check work emails after 7 p.m.
+
+ALLOWED
+
+Employees __________________ work emails after 7 p.m.
+
+27. This office is more relaxed than the one I worked in before.
+
+AS
+
+The office I worked in before __________________ this one.
+
+28. I regret not asking my team for feedback sooner.
+
+WISH
+
+I __________________ my team for feedback sooner.
+
+29. It wasn't necessary for Priya to stay late to finish the report.
+
+NEED
+
+Priya __________________ late to finish the report.
+
+30. People say that regular praise from managers keeps employees motivated.
+
+SAID
+
+Regular praise from managers __________________ employees motivated.
+
+Reviewer view
+
+Stored answer key
+
+Q
+
+Stored key
+
+Q
+
+Stored key
+
+25
+
+has been using
+
+28
+
+wish I had asked
+
+26
+
+are not allowed to check
+
+29
+
+did not need to stay
+
+27
+
+was not as relaxed as
+
+30
+
+is said to keep
+
+Reviewer notes
+
+Review field
+
+Notes
+
+Natural British English
+
+Check wording, collocation and register.
+
+B2 level / difficulty
+
+Check realistic B2 challenge and discrimination.
+
+Exam authenticity
+
+Check Cambridge-style mechanics and task feel.
+
+Distractor / key quality
+
+Confirm one defensible key and plausible wrong options.
+
+Ambiguity / multiple answers
+
+Check for alternative answers or unintended readings.
+
+Suggested change
+
+Record the final teacher-approved edit, if any.
+
+TEACHER ATTENTION
+
+• Q25 has been reconstructed to make BEEN necessary and preserve meaning exactly: 'has been using' expresses an action that started three years ago and continues now.
+
+PART 5
+
+Theme: Human skills and future work
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+The Human Skills That Still Matter
+
+For years, people discussing future careers have focused on technical ability. Schools have promoted coding, companies have searched for data experts, and young people have been told that the safest path is to learn whatever machines cannot yet do. There is truth in that advice, but it leaves out an important point. In many workplaces, digital systems are no longer special tools used by a few experts; they are becoming part of everyday life. As a result, employers are paying at least as much attention to the skills that help people work with change, with information and with one another.
+
+This does not mean that specialist knowledge has lost its value. A hospital still needs trained doctors, and a design firm still needs people who understand materials and production. Yet many managers now say that what separates strong employees from average ones is not simply what they know on the day they are hired. It is how quickly they can learn, unlearn and relearn. In industries where software is updated every few months, being confident enough to ask questions and adapt may matter more than having mastered one system that could soon disappear.
+
+One skill that appears again and again in reports about future work is communication. This is sometimes misunderstood as meaning the ability to give polished presentations. In fact, employers are often thinking of something less dramatic and more useful: explaining ideas clearly, listening carefully, and adjusting your message for different audiences. A software engineer might need to describe a technical problem to a customer with no technical background. A scientist may have to persuade a local community that a project will benefit them. In both cases, success depends not on speaking more, but on making sure the other person understands.
+
+Another ability that is rising in importance is judgement. Modern workers can reach huge amounts of information in seconds, and artificial intelligence can now produce summaries, plans and even images almost instantly. But fast access is not the same as wise use. People still need to decide whether a source is reliable, whether a suggestion fits the situation, and whether the result is fair. This is especially important in jobs that affect others directly, such as recruitment, education and healthcare. In these areas, a poor decision made at speed can create problems that take far longer to put right.
+
+Teamwork is also changing. In the past, collaboration often meant sitting in the same room. Now it may involve colleagues spread across time zones, cultures and working styles. That creates opportunities, but it also increases the chance of misunderstanding. The most effective workers are therefore not simply friendly people who enjoy group tasks. They are people who can disagree without creating conflict, share responsibility fairly and keep a project moving when no one person is fully in control. These habits are harder to measure than exam results, but they shape whether work gets done well.
+
+Some people worry that these so-called human skills are too vague to teach. However, they can be developed if education and training treat them as real abilities rather than personal qualities you either have or you do not. Students can practise giving feedback, solving open-ended problems and reflecting on mistakes. Early career employees can learn to lead small tasks before managing larger ones. The point is not that everyone must become endlessly flexible and cheerful. It is that future careers are likely to reward people who can combine practical knowledge with the maturity to use it well.
+
+So the jobs of tomorrow may not belong only to those with the most advanced technical training. They may go to people who can keep learning, make sensible decisions and build trust with others while technology continues to change around them. In a labour market full of uncertainty, those abilities may turn out to be the most reliable expertise of all.
+
+Questions
+
+31. Which development does the writer identify in the first two paragraphs? A. Employers are beginning to value general flexibility more than specialist knowledge. B. Employers increasingly value people who can keep adapting while still using job-specific expertise. C. Technical expertise now matters mainly in professions such as medicine and design. D. Frequent software changes have made formal training less useful than workplace experience.
+
+32. According to the writer, what do employers usually mean when they talk about communication skills? A. being able to explain and adjust ideas so that other people can follow them B. being confident enough to speak in front of large groups without notes C. knowing how to use specialist language accurately in formal situations D. being prepared to speak frequently in meetings and discussions
+
+33. Why does the writer mention recruitment, education and healthcare in paragraph four? A. to show that artificial intelligence is already more common in some sectors than others B. to suggest that workers in those fields need stronger technical training than most C. to illustrate situations where poor judgement can have serious consequences D. to argue that access to information is less useful in people-focused professions
+
+34. What is the writer's attitude towards teamwork in modern workplaces? A. It has become simpler because digital tools remove most causes of disagreement. B. It is less important now because many workers complete tasks independently. C. It is basically the same as before, even if teams are in different places. D. It demands more subtle skills than people sometimes recognise.
+
+35. What is the purpose of paragraph six? A. to warn companies not to expect too much from inexperienced staff B. to explain how human skills can be trained rather than treated as fixed traits C. to show that schools are already preparing students perfectly for future work D. to argue that positive attitudes matter more than practical knowledge
+
+36. Which statement best summarises the writer's conclusion? A. The most secure careers will belong to workers who specialise in a single system. B. Future success will depend mainly on avoiding uncertainty in the labour market. C. Lasting career value is likely to come from combining knowledge with adaptable human judgement. D. Human abilities will matter only until technology becomes advanced enough to replace them.
+
+Reviewer view
+
+Stored answer key
+
+Q
+
+Stored key
+
+Q
+
+Stored key
+
+31
+
+B
+
+34
+
+D
+
+32
+
+A
+
+35
+
+B
+
+33
+
+C
+
+36
+
+C
+
+Reviewer notes
+
+Review field
+
+Notes
+
+Natural British English
+
+Check wording, collocation and register.
+
+B2 level / difficulty
+
+Check realistic B2 challenge and discrimination.
+
+Exam authenticity
+
+Check Cambridge-style mechanics and task feel.
+
+Distractor / key quality
+
+Confirm one defensible key and plausible wrong options.
+
+Ambiguity / multiple answers
+
+Check for alternative answers or unintended readings.
+
+Suggested change
+
+Record the final teacher-approved edit, if any.
+
+TEACHER ATTENTION
+
+• Part 5 remains valid. Q31 has been made slightly more demanding by strengthening the distractors while preserving B as the key; Q35 remains unchanged.
+
+PART 6
+
+Theme: Minimalism and possessions
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+The Less-You-Own Experiment
+
+A few years ago, designer and podcast host Mia Turner realised that most of the things in her flat were not making life easier. She spent weekends moving piles of clothes to reach the wardrobe behind them, and kitchen drawers were so full that she avoided opening them. She was not trying to become a different person overnight; she simply wanted her home to feel calmer. (37) What surprised her most was not what disappeared, but how quickly daily routines became simpler once there was less to manage.
+
+For many people, the idea of owning less is still linked to a rather severe image: white walls, one chair and a life free from personality. In practice, though, most people who reduce their belongings do not aim for emptiness. They are deciding what deserves space and attention. (38) A guitar that is played every evening, for example, earns its place far more clearly than a bread maker used once in three years.
+
+Part of the appeal lies in the way possessions quietly demand our time. Every object must be cleaned, stored, repaired, charged, updated or eventually thrown away. Even gifts received with affection can become another decision to make. (39) Researchers who study consumer behaviour often point out that people do not only buy things; they also buy future responsibilities, though few notice that in the moment.
+
+Social pressure, however, makes it difficult to step back. Shops and online adverts constantly suggest that a better version of ourselves is one purchase away: more organised, fitter, more creative or more relaxed. (40) If the trainers remain by the door unused, or the expensive notebook stays blank, the problem can feel personal rather than practical.
+
+That is why many people begin with a small experiment rather than a dramatic clear-out. They choose one shelf, one drawer or one category, such as mugs or T-shirts, and question each item honestly. (41) Seeing immediate results in a limited area helps them build confidence before moving on to spaces with stronger emotional ties, such as books, gifts or childhood possessions.
+
+None of this means that objects are unimportant. Some items connect us to family history, creative work or major moments in our lives, and reducing clutter does not require pretending otherwise. (42) When people are clear about that difference, their homes tend to reflect real priorities rather than old habits or delayed decisions.
+
+Living with fewer possessions will not solve every modern problem, and most people who try it still enjoy buying useful or beautiful things. Yet many say the main reward is not a tidier shelf but a shift in attention. Instead of asking what else they need, they start noticing what already serves them well. In a culture that treats more as the default, that can be a surprisingly liberating change.
+
+Sentences
+
+A In other words, the goal is not to count possessions but to keep only those that play an active part in life.
+
+B She started by filling a single bag for charity and promised herself she would stop there if she regretted it.
+
+C That message is powerful because the hoped-for transformation rarely arrives with the object itself.
+
+D The point is not that memories matter less, but that they do not all need to be stored in physical form.
+
+E As a result, what looks like harmless clutter can create a constant background of small mental tasks.
+
+F This approach also prevents the process from turning into a test of willpower that people quickly abandon.
+
+G Some enthusiasts even set themselves a rule of buying nothing at all for an entire year.
+
+Reviewer view
+
+Stored answer key
+
+Q
+
+Stored key
+
+Q
+
+Stored key
+
+37
+
+B
+
+40
+
+C
+
+38
+
+A
+
+41
+
+F
+
+39
+
+E
+
+42
+
+D
+
+Reviewer notes
+
+Review field
+
+Notes
+
+Natural British English
+
+Check wording, collocation and register.
+
+B2 level / difficulty
+
+Check realistic B2 challenge and discrimination.
+
+Exam authenticity
+
+Check Cambridge-style mechanics and task feel.
+
+Distractor / key quality
+
+Confirm one defensible key and plausible wrong options.
+
+Ambiguity / multiple answers
+
+Check for alternative answers or unintended readings.
+
+Suggested change
+
+Record the final teacher-approved edit, if any.
+
+TEACHER ATTENTION
+
+• No teacher-requested content change applied. The stored sequence B–A–E–C–F–D remains intact, with G as the extra sentence.
+
+PART 7
+
+Theme: The return to reading
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+Which person…? The people may be chosen more than once.
+
+43 Who realised unexpectedly that reading could improve a period of time they had usually treated as unimportant?
+
+44 Who thinks the growth in reading is partly connected to financial pressures?
+
+45 Who mentions changing their choice of reading material in order to make the habit easier to continue?
+
+46 Who describes reading as a form of rest rather than another task?
+
+47 Who noticed that people increasingly value discussing books together, even when they are not fully prepared?
+
+48 Who is doubtful about a fashionable way some people present themselves as readers?
+
+49 Who feels that social contact linked to reading can still have a positive long-term effect?
+
+50 Who was mistaken at first about what was attracting people to book-related content?
+
+51 Who argues that the present enthusiasm for reading will continue only if certain conditions are met?
+
+52 Who was surprised that younger people preferred personal advice to online opinion when choosing what to read?
+
+Texts
+
+A – Leila Grant, bookseller
+
+A few years ago, customers mainly came into my shop asking for gifts, while they bought most of their own reading online. Initially, I assumed that habit had changed for good. However, things have shifted again. Since the pandemic, people seem less interested in rushing through a screen all day and more willing to spend an evening with a novel. What surprises me most is that many younger customers ask staff for recommendations instead of relying on star ratings. They often tell me that reading feels like a form of rest rather than another task. I have also noticed people joining our monthly discussions even when they have not finished the book, simply because they want company. Sales matter, of course, yet what really convinces me something wider is happening is the atmosphere: the shop is noisier, slower and more social than it used to be.
+
+B – Owen Price, engineer
+
+I never thought of myself as a reader. At school I associated books with tests, and later I told myself I was too busy. Then, during a long train journey when my phone battery died, I started a paperback that had been sitting in my bag for months. By the time I arrived, I had forgotten to check messages. Since then, reading has become part of my commute. I still use technology all day for work, so opening a book feels refreshingly different. That said, I do not romanticise it. I choose crime fiction because it holds my attention, not because I want to become more cultured. Some friends have taken up reading to post impressive shelves online, which seems odd to me. For me, the appeal is simpler: books make dead time feel properly used, and they leave my head quieter than podcasts do.
+
+C – Marta Silva, librarian
+
+From where I work, the return to reading is real, but it is not quite the cosy story people imagine. Yes, our membership has risen steadily, and teenagers now borrow printed books as well as manga and audiobooks. Meanwhile, parents often say they are relieved to see their children choosing anything that is not a phone. Even so, I think the biggest reason is practical. Household budgets are tight, and libraries offer free entertainment, warmth and a reason to leave the house. Book clubs have filled up too, although many members admit they come as much for conversation as for literature. I do not see that as a weakness. In fact, shared reading can lead people towards more challenging authors later on. Still, I would be cautious about calling this a golden age. Enthusiasm is growing, yet people need access, time and quiet if it is to last.
+
+D – Rafi Khan, presenter
+
+When I started hosting a culture podcast, I expected film and music episodes to attract the biggest audiences. Strangely, the discussions about books are now downloaded far more. At first I assumed listeners wanted expert interviews, but the messages we receive suggest something else. People say they miss the concentration they once had, and hearing others talk enthusiastically about a title gives them the push to begin one themselves. I recognise that feeling. For years I bought serious books and left them unread beside my bed. Recently I stopped aiming to read what I thought I should read and chose shorter travel writing instead. That changed everything. Yet I am not convinced reading is returning because society has suddenly become calmer or wiser. If anything, people are seeking a way to resist constant distraction. Whether that habit survives depends on making room for it, not just admiring it from a distance.
+
+Reviewer view
+
+Stored answer key
+
+Q
+
+Stored key
+
+Q
+
+Stored key
+
+43
+
+B
+
+48
+
+B
+
+44
+
+C
+
+49
+
+C
+
+45
+
+D
+
+50
+
+D
+
+46
+
+A
+
+51
+
+D
+
+47
+
+A
+
+52
+
+A
+
+Reviewer notes
+
+Review field
+
+Notes
+
+Natural British English
+
+Check wording, collocation and register.
+
+B2 level / difficulty
+
+Check realistic B2 challenge and discrimination.
+
+Exam authenticity
+
+Check Cambridge-style mechanics and task feel.
+
+Distractor / key quality
+
+Confirm one defensible key and plausible wrong options.
+
+Ambiguity / multiple answers
+
+Check for alternative answers or unintended readings.
+
+Suggested change
+
+Record the final teacher-approved edit, if any.
+
+TEACHER ATTENTION
+
+• Q46 has been rewritten to target Leila's unique wording and remove the broader digital-overload ambiguity with Rafi. Stored key remains A.
+
+FINAL EXAM REVIEW
+
+Part decisions
+
+Approve / revise each Part after teacher review.
+
+Language
+
+Confirm natural British English throughout.
+
+Level
+
+Confirm realistic B2 demand and spread of difficulty.
+
+Authenticity
+
+Confirm Cambridge-style task mechanics.
+
+Theme variety
+
+Assess both within-exam balance and overlap with Exams 5–10.
+
+Keys / distractors
+
+Confirm one defensible key for every closed item.
+
+Part 4
+
+Check exact meaning preservation and 2–5 word limit.
+
+Final decision
+
+PENDING HUMAN REVIEW
+
+Priority issues already flagged
+
+• Part 3 Q22 — corrected from UNEQUAL to EQUAL in this patched review copy.
+
+• Part 4 Q25 — reconstructed as BEEN → has been using to preserve continuing meaning exactly.
+
+• Part 3 Q19 — context strengthened to require plural IMPROVEMENTS. Part 2 Q13 and Part 7 Q46 also patched; Part 1 and Part 6 unchanged.
+

@@ -1,0 +1,1115 @@
+{
+  "version": "DRALO_RUOE_Exam_16_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 16,
+  "sourceGeneratedAt": "2026-08-31T22:12:31.044Z",
+  "reviewFile": "DRALO_RUOE_Exam_12_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) make",
+          "B) do",
+          "C) gain",
+          "D) win"
+        ],
+        "answer": "C",
+        "explanation": "The natural collocation is \"gain experience\"."
+      },
+      "title": "Volunteering and Your Future",
+      "passage": "Many students take part in volunteer projects because they want to help others, but they may also (0) ___ valuable experience at the same time. Employers often look for people who have shown they can work in a team, solve problems and deal (1) ___ unfamiliar situations. Volunteering offers the (2) ___ to develop these qualities in real life rather than simply reading about them in a textbook.\n\nFor example, someone helping at a local charity shop might be asked to (3) ___ responsibility for training new volunteers. This not only builds confidence, but also shows future employers that the person can be relied on. In addition, volunteer work can (4) ___ to useful contacts, especially if the organisation works closely with businesses or public services. Some young people even find that volunteering helps them (5) ___ up their minds about which career to follow.\n\nAlthough unpaid, this kind of work can have a very (6) ___ effect on job prospects. It proves that applicants are willing to make an effort, and that they (7) ___ initiative instead of waiting for others to tell them what to do. As a result, their CVs often (8) ___ out from the crowd.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) with",
+            "B) by",
+            "C) for",
+            "D) to"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) occasion",
+            "B) possibility",
+            "C) opportunity",
+            "D) probability"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) bring",
+            "B) take",
+            "C) hold",
+            "D) carry"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) reach",
+            "B) move",
+            "C) connect",
+            "D) lead"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) decide",
+            "B) make",
+            "C) think",
+            "D) set"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) negative",
+            "B) weak",
+            "C) certain",
+            "D) positive"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) create",
+            "B) give",
+            "C) show",
+            "D) put"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) stand",
+            "B) come",
+            "C) point",
+            "D) break"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "C",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "D",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "A",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "B2 Reading and Use of English Part 2: Open cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "been"
+      },
+      "title": "Secrets in the Sand",
+      "passage": "For centuries, discoveries in the deepest parts of the ocean were thought to have (0) ___ mostly the result of chance. Today, however, new technology allows scientists to return to the same area again and again, and what they are finding is changing our view of history. In several parts of the Mediterranean, for example, robots have discovered ancient ships lying far deeper (9) ___ divers can safely reach.\n\nOne recent expedition found a trading vessel that appears (10) ___ have sunk nearly 2,000 years ago. Because it was quickly covered in sand, many objects inside it remained in excellent condition. Researchers were not only impressed by the jars and tools recovered, (11) ___ also by traces of food still stored on board.\n\nSuch discoveries matter because they can show (12) ___ people lived, travelled and traded. They may even reveal links between cultures that historians had not previously been aware (13) ___. Although the sea destroys some evidence, it can protect other things so well (14) ___ they survive for centuries. As a result, scientists hope that many more secrets are still waiting (15) ___ be found beneath the waves, no matter (16) ___ difficult they are to reach.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "than"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "to"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "but"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "how"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "of"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "that"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "to"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "how"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "SCIENCE",
+        "answer": "scientific",
+        "transformationFamily": "adjective"
+      },
+      "title": "Why Good Sleep Matters",
+      "passage": "Although sleep was once seen as a simple period of rest, (0) ___ (SCIENCE) research now shows that it plays a central role in our daily lives. A good night's sleep improves our mood, sharpens our memory and supports better (17) ___ (DECIDE) during the day. It also helps the body recover from physical activity and strengthens the immune system.\n\nBy contrast, regular sleep loss can have serious (18) ___ (CONSEQUENT). People who are tired often become less (19) ___ (PRODUCT) at work or school, and they may react more (20) ___ (IMPULSE) in stressful situations. Over time, poor sleep can even increase the (21) ___ (LIKELY) of health problems such as heart disease.\n\nExperts say that a more restful night often depends on simple habits. For example, keeping a regular bedtime and limiting screen use before bed can be highly (22) ___ (BENEFIT). It is also (23) ___ (ADVICE) to avoid heavy meals late at night. In the end, sleep is not a luxury but a (24) ___ (NECESSARY) for a healthy, balanced life.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "DECIDE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "CONSEQUENT",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "PRODUCT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "IMPULSE",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "LIKELY",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "BENEFIT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "ADVICE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "NECESSARY",
+          "transformationFamily": "noun"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "decisions",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "consequences",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "productive",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "impulsively",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "likelihood",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "beneficial",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "advisable",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "necessity",
+          "transformationFamily": "noun"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "It was unnecessary for Mia to borrow money from her parents to start her online shop.",
+        "keyword": "NEED",
+        "sentence2Start": "Mia __________________ borrow money from her parents to start her online shop.",
+        "answer": "did not need to",
+        "sentence2": "Mia __________________ borrow money from her parents to start her online shop."
+      },
+      "questions": [
+        {
+          "id": "b2p4q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "People say that Noah built his business from his bedroom while he was still at school.",
+          "keyword": "SAID",
+          "sentence2Start": "Noah __________________ his business from his bedroom while he was still at school.",
+          "answer": "is said to have built",
+          "sentence2": "Noah __________________ his business from his bedroom while he was still at school.",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SAID",
+            "fullAnswers": [
+              "is said to have built"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive reporting structure",
+                "accepted": [
+                  "is said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "perfect infinitive complement",
+                "accepted": [
+                  "to have built"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "passive reporting verb with perfect infinitive",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests passive reporting form; MP2 tests perfect infinitive for earlier action.",
+          "alternative_route_check": "Only one defendable route is accepted because alternatives such as 'it is said that' are blocked by the sentence frame starting with 'Noah'."
+        },
+        {
+          "id": "b2p4q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "Ella regretted not asking her brother for advice before launching the app.",
+          "keyword": "WISHED",
+          "sentence2Start": "Ella __________________ her brother for advice before launching the app.",
+          "answer": "wished she had asked",
+          "sentence2": "Ella __________________ her brother for advice before launching the app.",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISHED",
+            "fullAnswers": [
+              "wished she had asked"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish clause introduction",
+                "accepted": [
+                  "wished she"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past perfect verb phrase",
+                "accepted": [
+                  "had asked"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-14",
+          "target_structure": "wish plus past perfect for past regret",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests the wish construction subject sequence; MP2 tests past perfect to express regret about the past.",
+          "alternative_route_check": "Other routes such as 'if only' or 'should have asked' are blocked by the fixed keyword and sentence opening."
+        },
+        {
+          "id": "b2p4q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "Tom only succeeded because his friends helped him promote the product online.",
+          "keyword": "WITHOUT",
+          "sentence2Start": "Tom would not have succeeded __________________ promoting the product online.",
+          "answer": "without his friends' help",
+          "sentence2": "Tom would not have succeeded __________________ him promote the product online.",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WITHOUT",
+            "fullAnswers": [
+              "without his friends' help"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "preposition plus noun phrase",
+                "accepted": [
+                  "without his friends"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "gerund complement",
+                "accepted": [
+                  "helping"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-11",
+          "target_structure": "third conditional meaning with without plus gerund",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests the negative condition introduced by 'without'; MP2 tests the required -ing form after the preposition.",
+          "alternative_route_check": "Alternatives like 'if his friends had not helped' are blocked by the keyword and the gap position before 'him promote'."
+        },
+        {
+          "id": "b2p4q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "The magazine interview was less interesting than the podcast with the teenage business owner.",
+          "keyword": "AS",
+          "sentence2Start": "The magazine interview was __________________ the podcast with the teenage business owner.",
+          "answer": "not as interesting as",
+          "sentence2": "The magazine interview was __________________ the podcast with the teenage business owner.",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "AS",
+            "fullAnswers": [
+              "not as interesting as"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "negative comparative frame",
+                "accepted": [
+                  "not as"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "adjective plus final as",
+                "accepted": [
+                  "interesting as"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-05",
+          "target_structure": "not as ... as comparative",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests the comparative starter; MP2 tests the adjective and closing comparator.",
+          "alternative_route_check": "A route with 'so interesting as' is excluded to keep one accepted answer and because it is less standard in this exam context."
+        },
+        {
+          "id": "b2p4q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "A local investor will probably offer Jay some financial support.",
+          "keyword": "LIKELY",
+          "sentence2Start": "Jay __________________ some financial support from a local investor.",
+          "answer": "is likely to receive",
+          "sentence2": "Jay __________________ some financial support from a local investor.",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "LIKELY",
+            "fullAnswers": [
+              "is likely to receive",
+              "isn't likely to receive"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "be likely structure",
+                "accepted": [
+                  "is likely",
+                  "isn't likely"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive verb complement",
+                "accepted": [
+                  "to receive"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-08",
+          "target_structure": "be likely to plus infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the adjective probability structure; MP2 tests the infinitive verb completing the meaning.",
+          "alternative_route_check": "Only one positive grammatical route is intended by the source meaning; no alternative lexical route is accepted."
+        },
+        {
+          "id": "b2p4q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "Sofia started her clothing brand three years ago and she still runs it today.",
+          "keyword": "BEEN",
+          "sentence2Start": "Sofia __________________ her clothing brand for three years.",
+          "answer": "has been running",
+          "sentence2": "Sofia __________________ her clothing brand for three years.",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BEEN",
+            "fullAnswers": [
+              "has been running",
+              "hasn't been running"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "present perfect continuous auxiliary",
+                "accepted": [
+                  "has been",
+                  "hasn't been"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "main verb in -ing form",
+                "accepted": [
+                  "running"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-03",
+          "target_structure": "present perfect continuous with for",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the tense auxiliary containing the keyword; MP2 tests the continuous main verb form.",
+          "alternative_route_check": "Alternatives such as 'has run' are blocked because the intended frame specifically tests duration with present perfect continuous."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "b2p4q25",
+          "number": 25,
+          "answer": "is said to have built"
+        },
+        {
+          "id": "b2p4q26",
+          "number": 26,
+          "answer": "wished she had asked"
+        },
+        {
+          "id": "b2p4q27",
+          "number": 27,
+          "answer": "without his friends' help"
+        },
+        {
+          "id": "b2p4q28",
+          "number": 28,
+          "answer": "not as interesting as"
+        },
+        {
+          "id": "b2p4q29",
+          "number": 29,
+          "answer": "is likely to receive"
+        },
+        {
+          "id": "b2p4q30",
+          "number": 30,
+          "answer": "has been running"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Strong",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Standard",
+            "number": 26
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 27
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 28
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 29
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 1,
+          "4": 4,
+          "5": 1
+        },
+        "answerLengths": [
+          5,
+          4,
+          4,
+          4,
+          4,
+          3
+        ]
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "Hotels Check In to the Future",
+      "passage": "A decade ago, checking into a hotel often meant standing in a queue, handing over a passport and hoping the room looked like the photos online. Today, many hotels are trying to remove those moments of friction with technology. Guests can unlock doors with their phones, ask a speaker to close the curtains and receive restaurant recommendations from a chatbot before they even arrive. For hotel companies, these tools promise greater efficiency. For travellers, they suggest a stay that is quicker, easier and more personalised.\n\nYet the industry has discovered that modernising a hotel is not as simple as filling it with screens. Hoteliers learned this the hard way when some early self-service systems created fresh irritation. A machine in the lobby might save time for a guest travelling light, but it can feel unhelpful to a tired family dealing with luggage, children and a booking problem. In other words, technology works best when it quietly removes obstacles rather than drawing attention to itself. The most successful systems are often the ones guests barely notice.\n\nOne area where change has been especially rapid is pricing. Hotels now use software that constantly adjusts room rates according to demand, local events, weather and even flight cancellations. In the past, managers often relied on experience and instinct; now, data can suggest exactly when to lower prices to fill rooms or raise them because a music festival has brought thousands of visitors into town. This may sound coldly mathematical, but supporters argue that better forecasting helps hotels avoid waste. If a hotel can predict demand more accurately, it can plan staffing, food orders and energy use with less guesswork.\n\nTechnology is also reshaping parts of the hotel that guests rarely see. Sensors can report which rooms are empty, whether air conditioning is running unnecessarily or when a lift may need maintenance before it breaks down. Supporters say these systems reduce costs and improve comfort at the same time. Critics, however, warn that the excitement around so-called smart hotels sometimes hides basic truths: if the shower is weak or the room is noisy, no app will rescue the experience. Digital tools may improve operations, but they do not replace the fundamentals of hospitality.\n\nThe biggest question concerns staff. Whenever automation enters a workplace, people fear job losses, and hotels are no exception. Some tasks certainly need fewer employees than before. A guest who checks in online and uses digital room keys may never visit reception. But many hotel groups say technology is changing roles rather than simply removing them. Staff who once handled repetitive paperwork can spend more time solving unusual problems or giving local advice. That argument sounds convincing in theory, although it depends on hotels investing in training instead of treating technology as an excuse to cut costs.\n\nThere is also a less obvious risk. Hotels are collecting more information than ever: arrival times, room preferences, spending habits and, in some cases, data from connected devices inside the room. Used carefully, this can make a stay smoother. Used badly, it can feel intrusive. Guests may appreciate a hotel remembering that they prefer a quiet room, but feel uncomfortable if it seems to know too much about their movements. The challenge for the industry is not only to gather data, but to decide what should be left unknown.\n\nPerhaps that is why the most thoughtful hoteliers no longer talk about technology as a replacement for service. Instead, they describe it as a tool that should support human judgement. Few travellers choose a hotel because its software sounds impressive. They return because the whole stay feels easy, calm and welcoming. In that sense, the future of hotels may depend less on how much technology they install than on how wisely they use it.",
+      "passageWordCount": 617,
+      "questions": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "What point does the writer make in the first two paragraphs about technology in hotels?",
+          "options": [
+            "A) It is most effective when it improves the stay without becoming the main focus.",
+            "B) It mainly benefits guests who are already confident with digital systems.",
+            "C) It has solved the traditional problems connected with hotel arrival procedures.",
+            "D) It is generally more useful for families than for people travelling alone."
+          ],
+          "evidence": "The writer says technology should 'quietly remove obstacles rather than drawing attention to itself' and that the best systems are 'the ones guests barely notice.'",
+          "rationale": "A is correct because the opening contrasts promising tools with early failures and concludes that successful technology is unobtrusive. B is too narrow: confident guests are mentioned only indirectly. C is wrong because the passage says some systems created new irritation. D reverses the example, since tired families may find machines less helpful."
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "questionType": "purpose",
+          "prompt": "Why does the writer mention music festivals and flight cancellations in the third paragraph?",
+          "options": [
+            "A) To show that hotels are often forced to react to events they cannot predict",
+            "B) To explain how software can respond to different factors when setting prices",
+            "C) To suggest that managers used to make poor decisions about room rates",
+            "D) To argue that travellers should book earlier to avoid sudden price increases"
+          ],
+          "evidence": "The paragraph explains that software adjusts rates according to demand, events, weather and flight cancellations, and can indicate when to lower or raise prices.",
+          "rationale": "B is correct because the examples illustrate the range of information used by pricing systems. A is only partly true but misses the paragraph's focus on software capability. C overstates the comparison with the past; managers relied on experience, not necessarily poor judgement. D introduces advice to travellers that the writer does not give."
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "questionType": "attitude",
+          "prompt": "What is the writer's attitude towards so-called smart hotels in the fourth paragraph?",
+          "options": [
+            "A) They have been unfairly criticised for problems they did not create.",
+            "B) They are likely to become less popular as guests grow tired of them.",
+            "C) They can be useful, but claims made for them should be treated with caution.",
+            "D) They matter most in hotels where the traditional service is already excellent."
+          ],
+          "evidence": "The writer notes benefits from sensors, but adds that critics warn the excitement can hide basic truths and that digital tools do not replace the fundamentals of hospitality.",
+          "rationale": "C is correct because the paragraph balances practical advantages with a warning against exaggerated expectations. A is unsupported because the writer does not suggest unfair criticism. B is speculative and not discussed. D sounds plausible but is not the writer's point; the emphasis is on limits, not where smart systems matter most."
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "questionType": "inference",
+          "prompt": "What does the writer suggest about the claim that technology changes jobs rather than removes them?",
+          "options": [
+            "A) It is already clearly true across the hotel industry.",
+            "B) It depends on whether hotels are willing to support staff properly.",
+            "C) It will only apply in larger hotels with enough money to experiment.",
+            "D) It is mainly a way of persuading guests to accept more automation."
+          ],
+          "evidence": "The writer says the argument sounds convincing 'in theory', but only if hotels invest in training instead of using technology merely to cut costs.",
+          "rationale": "B is correct because the writer links the success of changed roles to training and investment. A is too strong; the passage is cautious. C is not mentioned. D misidentifies the target of the claim, which concerns employees rather than persuading guests."
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "questionType": "reference",
+          "prompt": "In the sixth paragraph, what does 'this' refer to in the sentence 'Used carefully, this can make a stay smoother'?",
+          "options": [
+            "A) the growth in the number of connected devices in hotel rooms",
+            "B) the information hotels collect about their guests",
+            "C) the practice of remembering a guest's preferred type of room",
+            "D) the challenge of deciding what information should remain private"
+          ],
+          "evidence": "The paragraph begins, 'Hotels are collecting more information than ever...' and then says, 'Used carefully, this can make a stay smoother.'",
+          "rationale": "B is correct because 'this' refers back to the collection and use of guest information. A is only one possible source of data, not the overall referent. C is an example that appears later. D refers to a later challenge, not the earlier pronoun reference."
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "questionType": "global",
+          "prompt": "Which idea best summarises the writer's overall view of technology in the hotel industry?",
+          "options": [
+            "A) Hotels should adopt as much technology as possible in order to stay competitive.",
+            "B) Digital systems are valuable mainly because they reduce running costs for hotels.",
+            "C) The industry needs clearer rules so guests know exactly how their data is used.",
+            "D) Technology should be judged by how well it supports a comfortable human experience."
+          ],
+          "evidence": "The final paragraph says technology should 'support human judgement' and that guests return because the stay feels 'easy, calm and welcoming.'",
+          "rationale": "D is correct because it captures the article's central argument from start to finish: technology matters when it improves the guest experience and supports service. A ignores the repeated cautions. B is too limited, since guest comfort and service are equally important. C reflects one concern in the article but not the overall message."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "answer": "A"
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "answer": "B"
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "answer": "C"
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "answer": "B"
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "answer": "B"
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "answer": "D"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "descriptive_title"
+    },
+    "6": {
+      "partTitle": "Part 6: Gapped text",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "The Language Lesson That Starts After Class",
+      "passage": "For many learners, language study still means a textbook, a teacher and a weekly lesson. Those things matter, of course, but they are only part of the picture. Real progress often begins when students leave the classroom and start noticing how the language appears in ordinary life. Whether they are watching videos, following online creators or chatting while gaming, learners now meet English in places that did not exist for earlier generations. (37) As a result, practice can happen in short, regular moments instead of being limited to formal study time.\n\nThat does not mean every activity outside class is equally useful. Simply surrounding yourself with a language is not enough if you are only half paying attention. People sometimes believe improvement will happen automatically, but most successful learners do something more active than that. (38) In this way, a casual activity becomes a source of repeated learning rather than background noise.\n\nOne reason these informal methods work is that they are connected to personal interest. A student who loves cooking may happily watch recipe videos in Italian for half an hour, while the same person would lose focus after ten minutes with a grammar book. Interest keeps attention steady, and attention helps memory. (39) Because the content matters to them, learners are often willing to hear or read the same expressions again and again without getting bored.\n\nAnother advantage is that language outside the classroom is often more current. Course materials take time to produce, so examples can feel slightly distant from the way people actually speak. Online spaces, by contrast, change quickly and reflect everyday habits, jokes and reactions. (40) Learners begin to understand not just dictionary meanings but also tone, timing and what sounds natural in a real exchange.\n\nHowever, there is a risk in depending only on this kind of exposure. The language people meet online is not always clear, accurate or suitable for every situation. Slang can be useful, but it may also be limited to one group or disappear within months. (41) Without some guidance, learners may copy forms that confuse listeners or seem rude in more formal settings.\n\nFor that reason, many teachers now encourage students to bring their outside learning back into class. A phrase heard in a podcast or a comment seen on social media can become the starting point for discussion. The classroom then provides what the internet often cannot: careful explanation, correction and comparison. (42) Instead, each side supports the other, and learners gain both confidence and control.\n\nThe most effective language learners, then, are not always the ones who spend the longest doing exercises. They are often the ones who build small habits around the language and keep returning to it during the week. Five minutes spent reading posts, repeating useful expressions or writing a message can have more impact than a long session that feels disconnected from daily life. Outside the classroom, learning becomes less of an event and more of a routine.",
+      "passageWordCount": 535,
+      "sentencePool": [
+        "A) They pause to check a phrase, save a useful expression or try to guess meaning from context before moving on.",
+        "B) This is especially valuable when a language is used in fast, informal conversations rather than in carefully prepared examples.",
+        "C) In other words, motivation is not just about working harder; it is also about staying with the language for longer.",
+        "D) Yet this new variety of contact has changed one important thing: languages can become part of a learner's daily routine.",
+        "E) This does not mean that lessons become less important or that teachers are replaced by apps and videos.",
+        "F) Some even assume that every native speaker is a reliable model, which is clearly not the case.",
+        "G) In the past, many schools organised exchange trips abroad at the end of the academic year."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "D"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "A"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "C"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "B"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "F"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "E"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "the_x_that"
+    },
+    "7": {
+      "partTitle": "B2 Reading and Use of English Part 7",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person mentions the following? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Leila Khan",
+          "text": "When people ask which invention changed daily life most, I always say the washing machine. That sounds unexciting beside smartphones or electric cars, yet in my family it made the biggest difference. My grandmother grew up hand-washing everything, and she still talks about winter mornings with cracked hands and endless sheets. Initially, I thought she was exaggerating, but after our machine broke for a week, I understood. What struck me wasn't only the labour involved, but how much time disappeared. Since then, I've seen the appliance differently: not just as a convenience, but as something that quietly gave people, especially women, far more control over their day. However, I dislike how easily we take it for granted. We praise glamorous inventions, while this one transformed ordinary routines without demanding attention."
+        },
+        {
+          "letter": "B",
+          "name": "Oliver Grant",
+          "text": "For me, the satnav has altered everyday life more than any other device. I work as a furniture maker and spend half my week driving to clients' homes, often in unfamiliar towns. Before I started using one, I relied on printed maps and scribbled directions, which meant arriving stressed or late. At first, I treated satnav instructions as absolute truth, and that was a mistake; once it led me down a farm track that certainly wasn't designed for a van. Even so, I wouldn't give it up. What matters is not that it makes journeys more exciting, but that it removes a layer of mental effort. Meanwhile, I can concentrate on traffic and timing instead of constantly checking road names. Some friends complain it has weakened people's sense of direction, and they may be right, yet I think the trade-off is worth it."
+        },
+        {
+          "letter": "C",
+          "name": "Rosa Mendez",
+          "text": "The barcode seems too ordinary to deserve much attention, although I think it changed modern life in a remarkable way. I manage a small supermarket, so I see its effect every day. Customers notice the quick beep at the checkout, but they rarely think beyond that. Before our current system, stock checks took ages and mistakes were common. Now we can track what sells, spot problems quickly and order more accurately. Initially, I admired the speed alone; since then, I've come to value the information behind it even more. That said, I do feel uneasy when people assume technology always improves shopping. Self-service tills, for example, can make the experience colder. Still, the barcode itself solved practical problems without pretending to be clever. In my view, its success lies in being almost invisible while supporting an entire chain of everyday decisions."
+        },
+        {
+          "letter": "D",
+          "name": "Nathan Reed",
+          "text": "If I had to choose one invention, I'd go for the bicycle. That may sound nostalgic in an age of apps and streaming, but I mean the ordinary bike as a tool for everyday freedom. I started cycling to work during a train strike, expecting it to be a temporary solution. Instead, it completely changed my routine. Initially, I noticed the obvious benefits: lower costs, no waiting for delayed services and a chance to avoid crowded carriages. Yet the real surprise was psychological. I arrived feeling more awake and less irritated, even in bad weather. Of course, cycling isn't practical for everyone, and poor road design puts many people off. However, I admire inventions that remain useful without requiring updates, passwords or subscriptions. The bicycle still does exactly what it was designed to do, and for many people that is enough."
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "prompt": "Who came to appreciate an invention only after managing without it for a short period?"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "prompt": "Who accepts that a useful invention may also reduce a skill people once had?"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "prompt": "Who believes the true value of an invention is not always the most obvious one?"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "prompt": "Who chose an invention partly because it still works well without modern digital systems?"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "prompt": "Who describes changing their opinion after realising how much unnecessary effort had previously been involved?"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "prompt": "Who warns that one development linked to an invention can make human contact less pleasant?"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "prompt": "Who says an invention helps by freeing attention for another task?"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "prompt": "Who values an invention because it had a wider effect on how people organised their lives?"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "prompt": "Who started using an invention for one reason but continued because of an unexpected benefit?"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "prompt": "Who suggests that the importance of an invention is often overlooked because it is not especially impressive?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "answer": "A"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "answer": "B"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "answer": "C"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "answer": "A"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "answer": "C"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "answer": "B"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "answer": "A"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "answer": "D"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "answer": "C"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

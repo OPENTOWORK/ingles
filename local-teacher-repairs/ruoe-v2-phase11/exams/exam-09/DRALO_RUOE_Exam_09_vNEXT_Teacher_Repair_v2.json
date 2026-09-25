@@ -1,0 +1,1108 @@
+{
+  "version": "DRALO_RUOE_Exam_09_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 9,
+  "sourceGeneratedAt": "2026-08-31T20:32:22.205Z",
+  "reviewFile": "DRALO_RUOE_Exam_5_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) making",
+          "B) spending",
+          "C) taking",
+          "D) keeping"
+        ],
+        "answer": "C",
+        "explanation": "We use the fixed expression 'take an interest in', and only the -ing form fits after 'are'."
+      },
+      "title": "Back in the kitchen",
+      "passage": "A few years ago, many people had little time for cooking and relied on ready meals. Now, however, more families are (0) ___ an interest in preparing food at home again. One reason is cost: with prices rising, home cooking is a practical way to (1) ___ money. Another is health. After years of eating food high in salt and sugar, people have become more (2) ___ of what they eat. Social media has also played a part. Short videos can (3) ___ even simple recipes to life, and home cooks are quick to share tips for using basic ingredients well. As a result, cooking no longer seems like a skill reserved (4) ___ experts. For some, it has become a hobby that helps them slow down after a busy day. Of course, not everyone has time to cook every evening, and takeaways still have their (5) ___. But many people now plan meals more (6) ___, cook larger amounts, and freeze portions for later. This means they can (7) ___ on convenience less often while still eating food they enjoy. Home cooking may not solve everything, but it is clearly making a (8) ___ comeback.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) save",
+            "B) win",
+            "C) keep",
+            "D) spare"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) familiar",
+            "B) aware",
+            "C) sensitive",
+            "D) alert"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) make",
+            "B) let",
+            "C) have",
+            "D) get"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) by",
+            "B) with",
+            "C) for",
+            "D) to"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) side",
+            "B) point",
+            "C) area",
+            "D) place"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) deeply",
+            "B) carefully",
+            "C) closely",
+            "D) largely"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) trust",
+            "B) rest",
+            "C) depend",
+            "D) hold"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) heavy",
+            "B) hard",
+            "C) firm",
+            "D) strong"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "B",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "A",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "C",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "D",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "B",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "D",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "Part 2: Open cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "an"
+      },
+      "title": "Finding Work That Fits",
+      "passage": "From (0) ___ early age, many teenagers are told to decide what they want to do in the future. In reality, choosing a career is rarely as simple as picking the job that sounds most exciting. People often know what they are good (9) ___, but they may not realise how important it is to think about the kind of working life they want as well. Some enjoy teamwork, while others would rather work (10) ___ their own. Experts suggest trying different experiences before deciding. A weekend job, for example, can teach you more about yourself (11) ___ a long list of online quizzes. It can also show whether you are willing (12) ___ deal with pressure, customers or strict deadlines. Even if a job does not suit you, that is useful, because you learn what to avoid. In the end, the best career choice is usually the one that matches both your abilities and your values, not simply your expectations. (13) ___ you may not find the perfect role immediately, each step can still teach you something useful. You are responsible (14) ___ deciding which opportunities fit your values best. What matters most is staying open-minded, so (15) ___ opportunities appear, you are ready to take advantage (16) ___ them.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "at"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "not"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "than"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "whether"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "Although"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "for"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "when"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "of"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "SCIENCE",
+        "answer": "scientific",
+        "transformationFamily": "adjective"
+      },
+      "title": "AI as a Study Partner",
+      "passage": "Artificial intelligence is no longer limited to research labs. It has become a normal tool in many classrooms, and some teachers now see it as a (0) ___ (SCIENCE) innovation that can improve daily study habits. One of its main strengths is the speed with which it provides (17) ___ (RESPOND) to students' questions, allowing them to continue working instead of waiting for help. This can be especially useful for learners who are shy and may feel (18) ___ (COMFORT) about asking for support in front of others. AI systems can also offer (19) ___ (PERSON) practice activities based on a student's recent mistakes. Used (20) ___ (WISE), such tools can build confidence and encourage regular revision. However, there is also a risk of (21) ___ (DEPEND) if students begin to trust every answer without checking it. Teachers therefore need to discuss the (22) ___ (LIMIT) of these systems and remind learners that not all information is equally reliable. The most (23) ___ (VALUE) use of AI may be as a guide that supports human teaching rather than becoming a (24) ___ (PLACE) for it.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "RESPOND",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "COMFORT",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "PERSON",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "WISE",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "DEPEND",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "LIMIT",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "VALUE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "PLACE",
+          "transformationFamily": "prefix"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "responses",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "uncomfortable",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "personalised",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "wisely",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "dependence",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "limitations",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "valuable",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "replaces",
+          "transformationFamily": "prefix"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "B2 Reading and Use of English Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "Mia enjoys sorting her books every weekend.",
+        "keyword": "PLEASURE",
+        "sentence2Start": "Mia __________________ sorting her books every weekend.",
+        "answer": "takes pleasure in"
+      },
+      "questions": [
+        {
+          "id": "B2RUEP4-25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "People say that clearing out a room helps them feel calmer.",
+          "keyword": "SAID",
+          "sentence2Start": "Clearing out a room __________________ people feel calmer.",
+          "answer": "is said to help",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SAID",
+            "fullAnswers": [
+              "is said to help"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive reporting structure",
+                "accepted": [
+                  "is said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to help"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "passive reporting verb with infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests passive reporting frame; MP2 tests infinitive meaning transfer.",
+          "alternative_route_check": "Only one defendable route is allowed because the sentence stem fixes the passive opening and requires an infinitive after the reporting verb."
+        },
+        {
+          "id": "B2RUEP4-26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "Organising the kitchen was quicker than I had expected.",
+          "keyword": "EXPECTED",
+          "sentence2Start": "Organising the kitchen took __________________ it would.",
+          "answer": "less time than I expected",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "EXPECTED",
+            "fullAnswers": [
+              "less time than I expected"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "intensifier plus comparative",
+                "accepted": [
+                  "much less"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "noun plus comparator",
+                "accepted": [
+                  "time than"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-02",
+          "target_structure": "intensified comparative of decreased quantity",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 covers take + as much; MP2 completes the quantity comparison with time as.",
+          "alternative_route_check": "Only one route is valid: the positive frame blocks 'not so much time as', and MUCH must premodify the comparative."
+        },
+        {
+          "id": "B2RUEP4-27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "Ella regrets throwing away the old storage boxes now.",
+          "keyword": "WISHES",
+          "sentence2Start": "Ella __________________ away the old storage boxes.",
+          "answer": "wishes she had not thrown",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISHES",
+            "fullAnswers": [
+              "wishes she had not thrown",
+              "wishes she hadn't thrown"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish plus negated auxiliary",
+                "accepted": [
+                  "wishes she had not",
+                  "wishes she hadn't"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past participle",
+                "accepted": [
+                  "thrown"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "wish for past regret with past perfect",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 establishes regret frame with wish + past perfect auxiliary; MP2 supplies the negative participle meaning.",
+          "alternative_route_check": "Routes like 'wishes she kept' are blocked because they change the lexical verb and would not fit the stem before 'away'."
+        },
+        {
+          "id": "B2RUEP4-28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "It isn't necessary for us to label every drawer straight away.",
+          "keyword": "HAVE",
+          "sentence2Start": "We __________________ every drawer straight away.",
+          "answer": "do not have to label",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "HAVE",
+            "fullAnswers": [
+              "do not have to label",
+              "don't have to label"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "lack of necessity structure",
+                "accepted": [
+                  "do not have",
+                  "don't have"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to label"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "have to in the negative for lack of necessity",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests negative 'have to' form; MP2 tests infinitive complement.",
+          "alternative_route_check": "Alternative modal routes such as 'needn't label' are blocked because the keyword must be used unchanged."
+        },
+        {
+          "id": "B2RUEP4-29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "Tom started enjoying housework when he discovered a simple routine.",
+          "keyword": "UNTIL",
+          "sentence2Start": "Tom didn't enjoy housework __________________ a simple routine.",
+          "answer": "until he discovered",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "UNTIL",
+            "fullAnswers": [
+              "until he discovered"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "time linker and subject",
+                "accepted": [
+                  "until he"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past simple verb",
+                "accepted": [
+                  "discovered"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "not ... until for change in state",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 introduces the time boundary; MP2 completes it with the past event.",
+          "alternative_route_check": "Only one natural route works because the stem already contains the negative verb phrase and the clause must begin with 'until'."
+        },
+        {
+          "id": "B2RUEP4-30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "A tidy hallway is more welcoming than a cluttered one.",
+          "keyword": "AS",
+          "sentence2Start": "A cluttered hallway is __________________ a tidy one.",
+          "answer": "not as welcoming as",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "AS",
+            "fullAnswers": [
+              "not as welcoming as"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "negative comparative frame",
+                "accepted": [
+                  "not as"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "adjective and final comparison word",
+                "accepted": [
+                  "welcoming as"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "not as ... as comparative",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the negative comparative opener; MP2 completes the adjective comparison.",
+          "alternative_route_check": "Alternatives like 'less welcoming than' are blocked because the keyword requires the 'as ... as' frame."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "B2RUEP4-25",
+          "number": 25,
+          "answer": "is said to help"
+        },
+        {
+          "id": "B2RUEP4-26",
+          "number": 26,
+          "answer": "less time than I expected"
+        },
+        {
+          "id": "B2RUEP4-27",
+          "number": 27,
+          "answer": "wishes she had not thrown"
+        },
+        {
+          "id": "B2RUEP4-28",
+          "number": 28,
+          "answer": "do not have to label"
+        },
+        {
+          "id": "B2RUEP4-29",
+          "number": 29,
+          "answer": "until he discovered"
+        },
+        {
+          "id": "B2RUEP4-30",
+          "number": 30,
+          "answer": "not as welcoming as"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 26
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 27
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 28
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 29
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 1,
+          "4": 3,
+          "5": 2
+        },
+        "answerLengths": [
+          4,
+          4,
+          5,
+          5,
+          3,
+          4
+        ]
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "Beyond the Crowds",
+      "passageWordCount": 600,
+      "passage": "There was a time when travelling somewhere unfamiliar meant arriving with only a paper map and a few suggestions copied from a guidebook. Now, before most people have even booked a train, they have already watched videos of the best viewpoints, read reviews of the most photogenic cafés and saved a list of \"hidden gems\" that are, in reality, known to millions. As a result, many travellers have started looking for places that feel less performed and more real. The idea of going \"off the tourist trail\" has become a goal in itself.\n\nThat phrase sounds simple, but it can be misleading. A place does not become more meaningful just because it is harder to find, and avoiding famous sights entirely can be as limiting as following the crowd everywhere. Some visitors become so determined to discover what others have missed that they treat local streets like a competition, measuring success by how few foreign voices they hear. The more thoughtful travellers are usually those who are less interested in claiming discovery and more interested in paying attention. They understand that being somewhere quietly is often more rewarding than announcing that they have found the one part of a city nobody else knows about.\n\nThis shift in attitude has practical reasons as well. In many popular destinations, residents are tired of neighbourhoods being turned into backgrounds for other people's photos. Small bakeries that once served local customers can suddenly find queues forming outside because an image went viral. Rent rises, everyday routines become harder and the character visitors came to admire begins to disappear. Choosing lesser-known areas can reduce pressure on the busiest streets, but only if travellers behave differently there too. If people arrive expecting an untouched version of the centre, complete with cheap coffee and picturesque corners, they may simply repeat the same damage in a new location.\n\nSo what does exploring beyond the obvious actually involve? Often, it means adjusting expectations rather than travelling further. In Lisbon, for example, many visitors rush between the historic centre and the famous tram routes, while missing ordinary districts where life happens at a slower pace. These areas may not offer perfect views at every turn, but they can reveal how a city fits together: where children play after school, which parks fill up at lunch, how old workshops survive next to new businesses. None of this is dramatic, yet for some travellers that is precisely the attraction. They return home with a stronger sense of place, even if their photos attract less attention online.\n\nOf course, not everyone wants this kind of experience every day. There is nothing wrong with visiting major landmarks, and famous places are often famous for good reasons. The problem begins when travel turns into a checklist or when people confuse novelty with understanding. A spectacular square seen at sunrise can teach you something about a city; so can a quiet market where you understand almost nothing that is being said. What matters is the quality of attention you bring. If you move through a place only searching for confirmation that you are adventurous, you will probably miss what is in front of you.\n\nPerhaps that is why the most satisfying discoveries are often modest. They are not always remote beaches or secret mountain paths, but moments when a place stops feeling like a product and starts feeling inhabited. You notice a mechanic greeting three generations of the same family, or a football match beginning on a patch of rough ground at the edge of town. These scenes are easy to overlook because they do not fit a neat travel story. Yet they may stay in the memory longer than the celebrated attraction nearby. Going beyond the tourist trail, then, is less about geography than about learning to look with patience, respect and curiosity.",
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "What is the writer's main point in the article?",
+          "options": [
+            "A) Travellers should avoid well-known attractions because they are no longer authentic.",
+            "B) Real travel experiences depend more on attitude than on reaching secret locations.",
+            "C) Social media has made it impossible to discover places that feel genuinely local.",
+            "D) Residents benefit when visitors move from city centres to quieter neighbourhoods."
+          ],
+          "evidence": "The writer argues that 'being somewhere quietly is often more rewarding' and concludes that going beyond the tourist trail 'is less about geography than about learning to look'.",
+          "rationale": "B is correct because the whole article develops the idea that meaningful travel comes from attention, patience and respect rather than simply finding unknown places. A is wrong because the writer says there is 'nothing wrong with visiting major landmarks'. C is too absolute: social media creates problems, but the writer does not say genuine local experiences are impossible. D reflects only one part of the discussion and ignores the warning that visitors can repeat the same damage elsewhere."
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "questionType": "attitude",
+          "prompt": "In the second paragraph, what criticism does the writer make of some travellers?",
+          "options": [
+            "A) They treat unfamiliar places as something to show off about.",
+            "B) They expect local people to help them find unusual sights.",
+            "C) They complain when destinations are difficult to reach.",
+            "D) They rely too heavily on guidebooks when planning trips."
+          ],
+          "evidence": "The writer says some visitors 'treat local streets like a competition' and are interested in 'claiming discovery'.",
+          "rationale": "A is correct because the writer criticises travellers who want to present themselves as discoverers rather than engage with a place. B is unsupported: the paragraph says nothing about depending on local people for advice. C is not mentioned. D refers back to guidebooks in the opening paragraph, but the criticism here is about attitude and self-presentation, not planning tools."
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "questionType": "inference",
+          "prompt": "What does the writer suggest about visiting lesser-known areas?",
+          "options": [
+            "A) It usually allows travellers to spend less money than in central districts.",
+            "B) It only helps local communities if visitors also change their behaviour.",
+            "C) It guarantees a more accurate picture of daily life than famous landmarks do.",
+            "D) It works best in destinations that have already become popular online."
+          ],
+          "evidence": "The writer says choosing lesser-known areas 'can reduce pressure on the busiest streets, but only if travellers behave differently there too'.",
+          "rationale": "B is correct because the writer explicitly links the benefit of visiting quieter areas to visitors acting in a more responsible way. A is a distortion based on the mention of 'cheap coffee'; the writer criticises that expectation rather than confirming it. C is too strong because the writer values ordinary districts but does not claim they always give a truer picture. D is not suggested anywhere."
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "questionType": "purpose",
+          "prompt": "Why does the writer mention Lisbon in the fourth paragraph?",
+          "options": [
+            "A) To recommend a city that still has many undiscovered attractions",
+            "B) To show that public transport can shape visitors' travel choices",
+            "C) To give an example of how ordinary neighbourhoods can deepen understanding of a place",
+            "D) To explain why some cities are harder to explore without social media"
+          ],
+          "evidence": "The Lisbon example contrasts rushed visits to the historic centre with ordinary districts that reveal 'how a city fits together'.",
+          "rationale": "C is correct because Lisbon is used as an illustration of the article's broader argument that everyday areas can offer a richer sense of place. A is wrong because the writer does not present Lisbon as full of 'undiscovered attractions'. B is partly relevant because tram routes are mentioned, but transport is not the point of the example. D is unrelated to the paragraph."
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "questionType": "reference",
+          "prompt": "What point does the writer make in the fifth paragraph about choosing between famous sights and quieter places?",
+          "options": [
+            "A) Either a famous or a quiet place can be worthwhile, depending on how the visitor engages with it.",
+            "B) Visitors should spend longer in each part of a city before judging it.",
+            "C) Travellers need background knowledge before arriving in order to appreciate a place.",
+            "D) A place is only rewarding if the visitor can talk to local people."
+          ],
+          "evidence": "The writer says both a 'spectacular square' and a 'quiet market' can teach you something, depending on the attention you bring.",
+          "rationale": "A is correct because the sentence means that either type of place can be valuable if approached thoughtfully. B is not discussed. C is not the focus; the writer values observation rather than prior research. D is irrelevant, since the example of the market includes understanding 'almost nothing' that is being said."
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "questionType": "vocabulary",
+          "prompt": "In the final paragraph, what does the writer mean by saying a place 'stops feeling like a product'?",
+          "options": [
+            "A) It no longer seems designed mainly to be consumed by visitors.",
+            "B) It becomes difficult for tourists to pay for goods and services there.",
+            "C) It loses the traditional features that once attracted travellers.",
+            "D) It starts to offer more activities than the guidebooks describe."
+          ],
+          "evidence": "The writer contrasts a 'product' with a place that feels 'inhabited' and gives examples of everyday local life.",
+          "rationale": "A is correct because the phrase suggests a destination is no longer being seen as something packaged for tourist use, but as a real living community. B misreads 'product' literally. C goes against the writer's positive description of these moments. D is unsupported and shifts the focus to quantity of activities rather than perception."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "B"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "A"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "B"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "C"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "A"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "A"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "6": {
+      "partTitle": "Part 6",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Growing Up Online",
+      "passage": "For today’s teenagers, social media is not a separate activity that begins when homework is finished. It is woven into everyday life, shaping how friendships are maintained, how news is discovered and even how people see themselves. Adults often focus on the dangers, while young users point to the fun and freedom these platforms provide. In reality, both views contain some truth. To understand the effect of social media on teenagers, it is necessary to look beyond headlines and examine how it influences daily habits.\n\nOne reason these apps matter so much is that they offer a constant connection to other people. A teenager can share a joke, post a photo or ask for advice within seconds, and the response is often immediate. (37) That ability to share everyday worries can be especially valuable after moving to a new area or changing schools. Keeping in touch online may help them feel less isolated and more confident about starting conversations in person.\n\nHowever, the same tools that create connection can also increase pressure. Many teenagers are highly aware of how their posts will be judged, not only by close friends but by classmates and even strangers. (38) As a result, a simple photo can be edited repeatedly before it is shared, and a message may be rewritten several times to avoid sounding awkward. What appears to be relaxed communication can involve a surprising amount of performance.\n\nAnother issue is the speed at which ideas spread online. Trends, opinions and rumours can travel through a school year group in minutes, leaving little time to check whether they are true. (39) A minor disagreement that might once have ended after school can continue late into the evening through group chats and comment sections. When there is no clear break from the conversation, small problems can quickly feel much bigger.\n\nSleep is affected too, though not always for the reasons adults imagine. It is not simply that teenagers choose entertainment over rest. Notifications, fear of missing out and the habit of checking one more post can make it hard to stop. (40) Over time, this broken pattern may leave students tired in lessons and less able to concentrate, even if they believe they slept for a reasonable number of hours.\n\nThat said, social media is not only a source of distraction or anxiety. Many teenagers use it to explore interests that are not shared by people around them. They can find artists, sports fans or young activists from other parts of the world and learn from them. (41) In some cases, online spaces also allow quieter students to express ideas more comfortably than they would in a busy classroom.\n\nSo what should parents and schools do? Banning social media completely is unlikely to succeed, partly because online interaction has become a normal part of modern social life. (42) Teenagers need practical strategies, such as turning off alerts at night, checking sources before sharing stories and recognising when an app is affecting their mood. The goal is not to persuade young people to reject social media, but to help them use it with more awareness and control.",
+      "passageWordCount": 541,
+      "sentencePool": [
+        "A) In addition, when upsetting content appears, it can reach a large audience before anyone has time to calm the situation down.",
+        "B) This sense of instant contact can make distance feel less important and everyday worries easier to share.",
+        "C) Instead, experts increasingly argue that teenagers should be taught how to manage these platforms wisely.",
+        "D) That can make online approval seem far more important than it really is.",
+        "E) Researchers still disagree about how many hours of daily use should count as excessive.",
+        "F) In this way, social media can support identity as well as entertainment.",
+        "G) This often means phones remain nearby long after lights have been turned out."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "B"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "D"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "A"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "G"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "F"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "7": {
+      "partTitle": "B2 First Reading and Use of English Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Leah Morgan",
+          "text": "I took up pottery by accident after a friend dragged me to an evening class. At the time, my job in events meant I was constantly dealing with last-minute problems, so I liked the idea of making something slowly with my hands. Initially, I was terrible at it and felt ridiculous sitting beside people who seemed to know exactly what they were doing. However, the teacher never corrected us too quickly, and that made me less afraid of getting things wrong. Since then, pottery has altered the way I deal with the rest of my life. I still rush around at work, yet I no longer expect everything to be perfect straight away. Oddly enough, the best part isn't taking finished bowls home, but the quiet concentration in the studio, where nobody asks anything of me for two hours."
+        },
+        {
+          "letter": "B",
+          "name": "Owen Patel",
+          "text": "For years, I laughed at people who spent weekends watching birds through binoculars. Then my daughter asked for help with a school project on garden wildlife, and I went along with it just to support her. Meanwhile, I found myself getting up early to see what landed in the park near our flat. What began as a favour turned into a habit that changed my routine completely. Before, I used to spend Sundays checking emails and worrying about Monday; now I leave my phone behind and head outdoors. I wouldn't claim birdwatching has made me calmer in every situation, although my family says it has. What it has certainly done is sharpen my attention. I notice weather, sound and movement far more than I ever used to, and that sense of being properly present has stayed with me."
+        },
+        {
+          "letter": "C",
+          "name": "Rosa Bell",
+          "text": "When I started running, it was mainly because my doctor told me I needed regular exercise. I wasn't inspired by stories of marathon runners, and in truth I expected to give up within a month. Yet joining a local group changed everything. There were people of every age and ability, and no one made me feel slow. Gradually, training runs became the point around which I organised my week. The biggest surprise, though, was not the physical change but the social one. After moving to a new town, I had found it hard to meet people beyond work, whereas through running I built real friendships. We still talk about races, of course, but we also help one another through ordinary life. These days I still enjoy improving my times, although I know companionship is the reason I keep going back."
+        },
+        {
+          "letter": "D",
+          "name": "Marcus Reid",
+          "text": "I bought a second-hand guitar during a difficult winter when I'd been told to stay home and recover from an injury. At first, learning online felt frustrating because I couldn't ask anyone what I was doing wrong, and progress seemed painfully slow. Even so, practising gave shape to days that had previously felt empty. Later, when I was able to leave the house again, I nearly stopped. Then a neighbour invited me to a small music night at a café, and hearing amateurs play without embarrassment convinced me to carry on. I still wouldn't perform alone, yet I've joined them a few times and discovered I enjoy contributing to something shared. In that sense, guitar changed my life twice: first by helping me through isolation, and later by giving me the confidence to take part instead of standing at the edge."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q43",
+          "number": 43,
+          "prompt": "Who discovered that the activity mattered most because of the relationships it created?"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "prompt": "Who says they began the hobby for someone else's benefit rather than their own?"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "prompt": "Who mentions feeling discouraged at first because others appeared more capable?"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "prompt": "Who found that the hobby first helped during a period when normal life had suddenly become limited?"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "prompt": "Who suggests the activity improved an ability to observe small details?"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "prompt": "Who explains that a change in attitude towards mistakes influenced life beyond the hobby itself?"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "prompt": "Who admits they originally expected their interest in the activity to be short-lived?"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "prompt": "Who refers to other people as being more certain than they are about the hobby's emotional effect?"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "prompt": "Who values the time spent doing the hobby more than the result produced at the end?"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "prompt": "Who says another informal event persuaded them not to give up the activity?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q43",
+          "number": 43,
+          "answer": "C"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "answer": "B"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "answer": "A"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "answer": "B"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "answer": "A"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "answer": "C"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "answer": "B"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "answer": "A"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "answer": "D"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

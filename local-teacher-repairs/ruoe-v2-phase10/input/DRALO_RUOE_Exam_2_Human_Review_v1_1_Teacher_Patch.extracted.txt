@@ -1,0 +1,1396 @@
+DRALO
+
+RUOE EXAM 2
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW7/7 RUOE Parts extracted from ENGLISH_PROD · teacher feedback patch applied locally · no production write
+
+HUMAN REVIEW — EXAMEN 2 B2
+
+Reading and Use of English · Parts 1–7
+
+This pack follows the pilot-review workflow. Teacher-approved improvement changes have been applied locally to the student-facing content and answer keys in this Word review copy; unaffected content remains unchanged. No production database content has been modified.
+
+Field
+
+Value
+
+Exam
+
+Examen 6 B2
+
+Database exam ID
+
+88c8c3af-f9dd-4f23-831f-3a4890917144
+
+Source
+
+ENGLISH_PROD · levels_preguntas / levels_respuestas / levels_respuestas_abiertas
+
+Status
+
+PENDING HUMAN REVIEW
+
+Language target
+
+British English
+
+Document purpose
+
+Human academic review before approval / correction
+
+
+
+Reviewer focus
+
+• Natural British English at B2 level; avoid American spelling and generated/corporate phrasing.
+
+• Cambridge-style mechanics and realistic difficulty for each Part.
+
+• Only one clearly defensible answer where the task requires one; distractors must be plausible but wrong.
+
+• Part 3 must test genuine word formation, not merely easy pluralisation or superficial inflection.
+
+• Part 4 must preserve meaning, use the keyword unchanged and produce a grammatical 2–5-word answer.
+
+• Parts 5–7 should test paraphrase, inference and cohesion rather than obvious wording overlap.
+
+TEACHER FEEDBACK PATCH — APPLIED LOCALLY• Part 1: example replaced; Q1, Q2, Q4 and Q6 rebuilt to remove ambiguity and improve item-type variety.• Part 2: Q10 and Q13 strengthened to improve overall difficulty while retaining Q11 and Q14 as valid easier anchors.• Part 3: Q24 replaced with a genuine derivation (ENJOY → enjoyment).• Part 4: Q30 replaced because the original transformation did not preserve meaning precisely.• Part 5: no content change; Q35 retained as a valid direct-detail item.• Part 6: Q42 option B strengthened so its cohesion is specific to the skills-development paragraph.• Part 7: Q46 and Q49 rephrased to reduce lexical overlap and require more interpretation.
+
+Part 1 — Multiple-choice cloze
+
+Vista alumno
+
+Part 1: Multiple-choice cloze
+
+Example: After moving to a smaller flat, she quickly (0) ___ that she used only half her belongings.   A) noticed   B) watched   C) looked   D) viewed   |   Answer: A
+
+Owning Less
+
+A growing number of people are deciding that a home does not have to be packed with possessions to feel comfortable. Instead of filling every shelf, they are choosing to keep only what they really use and value. For some, this change begins after moving house, while others simply become tired of spending time trying to (1) ___ where they left things they hardly use.
+
+The idea is not to live with almost nothing, but to be more selective. People often start by getting rid of broken items or clothes that no longer (2) ___ because their size has changed. As rooms become less crowded, many say they can focus better and feel more (3) ___ . They also find it easier to keep their homes tidy, since there is less mess to clear (4) ___ at the end of the day.
+
+Living with fewer possessions can save money too. When people stop buying things on (5) ___ and think carefully before each purchase, they are less likely to waste cash. In the longer (6) ___ , this habit may also reduce the amount of rubbish we (7) ___ away. Owning less is not the right choice for everyone, but many people say it has had a positive (8) ___ on daily life.
+
+Q
+
+A
+
+B
+
+C
+
+D
+
+1
+
+remember
+
+remind
+
+recognise
+
+realise
+
+2
+
+fit
+
+suit
+
+match
+
+belong
+
+3
+
+gentle
+
+silent
+
+calm
+
+smooth
+
+4
+
+up
+
+out
+
+off
+
+over
+
+5
+
+chance
+
+purpose
+
+luck
+
+impulse
+
+6
+
+term
+
+length
+
+distance
+
+run
+
+7
+
+throw
+
+push
+
+drop
+
+pass
+
+8
+
+result
+
+effect
+
+change
+
+benefit
+
+
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+0bcb428b-9f35-4513-82f6-505ef23ee61c
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available for this production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+
+
+TEACHER FEEDBACK PATCH APPLIED• Example (0) replaced with an independent example sentence; the scored passage no longer contains an example gap.• Q1 rebuilt as a lexical distinction: remember / remind / recognise / realise.• Q2 rebuilt around fit vs suit / match / belong so only one option matches the size context.• Q4 rebuilt as the phrasal verb clear up; alternatives do not fit the context.• Q6 changed to 'in the longer term', which blocks 'run' and removes the original run/term ambiguity.• Q3, Q5, Q7 and Q8 remain unchanged, giving a broader mix of lexical meaning, phrasal verbs and fixed expressions.
+
+Q
+
+Stored key
+
+Word
+
+Reviewer note
+
+0
+
+A
+
+noticed
+
+Independent example — 'noticed that...'
+
+1
+
+A
+
+remember
+
+Rebuilt — only 'remember where...' fits
+
+2
+
+A
+
+fit
+
+Rebuilt — size context selects 'fit'
+
+3
+
+C
+
+calm
+
+feel calm
+
+4
+
+A
+
+up
+
+Rebuilt — phrasal verb 'clear up'
+
+5
+
+D
+
+impulse
+
+on impulse
+
+6
+
+A
+
+term
+
+Rebuilt — 'in the longer term' uniquely excludes 'run'
+
+7
+
+A
+
+throw
+
+throw away
+
+8
+
+B
+
+effect
+
+have a positive effect on
+
+
+
+Human review sheet
+
+Use this page for the teacher's final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 2 — Open cloze
+
+Vista alumno
+
+Part 2: Open cloze
+
+Example: (0) ___ good   |   Answer: for
+
+Turning Pages Again
+
+Not long ago, many experts predicted that screens would replace books for (0) ___ good. Yet reading is becoming popular again, and not only among children. One reason is that people are looking (9) ___ ways to escape constant messages and updates. A novel demands attention, but it also offers a break from the pressure to reply immediately.
+
+Bookshops and libraries have changed too. Many now organise events that encourage readers to meet others (10) ___ tastes overlap with their own. Reading, once seen as a solitary hobby, has become something people share online and in person. Readers post reactions, recommend titles and even film themselves discussing what they have read.
+
+Another factor is convenience. It is easier than ever to carry a book, whether printed or digital, and many busy adults are choosing (11) ___ read on trains or before bed instead of scrolling. Some say they sleep better as (12) ___ result. Others find themselves reading long (13) ___ they meant to stop. If this trend continues, reading may prove to be not old-fashioned (14) ___ exactly what modern life needs. After all, stories can still do what few apps are able (15) ___: slow us down and make us think about (16) ___ matters.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+85980507-4165-4d1e-9a78-91d059ad583b
+
+Stored answer source
+
+levels_respuestas_abiertas
+
+Automated validator
+
+Not available for this production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+
+
+TEACHER FEEDBACK PATCH APPLIED• Q11 ('choose to read') and Q14 ('not X but Y') are retained as valid easier anchor items.• Q10 is strengthened to the possessive relative 'whose' in 'readers whose tastes overlap'.• Q13 is strengthened to 'long after they meant to stop', replacing the very predictable 'put the book down' particle gap.• The set now contains a wider spread of grammatical demands without rewriting the whole Part.
+
+Q
+
+Stored answer
+
+Reviewer note
+
+9
+
+for
+
+look for ways
+
+10
+
+whose
+
+possessive relative pronoun: readers whose tastes...
+
+11
+
+to
+
+choose to read
+
+12
+
+a
+
+as a result
+
+13
+
+after
+
+time linker: long after they meant to stop
+
+14
+
+but
+
+not X but Y
+
+15
+
+to
+
+able to
+
+16
+
+what
+
+what matters
+
+
+
+Human review sheet
+
+Use this page for the teacher's final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 3 — Word formation
+
+Vista alumno
+
+Part 3: Word formation
+
+Example: (0) ___ (CELEBRATE)   |   Answer: celebration
+
+Festivals Worth the Journey
+
+Some events are more than a simple (0) ___ (CELEBRATE) of local culture; they become reasons to book a flight. The best festivals offer visitors a memorable mix of music, food and atmosphere, but also a sense of (17) ___ (CONNECT) with the place itself. In many towns, the streets are carefully decorated, and even ordinary corners become (18) ___ (RECOGNISE) after dark. What makes these occasions special is not always size. A small festival can be just as (19) ___ (IMPRESS) as a famous international one if the welcome feels genuine.
+
+Travellers should, however, do some research before they go. Hotel rooms may be (20) ___ (POSSIBLE) to find at short notice, and public transport is often extremely crowded. On the other hand, good planning can turn a difficult trip into an (21) ___ (FORGET) experience. Many regular festival-goers say that the real pleasure lies in the (22) ___ (EXPECT) that builds before the main event begins. Even bad weather rarely causes (23) ___ (DISAPPOINT), and the shared excitement can create lasting (24) ___ (ENJOY) for visitors.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+6f5f5e94-0ea2-4b65-9d80-308ed7cef9da
+
+Stored answer source
+
+levels_respuestas_abiertas
+
+Automated validator
+
+Not available for this production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+
+
+TEACHER FEEDBACK PATCH APPLIED• Q24 replaced: MEMORY → memories was only pluralisation and did not provide a genuine word-formation transformation.• New Q24 uses ENJOY → enjoyment in a natural noun slot.• The remaining items are unchanged; reviewers should still consider the overall transparency of the derivation set when judging final difficulty.
+
+Q
+
+Stem
+
+Stored answer
+
+17
+
+CONNECT
+
+connection
+
+18
+
+RECOGNISE
+
+unrecognisable
+
+19
+
+IMPRESS
+
+impressive
+
+20
+
+POSSIBLE
+
+impossible
+
+21
+
+FORGET
+
+unforgettable
+
+22
+
+EXPECT
+
+expectation
+
+23
+
+DISAPPOINT
+
+disappointment
+
+24
+
+ENJOY
+
+enjoyment
+
+
+
+Human review sheet
+
+Use this page for the teacher's final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 4 — Key word transformations
+
+Vista alumno
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example: I started learning the piano three years ago.  |  BEEN  |  I __________________ learning the piano for three years.  |  Answer: have been
+
+25. My violin teacher said I was improving more quickly than she had expected.
+
+THAN
+
+My violin teacher said I was improving __________________ expected.
+
+26. I regret not taking up the saxophone when I was at university.
+
+WISH
+
+I __________________ up the saxophone when I was at university.
+
+27. People say that learning drums as an adult is physically demanding.
+
+SAID
+
+Learning drums as an adult __________________ physically demanding.
+
+28. I didn't practise regularly, so I found the first few guitar lessons difficult.
+
+HAD
+
+If I __________________ regularly, I wouldn't have found the first few guitar lessons difficult.
+
+29. It wasn't necessary for Marta to buy an expensive keyboard for her first lessons.
+
+NEED
+
+Marta __________________ an expensive keyboard for her first lessons.
+
+30. The audience could not hear him because he played too quietly.
+
+ENOUGH
+
+He __________________ for the audience to hear him.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+289a6cd8-7738-4fd4-b349-58d17713b5b2
+
+Stored answer source
+
+levels_respuestas_abiertas
+
+Automated validator
+
+Not available for this production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+
+
+TEACHER FEEDBACK PATCH APPLIED• Q30 replaced because the original pair ('too difficult for me' → 'not good enough') shifted the source of difficulty and did not preserve meaning precisely.• New Q30 keeps keyword ENOUGH but requires a clearer syntactic reformulation: 'played too quietly' → 'did not play loudly enough'.• Q25–Q29 remain unchanged.
+
+Q
+
+Keyword
+
+Stored answer
+
+Reviewer note
+
+25
+
+THAN
+
+more quickly than she had
+
+5 words; check marking points
+
+26
+
+WISH
+
+wish I had taken
+
+clear
+
+27
+
+SAID
+
+is said to be
+
+clear passive reporting
+
+28
+
+HAD
+
+had practised more
+
+fits before “regularly”
+
+29
+
+NEED
+
+did not need to buy
+
+5 words; clear
+
+30
+
+ENOUGH
+
+did not play loudly enough
+
+Rebuilt — exact meaning preserved; 5-word answer
+
+
+
+Human review sheet
+
+Use this page for the teacher's final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 5 — Multiple-choice reading
+
+Vista alumno
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Keeping the Past Alive
+
+When people talk about preserving historical heritage, they often picture famous castles, grand museums or ancient temples. Yet the task is much wider than protecting a few celebrated landmarks. In many towns, heritage can be found in ordinary streets, old workshops, local archives and even in traditions linked to particular places. As cities grow and land becomes more valuable, the pressure to replace older buildings with new ones increases. Supporters of development argue that change is necessary if places are to remain economically active. However, those who work in conservation point out that once a site is lost, the connection it offers to earlier generations cannot simply be rebuilt.
+
+For a long time, heritage protection was mainly about freezing places in time. The aim was to restore damaged buildings so that they looked as they had in the past, while modern additions were kept out of sight. That approach still has value, but many specialists now prefer a broader view. They argue that historic areas should continue to be used rather than treated like stage sets. A former warehouse might become a library, for example, or a disused station could be turned into a market. According to this way of thinking, a building survives best when it remains part of daily life, even if that means accepting careful changes.
+
+This idea can be difficult for local residents to accept at first. Some fear that popular heritage projects will attract tourists, raise prices and push out the people who have lived nearby for years. Others worry that once a site starts earning money, decisions will be driven more by business than by respect for history. Such concerns are understandable. There have been cases in which traditional neighbourhoods were renovated so thoroughly that they ended up looking neat but strangely empty, with souvenir shops replacing the communities that had given the area its identity. Preserving walls while losing real life is, in a sense, another kind of destruction.
+
+Even so, refusing all change brings problems of its own. Historic buildings are expensive to maintain, and public funding is often limited. If no practical use can be found for an old structure, it may simply stand unused until its condition becomes dangerous. In that situation, calls to save it usually come too late. Conservationists therefore face a balancing act: they must protect the character of a place while allowing it to adapt enough to survive. Success often depends less on finding a perfect solution than on involving local people early, explaining proposed changes clearly and being honest about what cannot be preserved.
+
+Technology is beginning to help with this process in unexpected ways. Digital mapping, 3D scanning and virtual models can record fragile sites in remarkable detail before repairs begin. These tools are not a substitute for the original, but they can guide restoration work and make collections accessible to people who may never travel to see them. Some experts are enthusiastic about these possibilities, while others warn that a virtual visit should not be confused with direct experience. Looking at a screen cannot reproduce the scale of a stone staircase or the smell of timber in an old theatre. Still, digital records may prove invaluable when disasters such as fire, flood or war damage places beyond immediate repair.
+
+In the end, heritage is not just about age. It is about what communities decide is worth carrying forward. That judgment may involve beauty, memory, craftsmanship or the stories people attach to a site. The strongest preservation projects recognise that the past is neither untouchable nor endlessly reusable. Instead, they treat it as a shared resource that needs care, imagination and, above all, public trust. Without that trust, even well-funded schemes can fail. With it, preserving historical heritage becomes less an effort to resist time and more a way of giving the past a meaningful future.
+
+31. What point does the writer make in the opening paragraph?
+
+A. Protecting heritage mainly means saving the most famous monuments.   B. Economic growth and heritage protection are always impossible to combine.
+
+C. Heritage includes everyday places as well as well-known historic sites.   D. Most towns fail to recognise the value of their local traditions.
+
+32. Why does the writer mention turning a warehouse into a library and a station into a market?
+
+A. To illustrate how historic buildings can remain useful through adapted reuse.   B. To suggest that public buildings are easier to preserve than private ones.
+
+C. To show that modern architecture can improve neglected neighbourhoods.   D. To argue that restoration should hide all signs of contemporary change.
+
+33. What is suggested by the phrase 'another kind of destruction' in the third paragraph?
+
+A. Physical damage is less serious than poor planning.   B. Renovation can harm heritage if it removes the life that made a place meaningful.
+
+C. Tourism should be prevented in all traditional neighbourhoods.   D. Local residents are usually unwilling to support conservation work.
+
+34. What is the writer's attitude towards change in historic buildings?
+
+A. Strongly critical, because changes usually weaken a building's character.   B. Uncertain, because there is still not enough evidence to judge the results.
+
+C. Supportive only when changes are invisible to the public.   D. Generally accepting, provided it helps survival without ignoring what matters about the place.
+
+35. What limitation of digital technology does the writer emphasise?
+
+A. It is too expensive for most conservation projects to use regularly.   B. It cannot fully replace the experience of being at the real site.
+
+C. It often produces records that are unreliable after disasters.   D. It encourages experts to ignore the opinions of local communities.
+
+36. Which statement best sums up the writer's overall message?
+
+A. Heritage survives best when experts are free to make difficult decisions quickly.   B. The main aim of preservation should be to recreate the past as accurately as possible.
+
+C. Successful preservation depends on combining care for the past with practical use and public confidence.   D. New technology will soon solve the biggest problems facing historic sites.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+d165e18c-21d5-41e9-bdc5-08cf6721d381
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available for this production item
+
+Content state
+
+Teacher feedback patch reviewed; no student-facing content changed in this Part
+
+
+
+REVIEW NOTE — TEACHER FEEDBACK• Q35 is valid and clearly supported by the text, although it is a comparatively direct detail item.• No change has been made because a reading set can contain some easier direct-detail questions provided the overall Part remains balanced.• All other Part 5 content remains unchanged.
+
+Q
+
+Stored key
+
+Short rationale
+
+31
+
+C
+
+everyday places as well as landmarks
+
+32
+
+A
+
+examples of adapted reuse
+
+33
+
+B
+
+renovation can remove living community identity
+
+34
+
+D
+
+accepts careful adaptation for survival
+
+35
+
+B
+
+virtual access cannot reproduce direct experience
+
+36
+
+C
+
+care + practical use + public trust
+
+
+
+Human review sheet
+
+Use this page for the teacher's final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 6 — Gapped text
+
+Vista alumno
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Working With the Machine
+
+A few years ago, stories about artificial intelligence at work usually focused on robots replacing people. The reality in many offices has turned out to be less dramatic, but in some ways more surprising. AI systems are now booking meetings, summarising reports and sorting customer emails before a human even sees them. (37) As a result, discussions about the future of work have become more practical, with managers and employees asking what should be automated and what should remain firmly in human hands.
+
+One reason for this change is that the latest tools are easy to access. In the past, only large firms with specialist teams could afford to experiment with advanced software. Now even small businesses can pay for online services that write advertising copy, analyse sales figures or help staff organise their day. (38) Instead, they are often built into familiar workplace platforms, which means people start using them almost without noticing.
+
+That quiet arrival can bring clear advantages. In hospitals, for example, AI can organise patient information so doctors spend less time on paperwork. In law firms, it can search huge collections of documents far faster than junior staff. (39) When routine tasks disappear, workers often have more time for decisions that require judgement, experience and direct contact with other people.
+
+However, the same technology also creates new pressure. If a machine can produce a first draft of a report in seconds, employers may expect staff to complete more work in less time. Some workers say they now spend part of the day checking AI-generated material rather than producing their own. (40) In other words, efficiency does not always feel like freedom from the employee's point of view.
+
+There is also the question of trust. AI tools are impressive, but they still make mistakes, and those mistakes can be hard to spot because the language they produce sounds confident. A chatbot may invent a source, while an image system might create misleading visual details. (41) For that reason, companies are increasingly training staff not just to use AI, but to question it carefully.
+
+Another issue is what happens to workplace skills over time. If software always writes the first version of an email or presentation, younger employees may have fewer chances to develop those abilities themselves. Some experts worry this could weaken the very talents businesses will continue to need. (42) The challenge, then, is not simply to save time today, but to make sure tomorrow's workforce still knows how to think, write and solve problems independently.
+
+For now, most evidence suggests that AI is changing jobs more often than it is eliminating them. New roles are appearing for people who can train systems, review outputs and decide when automation is useful. At the same time, older roles are being reshaped rather than wiped out completely. The workplace of the future may include more machines, but success will still depend on people knowing when to rely on them and when to switch them off.
+
+Option
+
+Sentence
+
+A
+
+Yet this shift has not removed work so much as altered the kind of work people do.
+
+B
+
+For that reason, some employers deliberately keep junior staff involved in first drafts and routine problem-solving, even when AI could do the work faster.
+
+C
+
+These tools do not usually arrive as dramatic new machines in the corner of the room.
+
+D
+
+This can mean the pace increases even when the task itself seems easier.
+
+E
+
+That is helpful only if professionals remain able to judge whether the results are accurate and relevant.
+
+F
+
+In creative industries, meanwhile, it can generate ideas quickly enough to help teams get started.
+
+G
+
+Some businesses have responded by banning personal phones during the working day.
+
+
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+df0c68ba-ad5a-4f4d-9487-1cb04c91bda9
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available for this production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+
+
+TEACHER FEEDBACK PATCH APPLIED• Q42 was the least structurally secure gap in the teacher review.• Option B has been rewritten so that 'For that reason' refers specifically to the preceding concern about younger employees losing chances to develop skills.• The sentence now mentions junior staff, first drafts and routine problem-solving, making it a poor fit after the trust paragraph and a much stronger fit at gap 42.• G remains the extra sentence; gaps 37–41 are unchanged.
+
+Gap
+
+Stored key
+
+Reviewer note
+
+37
+
+A
+
+shift from replacement to changed work
+
+38
+
+C
+
+“These tools” + contrast with dramatic machines
+
+39
+
+F
+
+parallel sector example before general benefit
+
+40
+
+D
+
+pace/efficiency consequence
+
+41
+
+E
+
+accuracy/relevance judgement links to mistakes
+
+42
+
+B
+
+Rewritten B — explicit backward link to junior staff / skill development; unique forward link to future workforce
+
+
+
+Extra option: G
+
+Human review sheet
+
+Use this page for the teacher's final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 7 — Multiple matching
+
+Vista alumno
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+43  Who says that travelling alone made it easier for other people to begin conversations with them?
+
+44  Who realised that having complete freedom could create problems as well as advantages?
+
+45  Who explains that solo travel suits them because it allows them to focus fully on a personal interest?
+
+46  Who only discovered that solo travel suited them because a trip unexpectedly became a solo one?
+
+47  Who decided to alter the way they prepare for trips after finding one aspect too unplanned?
+
+48  Who admits they briefly wanted to end a trip early when they were not enjoying part of it?
+
+49  Who treats contact with other travellers as a welcome extra rather than a reason for travelling?
+
+50  Who began travelling alone partly to escape from the pressures of normal life?
+
+51  Who points out that solo travel was a practical solution to having different tastes from someone close to them?
+
+52  Who suggests that being by yourself can make ordinary travel decisions feel more difficult?
+
+A – Leonie Marsh
+
+I started travelling alone almost by accident after a friend pulled out of a walking holiday in Portugal. Initially, I was annoyed rather than excited, but once I arrived, I realised how much easier it was to follow my own rhythm. If I wanted to spend three hours sketching in a fishing village, nobody minded. That freedom soon became the main attraction. However, I did discover that solo travel demands more practical effort than going away with company. When a train was cancelled, for instance, there was no one to compare ideas with, so every decision felt heavier. Since then, I have become far more organised before setting off. I still enjoy chatting to strangers in cafés and hostels, yet I do not travel alone in order to meet people. For me, the real benefit is having enough quiet time to notice places properly.
+
+B – Rafiq Siddons
+
+For years I avoided solo trips because I assumed they would feel lonely. Meanwhile, most of my friends were posting photographs from group holidays that looked far more entertaining. Then work sent me to Helsinki for a conference, and I added a few extra days on my own. To my surprise, being alone made me more approachable. In a group, I tend to stay with the people I know, whereas this time I ended up sharing meals with locals and other visitors. Not every moment was comfortable: one wet Sunday afternoon, I seriously considered booking an earlier flight home because the city seemed to empty out. Yet that brief low point taught me something useful. If you keep moving, even just to a gallery or market, the mood usually changes. I now plan at least one solo break each year, mainly because it pushes me beyond familiar habits.
+
+C – Marta Villiers
+
+My first independent journey came after a difficult year when I needed distance from everyday routines. I chose a rail pass and spent two weeks crossing central Europe with no detailed schedule. Friends described this as brave, but I saw it differently: travelling alone meant I did not have to negotiate every stop or justify changing my mind. Even so, the complete lack of structure was not as relaxing as I had imagined. After missing a connection in Prague, I found myself wishing I had booked at least the first few nights in advance. Since then, I have kept the spirit of flexibility while building in a framework. I reserve accommodation for the start of a trip, then leave room for last-minute choices later on. That balance suits me. I still return home refreshed, but I no longer confuse spontaneity with good planning.
+
+D – Noah Kerr
+
+Unlike some solo travellers, I did not set off in search of freedom or self-discovery. My reason was simpler: my partner hates long train journeys and museums, both of which I love. Rather than arguing over holiday plans, we sometimes travel separately for short periods. At first, I worried that people would assume I was alone because something had gone wrong in my life. In reality, the experience felt perfectly ordinary once I got used to eating dinner by myself. What I value most is the chance to become deeply absorbed in one subject. On a recent trip to northern Italy, I spent an entire day comparing small railway museums, which would have bored most of my friends. That said, I am not interested in proving I can manage everything independently. If a local guide offers expertise, I am happy to join a tour and learn more.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+fc681493-04a8-49f3-b47e-6f7186deb5b0
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available for this production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+
+
+TEACHER FEEDBACK PATCH APPLIED• Q46 rephrased so the candidate must connect the changed travel arrangement with the later discovery that solo travel suited the speaker.• Q49 rephrased to remove the near-copy of 'I do not travel alone in order to meet people'.• Keys remain A for both items; Q43–45, Q47–48 and Q50–52 are unchanged.
+
+Q
+
+Stored key
+
+Evidence
+
+43
+
+B
+
+being alone made him more approachable
+
+44
+
+C
+
+freedom/no schedule became less relaxing than expected
+
+45
+
+D
+
+deep focus on museums/personal interest
+
+46
+
+A
+
+friend withdrew → planned trip unexpectedly became solo → she discovered the freedom suited her
+
+47
+
+C
+
+now books the start after too little structure
+
+48
+
+B
+
+considered an earlier flight home
+
+49
+
+A
+
+meeting people is incidental; the main purpose is quiet time to notice places
+
+50
+
+C
+
+needed distance from everyday routines
+
+51
+
+D
+
+different tastes from partner
+
+52
+
+A
+
+every decision felt heavier alone
+
+
+
+Human review sheet
+
+Use this page for the teacher's final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Final exam decision
+
+Complete this after all seven Parts have been reviewed. Do not approve the exam merely because the stored answers are internally consistent; approval is pedagogical and editorial.
+
+Part
+
+Decision
+
+Blocking issue / action
+
+1
+
+
+
+
+
+2
+
+
+
+
+
+3
+
+
+
+
+
+4
+
+
+
+
+
+5
+
+
+
+
+
+6
+
+
+
+
+
+7
+
+
+
+
+
+
+
+Field
+
+Value
+
+Overall decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Reviewer
+
+
+
+Date
+
+
+
+Priority corrections
+
+
+
+Ready for production after corrections?
+
+YES / NO
+
+
+
+HANDOFF NOTETeacher-feedback patch applied to Exam 6 v1.1. Re-review the changed items before pedagogical approval: Part 1 example/Q1/Q2/Q4/Q6; Part 2 Q10/Q13; Part 3 Q24; Part 4 Q30; Part 6 Q42; Part 7 Q46/Q49. Part 5 is intentionally unchanged. No production database content has been modified.
+
+
+

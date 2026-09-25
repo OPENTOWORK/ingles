@@ -1,0 +1,1124 @@
+DRALO
+
+RUOE EXAM 10
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Exam ID
+
+B2 · Exam 10
+
+Source
+
+ENGLISH_PROD · current stored RUOE Parts 1–7
+
+Status
+
+PENDING_HUMAN_REVIEW
+
+Language
+
+British English
+
+Purpose
+
+Teacher review before approval / correction / publication
+
+Theme map
+
+Exam 14 is internally varied, but several subjects recur from Exams 8–13. Those repetitions are deliberately flagged rather than silently rewritten, so the production version remains visible to reviewers.
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Life on long-distance space missions
+
+2
+
+Open cloze
+
+Wearable medical technology
+
+3
+
+Word formation
+
+Rail versus air travel
+
+4
+
+Key word transformations
+
+School start times and sleep
+
+5
+
+Multiple-choice reading
+
+Recycling systems and waste
+
+6
+
+Gapped text
+
+Return of home cooking
+
+7
+
+Multiple matching
+
+Career choices and changing direction
+
+Theme-variety alert: the clearest repeats are Part 1 (space), Part 3 (rail vs air), Part 6 (home cooking) and Part 7 (career change). Part 5 is also another sustainability text. Keep these visible for human review, but consider replacements before final bank approval.
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Life on long-distance space missions
+
+VISTA ALUMNO
+
+Example:
+
+A) set
+
+B) held
+
+C) spent
+
+D) passed
+
+Answer: C
+
+Text
+
+Living Beyond Earth
+
+Astronauts on future missions to Mars may have to (0) ___ more than two years away from Earth, so scientists are trying to predict what daily life will be like. One major challenge is how small crews will (1) ___ with stress while living in a very limited space. To reduce tension, mission planners want to build regular exercise and free time (2) ___ the daily schedule. Food will also play an important (3) ___, not only for health but for morale. Since supplies cannot easily be replaced, meals must stay fresh for long periods and be easy to heat (4) ___ before eating. Another concern is communication: messages to Earth could take many minutes to arrive, which means astronauts will often have to (5) ___ decisions without immediate advice. Because of this, crews will need a high (6) ___ of trust in one another. They will also have to look (7) ___ equipment carefully, as even a minor fault could become serious. If these problems can be solved, long-distance space travel may become a real (8) ___ within our lifetime.
+
+Questions
+
+1
+
+A cope
+
+B manage
+
+C resist
+
+D face
+
+2
+
+A at
+
+B into
+
+C to
+
+D by
+
+3
+
+A task
+
+B duty
+
+C work
+
+D role
+
+4
+
+A up
+
+B over
+
+C out
+
+D off
+
+5
+
+A do
+
+B reach
+
+C make
+
+D have
+
+6
+
+A amount
+
+B level
+
+C degree
+
+D scale
+
+7
+
+A after
+
+B up
+
+C for
+
+D through
+
+8
+
+A fact
+
+B event
+
+C truth
+
+D reality
+
+Part 1 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 14
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+1
+
+A · cope
+
+2
+
+B · into
+
+3
+
+D · role
+
+4
+
+A · up
+
+5
+
+C · make
+
+6
+
+B · level
+
+7
+
+A · after
+
+8
+
+D · reality
+
+TEACHER ATTENTION
+
+• Q1 uniqueness strengthened by replacing the distractor DEAL, which also formed the valid phrase 'deal with stress'. COPE is now the only clearly natural answer.
+
+• Q4 rebuilt completely: the text now tests 'heat up before eating', with UP as the unique key. The previous 'carry out' item has been removed.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 2 — Open cloze
+
+Theme: Wearable medical technology
+
+VISTA ALUMNO
+
+Example:
+
+Answer: 0 → as
+
+Text
+
+Tiny Devices, Big Changes
+
+Medical technology is changing lives faster than ever, especially when it is designed to fit into everyday routines. One example is the smart patch, a small device worn on the skin that can act (0) ___ a personal health monitor. It measures signs such as heart rate or temperature and sends the information to a phone, (9) ___ can then share it with a doctor.
+
+For people with long-term conditions, this means they do not have to visit hospital as often (10) ___ they once did. Some patches can even remind users (11) ___ take medicine at the right time. Others are able to warn them if something seems wrong, so action can be taken (12) ___ an emergency develops.
+
+Experts say these inventions are likely to become more common, partly because they are cheaper than they used to (13) ___. Patients also report feeling more confident, since they know help is available (14) ___ soon as a problem appears. (15) ___ all innovations succeed immediately, however. Devices must be tested carefully to make sure they work properly and are easy enough (16) ___ people of all ages to use.
+
+Part 2 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 14
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+9
+
+which
+
+10
+
+as
+
+11
+
+to
+
+12
+
+before
+
+13
+
+be
+
+14
+
+as
+
+15
+
+not
+
+16
+
+for
+
+TEACHER ATTENTION
+
+• No teacher-requested content change applied. The smart-patches Open Cloze remains unchanged.
+
+• Theme-variety alert: medical technology is close to Exam 8 Part 6 ('Small Breakthroughs, Big Changes'), though this text narrows the focus to smart patches.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 3 — Word formation
+
+Theme: Rail versus air travel
+
+VISTA ALUMNO
+
+Example:
+
+(0) ___ (COMFORT)
+
+Answer: 0 → comfortable
+
+Text
+
+Choosing How to Travel
+
+For many people, the most (0) ___ (COMFORT) way to cross Europe is still by plane, mainly because booking websites make flights seem quick and simple. However, rail companies argue that this view ignores the growing (17) ___ (POPULAR) of long-distance train travel. Modern trains offer reliable Wi-Fi, city-centre stations and far fewer luggage rules, which can make the whole experience less (18) ___ (STRESS) than flying.
+
+Another advantage is the (19) ___ (ABLE) to work or relax throughout the journey, instead of waiting in queues at security. In addition, train travel is often more (20) ___ (ENVIRONMENT) friendly, especially on routes where airports are far from the city itself. Even when tickets appear expensive at first, travellers should compare the total cost (21) ___ (CARE), including transport to and from the airport.
+
+That said, trains are not always the best choice. Delays can cause real (22) ___ (FRUSTRATE), and some international routes still involve (23) ___ (CONVENIENT) changes. As a result, the most sensible decision depends on whether speed, price or environmental (24) ___ (RESPONSIBLE) matters most to the passenger.
+
+Part 3 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 14
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+17
+
+popularity
+
+18
+
+stressful
+
+19
+
+ability
+
+20
+
+environmentally
+
+21
+
+carefully
+
+22
+
+frustration
+
+23
+
+inconvenient
+
+24
+
+responsibility
+
+TEACHER ATTENTION
+
+• Q24 wording refined to 'environmental responsibility', making RESPONSIBILITY a semantically precise and parallel decision criterion alongside speed and price.
+
+• Theme-variety alert: rail-versus-air travel closely overlaps Exam 8 Part 7. Strong candidate for replacement if exams are presented sequentially.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 4 — Key word transformations
+
+Theme: School start times and sleep
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+
+0. It isn't necessary for students to arrive at school before 8 a.m.
+
+NEED
+
+Students __________________ arrive at school before 8 a.m.
+
+Answer: 0 → do not need to
+
+Questions
+
+25. The sleep study was so convincing that the school changed its timetable.
+
+PERSUADED
+
+The sleep study __________________ its timetable.
+
+26. Our head teacher regrets not asking parents for their views earlier.
+
+WISHES
+
+Our head teacher __________________ parents for their views earlier.
+
+27. If schools began later, some students would cycle there instead of being driven.
+
+STARTED
+
+Some students would cycle to school __________________ later.
+
+28. Starting lessons at 8.30 is too early for many pupils.
+
+ENOUGH
+
+For many pupils, 8.30 is __________________ to start lessons.
+
+29. The science teacher told us not to rely on one study alone.
+
+AGAINST
+
+The science teacher __________________ on one study alone.
+
+30. Mia managed to get a seat although the bus was very crowded.
+
+DESPITE
+
+Mia managed to get a seat __________________ very crowded.
+
+Part 4 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 14
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+25
+
+persuaded the school to change
+
+26
+
+wishes she had asked
+
+27
+
+if schools started
+
+28
+
+not late enough
+
+29
+
+warned us against relying
+
+30
+
+despite the bus being
+
+TEACHER ATTENTION
+
+• Q25 rebuilt from passive reporting to PERSUADED → 'persuaded the school to change', increasing restructuring distance while preserving the school-start-time theme.
+
+• Q30 rebuilt from a direct TOO pattern to DESPITE → 'despite the bus being'. Q26–Q29 are retained, giving the set a broader structural mix.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 5 — Multiple-choice reading
+
+Theme: Recycling systems and waste
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+Does Recycling Really Work?
+
+For years, recycling has been presented as one of the simplest ways for ordinary people to help the planet. Rinse a jar, flatten a box, put a bottle in the right bin, and feel that a small but useful action has been taken. Yet the subject has become far more complicated than those early public campaigns suggested. Reports about plastic waste being exported abroad, or about carefully separated rubbish ending up in the same lorry, have led many people to ask an uncomfortable question: if the system is so messy, is recycling really effective at all?
+
+The short answer is yes, but only when it is part of a much bigger picture. Recycling does save raw materials and energy in many cases. Producing aluminium from recycled metal, for example, uses far less energy than making it from the original ore. Glass and paper can also bring clear benefits when they are collected and processed properly. The difficulty is that people often imagine recycling as a magical solution that cancels out wasteful habits. In reality, it is more like damage control: useful, necessary, but limited.
+
+Part of the confusion comes from the fact that not all materials behave in the same way. A metal can often be recycled repeatedly with little loss in quality, while many plastics become weaker each time they are reprocessed. Some plastic items cannot be economically recycled at all, especially if they contain different layers or food remains. This does not mean that all recycling programmes are dishonest. It means that the famous chasing-arrows symbol can suggest a promise that the real system cannot always keep. Something may be technically recyclable but still unlikely to be recycled in practice.
+
+Another reason for public doubt is that recycling depends on markets, not just good intentions. A council may collect a material separately, but that material still needs a buyer. If the price of new plastic falls, factories may prefer it to recycled plastic, which can be less consistent in quality. When that happens, a perfectly organised local collection system may suddenly become less effective. Critics sometimes use these failures to argue that recycling is pointless. That is too simple. The better conclusion is that recycling needs stable investment, clear rules for manufacturers and products designed with reuse in mind.
+
+There is also a psychological problem. Once people believe they are recycling, they may feel they have done their part and stop asking harder questions. A coffee cup dropped into the correct bin can seem like a success, even if that cup contains materials that are difficult to separate. In that sense, recycling can become a comforting story that protects overconsumption. Businesses know this. Some companies have promoted recyclable packaging while continuing to produce unnecessary single-use products. They are not exactly lying, but they are directing attention towards the final stage of a product's life and away from the amount being produced in the first place.
+
+None of this means household recycling is a waste of time. On the contrary, well-run schemes remain an important tool, especially for materials such as metals, paper and glass. But expecting bins alone to solve the waste crisis is like expecting seat belts to solve dangerous driving. They reduce harm, yet they do not remove the cause of the problem. If governments want real progress, they must encourage repair, refill systems and longer-lasting products, while making manufacturers responsible for what happens after sale. Recycling works best not as the hero of the story, but as one member of a much larger team.
+
+Questions
+
+31. What is the writer’s main point in the article? A. Recycling is worthwhile, but it cannot solve waste problems on its own. B. Recycling schemes would succeed if people cleaned and sorted rubbish more carefully. C. Recycling has failed mainly because councils have used the wrong collection methods. D. Recycling should be replaced by systems that focus only on reusing materials.
+
+32. Why does the writer mention aluminium in the second paragraph? A. to show that some recycled products are too expensive to make B. to give an example of a material for which recycling can bring clear benefits C. to explain why metal is easier to collect than glass or paper D. to suggest that energy savings from recycling are often exaggerated
+
+33. What does the writer suggest about the chasing-arrows symbol on products? A. It is useful mainly because it reminds people to wash containers properly. B. It is no longer used consistently by manufacturers in different countries. C. It can give consumers an impression that is more positive than reality. D. It has made recycling systems more efficient than they used to be.
+
+34. Why does the writer discuss buyers and the price of new plastic in the fourth paragraph? A. to argue that local councils should stop collecting plastic separately B. to show that recycling systems are affected by economic conditions as well as public effort C. to prove that manufacturers are unwilling to improve product quality D. to explain why recycled plastic is always inferior to new plastic
+
+35. What is the writer’s attitude towards companies that promote recyclable packaging? A. They are making an honest attempt to educate consumers about waste. B. They are unfairly blamed for problems created by shoppers. C. They are deliberately hiding the fact that recycling never works. D. They are using a partial truth to distract attention from a larger problem.
+
+36. In the final paragraph, what is the purpose of comparing recycling with seat belts? A. to suggest that waste problems are mainly caused by careless consumers B. to emphasise that recycling reduces damage without dealing with the root cause C. to show that simple safety measures are often more effective than expensive reforms D. to argue that governments should make recycling rules stricter for everyone
+
+Part 5 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 14
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+31
+
+A
+
+32
+
+B
+
+33
+
+C
+
+34
+
+B
+
+35
+
+D
+
+36
+
+B
+
+TEACHER ATTENTION
+
+• No content changes applied. Part 5 remains one of the strongest sections in the paper, with well-grounded paraphrase and inference.
+
+• Bank-level sustainability repetition remains a separate distribution issue, not a defect in this Part.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 6 — Gapped text
+
+Theme: Return of home cooking
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+Why Home Cooking Is Back
+
+For years, the story of modern eating seemed simple: people were busier than ever, takeaway apps were growing fast, and cooking at home looked old-fashioned. Yet recently, the opposite trend has begun to attract attention. More people are planning meals, buying basic ingredients and sharing photos of dishes they have made themselves. It is not just a hobby for skilled food lovers, either. Ordinary households are starting to see cooking as a normal part of daily life again.
+
+One reason is clearly financial. Meals bought outside the home have become noticeably more expensive, especially in towns and cities where food delivery is common. Families who once relied on prepared food a few nights a week are now doing the maths more carefully. (37) As a result, dishes that were once seen as slow or inconvenient, such as soups, pasta sauces and rice-based meals, suddenly make practical sense again.
+
+Money, however, is only part of the explanation. During periods when people spent more time at home, many discovered that cooking could structure the day and provide a small sense of progress. Chopping vegetables or preparing dough offered a break from screens and constant messages. (38) For some, that confidence remained even after life became busier again, and they continued to cook because they now felt capable rather than nervous.
+
+The internet has also changed the experience in ways that make home cooking easier to begin. In the past, a beginner might have been put off by a recipe full of unfamiliar terms or assumed knowledge. Now, short videos can show every step, from holding a knife correctly to checking whether onions are cooked enough. (39) That kind of guidance reduces the risk of wasting ingredients, which matters even more when budgets are tight.
+
+Another important change involves ideas about health. People have become more aware of how often they eat highly processed food and how little control they have over what goes into it. At home, even simple cooking gives them more influence over salt, sugar and portion size. (40) Instead, they are aiming for meals that feel realistic on a weekday but still healthier than something bought in a hurry.
+
+There is also a social side to the return of home cooking. In some households, preparing dinner has become a shared task rather than one person’s responsibility. Children wash vegetables, flatmates take turns choosing recipes, and friends invite one another over for low-cost meals. (41) It turns cooking into an activity with conversation and routine, rather than a lonely job that has to be finished as quickly as possible.
+
+Of course, not everyone has the time, space or energy to cook regularly, and ready-made food remains useful for many people. Even so, the renewed interest in home cooking seems likely to last. (42) In that sense, the return of home cooking is not really about going backwards. It is about finding a habit that suits modern life better than many people expected.
+
+Sentences
+
+A Many people realised that a home-cooked meal could feed several people for the same price as a single order from a restaurant.
+
+B What matters to them is not producing perfect restaurant-style food but making something satisfying with ingredients they trust.
+
+C In addition, viewers can pause, replay and compare their results with what they see on screen.
+
+D Just as importantly, the finished meal often gives everyone a reason to sit down together at the same time.
+
+E This was especially true when a basic recipe turned out well and could easily be made a second time.
+
+F Even people who are not especially interested in food can see the advantage of a skill that saves money and offers a degree of control.
+
+G Some food companies have responded by reducing portion sizes and changing their packaging designs.
+
+Part 6 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 14
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+37
+
+A
+
+38
+
+E
+
+39
+
+C
+
+40
+
+B
+
+41
+
+D
+
+42
+
+F
+
+TEACHER ATTENTION
+
+• No content changes applied. The gapped text and stored sequence A-E-C-B-D-F remain unchanged.
+
+• Theme repetition with earlier home-cooking material remains a bank-level consideration only.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 7 — Multiple matching
+
+Theme: Career choices and changing direction
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+Which person talks about each of the following? The people may be chosen more than once.
+
+43 Who realised from an activity outside their main job what kind of work suited them better?
+
+44 Who says that outsiders fail to appreciate how important their work can be?
+
+45 Who advises people not to be too influenced by other people's expectations?
+
+46 Who mentions that their current role still makes use of knowledge gained earlier?
+
+47 Who chose a path mainly because their personal circumstances limited the alternatives?
+
+48 Who accepted a less stable income in exchange for feeling happier about work?
+
+49 Who discovered that the part of work they enjoyed most was not the one they were originally employed to do?
+
+50 Who stayed in a suitable profession for some time despite a sense that it was not really right for them?
+
+51 Who talks about enjoying work because it combines routine with the unexpected?
+
+52 Who is considering becoming independent in their field at a later stage?
+
+Texts
+
+A – Leah Morton
+
+At school I was the sort of person who wanted a plan for everything, so choosing a career felt strangely difficult. I did well in science and everyone assumed I would study medicine, yet I wasn't convinced it suited me. During a summer job at a local garden centre, I realised I enjoyed explaining things to customers far more than dealing with stock. That surprised me. Initially, I ignored it and started a pharmacy course because it seemed sensible. However, after six months I switched to training as a science teacher. Since then, I've never regretted it. The pay isn't amazing and the workload can be intense, especially in winter, but I like the mix of structure and unpredictability. Young people ask honest questions, and that keeps me interested. Looking back, I wish I'd paid less attention to what other people thought was impressive.
+
+B – Ravi Sen
+
+My route into work was less about passion and more about necessity. My family ran a small café, and as the oldest child I helped out from the age of thirteen. By the time I left school, I knew I could manage people and solve problems quickly, but university wasn't financially realistic. Meanwhile, one of our suppliers suggested I apply for an apprenticeship in logistics. I had no idea what the sector involved, yet I liked the fact that every day brought a different challenge. Ten years on, I coordinate deliveries for a food company. Some friends still think it sounds dull compared with creative jobs, although I disagree. If a shipment goes wrong, shops can end up with empty shelves, so the pressure is real. I may eventually set up my own business, but for now I'm learning as much as I can from experienced colleagues.
+
+C – Nina Kowalska
+
+I spent years trying to choose between secure work and something more personal. As a teenager I loved drawing clothes, but people kept warning me that fashion was too competitive. In the end, I trained as an accountant and stayed in the profession longer than expected because I was good at it. Even so, I always felt slightly detached from what I was doing. Then, while making costumes for a local theatre group in the evenings, I noticed how absorbed I became when time was short and a design problem needed fixing. That was a clue I couldn't ignore. I now run a small alterations studio and design custom pieces at weekends. The income is less predictable than before, which can be worrying. Yet I prefer that uncertainty to spending every Monday counting the days until Friday. For me, choosing the right path meant accepting that comfort isn't the same as satisfaction.
+
+D – Owen Price
+
+People often imagine that choosing a career is a single dramatic moment, but mine changed through a series of small decisions. I studied computer engineering and joined a large tech company straight after university. The office was modern, the salary was decent and the promotion route was clear. Still, after a while I found myself enjoying the training sessions more than the technical work. I liked helping new staff understand difficult systems and watching them become more confident. At first I treated that as a useful side task; later I realised it was the part of the week I looked forward to most. Two years ago I moved into corporate learning and now design training programmes for different departments. Oddly enough, I use my original degree every day, just not in the way I expected. That has taught me that changing direction doesn't always mean starting from zero.
+
+Part 7 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 14
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+43
+
+C
+
+44
+
+B
+
+45
+
+A
+
+46
+
+D
+
+47
+
+B
+
+48
+
+C
+
+49
+
+D
+
+50
+
+C
+
+51
+
+A
+
+52
+
+B
+
+TEACHER ATTENTION
+
+• Q49 answer key corrected from C to D. Owen is the only profile who says the part he enjoyed most was different from the technical work he was originally employed to do.
+
+• After correcting Q49, the distribution becomes A=2, B=3, C=3, D=2, so the previous C-heavy / D-light imbalance is substantially resolved without rewriting valid questions.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Final exam review
+
+Use this page only after all seven Parts have been reviewed.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+LANGUAGE
+
+☐ Natural British English throughout
+
+LEVEL
+
+☐ Consistently B2 First
+
+AUTHENTICITY
+
+☐ Cambridge-style task behaviour and difficulty
+
+THEME VARIETY
+
+☐ Sufficient variety within Exam 14 and against Exams 5–13
+
+KEYS
+
+☐ All keys verified manually
+
+DISTRACTORS
+
+☐ Plausible but clearly wrong
+
+PART 4
+
+☐ Meaning preserved · keyword intact · 2–5 words
+
+CRITICAL FIXES
+
+☐ Part 1 Q1 uniqueness strengthened · Part 1 Q4 rebuilt · Part 3 Q24 refined · Part 4 Q25/Q30 rebuilt · Part 7 Q49 key corrected
+
+FINAL DECISION
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Reviewer: ________________________________    Date: __________________
+

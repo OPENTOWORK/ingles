@@ -1,0 +1,1113 @@
+{
+  "version": "DRALO_RUOE_Exam_08_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 8,
+  "sourceGeneratedAt": "2026-08-31T20:14:25.691Z",
+  "reviewFile": "DRALO_RUOE_Exam_4_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "B2 First Reading and Use of English Part 1",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) strong",
+          "B) strict",
+          "C) tight",
+          "D) narrow"
+        ],
+        "answer": "C",
+        "explanation": "The fixed expression is 'on a tight budget'."
+      },
+      "title": "Eating Well for Less",
+      "passage": "Many people believe that healthy food is expensive, but that is not always true. If you are living on a (0) ___ budget, a little planning can make a big difference. One useful (1) ___ is to write a shopping list before you go to the supermarket and stick to it. This helps you avoid buying things you do not really need. It is also worth keeping an eye out (2) ___ special offers, although you should only buy extra items if you know you will use them. Another way to save money is to base meals (3) ___ simple ingredients such as rice, beans and seasonal vegetables. These are often cheaper and can be used in a wide (4) ___ of dishes. Cooking at home may take more time, but it usually works (5) ___ far less expensive than buying prepared meals. You can also make larger amounts and freeze portions for later. In the long (6) ___, this can reduce waste as well as cost. Healthy eating does not depend on buying fashionable products. It is more a (7) ___ of making sensible choices and getting the most out (8) ___ the food you buy.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) hint",
+            "B) tip",
+            "C) clue",
+            "D) signal"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) at",
+            "B) on",
+            "C) for",
+            "D) to"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) on",
+            "B) by",
+            "C) with",
+            "D) from"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) extent",
+            "B) collection",
+            "C) spread",
+            "D) range"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) off",
+            "B) out",
+            "C) over",
+            "D) up"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) run",
+            "B) length",
+            "C) distance",
+            "D) period"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) fact",
+            "B) issue",
+            "C) matter",
+            "D) situation"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) from",
+            "B) with",
+            "C) over",
+            "D) of"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "B",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "C",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "A",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "B",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "A",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "C",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "D",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "B2 First Reading and Use of English Part 2",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "as"
+      },
+      "title": "When Visitors Change a Town",
+      "passage": "Tourism is often presented (0) ___ a simple success story: more visitors arrive, local businesses earn more money, and jobs are created. In reality, the effects on local communities are rarely quite (9) ___ straightforward. In many places, tourism has allowed historic buildings to be repaired and traditional festivals to survive, which might otherwise have disappeared. At the same time, however, residents sometimes find that their town no longer belongs (10) ___ them in the same way.\n\nOne reason for this is that homes may be turned into holiday rentals, leaving fewer places for local people to live. Prices can rise so quickly (11) ___ younger families are forced to move away. Streets that were once quiet may become crowded, and small shops may close if they cannot compete with businesses aimed mainly (12) ___ tourists.\n\nFor tourism to benefit everyone, local people need to be involved in planning how it develops. If they are listened (13) ___, they are more likely to support new projects. Visitors also have a role to play: they should respect local customs and remember that they are guests rather (14) ___ owners. Communities are far more likely to welcome tourism when they feel (15) ___ control of it, instead of being shaped (16) ___ it.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "so"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "to"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "that"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "at"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "to"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "than"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "in"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "by"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "when_x"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "USUAL",
+        "answer": "unusual",
+        "transformationFamily": "prefix"
+      },
+      "title": "When Playlists Cross the Age Gap",
+      "passage": "It is no longer (0) ___ (USUAL) to see grandparents and teenagers sharing headphones on the bus. Music streaming has made this kind of connection easier, and many families are surprised by the (17) ___ (VARY) of songs they end up enjoying together. A teenager may introduce a grandparent to a new singer, while an older relative offers stories about the first time a classic track became popular. This exchange creates a sense of (18) ___ (CLOSE) that is hard to find in everyday conversation. Researchers say that shared listening can also improve (19) ___ (RELATE) between age groups, especially when each person feels their tastes are respected. In community centres, mixed-age choirs are growing in (20) ___ (POPULAR), partly because rehearsals give people a regular reason to meet. Members often say that the most (21) ___ (VALUE) part is not the performance itself but the chance to learn from one another. For younger people, that can be an (22) ___ (EXPECT) benefit. For older singers, music can bring back confidence and encourage active (23) ___ (INVOLVE) in local life. In the end, a song's real power may lie in its (24) ___ (ABLE) to make strangers, and relatives, feel closer.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "VARY",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "CLOSE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "RELATE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "POPULAR",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "VALUE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EXPECT",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "INVOLVE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "ABLE",
+          "transformationFamily": "noun"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "widely",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "closeness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "relationships",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "popularity",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "valuable",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "unexpected",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "involvement",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "ability",
+          "transformationFamily": "noun"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "when_x"
+    },
+    "4": {
+      "partTitle": "Reading and Use of English Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "I started collecting stamps when I was ten.",
+        "keyword": "BEEN",
+        "sentence2Start": "I __________________ collecting stamps since I was ten.",
+        "answer": "have been"
+      },
+      "questions": [
+        {
+          "id": "p4q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "People say that local craft clubs are becoming popular again with teenagers.",
+          "keyword": "SAID",
+          "sentence2Start": "Local craft clubs __________________ popular again with teenagers.",
+          "answer": "are said to be",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SAID",
+            "fullAnswers": [
+              "are said to be"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive reporting structure",
+                "accepted": [
+                  "are said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to be"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-02",
+          "target_structure": "passive reporting verb with infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests passive reporting form; MP2 tests infinitive complement after reporting verb.",
+          "alternative_route_check": "Only one defendable route is allowed because the sentence2Start fixes the passive pattern and blocks alternatives like 'people say'."
+        },
+        {
+          "id": "p4q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "Mia regrets selling her grandmother's sewing machine online.",
+          "keyword": "WISHES",
+          "sentence2Start": "Mia __________________ her grandmother's sewing machine online.",
+          "answer": "wishes she had not sold",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISHES",
+            "fullAnswers": [
+              "wishes she had not sold"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish plus subject",
+                "accepted": [
+                  "wishes she",
+                  "wishes she'd"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past perfect negative",
+                "accepted": [
+                  "had not sold",
+                  "not sold"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-11",
+          "target_structure": "wish for past regret with past perfect",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests the fixed 'wishes she' frame; MP2 tests the past perfect negative meaning of regret.",
+          "alternative_route_check": "Only one route is valid: WISHES is fixed in the third person and the gap must carry the negative past perfect."
+        },
+        {
+          "id": "p4q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "Tom had expected fewer people to read his blog about repairing old radios.",
+          "keyword": "THAN",
+          "sentence2Start": "Tom's blog about repairing old radios attracted __________________ he had expected.",
+          "answer": "more readers than",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "THAN",
+            "fullAnswers": [
+              "more readers than"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "infinitive plus first comparator",
+                "accepted": [
+                  "to be as"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "adjective plus second comparator",
+                "accepted": [
+                  "successful as"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-05",
+          "target_structure": "comparison of expectation and outcome with as ... as",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests the 'not as ... as' structure with antonym shift; MP2 tests the clause expressing expectation.",
+          "alternative_route_check": "Only one route is valid: the negative sits outside the gap on 'had not expected', so the adjective inside the gap must stay positive."
+        },
+        {
+          "id": "p4q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "You should switch off your phone before the photography workshop starts.",
+          "keyword": "BETTER",
+          "sentence2Start": "You __________________ your phone before the photography workshop starts.",
+          "answer": "had better switch off",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BETTER",
+            "fullAnswers": [
+              "had better switch off",
+              "'d better switch off"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "advisory modal structure",
+                "accepted": [
+                  "had better",
+                  "'d better"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "phrasal verb complement",
+                "accepted": [
+                  "switch off"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-08",
+          "target_structure": "had better for strong advice",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests the fixed modal phrase; MP2 tests the verb phrase required by the context.",
+          "alternative_route_check": "Other advice forms such as 'ought to' are blocked by the keyword and sentence opening."
+        },
+        {
+          "id": "p4q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "I only learnt to knit because my aunt showed me how to do it.",
+          "keyword": "TAUGHT",
+          "sentence2Start": "I would not have learnt to knit if my aunt __________________ how to do it.",
+          "answer": "had not taught me",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "TAUGHT",
+            "fullAnswers": [
+              "had not taught me",
+              "hadn't taught me"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "third conditional past perfect negative",
+                "accepted": [
+                  "had not taught",
+                  "hadn't taught"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "object pronoun",
+                "accepted": [
+                  "me"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-14",
+          "target_structure": "third conditional with past perfect in if-clause",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests the past perfect negative after 'if'; MP2 tests the required object pronoun.",
+          "alternative_route_check": "Only one defendable route fits the given frame; alternatives like 'shown me' would not match the keyword."
+        },
+        {
+          "id": "p4q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "Finn started restoring vintage bicycles two years ago and he still does it now.",
+          "keyword": "BEEN",
+          "sentence2Start": "Finn __________________ vintage bicycles for two years.",
+          "answer": "has been restoring",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BEEN",
+            "fullAnswers": [
+              "has been restoring",
+              "he's been restoring"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "present perfect continuous auxiliary",
+                "accepted": [
+                  "has been",
+                  "he's been"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "main verb in -ing form",
+                "accepted": [
+                  "restoring"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-01",
+          "target_structure": "present perfect continuous for activity continuing until now",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests the perfect continuous auxiliary sequence; MP2 tests the -ing main verb.",
+          "alternative_route_check": "The sentence2Start strongly selects the continuous form; alternatives like 'has restored' change the aspect and are not accepted."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "p4q25",
+          "number": 25,
+          "answer": "are said to be"
+        },
+        {
+          "id": "p4q26",
+          "number": 26,
+          "answer": "wishes she had not sold"
+        },
+        {
+          "id": "p4q27",
+          "number": 27,
+          "answer": "more readers than"
+        },
+        {
+          "id": "p4q28",
+          "number": 28,
+          "answer": "had better switch off"
+        },
+        {
+          "id": "p4q29",
+          "number": 29,
+          "answer": "had not taught me"
+        },
+        {
+          "id": "p4q30",
+          "number": 30,
+          "answer": "has been restoring"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 26
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 27
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 28
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 29
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 1,
+          "4": 3,
+          "5": 2
+        },
+        "answerLengths": [
+          4,
+          5,
+          5,
+          4,
+          4,
+          3
+        ]
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "Living Beyond Earth",
+      "passage": "For decades, space travel was presented as a heroic adventure lasting a few thrilling days. Future missions are likely to be very different. A journey to Mars, for example, could take many months, with the crew living in a metal structure no bigger than a small flat. In that situation, success will depend not only on rockets and fuel, but also on whether people can stay healthy, motivated and cooperative when there is no quick way home.\n\nThat is why modern mission planning pays almost as much attention to ordinary daily life as to engineering. Researchers now study what astronauts eat, how they sleep and even how they argue. On the International Space Station, these questions matter, but support from Earth is always relatively close. For crews heading much farther away, however, every routine task becomes more important. If the coffee machine breaks in orbit around Earth, it is irritating; if the water recycling system fails halfway to Mars, it may threaten the whole mission.\n\nFood offers a good example of this change in thinking. Early space meals were designed simply to be safe, light and easy to store. Future crews will still need practical food, but they may also need meals that provide comfort and variety. Some scientists are testing ways of growing salad leaves and herbs in small onboard gardens, not because astronauts cannot survive without fresh flavour, but because familiar smells and colours may improve mood. A handful of green plants might therefore do more than supply vitamins: it could remind the crew that life exists beyond plastic walls and computer screens.\n\nPsychologists are equally interested in how groups behave over time. Films often show dramatic personal conflicts in space, yet real danger may come from quieter problems: boredom, tiredness and tiny habits that become unbearable after months together. In isolation studies on Earth, people have reported that the hardest part was not technical work but the lack of privacy and the feeling that every action was being observed. This suggests that future spacecraft will need not only excellent equipment but also carefully designed private corners where crew members can briefly escape one another.\n\nCommunication with Earth will also change. At great distances, messages can take many minutes to arrive, making ordinary conversation impossible. As a result, astronauts will have to solve more problems without immediate advice from mission control. This does not mean that experts on Earth will become unimportant. Rather, the balance of responsibility may shift. Space agencies have traditionally trained astronauts to follow detailed procedures, but future crews may need greater freedom to adapt when reality does not match the manual.\n\nEven leisure, once treated as a minor issue, is becoming part of serious planning. Engineers have considered virtual windows, recorded natural sounds and digital libraries so that astronauts can choose how to relax. Critics sometimes dismiss such ideas as luxuries, arguing that every kilogram launched into space should have a clear practical use. Yet this view assumes that mental wellbeing is somehow separate from mission performance. In fact, a crew that can rest properly and recover from stress may be safer and more efficient than one supplied only with the bare essentials.\n\nNone of this guarantees that life on a long mission will be comfortable. Space will remain cramped, risky and deeply unfamiliar. But the image of astronauts as fearless machine operators is fading. The more experts learn about long-distance travel, the clearer it becomes that future missions will depend on human needs that are surprisingly down to Earth. In the end, reaching another planet may require us to think less about escaping ordinary life and more about how to carry the best parts of it with us.",
+      "passageWordCount": 598,
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "questionType": "main-idea / global",
+          "prompt": "What is the writer's main point in the first two paragraphs?",
+          "options": [
+            "A) Long space missions will succeed only if technical systems are kept as simple as possible.",
+            "B) Future space travel will depend as much on managing human life as on advanced technology.",
+            "C) Missions beyond Earth orbit are less attractive because everyday tasks become too difficult.",
+            "D) Scientists are now more interested in astronauts' behaviour than in building spacecraft."
+          ],
+          "evidence": "The writer says success will depend 'not only on rockets and fuel' but also on whether people can stay healthy, motivated and cooperative, and that mission planning pays almost as much attention to daily life as to engineering.",
+          "rationale": "B is correct because it captures the contrast between technology and human factors that frames the passage. A is too narrow and focuses only on simplicity. C distorts the text, which does not say such missions are less attractive. D exaggerates the comparison, since engineering remains important."
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "questionType": "purpose",
+          "prompt": "Why does the writer compare a broken coffee machine with a failed water recycling system?",
+          "options": [
+            "A) To show that some equipment problems become far more serious on distant missions.",
+            "B) To suggest that astronauts in Earth orbit already face unnecessary discomfort.",
+            "C) To explain why water will replace other drinks on future spacecraft.",
+            "D) To criticise designers for paying attention to unimportant machinery."
+          ],
+          "evidence": "The text says that on missions much farther away, 'every routine task becomes more important' and contrasts irritation caused by the coffee machine with a life-threatening failure of the water recycling system.",
+          "rationale": "A is correct because the comparison highlights the increased consequences of failure far from Earth. B adds an idea about unnecessary discomfort that is not stated. C misreads the example as being about beverages. D wrongly suggests criticism of designers rather than illustrating different levels of risk."
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "questionType": "inference",
+          "prompt": "What can be inferred from the paragraph about growing plants on board?",
+          "options": [
+            "A) Fresh food will probably replace stored meals completely.",
+            "B) Scientists have proved that astronauts work better after gardening.",
+            "C) Plants may be valuable mainly because of their psychological effect.",
+            "D) Space agencies are more concerned with appearance than nutrition."
+          ],
+          "evidence": "The writer says astronauts do not need fresh flavour to survive, but familiar smells and colours may improve mood, and plants could remind the crew that life exists beyond the spacecraft.",
+          "rationale": "C is correct because the paragraph emphasises mood and emotional comfort more than nutrition. A is unsupported because stored meals will still be needed. B is too strong: the text mentions testing and possible benefits, not proof. D creates a false opposition between appearance and nutrition."
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "questionType": "detail",
+          "prompt": "According to the writer, what may be the most difficult social problem on a long mission?",
+          "options": [
+            "A) Crew members refusing to follow safety procedures.",
+            "B) Open arguments caused by stressful technical work.",
+            "C) A lack of trust between astronauts and researchers on Earth.",
+            "D) Small irritations becoming harder to tolerate over time."
+          ],
+          "evidence": "The passage says real danger may come from 'quieter problems: boredom, tiredness and tiny habits that become unbearable after months together'.",
+          "rationale": "D is correct because it reflects the idea that minor habits and ongoing strain may cause the greatest trouble. A is not mentioned. B is linked to film stereotypes, which the writer contrasts with reality. C is not presented as the key social difficulty in that paragraph."
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "questionType": "attitude / opinion",
+          "prompt": "What is the writer's attitude towards giving future astronauts more independence from mission control?",
+          "options": [
+            "A) doubtful, because crews should still rely mainly on Earth-based experts",
+            "B) supportive, because delays will make complete dependence on Earth unrealistic",
+            "C) surprised, because astronauts have never had to make important decisions before",
+            "D) unconcerned, because communication technology will soon remove any delays"
+          ],
+          "evidence": "The writer notes that messages can take many minutes, making ordinary conversation impossible, and says future crews may need greater freedom to adapt when reality does not match the manual.",
+          "rationale": "B is correct because the writer presents increased independence as a practical response to communication delays. A is too negative and ignores the writer's acceptance of this shift. C is inaccurate because astronauts are not described as inexperienced decision-makers. D contradicts the passage, which treats delays as a real condition."
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "questionType": "vocabulary / global",
+          "prompt": "In the final paragraph, what does the writer mean by 'human needs that are surprisingly down to Earth'?",
+          "options": [
+            "A) People in space will eventually lose interest in exploring other planets.",
+            "B) Astronauts will need training that is similar to ordinary office work.",
+            "C) The basic comforts and routines of normal life remain important even in space.",
+            "D) Space travel will become common only when it is affordable for everyone."
+          ],
+          "evidence": "The conclusion says reaching another planet may require us to think less about escaping ordinary life and more about carrying the best parts of it with us.",
+          "rationale": "C is correct because 'down to Earth' refers to familiar human habits, comforts and emotional needs. A is unrelated to the phrase. B narrows the idea to work training, which is not the point. D shifts the meaning to cost and public access, which the paragraph does not discuss."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "B"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "A"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "C"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "D"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "B"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "6": {
+      "partTitle": "Part 6: Gapped text",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Small Breakthroughs, Big Changes",
+      "passage": "When people hear the phrase ‘medical innovation’, they often imagine dramatic scenes: a surgeon controlling a robot or scientists creating an entirely new organ in a laboratory. In reality, many of the advances that improve patients’ lives are less spectacular. They are often small changes to existing treatments, devices or systems, but they can still make an enormous difference. (37) For patients, that can mean less pain, shorter recovery times and more control over everyday life.\n\nOne area where this is clear is diabetes care. In the past, many people had to check their blood sugar by taking a drop of blood several times a day. Now, small sensors worn on the skin can measure levels continuously and send the information to a phone. (38) Instead of reacting to a problem after it has happened, users can often prevent it by eating, resting or adjusting medication sooner.\n\nAnother important change has come in hearing technology. Traditional hearing aids were useful, but many users complained that they amplified every sound equally, making busy places exhausting. Newer devices can separate speech from background noise far more effectively. They can also connect directly to phones, televisions and public sound systems. (39) As a result, many people feel more confident about going to restaurants, attending meetings or simply chatting in a crowded room.\n\nNot all innovations are pieces of equipment. Some involve rethinking how care is delivered. In several countries, hospitals now allow certain patients to recover at home while being monitored remotely. Nurses visit when necessary, and medical staff review temperature, heart rate and other readings online. (40) For many patients, sleeping in their own bed and staying close to family can be as valuable as the treatment itself.\n\n3D printing is also beginning to change medicine in practical ways. It is already used to produce detailed models of a patient’s body before complex operations. Surgeons can study these models in advance and plan difficult procedures more carefully. (41) This matters because a slightly better fit can reduce discomfort and encourage people to keep using the item they need.\n\nPerhaps the most striking progress, however, is in rehabilitation. People who have lost movement after an injury or stroke can now practise with robotic supports that guide their arms or legs through repeated actions. The machines do not replace therapists, but they allow patients to perform more precise movements more often. (42) Even when recovery is slow, noticing these small gains can be highly motivating.\n\nOf course, not every promising idea becomes a success. New products can be expensive, and some are difficult to make widely available. Doctors and patients also need time to learn how to use them properly. Even so, the direction is encouraging. Medical progress is not only about discovering cures; it is also about making daily life safer, easier and more independent for millions of people.",
+      "passageWordCount": 539,
+      "sentencePool": [
+        "A) This gives doctors a fuller picture, but it also gives patients early warnings when something is beginning to go wrong.",
+        "B) In some cases, the same technology can then be used to create personalised supports, such as braces or artificial limbs.",
+        "C) This shift may sound modest, yet it is exactly how modern medicine often moves forward.",
+        "D) Together, these improvements reduce the effort required to follow speech in busy surroundings.",
+        "E) That approach is not suitable for everyone, but it can free up hospital beds and reduce the risk of infection.",
+        "F) Progress is measured not only by major milestones, but by tiny improvements from one session to the next.",
+        "G) Researchers are also developing new vaccines that could protect people against several diseases at once."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "C"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "A"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "D"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "E"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "B"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "F"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "7": {
+      "partTitle": "Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Liam Porter",
+          "text": "I used to book flights without thinking twice, mainly because my work involved short notice meetings in different cities. Initially, I saw trains as the slower option for people with time to spare. That changed after a winter storm left me sleeping on an airport bench while the rail services were mostly back to normal by morning. Since then, I still fly for some journeys abroad, yet for trips within the country I nearly always choose the train. I can open my laptop, answer emails and arrive feeling as if the day has already started, rather than as if I have survived an obstacle course. It is usually pricier than the budget flights my colleagues hunt down, although once I add airport transfers and parking, the gap shrinks. For me, the calmer experience matters as much as the timetable."
+        },
+        {
+          "letter": "B",
+          "name": "Sonia Malik",
+          "text": "My choice between rail and air is largely practical rather than ideological. I live in a town with a small airport twenty minutes away, while the nearest mainline station is a bus ride and a long wait from my front door. Because of that, flying often wins for family visits, especially when I am travelling with two energetic children and several bags. People assume airports are stressful, but I find them manageable if I check in online and keep expectations realistic. However, I would never claim planes are always better. Last summer, after a delayed departure and a missed connection, I spent more than twelve hours getting to somewhere that is only six by train. Meanwhile, the children were exhausted. If a direct rail service existed from where I live, I suspect I would switch immediately for many journeys."
+        },
+        {
+          "letter": "C",
+          "name": "Harriet Doyle",
+          "text": "I am one of those people who genuinely enjoy the journey itself, so trains suit me perfectly. Looking out of the window helps me settle into a trip in a way flying never has. At airports, everything seems designed to hurry you from one queue to another, and I arrive already irritated. By contrast, on trains I read, daydream or chat to whoever is beside me. That said, I am not romantic about it. I have had cramped seats, broken air conditioning and one memorable evening when we stopped in open countryside for two hours with no explanation. Even so, I remain loyal to rail because it feels connected to real places instead of sealed off from them. Friends tell me I should take cheaper flights for weekend breaks, yet I would rather spend longer travelling than give up that sense of gradual arrival."
+        },
+        {
+          "letter": "D",
+          "name": "Noah Greene",
+          "text": "Until recently, I had hardly travelled by train beyond my daily commute. I assumed long-distance rail would be unreliable and old-fashioned, so for years I booked flights automatically, especially for city breaks in Europe. Then my partner persuaded me to try an overnight train to the continent instead of flying. Frankly, I expected to regret it. Yet the trip turned out to be the highlight of the holiday: we boarded in the evening, had dinner, slept surprisingly well and woke up in the centre of our destination. Since then, I have become far more interested in planning routes that avoid airports altogether, although I know this approach only works if you organise well in advance. The one drawback is that rail journeys sometimes demand more research and flexibility. Even so, I now see travel time as part of the experience rather than wasted hours to be cut."
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "prompt": "Who changed their mind after an unexpected event showed that their usual form of transport was not as dependable as they had believed?"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "prompt": "Who suggests that where they live has a strong influence on which option they normally choose?"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "prompt": "Who makes practical use of the journey itself before reaching their destination?"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "prompt": "Who admits to liking rail travel for emotional reasons rather than purely sensible ones?"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "prompt": "Who describes a single rail trip as the experience that persuaded them to reconsider their habits?"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "prompt": "Who mentions that travelling with other people affects their decision?"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "prompt": "Who feels that the total cost difference between the two methods is sometimes smaller than it first appears?"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "prompt": "Who believes that travel should involve noticing the places between the start and the finish?"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "prompt": "Whose preference might change if their home had better access to the rail network?"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "prompt": "Who accepts that choosing rail may involve more forward planning?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "Q43",
+          "number": 43,
+          "answer": "A"
+        },
+        {
+          "id": "Q44",
+          "number": 44,
+          "answer": "B"
+        },
+        {
+          "id": "Q45",
+          "number": 45,
+          "answer": "A"
+        },
+        {
+          "id": "Q46",
+          "number": 46,
+          "answer": "C"
+        },
+        {
+          "id": "Q47",
+          "number": 47,
+          "answer": "D"
+        },
+        {
+          "id": "Q48",
+          "number": 48,
+          "answer": "B"
+        },
+        {
+          "id": "Q49",
+          "number": 49,
+          "answer": "A"
+        },
+        {
+          "id": "Q50",
+          "number": 50,
+          "answer": "C"
+        },
+        {
+          "id": "Q51",
+          "number": 51,
+          "answer": "B"
+        },
+        {
+          "id": "Q52",
+          "number": 52,
+          "answer": "D"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

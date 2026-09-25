@@ -1,0 +1,1116 @@
+{
+  "version": "DRALO_RUOE_Exam_14_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 14,
+  "sourceGeneratedAt": "2026-08-31T21:52:08.506Z",
+  "reviewFile": "DRALO_RUOE_Exam_10_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) set",
+          "B) held",
+          "C) spent",
+          "D) passed"
+        ],
+        "answer": "C",
+        "explanation": "We say 'spend time' when talking about the amount of time used doing something."
+      },
+      "title": "Living Beyond Earth",
+      "passage": "Astronauts on future missions to Mars may have to (0) ___ more than two years away from Earth, so scientists are trying to predict what daily life will be like. One major challenge is how small crews will (1) ___ with stress while living in a very limited space. To reduce tension, mission planners want to build regular exercise and free time (2) ___ the daily schedule. Food will also play an important (3) ___, not only for health but for morale. Since supplies cannot easily be replaced, meals must stay fresh for long periods, and the feeding plan must be easy to (4) ___ out. Another concern is communication: messages to Earth could take many minutes to arrive, which means astronauts will often have to (5) ___ decisions without immediate advice. Because of this, crews will need a high (6) ___ of trust in one another. They will also have to look (7) ___ equipment carefully, as even a minor fault could become serious. If these problems can be solved, long-distance space travel may become a real (8) ___ within our lifetime.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) cope",
+            "B) manage",
+            "C) deal",
+            "D) face"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) at",
+            "B) into",
+            "C) to",
+            "D) by"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) task",
+            "B) duty",
+            "C) work",
+            "D) role"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) bring",
+            "B) take",
+            "C) carry",
+            "D) hand"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) do",
+            "B) reach",
+            "C) make",
+            "D) have"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) amount",
+            "B) level",
+            "C) degree",
+            "D) scale"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) after",
+            "B) up",
+            "C) for",
+            "D) through"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) fact",
+            "B) event",
+            "C) truth",
+            "D) reality"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "B",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "D",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "C",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "C",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "B",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "A",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "D",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "Part 2: Open cloze",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "as"
+      },
+      "title": "Tiny Devices, Big Changes",
+      "passage": "Medical technology is changing lives faster than ever, especially when it is designed to fit into everyday routines. One example is the smart patch, a small device worn on the skin that can act (0) ___ a personal health monitor. It measures signs such as heart rate or temperature and sends the information to a phone, (9) ___ can then share it with a doctor.\n\nFor people with long-term conditions, this means they do not have to visit hospital as often (10) ___ they once did. Some patches can even remind users (11) ___ take medicine at the right time. Others are able to warn them if something seems wrong, so action can be taken (12) ___ an emergency develops.\n\nExperts say these inventions are likely to become more common, partly because they are cheaper than they used to (13) ___. Patients also report feeling more confident, since they know help is available (14) ___ soon as a problem appears. (15) ___ all innovations succeed immediately, however. Devices must be tested carefully to make sure they work properly and are easy enough (16) ___ people of all ages to use.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "which"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "as"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "to"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "before"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "be"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "as"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "not"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "for"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "COMFORT",
+        "answer": "comfortable",
+        "transformationFamily": "adjective"
+      },
+      "title": "Choosing How to Travel",
+      "passage": "For many people, the most (0) ___ (COMFORT) way to cross Europe is still by plane, mainly because booking websites make flights seem quick and simple. However, rail companies argue that this view ignores the growing (17) ___ (POPULAR) of long-distance train travel. Modern trains offer reliable Wi-Fi, city-centre stations and far fewer luggage rules, which can make the whole experience less (18) ___ (STRESS) than flying. Another advantage is the (19) ___ (ABLE) to work or relax throughout the journey, instead of waiting in queues at security. In addition, train travel is often more (20) ___ (ENVIRONMENT) friendly, especially on routes where airports are far from the city itself. Even when tickets appear expensive at first, travellers should compare the total cost (21) ___ (CARE), including transport to and from the airport. That said, trains are not always the best choice. Delays can cause real (22) ___ (FRUSTRATE), and some international routes still involve (23) ___ (CONVENIENT) changes. As a result, the most sensible decision depends on whether speed, price or environmental (24) ___ (RESPONSIBLE) matters most to the passenger.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "POPULAR",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "STRESS",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "ABLE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "ENVIRONMENT",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "CARE",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "FRUSTRATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "CONVENIENT",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "RESPONSIBLE",
+          "transformationFamily": "noun"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "popularity",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "stressful",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "ability",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "environmentally",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "carefully",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "frustration",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "inconvenient",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "responsibility",
+          "transformationFamily": "noun"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "It isn't necessary for students to arrive at school before 8 a.m.",
+        "keyword": "NEED",
+        "sentence2Start": "Students __________________ arrive at school before 8 a.m.",
+        "answer": "do not need to"
+      },
+      "questions": [
+        {
+          "id": "q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "The sleep study was so convincing that the school changed its timetable.",
+          "keyword": "PERSUADED",
+          "sentence2Start": "The sleep study __________________ its timetable.",
+          "answer": "persuaded the school to change",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "PERSUADED",
+            "fullAnswers": [
+              "persuaded the school to change"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive reporting structure",
+                "accepted": [
+                  "are said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive verb complement",
+                "accepted": [
+                  "to learn"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-02",
+          "target_structure": "passive reporting verb with infinitive",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests passive reporting form; MP2 tests correct infinitive complement.",
+          "alternative_route_check": "Only one defendable route is intended because the keyword requires the passive reporting structure with 'said'."
+        },
+        {
+          "id": "q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "Our head teacher regrets not asking parents for their views earlier.",
+          "keyword": "WISHES",
+          "sentence2Start": "Our head teacher __________________ parents for their views earlier.",
+          "answer": "wishes she had asked",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISHES",
+            "fullAnswers": [
+              "wishes she had asked"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish with past perfect",
+                "accepted": [
+                  "wishes she had"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past participle main verb",
+                "accepted": [
+                  "asked"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-14",
+          "target_structure": "wish plus past perfect for regret about the past",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests regret structure with 'wish' and past perfect auxiliary; MP2 tests the past participle.",
+          "alternative_route_check": "Alternative regret routes are blocked because the keyword must remain 'WISHES' and the sentence frame leads to a past regret structure."
+        },
+        {
+          "id": "q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "If schools began later, some students would cycle there instead of being driven.",
+          "keyword": "STARTED",
+          "sentence2Start": "Some students would cycle to school __________________ later.",
+          "answer": "if schools started",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "STARTED",
+            "fullAnswers": [
+              "if schools started"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "conditional linker and subject",
+                "accepted": [
+                  "if schools"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past simple verb in conditional clause",
+                "accepted": [
+                  "started"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-09",
+          "target_structure": "second conditional clause reformulation",
+          "difficulty_band": "B2-Core",
+          "transformation_distance": "minor_grammatical",
+          "marking_point_plan": "MP1 tests the conditional opener; MP2 tests the correct past simple verb required by the second conditional.",
+          "alternative_route_check": "Only one natural route fits the frame because the gap directly introduces the conditional clause with the fixed keyword."
+        },
+        {
+          "id": "q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "Starting lessons at 8.30 is too early for many pupils.",
+          "keyword": "ENOUGH",
+          "sentence2Start": "For many pupils, 8.30 is __________________ to start lessons.",
+          "answer": "not late enough",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "ENOUGH",
+            "fullAnswers": [
+              "not late enough"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "negative adjective phrase",
+                "accepted": [
+                  "not late"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "degree word",
+                "accepted": [
+                  "enough"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-05",
+          "target_structure": "too plus adjective to not adjective enough",
+          "difficulty_band": "B2-Standard",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests reversal from 'too early' to negative comparative meaning; MP2 tests placement of 'enough'.",
+          "alternative_route_check": "Competing routes are blocked because the sentence end fixes the infinitive and only 'not late enough' gives the same meaning naturally."
+        },
+        {
+          "id": "q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "The science teacher told us not to rely on one study alone.",
+          "keyword": "AGAINST",
+          "sentence2Start": "The science teacher __________________ on one study alone.",
+          "answer": "warned us against relying",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "AGAINST",
+            "fullAnswers": [
+              "warned us against relying"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "reporting verb and object",
+                "accepted": [
+                  "warned us"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "dependent preposition plus gerund",
+                "accepted": [
+                  "against relying"
+                ]
+              }
+            ]
+          },
+          "family_id": "TF-11",
+          "target_structure": "warn someone against doing something",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "multi_step_transformation",
+          "marking_point_plan": "MP1 tests correct reporting verb pattern with object; MP2 tests fixed preposition and gerund.",
+          "alternative_route_check": "Other reporting verbs are blocked by the keyword 'AGAINST', which naturally selects 'warned us against relying'."
+        },
+        {
+          "id": "q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "Mia managed to get a seat although the bus was very crowded.",
+          "keyword": "DESPITE",
+          "sentence2Start": "Mia managed to get a seat __________________ very crowded.",
+          "answer": "despite the bus being",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "DESPITE",
+            "fullAnswers": [
+              "despite the bus being"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "too plus adjective phrase",
+                "accepted": [
+                  "too crowded"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "for-object infinitive structure",
+                "accepted": [
+                  "for Mia to"
+                ]
+              }
+            ],
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          },
+          "family_id": "TF-03",
+          "target_structure": "so adjective that to too adjective for someone to",
+          "difficulty_band": "B2-Strong",
+          "transformation_distance": "syntactic_restructuring",
+          "marking_point_plan": "MP1 tests conversion to 'too + adjective'; MP2 tests the for-object infinitive complement.",
+          "alternative_route_check": "Only one defendable route fits the given frame and keyword because the remaining infinitive clause is already provided after the gap."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q25",
+          "number": 25,
+          "answer": "persuaded the school to change"
+        },
+        {
+          "id": "q26",
+          "number": 26,
+          "answer": "wishes she had asked"
+        },
+        {
+          "id": "q27",
+          "number": 27,
+          "answer": "if schools started"
+        },
+        {
+          "id": "q28",
+          "number": 28,
+          "answer": "not late enough"
+        },
+        {
+          "id": "q29",
+          "number": 29,
+          "answer": "warned us against relying"
+        },
+        {
+          "id": "q30",
+          "number": 30,
+          "answer": "despite the bus being"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 26
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Core",
+            "number": 27
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 28
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 29
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Strong",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 2,
+          "4": 3,
+          "5": 1
+        },
+        "answerLengths": [
+          4,
+          4,
+          3,
+          3,
+          4,
+          5
+        ]
+      }
+    },
+    "5": {
+      "partTitle": "B2 Reading Part 5: Multiple choice",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "Does Recycling Really Work?",
+      "passage": "For years, recycling has been presented as one of the simplest ways for ordinary people to help the planet. Rinse a jar, flatten a box, put a bottle in the right bin, and feel that a small but useful action has been taken. Yet the subject has become far more complicated than those early public campaigns suggested. Reports about plastic waste being exported abroad, or about carefully separated rubbish ending up in the same lorry, have led many people to ask an uncomfortable question: if the system is so messy, is recycling really effective at all?\n\nThe short answer is yes, but only when it is part of a much bigger picture. Recycling does save raw materials and energy in many cases. Producing aluminium from recycled metal, for example, uses far less energy than making it from the original ore. Glass and paper can also bring clear benefits when they are collected and processed properly. The difficulty is that people often imagine recycling as a magical solution that cancels out wasteful habits. In reality, it is more like damage control: useful, necessary, but limited.\n\nPart of the confusion comes from the fact that not all materials behave in the same way. A metal can often be recycled repeatedly with little loss in quality, while many plastics become weaker each time they are reprocessed. Some plastic items cannot be economically recycled at all, especially if they contain different layers or food remains. This does not mean that all recycling programmes are dishonest. It means that the famous chasing-arrows symbol can suggest a promise that the real system cannot always keep. Something may be technically recyclable but still unlikely to be recycled in practice.\n\nAnother reason for public doubt is that recycling depends on markets, not just good intentions. A council may collect a material separately, but that material still needs a buyer. If the price of new plastic falls, factories may prefer it to recycled plastic, which can be less consistent in quality. When that happens, a perfectly organised local collection system may suddenly become less effective. Critics sometimes use these failures to argue that recycling is pointless. That is too simple. The better conclusion is that recycling needs stable investment, clear rules for manufacturers and products designed with reuse in mind.\n\nThere is also a psychological problem. Once people believe they are recycling, they may feel they have done their part and stop asking harder questions. A coffee cup dropped into the correct bin can seem like a success, even if that cup contains materials that are difficult to separate. In that sense, recycling can become a comforting story that protects overconsumption. Businesses know this. Some companies have promoted recyclable packaging while continuing to produce unnecessary single-use products. They are not exactly lying, but they are directing attention towards the final stage of a product's life and away from the amount being produced in the first place.\n\nNone of this means household recycling is a waste of time. On the contrary, well-run schemes remain an important tool, especially for materials such as metals, paper and glass. But expecting bins alone to solve the waste crisis is like expecting seat belts to solve dangerous driving. They reduce harm, yet they do not remove the cause of the problem. If governments want real progress, they must encourage repair, refill systems and longer-lasting products, while making manufacturers responsible for what happens after sale. Recycling works best not as the hero of the story, but as one member of a much larger team.",
+      "passageWordCount": 605,
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "What is the writer’s main point in the article?",
+          "options": [
+            "A) Recycling is worthwhile, but it cannot solve waste problems on its own.",
+            "B) Recycling schemes would succeed if people cleaned and sorted rubbish more carefully.",
+            "C) Recycling has failed mainly because councils have used the wrong collection methods.",
+            "D) Recycling should be replaced by systems that focus only on reusing materials."
+          ],
+          "evidence": "The writer says recycling is effective 'only when it is part of a much bigger picture' and ends by describing it as 'one member of a much larger team'.",
+          "rationale": "A is correct because it captures the balanced position of the whole text: recycling has value but is limited. B is too narrow, as household behaviour is only one issue among several. C wrongly presents local collection as the main cause of failure, which the passage does not do. D is too extreme because the writer explicitly says household recycling is not a waste of time."
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "questionType": "detail",
+          "prompt": "Why does the writer mention aluminium in the second paragraph?",
+          "options": [
+            "A) to show that some recycled products are too expensive to make",
+            "B) to give an example of a material for which recycling can bring clear benefits",
+            "C) to explain why metal is easier to collect than glass or paper",
+            "D) to suggest that energy savings from recycling are often exaggerated"
+          ],
+          "evidence": "The passage states that 'Producing aluminium from recycled metal ... uses far less energy than making it from the original ore.'",
+          "rationale": "B is correct because aluminium is used as evidence that recycling can genuinely save energy and raw materials. A is unsupported, since cost is not the point of this example. C introduces a comparison about collection that the passage does not make. D reverses the meaning, because the example supports, rather than questions, real savings."
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "questionType": "inference",
+          "prompt": "What does the writer suggest about the chasing-arrows symbol on products?",
+          "options": [
+            "A) It is useful mainly because it reminds people to wash containers properly.",
+            "B) It is no longer used consistently by manufacturers in different countries.",
+            "C) It can give consumers an impression that is more positive than reality.",
+            "D) It has made recycling systems more efficient than they used to be."
+          ],
+          "evidence": "The writer says the symbol 'can suggest a promise that the real system cannot always keep' and that something may be recyclable in theory but not in practice.",
+          "rationale": "C is correct because the symbol may imply that an item will in fact be recycled, even when practical conditions make that unlikely. A focuses on cleaning containers, which is not discussed here. B adds an international consistency issue absent from the text. D is unsupported and conflicts with the writer’s critical tone in this paragraph."
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "questionType": "purpose",
+          "prompt": "Why does the writer discuss buyers and the price of new plastic in the fourth paragraph?",
+          "options": [
+            "A) to argue that local councils should stop collecting plastic separately",
+            "B) to show that recycling systems are affected by economic conditions as well as public effort",
+            "C) to prove that manufacturers are unwilling to improve product quality",
+            "D) to explain why recycled plastic is always inferior to new plastic"
+          ],
+          "evidence": "The paragraph states that recycling 'depends on markets' and explains that when new plastic becomes cheaper, demand for recycled plastic can fall.",
+          "rationale": "B is correct because the writer is broadening the discussion beyond individual behaviour to market forces. A is too strong and not suggested by the text. C misrepresents the focus, which is market demand rather than manufacturers' attitudes. D is incorrect because the passage says recycled plastic can be less consistent, not always inferior."
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "questionType": "attitude",
+          "prompt": "What is the writer’s attitude towards companies that promote recyclable packaging?",
+          "options": [
+            "A) They are making an honest attempt to educate consumers about waste.",
+            "B) They are unfairly blamed for problems created by shoppers.",
+            "C) They are deliberately hiding the fact that recycling never works.",
+            "D) They are using a partial truth to distract attention from a larger problem."
+          ],
+          "evidence": "The writer says some companies 'have promoted recyclable packaging while continuing to produce unnecessary single-use products' and are 'directing attention towards the final stage' rather than production itself.",
+          "rationale": "D is correct because the criticism is that companies focus on recyclability to shift attention away from overproduction. A is too sympathetic and ignores the critical context. B wrongly suggests the writer thinks companies are victims of blame. C is too extreme because the writer says they are 'not exactly lying' and does not claim recycling never works."
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "questionType": "reference",
+          "prompt": "In the final paragraph, what is the purpose of comparing recycling with seat belts?",
+          "options": [
+            "A) to suggest that waste problems are mainly caused by careless consumers",
+            "B) to emphasise that recycling reduces damage without dealing with the root cause",
+            "C) to show that simple safety measures are often more effective than expensive reforms",
+            "D) to argue that governments should make recycling rules stricter for everyone"
+          ],
+          "evidence": "The writer says seat belts 'reduce harm, yet they do not remove the cause of the problem' and uses this to explain the limits of relying on bins alone.",
+          "rationale": "B is correct because the comparison highlights recycling as a useful protective measure, not a complete cure. A oversimplifies the issue into consumer behaviour. C introduces a cost comparison that is not present. D narrows the meaning to stricter rules, whereas the writer is making a broader point about systemic change."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "A"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "B"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "C"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "B"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "D"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "B"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "question_title"
+    },
+    "6": {
+      "partTitle": "Part 6: Gapped text",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Why Home Cooking Is Back",
+      "passage": "For years, the story of modern eating seemed simple: people were busier than ever, takeaway apps were growing fast, and cooking at home looked old-fashioned. Yet recently, the opposite trend has begun to attract attention. More people are planning meals, buying basic ingredients and sharing photos of dishes they have made themselves. It is not just a hobby for skilled food lovers, either. Ordinary households are starting to see cooking as a normal part of daily life again.\n\nOne reason is clearly financial. Meals bought outside the home have become noticeably more expensive, especially in towns and cities where food delivery is common. Families who once relied on prepared food a few nights a week are now doing the maths more carefully. (37) As a result, dishes that were once seen as slow or inconvenient, such as soups, pasta sauces and rice-based meals, suddenly make practical sense again.\n\nMoney, however, is only part of the explanation. During periods when people spent more time at home, many discovered that cooking could structure the day and provide a small sense of progress. Chopping vegetables or preparing dough offered a break from screens and constant messages. (38) For some, that confidence remained even after life became busier again, and they continued to cook because they now felt capable rather than nervous.\n\nThe internet has also changed the experience in ways that make home cooking easier to begin. In the past, a beginner might have been put off by a recipe full of unfamiliar terms or assumed knowledge. Now, short videos can show every step, from holding a knife correctly to checking whether onions are cooked enough. (39) That kind of guidance reduces the risk of wasting ingredients, which matters even more when budgets are tight.\n\nAnother important change involves ideas about health. People have become more aware of how often they eat highly processed food and how little control they have over what goes into it. At home, even simple cooking gives them more influence over salt, sugar and portion size. (40) Instead, they are aiming for meals that feel realistic on a weekday but still healthier than something bought in a hurry.\n\nThere is also a social side to the return of home cooking. In some households, preparing dinner has become a shared task rather than one person’s responsibility. Children wash vegetables, flatmates take turns choosing recipes, and friends invite one another over for low-cost meals. (41) It turns cooking into an activity with conversation and routine, rather than a lonely job that has to be finished as quickly as possible.\n\nOf course, not everyone has the time, space or energy to cook regularly, and ready-made food remains useful for many people. Even so, the renewed interest in home cooking seems likely to last. (42) In that sense, the return of home cooking is not really about going backwards. It is about finding a habit that suits modern life better than many people expected.",
+      "passageWordCount": 511,
+      "sentencePool": [
+        "A) Many people realised that a home-cooked meal could feed several people for the same price as a single order from a restaurant.",
+        "B) What matters to them is not producing perfect restaurant-style food but making something satisfying with ingredients they trust.",
+        "C) In addition, viewers can pause, replay and compare their results with what they see on screen.",
+        "D) Just as importantly, the finished meal often gives everyone a reason to sit down together at the same time.",
+        "E) This was especially true when a basic recipe turned out well and could easily be made a second time.",
+        "F) Even people who are not especially interested in food can see the advantage of a skill that saves money and offers a degree of control.",
+        "G) Some food companies have responded by reducing portion sizes and changing their packaging designs."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "A"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "E"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "C"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "B"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "D"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "F"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[P6-H07] gap (41): Correct option shows weak backward/forward cohesion clues (heuristic)."
+          }
+        ],
+        "detectedAt": "2026-08-31T21:55:28.012Z"
+      }
+    },
+    "7": {
+      "partTitle": "B2 Reading and Use of English Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person talks about each of the following? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Leah Morton",
+          "text": "At school I was the sort of person who wanted a plan for everything, so choosing a career felt strangely difficult. I did well in science and everyone assumed I would study medicine, yet I wasn't convinced it suited me. During a summer job at a local garden centre, I realised I enjoyed explaining things to customers far more than dealing with stock. That surprised me. Initially, I ignored it and started a pharmacy course because it seemed sensible. However, after six months I switched to training as a science teacher. Since then, I've never regretted it. The pay isn't amazing and the workload can be intense, especially in winter, but I like the mix of structure and unpredictability. Young people ask honest questions, and that keeps me interested. Looking back, I wish I'd paid less attention to what other people thought was impressive."
+        },
+        {
+          "letter": "B",
+          "name": "Ravi Sen",
+          "text": "My route into work was less about passion and more about necessity. My family ran a small café, and as the oldest child I helped out from the age of thirteen. By the time I left school, I knew I could manage people and solve problems quickly, but university wasn't financially realistic. Meanwhile, one of our suppliers suggested I apply for an apprenticeship in logistics. I had no idea what the sector involved, yet I liked the fact that every day brought a different challenge. Ten years on, I coordinate deliveries for a food company. Some friends still think it sounds dull compared with creative jobs, although I disagree. If a shipment goes wrong, shops can end up with empty shelves, so the pressure is real. I may eventually set up my own business, but for now I'm learning as much as I can from experienced colleagues."
+        },
+        {
+          "letter": "C",
+          "name": "Nina Kowalska",
+          "text": "I spent years trying to choose between secure work and something more personal. As a teenager I loved drawing clothes, but people kept warning me that fashion was too competitive. In the end, I trained as an accountant and stayed in the profession longer than expected because I was good at it. Even so, I always felt slightly detached from what I was doing. Then, while making costumes for a local theatre group in the evenings, I noticed how absorbed I became when time was short and a design problem needed fixing. That was a clue I couldn't ignore. I now run a small alterations studio and design custom pieces at weekends. The income is less predictable than before, which can be worrying. Yet I prefer that uncertainty to spending every Monday counting the days until Friday. For me, choosing the right path meant accepting that comfort isn't the same as satisfaction."
+        },
+        {
+          "letter": "D",
+          "name": "Owen Price",
+          "text": "People often imagine that choosing a career is a single dramatic moment, but mine changed through a series of small decisions. I studied computer engineering and joined a large tech company straight after university. The office was modern, the salary was decent and the promotion route was clear. Still, after a while I found myself enjoying the training sessions more than the technical work. I liked helping new staff understand difficult systems and watching them become more confident. At first I treated that as a useful side task; later I realised it was the part of the week I looked forward to most. Two years ago I moved into corporate learning and now design training programmes for different departments. Oddly enough, I use my original degree every day, just not in the way I expected. That has taught me that changing direction doesn't always mean starting from zero."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q43",
+          "number": 43,
+          "prompt": "Who realised from an activity outside their main job what kind of work suited them better?"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "prompt": "Who says that outsiders fail to appreciate how important their work can be?"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "prompt": "Who advises people not to be too influenced by other people's expectations?"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "prompt": "Who mentions that their current role still makes use of knowledge gained earlier?"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "prompt": "Who chose a path mainly because their personal circumstances limited the alternatives?"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "prompt": "Who accepted a less stable income in exchange for feeling happier about work?"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "prompt": "Who discovered that the part of work they enjoyed most was not the one they were originally employed to do?"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "prompt": "Who stayed in a suitable profession for some time despite a sense that it was not really right for them?"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "prompt": "Who talks about enjoying work because it combines routine with the unexpected?"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "prompt": "Who is considering becoming independent in their field at a later stage?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q43",
+          "number": 43,
+          "answer": "C"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "answer": "B"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "answer": "A"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "answer": "D"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "answer": "B"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "answer": "C"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "answer": "D"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "answer": "C"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "answer": "A"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "answer": "B"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

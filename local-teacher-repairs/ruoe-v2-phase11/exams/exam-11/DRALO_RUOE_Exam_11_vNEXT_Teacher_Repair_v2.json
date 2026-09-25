@@ -1,0 +1,1147 @@
+{
+  "version": "DRALO_RUOE_Exam_11_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 11,
+  "sourceGeneratedAt": "2026-08-31T21:07:44.665Z",
+  "reviewFile": "DRALO_RUOE_Exam_7_Human_Review_v1_2_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) say",
+          "B) tell",
+          "C) learn",
+          "D) train"
+        ],
+        "answer": "C",
+        "explanation": "We normally say 'learn a language'."
+      },
+      "title": "Beyond the classroom",
+      "passage": "Many people start to (0) ___ a language in lessons, but real progress often happens outside the classroom. In recent years, learners have had easier (1) ___ to films, podcasts and online communities in other languages. As a result, they can hear how people really speak and pick (2) ___ useful expressions that do not always appear in textbooks.\n\nHowever, simply watching videos is not enough. Experts point (3) ___ that students improve faster when they actively use new words. One effective habit is keeping a small notebook and writing down phrases in (4) ___, rather than single words on their own. Another is to set clear goals, such as following one social-media account each week or sending short messages to a language partner.\n\nThis kind of regular contact can also build (5) ___. Learners become less afraid of making mistakes and more willing to (6) ___ part in conversations. Over time, they begin to (7) ___ patterns for themselves instead of waiting for a teacher to explain everything. In that (8) ___, learning becomes part of everyday life.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) access",
+            "B) approach",
+            "C) entrance",
+            "D) admission"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) out",
+            "B) on",
+            "C) up",
+            "D) over"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) up",
+            "B) out",
+            "C) off",
+            "D) over"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) detail",
+            "B) brief",
+            "C) company",
+            "D) context"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) confidence",
+            "B) courage",
+            "C) trust",
+            "D) spirit"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) make",
+            "B) do",
+            "C) put",
+            "D) take"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) watch",
+            "B) notice",
+            "C) regard",
+            "D) stare"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) route",
+            "B) manner",
+            "C) way",
+            "D) method"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "C",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "D",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "A",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "D",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "B",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "C",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "B2 First Reading and Use of English Part 2",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "of"
+      },
+      "title": "Small Objects, Big Changes",
+      "passage": "Many inventions are famous because (0) ___ their advanced technology, but some changed daily life through simple ideas. Take the zip fastener, for example. Before it became common, people had to spend far longer doing (9) ___ their clothes. The zip was not perfect at first, and manufacturers were slow to trust it. However, once it proved reliable, it spread quickly from boots to jackets and bags. Another overlooked invention is the ballpoint pen. Earlier pens needed constant attention and were likely to leak, which meant users had to write carefully if they did not want ink (10) ___ stain their work. The new design solved this problem so effectively (11) ___ it soon became a classroom essential. A similar story can be told about the electric kettle. Not only does it save time, but it also uses no more water (12) ___ necessary. As a result, people can make hot drinks more efficiently, without having to wait (13) ___ long. Such inventions may seem ordinary now, yet modern routines would be hard to imagine (14) ___ them. We rely on them so completely that we rarely stop to think about (15) ___ much effort they have saved us, or (16) ___ life was like before they existed.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "up"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "to"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "that"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "than"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "to"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "without"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "how"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "what"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "COLOUR",
+        "answer": "colourful",
+        "transformationFamily": "adjective"
+      },
+      "title": "A greener future for cities",
+      "passage": "For many people, a truly green city is not only full of parks and trees, but also a more (0) ___ (COLOUR) and pleasant place to live. In recent years, city planners have shown growing (17) ___ (AWARE) of the need to design streets that are healthier for both people and wildlife. One (18) ___ (EFFECT) solution has been to replace areas of concrete with plants that absorb rainwater and cool the air. These changes can bring several noticeable (19) ___ (IMPROVE) to daily life. Green roofs, for example, reduce noise and offer a home to insects and birds. In some places, local councils have even turned car parks into small community gardens, encouraging residents to become actively (20) ___ (INVOLVE) in their neighbourhoods. This kind of (21) ___ (PARTICIPATE) often leads to stronger communities. However, experts warn that progress can be (22) ___ (EQUAL) across a city. Poorer areas may receive less investment, which is deeply (23) ___ (FAIR). To create lasting change, leaders must plan carefully and act (24) ___ (RESPONSIBLE), ensuring that everyone benefits from a greener urban environment.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "AWARE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EFFECT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "IMPROVE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "INVOLVE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "PARTICIPATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EQUAL",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "FAIR",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "RESPONSIBLE",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "awareness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "effective",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "improvements",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "involved",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "participation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "unequal",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "unfair",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "responsibly",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "B2 First Reading and Use of English Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "It is impossible for everyone in the office to agree about the perfect working environment.",
+        "keyword": "LIKELY",
+        "sentence2Start": "Not everyone in the office __________________ about the perfect working environment.",
+        "answer": "is likely to agree"
+      },
+      "questions": [
+        {
+          "id": "b2p4q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "The manager said that flexible hours had made a big difference to staff morale.",
+          "keyword": "BEEN",
+          "sentence2Start": "The manager said that flexible hours __________________ a big difference to staff morale.",
+          "answer": "had been making",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "BEEN",
+            "fullAnswers": [
+              "had been making"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "past perfect continuous auxiliary structure",
+                "accepted": [
+                  "had been"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "main verb complement",
+                "accepted": [
+                  "making"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "past perfect continuous after reported speech",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "minor_grammatical",
+            "marking_point_plan": "MP1 = past perfect continuous auxiliary; MP2 = lexical verb preserving 'made a difference' meaning.",
+            "alternative_route_check": "Only one defendable route is intended because the gap must include BEEN and keep the continuous aspect."
+          }
+        },
+        {
+          "id": "b2p4q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "The company does not allow employees to check work emails after 7 p.m.",
+          "keyword": "ALLOWED",
+          "sentence2Start": "Employees __________________ work emails after 7 p.m.",
+          "answer": "are not allowed to check",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "ALLOWED",
+            "fullAnswers": [
+              "are not allowed to check",
+              "aren't allowed to check"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive permission structure",
+                "accepted": [
+                  "are not allowed",
+                  "aren't allowed"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to check"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "passive form of allow + infinitive",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 = passive negative form with keyword; MP2 = infinitive complement.",
+            "alternative_route_check": "Alternatives such as 'must not check' are blocked because the keyword ALLOWED must be used unchanged."
+          }
+        },
+        {
+          "id": "b2p4q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "This office is more relaxed than the one I worked in before.",
+          "keyword": "AS",
+          "sentence2Start": "The office I worked in before __________________ this one.",
+          "answer": "was not as relaxed as",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "AS",
+            "fullAnswers": [
+              "was not as relaxed as",
+              "wasn't as relaxed as"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "negative comparative structure",
+                "accepted": [
+                  "was not as",
+                  "wasn't as"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "adjective plus final comparator",
+                "accepted": [
+                  "relaxed as"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "not as + adjective + as comparative",
+            "difficulty_band": "B2-Core",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 = negative 'as...as' frame; MP2 = adjective and closing 'as'.",
+            "alternative_route_check": "Only one main route fits the required keyword AS and the exact comparative meaning."
+          }
+        },
+        {
+          "id": "b2p4q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "I regret not asking my team for feedback sooner.",
+          "keyword": "WISH",
+          "sentence2Start": "I __________________ my team for feedback sooner.",
+          "answer": "wish I had asked",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISH",
+            "fullAnswers": [
+              "wish I had asked"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish + subject structure",
+                "accepted": [
+                  "wish I"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "past perfect verb phrase",
+                "accepted": [
+                  "had asked"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "wish + past perfect for past regret",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "multi_step_transformation",
+            "marking_point_plan": "MP1 = wish clause opening; MP2 = past perfect expressing regret about the past.",
+            "alternative_route_check": "Routes like 'should have asked' are blocked because the keyword WISH is compulsory and unchanged."
+          }
+        },
+        {
+          "id": "b2p4q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "It wasn't necessary for Priya to stay late to finish the report.",
+          "keyword": "NEED",
+          "sentence2Start": "Priya __________________ late to finish the report.",
+          "answer": "did not need to stay",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "NEED",
+            "fullAnswers": [
+              "did not need to stay",
+              "didn't need to stay"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "past negative need structure",
+                "accepted": [
+                  "did not need",
+                  "didn't need"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to stay"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "did not need to + infinitive for lack of necessity",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 = negative need in the past; MP2 = infinitive completing the action.",
+            "alternative_route_check": "Only one defendable route is allowed; 'needn't have stayed' is excluded because it changes the meaning implication."
+          }
+        },
+        {
+          "id": "b2p4q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "People say that regular praise from managers keeps employees motivated.",
+          "keyword": "SAID",
+          "sentence2Start": "Regular praise from managers __________________ employees motivated.",
+          "answer": "is said to keep",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SAID",
+            "fullAnswers": [
+              "is said to keep"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "impersonal passive reporting structure",
+                "accepted": [
+                  "is said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to keep"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "impersonal passive with say + infinitive",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 = passive reporting verb with keyword; MP2 = infinitive carrying the reported action.",
+            "alternative_route_check": "Alternative active routes are blocked because the keyword SAID must be retained in a passive reporting structure."
+          }
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "b2p4q25",
+          "number": 25,
+          "answer": "had been making"
+        },
+        {
+          "id": "b2p4q26",
+          "number": 26,
+          "answer": "are not allowed to check"
+        },
+        {
+          "id": "b2p4q27",
+          "number": 27,
+          "answer": "was not as relaxed as"
+        },
+        {
+          "id": "b2p4q28",
+          "number": 28,
+          "answer": "wish I had asked"
+        },
+        {
+          "id": "b2p4q29",
+          "number": 29,
+          "answer": "did not need to stay"
+        },
+        {
+          "id": "b2p4q30",
+          "number": 30,
+          "answer": "is said to keep"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 26
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Core",
+            "number": 27
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 28
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 29
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Strong",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 1,
+          "4": 2,
+          "5": 3
+        },
+        "answerLengths": [
+          3,
+          5,
+          5,
+          4,
+          5,
+          4
+        ]
+      },
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-TOO-EASY] Q25: Sentence 2 is too parallel to Sentence 1 — little restructuring required."
+          },
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P4-ALTERNATIVE-ROUTE] Q28: Keyword + sentence1 pattern may allow a second grammatical route."
+          }
+        ],
+        "detectedAt": "2026-08-31T21:12:22.555Z"
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "The Human Skills That Still Matter",
+      "passageWordCount": 595,
+      "passage": "For years, people discussing future careers have focused on technical ability. Schools have promoted coding, companies have searched for data experts, and young people have been told that the safest path is to learn whatever machines cannot yet do. There is truth in that advice, but it leaves out an important point. In many workplaces, digital systems are no longer special tools used by a few experts; they are becoming part of everyday life. As a result, employers are paying at least as much attention to the skills that help people work with change, with information and with one another.\n\nThis does not mean that specialist knowledge has lost its value. A hospital still needs trained doctors, and a design firm still needs people who understand materials and production. Yet many managers now say that what separates strong employees from average ones is not simply what they know on the day they are hired. It is how quickly they can learn, unlearn and relearn. In industries where software is updated every few months, being confident enough to ask questions and adapt may matter more than having mastered one system that could soon disappear.\n\nOne skill that appears again and again in reports about future work is communication. This is sometimes misunderstood as meaning the ability to give polished presentations. In fact, employers are often thinking of something less dramatic and more useful: explaining ideas clearly, listening carefully, and adjusting your message for different audiences. A software engineer might need to describe a technical problem to a customer with no technical background. A scientist may have to persuade a local community that a project will benefit them. In both cases, success depends not on speaking more, but on making sure the other person understands.\n\nAnother ability that is rising in importance is judgement. Modern workers can reach huge amounts of information in seconds, and artificial intelligence can now produce summaries, plans and even images almost instantly. But fast access is not the same as wise use. People still need to decide whether a source is reliable, whether a suggestion fits the situation, and whether the result is fair. This is especially important in jobs that affect others directly, such as recruitment, education and healthcare. In these areas, a poor decision made at speed can create problems that take far longer to put right.\n\nTeamwork is also changing. In the past, collaboration often meant sitting in the same room. Now it may involve colleagues spread across time zones, cultures and working styles. That creates opportunities, but it also increases the chance of misunderstanding. The most effective workers are therefore not simply friendly people who enjoy group tasks. They are people who can disagree without creating conflict, share responsibility fairly and keep a project moving when no one person is fully in control. These habits are harder to measure than exam results, but they shape whether work gets done well.\n\nSome people worry that these so-called human skills are too vague to teach. However, they can be developed if education and training treat them as real abilities rather than personal qualities you either have or you do not. Students can practise giving feedback, solving open-ended problems and reflecting on mistakes. Early career employees can learn to lead small tasks before managing larger ones. The point is not that everyone must become endlessly flexible and cheerful. It is that future careers are likely to reward people who can combine practical knowledge with the maturity to use it well.\n\nSo the jobs of tomorrow may not belong only to those with the most advanced technical training. They may go to people who can keep learning, make sensible decisions and build trust with others while technology continues to change around them. In a labour market full of uncertainty, those abilities may turn out to be the most reliable expertise of all.",
+      "questions": [
+        {
+          "id": "q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "Which development does the writer identify in the first two paragraphs?",
+          "options": [
+            "A) Employers are beginning to value general flexibility more than specialist knowledge.",
+            "B) Employers increasingly value people who can keep adapting while still using job-specific expertise.",
+            "C) Technical expertise now matters mainly in professions such as medicine and design.",
+            "D) Frequent software changes have made formal training less useful than workplace experience."
+          ],
+          "evidence": "The writer says technical advice contains truth, but employers now value skills that help people deal with change, and that strong employees are distinguished by how quickly they can learn, unlearn and relearn.",
+          "rationale": "B is correct because the opening contrasts technical ability with wider skills, especially adaptability. A is wrong because the writer clearly states specialist knowledge still matters. C distorts the advice; the article does not tell young people to avoid technology-based careers. D introduces recruitment reliability too early and is not the focus of the first two paragraphs."
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "questionType": "detail",
+          "prompt": "According to the writer, what do employers usually mean when they talk about communication skills?",
+          "options": [
+            "A) being able to explain and adjust ideas so that other people can follow them",
+            "B) being confident enough to speak in front of large groups without notes",
+            "C) knowing how to use specialist language accurately in formal situations",
+            "D) being prepared to speak frequently in meetings and discussions"
+          ],
+          "evidence": "The passage says communication is often misunderstood as polished presentations and instead means explaining ideas clearly, listening carefully and adjusting your message for different audiences.",
+          "rationale": "A is correct because it reflects the fuller definition given by the writer. B is the misunderstanding the writer rejects. C overemphasises specialist language, whereas the point is often to explain things to non-experts. D confuses quantity of speaking with effective communication."
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "questionType": "inference",
+          "prompt": "Why does the writer mention recruitment, education and healthcare in paragraph four?",
+          "options": [
+            "A) to show that artificial intelligence is already more common in some sectors than others",
+            "B) to suggest that workers in those fields need stronger technical training than most",
+            "C) to illustrate situations where poor judgement can have serious consequences",
+            "D) to argue that access to information is less useful in people-focused professions"
+          ],
+          "evidence": "After discussing judgement, the writer says this is especially important in jobs affecting others directly and notes that a poor decision made quickly can cause problems that take much longer to fix.",
+          "rationale": "C is correct because the examples support the claim that judgement matters where decisions directly affect people. A is not discussed. B shifts the focus to technical training, which is not the point of the paragraph. D misreads the text; the issue is not that information is less useful, but that it must be used wisely."
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "questionType": "attitude",
+          "prompt": "What is the writer's attitude towards teamwork in modern workplaces?",
+          "options": [
+            "A) It has become simpler because digital tools remove most causes of disagreement.",
+            "B) It is less important now because many workers complete tasks independently.",
+            "C) It is basically the same as before, even if teams are in different places.",
+            "D) It demands more subtle skills than people sometimes recognise."
+          ],
+          "evidence": "The writer says teamwork now often happens across time zones and cultures, creating opportunities but also increasing misunderstanding; effective workers can disagree constructively, share responsibility and keep projects moving.",
+          "rationale": "D is correct because the paragraph stresses the less visible skills required for successful collaboration. A is the opposite of the text, which highlights greater risk of misunderstanding. B is unsupported and contradicts the focus on collaboration. C ignores the writer's point that teamwork is changing in important ways."
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "questionType": "purpose",
+          "prompt": "What is the purpose of paragraph six?",
+          "options": [
+            "A) to warn companies not to expect too much from inexperienced staff",
+            "B) to explain how human skills can be trained rather than treated as fixed traits",
+            "C) to show that schools are already preparing students perfectly for future work",
+            "D) to argue that positive attitudes matter more than practical knowledge"
+          ],
+          "evidence": "The writer rejects the idea that human skills are too vague to teach and gives examples such as practising feedback, solving open-ended problems and gradually leading tasks.",
+          "rationale": "B is correct because the paragraph directly responds to a possible objection and explains ways these abilities can be developed. A is not the focus. C is too strong; the paragraph suggests what education and training can do, not that they already do it perfectly. D is wrong because the writer ends by calling for practical knowledge combined with maturity."
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "questionType": "global",
+          "prompt": "Which statement best summarises the writer's conclusion?",
+          "options": [
+            "A) The most secure careers will belong to workers who specialise in a single system.",
+            "B) Future success will depend mainly on avoiding uncertainty in the labour market.",
+            "C) Lasting career value is likely to come from combining knowledge with adaptable human judgement.",
+            "D) Human abilities will matter only until technology becomes advanced enough to replace them."
+          ],
+          "evidence": "The final paragraph says jobs may go to people who keep learning, make sensible decisions and build trust with others while technology changes around them, calling these abilities reliable expertise.",
+          "rationale": "C is correct because it captures the article's closing message: technical knowledge matters, but its lasting value depends on adaptable, human use. A contradicts the emphasis on relearning rather than fixed mastery. B misstates the conclusion; uncertainty is context, not the strategy. D suggests a temporary role for human skills, which the writer does not imply."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q31",
+          "number": 31,
+          "answer": "B"
+        },
+        {
+          "id": "q32",
+          "number": 32,
+          "answer": "A"
+        },
+        {
+          "id": "q33",
+          "number": 33,
+          "answer": "C"
+        },
+        {
+          "id": "q34",
+          "number": 34,
+          "answer": "D"
+        },
+        {
+          "id": "q35",
+          "number": 35,
+          "answer": "B"
+        },
+        {
+          "id": "q36",
+          "number": 36,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "the_x_that"
+    },
+    "6": {
+      "partTitle": "Part 6: Gapped text",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "The Less-You-Own Experiment",
+      "passage": "A few years ago, designer and podcast host Mia Turner realised that most of the things in her flat were not making life easier. She spent weekends moving piles of clothes to reach the wardrobe behind them, and kitchen drawers were so full that she avoided opening them. She was not trying to become a different person overnight; she simply wanted her home to feel calmer. (37) What surprised her most was not what disappeared, but how quickly daily routines became simpler once there was less to manage.\n\nFor many people, the idea of owning less is still linked to a rather severe image: white walls, one chair and a life free from personality. In practice, though, most people who reduce their belongings do not aim for emptiness. They are deciding what deserves space and attention. (38) A guitar that is played every evening, for example, earns its place far more clearly than a bread maker used once in three years.\n\nPart of the appeal lies in the way possessions quietly demand our time. Every object must be cleaned, stored, repaired, charged, updated or eventually thrown away. Even gifts received with affection can become another decision to make. (39) Researchers who study consumer behaviour often point out that people do not only buy things; they also buy future responsibilities, though few notice that in the moment.\n\nSocial pressure, however, makes it difficult to step back. Shops and online adverts constantly suggest that a better version of ourselves is one purchase away: more organised, fitter, more creative or more relaxed. (40) If the trainers remain by the door unused, or the expensive notebook stays blank, the problem can feel personal rather than practical.\n\nThat is why many people begin with a small experiment rather than a dramatic clear-out. They choose one shelf, one drawer or one category, such as mugs or T-shirts, and question each item honestly. (41) Seeing immediate results in a limited area helps them build confidence before moving on to spaces with stronger emotional ties, such as books, gifts or childhood possessions.\n\nNone of this means that objects are unimportant. Some items connect us to family history, creative work or major moments in our lives, and reducing clutter does not require pretending otherwise. (42) When people are clear about that difference, their homes tend to reflect real priorities rather than old habits or delayed decisions.\n\nLiving with fewer possessions will not solve every modern problem, and most people who try it still enjoy buying useful or beautiful things. Yet many say the main reward is not a tidier shelf but a shift in attention. Instead of asking what else they need, they start noticing what already serves them well. In a culture that treats more as the default, that can be a surprisingly liberating change.",
+      "passageWordCount": 519,
+      "sentencePool": [
+        "A) In other words, the goal is not to count possessions but to keep only those that play an active part in life.",
+        "B) She started by filling a single bag for charity and promised herself she would stop there if she regretted it.",
+        "C) That message is powerful because the hoped-for transformation rarely arrives with the object itself.",
+        "D) The point is not that memories matter less, but that they do not all need to be stored in physical form.",
+        "E) As a result, what looks like harmless clutter can create a constant background of small mental tasks.",
+        "F) This approach also prevents the process from turning into a test of willpower that people quickly abandon.",
+        "G) Some enthusiasts even set themselves a rule of buying nothing at all for an entire year."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "B"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "A"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "E"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "C"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "F"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "D"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "__adversarialFindings": [
+        {
+          "rule_id": "TEST-P6-MULTIFIT",
+          "severity": "QUALITY_FAIL",
+          "location": "Q41",
+          "evidence": "G",
+          "reason": "Option G may fit gaps 41,42: It could follow a general statement about reducing possessions, but it is less cohesive than the chosen options because it introduces a more extreme example without strong support from the surrounding sentences.",
+          "recommended_local_action": "Rewrite option or gap context so only one gap accepts the sentence.",
+          "source": "ai_adversarial"
+        }
+      ],
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P6-MULTIFIT] Q41: Option G may fit gaps 41,42: It could follow a general statement about reducing possessions, but it is less cohesive than the chosen options because it introduces a more extreme example without strong support from the surrounding sentences."
+          }
+        ],
+        "detectedAt": "2026-08-31T21:26:07.458Z"
+      }
+    },
+    "7": {
+      "partTitle": "Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Leila Grant, bookseller",
+          "text": "A few years ago, customers mainly came into my shop asking for gifts, while they bought most of their own reading online. Initially, I assumed that habit had changed for good. However, things have shifted again. Since the pandemic, people seem less interested in rushing through a screen all day and more willing to spend an evening with a novel. What surprises me most is that many younger customers ask staff for recommendations instead of relying on star ratings. They often tell me that reading feels like a form of rest rather than another task. I have also noticed people joining our monthly discussions even when they have not finished the book, simply because they want company. Sales matter, of course, yet what really convinces me something wider is happening is the atmosphere: the shop is noisier, slower and more social than it used to be."
+        },
+        {
+          "letter": "B",
+          "name": "Owen Price, engineer",
+          "text": "I never thought of myself as a reader. At school I associated books with tests, and later I told myself I was too busy. Then, during a long train journey when my phone battery died, I started a paperback that had been sitting in my bag for months. By the time I arrived, I had forgotten to check messages. Since then, reading has become part of my commute. I still use technology all day for work, so opening a book feels refreshingly different. That said, I do not romanticise it. I choose crime fiction because it holds my attention, not because I want to become more cultured. Some friends have taken up reading to post impressive shelves online, which seems odd to me. For me, the appeal is simpler: books make dead time feel properly used, and they leave my head quieter than podcasts do."
+        },
+        {
+          "letter": "C",
+          "name": "Marta Silva, librarian",
+          "text": "From where I work, the return to reading is real, but it is not quite the cosy story people imagine. Yes, our membership has risen steadily, and teenagers now borrow printed books as well as manga and audiobooks. Meanwhile, parents often say they are relieved to see their children choosing anything that is not a phone. Even so, I think the biggest reason is practical. Household budgets are tight, and libraries offer free entertainment, warmth and a reason to leave the house. Book clubs have filled up too, although many members admit they come as much for conversation as for literature. I do not see that as a weakness. In fact, shared reading can lead people towards more challenging authors later on. Still, I would be cautious about calling this a golden age. Enthusiasm is growing, yet people need access, time and quiet if it is to last."
+        },
+        {
+          "letter": "D",
+          "name": "Rafi Khan, presenter",
+          "text": "When I started hosting a culture podcast, I expected film and music episodes to attract the biggest audiences. Strangely, the discussions about books are now downloaded far more. At first I assumed listeners wanted expert interviews, but the messages we receive suggest something else. People say they miss the concentration they once had, and hearing others talk enthusiastically about a title gives them the push to begin one themselves. I recognise that feeling. For years I bought serious books and left them unread beside my bed. Recently I stopped aiming to read what I thought I should read and chose shorter travel writing instead. That changed everything. Yet I am not convinced reading is returning because society has suddenly become calmer or wiser. If anything, people are seeking a way to resist constant distraction. Whether that habit survives depends on making room for it, not just admiring it from a distance."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q43",
+          "number": 43,
+          "prompt": "Who realised unexpectedly that reading could improve a period of time they had usually treated as unimportant?"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "prompt": "Who thinks the growth in reading is partly connected to financial pressures?"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "prompt": "Who mentions changing their choice of reading material in order to make the habit easier to continue?"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "prompt": "Who describes reading as a form of rest rather than another task?"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "prompt": "Who noticed that people increasingly value discussing books together, even when they are not fully prepared?"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "prompt": "Who is doubtful about a fashionable way some people present themselves as readers?"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "prompt": "Who feels that social contact linked to reading can still have a positive long-term effect?"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "prompt": "Who was mistaken at first about what was attracting people to book-related content?"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "prompt": "Who argues that the present enthusiasm for reading will continue only if certain conditions are met?"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "prompt": "Who was surprised that younger people preferred personal advice to online opinion when choosing what to read?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q43",
+          "number": 43,
+          "answer": "B"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "answer": "C"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "answer": "D"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "answer": "A"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "answer": "A"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "answer": "B"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "answer": "C"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "answer": "D"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "answer": "D"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "answer": "A"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

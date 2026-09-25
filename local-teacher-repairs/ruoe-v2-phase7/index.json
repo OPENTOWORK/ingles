@@ -1,0 +1,338 @@
+{
+  "records": [
+    {
+      "caseId": 1,
+      "status": "QUALITY_FAIL"
+    },
+    {
+      "caseId": 2,
+      "status": "PIPELINE_FAIL",
+      "reason": "Stopped: the exact historical teacher-patch document/comment for Exam 15 Part 2 was not present locally. The prompt only summarises that the example/opening required correction."
+    },
+    {
+      "caseId": 3,
+      "status": "QUALITY_FAIL"
+    },
+    {
+      "caseId": 4,
+      "status": "PIPELINE_FAIL",
+      "reason": "Stopped: the supplied historical direction (BEEN / has been using) does not match the located pre-patch Q25, whose subject is flexible hours and whose predicate is make a difference. Applying it would invent a different item."
+    },
+    {
+      "caseId": 5,
+      "status": "HARD_FAIL"
+    }
+  ],
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "usage": {
+    "promptTokens": 2400,
+    "completionTokens": 1619,
+    "totalTokens": 4019
+  },
+  "calls": [
+    {
+      "role": "generator",
+      "stage": "case-1-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 167,
+        "completion_tokens": 81,
+        "total_tokens": 248,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "blindSolver",
+      "stage": "case-1-blind",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 139,
+        "completion_tokens": 89,
+        "total_tokens": 228,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "case-1-adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 152,
+        "completion_tokens": 329,
+        "total_tokens": 481,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "case-1-linguistic-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 413,
+        "completion_tokens": 80,
+        "total_tokens": 493,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "blindSolver",
+      "stage": "case-1-blind-retry-1",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 142,
+        "completion_tokens": 80,
+        "total_tokens": 222,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "case-1-adversary-retry-1",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 155,
+        "completion_tokens": 359,
+        "total_tokens": 514,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "case-3-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 132,
+        "completion_tokens": 89,
+        "total_tokens": 221,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "case-3-schema-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 195,
+        "completion_tokens": 54,
+        "total_tokens": 249,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "blindSolver",
+      "stage": "case-3-blind",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 89,
+        "completion_tokens": 41,
+        "total_tokens": 130,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "case-3-adversary",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 115,
+        "completion_tokens": 120,
+        "total_tokens": 235,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "case-3-linguistic-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 315,
+        "completion_tokens": 54,
+        "total_tokens": 369,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "blindSolver",
+      "stage": "case-3-blind-retry-1",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 89,
+        "completion_tokens": 41,
+        "total_tokens": 130,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "adversary",
+      "stage": "case-3-adversary-retry-1",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 115,
+        "completion_tokens": 119,
+        "total_tokens": 234,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "generator",
+      "stage": "case-5-repair",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 103,
+        "completion_tokens": 44,
+        "total_tokens": 147,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    },
+    {
+      "role": "blindSolver",
+      "stage": "case-5-blind",
+      "model": "gpt-4o-mini",
+      "usage": {
+        "prompt_tokens": 79,
+        "completion_tokens": 39,
+        "total_tokens": 118,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    }
+  ]
+}

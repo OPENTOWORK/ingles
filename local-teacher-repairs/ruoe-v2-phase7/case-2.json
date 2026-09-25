@@ -1,0 +1,14 @@
+{
+  "caseId": 2,
+  "repairResult": {
+    "status": "PIPELINE_FAIL",
+    "reason": "Stopped: the exact historical teacher-patch document/comment for Exam 15 Part 2 was not present locally. The prompt only summarises that the example/opening required correction."
+  },
+  "source": "scripts\\generated\\b2-exams\\exam-15\\part-02.json",
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "savedAt": "2026-09-22T15:14:20.254Z"
+}

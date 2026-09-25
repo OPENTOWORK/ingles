@@ -1,0 +1,369 @@
+{
+  "caseId": 5,
+  "source": "scripts\\generated\\b2-exams\\exam-11\\part-03.json",
+  "historicalCorrection": "UNEQUAL → EQUAL",
+  "proposal": {
+    "answer": "equal",
+    "reason": "The context of the sentence suggests that the correct term should indicate a lack of uniformity in progress across a city, which aligns with 'equal' rather than 'unequal'."
+  },
+  "blindSolve": {
+    "answer": "equal",
+    "reason": "The sentence requires a word that conveys the idea of uniformity or sameness across a city, which is effectively captured by the base word 'equal'."
+  },
+  "repairResult": {
+    "status": "HARD_FAIL",
+    "originalExam": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "COLOUR",
+        "answer": "colourful",
+        "transformationFamily": "adjective"
+      },
+      "title": "A greener future for cities",
+      "passage": "For many people, a truly green city is not only full of parks and trees, but also a more (0) ___ (COLOUR) and pleasant place to live. In recent years, city planners have shown growing (17) ___ (AWARE) of the need to design streets that are healthier for both people and wildlife. One (18) ___ (EFFECT) solution has been to replace areas of concrete with plants that absorb rainwater and cool the air.\n\nThese changes can bring real (19) ___ (IMPROVE) to daily life. Green roofs, for example, reduce noise and offer a home to insects and birds. In some places, local councils have even turned car parks into small community gardens, encouraging residents to become actively (20) ___ (INVOLVE) in their neighbourhoods. This kind of (21) ___ (PARTICIPATE) often leads to stronger communities.\n\nHowever, experts warn that progress is not always (22) ___ (EQUAL) across a city. Poorer areas may receive less investment, which is deeply (23) ___ (FAIR). To create lasting change, leaders must plan carefully and act (24) ___ (RESPONSIBLE), ensuring that everyone benefits from a greener urban environment.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "AWARE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EFFECT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "IMPROVE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "INVOLVE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "PARTICIPATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EQUAL",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "FAIR",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "RESPONSIBLE",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "awareness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "effective",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "improvements",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "involved",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "participation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "unequal",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "unfair",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "responsibly",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-11-part-3",
+      "version": "pre-teacher-patch-2026-08-31T21:08:52.079Z"
+    },
+    "candidateExam": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "COLOUR",
+        "answer": "colourful",
+        "transformationFamily": "adjective"
+      },
+      "title": "A greener future for cities",
+      "passage": "For many people, a truly green city is not only full of parks and trees, but also a more (0) ___ (COLOUR) and pleasant place to live. In recent years, city planners have shown growing (17) ___ (AWARE) of the need to design streets that are healthier for both people and wildlife. One (18) ___ (EFFECT) solution has been to replace areas of concrete with plants that absorb rainwater and cool the air.\n\nThese changes can bring real (19) ___ (IMPROVE) to daily life. Green roofs, for example, reduce noise and offer a home to insects and birds. In some places, local councils have even turned car parks into small community gardens, encouraging residents to become actively (20) ___ (INVOLVE) in their neighbourhoods. This kind of (21) ___ (PARTICIPATE) often leads to stronger communities.\n\nHowever, experts warn that progress is not always (22) ___ (EQUAL) across a city. Poorer areas may receive less investment, which is deeply (23) ___ (FAIR). To create lasting change, leaders must plan carefully and act (24) ___ (RESPONSIBLE), ensuring that everyone benefits from a greener urban environment.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "AWARE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "EFFECT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "IMPROVE",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "INVOLVE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "PARTICIPATE",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EQUAL",
+          "transformationFamily": "prefix",
+          "answer": "equal"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "FAIR",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "RESPONSIBLE",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "awareness",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "effective",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "improvements",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "involved",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "participation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "equal",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "unfair",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "responsibly",
+          "transformationFamily": "adverb"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-11-part-3",
+      "version": "exam-11-part-3-v2-teacher-repair-case-5-rejected",
+      "derivedFromVersion": "pre-teacher-patch-2026-08-31T21:08:52.079Z"
+    },
+    "acceptedExam": null,
+    "changeRecord": {
+      "examId": "exam-11",
+      "sourceVersion": "pre-teacher-patch-2026-08-31T21:08:52.079Z",
+      "newVersion": "exam-11-part-3-v2-teacher-repair-case-5-rejected",
+      "part": 3,
+      "question": 22,
+      "originalContent": {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "EQUAL",
+        "transformationFamily": "prefix"
+      },
+      "teacherFeedback": "The answer key is wrong and contradicts the local sentence.",
+      "repairClassification": "KEY_METADATA_FIX",
+      "revisedContent": {
+        "id": "q6",
+        "number": 22,
+        "type": "word-formation",
+        "stem": "EQUAL",
+        "transformationFamily": "prefix",
+        "answer": "equal"
+      },
+      "originalAnswer": "unequal",
+      "revisedAnswer": "equal",
+      "reasonForChange": "The feedback targets the key or metadata.",
+      "validatorsRun": [
+        {
+          "verdict": "PASS",
+          "reason": "Structure, question number, and separate modelAnswers key were preserved and synchronised."
+        },
+        {
+          "verdict": "HARD_FAIL",
+          "reason": "The answer is identical to the stem. That is not word formation.",
+          "candidateAlternative": "equal",
+          "repairRecommendation": "Discard this position and choose a word that is a real derivation.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "equal",
+            "answer": "equal",
+            "sameLexicalFamily": false,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": false,
+            "artificialBase": false,
+            "reason": "The answer is identical to the stem. That is not word formation."
+          }
+        },
+        {
+          "verdict": "PASS",
+          "reason": "Blind solver independently supplied equal."
+        },
+        {
+          "verdict": "HARD_FAIL",
+          "reason": "Adversarial mechanics: The answer is identical to the stem. That is not word formation."
+        }
+      ],
+      "finalStatus": "HARD_FAIL"
+    }
+  },
+  "preservation": {
+    "unchangedQuestions": [
+      17,
+      18,
+      19,
+      20,
+      21,
+      23,
+      24
+    ],
+    "expected": [
+      17,
+      18,
+      19,
+      20,
+      21,
+      23,
+      24
+    ]
+  },
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "savedAt": "2026-09-22T15:14:20.255Z"
+}

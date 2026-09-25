@@ -1,0 +1,1060 @@
+DRALO
+
+RUOE EXAM 3
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Exam ID
+
+B2 · Exam 3
+
+Source
+
+ENGLISH_PROD · current stored RUOE Parts 1–7
+
+Status
+
+PENDING_HUMAN_REVIEW
+
+Language
+
+British English
+
+Purpose
+
+Teacher re-review after targeted corrections; production source unchanged
+
+Theme map
+
+This exam deliberately moves away from the main themes used in Exam 6. The internal mix is:
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Unusual sports & emerging trends
+
+2
+
+Open cloze
+
+Smart devices & digital habits
+
+3
+
+Word formation
+
+A week without a smartphone
+
+4
+
+Key word transformations
+
+Plastic waste & recycling
+
+5
+
+Multiple-choice reading
+
+Everyday fitness
+
+6
+
+Gapped text
+
+Modern communication
+
+7
+
+Multiple matching
+
+Everyday sustainability
+
+Distribution note: Exam 7 is clearly different from Exam 6, but Parts 2, 3 and 6 all touch digital life, while Parts 4 and 7 touch sustainability. Reviewers should judge whether that still feels varied enough as a single paper.
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Unusual sports & emerging trends
+
+VISTA ALUMNO
+
+Example:
+
+A) taken
+
+B) made
+
+C) become
+
+D) turned
+
+Answer: C
+
+Text
+
+From Strange to Mainstream
+
+A few years ago, sports such as underwater hockey and extreme ironing would have seemed too unusual to attract a wide audience. Yet both have (0) ___ popular enough to appear regularly on social media, where short videos can help a sport (1) ___ a much wider audience. One reason is that people are always looking for fresh experiences, especially if they can (2) ___ them with friends online. Another factor is that many unusual sports are more (3) ___ than their names suggest. Participants often need only basic equipment, and clubs are keen to welcome beginners.
+
+As a result, these activities are no longer seen as jokes. In fact, some are beginning to (4) ___ in serious sponsorship deals and organised competitions. Supporters say unusual sports also (5) ___ a sense of community, because newcomers and experts mix more easily than in traditional games. Of course, not every trend will last, and some sports may fade (6) ___ once the novelty disappears. Still, their recent success shows that people are open (7) ___ trying something different, provided it is safe, social and fun. What once looked ridiculous may soon be a familiar (8) ___ at local sports centres.
+
+Questions
+
+1
+
+A reach
+
+B approach
+
+C enter
+
+D arrive
+
+2
+
+A post
+
+B send
+
+C share
+
+D pass
+
+3
+
+A accessible
+
+B familiar
+
+C convenient
+
+D ordinary
+
+4
+
+A lead
+
+B end
+
+C result
+
+D arrive
+
+5
+
+A foster
+
+B raise
+
+C lift
+
+D widen
+
+6
+
+A out
+
+B away
+
+C over
+
+D down
+
+7
+
+A for
+
+B with
+
+C by
+
+D to
+
+8
+
+A scene
+
+B view
+
+C vision
+
+D sight
+
+Part 1 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 7
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · targeted teacher patch applied
+
+ANSWER KEY
+
+1
+
+A · reach
+
+2
+
+C · share
+
+3
+
+A · accessible
+
+4
+
+C · result
+
+5
+
+A · foster
+
+6
+
+B · away
+
+7
+
+D · to
+
+8
+
+D · sight
+
+TEACHER ATTENTION
+
+• Teacher feedback patch applied to Q1, Q3 and Q5: the original ambiguous or forced wording has been rebuilt so each item has one clearly defensible answer.
+
+• Item-type balance is improved: Q1 now tests lexical meaning in context, Q3 an adjective distinction, and Q5 a less formulaic collocation; Q2, Q4, Q6, Q7 and Q8 remain unchanged.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 2 — Open cloze
+
+Theme: Smart devices & digital habits
+
+VISTA ALUMNO
+
+Example:
+
+Answer: 0 → if
+
+Text
+
+Smart devices at home and on the move
+
+A few years ago, smart devices were seen as luxuries, but now many people wonder (0) ___ they could manage without them. Phones can control lights, speakers and heating, while watches record how far we have walked and remind us to stand up. For busy people, this can seem convenient, as everything is designed (9) ___ save time.
+
+However, smart devices are not always as helpful (10) ___ they appear. Notifications may interrupt us at work, and some people become so dependent (11) ___ their phones that they feel anxious when the battery runs low. Another issue is privacy. Users are often asked to agree to terms and conditions without reading all of (12) ___, so they may not realise how much personal data is being collected.
+
+Even so, experts say the answer is not to avoid smart technology completely, (13) ___ to use it more carefully. If people switch (14) ___ alerts they do not need and think twice before buying another device, they may find that technology works for them rather (15) ___ the other way round. After all, the smartest homes should make life easier, not turn (16) ___ a source of stress.
+
+Part 2 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 7
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+9
+
+to
+
+10
+
+as
+
+11
+
+on
+
+12
+
+them
+
+13
+
+but
+
+14
+
+off
+
+15
+
+than
+
+16
+
+into
+
+TEACHER ATTENTION
+
+• Teacher re-review: no item requires correction. Q11 and Q14 are relatively accessible, but the Part remains valid as a set. No student-facing changes applied.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 3 — Word formation
+
+Theme: A week without a smartphone
+
+VISTA ALUMNO
+
+Example:
+
+(0) ___ (USUAL)
+
+Answer: 0 → unusual
+
+Text
+
+A Week Offline
+
+For many people, the idea of leaving home without a smartphone seems (0) ___ (USUAL). Yet journalist Sam Briggs recently tried it for a week and wrote about the experience. His first feeling was one of (17) ___ (NERVOUS), especially on the journey to work, when he could not check messages every few minutes. However, he soon noticed an (18) ___ (EXPECT) benefit: he paid more attention to the world around him. Streets he had walked along for years suddenly seemed more interesting.
+
+There were, of course, some (19) ___ (PRACTICE) difficulties. He got lost twice because he had no maps, and making plans with friends required careful (20) ___ (ORGANISE) in advance. Still, Sam argues that the constant (21) ___ (AVAILABLE) of information can be a problem in itself. Without his phone, he became less (22) ___ (DISTRACT) and far more aware of how often people turn to screens out of habit rather than need. By the end of the week, he had developed a greater (23) ___ (APPRECIATE) of quiet moments and a stronger (24) ___ (BELIEVE) that occasional disconnection is good for us.
+
+Part 3 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 7
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+17
+
+nervousness
+
+18
+
+unexpected
+
+19
+
+practical
+
+20
+
+organisation
+
+21
+
+availability
+
+22
+
+distracted
+
+23
+
+appreciation
+
+24
+
+belief
+
+TEACHER ATTENTION
+
+• Q20 rebuilt for naturalness: ARRANGE → arrangement has been replaced with ORGANISE → organisation in “required careful organisation in advance”.
+
+• The remaining Part 3 items are unchanged. Teacher should still confirm the overall derivational difficulty is consistently B2.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 4 — Key word transformations
+
+Theme: Plastic waste & recycling
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+
+0. People throw away millions of plastic bottles every week.
+
+THROWN
+
+Millions of plastic bottles __________________ every week.
+
+Answer: 0 → are thrown away
+
+Questions
+
+25. The council said it would introduce more recycling bins next year.
+
+ANNOUNCED
+
+The council __________________ more recycling bins the following year.
+
+26. We regret buying so many drinks in plastic bottles for the event.
+
+WISH
+
+We __________________ so many drinks in plastic bottles for the event.
+
+27. Using a reusable cup is cheaper than buying a new plastic one every day.
+
+AS
+
+Buying a new plastic cup every day __________________ using a reusable one.
+
+28. I only understood how serious plastic pollution was after I watched the documentary.
+
+UNTIL
+
+It __________________ the documentary that I understood how serious plastic pollution was.
+
+29. You should avoid buying fruit wrapped in unnecessary plastic.
+
+BETTER
+
+You __________________ fruit wrapped in unnecessary plastic.
+
+30. The shop gave customers paper bags because it wanted to reduce plastic waste.
+
+ORDER
+
+The shop gave customers paper bags __________________ plastic waste.
+
+Part 4 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 7
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+25
+
+announced it would introduce
+
+26
+
+wish we had not bought
+
+27
+
+is not as cheap as
+
+28
+
+was not until I watched
+
+29
+
+had better avoid buying
+
+30
+
+in order to reduce
+
+TEACHER ATTENTION
+
+• Teacher re-review found no correction issue requiring replacement. Q29 remains valid; the set could be made more demanding in a future difficulty pass, but no student-facing changes are applied here.
+
+• Keep current six transformations for this patch. Revisit only if a later exam-wide difficulty calibration calls for one or two stronger items.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 5 — Multiple-choice reading
+
+Theme: Everyday fitness
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+Fitness That Fits Real Life
+
+Many people decide to get fitter in the same dramatic way: they buy expensive trainers, join a gym and promise themselves they will go five times a week. Two weeks later, the trainers are by the door, the gym card is in a drawer and the plan has quietly disappeared. This cycle is so common that it is easy to believe staying fit must involve a huge effort. In fact, the opposite is often true. The routines that last are usually the ones that fit into daily life so neatly that they barely feel like routines at all.
+
+One reason people give up is that they choose exercise that looks impressive rather than exercise they will actually do. A friend may be training for a half marathon, and social media is full of intense workout videos, but that does not mean running long distances or lifting heavy weights is the right starting point for everyone. If your first plan already feels like punishment, you are unlikely to repeat it. Walking to work, cycling to the shops or doing a short online class in the living room may sound less exciting, but they are far easier to keep doing when work gets busy or the weather changes.
+
+This does not mean easy exercise has little value. In recent years, health experts have become much more interested in ordinary movement spread across the day. Climbing stairs, carrying shopping bags and standing up regularly from a desk can all make a difference, especially for people who spend hours sitting down. Ten minutes here and there may not look important in isolation, yet the effect adds up. The point is not that a brisk walk is equal to a serious training session, but that people often ignore useful activity because it does not match their image of what exercise should look like.
+
+There is also a psychological advantage in keeping things simple. Large fitness goals can be inspiring, but they can also create an uncomfortable feeling of failure before you have properly begun. If the target is to become a different person by next month, any missed session seems to prove you were never committed. Smaller goals work differently. Promising yourself a short walk after dinner or a few stretches before breakfast makes success more likely, and success matters because it changes identity. Once people start seeing themselves as someone who moves regularly, they often become more willing to do a little more.
+
+Of course, convenience should not be confused with carelessness. People sometimes use the idea of "keeping active" to avoid anything that raises the heart rate or requires planning. Fetching a cup of tea from the kitchen is movement, but it is not enough on its own. The most helpful approach is probably a mixture: build more activity into ordinary life, then protect a small number of moments each week for something slightly harder. That could mean a swim on Saturday, a longer bike ride or a dance class with a friend. The details matter less than the fact that the habit is realistic.
+
+Perhaps the most useful change, then, is not in the body but in the story people tell themselves about fitness. If exercise is treated as a test of discipline, many will delay starting until they have the right clothes, enough time or stronger motivation. If it is seen instead as a practical part of everyday life, the barrier becomes lower. You do not have to wait for a perfect Monday or a burst of enthusiasm. You can begin with the journey to work, the stairs at the station or ten minutes before bed, and let consistency do the rest.
+
+Questions
+
+31. What point does the writer make in the opening paragraph? A. People often spend too much money before deciding what kind of exercise they enjoy. B. Fitness plans usually fail because they are based on sudden, unrealistic changes. C. Gym memberships are less useful than people expect them to be. D. The hardest part of getting fit is finding time in a busy schedule.
+
+32. In the second paragraph, the writer suggests that some people choose certain forms of exercise mainly because they A. want results as quickly as possible. B. have been advised to copy fitter friends. C. are influenced by what seems admirable or fashionable. D. believe easier activities are suitable only for beginners.
+
+33. Why does the writer mention climbing stairs, carrying shopping bags and standing up from a desk? A. to argue that these should replace more demanding exercise completely B. to show that useful physical activity can be built into ordinary routines C. to explain why office workers need different advice from other people D. to prove that short periods of exercise are better than longer ones
+
+34. What is the writer's attitude towards large fitness goals in the fourth paragraph? A. They are helpful only when supported by professional coaching. B. They are mostly unnecessary once people have formed good habits. C. They are motivating for everyone despite the pressure they create. D. They can be useful, but they may also discourage people at the start.
+
+35. In the fifth paragraph, what does 'That' refer to in the sentence 'That could mean a swim on Saturday, a longer bike ride or a dance class with a friend'? A. using everyday tasks as the only form of exercise B. avoiding activities that need any preparation C. setting aside time for a more demanding activity D. increasing the amount of movement done at work
+
+36. Which statement best summarises the writer's overall message? A. People should wait until they feel highly motivated before starting to exercise seriously. B. Fitness becomes easier to maintain when it is treated as a normal part of daily life. C. The best way to get fit is to combine social activities with strict weekly targets. D. Small changes are worthwhile only if they eventually lead to an ambitious training plan.
+
+Part 5 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 7
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+31
+
+B
+
+32
+
+C
+
+33
+
+B
+
+34
+
+D
+
+35
+
+C
+
+36
+
+B
+
+TEACHER ATTENTION
+
+• Teacher re-review: Part 5 is one of the strongest sections of the paper. No correction changes requested; keep current text, questions and keys unchanged.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 6 — Gapped text
+
+Theme: Modern communication
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+Always Connected?
+
+A generation ago, staying in touch usually meant planning ahead. People arranged a time to call, wrote letters that took days to arrive, or waited until they met face to face. Today, a message can cross the world in seconds, and that speed has changed not only how often we communicate but also what we expect from one another. Friends, relatives and colleagues can now reach us almost whenever they want, wherever we happen to be.
+
+For many people, the biggest change is the disappearance of distance as a real obstacle. Video calls allow grandparents to read bedtime stories from another country, while work teams can discuss a project without sharing an office. (37) As a result, people often maintain relationships that might once have become weaker over time. Regular contact no longer depends on living in the same place, or even in the same time zone.
+
+Another major shift is the movement from delayed replies to instant reactions. In the past, silence usually had a practical explanation: a person was out, a letter had not arrived, or a phone line was busy. Now, when someone sees a message and does not answer, others may read meaning into that pause. (38) Technology has therefore created a new form of social pressure, in which speed itself can seem like a sign of care, interest or respect.
+
+At the same time, digital communication has changed the style of everyday language. Emails were once seen as quite formal, but messaging apps have encouraged shorter sentences, quicker exchanges and a more relaxed tone. (39) Although some critics worry that this makes writing less careful, others point out that people are actually writing far more often than previous generations did. Teenagers who rarely send letters may still produce thousands of words a week on their phones.
+
+The rise of group chats has brought its own advantages and problems. Families use them to share news, sports teams organise lifts there, and groups of friends make plans without sending ten separate messages. (40) Yet these spaces can also be exhausting. Conversations continue all day, jokes arrive too quickly for everyone to follow, and some members feel obliged to react even when they have nothing useful to add.
+
+Public communication has changed as well. Social media allows individuals, companies and public figures to speak directly to large audiences without relying on traditional newspapers or broadcasters. (41) A funny post, a short video or a personal comment can reach millions within hours. This has made communication more democratic in some ways, but it has also made mistakes more visible and harder to control once they begin to spread.
+
+Despite all these developments, older forms of communication have not completely disappeared. Important conversations are still often saved for face-to-face meetings, especially when emotions are involved or decisions are difficult. (42) In the end, technology has not replaced human communication; it has expanded it. We now have more ways to connect than ever before, but choosing the right one has become a skill in itself.
+
+Sentences
+
+A The same tool that keeps everyone informed, however, can make it almost impossible to escape constant updates.
+
+B For that reason, a handwritten note or a carefully timed phone call can still feel more meaningful than a stream of short messages.
+
+C In many cases, that can strengthen family life and make international friendships feel surprisingly ordinary.
+
+D Some experts believe that voice technology will soon replace keyboards for most online conversations.
+
+E Even punctuation has taken on new roles, with emojis and gifs helping to show feelings that plain text may hide.
+
+F This is why a quick text can sometimes create more anxiety than comfort, despite its convenience.
+
+G This has completely altered who gets heard and how quickly ideas move from private conversation into public debate.
+
+Part 6 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 7
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+37
+
+C
+
+38
+
+F
+
+39
+
+E
+
+40
+
+A
+
+41
+
+G
+
+42
+
+B
+
+• Option letters have been deliberately reshuffled to remove the conspicuous A–B–C–D–E–F answer pattern. The six inserted sentences, passage wording and cohesion logic are unchanged.
+
+• New key sequence: 37 C · 38 F · 39 E · 40 A · 41 G · 42 B. Extra sentence: D.
+
+• Technology/communication is the third digital-life theme in this exam; content is distinct, but distribution should avoid a technology-heavy overall impression.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Part 7 — Multiple matching
+
+Theme: Everyday sustainability
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+Which person…? The people may be chosen more than once.
+
+43 Who was motivated to change partly because of a financial consideration?
+
+44 Who suggests that people sometimes pretend something is difficult simply because it suits them?
+
+45 Who values an unexpected improvement in relationships with other people?
+
+46 Who says they are likely to fall back into old habits unless they organise practical ways to keep themselves on track?
+
+47 Who says they avoid judging themselves for not managing to do everything perfectly?
+
+48 Who was influenced by younger family members to reconsider daily travel habits?
+
+49 Who became more concerned after taking part in a single event in the local area?
+
+50 Who dislikes the way some people treat green living as a chance to compare themselves with others?
+
+51 Who is unconvinced by products presented as necessary for an environmentally responsible lifestyle?
+
+52 Who found that making changes was less hard than they had imagined?
+
+Texts
+
+A – Leah Morgan
+
+At first, I thought trying to live more sustainably meant making huge sacrifices, so I kept putting it off. Then my electricity bill rose sharply, and that finally pushed me to act. I started with ordinary habits: switching devices off properly, washing clothes at lower temperatures and carrying a flask instead of buying takeaway coffee. None of it felt dramatic, yet after a few months the changes became routine. Meanwhile, my neighbours set up a chat group where we exchange tips, and that has helped me stick to my plans. I still fly to visit my brother once a year, so I would never claim to be perfect. However, I have stopped worrying about getting every decision right. For me, the biggest lesson is that practical changes matter more than guilt, especially when they save money as well.
+
+B – Nikhil Patel
+
+My interest in climate action began for a different reason. I work as a chef, so I see every day how much food gets thrown away in homes and restaurants. Initially, I focused on composting and planning meals better, but since then I have become more ambitious. These days, I cycle to work most mornings, even though the traffic can be unpleasant, and I have cut down sharply on meat. Friends sometimes assume I enjoy setting strict rules for myself, yet that is not really true. In fact, I get annoyed when people turn small changes into a competition about who is the greenest. Even so, I do think convenience is often just an excuse. Once I learnt a few basic recipes and started using leftovers creatively, wasting less food turned out to be easier than I had expected.
+
+C – Sophie Green
+
+I came to everyday climate action through my children. They returned from school full of ideas and immediately questioned why our family drove such short distances. To be honest, I resisted at first because my timetable already felt impossible. Since then, though, walking more and borrowing things instead of buying them have changed how I think about daily life. What surprised me most was the social side of it. Our street now runs occasional repair evenings, and people who barely spoke before now share tools and fix lamps, zips and bikes together. That sense of community matters to me as much as the environmental benefit. I am still doubtful about some trends online, especially expensive products marketed as essential for a greener lifestyle. If an action creates pressure to spend more, I usually question whether it is really the best solution.
+
+D – Owen Kerr
+
+For years I read articles about the climate and agreed with them in theory, yet I carried on living exactly as before. What changed was joining a local river-cleaning day. It was only a Saturday morning, but seeing piles of litter beside water I had known since childhood made the issue feel immediate rather than abstract. Since then, I have tried to reduce packaging, use public transport more often and buy fewer new clothes. I am not naturally organised, so I need systems: a shopping list, a reusable bag kept by the door, and reminders on my phone. Without those, I slip back into old habits surprisingly fast. I also think some campaigns ask too much from individuals while ignoring larger companies. Even so, taking action myself has stopped me feeling powerless, which is why I encourage other people to begin somewhere, however small.
+
+Part 7 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 7
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+43
+
+A
+
+44
+
+B
+
+45
+
+C
+
+46
+
+D
+
+47
+
+A
+
+48
+
+C
+
+49
+
+D
+
+50
+
+B
+
+51
+
+C
+
+52
+
+B
+
+TEACHER ATTENTION
+
+• Q46 has been rewritten to remove the direct “reminders” lexical overlap. The answer remains D, but the new wording requires understanding the role of practical systems in preventing a return to old habits.
+
+• All other Part 7 questions, profiles and keys remain unchanged; the sustainability theme overlap with Part 4 should still be considered in final exam-level review.
+
+Human review notes
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+KEEP
+
+
+
+CHANGE
+
+
+
+ADD
+
+
+
+REMOVE
+
+
+
+DO NOT
+
+
+
+DECISION
+
+☐ Approve   ☐ Needs adjustment   ☐ Replace
+
+Final exam review
+
+Use this page only after all seven Parts have been reviewed.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+LANGUAGE
+
+☐ Natural British English throughout
+
+LEVEL
+
+☐ Consistently B2 First
+
+AUTHENTICITY
+
+☐ Cambridge-style task behaviour and difficulty
+
+THEME VARIETY
+
+☐ Sufficient variety within Exam 7 and against Exams 5–6
+
+KEYS
+
+☐ All keys verified manually
+
+DISTRACTORS
+
+☐ Plausible but clearly wrong
+
+PART 4
+
+☐ Meaning preserved · keyword intact · 2–5 words · suitable transformation distance
+
+FINAL DECISION
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Reviewer: ________________________________    Date: __________________
+

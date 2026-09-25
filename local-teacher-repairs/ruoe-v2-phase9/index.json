@@ -1,0 +1,21 @@
+{
+  "casesRun": [
+    5
+  ],
+  "results": [
+    {
+      "caseId": 5,
+      "status": "PASS"
+    }
+  ],
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "usage": {
+    "promptTokens": 656,
+    "completionTokens": 254,
+    "totalTokens": 910
+  }
+}

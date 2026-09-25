@@ -1,0 +1,1462 @@
+DRALO
+
+RUOE EXAM 1
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW7/7 RUOE Parts included · teacher-feedback patch applied locally · no production database write
+
+
+
+
+
+HUMAN REVIEW — EXAMEN 1 B2
+
+Reading and Use of English · Parts 1–7
+
+Field
+
+Value
+
+Exam
+
+Examen 5 B2
+
+Database exam ID
+
+c8538ca6-97ec-4f47-beea-8f5137a44f47
+
+Source
+
+ENGLISH_PROD · levels_preguntas / levels_respuestas / levels_respuestas_abiertas
+
+Status
+
+PENDING HUMAN REVIEW
+
+Language target
+
+British English
+
+Document purpose
+
+Human academic review before approval / correction
+
+This pack follows the pilot-review workflow. Teacher-approved improvement changes have been applied locally to this Word review copy; unaffected content remains unchanged. No production database content has been modified.
+
+Reviewer focus
+
+• Natural British English at B2 level; avoid American spelling and generated/corporate phrasing.
+
+• Cambridge-style mechanics and realistic difficulty for each Part.
+
+• Only one clearly defensible answer where the task requires one; distractors must be plausible but wrong.
+
+• Part 3 must test genuine word formation, not merely easy pluralisation or superficial inflection.
+
+• Part 4 must preserve meaning, use the keyword unchanged and produce a grammatical 2–5-word answer.
+
+• Parts 5–7 should test paraphrase, inference and cohesion rather than obvious wording overlap.
+
+TEACHER FEEDBACK PATCH — APPLIED LOCALLY• Part 1: Q1, Q3, Q6 and Q8 rebuilt to remove ambiguity and weak collocations.• Part 2: Q10, Q14 and Q15 rebuilt to enforce a single natural answer.• Part 3: Q17 and Q21 upgraded from plural inflection to genuine word formation.• Part 4: Q26 and Q28 replaced with stronger transformations; Q29 key corrected.• Part 5: Q32 distractors strengthened.• Part 6: unchanged by teacher decision.• Part 7: British English normalised, weak factual phrasing improved, and ambiguous / word-match questions rewritten.
+
+
+
+
+
+
+
+
+
+
+
+Part 1 — Multiple-choice cloze
+
+Vista alumno
+
+Part 1: Multiple-choice cloze
+
+Example: A) between   B) beyond   C) beneath   D) below   |   Answer: C
+
+Discoveries Beneath the Sea
+
+The vast and mysterious world (0) ___ the ocean has always fascinated explorers and scientists alike. Recent advances in technology have made it possible for researchers to (1) ___ depths that were once beyond human reach, uncovering secrets that have long (2) ___ hidden from human eyes. One of the most astonishing discoveries is the existence of vibrant ecosystems that have (3) ___ up around hydrothermal vents on the ocean floor. These ecosystems are home to a variety of unique species that have adapted to the extreme conditions. Unlike terrestrial ecosystems, these underwater worlds (4) ___ around hydrothermal vents, which provide the necessary heat and nutrients. Scientists are particularly interested in these environments because they may (5) ___ clues about the origins of life on Earth. The intense pressure and darkness found in the depths of the ocean make it a challenging place to study. However, with the help of remotely operated vehicles and submersibles, researchers are able to gather data and samples that (6) ___ the basis of groundbreaking studies. Each new discovery adds to our understanding of marine life and the complex relationships that (7) ___ in these remote places. As exploration continues, more sites are being discovered, adding to the (8) ___ of evidence about what lies beneath the sea.
+
+Q
+
+A
+
+B
+
+C
+
+D
+
+1
+
+reach
+
+arrive
+
+enter
+
+approach
+
+2
+
+stayed
+
+delayed
+
+lasted
+
+remained
+
+3
+
+sprung
+
+risen
+
+built
+
+lifted
+
+4
+
+rotate
+
+circle
+
+spin
+
+revolve
+
+5
+
+bring
+
+offer
+
+supply
+
+suggest
+
+6
+
+form
+
+make
+
+set
+
+build
+
+7
+
+persist
+
+exist
+
+inhabit
+
+dwell
+
+8
+
+body
+
+amount
+
+sum
+
+quantity
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+7a44bb3a-1b00-4d38-860b-4009b630e9f5
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available for this legacy/production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+TEACHER FEEDBACK PATCH APPLIED• Q1 rebuilt so only “reach depths” is natural in the frame.• Q3 rebuilt around the fixed phrasal pattern “spring up”.• Q6 rebuilt around the collocation “form the basis of”.• Q8 rebuilt around the fixed collocation “body of evidence”.• Q2, Q4, Q5 and Q7 remain unchanged.
+
+
+
+
+
+
+
+
+
+
+
+Q
+
+Stored key
+
+Word
+
+Reviewer note
+
+0
+
+C
+
+beneath
+
+Example
+
+1
+
+A
+
+reach
+
+Rebuilt — unique collocation: “reach depths”
+
+2
+
+D
+
+remained
+
+“have long remained hidden”
+
+3
+
+A
+
+sprung
+
+Rebuilt — fixed phrasal pattern: “spring up”
+
+4
+
+D
+
+revolve
+
+“revolve around” is the intended collocation
+
+5
+
+B
+
+offer
+
+“offer clues”
+
+6
+
+A
+
+form
+
+Rebuilt — “form the basis of”
+
+7
+
+B
+
+exist
+
+“relationships that exist”
+
+8
+
+A
+
+body
+
+Rebuilt — fixed collocation: “body of evidence”
+
+
+
+Human review sheet
+
+Use this page for the teacher’s final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor quality & collocations
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 2 — Open cloze
+
+Vista alumno
+
+Part 2: Open cloze
+
+Example: (0) ___ course   |   Answer: of
+
+Why Good Sleep Matters
+
+Getting enough good quality sleep is essential for maintaining a healthy lifestyle. Sleep (0) ___ course is not just about resting the body. It also involves restoring the mind and has a significant impact on our mental health. Many people fail to realise the importance (9) ___ getting a good night's sleep, and as a result, they may end (10) ___ suffering from sleep deprivation. Lack of sleep can lead to a variety of health issues, (11) ___ as weakened immunity and decreased concentration. Moreover, it can affect your mood, causing irritability and even depression. Experts recommend that adults aim for between seven (12) ___ nine hours of sleep per night. (13) ___ you struggle to achieve this, it could be beneficial to establish a regular sleeping routine. Try to go to bed at the same time every night and create a comfortable sleeping environment. Try to keep screens (14) ___ of the bedroom before bedtime. This is because the blue light emitted by devices can interfere (15) ___ your sleep cycle. Lastly, ensure that your bedroom is dark and quiet to improve (16) ___ chances of falling asleep quickly.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+372c4ac1-72c2-4287-a41c-76c2a9d32d31
+
+Stored answer source
+
+levels_respuestas_abiertas
+
+Automated validator
+
+Not available for this legacy/production item
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+TEACHER FEEDBACK PATCH APPLIED• Q10 rebuilt from begin/start ambiguity to the fixed frame “end up + -ing”.• Q14 rebuilt so the single answer is “out” in “keep screens out of the bedroom”.• Q15 rebuilt around the dependent preposition “interfere with”.• All other gaps remain unchanged.
+
+
+
+
+
+
+
+Q
+
+Stored key
+
+Category / comment
+
+0
+
+of
+
+fixed phrase: of course
+
+9
+
+of
+
+dependent preposition: importance of
+
+10
+
+up
+
+phrasal-verb particle: end up + -ing
+
+11
+
+such
+
+fixed phrase: such as
+
+12
+
+and
+
+correlative: between X and Y
+
+13
+
+If
+
+conditional linker
+
+14
+
+out
+
+fixed frame: keep something out of a place
+
+15
+
+with
+
+dependent preposition: interfere with
+
+16
+
+your
+
+possessive determiner
+
+
+
+Human review sheet
+
+Use this page for the teacher’s final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Open-cloze uniqueness / grammar focus
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 3 — Word formation
+
+Vista alumno
+
+Part 3: Word formation
+
+Example: (0) ___ (AMBITION)   |   Answer: ambitious
+
+Young Entrepreneurs on the Rise
+
+The world of business is constantly evolving, and many young people are proving to be (0) ___ (AMBITION) and capable of achieving remarkable success at an early age. With the rise of technology, young entrepreneurs now operate in an increasingly (17) ___ (COMPETE) market when starting their own businesses. In recent years, there has been significant (18) ___ (EXPAND) in the number of platforms available for young people to market their products, which has made it easier for them to reach a global audience.
+
+A successful business often requires (19) ___ (INNOVATE) and a deep understanding of market trends. Many young business owners are able to identify gaps in the market and come up with (20) ___ (CREATE) solutions to fill them. Although running a business can be extremely (21) ___ (STRESS), their persistence and (22) ___ (DETERMINE) often lead them to overcome obstacles and succeed in their ventures.
+
+Interestingly, the ability to think (23) ___ (STRATEGY) and adapt quickly to changes often distinguishes successful young entrepreneurs from others. They are not only concerned about making profits but are also focused on (24) ___ (SUSTAIN) practices, ensuring that their businesses have a positive impact on society and the environment.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+20c7fe8a-beb1-4e51-afb5-17f18dd8da1a
+
+Stored answer source
+
+levels_respuestas_abiertas
+
+Automated validator
+
+Not available
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+TEACHER FEEDBACK PATCH APPLIED• Q17 replaced with COMPETE → competitive.• Q21 replaced with STRESS → stressful.• Surrounding wording adjusted for natural British English; all other items unchanged.
+
+
+
+
+
+
+
+Q
+
+Stem
+
+Stored key
+
+Derivation
+
+0
+
+AMBITION
+
+ambitious
+
+noun → adjective
+
+17
+
+COMPETE
+
+competitive
+
+verb/noun → adjective
+
+18
+
+EXPAND
+
+expansion
+
+verb → noun
+
+19
+
+INNOVATE
+
+innovation
+
+verb → noun
+
+20
+
+CREATE
+
+creative
+
+verb → adjective
+
+21
+
+STRESS
+
+stressful
+
+noun/verb → adjective
+
+22
+
+DETERMINE
+
+determination
+
+verb → noun
+
+23
+
+STRATEGY
+
+strategically
+
+noun → adverb
+
+24
+
+SUSTAIN
+
+sustainable
+
+verb → adjective
+
+
+
+Human review sheet
+
+Use this page for the teacher’s final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Word-formation quality / derivation depth
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 4 — Key word transformations
+
+Vista alumno
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example: Guests can now check in online before they arrive at the hotel.  |  ABLE  |  Guests are now __________________ before they arrive at the hotel.  |  Answer: able to check in
+
+25. The manager said that the hotel had installed self-service kiosks the previous month.
+
+BEEN
+
+According to the manager, self-service kiosks __________________ the previous month.
+
+26. Guests have to download the hotel app first in order to use the digital room key.
+
+UNLESS
+
+Guests cannot use the digital room key __________________ the hotel app first.
+
+27. I regret not reading the email about the digital room key before I arrived.
+
+WISH
+
+I __________________ the email about the digital room key before I arrived.
+
+28. The hotel arranged for a technician to repair the air-conditioning system yesterday.
+
+HAD
+
+The hotel __________________ the air-conditioning system yesterday.
+
+29. The hotel introduced smart energy controls, and then its electricity bills fell.
+
+AFTER
+
+The hotel's electricity bills fell __________________ smart energy controls.
+
+30. The website was so confusing that many people gave up before booking a room.
+
+SUCH
+
+It was __________________ many people gave up before booking a room.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+07fb7f20-d0d0-4abb-868f-a48d2384df6b
+
+Stored answer source
+
+levels_respuestas_abiertas
+
+Automated validator
+
+Not available
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+TEACHER FEEDBACK PATCH APPLIED• Q26 replaced with an UNLESS transformation requiring polarity change and restructuring.• Q28 replaced with a causative HAVE transformation.• Q29 pair retained; key corrected to “after the hotel had introduced”.• Q25, Q27 and Q30 remain unchanged.
+
+
+
+
+
+
+
+Q
+
+Keyword
+
+Stored key
+
+Reviewer note
+
+0
+
+ABLE
+
+able to check in
+
+Example
+
+25
+
+BEEN
+
+had been installed
+
+Meaning preserved; passive transformation
+
+26
+
+UNLESS
+
+unless they download
+
+Rebuilt — conditional restructuring
+
+27
+
+WISH
+
+wish I had read
+
+Past regret
+
+28
+
+HAD
+
+had the air-conditioning system repaired
+
+Rebuilt — causative HAVE; 5-word answer
+
+29
+
+AFTER
+
+after the hotel had introduced
+
+Corrected — preserves subject and past sequence
+
+30
+
+SUCH
+
+such a confusing website that
+
+so → such transformation; 5 words
+
+
+
+Human review sheet
+
+Use this page for the teacher’s final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Transformation distance / marking-point quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 5 — Multiple-choice reading
+
+Vista alumno
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Beyond the Lesson
+
+When people decide to learn a language, they often begin by looking for the right course, teacher or app. That makes sense: organised lessons provide structure, clear goals and someone to explain what is going on. Yet many learners discover that progress does not depend only on what happens during those scheduled hours. The real change often begins later, when the lesson has ended and the language starts appearing in ordinary life. At that point, learning can feel less like completing tasks and more like joining a conversation that has been continuing without you.
+
+For years, language experts have encouraged students to practise outside the classroom, but this advice is easy to misunderstand. Some learners imagine they must move abroad, find native-speaker friends immediately or spend every evening studying grammar. In fact, out-of-class learning is usually far less dramatic. It may involve following a chef on social media, listening to football podcasts on the way to work, changing a phone setting or reading comments under videos. These activities might appear too small to matter, especially when they are done irregularly. However, their value lies partly in the fact that they connect the language with habits that already exist.
+
+This matters because classroom learning and everyday contact with a language do different jobs. In class, students are often protected from confusion. A text is chosen because it contains useful vocabulary; a listening task is designed so that key information can be identified; errors are corrected before they become permanent. Outside the classroom, by contrast, language arrives in a messier form. People speak too fast, joke without explanation and refer to things the learner has never heard of. That experience can be frustrating, but it also trains an important skill: learning to continue even when full understanding is impossible. Successful learners are not always the ones who understand everything. Often, they are the ones who stop panicking when they do not.
+
+There is, however, a risk in praising independent learning too much. It can sound as if teachers no longer matter, or as if students who cannot travel or meet speakers face an impossible task. Neither is true. Teachers remain important because they help learners notice patterns they would otherwise miss, and because they save time by directing attention towards what is worth learning next. At the same time, modern learners have access to opportunities that previous generations could barely imagine. They may never leave home and still hear different accents, join online gaming groups or watch live interviews from another continent. Access does not guarantee improvement, of course, but it has changed what is possible.
+
+Another mistake is to assume that enjoyable exposure automatically leads to progress. Watching ten crime series in another language may improve listening confidence, but only if the learner is engaged in some active way. That does not mean turning every film into homework. It may be enough to replay a short section, copy an expression that keeps appearing or notice how speakers disagree politely. Small acts of attention turn entertainment into material for learning. Without that attention, learners can remain comfortable for months while understanding little more than they did at the start.
+
+Perhaps the biggest advantage of learning beyond the classroom is psychological. Lessons are useful, but they can accidentally suggest that a language belongs inside textbooks and exercises. Meeting it elsewhere changes that impression. A learner who orders a meal, laughs at a joke online or understands part of a song receives a different message: this language is not simply a subject to be passed, but a tool for doing real things. That feeling rarely arrives all at once. More often, it grows through dozens of small encounters which seem unimportant on their own. Together, they can produce the moment every learner wants: the point at which the language begins to feel less foreign, and more like part of daily life.
+
+31. What point does the writer make in the opening paragraph about learning a language?
+
+A. Formal lessons are mainly useful for people who need clear explanations.   B. Real progress often begins when learners start meeting the language in everyday situations.
+
+C. Most learners lose motivation once the organised part of a course has finished.   D. People usually choose language courses before deciding what they want to use the language for.
+
+32. Why does the writer include examples such as following a chef online or changing a phone setting?
+
+A. To show that useful language practice can be built into ordinary routines   B. To show that learners need to make major changes to their daily lives to improve
+
+C. To explain why out-of-class activities are more valuable when they are done regularly   D. To suggest that informal activities can replace organised language lessons
+
+33. According to the writer, what is one benefit of encountering language outside the classroom?
+
+A. It allows learners to avoid making errors that later become habits.   B. It gives learners experience of understanding every kind of speaker.
+
+C. It develops the ability to keep going despite uncertainty.   D. It helps learners focus on key facts in a more efficient way.
+
+34. What is the writer's attitude towards independent learning in the fourth paragraph?
+
+A. doubtful that it can work for learners without strong teacher support   B. worried that it has become less useful because of technology
+
+C. enthusiastic because it has replaced older teaching methods   D. positive about its possibilities, while warning against unrealistic claims
+
+35. In the fifth paragraph, what does the writer say about enjoyable exposure to a language?
+
+A. It is most helpful when learners treat entertainment as formal study.   B. It can increase confidence, but only leads to progress if learners notice things actively.
+
+C. It works best when learners choose challenging material rather than familiar genres.   D. It is mainly valuable for improving listening, rather than other skills.
+
+36. What is the writer's main purpose in the article as a whole?
+
+A. to persuade teachers to give learners fewer controlled classroom tasks   B. to argue that modern technology has solved most difficulties in language learning
+
+C. to explain how learning beyond lessons can support progress when approached realistically   D. to challenge the view that confidence matters more than grammatical accuracy
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+967018eb-d2d3-465a-86f0-d29af4bb7d1b
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+REVIEW NOTE — TEACHER FEEDBACK PATCH• Q32 correct answer A is unchanged.• Q32 distractors B–D were replaced with alternatives grounded more closely in ideas present in the paragraph.• The rest of Part 5 is unchanged.
+
+
+
+
+
+Q
+
+Stored key
+
+Target
+
+31
+
+B
+
+main point / development
+
+32
+
+A
+
+writer purpose for examples
+
+33
+
+C
+
+detail + paraphrase
+
+34
+
+D
+
+writer attitude
+
+35
+
+B
+
+qualified detail / inference
+
+36
+
+C
+
+overall purpose
+
+
+
+Human review sheet
+
+Use this page for the teacher’s final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor grounding / inference quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 6 — Gapped text
+
+Vista alumno
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Small Ideas, Big Changes
+
+When people talk about life-changing inventions, they often mention planes, computers or the internet. Yet many of the objects that shape our days are far less dramatic. We use them so automatically that it is easy to forget they had to be designed, tested and accepted by the public. Their importance lies not in how exciting they seem, but in how completely they have blended into ordinary routines. (37) Once that happens, daily life begins to feel different in ways that are hard to reverse.
+
+One good example is the humble zip. Before it became common, buttons, hooks and laces did the same jobs, but usually more slowly and with greater effort. Early versions of the zip were not especially reliable, and some clothing companies worried that customers would not trust them. (38) As manufacturers improved the design, however, people started to appreciate the speed and convenience it offered, especially on children's clothes, bags and boots.
+
+Another invention that transformed everyday life was the ballpoint pen. Cheap, light and easy to carry, it solved a problem that had frustrated writers for years: fountain pens leaked, needed careful refilling and often stopped working at inconvenient moments. The new pen was not instantly perfect, and some early models were disappointing. (39) By the time production methods improved, though, the ballpoint had become practical enough for offices, schools and homes.
+
+The electric washing machine had an even deeper effect because it changed not just a single task but the rhythm of domestic life. Washing clothes by hand was tiring, time-consuming work, and in many homes it occupied a full day every week. (40) This mattered especially in larger families, where the amount of washing could be overwhelming. What had once required constant physical effort gradually became a more manageable background task.
+
+Not every useful invention is mechanical. Supermarkets, for instance, depended on a social invention as much as a technical one: the barcode. Shops had always needed a way to identify products and calculate prices, but doing this by hand was slow and often inaccurate. (41) It also made stock control easier, helping shops know what needed replacing before shelves became empty.
+
+Perhaps the most powerful inventions are the ones that remove tiny obstacles again and again. The sticky note is a good case in point. It was created from an adhesive that was weaker than expected, which might normally have been seen as a failure. Instead, someone realised that a note which could be attached and removed without damage would be useful in offices, classrooms and kitchens. (42) Because they are so simple, we rarely notice how often they save us time.
+
+Inventions like these rarely appear in history books beside grand scientific breakthroughs. Even so, they deserve attention because they show that progress is not always about doing spectacular new things. Sometimes it is about making familiar tasks easier, quicker and slightly less annoying. That quieter kind of innovation may be less impressive at first sight, but it is often what changes everyday life most completely.
+
+Option
+
+Sentence
+
+A
+
+Once scanners could read it quickly, paying for shopping became faster for customers and less stressful for staff.
+
+B
+
+In fact, many successful inventions become almost invisible precisely because they work so well.
+
+C
+
+For that reason, the first users were not always convinced that it was better than older alternatives.
+
+D
+
+As a result, people could spend more of their time on other responsibilities or on activities they actually enjoyed.
+
+E
+
+Their value comes from being available exactly when a reminder, label or quick message is needed.
+
+F
+
+In some cases, inventors deliberately kept the original materials unchanged in order to protect traditional manufacturing methods.
+
+G
+
+This hesitation meant that the device first appeared on items where practicality mattered more than style.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+de65d64a-5d50-4306-b9ac-4c3d7a00c68b
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available
+
+Content state
+
+Existing database content — no edits applied
+
+REVIEW NOTE• Teacher review found gaps 37, 38 and 41 structurally stronger than 39, 40 and especially 42.• No content changes were requested for Part 6, so the entire Part remains unchanged.• Option F remains the stored extra sentence.
+
+
+
+
+
+Gap
+
+Stored key
+
+Cohesion cue
+
+37
+
+B
+
+“Once that happens” refers to inventions becoming invisible/embedded
+
+38
+
+G
+
+“This hesitation” refers to customer/company distrust
+
+39
+
+C
+
+early disappointing models → first users unconvinced
+
+40
+
+D
+
+time saved from hand washing → other activities
+
+41
+
+A
+
+barcode scanners → checkout speed; “It also…” continues benefits
+
+42
+
+E
+
+sticky-note value / immediate availability
+
+Extra
+
+F
+
+does not fit the discourse chain
+
+
+
+Human review sheet
+
+Use this page for the teacher’s final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Cohesion / option interchangeability
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Part 7 — Multiple matching
+
+Vista alumno
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+43 Who created a green space as part of a project at their own workplace?
+
+44 Who believes their project improved the quality of urban living?
+
+45 Who says resistance from local people was one of several obstacles the project had to overcome?
+
+46 Who has gone on to argue for similar schemes elsewhere?
+
+47 Who believes public bodies should contribute more money to this kind of work?
+
+48 Who talks about an increase in environmental awareness among peers?
+
+49 Who says the project has made the area feel cleaner as well as strengthening community spirit?
+
+50 Who struggled at first with getting the people taking part to work together?
+
+51 Who says the scheme remained popular overall even though one group objected to a practical change?
+
+52 Who says residents’ sense of responsibility helps keep the spaces in good condition?
+
+A – Sophie
+
+When my city council proposed to transform an old industrial site into a community garden, I was excited. Initially, I was sceptical about the project's feasibility, given the site's historical contamination. However, after thorough soil treatments and planning, we successfully created a vibrant space. It took teamwork and dedication, but seeing local residents coming together to enjoy the green urban oasis is rewarding. The positive effects on our mental health and community spirit are undeniable. Since then, I've been advocating for additional green projects to enhance urban living. Although some challenges remain, the benefits of having green spaces close to home make it worthwhile. We've also noticed how the garden has made the area feel cleaner and more pleasant. Despite some opposition, particularly from motorists who lost parking spaces, overall, the initiative has been embraced warmly.
+
+B – Liam
+
+A few years ago, I initiated a rooftop garden project on top of the commercial building where I work. The primary goal was to reduce the building's energy use and carbon footprint by improving insulation. Initially, raising awareness and funding were challenging, but persistence paid off. The garden now boasts a range of plants that not only beautify the space but also benefit the environment. Colleagues have embraced the opportunity to unwind in the tranquil setting during breaks. Furthermore, it's sparked a noticeable shift in attitudes towards environmental responsibility among staff. There's now a growing interest in expanding similar projects throughout the city. Despite lacking expertise initially, I've learned a lot about sustainable practices. The transformation has been remarkable, and I'm proud to have led this initiative, proving that even small changes can lead to significant impacts.
+
+C – Emily
+
+As a city planner, I've always prioritised integrating nature within urban developments. My latest project faced numerous obstacles, including budget constraints and scepticism from the public. However, the urban park's grand opening marked a turning point. The park, equipped with walking trails and picnic areas, aims to provide residents with a retreat from the bustling city life. Seeing families enjoying the new facilities validated the relentless effort my team invested. Community feedback has been overwhelmingly positive, highlighting the park's role in enhancing quality of life. However, there are ongoing discussions about maintaining the park sustainably. Addressing these challenges is critical, as I believe urban green spaces are essential for future developments. The park's success has encouraged further investment in green initiatives, showing people the tangible benefits of environmental stewardship.
+
+D – Oliver
+
+My experience with green urban projects began when I joined a volunteering initiative to revitalise neglected neighbourhood parks. It quickly became evident that many people desire spaces that foster community interaction and add beauty to urban life. At first, coordinating volunteers was tough, but witnessing the transformation of these neglected areas made it worthwhile. There's a unique joy in seeing children play and families gather in spaces they once avoided. Over time, my enthusiasm for green spaces only grew. These projects have taught me the significance of integrating nature into urban settings to combat stress and promote well-being. Although I'd like to see more government funding, community-driven efforts have shown potential to bring about change. The sense of ownership that residents feel towards these spaces contributes significantly to their upkeep and preservation.
+
+Vista revisor
+
+Field
+
+Value
+
+Source
+
+ENGLISH_PROD · levels_preguntas
+
+Question ID
+
+9d736f89-5398-421e-ad88-c609d47d048c
+
+Stored answer source
+
+levels_respuestas
+
+Automated validator
+
+Not available
+
+Content state
+
+Teacher feedback patch applied locally in this review copy
+
+TEACHER FEEDBACK PATCH APPLIED• British English normalised: sceptical, prioritised, revitalise, neighbourhood.• Profile A: unsupported pollution claim replaced with a subjective observation.• Profile B: carbon-footprint sentence corrected so insulation is the stated mechanism.• Q43, Q45, Q46, Q47, Q49, Q50, Q51 and Q52 rewritten to reduce keyword matching and ambiguity.• Q44 and Q48 remain unchanged.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Q
+
+Stored key
+
+Reviewer note
+
+43
+
+B
+
+Rewritten — workplace rooftop project is unique to Liam
+
+44
+
+C
+
+Unchanged — quality of urban living
+
+45
+
+C
+
+Rewritten — public resistance paraphrased
+
+46
+
+A
+
+Rewritten — advocates similar schemes elsewhere
+
+47
+
+D
+
+Rewritten — public funding paraphrased
+
+48
+
+B
+
+Unchanged — shift in staff environmental attitudes
+
+49
+
+A
+
+Rewritten — cleaner-feeling area + community spirit
+
+50
+
+D
+
+Rewritten — initial difficulty coordinating participants
+
+51
+
+A
+
+Rewritten — overall support despite motorists objecting
+
+52
+
+D
+
+Rewritten — resident ownership linked to upkeep
+
+
+
+Human review sheet
+
+Use this page for the teacher’s final notes on this Part. The student-facing content on the previous page(s) remains unchanged.
+
+Check
+
+Reviewer notes / decision
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Paraphrase matching / profile uniqueness
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+
+
+Final exam sign-off
+
+Use this page only after all seven Parts have been reviewed. Automated/preliminary flags above are prompts for human judgement, not approval decisions.
+
+Area
+
+Decision / notes
+
+Part 1
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Part 2
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Part 3
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Part 4
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Part 5
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Part 6
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Part 7
+
+APPROVE / NEEDS ADJUSTMENT / REPLACE
+
+Whole exam: difficulty balance
+
+
+
+Whole exam: British English
+
+
+
+Whole exam: topic variety
+
+
+
+Whole exam: Cambridge authenticity
+
+
+
+Final decision
+
+APPROVE / REGENERATE SELECTIVELY / REPLACE EXAM
+
+Priority fixes to resolve before approval
+
+• Part 1: patch applied to Q1, Q3, Q6 and Q8; re-review uniqueness and level.
+
+• Part 3: Q17 and Q21 upgraded to genuine word formation; re-review derivational balance.
+
+• Part 4: Q26 and Q28 rebuilt; Q29 key corrected; re-review overall difficulty.
+
+• Part 7: British English and question set patched; re-review uniqueness and paraphrase quality.
+
+Reviewer name: ____________________________________
+
+Date: ______________________    Version reviewed: ______________________
+

@@ -1,0 +1,1124 @@
+DRALO
+
+RUOE EXAM 11
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Exam ID
+
+B2 · Exam 11
+
+Source
+
+ENGLISH_PROD · current stored RUOE Parts 1–7
+
+Status
+
+PENDING_HUMAN_REVIEW
+
+Language
+
+British English
+
+Purpose
+
+Teacher review before approval / correction / publication
+
+Theme map
+
+Exam 15 mixes travel, digital life, photography, animal behaviour, transport technology, wellbeing and conservation. Several surface topics repeat earlier exams, so those overlaps are explicitly flagged instead of silently changing production content.
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Low-key travel beyond guidebooks
+
+2
+
+Open cloze
+
+Teenagers and social media
+
+3
+
+Word formation
+
+Photography and a career change
+
+4
+
+Key word transformations
+
+Animal intelligence and behaviour
+
+5
+
+Multiple-choice reading
+
+Driverless transport
+
+6
+
+Gapped text
+
+Everyday stress management
+
+7
+
+Multiple matching
+
+Wildlife conservation in practice
+
+Theme-variety alert: Parts 1, 2, 6 and 7 have the clearest overlap with Exams 9–14. Part 5 (driverless transport) is the most distinct theme in this exam. Review topic distribution before final bank approval.
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Low-key travel beyond guidebooks
+
+VISTA ALUMNO
+
+Example:
+
+A) made
+
+B) held
+
+C) spent
+
+D) passed
+
+Answer: C
+
+Text
+
+Beyond the Guidebook
+
+Last spring, I (0) ___ a weekend in a mountain village that rarely appears in travel guides. I had first heard (1) ___ it from a photographer who said the place was at its best before sunrise. Unlike famous beauty spots, it does not depend (2) ___ tour buses and souvenir shops. Instead, visitors are drawn by quieter pleasures: narrow paths, home-cooked food and conversations with local people.
+
+Reaching the village takes some effort. After the train, you still have to (3) ___ a bus that only runs twice a day, and then walk for twenty minutes. Yet this extra trouble gives the village much of its (4) ___. Nothing has been redesigned to meet tourists' expectations, so daily life continues at its own (5) ___. Farmers still gather in the square at dawn, and children race each other home from school.
+
+Of course, places like this can quickly (6) ___ their charm once they become fashionable online. That is why some travellers now make a conscious (7) ___ to leave certain locations off social media. If we want such places to survive, we should learn to explore with care rather than simply (8) ___ up wherever a post tells us to go.
+
+Questions
+
+1
+
+A about
+
+B by
+
+C on
+
+D with
+
+2
+
+A at
+
+B on
+
+C from
+
+D in
+
+3
+
+A fetch
+
+B catch
+
+C grasp
+
+D seize
+
+4
+
+A feature
+
+B nature
+
+C character
+
+D quality
+
+5
+
+A speed
+
+B step
+
+C rate
+
+D pace
+
+6
+
+A lose
+
+B miss
+
+C fail
+
+D drop
+
+7
+
+A choice
+
+B plan
+
+C view
+
+D decision
+
+8
+
+A show
+
+B come
+
+C turn
+
+D get
+
+Part 1 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 15
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+1
+
+A · about
+
+2
+
+B · on
+
+3
+
+B · catch
+
+4
+
+C · character
+
+5
+
+D · pace
+
+6
+
+A · lose
+
+7
+
+D · decision
+
+8
+
+C · turn
+
+TEACHER ATTENTION
+
+• Q7 uniqueness strengthened: the distractor CHOICE has been replaced because 'make a conscious choice' was also fully natural. DECISION remains the unique intended answer in 'make a conscious decision'.
+
+• No other Part 1 content changes applied. Bank-level theme overlap remains a separate distribution issue.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 2 — Open cloze
+
+Theme: Teenagers and social media
+
+VISTA ALUMNO
+
+Example:
+
+Answer: 0 → as
+
+Text
+
+Scrolling Through the Teenage Years
+
+For many teenagers, social media is now just (0) ___ normal as sending a text message. It offers a place to share photos, follow trends and stay in touch with friends who may live far away. Used well, it can even help shy students take part in conversations they might avoid in person.
+
+Problems appear, however, when online activity begins to take up more time than other parts of life. Some teenagers say they check their phones without thinking, even when they had promised themselves not (9) ___ do so. Others compare themselves with people whose posts seem perfect, although those images may have been carefully edited.
+
+As a result, experts advise young people to ask (10) ___ whether a particular app is improving their mood or damaging it. Parents can help too, not by banning everything, (11) ___ by discussing limits and setting an example. A phone does not have to be switched off completely, but there should be times (12) ___ it is put away. This allows teenagers to focus (13) ___ schoolwork, sleep and face-to-face friendships, all of (14) ___ remain essential. In the end, social media is a tool, and the effect it has depends (15) ___ how it is used and (16) ___ is using it.
+
+Part 2 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 15
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+9
+
+to
+
+10
+
+themselves
+
+11
+
+but
+
+12
+
+when
+
+13
+
+on
+
+14
+
+which
+
+15
+
+on
+
+16
+
+who
+
+TEACHER ATTENTION
+
+• Example fixed: 'social media is now just (0) ___ normal as...' with answer AS now correctly produces 'just as normal as'.
+
+• Theme-variety alert: teenagers/social media closely repeats Exam 9 Part 6 and Exam 13 Part 2.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 3 — Word formation
+
+Theme: Photography and a career change
+
+VISTA ALUMNO
+
+Example:
+
+(0) ___ (EXPECT)
+
+Answer: 0 → unexpected
+
+Text
+
+A Camera and a New Direction
+
+When Lena accepted an (0) ___ (EXPECT) invitation to join a weekend photography class, she thought it would simply be a relaxing break from her office job. At first, she doubted whether she had enough (17) ___ (CREATE) to take interesting pictures. However, her teacher's calm advice and clear (18) ___ (EXPLAIN) soon gave her confidence. Lena began walking around the city before work, noticing details she had previously been (19) ___ (AWARE) of. Within a few months, photography had become more than a hobby; it was a daily source of (20) ___ (MOTIVATE). She also found herself speaking more (21) ___ (CONFIDENT) to new people while asking if she could photograph them. Her growing online audience brought increasing (22) ___ (RECOGNISE), and local businesses started requesting her images. What began as a simple pastime slowly changed her professional life. Two years later, she made the (23) ___ (DECIDE) to leave her old job and work as a photographer full-time. She now says that curiosity, not natural talent, is the most (24) ___ (VALUE) quality a beginner can have.
+
+Part 3 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 15
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+17
+
+creativity
+
+18
+
+explanations
+
+19
+
+unaware
+
+20
+
+motivation
+
+21
+
+confidently
+
+22
+
+recognition
+
+23
+
+decision
+
+24
+
+valuable
+
+TEACHER ATTENTION
+
+• Q22 replaced with RECOGNISE → recognition, giving a less transparent derivation.
+
+• Remaining Part 3 items unchanged.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 4 — Key word transformations
+
+Theme: Animal intelligence and behaviour
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+
+0. It was too dark for us to see the owl clearly.
+
+ENOUGH
+
+It was not __________________ see the owl clearly.
+
+Answer: 0 → bright enough for us to
+
+Questions
+
+25. People believe that some parrots can remember hundreds of words.
+
+BELIEVED
+
+Some parrots __________________ hundreds of words.
+
+26. No other animal in the rescue centre could swim as quickly as the dolphin.
+
+FASTEST
+
+The dolphin was __________________ the rescue centre.
+
+27. I regret not taking my camera when we saw the octopus change colour.
+
+WISH
+
+I __________________ my camera when we saw the octopus change colour.
+
+28. It wasn't necessary for the zookeepers to wake the sloth because it was already active.
+
+NEED
+
+The zookeepers __________________ the sloth because it was already active.
+
+29. The scientist said that the bat was capable of finding its way in complete darkness.
+
+COULD
+
+According to the scientist, the bat __________________ in complete darkness.
+
+30. The trainer showed the border collie how to open the gate.
+
+TAUGHT
+
+The trainer __________________ open the gate.
+
+Part 4 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 15
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+25
+
+are believed to remember
+
+26
+
+the fastest swimmer in
+
+27
+
+wish I had taken
+
+28
+
+did not need to wake
+
+29
+
+could find its way
+
+30
+
+taught the border collie to 
+
+TEACHER ATTENTION
+
+• Q30 rebuilt completely: 'The trainer taught the border collie to open the gate' preserves all original information and the answer uses exactly five words.
+
+• Q26 rebuilt around 'the fastest swimmer in', preserving the specific comparison of swimming speed rather than broadening it to the animal's general speed.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 5 — Multiple-choice reading
+
+Theme: Driverless transport
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+When the Steering Wheel Lets Go
+
+For years, images of driverless transport belonged to science fiction: silent vehicles gliding through cities while passengers read, sleep or work. Recently, however, that future has begun to look less distant. In several places, buses already follow fixed routes without a human driver, and robot taxis are being tested on public roads. Yet if you ask transport engineers when driverless travel will become normal, many give a careful answer. The technology has advanced quickly, they say, but the bigger challenge is fitting it into the untidy reality of everyday life.
+
+A machine can be trained to recognise traffic lights, lane markings and road signs with impressive accuracy. What causes trouble is not the ordinary journey but the unusual one: the child who runs into the street chasing a ball, the roadworks that force traffic into a temporary lane, the police officer waving drivers through a red light after an accident. Human drivers are not perfect in such situations, of course, but they are often good at guessing what others are about to do. Teaching that kind of judgement to software has proved far harder than early developers expected.
+
+Because of this, some companies have moved away from grand promises. Instead of trying to build vehicles that can handle every road in every weather condition, they are concentrating on limited environments where fewer surprises appear. This is why airports, business parks and ports have become important testing grounds. A shuttle that drives slowly around a predictable route may not sound revolutionary, but supporters argue that such services matter. They can cut costs, reduce emissions and provide useful evidence about how people respond when no one is sitting behind the wheel.
+
+Public reaction, in fact, may shape the future of the technology as much as computer design does. Surveys often show a contradiction: people like the idea of fewer crashes caused by tired or distracted drivers, but they also say they would feel nervous entering a vehicle controlled entirely by software. That hesitation is not simply fear of new technology. It also reflects a difficult question of responsibility. If a driverless bus makes a serious mistake, who should be blamed: the passenger, the operator, the manufacturer or the programmer who wrote the code? Until governments answer that clearly, widespread public trust will remain hard to win.
+
+There is also the risk of expecting too much too soon. Some transport experts worry that the phrase driverless transport creates the false impression that humans will soon disappear from the system altogether. In reality, remote supervisors may still need to monitor vehicles, maintenance teams will have to check sensors constantly, and control-room staff may be required to step in when conditions become too complex. In that sense, automation may change human work rather than remove it. The jobs may look different, but people are unlikely to become irrelevant.
+
+Even so, the long-term effects could be significant. For older people or disabled passengers, autonomous services might offer greater independence, especially in areas with poor public transport. Freight companies are also interested in self-driving lorries that could travel long motorway stretches more efficiently. Still, the most sensible view is probably neither excitement nor disappointment. Driverless transport is unlikely to arrive all at once in a dramatic leap. More probably, it will appear bit by bit, in places where it solves specific problems better than existing systems do. The future may indeed be driverless, but only in parts, and only after a great deal of patient human effort.
+
+Questions
+
+31. What point does the writer make in the opening paragraph about driverless transport? A. It is developing, but becoming part of daily life is more complicated than people first thought. B. It has already changed transport systems in most major cities more rapidly than expected. C. It is attracting engineers mainly because passengers want more time to relax during journeys. D. It will remain limited to science-fiction ideas unless governments invest far more money.
+
+32. In the second paragraph, the writer suggests that early developers misjudged A. how often traffic systems would need updating. B. how expensive it would be to train software engineers. C. how difficult it would be to prepare vehicles for unexpected events. D. how willing human drivers would be to share roads with machines.
+
+33. Why does the writer mention airports, business parks and ports in the third paragraph? A. to show where driverless transport has already replaced ordinary vehicles completely B. to illustrate the type of controlled settings that suit present-day experiments C. to criticise companies for avoiding places where transport problems are most serious D. to explain why passengers prefer short automated journeys to longer ones
+
+34. What is the writer's attitude to the public's concerns in the fourth paragraph? A. They are exaggerated because machines are already safer than people in most situations. B. They are disappointing because they slow progress that would clearly benefit everyone. C. They are understandable because important questions have not yet been settled. D. They are misplaced because passengers should accept responsibility for their own choices.
+
+35. In the fifth paragraph, what does 'that sense' refer to? A. the belief that transport experts are expecting too much from the technology B. the possibility that vehicles will still need checking when conditions are difficult C. the claim that the term driverless transport creates confusion for the public D. the idea that automation is more likely to alter jobs than remove people entirely
+
+36. Which statement best summarises the writer's overall view in the final paragraph? A. Driverless freight services are likely to be more successful than public transport schemes. B. The benefits of autonomous transport are so great that delays should not discourage developers. C. Driverless transport will probably spread gradually where it offers practical advantages. D. The main future role of autonomous vehicles will be to support elderly and disabled travellers.
+
+Part 5 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 15
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+31
+
+A
+
+32
+
+C
+
+33
+
+B
+
+34
+
+C
+
+35
+
+D
+
+36
+
+C
+
+TEACHER ATTENTION
+
+• No content changes applied. Part 5 remains one of the strongest sections in the paper, with a distinctive topic and well-supported paraphrase/inference.
+
+• Q35 remains unchanged; D is retained as the unique reference answer after review.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 6 — Gapped text
+
+Theme: Everyday stress management
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+Small Changes, Less Pressure
+
+Stress is often described as a modern problem, yet it is really a normal human response to pressure. A busy week, an argument with a friend or an approaching deadline can all make the body react as if danger is near. Heart rate increases, attention narrows and muscles tighten. In the short term, that response can be useful, because it helps us focus and take action. Problems begin when the feeling remains long after the difficult moment has passed.
+
+One reason stress feels hard to manage is that it rarely arrives in one dramatic event. More often, it builds through a series of small demands: messages that need answering, chores left unfinished and plans that keep changing. (37) As a result, people may tell themselves they are coping perfectly well, even while they become less patient, sleep less deeply and find simple decisions unusually tiring.
+
+A common reaction is to search for a quick solution. People often imagine that stress will disappear after a holiday, a free weekend or a more organised week. These things can certainly help, but they do not always change daily habits. (38) If someone checks work messages late at night, skips meals and agrees to every request, pressure soon returns, no matter how restful the weekend was.
+
+For that reason, many experts suggest paying attention to routine before looking for dramatic answers. The most effective habits are not always impressive. Getting up at a similar time each day, preparing lunch in advance or taking ten quiet minutes without a screen can all make a difference. (39) When the mind knows what to expect, it spends less energy dealing with unnecessary uncertainty.
+
+Movement matters too, although it does not have to mean hard training at the gym. A brisk walk, a cycle to the shops or even stretching between tasks can interrupt the physical side of stress. (40) That shift is important, because many people remain seated and tense for hours without noticing how uncomfortable they have become.
+
+Another useful skill is learning when to protect your attention. Many of us treat every notification as urgent, even when it is not. (41) Turning off unnecessary alerts for an hour may feel risky at first, but it often reveals that very few things truly require an immediate response. This can be especially helpful for students and workers who need long periods of concentration.
+
+None of this means stress can be removed completely, and that should not be the goal. Some pressure is part of caring about work, relationships and future plans. (42) By noticing patterns and making small adjustments, people can stop stress from controlling the whole day. Managing it is less about becoming calm all the time and more about recovering balance more quickly when life becomes demanding.
+
+Sentences
+
+A In other words, a few days off cannot compensate for a pattern that is exhausting in the first place.
+
+B Because each task seems minor, the overall weight of them may go unnoticed for quite a long time.
+
+C Instead, the aim is to recognise it early and keep it within reasonable limits.
+
+D This regularity creates a sense of safety, even on days that are particularly demanding.
+
+E Physical activity signals that the body can release some of the tension it has been storing.
+
+F This constant interruption trains the brain to expect distraction rather than focus.
+
+G Some people deal with stress by discussing it immediately with everyone around them.
+
+Part 6 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 15
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+37
+
+B
+
+38
+
+A
+
+39
+
+D
+
+40
+
+E
+
+41
+
+F
+
+42
+
+C
+
+TEACHER ATTENTION
+
+• No content changes applied. The stored sequence B-A-D-E-F-C remains well mixed and the six discourse links are retained.
+
+• Theme overlap with earlier stress-management material remains a bank-level consideration only.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 7 — Multiple matching
+
+Theme: Wildlife conservation in practice
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+Which person…? The people may be chosen more than once.
+
+43 Who began with a fairly limited reason for taking part, but later developed a deeper commitment?
+
+44 Who believes that educating others is now a more valuable use of time than the activity they were first known for?
+
+45 Who admits they were doubtful about expert advice until a relationship of trust was built?
+
+46 Who says that public attention tends to focus on the most dramatic aspect of the issue rather than the most effective one?
+
+47 Who prefers steady, less visible progress to high-profile action that may not last?
+
+48 Who changed their working methods after recognising that their own behaviour might be part of the problem?
+
+49 Who mentions finding it difficult to persuade people until there is clear evidence in front of them?
+
+50 Who points out that support from local people can depend on economic realities?
+
+51 Who feels that concern from inexperienced people should be treated sympathetically, even when it creates extra work?
+
+52 Who has become more willing to accept slow results, despite disappointment when resources are reduced?
+
+Texts
+
+A – Lena Morris
+
+Initially, I joined a local group that monitored otters simply because I enjoyed being outdoors. I had no plan to get involved in conservation in a serious way. However, after one winter survey, I realised how little people noticed what was happening along the riverbanks near our town. Since then, I’ve spent most weekends giving short talks to walkers and anglers, explaining why small disturbances can matter. What surprises me is that success often depends less on dramatic rescue stories and more on dull tasks like recording water quality and persuading landowners to move fencing. It can be frustratingly slow, yet I prefer that to quick campaigns that attract attention for a month and then disappear. If anything, I’ve become more patient, although I still find it hard when funding is cut just as a project begins to show results.
+
+B – Tariq Shah
+
+For years I photographed rare birds for travel magazines, and at first I saw endangered species mainly as subjects for striking images. Meanwhile, guides in several countries kept telling me the same thing: tourists wanted close views, but the pressure was changing the animals’ behaviour. That made me rethink my own role. Now I still take pictures, yet I work under much stricter rules and often put the camera down entirely. Oddly enough, the most useful thing I do is train younger photographers to recognise when they are too near a nest or feeding site. Some complain that the limits spoil the experience, but I remember making similar excuses myself. I’m not against tourism; in fact, local communities may depend on it. Even so, if visitors leave with only one lesson, I hope it is that admiration should never become interference.
+
+C – Megan Doyle
+
+When our fishing business was asked to support a marine protection zone, my first reaction was suspicion. Like many others on the harbour, I assumed the scientists had arrived with tidy theories and no understanding of how families here earn a living. Yet one of them kept coming back, listening rather than lecturing, and gradually a few of us agreed to test seasonal no-fishing areas. The early months were difficult, especially when catches fell and neighbours said we had been naive. Since then, however, the evidence has become harder to ignore: some species are returning, and younger fish are appearing in places that had seemed empty. I still dislike being told what to do by people from outside the community, but I’ve accepted that protecting wildlife and protecting jobs are not always opposite aims. The challenge is convincing others before they see the proof for themselves.
+
+D – Sofia Petrescu
+
+I run a small rescue centre for injured hedgehogs, so people assume I spend my time doing practical work with animals. In reality, a large part of the job is answering messages from well-meaning members of the public who have picked up healthy young ones by mistake. Although that can be exhausting, I try not to sound annoyed, because their concern comes from a good place. What troubles me more is the expectation that a centre like ours can solve the wider problem alone. We patch up the damage, certainly, but road design, garden fencing and pesticide use matter far more in the long term. Recently, I’ve started visiting schools, as children often persuade adults to change habits more effectively than leaflets do. It’s not glamorous, and donations usually increase only after a dramatic story appears online, yet prevention remains the part of the work I value most.
+
+Part 7 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 15
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+43
+
+A
+
+44
+
+B
+
+45
+
+C
+
+46
+
+D
+
+47
+
+A
+
+48
+
+B
+
+49
+
+C
+
+50
+
+B
+
+51
+
+D
+
+52
+
+A
+
+TEACHER ATTENTION
+
+• No content changes applied. The ten matching questions remain valid, distinct and sufficiently balanced (A×3, B×3, C×2, D×2).
+
+• Conservation/wildlife repetition remains a bank-level theme-distribution issue rather than an item-validity problem.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Final exam review
+
+Use this page only after all seven Parts have been reviewed.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+LANGUAGE
+
+☐ Natural British English throughout
+
+LEVEL
+
+☐ Consistently B2 First
+
+AUTHENTICITY
+
+☐ Cambridge-style task behaviour and difficulty
+
+THEME VARIETY
+
+☐ Sufficient variety within Exam 15 and against Exams 5–14
+
+KEYS
+
+☐ All keys verified manually
+
+DISTRACTORS
+
+☐ Plausible but clearly wrong
+
+PART 4
+
+☐ Meaning preserved · keyword intact · 2–5 words
+
+CRITICAL FIXES
+
+☐ Part 1 Q7 distractor fixed · Part 2 example corrected · Part 3 Q22 replaced · Part 4 Q26/Q30 rebuilt · Parts 5–7 retained
+
+FINAL DECISION
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Reviewer: ________________________________    Date: __________________
+

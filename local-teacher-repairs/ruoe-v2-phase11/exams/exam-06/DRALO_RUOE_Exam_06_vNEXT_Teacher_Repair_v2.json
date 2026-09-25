@@ -1,0 +1,1130 @@
+{
+  "version": "DRALO_RUOE_Exam_06_vNEXT_Teacher_Repair_v2",
+  "status": "PENDING HUMAN REVIEW",
+  "sourceExamSlot": 6,
+  "sourceGeneratedAt": "2026-08-31T19:31:24.968Z",
+  "reviewFile": "DRALO_RUOE_Exam_2_Human_Review_v1_1_Teacher_Patch.docx",
+  "production": "untouched",
+  "parts": {
+    "1": {
+      "partTitle": "Part 1: Multiple-choice cloze",
+      "directions": "Part 1: Multiple-choice cloze\nFor questions 1–8, read the text below and choose the best word (A, B, C or D) for each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "options": [
+          "A) need",
+          "B) must",
+          "C) should",
+          "D) ought"
+        ],
+        "answer": "A",
+        "explanation": "Only \"need\" can follow \"does not\" and take an infinitive with \"to\"."
+      },
+      "title": "Owning Less",
+      "passage": "A growing number of people are deciding that a comfortable home does not (0) ___ to be full of possessions. Instead of filling every shelf, they keep only what they really use. For some, this change begins after moving house, while others simply become tired of spending time trying to (1) ___ where they left things they hardly use. The idea is not to live with almost nothing, but to be more selective. People often start by getting rid of broken items or clothes they are (2) ___ up with wearing. As rooms become less crowded, many say they can focus better and feel more (3) ___ . They also find it easier to keep their homes tidy, since there is less stuff to put (4) ___ . Living with fewer possessions can save money too. When people stop buying things on (5) ___ and think carefully before each purchase, they are less likely to waste cash. In the long (6) ___ , this habit may also reduce the amount of rubbish we (7) ___ away. Owning less is not the right choice for everyone, but many people say it has had a positive (8) ___ on daily life.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 1,
+          "type": "mcq",
+          "options": [
+            "A) remember",
+            "B) remind",
+            "C) recognise",
+            "D) realise"
+          ]
+        },
+        {
+          "id": "q2",
+          "number": 2,
+          "type": "mcq",
+          "options": [
+            "A) fed",
+            "B) tired",
+            "C) bored",
+            "D) sick"
+          ]
+        },
+        {
+          "id": "q3",
+          "number": 3,
+          "type": "mcq",
+          "options": [
+            "A) gentle",
+            "B) calm",
+            "C) silent",
+            "D) smooth"
+          ]
+        },
+        {
+          "id": "q4",
+          "number": 4,
+          "type": "mcq",
+          "options": [
+            "A) aside",
+            "B) off",
+            "C) away",
+            "D) out"
+          ]
+        },
+        {
+          "id": "q5",
+          "number": 5,
+          "type": "mcq",
+          "options": [
+            "A) chance",
+            "B) purpose",
+            "C) impulse",
+            "D) luck"
+          ]
+        },
+        {
+          "id": "q6",
+          "number": 6,
+          "type": "mcq",
+          "options": [
+            "A) length",
+            "B) run",
+            "C) distance",
+            "D) period"
+          ]
+        },
+        {
+          "id": "q7",
+          "number": 7,
+          "type": "mcq",
+          "options": [
+            "A) throw",
+            "B) push",
+            "C) drop",
+            "D) pass"
+          ]
+        },
+        {
+          "id": "q8",
+          "number": 8,
+          "type": "mcq",
+          "options": [
+            "A) result",
+            "B) change",
+            "C) benefit",
+            "D) effect"
+          ]
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "answer": "A",
+          "number": 1
+        },
+        {
+          "id": "q2",
+          "answer": "A",
+          "number": 2
+        },
+        {
+          "id": "q3",
+          "answer": "B",
+          "number": 3
+        },
+        {
+          "id": "q4",
+          "answer": "C",
+          "number": 4
+        },
+        {
+          "id": "q5",
+          "answer": "C",
+          "number": 5
+        },
+        {
+          "id": "q6",
+          "answer": "B",
+          "number": 6
+        },
+        {
+          "id": "q7",
+          "answer": "A",
+          "number": 7
+        },
+        {
+          "id": "q8",
+          "answer": "D",
+          "number": 8
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 1,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "2": {
+      "partTitle": "B2 First Reading and Use of English Part 2",
+      "directions": "For questions 9–16, read the text below and think of the word which best fits each gap. Use only ONE word in each gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "answer": "for"
+      },
+      "title": "Turning Pages Again",
+      "passage": "Not long ago, many experts predicted that screens would replace books for (0) ___ good. Yet reading is becoming popular again, and not only among children. One reason is that people are looking (9) ___ ways to escape constant messages and updates. A novel demands attention, but also offers a break from the pressure to reply immediately. Bookshops and libraries have changed too. Many now organise events that encourage readers to meet others (10) ___ tastes overlap with their own. Reading, once a solitary hobby, has become something people share online and in person, posting reactions and recommending titles. Another factor is convenience. It is easier than ever to carry a book, whether printed or digital, and many busy adults are choosing (11) ___ read on trains or before bed instead of scrolling. Some say they sleep better as (12) ___ result. Others find themselves reading long (13) ___ they meant to stop. If this trend continues, reading may prove to be not old-fashioned (14) ___ exactly what modern life needs. After all, stories can still do what few apps are able (15) ___: slow us down and make us think about (16) ___ matters.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 9,
+          "type": "short"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "type": "short"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "type": "short"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "type": "short"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "type": "short"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "type": "short"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "type": "short"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "type": "short"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 9,
+          "answer": "for"
+        },
+        {
+          "id": "q2",
+          "number": 10,
+          "answer": "whose"
+        },
+        {
+          "id": "q3",
+          "number": 11,
+          "answer": "to"
+        },
+        {
+          "id": "q4",
+          "number": 12,
+          "answer": "a"
+        },
+        {
+          "id": "q5",
+          "number": 13,
+          "answer": "after"
+        },
+        {
+          "id": "q6",
+          "number": 14,
+          "answer": "but"
+        },
+        {
+          "id": "q7",
+          "number": 15,
+          "answer": "to"
+        },
+        {
+          "id": "q8",
+          "number": 16,
+          "answer": "what"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 2,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "3": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "CELEBRATE",
+        "answer": "celebration",
+        "transformationFamily": "noun"
+      },
+      "title": "Festivals Worth the Journey",
+      "passage": "Some events are more than a simple (0) ___ (CELEBRATE) of local culture; they become reasons to book a flight. The best festivals offer visitors a memorable mix of music, food and atmosphere, but also a sense of (17) ___ (CONNECT) with the place itself. In many towns, the streets are carefully decorated, and even ordinary corners become (18) ___ (RECOGNISE) after dark. What makes these occasions special is not always size. A small festival can be just as (19) ___ (IMPRESS) as a famous international one if the welcome feels genuine. Travellers should, however, do some research before they go. Hotel rooms may be (20) ___ (POSSIBLE) to find at short notice, and public transport is often extremely crowded. On the other hand, good planning can turn a difficult trip into an (21) ___ (FORGET) experience. Many regular festival-goers say that the real pleasure lies in the (22) ___ (EXPECT) that builds before the main event begins. Even bad weather rarely causes (23) ___ (DISAPPOINT), and the shared excitement can create lasting (24) ___ (ENJOY) for visitors.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "CONNECT",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "RECOGNISE",
+          "transformationFamily": "negative"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "IMPRESS",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "POSSIBLE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "FORGET",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "EXPECT",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "DISAPPOINT",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "ENJOY",
+          "transformationFamily": "noun"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "connection",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "unrecognisable",
+          "transformationFamily": "negative"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "impressive",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "impossible",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "unforgettable",
+          "transformationFamily": "prefix"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "expectation",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "disappointment",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "enjoyment",
+          "transformationFamily": "noun"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "4": {
+      "partTitle": "B2 Reading and Use of English Part 4",
+      "directions": "For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "sentence1": "I started learning the piano three years ago.",
+        "keyword": "BEEN",
+        "sentence2Start": "I __________________ learning the piano for three years.",
+        "answer": "have been"
+      },
+      "questions": [
+        {
+          "id": "p4q25",
+          "number": 25,
+          "type": "transformation",
+          "sentence1": "My violin teacher said I was improving more quickly than she had expected.",
+          "keyword": "THAN",
+          "sentence2Start": "My violin teacher said I was improving __________________ expected.",
+          "answer": "more quickly than she had",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "THAN",
+            "fullAnswers": [
+              "more quickly than she had"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "comparative structure with keyword",
+                "accepted": [
+                  "more quickly than"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "reported expectation clause",
+                "accepted": [
+                  "she had"
+                ]
+              }
+            ],
+            "family_id": "TF-02",
+            "target_structure": "comparative + past perfect reference to prior expectation",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 tests the comparative frame with THAN; MP2 completes the earlier expectation reference.",
+            "alternative_route_check": "Only one defendable route is allowed because the gap must preserve the adverbial comparative and the prior-time reference to the teacher's expectation."
+          }
+        },
+        {
+          "id": "p4q26",
+          "number": 26,
+          "type": "transformation",
+          "sentence1": "I regret not taking up the saxophone when I was at university.",
+          "keyword": "WISH",
+          "sentence2Start": "I __________________ up the saxophone when I was at university.",
+          "answer": "wish I had taken",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "WISH",
+            "fullAnswers": [
+              "wish I had taken"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "wish + past perfect structure",
+                "accepted": [
+                  "wish I had"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "main verb for missed past action",
+                "accepted": [
+                  "taken"
+                ]
+              }
+            ],
+            "family_id": "TF-07",
+            "target_structure": "wish + past perfect for past regret",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "multi_step_transformation",
+            "marking_point_plan": "MP1 tests the regret structure with WISH; MP2 supplies the correct past participle.",
+            "alternative_route_check": "Alternative routes such as 'if only' are blocked by the fixed keyword WISH and the need to express past regret."
+          },
+          "alternative_route_check": "Only one route is possible: the gap sits between 'I' and 'up the saxophone', so WISH forces 'wish I had taken' and no other regret pattern fits."
+        },
+        {
+          "id": "p4q27",
+          "number": 27,
+          "type": "transformation",
+          "sentence1": "People say that learning drums as an adult is physically demanding.",
+          "keyword": "SAID",
+          "sentence2Start": "Learning drums as an adult __________________ physically demanding.",
+          "answer": "is said to be",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "SAID",
+            "fullAnswers": [
+              "is said to be"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "passive reporting structure",
+                "accepted": [
+                  "is said"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to be"
+                ]
+              }
+            ],
+            "family_id": "TF-01",
+            "target_structure": "impersonal passive reporting verb + infinitive",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 tests the passive reporting frame; MP2 completes it with the infinitive.",
+            "alternative_route_check": "Only one defendable route fits the sentence opening and keyword because the structure must be the impersonal passive form."
+          }
+        },
+        {
+          "id": "p4q28",
+          "number": 28,
+          "type": "transformation",
+          "sentence1": "I didn't practise regularly, so I found the first few guitar lessons difficult.",
+          "keyword": "HAD",
+          "sentence2Start": "If I __________________ regularly, I wouldn't have found the first few guitar lessons difficult.",
+          "answer": "had practised more",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "HAD",
+            "fullAnswers": [
+              "had practised more"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "third conditional past perfect",
+                "accepted": [
+                  "had practised"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "adverb carrying the original meaning",
+                "accepted": [
+                  "regularly"
+                ]
+              }
+            ],
+            "family_id": "TF-05",
+            "target_structure": "cause and effect in the past converted to a third conditional",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "multi_step_transformation",
+            "marking_point_plan": "MP1 tests the past perfect in the if-clause; MP2 recovers 'regularly' from sentence 1.",
+            "alternative_route_check": "Only one route is valid: the result clause is already supplied, so HAD must open the if-clause.",
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          }
+        },
+        {
+          "id": "p4q29",
+          "number": 29,
+          "type": "transformation",
+          "sentence1": "It wasn't necessary for Marta to buy an expensive keyboard for her first lessons.",
+          "keyword": "NEED",
+          "sentence2Start": "Marta __________________ an expensive keyboard for her first lessons.",
+          "answer": "did not need to buy",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "NEED",
+            "fullAnswers": [
+              "did not need to buy",
+              "didn't need to buy"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "past lack of necessity structure",
+                "accepted": [
+                  "did not need",
+                  "didn't need"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive of required action",
+                "accepted": [
+                  "to buy"
+                ]
+              }
+            ],
+            "family_id": "TF-09",
+            "target_structure": "did not need to + infinitive for past lack of necessity",
+            "difficulty_band": "B2-Standard",
+            "transformation_distance": "minor_grammatical",
+            "marking_point_plan": "MP1 tests the past negative need structure; MP2 supplies the infinitive complement.",
+            "alternative_route_check": "Using 'needn't have bought' would change the meaning, so only the lack-of-necessity route is accepted."
+          }
+        },
+        {
+          "id": "p4q30",
+          "number": 30,
+          "type": "transformation",
+          "sentence1": "The audience could not hear him because he played too quietly.",
+          "keyword": "ENOUGH",
+          "sentence2Start": "He __________________ for the audience to hear him.",
+          "answer": "did not play loudly enough",
+          "grading_metadata": {
+            "type": "b2_key_word_transformation",
+            "version": 1,
+            "keyword": "ENOUGH",
+            "fullAnswers": [
+              "did not play loudly enough"
+            ],
+            "markingPoints": [
+              {
+                "id": 1,
+                "label": "not plus adjective plus enough",
+                "accepted": [
+                  "not easy enough"
+                ]
+              },
+              {
+                "id": 2,
+                "label": "infinitive complement",
+                "accepted": [
+                  "to learn"
+                ]
+              }
+            ],
+            "family_id": "TF-03",
+            "target_structure": "too plus adjective plus to converted to not plus adjective plus enough plus to",
+            "difficulty_band": "B2-Strong",
+            "transformation_distance": "syntactic_restructuring",
+            "marking_point_plan": "MP1 tests the enough structure with the adjective that describes the instrument; MP2 supplies the infinitive.",
+            "alternative_route_check": "Only one route is valid: the subject of sentence 2 is the flute, so ability adjectives such as 'good' no longer fit the frame.",
+            "teacherRepair": "Marking points require human review after the transformation rebuild."
+          }
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "p4q25",
+          "number": 25,
+          "answer": "more quickly than she had"
+        },
+        {
+          "id": "p4q26",
+          "number": 26,
+          "answer": "wish I had taken"
+        },
+        {
+          "id": "p4q27",
+          "number": 27,
+          "answer": "is said to be"
+        },
+        {
+          "id": "p4q28",
+          "number": 28,
+          "answer": "had practised more"
+        },
+        {
+          "id": "p4q29",
+          "number": 29,
+          "answer": "did not need to buy"
+        },
+        {
+          "id": "p4q30",
+          "number": 30,
+          "answer": "did not play loudly enough"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 4,
+      "audioClips": [],
+      "part4QualityMetrics": {
+        "itemMeta": [
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 25
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Standard",
+            "number": 26
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Standard",
+            "number": 27
+          },
+          {
+            "distance": "multi_step_transformation",
+            "band": "B2-Strong",
+            "number": 28
+          },
+          {
+            "distance": "minor_grammatical",
+            "band": "B2-Standard",
+            "number": 29
+          },
+          {
+            "distance": "syntactic_restructuring",
+            "band": "B2-Strong",
+            "number": 30
+          }
+        ],
+        "answerLengthDistribution": {
+          "2": 0,
+          "3": 1,
+          "4": 2,
+          "5": 3
+        },
+        "answerLengths": [
+          5,
+          4,
+          4,
+          3,
+          5,
+          5
+        ]
+      }
+    },
+    "5": {
+      "partTitle": "Part 5",
+      "directions": "Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.",
+      "title": "Keeping the Past Alive",
+      "passageWordCount": 596,
+      "passage": "When people talk about preserving historical heritage, they often picture famous castles, grand museums or ancient temples. Yet the task is much wider than protecting a few celebrated landmarks. In many towns, heritage can be found in ordinary streets, old workshops, local archives and even in traditions linked to particular places. As cities grow and land becomes more valuable, the pressure to replace older buildings with new ones increases. Supporters of development argue that change is necessary if places are to remain economically active. However, those who work in conservation point out that once a site is lost, the connection it offers to earlier generations cannot simply be rebuilt.\n\nFor a long time, heritage protection was mainly about freezing places in time. The aim was to restore damaged buildings so that they looked as they had in the past, while modern additions were kept out of sight. That approach still has value, but many specialists now prefer a broader view. They argue that historic areas should continue to be used rather than treated like stage sets. A former warehouse might become a library, for example, or a disused station could be turned into a market. According to this way of thinking, a building survives best when it remains part of daily life, even if that means accepting careful changes.\n\nThis idea can be difficult for local residents to accept at first. Some fear that popular heritage projects will attract tourists, raise prices and push out the people who have lived nearby for years. Others worry that once a site starts earning money, decisions will be driven more by business than by respect for history. Such concerns are understandable. There have been cases in which traditional neighbourhoods were renovated so thoroughly that they ended up looking neat but strangely empty, with souvenir shops replacing the communities that had given the area its identity. Preserving walls while losing real life is, in a sense, another kind of destruction.\n\nEven so, refusing all change brings problems of its own. Historic buildings are expensive to maintain, and public funding is often limited. If no practical use can be found for an old structure, it may simply stand unused until its condition becomes dangerous. In that situation, calls to save it usually come too late. Conservationists therefore face a balancing act: they must protect the character of a place while allowing it to adapt enough to survive. Success often depends less on finding a perfect solution than on involving local people early, explaining proposed changes clearly and being honest about what cannot be preserved.\n\nTechnology is beginning to help with this process in unexpected ways. Digital mapping, 3D scanning and virtual models can record fragile sites in remarkable detail before repairs begin. These tools are not a substitute for the original, but they can guide restoration work and make collections accessible to people who may never travel to see them. Some experts are enthusiastic about these possibilities, while others warn that a virtual visit should not be confused with direct experience. Looking at a screen cannot reproduce the scale of a stone staircase or the smell of timber in an old theatre. Still, digital records may prove invaluable when disasters such as fire, flood or war damage places beyond immediate repair.\n\nIn the end, heritage is not just about age. It is about what communities decide is worth carrying forward. That judgment may involve beauty, memory, craftsmanship or the stories people attach to a site. The strongest preservation projects recognise that the past is neither untouchable nor endlessly reusable. Instead, they treat it as a shared resource that needs care, imagination and, above all, public trust. Without that trust, even well-funded schemes can fail. With it, preserving historical heritage becomes less an effort to resist time and more a way of giving the past a meaningful future.",
+      "questions": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "questionType": "main-idea",
+          "prompt": "What point does the writer make in the opening paragraph?",
+          "options": [
+            "A) Protecting heritage mainly means saving the most famous monuments.",
+            "B) Economic growth and heritage protection are always impossible to combine.",
+            "C) Heritage includes everyday places as well as well-known historic sites.",
+            "D) Most towns fail to recognise the value of their local traditions."
+          ],
+          "evidence": "The writer says heritage is found not only in famous landmarks but also in ordinary streets, workshops, archives and traditions linked to places.",
+          "rationale": "C is correct because the paragraph broadens the idea of heritage beyond major monuments. A is the opposite of the writer's point. B overstates the tension between development and conservation by saying they are always incompatible. D goes beyond the text, which mentions pressure on heritage but does not claim most towns fail to value it."
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "questionType": "purpose",
+          "prompt": "Why does the writer mention turning a warehouse into a library and a station into a market?",
+          "options": [
+            "A) To illustrate how historic buildings can remain useful through adapted reuse.",
+            "B) To suggest that public buildings are easier to preserve than private ones.",
+            "C) To show that modern architecture can improve neglected neighbourhoods.",
+            "D) To argue that restoration should hide all signs of contemporary change."
+          ],
+          "evidence": "The second paragraph explains that many specialists want historic areas to continue to be used and gives these examples to show buildings surviving as part of daily life.",
+          "rationale": "A is correct because the examples support the idea of giving old buildings new functions. B is unsupported; the text does not compare public and private preservation. C shifts the focus to modern architecture, which is not the point. D contradicts the paragraph, which accepts careful change rather than hiding all modern additions."
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "questionType": "inference",
+          "prompt": "What is suggested by the phrase 'another kind of destruction' in the third paragraph?",
+          "options": [
+            "A) Physical damage is less serious than poor planning.",
+            "B) Renovation can harm heritage if it removes the life that made a place meaningful.",
+            "C) Tourism should be prevented in all traditional neighbourhoods.",
+            "D) Local residents are usually unwilling to support conservation work."
+          ],
+          "evidence": "The writer describes renovated areas becoming neat but empty, with souvenir shops replacing communities, and says preserving walls while losing real life is another kind of destruction.",
+          "rationale": "B is correct because the phrase refers to losing a place's living character even if its buildings remain. A creates a comparison the writer does not make. C is too absolute; the writer warns about some effects of tourism, not tourism itself in every case. D misreads the paragraph, which says residents' concerns are understandable, not that they usually oppose conservation."
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "questionType": "attitude",
+          "prompt": "What is the writer's attitude towards change in historic buildings?",
+          "options": [
+            "A) Strongly critical, because changes usually weaken a building's character.",
+            "B) Uncertain, because there is still not enough evidence to judge the results.",
+            "C) Supportive only when changes are invisible to the public.",
+            "D) Generally accepting, provided it helps survival without ignoring what matters about the place."
+          ],
+          "evidence": "The fourth paragraph says refusing all change causes problems and that conservationists must protect character while allowing enough adaptation for survival.",
+          "rationale": "D is correct because the writer presents change as necessary but says it must be managed carefully. A is too negative and ignores the argument for adaptation. B is inaccurate because the writer clearly takes a position. C reflects an older approach mentioned earlier, not the writer's overall view."
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "questionType": "detail",
+          "prompt": "What limitation of digital technology does the writer emphasise?",
+          "options": [
+            "A) It is too expensive for most conservation projects to use regularly.",
+            "B) It cannot fully replace the experience of being at the real site.",
+            "C) It often produces records that are unreliable after disasters.",
+            "D) It encourages experts to ignore the opinions of local communities."
+          ],
+          "evidence": "The fifth paragraph says virtual models are not a substitute for the original and that a screen cannot reproduce the scale or smell of an old place.",
+          "rationale": "B is correct because the writer stresses the difference between digital access and direct experience. A is not mentioned. C distorts the point: digital records may actually help after disasters. D introduces an issue not linked to the discussion of technology."
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "questionType": "global",
+          "prompt": "Which statement best sums up the writer's overall message?",
+          "options": [
+            "A) Heritage survives best when experts are free to make difficult decisions quickly.",
+            "B) The main aim of preservation should be to recreate the past as accurately as possible.",
+            "C) Successful preservation depends on combining care for the past with practical use and public confidence.",
+            "D) New technology will soon solve the biggest problems facing historic sites."
+          ],
+          "evidence": "The final paragraph says strong projects treat heritage as a shared resource needing care, imagination and public trust, giving the past a meaningful future.",
+          "rationale": "C is correct because it reflects the article's central balance between protection, adaptation and trust. A overemphasises expert control and ignores community involvement. B repeats an outdated idea the article questions. D exaggerates the role of technology, which the writer presents as useful but limited."
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "p5q31",
+          "number": 31,
+          "answer": "C"
+        },
+        {
+          "id": "p5q32",
+          "number": 32,
+          "answer": "A"
+        },
+        {
+          "id": "p5q33",
+          "number": 33,
+          "answer": "B"
+        },
+        {
+          "id": "p5q34",
+          "number": 34,
+          "answer": "D"
+        },
+        {
+          "id": "p5q35",
+          "number": 35,
+          "answer": "B"
+        },
+        {
+          "id": "p5q36",
+          "number": 36,
+          "answer": "C"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 5,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement"
+    },
+    "6": {
+      "partTitle": "Part 6: Gapped text",
+      "directions": "Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.",
+      "title": "Working With the Machine",
+      "passage": "A few years ago, stories about artificial intelligence at work usually focused on robots replacing people. The reality in many offices has turned out to be less dramatic, but in some ways more surprising. AI systems are now booking meetings, summarising reports and sorting customer emails before a human even sees them. (37) As a result, discussions about the future of work have become more practical, with managers and employees asking what should be automated and what should remain firmly in human hands.\n\nOne reason for this change is that the latest tools are easy to access. In the past, only large firms with specialist teams could afford to experiment with advanced software. Now even small businesses can pay for online services that write advertising copy, analyse sales figures or help staff organise their day. (38) Instead, they are often built into familiar workplace platforms, which means people start using them almost without noticing.\n\nThat quiet arrival can bring clear advantages. In hospitals, for example, AI can organise patient information so doctors spend less time on paperwork. In law firms, it can search huge collections of documents far faster than junior staff. (39) When routine tasks disappear, workers often have more time for decisions that require judgement, experience and direct contact with other people.\n\nHowever, the same technology also creates new pressure. If a machine can produce a first draft of a report in seconds, employers may expect staff to complete more work in less time. Some workers say they now spend part of the day checking AI-generated material rather than producing their own. (40) In other words, efficiency does not always feel like freedom from the employee's point of view.\n\nThere is also the question of trust. AI tools are impressive, but they still make mistakes, and those mistakes can be hard to spot because the language they produce sounds confident. A chatbot may invent a source, while an image system might create misleading visual details. (41) For that reason, companies are increasingly training staff not just to use AI, but to question it carefully.\n\nAnother issue is what happens to workplace skills over time. If software always writes the first version of an email or presentation, younger employees may have fewer chances to develop those abilities themselves. Some experts worry this could weaken the very talents businesses will continue to need. (42) The challenge, then, is not simply to save time today, but to make sure tomorrow's workforce still knows how to think, write and solve problems independently.\n\nFor now, most evidence suggests that AI is changing jobs more often than it is eliminating them. New roles are appearing for people who can train systems, review outputs and decide when automation is useful. At the same time, older roles are being reshaped rather than wiped out completely. The workplace of the future may include more machines, but success will still depend on people knowing when to rely on them and when to switch them off.",
+      "passageWordCount": 546,
+      "sentencePool": [
+        "A) Yet this shift has not removed work so much as altered the kind of work people do.",
+        "B) For that reason, some employers deliberately keep junior staff involved in first drafts and routine problem-solving, even when AI could do the work faster.",
+        "C) These tools do not usually arrive as dramatic new machines in the corner of the room.",
+        "D) This can mean the pace increases even when the task itself seems easier.",
+        "E) That is helpful only if professionals remain able to judge whether the results are accurate and relevant.",
+        "F) In creative industries, meanwhile, it can generate ideas quickly enough to help teams get started.",
+        "G) Some businesses have responded by banning personal phones during the working day."
+      ],
+      "questions": [
+        {
+          "id": "q37",
+          "number": 37
+        },
+        {
+          "id": "q38",
+          "number": 38
+        },
+        {
+          "id": "q39",
+          "number": 39
+        },
+        {
+          "id": "q40",
+          "number": 40
+        },
+        {
+          "id": "q41",
+          "number": 41
+        },
+        {
+          "id": "q42",
+          "number": 42
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q37",
+          "number": 37,
+          "answer": "A"
+        },
+        {
+          "id": "q38",
+          "number": 38,
+          "answer": "C"
+        },
+        {
+          "id": "q39",
+          "number": 39,
+          "answer": "F"
+        },
+        {
+          "id": "q40",
+          "number": 40,
+          "answer": "D"
+        },
+        {
+          "id": "q41",
+          "number": 41,
+          "answer": "E"
+        },
+        {
+          "id": "q42",
+          "number": 42,
+          "answer": "B"
+        }
+      ],
+      "sections": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 6,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "__adversarialFindings": [
+        {
+          "rule_id": "TEST-P6-MULTIFIT",
+          "severity": "QUALITY_FAIL",
+          "location": "Q41",
+          "evidence": "B",
+          "reason": "Option B may fit gaps 41,42: It could follow concerns about errors or skills loss, since both contexts support the idea that AI still needs human oversight, though gap 42 is the stronger thematic fit.",
+          "recommended_local_action": "Rewrite option or gap context so only one gap accepts the sentence.",
+          "source": "ai_adversarial"
+        }
+      ],
+      "__needsReview": {
+        "status": "ambiguity_warning",
+        "findings": [
+          {
+            "itemNumber": null,
+            "type": "quality_fail",
+            "detail": "[TEST-P6-MULTIFIT] Q41: Option B may fit gaps 41,42: It could follow concerns about errors or skills loss, since both contexts support the idea that AI still needs human oversight, though gap 42 is the stronger thematic fit."
+          }
+        ],
+        "detectedAt": "2026-08-31T19:44:58.086Z"
+      }
+    },
+    "7": {
+      "partTitle": "B2 Reading and Use of English Part 7: Multiple matching",
+      "directions": "Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.",
+      "matchingIntro": "Which person…? The people may be chosen more than once.",
+      "sections": [
+        {
+          "letter": "A",
+          "name": "Leonie Marsh",
+          "text": "I started travelling alone almost by accident after a friend pulled out of a walking holiday in Portugal. Initially, I was annoyed rather than excited, but once I arrived, I realised how much easier it was to follow my own rhythm. If I wanted to spend three hours sketching in a fishing village, nobody minded. That freedom soon became the main attraction. However, I did discover that solo travel demands more practical effort than going away with company. When a train was cancelled, for instance, there was no one to compare ideas with, so every decision felt heavier. Since then, I have become far more organised before setting off. I still enjoy chatting to strangers in cafés and hostels, yet I do not travel alone in order to meet people. For me, the real benefit is having enough quiet time to notice places properly."
+        },
+        {
+          "letter": "B",
+          "name": "Rafiq Siddons",
+          "text": "For years I avoided solo trips because I assumed they would feel lonely. Meanwhile, most of my friends were posting photographs from group holidays that looked far more entertaining. Then work sent me to Helsinki for a conference, and I added a few extra days on my own. To my surprise, being alone made me more approachable. In a group, I tend to stay with the people I know, whereas this time I ended up sharing meals with locals and other visitors. Not every moment was comfortable: one wet Sunday afternoon, I seriously considered booking an earlier flight home because the city seemed to empty out. Yet that brief low point taught me something useful. If you keep moving, even just to a gallery or market, the mood usually changes. I now plan at least one solo break each year, mainly because it pushes me beyond familiar habits."
+        },
+        {
+          "letter": "C",
+          "name": "Marta Villiers",
+          "text": "My first independent journey came after a difficult year when I needed distance from everyday routines. I chose a rail pass and spent two weeks crossing central Europe with no detailed schedule. Friends described this as brave, but I saw it differently: travelling alone meant I did not have to negotiate every stop or justify changing my mind. Even so, the complete lack of structure was not as relaxing as I had imagined. After missing a connection in Prague, I found myself wishing I had booked at least the first few nights in advance. Since then, I have kept the spirit of flexibility while building in a framework. I reserve accommodation for the start of a trip, then leave room for last-minute choices later on. That balance suits me. I still return home refreshed, but I no longer confuse spontaneity with good planning."
+        },
+        {
+          "letter": "D",
+          "name": "Noah Kerr",
+          "text": "Unlike some solo travellers, I did not set off in search of freedom or self-discovery. My reason was simpler: my partner hates long train journeys and museums, both of which I love. Rather than arguing over holiday plans, we sometimes travel separately for short periods. At first, I worried that people would assume I was alone because something had gone wrong in my life. In reality, the experience felt perfectly ordinary once I got used to eating dinner by myself. What I value most is the chance to become deeply absorbed in one subject. On a recent trip to northern Italy, I spent an entire day comparing small railway museums, which would have bored most of my friends. That said, I am not interested in proving I can manage everything independently. If a local guide offers expertise, I am happy to join a tour and learn more."
+        }
+      ],
+      "questions": [
+        {
+          "id": "q43",
+          "number": 43,
+          "prompt": "Who says that travelling alone made it easier for other people to begin conversations with them?"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "prompt": "Who realised that having complete freedom could create problems as well as advantages?"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "prompt": "Who explains that solo travel suits them because it allows them to focus fully on a personal interest?"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "prompt": "Who only discovered that solo travel suited them because a trip unexpectedly became a solo one?"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "prompt": "Who decided to alter the way they prepare for trips after finding one aspect too unplanned?"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "prompt": "Who admits they briefly wanted to end a trip early when they were not enjoying part of it?"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "prompt": "Who treats contact with other travellers as a welcome extra rather than a reason for travelling?"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "prompt": "Who began travelling alone partly to escape from the pressures of normal life?"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "prompt": "Who points out that solo travel was a practical solution to having different tastes from someone close to them?"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "prompt": "Who suggests that being by yourself can make ordinary travel decisions feel more difficult?"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q43",
+          "number": 43,
+          "answer": "B"
+        },
+        {
+          "id": "q44",
+          "number": 44,
+          "answer": "C"
+        },
+        {
+          "id": "q45",
+          "number": 45,
+          "answer": "D"
+        },
+        {
+          "id": "q46",
+          "number": 46,
+          "answer": "A"
+        },
+        {
+          "id": "q47",
+          "number": 47,
+          "answer": "C"
+        },
+        {
+          "id": "q48",
+          "number": 48,
+          "answer": "B"
+        },
+        {
+          "id": "q49",
+          "number": 49,
+          "answer": "A"
+        },
+        {
+          "id": "q50",
+          "number": 50,
+          "answer": "C"
+        },
+        {
+          "id": "q51",
+          "number": 51,
+          "answer": "D"
+        },
+        {
+          "id": "q52",
+          "number": 52,
+          "answer": "A"
+        }
+      ],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 7,
+      "audioClips": []
+    }
+  }
+}

@@ -1,0 +1,1120 @@
+DRALO
+
+RUOE EXAM 9
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Exam ID
+
+B2 · Exam 9
+
+Source
+
+ENGLISH_PROD · current stored RUOE Parts 1–7
+
+Status
+
+PENDING_HUMAN_REVIEW
+
+Language
+
+British English
+
+Purpose
+
+Teacher review before approval / correction / publication
+
+Theme map
+
+This paper is internally varied, but several themes repeat topics already used in Exams 7–12. Those overlaps are flagged so the 5–20 set can remain genuinely varied.
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Everyday fitness habits
+
+2
+
+Open cloze
+
+Digital communication
+
+3
+
+Word formation
+
+Personal climate action
+
+4
+
+Key word transformations
+
+Remote work and boundaries
+
+5
+
+Multiple-choice reading
+
+Impulse buying psychology
+
+6
+
+Gapped text
+
+Healthy eating on a budget
+
+7
+
+Multiple matching
+
+Tourism and local communities
+
+Theme-variety alert: Parts 2, 6 and 7 are the clearest repeats across the existing bank (digital communication, healthy eating on a budget, and tourism/local communities). Keep production content unchanged for review, but consider replacing these before final publication.
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Everyday fitness habits
+
+VISTA ALUMNO
+
+Example:
+
+A) make
+
+B) keep
+
+C) stay
+
+D) hold
+
+Answer: C
+
+Text
+
+Small Changes, Big Results
+
+Many people want to (0) ___ fit, but they often imagine they need expensive equipment or hours at the gym. In fact, a few simple habits can make a real (1) ___ to your health and overall wellbeing. One easy idea is to walk more. If you get (2) ___ the bus one stop early or take the stairs, you can add exercise to your day without changing your routine too much.
+
+It also helps to choose an activity you actually enjoy, because you are more likely to keep it (3) ___. Some people join a class, while others prefer to work (4) ___ at home with an online video. The important thing is to set goals that are realistic. If you aim too high, you may (5) ___ up feeling disappointed.
+
+Finally, do not (6) ___ the value of rest. Your body needs time to recover, and sleep plays a key (7) ___ in staying healthy. With a sensible plan, getting fitter can become part of daily life rather than an extra (8) ___ on your already busy schedule.
+
+Questions
+
+1
+
+A difference
+
+B change
+
+C progress
+
+D improvement
+
+2
+
+A down
+
+B away
+
+C out
+
+D off
+
+3
+
+A over
+
+B on
+
+C up
+
+D out
+
+4
+
+A single
+
+B separate
+
+C private
+
+D alone
+
+5
+
+A finish
+
+B turn
+
+C end
+
+D bring
+
+6
+
+A miss
+
+B fail
+
+C underestimate
+
+D refuse
+
+7
+
+A role
+
+B task
+
+C point
+
+D duty
+
+8
+
+A pressure
+
+B burden
+
+C effort
+
+D challenge
+
+Part 1 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 13
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+1
+
+A · difference
+
+2
+
+D · off
+
+3
+
+B · on
+
+4
+
+D · alone
+
+5
+
+C · end
+
+6
+
+C · underestimate
+
+7
+
+A · role
+
+8
+
+B · burden
+
+TEACHER ATTENTION
+
+• Q1 context strengthened: 'make a real difference to your health and overall wellbeing' now points more clearly to DIFFERENCE as the intended collocation.
+
+• Q8 context strengthened with 'on your already busy schedule', making BURDEN more precise than challenge/effort. Future Part 1 blueprints should also avoid over-concentrating on fixed expressions and distribute lexical targets more widely.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 2 — Open cloze
+
+Theme: Digital communication
+
+VISTA ALUMNO
+
+Example:
+
+Answer: 0 → for
+
+Text
+
+Messages in a Digital Age
+
+Not long ago, people mainly used phones (0) ___ urgent conversations and letters for news that could wait. Today, communication happens across several devices, and messages can be sent in seconds to friends, colleagues or relatives who may live thousands of miles away. This change has brought many benefits, (9) ___ as faster access to information and the chance to keep in touch more easily. At the same time, it has changed expectations. People are often surprised if a reply does not arrive (10) ___ away, even though the person they contacted may be busy. Another effect is that written messages now have to do the job that tone of voice once did, (11) ___ is why people use emojis and punctuation more carefully. Experts also point (12) ___ that digital tools can create pressure to be available all the time. As a result, some users choose (13) ___ turn off notifications during the evening. Technology has clearly made communication quicker, but whether it has made it better depends (14) ___ how thoughtfully we use it. If we learn when to reply and when to wait, we may communicate just (15) ___ effectively online as we do face to face, rather (16) ___ allowing our devices to control us.
+
+Part 2 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 13
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+9
+
+such
+
+10
+
+straight
+
+11
+
+which
+
+12
+
+out
+
+13
+
+to
+
+14
+
+on
+
+15
+
+as
+
+16
+
+than
+
+TEACHER ATTENTION
+
+• No content patch applied in Part 2. The supplied teacher note about consecutive THAN answers and repeated TO answers does not correspond to this Exam 13 version, whose stored answers are such / straight / which / out / to / on / as / than.
+
+• Theme-variety alert: digital communication closely echoes Exam 7 Part 6 ('Always Connected?') and Exam 9 Part 6 ('Growing Up Online'). Strong candidate for thematic replacement if exams are used sequentially.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 3 — Word formation
+
+Theme: Personal climate action
+
+VISTA ALUMNO
+
+Example:
+
+(0) ___ (RESPOND)
+
+Answer: 0 → response
+
+Text
+
+Small Habits, Big Difference
+
+Many people feel that climate change is too large a problem for one person to solve. Yet a practical (0) ___ (RESPOND) begins with ordinary habits at home, at work and while travelling. One of the easiest steps is to make more (17) ___ (CARE) choices about energy use. Turning off lights and chargers may seem (18) ___ (IMPORTANT), but over time it reduces waste. Transport is another area where small changes matter. A short car journey can often be replaced by a walk, and regular cycle use brings health benefits in (19) ___ (ADD) to lower emissions. Food also plays a role. Planning meals helps people shop more (20) ___ (EFFICIENT), so less food is thrown away. It is also worth checking product labels. Companies sometimes make (21) ___ (MISLEAD) claims about how green their goods are, so consumers need to read with care. Finally, reusing and repairing items can extend their (22) ___ (LONG) and cut demand for new products. Taking part in local environmental projects can also encourage greater (23) ___ (SOCIAL), because people meet neighbours they might not otherwise speak to. Together, these habits can have a surprisingly (24) ___ (BENEFIT) effect on the planet.
+
+Part 3 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 13
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+17
+
+careful
+
+18
+
+unimportant
+
+19
+
+addition
+
+20
+
+efficiently
+
+21
+
+misleading
+
+22
+
+lifespan
+
+23
+
+sociability
+
+24
+
+beneficial
+
+TEACHER ATTENTION
+
+• Q23 rebuilt completely: SOCIAL now produces the natural noun SOCIABILITY in 'encourage greater sociability', removing the forced phrase 'actions are not powerless'.
+
+• Climate/sustainability has already appeared prominently in Exam 7 Part 7 and Exam 12 Part 3. Consider bank-level spacing.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 4 — Key word transformations
+
+Theme: Remote work and boundaries
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example:
+
+0. It is unnecessary for remote workers to travel to the office every day.
+
+NEED
+
+Remote workers __________________ travel to the office every day.
+
+Answer: 0 → do not need to
+
+Questions
+
+25. Working from home was less stressful for Marta than commuting into the city every day.
+
+AS
+
+Commuting into the city every day was __________________ working from home for Marta.
+
+26. The manager said it would be a good idea for remote staff to switch off their work phones in the evening.
+
+SUGGESTED
+
+The manager __________________ their work phones in the evening.
+
+27. Sophie regrets not setting clearer boundaries between work and free time.
+
+WISHES
+
+Sophie __________________ clearer boundaries between work and free time.
+
+28. Daniel answered emails during his holiday even though it wasn't necessary.
+
+HAVE
+
+Daniel __________________ emails during his holiday, but he did.
+
+29. Because Amir's internet connection was unreliable, he missed part of the online meeting.
+
+RESULTED
+
+Amir's unreliable internet connection __________________ part of the online meeting.
+
+30. Nina started remote work three years ago and she still works from home now.
+
+HAS
+
+Nina __________________ for three years.
+
+Part 4 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 13
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+25
+
+not as stressful as
+
+26
+
+suggested remote staff switch off
+
+27
+
+wishes she had set
+
+28
+
+did not have to answer
+
+29
+
+resulted in him missing
+
+30
+
+has worked from home
+
+TEACHER ATTENTION
+
+• Q26 is a problem: the stored answer 'suggested remote staff switch off' is five words, but after 'The manager' it produces 'The manager suggested remote staff switch off their work phones...' This is acceptable in British English, though some teachers may prefer 'suggested that remote staff switch off' which is six words and therefore invalid. Confirm Cambridge acceptability of the zero-that pattern.
+
+• Q28 rebuilt so the second sentence explicitly preserves both ideas: there was no obligation to answer, but Daniel did answer.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 5 — Multiple-choice reading
+
+Theme: Impulse buying psychology
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+The Things We Never Planned to Buy
+
+Most of us know the feeling. We go into a shop for toothpaste and come out carrying a candle, a notebook and a packet of biscuits as well. We click online to replace a phone charger and somehow end up paying for trainers we had not even considered a minute earlier. Later, when the excitement has gone, we may wonder why we wanted any of it. Yet this pattern is so common that businesses spend huge amounts trying to understand it. Their success does not depend only on making useful products. It also relies on recognising the small psychological nudges that can turn a passing glance into a purchase.
+
+One of the strongest nudges is the hope that an object might improve not just our lives but our identities. People do not only buy running shoes because they need something on their feet. They may also be buying a picture of themselves as healthier, busier or more disciplined. The same thing happens with kitchen equipment, expensive pens and travel bags. A product can seem to promise a future version of us, and that future can be more attractive than the object itself. This helps explain why unopened items often gather dust in cupboards: they were bought for the person we meant to become, not the one we already were.
+
+Shops and websites are skilled at making that imagined future feel close. Online stores, for example, recommend items by suggesting that people similar to us chose them, too. This can be useful, but it also removes some of the pause in which we might ask whether we need the item at all. Physical shops do something similar through layout. Essentials are rarely near the entrance, so customers travel past rows of things they never intended to see. None of this forces anyone to buy. But the environment quietly increases the number of moments in which buying feels easy and saying no feels like an unnecessary effort.
+
+Another reason we overspend is that modern shopping often separates the pleasure of choosing from the pain of paying. Cash once made the cost visible and immediate. Now many purchases happen with a quick tap, and online payments may be completed before we have properly noticed the total. Subscription services push this even further. A small monthly charge can feel harmless, even if several of them together cost far more than a single larger payment would. People are not foolish for missing this. Our brains tend to notice immediate rewards more clearly than slow, repeated losses.
+
+Emotions matter just as much. Buying can create a brief sense of control, comfort or reward, especially after a difficult day. That is why boredom, stress and loneliness are such powerful shopping partners. The item itself may be almost irrelevant; what matters is the lift that comes from deciding, receiving and opening. Companies are well aware of this and often design the process to feel smooth and satisfying, from attractive packaging to messages announcing that an order is on its way. These details may appear minor, but together they turn shopping into an experience rather than a simple exchange.
+
+None of this means that people are helpless or that all unplanned buying is a mistake. Pleasure has value, and an unexpected purchase can sometimes be a good one. The problem starts when buying becomes our automatic response to every mood or every clever suggestion. The most effective solution is not usually strict self-denial. It is to create enough delay for thought to return: leaving an online basket overnight, unsubscribing from marketing emails, or deciding in advance what kind of shopper we want to be. The aim is not to remove enjoyment from spending, but to make sure our money follows our decisions instead of somebody else's design.
+
+Questions
+
+31. What is the writer doing in the article as a whole? A. warning readers that modern products are usually poor value B. explaining why people often buy more than they intended C. arguing that online shopping has replaced shopping in stores D. suggesting that advertising should be controlled more strictly
+
+32. In the second paragraph, what point does the writer make about items such as running shoes and travel bags? A. People often choose them because they are practical and long-lasting. B. They are bought mainly to match what friends and colleagues own. C. They can appeal because of the kind of person buyers hope to become. D. Buyers usually regret spending too much on goods they rarely use.
+
+33. Why does the writer mention the layout of physical shops in the third paragraph? A. to show one way in which businesses increase opportunities for impulse buying B. to argue that customers should avoid large shops whenever possible C. to explain why essential goods are usually more expensive than other items D. to suggest that shoppers are more easily influenced in stores than online
+
+34. According to the fourth paragraph, why can subscription services encourage people to spend too much? A. They persuade people to pay in cash more often than they expect. B. They make it difficult for people to compare brands properly. C. They offer immediate rewards that disappear very quickly. D. They hide the overall cost behind charges that seem small on their own.
+
+35. According to the final paragraph, what does the writer describe as the real reward of turning a hobby into a career? A. the chance to build work that feels meaningful B. endless enjoyment untouched by pressure C. escaping the influence of market forces D. proving that changing career direction was not a mistake
+
+36. What conclusion does the writer reach in the final paragraph? A. Unplanned purchases are best prevented by making strict rules about spending. B. Enjoying occasional impulse buys is harmless if income is high enough. C. The key is to build in time to think before deciding to buy. D. People should stop companies from collecting information about their habits.
+
+Part 5 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 13
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+31
+
+B
+
+32
+
+C
+
+33
+
+A
+
+34
+
+D
+
+35
+
+B
+
+36
+
+C
+
+TEACHER ATTENTION
+
+• Q35 rewritten to remove the incorrect reference to a non-existent 'it'. The item now asks directly about the real reward identified in the final paragraph; key A is unchanged.
+
+• Topic is consumer psychology/impulse buying and is distinct from the immediately preceding papers; useful for theme rotation.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 6 — Gapped text
+
+Theme: Healthy eating on a budget
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+Eating Well for Less
+
+For many people, healthy eating seems to belong in the same category as luxury gym memberships and expensive kitchen gadgets. Fresh ingredients are often seen as something for shoppers with plenty of time and money. Yet nutrition experts repeatedly point out that eating well does not depend on buying the most fashionable products in the supermarket. (37) Once that idea changes, planning cheaper and healthier meals becomes much more realistic.
+
+One reason healthy food appears costly is that people compare individual items rather than whole meals. A ready-made pizza may look cheaper than buying vegetables, rice and chicken separately. However, the pizza usually feeds fewer people and leaves nothing for the next day. (38) In other words, the better comparison is not product against product, but meal against meal.
+
+Planning is one of the simplest ways to control food spending. People who decide what they will cook before shopping are less likely to buy snacks, duplicate ingredients or food they never use. A short list also helps shoppers ignore special offers that are not really useful. (39) That way, ingredients bought for one dish can often be used in another later in the week.
+
+Some of the best-value foods are ones many shoppers walk past without much thought. Dried lentils, oats, eggs, frozen peas and tinned tomatoes are rarely advertised as exciting, but they are versatile and nutritious. They can become soups, pasta sauces, curries or quick lunches with very little effort. (40) Choosing a few reliable basics like these can reduce both cost and stress.
+
+Another useful habit is being flexible about where nutrition comes from. Many people build meals around meat and then add vegetables to the side. That can work, but it is often the most expensive approach. Beans, chickpeas and eggs provide protein at a much lower price, and they can still produce filling meals. (41) The point is not to give up meat completely, but to use it more carefully.
+
+Of course, even careful shoppers waste money if food ends up in the bin. Leftovers are not exciting, which is why they are often forgotten until it is too late. But a small amount of cooked rice, roast vegetables or chicken can easily become lunch the next day. (42) Besides saving money, this habit also saves the time and energy needed to cook from the beginning again.
+
+In the end, healthy eating on a budget is less about finding one perfect shopping trick and more about building several sensible habits. None of them is especially complicated: compare meals, plan ahead, keep basic ingredients at home and use what you buy. Taken together, those choices can make home cooking cheaper than many people expect. They also show that eating well is not reserved for people with unusually large food budgets.
+
+Sentences
+
+A They also last for a long time, so there is less pressure to use them immediately.
+
+B In fact, meals based on ordinary ingredients are often cheaper than heavily processed convenience food.
+
+C With a little imagination, those leftovers can be turned into something that feels like a new meal.
+
+D It is often smarter to think about how a week of meals will fit together before entering the shop.
+
+E Some shoppers save money by visiting several different supermarkets in a single afternoon.
+
+F A large pot of soup or curry, for example, can provide several portions at a reasonable cost.
+
+G For example, a small amount added to a vegetable stir-fry or pasta dish can go much further.
+
+Part 6 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 13
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+37
+
+B
+
+38
+
+F
+
+39
+
+D
+
+40
+
+A
+
+41
+
+G
+
+42
+
+C
+
+TEACHER ATTENTION
+
+• Option labels A–G have been shuffled only; the six gap sentences and passage are unchanged. New key: 37 B · 38 F · 39 D · 40 A · 41 G · 42 C. Extra option: E.
+
+• Theme also overlaps Exam 8 Part 1 ('Eating Well for Less'). Strong candidate for thematic replacement to preserve exam-to-exam variety.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Part 7 — Multiple matching
+
+Theme: Tourism and local communities
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+Which person…? The people may be chosen more than once.
+
+43 Who believes local people are most frustrated because they are left out of important choices?
+
+44 Who admits that contact with outsiders changed their own attitude towards the place where they live?
+
+45 Who is concerned that young people may make limited plans because of jobs linked to visitors?
+
+46 Who suggests that public anger reduced when residents noticed practical improvements?
+
+47 Who says tourism led to worthwhile investment after pressure from people visiting the area?
+
+48 Who feels that an activity once valued mainly by residents has lost some of its original character?
+
+49 Who thinks the key question is not the presence of tourists, but who benefits financially?
+
+50 Who accepts that tourism brings advantages, while regretting a weaker sense of community?
+
+51 Who argues that local people should stay involved because tourism is unlikely to disappear?
+
+52 Who warns against allowing immediate economic needs to shape long-term decisions?
+
+Texts
+
+A – Luca Ferris, café owner
+
+When the first budget flights began using the airport nearby, our town changed almost overnight. Initially, I was delighted: I run a small café on the harbour, and extra visitors meant I could stay open all year instead of closing every winter. Since then, however, the success has had awkward side effects. Rents have risen so sharply that two of my staff now share a flat an hour away. I also miss recognising faces in the street. Yet I would be dishonest if I pretended tourism had brought nothing but problems. The council finally repaired the seafront because holidaymakers complained online, and local fishermen now sell directly to restaurants rather than through middlemen. What bothers me most is not the number of tourists, but the way decisions are made without asking those of us who live and work here.
+
+B – Hannah Price, volunteer guide
+
+I moved to the village ten years ago for a quieter life, so I was sceptical when coaches started arriving every weekend. Meanwhile, the old mill, which had stood empty for years, was turned into a visitor centre, and I agreed to help there one afternoon a week. To my surprise, meeting travellers has made me appreciate the place more, because their questions force me to notice details I had ignored. Even so, I worry that some businesses now present a polished version of local life that residents barely recognise. The summer craft market, for instance, used to be where neighbours swapped homemade goods; now it can feel like a performance. Still, I would rather manage tourism carefully than try to stop it. People will keep coming, and if locals take part, we have a better chance of protecting what matters.
+
+C – Sanjay Mehta, secondary school teacher
+
+Our mountain region has long depended on farming, but poor harvests pushed many families into tourist work. At first, I welcomed that shift because several parents finally had a stable income. Yet after a few seasons, I noticed something less obvious in school. Teenagers were leaving classes early to help in guesthouses, especially during peak months, and some no longer saw education as worthwhile. There is also pressure to learn only the kind of English needed for serving visitors, which seems far too narrow to me. On the other hand, tourism has funded a new sports hall that the whole community uses, and a few former students have returned after university to start walking tours with real respect for local traditions. So I am not against visitors; I simply think short-term earnings should not decide the region’s future.
+
+D – Marta Zielińska, town councillor
+
+By the time I joined the council, residents were already angry about crowded buses and noisy holiday flats, so any proposal linked to tourism was bound to cause arguments. I understood the frustration, yet I also knew the town could not rely on its declining fishing industry forever. We introduced limits on short-term rentals and changed rubbish collection times, which helped a little. What surprised me was how quickly tempers cooled once people saw that complaints led to action. Even now, though, I am uneasy when campaigners talk as if tourism itself were the enemy. In my view, the real issue is whether profits stay locally or disappear into companies based elsewhere. If more small firms were owned by residents, the conversation would be far less bitter. Since then, I have become convinced that control matters more than growth.
+
+Part 7 — Reviewer view
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Source
+
+ENGLISH_PROD · Exam 13
+
+Pedagogical approval
+
+PENDING_HUMAN_REVIEW
+
+Reviewer focus
+
+Natural British English · B2 authenticity · uniqueness of answers · distractor quality · thematic distribution
+
+ANSWER KEY
+
+43
+
+A
+
+44
+
+B
+
+45
+
+C
+
+46
+
+D
+
+47
+
+A
+
+48
+
+B
+
+49
+
+D
+
+50
+
+A
+
+51
+
+B
+
+52
+
+C
+
+TEACHER ATTENTION
+
+• No content patch applied in Part 7. The supplied Q48 feedback refers to Rosa and a smart device while travelling around town, but this Exam 13 Part 7 is the tourism/local-communities text and Q48 concerns Hannah's craft market. Applying that change here would alter the wrong exam.
+
+• Existing matching set retained pending the correct Exam 13-specific Part 7 feedback.
+
+Human review sheet
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Cambridge-style authenticity
+
+
+
+Answer/key defensibility
+
+
+
+Distractor / item quality
+
+
+
+Ambiguity / alternative answers
+
+
+
+Teacher comments
+
+
+
+Decision
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Final exam review
+
+Use this page only after all seven Parts have been reviewed.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+LANGUAGE
+
+☐ Natural British English throughout
+
+LEVEL
+
+☐ Consistently B2 First
+
+AUTHENTICITY
+
+☐ Cambridge-style task behaviour and difficulty
+
+THEME VARIETY
+
+☐ Sufficient variety within Exam 13 and against Exams 5–12
+
+KEYS
+
+☐ All keys verified manually
+
+DISTRACTORS
+
+☐ Plausible but clearly wrong
+
+PART 4
+
+☐ Meaning preserved · keyword intact · 2–5 words
+
+CRITICAL FIXES
+
+☐ Part 1 Q1/Q8 context strengthened · Part 3 Q23 rebuilt · Part 4 Q28 rebuilt · Part 5 Q35 fixed · Part 6 answer sequence shuffled
+
+FINAL DECISION
+
+☐ APPROVE   ☐ NEEDS ADJUSTMENT   ☐ REPLACE
+
+Reviewer: ________________________________    Date: __________________
+

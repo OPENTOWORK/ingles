@@ -1,0 +1,384 @@
+{
+  "caseId": 3,
+  "source": "scripts\\generated\\b2-exams\\exam-16\\part-03.json",
+  "historicalCorrection": "DECIDE → decisions",
+  "proposal": {
+    "stem": "DECIDE",
+    "answer": "decision",
+    "transformationFamily": "noun",
+    "reason": "The noun form 'decision' fits the context of the sentence, indicating the outcome of the action of deciding, while adhering to the instruction of not using a second lexical root."
+  },
+  "schemaRepairAttempts": 1,
+  "repairRetries": 1,
+  "blindSolve": {
+    "answer": "decisions",
+    "reason": "The base word 'decide' can be transformed into the noun 'decisions', which fits the context of the sentence regarding improved cognitive functions during the day."
+  },
+  "adversarialValidation": {
+    "natural": true,
+    "forcedContext": false,
+    "alternativeFamilyMembers": [],
+    "lexicalFamilyValidation": {
+      "sameLexicalFamily": true,
+      "extraLexicalRootIntroduced": false,
+      "directDerivation": true,
+      "legitimateBase": true,
+      "reason": "The word 'decision' is a noun derived from the verb 'decide', and it fits naturally in the context of the sentence. The phrase 'supports better decision during the day' is grammatically correct and semantically appropriate."
+    }
+  },
+  "repairResult": {
+    "status": "QUALITY_FAIL",
+    "originalExam": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "SCIENCE",
+        "answer": "scientific",
+        "transformationFamily": "adjective"
+      },
+      "title": "Why Good Sleep Matters",
+      "passage": "Although sleep was once seen as a simple period of rest, (0) ___ (SCIENCE) research now shows that it plays a central role in our daily lives. A good night's sleep improves our mood, sharpens our memory and supports better (17) ___ (DECIDE) during the day. It also helps the body recover from physical activity and strengthens the immune system.\n\nBy contrast, regular sleep loss can have serious (18) ___ (CONSEQUENT). People who are tired often become less (19) ___ (PRODUCT) at work or school, and they may react more (20) ___ (IMPULSE) in stressful situations. Over time, poor sleep can even increase the (21) ___ (LIKELY) of health problems such as heart disease.\n\nExperts say that a more restful night often depends on simple habits. For example, keeping a regular bedtime and limiting screen use before bed can be highly (22) ___ (BENEFIT). It is also (23) ___ (ADVICE) to avoid heavy meals late at night. In the end, sleep is not a luxury but a (24) ___ (NECESSARY) for a healthy, balanced life.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "DECIDE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "CONSEQUENT",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "PRODUCT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "IMPULSE",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "LIKELY",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "BENEFIT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "ADVICE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "NECESSARY",
+          "transformationFamily": "noun"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "decision-making",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "consequences",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "productive",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "impulsively",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "likelihood",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "beneficial",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "advisable",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "necessity",
+          "transformationFamily": "noun"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-16-part-3",
+      "version": "pre-teacher-patch-2026-08-31T22:13:44.493Z"
+    },
+    "candidateExam": {
+      "partTitle": "B2 First Reading and Use of English Part 3",
+      "directions": "For questions 17–24, read the text below. Use the word given in capitals at the end of each line to form a word that fits in the gap. There is an example at the beginning (0).",
+      "example": {
+        "number": 0,
+        "stem": "SCIENCE",
+        "answer": "scientific",
+        "transformationFamily": "adjective"
+      },
+      "title": "Why Good Sleep Matters",
+      "passage": "Although sleep was once seen as a simple period of rest, (0) ___ (SCIENCE) research now shows that it plays a central role in our daily lives. A good night's sleep improves our mood, sharpens our memory and supports better (17) ___ (DECIDE) during the day. It also helps the body recover from physical activity and strengthens the immune system.\n\nBy contrast, regular sleep loss can have serious (18) ___ (CONSEQUENT). People who are tired often become less (19) ___ (PRODUCT) at work or school, and they may react more (20) ___ (IMPULSE) in stressful situations. Over time, poor sleep can even increase the (21) ___ (LIKELY) of health problems such as heart disease.\n\nExperts say that a more restful night often depends on simple habits. For example, keeping a regular bedtime and limiting screen use before bed can be highly (22) ___ (BENEFIT). It is also (23) ___ (ADVICE) to avoid heavy meals late at night. In the end, sleep is not a luxury but a (24) ___ (NECESSARY) for a healthy, balanced life.",
+      "questions": [
+        {
+          "id": "q1",
+          "number": 17,
+          "type": "word-formation",
+          "stem": "DECIDE",
+          "transformationFamily": "noun",
+          "answer": "decision",
+          "reason": "The noun form 'decision' fits the context of the sentence, indicating the outcome of the action of deciding, while adhering to the instruction of not using a second lexical root."
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "type": "word-formation",
+          "stem": "CONSEQUENT",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "type": "word-formation",
+          "stem": "PRODUCT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "type": "word-formation",
+          "stem": "IMPULSE",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "type": "word-formation",
+          "stem": "LIKELY",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "type": "word-formation",
+          "stem": "BENEFIT",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "type": "word-formation",
+          "stem": "ADVICE",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "type": "word-formation",
+          "stem": "NECESSARY",
+          "transformationFamily": "noun"
+        }
+      ],
+      "modelAnswers": [
+        {
+          "id": "q1",
+          "number": 17,
+          "answer": "decision",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q2",
+          "number": 18,
+          "answer": "consequences",
+          "transformationFamily": "other"
+        },
+        {
+          "id": "q3",
+          "number": 19,
+          "answer": "productive",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q4",
+          "number": 20,
+          "answer": "impulsively",
+          "transformationFamily": "adverb"
+        },
+        {
+          "id": "q5",
+          "number": 21,
+          "answer": "likelihood",
+          "transformationFamily": "noun"
+        },
+        {
+          "id": "q6",
+          "number": 22,
+          "answer": "beneficial",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q7",
+          "number": 23,
+          "answer": "advisable",
+          "transformationFamily": "adjective"
+        },
+        {
+          "id": "q8",
+          "number": 24,
+          "answer": "necessity",
+          "transformationFamily": "noun"
+        }
+      ],
+      "sections": [],
+      "sentencePool": [],
+      "optionPool": [],
+      "matchingAnswers": [],
+      "speakingPrompts": [],
+      "collaborativePrompts": [],
+      "discussionQuestions": [],
+      "bulletPoints": [],
+      "partNumber": 3,
+      "audioClips": [],
+      "titlePatternFamily": "concise_statement",
+      "id": "exam-16-part-3",
+      "version": "exam-16-part-3-v2-teacher-repair-case-3",
+      "derivedFromVersion": "pre-teacher-patch-2026-08-31T22:13:44.493Z"
+    },
+    "acceptedExam": null,
+    "changeRecord": {
+      "examId": "exam-16",
+      "sourceVersion": "pre-teacher-patch-2026-08-31T22:13:44.493Z",
+      "newVersion": "exam-16-part-3-v2-teacher-repair-case-3",
+      "part": 3,
+      "question": 17,
+      "originalContent": {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "DECIDE",
+        "transformationFamily": "adjective"
+      },
+      "teacherFeedback": "The DECIDE derivation introduces a forced compound route, so the target must be replaced.",
+      "repairClassification": "TARGET_REPLACEMENT",
+      "revisedContent": {
+        "id": "q1",
+        "number": 17,
+        "type": "word-formation",
+        "stem": "DECIDE",
+        "transformationFamily": "noun",
+        "answer": "decision",
+        "reason": "The noun form 'decision' fits the context of the sentence, indicating the outcome of the action of deciding, while adhering to the instruction of not using a second lexical root."
+      },
+      "originalAnswer": "decision-making",
+      "revisedAnswer": "decision",
+      "reasonForChange": "The Part 3 lexical target is challenged.",
+      "validatorsRun": [
+        {
+          "verdict": "PASS",
+          "reason": "\"decision\" is a direct, unique derivation of \"decide\" in a natural sentence.",
+          "candidateAlternative": null,
+          "repairRecommendation": "None.",
+          "confidence": "high",
+          "lexicalFamily": {
+            "base": "decide",
+            "answer": "decision",
+            "sameLexicalFamily": true,
+            "extraLexicalRootIntroduced": false,
+            "directDerivation": true,
+            "artificialBase": false,
+            "reason": "\"decision\" is a direct member of the DECIDE family.",
+            "validationSource": "reference-family"
+          }
+        },
+        {
+          "verdict": "QUALITY_FAIL",
+          "reason": "Blind solver supplied decisions, not decision."
+        },
+        {
+          "verdict": "PASS",
+          "reason": "Adversarial lexical-family and context checks found no defect."
+        }
+      ],
+      "finalStatus": "QUALITY_FAIL"
+    }
+  },
+  "preservation": {
+    "unchangedQuestions": [
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ],
+    "expected": [
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24
+    ]
+  },
+  "models": {
+    "generator": "gpt-4o-mini",
+    "blindSolver": "gpt-4o-mini",
+    "adversary": "gpt-4o-mini"
+  },
+  "savedAt": "2026-09-22T15:14:20.254Z"
+}

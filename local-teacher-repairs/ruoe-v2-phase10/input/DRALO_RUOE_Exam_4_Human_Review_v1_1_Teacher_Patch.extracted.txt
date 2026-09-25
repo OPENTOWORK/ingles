@@ -1,0 +1,908 @@
+DRALO
+
+RUOE EXAM 4
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+Theme map
+
+Exam 8 deliberately changes direction again after Exam 4. Instead of clustering around digital life, sustainability and fitness, this paper spreads its content across food, tourism, music, hobbies, space, medicine and transport.
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Healthy eating on a budget
+
+2
+
+Open cloze
+
+Tourism & local communities
+
+3
+
+Word formation
+
+Music across generations
+
+4
+
+Key word transformations
+
+Hobbies, crafts & repairing
+
+5
+
+Multiple choice reading
+
+Long-distance space travel
+
+6
+
+Gapped text
+
+Medical innovation
+
+7
+
+Multiple matching
+
+Train versus air travel
+
+Distribution note: this is a strong thematic shift from Exam 7. The only broad overlap is “travel”, but here it is split between tourism/community impact and transport choice rather than unusual sports, digital life or sustainability habits.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Overall thematic variety
+
+
+
+Balance across Parts
+
+
+
+Repeated theme risk vs Exams 5–7
+
+
+
+Overall B2 authenticity
+
+
+
+General reviewer decision
+
+
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Healthy eating on a budget
+
+VISTA ALUMNO
+
+Example:
+
+A) strong    B) strict    C) tight    D) narrow
+
+Answer: C
+
+Text
+
+Eating Well for Less
+
+Many people believe that healthy food is expensive, but that is not always true. If you are living on a (0) ___ budget, a little planning can make a big difference. One useful (1) ___ is to write a shopping list before you go to the supermarket and stick to it. This helps you avoid buying things you do not really need. It is also worth watching (2) ___ special offers, although you should only buy extra items if you know you will use them.
+
+Another way to save money is to base meals (3) ___ simple ingredients such as rice, beans and seasonal vegetables. These are often cheaper and can be used in a wide (4) ___ of dishes. Cooking at home may take more time, but it usually works (5) ___ far less expensive than buying prepared meals. You can also make larger amounts and freeze portions for later. In the long (6) ___, this can reduce waste as well as cost.
+
+Healthy eating does not depend on buying fashionable products. It is more a (7) ___ of making sensible choices and getting the most (8) ___ the food you buy.
+
+Questions
+
+1
+
+A tip
+
+B hint
+
+C clue
+
+D signal
+
+2
+
+A at
+
+B for
+
+C on
+
+D to
+
+3
+
+A by
+
+B with
+
+C from
+
+D on
+
+4
+
+A extent
+
+B collection
+
+C range
+
+D spread
+
+5
+
+A off
+
+B over
+
+C out
+
+D up
+
+6
+
+A term
+
+B distance
+
+C period
+
+D run
+
+7
+
+A matter
+
+B fact
+
+C point
+
+D case
+
+8
+
+A from
+
+B of
+
+C with
+
+D over
+
+Part 1 — Reviewer view
+
+ANSWER KEY
+
+1
+
+A · tip
+
+2
+
+B · for
+
+3
+
+D · on
+
+4
+
+C · range
+
+5
+
+C · out
+
+6
+
+D · run
+
+7
+
+A · matter
+
+8
+
+B · of
+
+TEACHER ATTENTION
+
+• Q2 rebuilt: 'watching for special offers' is natural British English and only 'for' completes the one-word gap; 'on' would require a different verb frame. The rest of Part 1 is unchanged.
+
+• Overall difficulty remains relatively collocation-heavy; no further items were changed because the teacher feedback identified only Q2 as invalid in this Part.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Q2 rebuilt locally; key remains B = for. Re-review overall collocation balance.
+
+
+
+Part 2 — Open cloze
+
+Theme: Tourism & local communities
+
+VISTA ALUMNO
+
+Example: Answer: 0 → as
+
+Text
+
+When Visitors Change a Town
+
+Tourism is often presented (0) ___ a simple success story: more visitors arrive, local businesses earn more money, and jobs are created. In reality, the effects on local communities are rarely quite (9) ___ straightforward. In many places, tourism has allowed historic buildings to be repaired and traditional festivals to survive, which might otherwise have disappeared. At the same time, however, residents sometimes find that their town no longer belongs (10) ___ them in the same way.
+
+One reason for this is that homes may be turned into holiday rentals, leaving fewer places for local people to live. Prices can rise so quickly (11) ___ younger families are forced to move away. Streets that were once quiet may become crowded, and small shops may close if they cannot compete with businesses aimed mainly (12) ___ tourists.
+
+For tourism to benefit everyone, local people need to be involved in planning how it develops. If they are listened (13) ___, they are more likely to support new projects. Visitors also have a role to play: they should respect local customs and remember that they are guests rather (14) ___ owners. Communities are far more likely to welcome tourism when they feel (15) ___ control of it, instead of being shaped (16) ___ it.
+
+Part 2 — Reviewer view
+
+ANSWER KEY
+
+9
+
+so
+
+10
+
+to
+
+11
+
+that
+
+12
+
+at
+
+13
+
+to
+
+14
+
+than
+
+15
+
+in
+
+16
+
+by
+
+TEACHER ATTENTION
+
+• The cloze is structurally clean and the answers are defensible. Check whether Q9 “rarely quite so straightforward” is sufficiently challenging for B2 and whether the set as a whole has enough variety beyond prepositions/linkers.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+No teacher-requested content changes. Keep current Part 2.
+
+
+
+Part 3 — Word formation
+
+Theme: Music across generations
+
+VISTA ALUMNO
+
+Example: (0) ___ (USUAL)   Answer: 0 → unusual
+
+Text
+
+When Playlists Cross the Age Gap
+
+It is no longer (0) ___ (USUAL) to see grandparents and teenagers sharing headphones on the bus. Music streaming has made this kind of connection easier, and many families are surprised by the (17) ___ (VARY) of songs they end up enjoying together. A teenager may introduce a grandparent to a new singer, while an older relative offers stories about the first time a classic track became popular. This exchange creates a sense of (18) ___ (CLOSE) that is hard to find in everyday conversation.
+
+Researchers say that shared listening can also improve (19) ___ (RELATE) between age groups, especially when each person feels their tastes are respected. In community centres, mixed-age choirs are growing in (20) ___ (POPULAR), partly because rehearsals give people a regular reason to meet. Members often say that the most (21) ___ (VALUE) part is not the performance itself but the chance to learn from one another. For younger people, that can be an (22) ___ (EXPECT) benefit. For older singers, music can bring back confidence and encourage active (23) ___ (INVOLVE) in local life. In the end, a song's real power may lie in its (24) ___ (ABLE) to make strangers, and relatives, feel closer.
+
+Part 3 — Reviewer view
+
+ANSWER KEY
+
+17
+
+variety
+
+18
+
+closeness
+
+19
+
+relationships
+
+20
+
+popularity
+
+21
+
+valuable
+
+22
+
+unexpected
+
+23
+
+involvement
+
+24
+
+ability
+
+TEACHER ATTENTION
+
+• Q17 rebuilt: WIDE → width was removed because 'the width of songs' is not idiomatic. The revised item uses VARY → variety in the natural phrase 'the variety of songs'.
+
+• The remaining word-formation items are unchanged. Re-review the overall derivational difficulty, as several transformations are still relatively transparent.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Q17 changed to VARY → variety; remaining items unchanged.
+
+
+
+Part 4 — Key word transformations
+
+Theme: Hobbies, crafts & repairing
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given. There is an example at the beginning (0).
+
+Example: 0. I started collecting stamps when I was ten.BEENI __________________ collecting stamps since I was ten.Answer: 0 → have been
+
+25. People say that local craft clubs are becoming popular again with teenagers.SAIDLocal craft clubs __________________ popular again with teenagers.
+
+26. Mia regrets selling her grandmother's sewing machine online.WISHESMia __________________ her grandmother's sewing machine online.
+
+27. Tom had expected fewer people to read his blog about repairing old radios.THANTom's blog about repairing old radios attracted __________________ he had expected.
+
+28. You should switch off your phone before the photography workshop starts.BETTERYou __________________ your phone before the photography workshop starts.
+
+29. I only learnt to knit because my aunt showed me how to do it.TAUGHTI would not have learnt to knit if my aunt __________________ how to do it.
+
+30. Finn started restoring vintage bicycles two years ago and he still does it now.BEENFinn __________________ vintage bicycles for two years.
+
+Part 4 — Reviewer view
+
+ANSWER KEY
+
+25
+
+are said to be
+
+26
+
+wishes she had not sold
+
+27
+
+more readers than
+
+28
+
+had better switch off
+
+29
+
+had not taught me
+
+30
+
+has been restoring
+
+TEACHER ATTENTION
+
+• Q27 replaced completely. The previous AS transformation did not preserve meaning precisely. The new THAN item tests the same broad comparison area while keeping exact equivalence: 'expected fewer people' → 'attracted more readers than he had expected'.
+
+• No other Part 4 item was changed. Difficulty remains broadly B2-standard; one or two items could be made stronger in a future calibration pass, but there is no correction issue requiring replacement now.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Q27 replaced; new key: more readers than. Other items unchanged.
+
+
+
+Part 5 — Multiple choice reading
+
+Theme: Long-distance space travel
+
+VISTA ALUMNO
+
+Text
+
+Living Beyond Earth
+
+For decades, space travel was presented as a heroic adventure lasting a few thrilling days. Future missions are likely to be very different. A journey to Mars, for example, could take many months, with the crew living in a metal structure no bigger than a small flat. In that situation, success will depend not only on rockets and fuel, but also on whether people can stay healthy, motivated and cooperative when there is no quick way home.
+
+That is why modern mission planning pays almost as much attention to ordinary daily life as to engineering. Researchers now study what astronauts eat, how they sleep and even how they argue. On the International Space Station, these questions matter, but support from Earth is always relatively close. For crews heading much farther away, however, every routine task becomes more important. If the coffee machine breaks in orbit around Earth, it is irritating; if the water recycling system fails halfway to Mars, it may threaten the whole mission.
+
+Food offers a good example of this change in thinking. Early space meals were designed simply to be safe, light and easy to store. Future crews will still need practical food, but they may also need meals that provide comfort and variety. Some scientists are testing ways of growing salad leaves and herbs in small onboard gardens, not because astronauts cannot survive without fresh flavour, but because familiar smells and colours may improve mood. A handful of green plants might therefore do more than supply vitamins: it could remind the crew that life exists beyond plastic walls and computer screens.
+
+Psychologists are equally interested in how groups behave over time. Films often show dramatic personal conflicts in space, yet real danger may come from quieter problems: boredom, tiredness and tiny habits that become unbearable after months together. In isolation studies on Earth, people have reported that the hardest part was not technical work but the lack of privacy and the feeling that every action was being observed. This suggests that future spacecraft will need not only excellent equipment but also carefully designed private corners where crew members can briefly escape one another.
+
+Communication with Earth will also change. At great distances, messages can take many minutes to arrive, making ordinary conversation impossible. As a result, astronauts will have to solve more problems without immediate advice from mission control. This does not mean that experts on Earth will become unimportant. Rather, the balance of responsibility may shift. Space agencies have traditionally trained astronauts to follow detailed procedures, but future crews may need greater freedom to adapt when reality does not match the manual.
+
+Even leisure, once treated as a minor issue, is becoming part of serious planning. Engineers have considered virtual windows, recorded natural sounds and digital libraries so that astronauts can choose how to relax. Critics sometimes dismiss such ideas as luxuries, arguing that every kilogram launched into space should have a clear practical use. Yet this view assumes that mental wellbeing is somehow separate from mission performance. In fact, a crew that can rest properly and recover from stress may be safer and more efficient than one supplied only with the bare essentials.
+
+None of this guarantees that life on a long mission will be comfortable. Space will remain cramped, risky and deeply unfamiliar. But the image of astronauts as fearless machine operators is fading. The more experts learn about long-distance travel, the clearer it becomes that future missions will depend on human needs that are surprisingly down to Earth. In the end, reaching another planet may require us to think less about escaping ordinary life and more about how to carry the best parts of it with us.
+
+Questions
+
+31. What is the writer's main point in the first two paragraphs?A. Long space missions will succeed only if technical systems are kept as simple as possible.B. Future space travel will depend as much on managing human life as on advanced technology.C. Missions beyond Earth orbit are less attractive because everyday tasks become too difficult.D. Scientists are now more interested in astronauts' behaviour than in building spacecraft.
+
+32. Why does the writer compare a broken coffee machine with a failed water recycling system?A. To show that some equipment problems become far more serious on distant missions.B. To suggest that astronauts in Earth orbit already face unnecessary discomfort.C. To explain why water will replace other drinks on future spacecraft.D. To criticise designers for paying attention to unimportant machinery.
+
+33. What can be inferred from the paragraph about growing plants on board?A. Fresh food will probably replace stored meals completely.B. Scientists have proved that astronauts work better after gardening.C. Plants may be valuable mainly because of their psychological effect.D. Space agencies are more concerned with appearance than nutrition.
+
+34. According to the writer, what may be the most difficult social problem on a long mission?A. Crew members refusing to follow safety procedures.B. Open arguments caused by stressful technical work.C. A lack of trust between astronauts and researchers on Earth.D. Small irritations becoming harder to tolerate over time.
+
+35. What is the writer's attitude towards giving future astronauts more independence from mission control?A. doubtful, because crews should still rely mainly on Earth-based expertsB. supportive, because delays will make complete dependence on Earth unrealisticC. surprised, because astronauts have never had to make important decisions beforeD. unconcerned, because communication technology will soon remove any delays
+
+36. In the final paragraph, what does the writer mean by 'human needs that are surprisingly down to Earth'?A. People in space will eventually lose interest in exploring other planets.B. Astronauts will need training that is similar to ordinary office work.C. The basic comforts and routines of normal life remain important even in space.D. Space travel will become common only when it is affordable for everyone.
+
+Part 5 — Reviewer view
+
+ANSWER KEY
+
+31
+
+B
+
+32
+
+A
+
+33
+
+C
+
+34
+
+D
+
+35
+
+B
+
+36
+
+C
+
+TEACHER ATTENTION
+
+• Part 5 remains unchanged. Q32 and Q36 should still be reviewed for distractor strength, but no second defensible answer was identified and no teacher-requested rewrite is necessary.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+No content changes. Keep Q32/Q36 under reviewer attention for distractor strength only.
+
+
+
+Part 6 — Gapped text
+
+Theme: Medical innovation
+
+VISTA ALUMNO
+
+Text
+
+Small Breakthroughs, Big Changes
+
+When people hear the phrase ‘medical innovation’, they often imagine dramatic scenes: a surgeon controlling a robot or scientists creating an entirely new organ in a laboratory. In reality, many of the advances that improve patients’ lives are less spectacular. They are often small changes to existing treatments, devices or systems, but they can still make an enormous difference. (37) For patients, that can mean less pain, shorter recovery times and more control over everyday life.
+
+One area where this is clear is diabetes care. In the past, many people had to check their blood sugar by taking a drop of blood several times a day. Now, small sensors worn on the skin can measure levels continuously and send the information to a phone. (38) Instead of reacting to a problem after it has happened, users can often prevent it by eating, resting or adjusting medication sooner.
+
+Another important change has come in hearing technology. Traditional hearing aids were useful, but many users complained that they amplified every sound equally, making busy places exhausting. Newer devices can separate speech from background noise far more effectively. They can also connect directly to phones, televisions and public sound systems. (39) As a result, many people feel more confident about going to restaurants, attending meetings or simply chatting in a crowded room.
+
+Not all innovations are pieces of equipment. Some involve rethinking how care is delivered. In several countries, hospitals now allow certain patients to recover at home while being monitored remotely. Nurses visit when necessary, and medical staff review temperature, heart rate and other readings online. (40) For many patients, sleeping in their own bed and staying close to family can be as valuable as the treatment itself.
+
+3D printing is also beginning to change medicine in practical ways. It is already used to produce detailed models of a patient’s body before complex operations. Surgeons can study these models in advance and plan difficult procedures more carefully. (41) This matters because a slightly better fit can reduce discomfort and encourage people to keep using the item they need.
+
+Perhaps the most striking progress, however, is in rehabilitation. People who have lost movement after an injury or stroke can now practise with robotic supports that guide their arms or legs through repeated actions. The machines do not replace therapists, but they allow patients to perform more precise movements more often. (42) Even when recovery is slow, noticing these small gains can be highly motivating.
+
+Of course, not every promising idea becomes a success. New products can be expensive, and some are difficult to make widely available. Doctors and patients also need time to learn how to use them properly. Even so, the direction is encouraging. Medical progress is not only about discovering cures; it is also about making daily life safer, easier and more independent for millions of people.
+
+Sentences
+
+A  This gives doctors a fuller picture, but it also gives patients early warnings when something is beginning to go wrong.
+
+B  In some cases, the same technology can then be used to create personalised supports, such as braces or artificial limbs.
+
+C  This shift may sound modest, yet it is exactly how modern medicine often moves forward.
+
+D  Together, these improvements reduce the effort required to follow speech in busy surroundings.
+
+E  That approach is not suitable for everyone, but it can free up hospital beds and reduce the risk of infection.
+
+F  Progress is measured not only by major milestones, but by tiny improvements from one session to the next.
+
+G  Researchers are also developing new vaccines that could protect people against several diseases at once.
+
+Part 6 — Reviewer view
+
+STORED ANSWER KEY
+
+37
+
+C
+
+38
+
+A
+
+39
+
+D
+
+40
+
+E
+
+41
+
+B
+
+42
+
+F
+
+TEACHER ATTENTION
+
+• Q39 rebuilt while preserving key D. The previous sentence about 'treatment' did not connect to hearing technology. The new D refers directly to the improvements just described and provides a clear bridge to the following consequence about confidence in restaurants, meetings and crowded conversations.
+
+• Because Part 6 depends on discourse cohesion, Q39 should be re-solved in human review to confirm D is the unique fit; the other five gaps and option letters are unchanged.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Q39 option D replaced; key remains D. Re-check unique fit across all gaps.
+
+
+
+Part 7 — Multiple matching
+
+Theme: Train versus air travel
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+43 Who changed their mind after an unexpected event showed that their usual form of transport was not as dependable as they had believed?
+
+44 Who suggests that where they live has a strong influence on which option they normally choose?
+
+45 Who makes practical use of the journey itself before reaching their destination?
+
+46 Who admits to liking rail travel for emotional reasons rather than purely sensible ones?
+
+47 Who describes a single rail trip as the experience that persuaded them to reconsider their habits?
+
+48 Who mentions that travelling with other people affects their decision?
+
+49 Who feels that the total cost difference between the two methods is sometimes smaller than it first appears?
+
+50 Who believes that travel should involve noticing the places between the start and the finish?
+
+51 Whose preference might change if their home had better access to the rail network?
+
+52 Who accepts that choosing rail may involve more forward planning?
+
+A – Liam Porter
+
+I used to book flights without thinking twice, mainly because my work involved short notice meetings in different cities. Initially, I saw trains as the slower option for people with time to spare. That changed after a winter storm left me sleeping on an airport bench while the rail services were mostly back to normal by morning. Since then, I still fly for some journeys abroad, yet for trips within the country I nearly always choose the train. I can open my laptop, answer emails and arrive feeling as if the day has already started, rather than as if I have survived an obstacle course. It is usually pricier than the budget flights my colleagues hunt down, although once I add airport transfers and parking, the gap shrinks. For me, the calmer experience matters as much as the timetable.
+
+B – Sonia Malik
+
+My choice between rail and air is largely practical rather than ideological. I live in a town with a small airport twenty minutes away, while the nearest mainline station is a bus ride and a long wait from my front door. Because of that, flying often wins for family visits, especially when I am travelling with two energetic children and several bags. People assume airports are stressful, but I find them manageable if I check in online and keep expectations realistic. However, I would never claim planes are always better. Last summer, after a delayed departure and a missed connection, I spent more than twelve hours getting to somewhere that is only six by train. Meanwhile, the children were exhausted. If a direct rail service existed from where I live, I suspect I would switch immediately for many journeys.
+
+C – Harriet Doyle
+
+I am one of those people who genuinely enjoy the journey itself, so trains suit me perfectly. Looking out of the window helps me settle into a trip in a way flying never has. At airports, everything seems designed to hurry you from one queue to another, and I arrive already irritated. By contrast, on trains I read, daydream or chat to whoever is beside me. That said, I am not romantic about it. I have had cramped seats, broken air conditioning and one memorable evening when we stopped in open countryside for two hours with no explanation. Even so, I remain loyal to rail because it feels connected to real places instead of sealed off from them. Friends tell me I should take cheaper flights for weekend breaks, yet I would rather spend longer travelling than give up that sense of gradual arrival.
+
+D – Noah Greene
+
+Until recently, I had hardly travelled by train beyond my daily commute. I assumed long-distance rail would be unreliable and old-fashioned, so for years I booked flights automatically, especially for city breaks in Europe. Then my partner persuaded me to try an overnight train to the continent instead of flying. Frankly, I expected to regret it. Yet the trip turned out to be the highlight of the holiday: we boarded in the evening, had dinner, slept surprisingly well and woke up in the centre of our destination. Since then, I have become far more interested in planning routes that avoid airports altogether, although I know this approach only works if you organise well in advance. The one drawback is that rail journeys sometimes demand more research and flexibility. Even so, I now see travel time as part of the experience rather than wasted hours to be cut.
+
+Part 7 — Reviewer view
+
+ANSWER KEY
+
+43
+
+A
+
+44
+
+B
+
+45
+
+A
+
+46
+
+C
+
+47
+
+D
+
+48
+
+B
+
+49
+
+A
+
+50
+
+C
+
+51
+
+B
+
+52
+
+D
+
+TEACHER ATTENTION
+
+• Q43 and Q47 remain unchanged: the two change-of-mind items are sufficiently differentiated by their evidence. Q45, Q51 and Q52 have been paraphrased more indirectly to reduce keyword matching while preserving the same answer keys.
+
+• No profile text or answer key was changed in Part 7.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+Q45, Q51 and Q52 rephrased for greater paraphrase distance; keys unchanged.
+
+
+
+Final human review sheet
+
+Complete this page after reviewing all seven Parts. Mechanical/database keys are not a substitute for pedagogical approval.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Part 1 decision
+
+
+
+Part 2 decision
+
+
+
+Part 3 decision
+
+
+
+Part 4 decision
+
+
+
+Part 5 decision
+
+
+
+Part 6 decision
+
+
+
+Part 7 decision
+
+
+
+Overall theme variety
+
+
+
+Overall Cambridge B2 authenticity
+
+
+
+Final decision: APPROVE / ADJUST / REPLACE
+
+
+
+Teacher patch applied: Part 1 Q2; Part 3 Q17; Part 4 Q27; Part 6 Q39; Part 7 Q45/Q51/Q52. Parts 2 and 5 unchanged. Re-review all patched items before approval.
+
+Status: PENDING HUMAN REVIEW · v1.1 teacher feedback patch
+

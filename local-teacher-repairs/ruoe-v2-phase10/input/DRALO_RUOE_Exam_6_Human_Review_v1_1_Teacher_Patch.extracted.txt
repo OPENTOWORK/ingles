@@ -1,0 +1,918 @@
+DRALO
+
+RUOE EXAM 6
+
+Cambridge B2 First · Reading & Use of English
+
+Human Review · British English · v1.1 · Teacher feedback patch
+
+PENDING HUMAN REVIEW
+
+Theme map
+
+Exam 10 continues the planned topic rotation. Compared with Exam 6, it moves away from cooking, careers, AI study tools, home organisation, social media and hobbies, and instead covers stress management, wildlife conservation, games in education, regional food culture, volunteering, deep-sea discovery and sleep.
+
+Part
+
+Task
+
+Theme
+
+1
+
+Multiple-choice cloze
+
+Stress management & everyday habits
+
+2
+
+Open cloze
+
+Wildlife conservation & communities
+
+3
+
+Word formation
+
+Learning through video games
+
+4
+
+Key word transformations
+
+Regional food & travel
+
+5
+
+Multiple choice reading
+
+Volunteering & employability
+
+6
+
+Gapped text
+
+Deep-sea science & archaeology
+
+7
+
+Multiple matching
+
+Sleep, work & performance
+
+Distribution note: there is some broad continuity with travel and work from earlier papers, but the treatment is different: regional food culture rather than tourism behaviour, and volunteering/sleep rather than career choice. Science is split between conservation, games research and deep-sea exploration.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Overall thematic variety
+
+
+
+Balance across Parts
+
+
+
+Repeated theme risk vs Exams 7–9
+
+
+
+Overall B2 authenticity
+
+
+
+General reviewer decision
+
+
+
+
+
+Part 1 — Multiple-choice cloze
+
+Theme: Stress management & everyday habits
+
+VISTA ALUMNO
+
+Example:
+
+A) held    B) set    C) under    D) placed
+
+Answer: C
+
+Text
+
+Small Changes, Less Stress
+
+Many people say they are constantly (0) ___ pressure, but experts believe that stress can often be reduced through small daily habits. One useful idea is to (1) ___ aside a few minutes each morning to plan the day. This can stop minor problems from building (2) ___ and becoming harder to deal with later on.
+
+Another helpful technique is to pay attention to what causes stress in the first (3) ___. Some people feel anxious because they take (4) ___ too many tasks, while others simply do not leave enough time between activities. Once you understand your own patterns, it becomes easier to make sensible changes.
+
+Physical movement also has a positive (5) ___ on mood. A short walk, for example, can help you calm down and return to work with a clear (6) ___. Finally, it is worth remembering that nobody manages stress perfectly all the time. The aim is not to remove it completely, but to recognise when it starts to (7) ___ your ability to focus or (8) ___ with everyday life.
+
+Questions
+
+1
+
+A set
+
+B put
+
+C keep
+
+D take
+
+2
+
+A over
+
+B out
+
+C up
+
+D off
+
+3
+
+A point
+
+B place
+
+C part
+
+D section
+
+4
+
+A on
+
+B in
+
+C up
+
+D over
+
+5
+
+A result
+
+B response
+
+C benefit
+
+D effect
+
+6
+
+A head
+
+B brain
+
+C thought
+
+D sense
+
+7
+
+A affect
+
+B effect
+
+C result
+
+D involve
+
+8
+
+A interrupt
+
+B disturb
+
+C interfere
+
+D prevent
+
+Part 1 — Reviewer view
+
+ANSWER KEY
+
+1
+
+A · set
+
+2
+
+C · up
+
+3
+
+B · place
+
+4
+
+A · on
+
+5
+
+D · effect
+
+6
+
+A · head
+
+7
+
+A · affect
+
+8
+
+C · interfere
+
+TEACHER ATTENTION
+
+• Q6 has been rewritten as the natural British English collocation 'with a clear head'. The distractors no longer force the less idiomatic 'fresh mind'.
+
+• Q7 has been rebuilt as a lexical distinction ('affect your ability to focus') rather than the highly predictable 'remove it entirely'.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 2 — Open cloze
+
+Theme: Wildlife conservation & communities
+
+VISTA ALUMNO
+
+Example: Answer: 0 → of
+
+Text
+
+Saving Species Together
+
+Many people think protecting endangered animals is the job (0) ___ scientists or governments alone. In fact, conservation works best when local people are involved, because they know the land better than anyone (9) ___. In some regions, farmers are paid to leave space for wild animals, while tourists are asked not (10) ___ disturb nesting areas. These measures may seem small, but they can make a real difference.
+
+One reason some projects fail is that they focus only on a single species, instead of the whole environment it depends (11) ___. If a forest is cut down, for example, birds may survive for a short time, but they will eventually have nowhere (12) ___ go. Successful programmes therefore try to protect habitats as well as animals.
+
+There is also growing evidence that young people can contribute more than many adults expect. Schools that teach children about wildlife often find that families become (13) ___ willing to support local projects. As a result, communities are more likely to take pride (14) ___ nearby species and report illegal hunting. Without public support, even the best plans may not succeed, no matter (15) ___ carefully they are designed. Protecting species is something we all have a part (16) ___ play in.
+
+Part 2 — Reviewer view
+
+ANSWER KEY
+
+9
+
+else
+
+10
+
+to
+
+11
+
+on
+
+12
+
+to
+
+13
+
+more
+
+14
+
+in
+
+15
+
+how
+
+16
+
+to
+
+TEACHER ATTENTION
+
+• No teacher-requested content change applied. The repeated 'to' answers and overall difficulty remain a review point, but there is no stated blocking issue.
+
+• Q9 and Q15 remain valid but relatively transparent; keep under review for future difficulty calibration rather than altering this approved content patch.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 3 — Word formation
+
+Theme: Learning through video games
+
+VISTA ALUMNO
+
+Example: (0) ___ (SCIENCE) → scientific
+
+Text
+
+Learning through play
+
+For years, the idea that video games could support learning was dismissed as unproven. However, recent (0) ___ (SCIENCE) research suggests that some games may offer real educational value. Good games demand close attention, quick decisions and the (17) ___ (ABLE) to solve problems under pressure. Players often improve through repeated failure, which encourages a (18) ___ (WILL) to try new strategies rather than give up.
+
+In classrooms, teachers have used historical adventure games to increase students’ (19) ___ (CURIOUS) about the past. In language learning, online games can create a more (20) ___ (INTERACT) experience than traditional exercises, especially when players need to cooperate. This kind of active involvement may lead to better (21) ___ (RETAIN) of new words and ideas.
+
+Of course, not every game is useful. Some are purely entertaining, while others contain material that is (22) ___ (SUIT) for younger learners. Success also depends on careful planning. Without clear goals, the educational benefits may disappear (23) ___ (ENTIRE). Even so, the continued (24) ___ (INCLUDE) of games in education seems increasingly likely.
+
+Part 3 — Reviewer view
+
+STORED ANSWER KEY
+
+17
+
+ability
+
+18
+
+willingness
+
+19
+
+curiosity
+
+20
+
+interactive
+
+21
+
+retention
+
+22
+
+unsuitable
+
+23
+
+entirely
+
+24
+
+inclusion
+
+TEACHER ATTENTION
+
+• Q21 has been replaced with RETAIN → retention, giving the natural phrase 'better retention of new words and ideas' instead of the forced 'remembrance'.
+
+• Q24 has been strengthened from LIKELY → unlikely to INCLUDE → inclusion, reducing the highly predictable negative-prefix cue while preserving the passage meaning.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 4 — Key word transformations
+
+Theme: Regional food & travel
+
+VISTA ALUMNO
+
+For questions 25–30, complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between two and five words, including the word given.
+
+Example: It was too late to book a table at the famous seafood restaurant.ENOUGHWe were not __________________ a table at the famous seafood restaurant.Answer: early enough to book
+
+25. The restaurant was so popular that we had to book three days ahead.SUCHIt was __________________ we had to book three days ahead.
+
+26. I regret not asking the market seller how to cook those beans.WISHI __________________ the market seller how to cook those beans.
+
+27. The soup in that mountain village was better than any other dish I tried on the trip.BESTThat soup in the mountain village __________________ I tried on the trip.
+
+28. We arrived at the bakery too late to try its famous almond pastries.ENOUGHWe did not arrive __________________ its famous almond pastries.
+
+29. It wasn't necessary for us to order dessert because the host had already brought fruit.NEEDWe __________________ dessert because the host had already brought fruit.
+
+30. The market closed before we arrived.BYThe market __________________ we arrived.
+
+Part 4 — Reviewer view
+
+STORED ANSWER KEY
+
+25
+
+such a popular restaurant that
+
+26
+
+wish I had asked
+
+27
+
+was the best dish
+
+28
+
+early enough to try
+
+29
+
+did not need to order
+
+30
+
+had closed by the time
+
+TEACHER ATTENTION
+
+• Q25 has been rebuilt as a SO → SUCH transformation requiring a five-word noun-phrase reconstruction: 'such a popular restaurant that'.
+
+• Q27 remains valid but relatively direct; it is retained because the set now contains greater structural variety elsewhere.
+
+• Q30 has been rebuilt with BY → 'had closed by the time', adding tense recovery and a stronger restructuring step than straightforward reported advice.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 5 — Multiple choice reading
+
+Theme: Volunteering & employability
+
+VISTA ALUMNO
+
+Read the text and choose the answer (A, B, C or D) which you think fits best according to the text.
+
+Text
+
+The Unexpected Value of Volunteering
+
+When students think about improving their job prospects, they often imagine expensive courses, polished CVs and hours spent online searching for internships. Volunteering rarely appears at the top of the list. It is still seen by some as something generous but separate from professional life, a pleasant extra for people with spare time. Yet employers are increasingly interested in applicants who have chosen to work without pay, not because unpaid work is automatically impressive, but because it can reveal qualities that are difficult to teach in a classroom.
+
+One reason is that volunteering places people in situations where they must act rather than simply discuss. A university seminar may explore teamwork in theory, but helping to organise a local sports event or supporting staff in a charity shop demands cooperation in real time. Volunteers often have to solve small problems quickly, speak to strangers and deal with the unexpected. None of this turns someone instantly into the ideal employee, of course. However, it does provide evidence that a person can cope when instructions are incomplete and conditions are less than perfect.
+
+This practical side matters because many employers are cautious about grades on their own. A strong academic record suggests intelligence and determination, but not necessarily reliability or initiative. Managers know that a new recruit may understand the theory of customer service and still struggle when faced with an impatient customer or a busy office. Volunteering can help close that gap. A candidate who has spent Saturday mornings coordinating food-bank deliveries or running activities for children is able to point to specific experience rather than offering vague claims about being organised and good with people.
+
+There is another, less obvious advantage. Volunteering can widen a person's view of work itself. Someone helping at an environmental project may discover that they enjoy planning tasks more than carrying them out, while a volunteer role in a museum might lead to an interest in communications rather than history. In this sense, unpaid work is not just useful for getting a job; it can also prevent people from chasing the wrong one. Career advisers often talk about finding your strengths, but many people only recognise them when they are doing something that feels meaningful.
+
+That said, volunteering is not a magic key that opens every door. Employers can usually tell when applicants mention it simply because they think they should. Listing a single afternoon spent planting trees will not transform a weak application, and pretending to care about a cause is risky in interview, where enthusiasm is difficult to fake for long. The real benefit comes when people reflect on what they learned. Even routine tasks can become valuable examples if applicants explain clearly how they developed patience, confidence or judgement.
+
+For this reason, students should perhaps think less about which volunteer role will look most impressive and more about which one they are likely to take seriously. The best experiences are often local and ordinary: helping at a youth club, assisting at a community festival or supporting an elderly neighbour with shopping and technology. Such activities may sound modest, but they involve trust, consistency and contact with others. In a competitive job market, those qualities can matter as much as technical knowledge. Volunteering will not replace qualifications, but it can give them a more human shape.
+
+Questions
+
+31. What is the writer's main point in the article?A. Volunteering is becoming more valuable to employers because it can show personal qualities that qualifications alone may not reveal.B. Volunteering is now a more effective route into employment than formal education for most young people.C. Students should avoid spending money on career courses until they have completed some volunteer work.D. Employers mainly use volunteering to decide whether an applicant is suitable for customer-facing roles.
+
+32. In the second paragraph, what does the writer suggest is especially useful about volunteering?A. It allows volunteers to receive clear guidance from experienced staff.B. It gives people the chance to apply skills in unpredictable real-life situations.C. It teaches technical abilities that are rarely covered in university courses.D. It offers a safer environment for making mistakes than paid employment does.
+
+33. Why does the writer mention 'an impatient customer or a busy office' in the third paragraph?A. To argue that customer service experience is more useful than academic success.B. To criticise managers who expect too much from inexperienced workers.C. To illustrate the kind of pressure that academic achievement does not always prepare people for.D. To show that volunteering usually provides better training than most entry-level jobs.
+
+34. What is the purpose of the fourth paragraph?A. To explain why some volunteer roles are more demanding than they first appear.B. To suggest that volunteering can help people understand which careers suit them.C. To show that unpaid work is most useful when it leads directly to a job offer.D. To warn readers that career advisers often give unhelpful advice about employment.
+
+35. What is the writer's attitude towards mentioning volunteering on a job application?A. It is worthwhile only if the role involved major responsibility.B. It is generally unnecessary unless the employer specifically asks for it.C. It is useful, but only when applicants can genuinely explain what they gained from it.D. It is risky because interviewers tend to distrust all unpaid work.
+
+36. In the final paragraph, what does 'those qualities' refer to?A. The ability to choose volunteer roles that seem impressive to employersB. A combination of trustworthiness, regular commitment and dealing with peopleC. Experience of working in youth clubs, festivals and neighbourhood projectsD. Technical knowledge developed through local community activities
+
+Part 5 — Reviewer view
+
+ANSWER KEY
+
+31
+
+A
+
+32
+
+B
+
+33
+
+C
+
+34
+
+B
+
+35
+
+C
+
+36
+
+B
+
+TEACHER ATTENTION
+
+• No teacher-requested content change applied. The passage remains coherent and the answer set is retained as reviewed.
+
+• Q31 and Q35 remain useful difficulty-review points for future calibration, but no validity problem was identified.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 6 — Gapped text
+
+Theme: Deep-sea science & archaeology
+
+VISTA ALUMNO
+
+Six sentences have been removed from the article. Choose from the sentences A–G the one which fits each gap. There is one extra sentence which you do not need to use.
+
+Text
+
+What the Sea Keeps Hidden
+
+For centuries, the deep sea was imagined as an empty and rather lifeless place. Divers could only reach shallow water, and early maps showed huge areas of ocean floor as blank spaces. That picture has changed dramatically in the last few decades, as better submarines, cameras and sensors have allowed researchers to explore further than ever before. (37) As a result, the seabed is now seen not as a flat desert, but as a varied landscape full of life, movement and surprising discoveries.
+
+One of the most dramatic moments came when scientists first found hydrothermal vents in the Pacific Ocean. These are cracks in the seabed where extremely hot water, rich in minerals, pours out from below the Earth's surface. (38) Yet around these dark openings, researchers discovered thick communities of tube worms, crabs and bacteria that were thriving without any sunlight at all.
+
+That finding forced biologists to rethink one of their most basic assumptions. Until then, nearly all known ecosystems were thought to depend, directly or indirectly, on energy from the Sun. In vent communities, however, bacteria gain energy from chemicals released by the Earth itself, and other creatures feed on them. (39) It also raised new questions about whether similar forms of life might exist on other planets or moons with oceans beneath ice.
+
+Discoveries beneath the sea are not limited to living things. Shipwrecks, tools and even entire lost settlements have been found underwater, preserved in mud or cold, dark conditions. Marine archaeologists say the sea can act like a giant storage room, protecting objects that would quickly rot or break apart on land. (40) In some cases, a wreck does more than reveal a single disaster: it can offer a detailed picture of trade, diet and daily routine in a past society.
+
+Modern technology has made this kind of work far more precise. Remotely operated vehicles can stay underwater for hours, collecting samples and sending back high-quality images. Powerful scanning systems can also build detailed maps of the seabed before anyone decides where to explore more closely. (41) Instead of relying on chance, research teams can now compare data, identify unusual shapes and return to exact spots again and again.
+
+However, greater access brings new problems. Deep-sea tourism, fishing and plans for underwater mining are expanding into places that were once difficult to reach. Scientists worry that habitats could be damaged before they are properly understood, especially because many deep-sea species grow slowly and may take decades to recover. (42) For that reason, several research groups are calling for stronger international rules to protect vulnerable areas before commercial activity increases.
+
+The sea still covers more than two thirds of the planet, and much of it remains unexplored. Each expedition adds a few more details to a picture that is still incomplete. What lies below is not simply a collection of strange creatures or sunken objects, but a record of how Earth works and how people have lived on it. The more we discover, the clearer it becomes that the ocean floor is one of the world's last great frontiers.
+
+Sentences
+
+A  This changed ideas not only about the deep ocean, but about the possible limits of life itself.
+
+B  Among the items recovered are ordinary objects such as bowls, ropes and seeds, which can reveal far more about daily life than treasure can.
+
+C  Before that, many experts believed nothing could survive in such heat and darkness.
+
+D  These tools have revealed mountains, trenches and living communities in places that earlier maps showed only as blank space.
+
+E  This has transformed underwater research from a largely uncertain search into something much more systematic.
+
+F  Once damage is done in the deep ocean, it may be almost impossible to reverse.
+
+G  By contrast, many coastal towns now use underwater museums to attract visitors during the summer season.
+
+Part 6 — Reviewer view
+
+ANSWER KEY
+
+37
+
+D
+
+38
+
+C
+
+39
+
+A
+
+40
+
+B
+
+41
+
+E
+
+42
+
+F
+
+TEACHER ATTENTION
+
+• Q37 has been strengthened: option D now supplies concrete discoveries made possible by the improved technology, so the following 'As a result' has a clear cause.
+
+• Q40 has been strengthened: option B now links preserved everyday objects directly to what archaeologists can learn about daily life, making its position more structurally specific.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Part 7 — Multiple matching
+
+Theme: Sleep, work & performance
+
+VISTA ALUMNO
+
+Read the article in which people talk about their experiences. For each question, choose from the people (A–D). The people may be chosen more than once.
+
+43 Who changed their mind after a specialist explained the importance of rest?
+
+44 Who realised they could no longer rely on their attention to detail?
+
+45 Who says sleeping well improved their ability to make practical use of their ideas?
+
+46 Who mentions that people close to them have noticed a positive difference?
+
+47 Who admits they once admired behaviour that they now consider unwise?
+
+48 Who decided that responding to entertainment or social contact was less important than being ready for work?
+
+49 Who refers to a habit that seemed productive because it happened when there were fewer interruptions?
+
+50 Who warns that trying to continue for too long can create danger even if nothing goes wrong in the end?
+
+51 Who says that a regular change in daily routine began as something they did not expect to continue?
+
+52 Who changes access to a device as part of preparing for particularly demanding periods at work?
+
+A – Leah Morton, junior doctor
+
+During medical school, I treated sleep as optional. If I had an early placement, I stayed up revising and assumed coffee would solve everything. Initially, that seemed true, yet once I started work in a hospital, the effect of poor sleep became impossible to ignore. I wasn't just tired; I was slower, less patient and far too likely to forget small details. One night shift, I wrote down a dosage and then immediately checked it again because I no longer trusted my own concentration. Since then, I've become quite protective of my routine. I still can't control every shift pattern, of course, but I prepare for busy weeks by going to bed earlier and keeping my phone out of reach. Friends joke that I've become boring. However, feeling alert at work matters more to me than late-night messages or another episode of a series.
+
+B – Noah Price, university rowing coach
+
+People assume my athletes need speeches about discipline, whereas what they often need is permission to rest. A few years ago, I used to praise anyone who trained before dawn and studied late into the evening. Meanwhile, several of them were getting ill, arguing with teammates and performing worse in races. It took one frank conversation with our team physiotherapist to make me reconsider. She pointed out that we were planning recovery sessions carefully but ignoring the simplest kind of recovery there is. Since then, I ask students about their sleeping habits as seriously as I ask about nutrition. I still admire determination, although I'm no longer impressed by people who boast that they manage on four or five hours. In my experience, that attitude sounds tough but usually leads to poor decisions, especially when pressure builds before a competition.
+
+C – Priya Shah, software designer
+
+For years, I believed my best ideas arrived after midnight. My flat was quiet then, emails stopped, and I enjoyed the feeling that everyone else had switched off while I was still creating. The problem was that mornings became a blur. I worked from home, so I could hide it for a while, yet during online meetings I sometimes missed obvious points or sounded uninterested when I was simply exhausted. Last winter, I agreed to join a colleague for an early walk before work. I expected it to last a week; instead, it changed my routine completely. I now shut my laptop at a sensible time, and although I occasionally lose an evening of work, I gain much clearer thinking the next day. Strangely, better sleep hasn't made me less imaginative. If anything, it has helped me turn ideas into plans I can actually follow.
+
+D – Gareth Ellis, long-distance lorry driver
+
+I've spent most of my working life on the road, so I know exactly how tempting it is to keep going when you're only an hour from home. Earlier in my career, I did that far too often. I told myself opening the window or turning up the radio was enough. It wasn't. Nothing serious happened, thankfully, but there were moments when the motorway signs seemed to appear out of nowhere, which frightened me more than I admitted at the time. Nowadays I plan breaks before I set off and use service stations without feeling guilty about lost time. Some drivers still see sleep as something that gets in the way of earning money. Yet I think that's short-sighted. Being awake for long stretches doesn't prove commitment; it simply increases the chance of mistakes. My family certainly prefers the calmer version of me that arrives home after proper rest.
+
+Part 7 — Reviewer view
+
+ANSWER KEY
+
+43
+
+B
+
+44
+
+A
+
+45
+
+C
+
+46
+
+D
+
+47
+
+B
+
+48
+
+A
+
+49
+
+C
+
+50
+
+D
+
+51
+
+C
+
+52
+
+A
+
+TEACHER ATTENTION
+
+• Q43 and Q47 still test distinct aspects of Noah's changed attitude to rest, but Q52 has been replaced with a separate Leah detail to reduce semantic concentration on the same profile.
+
+• Q46 and Q50 remain on Gareth for different evidence (family noticing a calmer version of him vs the danger of continuing while tired); the distinction remains clear.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Natural British English
+
+
+
+B2 level & difficulty
+
+
+
+Exam authenticity
+
+
+
+Distractor / key quality
+
+
+
+Ambiguity or multiple answers
+
+
+
+Suggested change
+
+
+
+
+
+Final human review sheet
+
+Complete this page after reviewing all seven Parts. Mechanical/database keys are not a substitute for pedagogical approval.
+
+REVIEW FIELD
+
+NOTES / DECISION
+
+Part 1 decision
+
+
+
+Part 2 decision
+
+
+
+Part 3 decision
+
+
+
+Part 4 decision
+
+
+
+Part 5 decision
+
+
+
+Part 6 decision
+
+
+
+Part 7 decision
+
+
+
+Overall theme variety
+
+
+
+Overall Cambridge B2 authenticity
+
+
+
+Final decision: APPROVE / ADJUST / REPLACE
+
+
+
+Teacher feedback patch applied: Part 1 Q6/Q7 rebuilt; Part 3 Q21/Q24 strengthened; Part 4 Q25/Q30 made less mechanical; Part 6 Q37/Q40 cohesion strengthened; Part 7 Q52 diversified. Parts 2 and 5 unchanged.
+
+Status: PENDING HUMAN REVIEW
+
