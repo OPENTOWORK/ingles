@@ -61,6 +61,12 @@ function itemFormat(item) {
 
 const SESSION_SIZE = 10;
 
+const TEXT_PLACEHOLDERS = {
+  dictation: 'Type what you hear',
+  translate_to_english: 'Write it in English',
+  translate_to_spanish: 'Write it in Spanish',
+};
+
 /** True/False keeps its order; every other new choice type is shown shuffled. */
 const SHUFFLED_CHOICE_FORMATS = new Set(TRAINING_TYPE_FORMATS.filter((format) => format !== 'listen_true_false'));
 
@@ -517,7 +523,7 @@ export default function TrainingGapFillExercise({
                 onChange={(gapIndex, value) => updateValues((current) => ({ ...current, [gapIndex]: value }))}
               />
             ) : item.sentence ? (
-              <p className={styles.sentence}>
+              <p className={styles.sentence} lang={item.sourceLanguage}>
                 <RichText text={item.sentence} />
               </p>
             ) : null}
@@ -535,7 +541,7 @@ export default function TrainingGapFillExercise({
                 }}
                 disabled={locked}
                 rows={3}
-                placeholder={format === 'dictation' ? 'Type what you hear' : 'Write your sentence'}
+                placeholder={TEXT_PLACEHOLDERS[format] || 'Write your sentence'}
                 autoComplete="off"
                 autoCorrect="off"
                 spellCheck={false}

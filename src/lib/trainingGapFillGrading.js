@@ -2,7 +2,7 @@ import { countCambridgeKeyWordWords } from '@/lib/countCambridgeKeyWordWords';
 import { normalizeB2KeyWordAnswer } from '@/lib/normalizeB2KeyWordAnswer';
 import { ruoeAnswersShareCanonicalForm } from '@/lib/ruoeContractionEquivalence';
 import {
-  TRAINING_TYPE_FORMATS,
+  TRAINING_PATH_TYPE_FORMATS,
   passageSlotNumbers,
   trainingFormatFamily,
   trainingSlotModel,
@@ -85,6 +85,25 @@ export const GAP_FILL_ERROR_TAG_LABELS = Object.freeze({
   text_sequencing: 'Order of events',
   modal_certainty: 'Certainty and deduction',
   sentence_transformation: 'Sentence transformations',
+  translation_to_english: 'Translating into English',
+  translation_to_spanish: 'Translating into Spanish',
+  topic_vocabulary: 'Topic vocabulary',
+  adjectives: 'Adjectives',
+  spelling: 'Spelling',
+  numbers_dates: 'Numbers, days and dates',
+  pronoun_choice: 'Pronouns',
+  possessive_choice: 'Possessives',
+  verb_to_be: 'The verb to be',
+  plural_forms: 'Plurals',
+  there_is_are: 'There is and there are',
+  demonstratives: 'This, that, these and those',
+  word_order: 'Word order',
+  question_forms: 'Questions',
+  frequency_adverbs: 'Adverbs of frequency',
+  modal_ability: 'Can and can’t',
+  verb_patterns: 'Verb patterns',
+  past_to_be: 'Was and were',
+  have_got: 'Have got',
 });
 
 const GAP_TOKEN = /\{(\d+)\}/g;
@@ -168,6 +187,28 @@ export function sentenceAnswerMatches(value, item, { strict = false } = {}) {
   });
 }
 
+/** A Spanish sentence: accents, ñ and ¿ ¡ do not count, so a keyboard without them is not penalised. */
+export function normalizeSpanishSentence(raw) {
+  return normalizeTrainingSentence(raw)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[¿¡]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/** A translation into Spanish must be one of the listed versions. */
+export function spanishAnswerMatches(value, item) {
+  const student = normalizeSpanishSentence(value);
+  if (!student) return false;
+
+  const accepted = item?.acceptedAnswers?.length
+    ? item.acceptedAnswers
+    : [item?.canonicalAnswer].filter(Boolean);
+
+  return accepted.some((answer) => normalizeSpanishSentence(answer) === student);
+}
+
 /**
  * @param {{ gaps: Array<{ canonicalAnswer: string, acceptedAnswers?: string[] }> }} item
  * @param {Record<number, string>} values Keyed by gap number (1-based).
@@ -188,7 +229,7 @@ export function formatGapFillSolution(item) {
 }
 
 const CHOICE_FORMATS = new Set(['choice', 'tense', 'intention', 'true_false', 'error']);
-const TYPE_FORMATS = new Set(TRAINING_TYPE_FORMATS);
+const TYPE_FORMATS = new Set(TRAINING_PATH_TYPE_FORMATS);
 
 function sameSet(left = [], right = []) {
   if (left.length !== right.length) return false;
@@ -220,6 +261,9 @@ export function gradeTrainingItem(item, values = {}) {
   }
 
   if (family === 'text') {
+    if (format === 'translate_to_spanish') {
+      return { correct: spanishAnswerMatches(values.text || '', item), gaps: [] };
+    }
     if (format === 'transform') {
       return {
         correct: gapFillAnswerMatches(values.text || '', {
@@ -340,7 +384,10 @@ function britishFindings(where, text, findings) {
   }
 }
 
-/** Every piece of text a student can read, except the American column of a UK/US match. */
+/**
+ * Every piece of English a student can read: not the American column of a UK/US match, nor the
+ * Spanish side of a translation (or its explanation, which quotes Spanish words like "color").
+ */
 function itemText(item) {
   const parts = [
     item.sentence,
@@ -364,6 +411,15 @@ function itemText(item) {
     ...(item.questions || []).map((question) => question.text),
     ...(item.lines || []).map((line) => line.text),
   ];
+  if (item.format === 'translate_to_english' || item.format === 'translate_to_spanish') {
+    const spanish =
+      item.format === 'translate_to_english'
+        ? [item.sentence]
+        : [item.canonicalAnswer, item.solution, ...(item.acceptedAnswers || [])];
+    return parts
+      .filter((part) => part && part !== item.explanation && !spanish.includes(part))
+      .join(' ');
+  }
   if (item.format === 'british_american') {
     parts.push(...(item.pairs || []).map((pair) => pair.left));
     return parts
@@ -426,7 +482,7 @@ function fillGaps(sentence, gaps) {
   return String(sentence || '').replace(GAP_TOKEN, (_, number) => gaps[Number(number) - 1]?.canonicalAnswer || '');
 }
 
-/** Checks for the 45 task types; the original seven formats keep their own rules below. */
+/** Checks for the 45 task types and translation; the original seven formats keep their own rules below. */
 function validateTypeItem(item, where, findings) {
   const format = item.format;
   const family = trainingFormatFamily(item);
@@ -529,7 +585,8 @@ function validateTypeItem(item, where, findings) {
   }
 
   if (family === 'text' || family === 'short_text') {
-    const normalize = family === 'text' ? normalizeTrainingSentence : normalizeGapFillAnswer;
+    let normalize = family === 'text' ? normalizeTrainingSentence : normalizeGapFillAnswer;
+    if (format === 'translate_to_spanish') normalize = normalizeSpanishSentence;
     checkAccepted(where, item.canonicalAnswer, item.acceptedAnswers, findings, normalize);
     const needsSentence = !['dictation', 'conditional', 'situation_rewrite'].includes(format);
     if (needsSentence && !item.sentence?.trim()) findings.push(`${where}: missing sentence`);
@@ -556,6 +613,14 @@ function validateTypeItem(item, where, findings) {
     }
     if (format === 'error_correction' && sentenceAnswerMatches(item.sentence, item)) {
       findings.push(`${where}: the sentence to correct is already correct`);
+    }
+    if (format === 'translate_to_english' || format === 'translate_to_spanish') {
+      if ((item.acceptedAnswers || []).length < 2) {
+        findings.push(`${where}: list at least two accepted translations`);
+      }
+      if (normalizeSpanishSentence(item.sentence) === normalizeSpanishSentence(item.canonicalAnswer)) {
+        findings.push(`${where}: the translation is the same as the sentence`);
+      }
     }
   }
 
@@ -775,9 +840,11 @@ export function validateGapFillExercise(exercise, { expectedItemCount = 10 } = {
     else affirmatives += 1;
   });
 
-  if (negatives < 1) findings.push('exercise: no negative item');
-  if (questions < 1) findings.push('exercise: no question item');
-  if (affirmatives < 1) findings.push('exercise: no affirmative item');
+  if (negatives + questions + affirmatives > 0) {
+    if (negatives < 1) findings.push('exercise: no negative item');
+    if (questions < 1) findings.push('exercise: no question item');
+    if (affirmatives < 1) findings.push('exercise: no affirmative item');
+  }
 
   return { ok: findings.length === 0, findings };
 }

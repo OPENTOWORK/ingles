@@ -1,6 +1,7 @@
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
 import { A2_BASICO_TOPICS } from '@/data/a2TrainingContent';
 import { B2_UOE_CURRICULUM } from '@/data/b2TrainingContent';
+import { trainingPathSections } from '@/data/trainingPaths/curricula';
 
 const TRAINING_LEVELS_PER_SECTION = 6;
 
@@ -175,6 +176,20 @@ export function getTrainingPathCurriculum(cefrLevel, difficulty, skill = 'use-of
   }
 
   const tier = getTrainingTier(cefr, diff);
+
+  const pathSections = skillKey === 'use-of-english' ? trainingPathSections(cefr, diff) : null;
+  if (pathSections) {
+    const cefrLabel = CEFR_LABELS[cefr] || cefr.toUpperCase();
+    const diffLabel = DIFF_LABELS[diff] || diff;
+    const result = buildCurriculumFromSectionDefs(pathSections, {
+      tier,
+      cefrLabel,
+      diffLabel,
+      progressionLabel: `${cefrLabel} · ${diffLabel}`,
+    });
+    curriculumCache.set(cacheKey, result);
+    return result;
+  }
 
   if (cefr === 'b2' && skillKey === 'use-of-english' && B2_UOE_CURRICULUM[diff]) {
     const result = buildCurriculumFromSectionDefs(B2_UOE_CURRICULUM[diff], {

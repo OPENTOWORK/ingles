@@ -47,6 +47,8 @@ export const TRAINING_FORMAT_FAMILY = Object.freeze({
   conditional: 'text',
   combine: 'text',
   dictation: 'text',
+  translate_to_english: 'text',
+  translate_to_spanish: 'text',
 
   define_word: 'short_text',
 
@@ -115,6 +117,15 @@ export const TRAINING_TYPE_FORMATS = Object.freeze([
   'combine',
   'linker',
   'certainty',
+]);
+
+/** Translation both ways: the student reads Spanish and writes English, then the other way round. */
+export const TRAINING_TRANSLATION_FORMATS = Object.freeze(['translate_to_english', 'translate_to_spanish']);
+
+/** The 47 task types each level of the A2–C2 paths offers, one item per type, in this order. */
+export const TRAINING_PATH_TYPE_FORMATS = Object.freeze([
+  ...TRAINING_TYPE_FORMATS,
+  ...TRAINING_TRANSLATION_FORMATS,
 ]);
 
 export const TRAINING_LISTENING_FORMATS = Object.freeze(

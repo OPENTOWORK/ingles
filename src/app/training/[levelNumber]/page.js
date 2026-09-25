@@ -138,7 +138,7 @@ export default function ExercisePage({ params }) {
     (async () => {
       try {
         const loadedExercises = reviewNum
-          ? (buildReviewExercise(review, level, skill, difficulty)?.items || []).map((item, index) => ({
+          ? ((await buildReviewExercise(review, level, skill, difficulty))?.items || []).map((item, index) => ({
               ...item,
               id: reviewNum * 100000 + index + 1,
             }))

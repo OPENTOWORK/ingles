@@ -1,5 +1,5 @@
 /**
- * Builders for the 45 task types each basic level offers on top of its original items.
+ * Builders for the 45 task types, plus translation both ways, that every Training level offers.
  * Every builder takes `id`, `focus` (unique per level), `why` (the explanation) and `tag`
  * (a key of GAP_FILL_ERROR_TAG_LABELS). `instruction` is optional: each type has a default,
  * and Dralo reads it out in his speech bubble.
@@ -452,5 +452,32 @@ export function multipleMatching(spec) {
     ...base('multiple_matching', spec, 'Read the texts. Choose the right person for each question.'),
     texts: spec.texts.map(([label, text]) => ({ label, text })),
     questions: spec.questions.map(([text, answer]) => ({ text, answer })),
+  };
+}
+
+// ── Translate ────────────────────────────────────────────────────────────────
+
+/** `spanish` is shown; `answers` lists at least two English versions, the key first. */
+export function translateToEnglish(spec) {
+  const { canonicalAnswer, acceptedAnswers } = formsOf(spec.answers);
+  return {
+    ...base('translate_to_english', spec, 'Translate the sentence into English.'),
+    sentence: spec.spanish,
+    sourceLanguage: 'es',
+    ...sentenceFields(canonicalAnswer, acceptedAnswers),
+  };
+}
+
+/**
+ * `english` is shown; `answers` lists at least two versions in Spanish from Spain, the key first.
+ * The student may leave out accents, ñ and ¿ ¡, so never list those variants.
+ */
+export function translateToSpanish(spec) {
+  const { canonicalAnswer, acceptedAnswers } = formsOf(spec.answers);
+  return {
+    ...base('translate_to_spanish', spec, 'Translate the sentence into Spanish.'),
+    sentence: spec.english,
+    sourceLanguage: 'en',
+    ...sentenceFields(canonicalAnswer, acceptedAnswers),
   };
 }

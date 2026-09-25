@@ -13,7 +13,7 @@ import {
   validateGapFillExercise,
 } from '../trainingGapFillGrading.js';
 import {
-  TRAINING_TYPE_FORMATS,
+  TRAINING_PATH_TYPE_FORMATS,
   canSubmitTrainingItem,
   canonicalTrainingValues,
   trainingItemFormat,
@@ -113,7 +113,8 @@ test('an item with two gaps needs both of them right', () => {
   assert.equal(formatGapFillSolution(item), 'does / review');
 });
 
-const TYPE_FORMATS = new Set(TRAINING_TYPE_FORMATS);
+const TYPE_FORMATS = new Set(TRAINING_PATH_TYPE_FORMATS);
+const PATH_FORMATS = TYPE_FORMATS;
 
 function answerFor(item) {
   const format = item.format || 'gap';
@@ -232,21 +233,21 @@ test('authoring checks catch broken items', () => {
 
 const typeItem = (format, level = 1) => B2_BASIC_TYPE_ITEMS[level].find((item) => item.format === format);
 
-test('every basic level offers each of the 45 task types exactly once, in order', () => {
+test('every basic level offers each of the 47 task types exactly once, in order', () => {
   for (let level = 1; level <= 25; level += 1) {
     const exercise = getGapFillExercise('b2', 'use-of-english', 'basico', level);
     const counts = {};
     for (const item of exercise.items) {
       const format = trainingItemFormat(item);
-      if (TYPE_FORMATS.has(format)) counts[format] = (counts[format] || 0) + 1;
+      if (PATH_FORMATS.has(format)) counts[format] = (counts[format] || 0) + 1;
     }
-    for (const format of TRAINING_TYPE_FORMATS) {
+    for (const format of TRAINING_PATH_TYPE_FORMATS) {
       assert.equal(counts[format], 1, `level ${level}: ${format}`);
     }
     const prefix = `b2-basic-${String(level).padStart(2, '0')}-t`;
     B2_BASIC_TYPE_ITEMS[level].forEach((item, index) => {
       assert.equal(item.itemId, `${prefix}${String(index + 1).padStart(2, '0')}`);
-      assert.equal(item.format, TRAINING_TYPE_FORMATS[index], item.itemId);
+      assert.equal(item.format, TRAINING_PATH_TYPE_FORMATS[index], item.itemId);
     });
   }
 });
@@ -254,7 +255,7 @@ test('every basic level offers each of the 45 task types exactly once, in order'
 test('the pilot keeps its fifty items and the task types come on top', () => {
   assert.equal(B2_BASIC_01_PRESENT_SIMPLE.items.length, 50);
   const level1 = getGapFillExercise('b2', 'use-of-english', 'basico', 1);
-  assert.equal(level1.items.length, 50 + TRAINING_TYPE_FORMATS.length);
+  assert.equal(level1.items.length, 50 + TRAINING_PATH_TYPE_FORMATS.length);
 });
 
 test('every picture question points at an image that exists', () => {

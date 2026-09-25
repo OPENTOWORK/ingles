@@ -42,6 +42,8 @@ import {
   stress,
   synonym,
   textGaps,
+  translateToEnglish,
+  translateToSpanish,
   wordFormation,
   wordToDefinition,
 } from '../b2TrainingTypeBuilders.js';
@@ -569,5 +571,28 @@ export default [
     correct: 'must',
     why: 'Cycling that far every day is strong evidence, so we are almost sure: “He must be very fit.”',
     tag: 'modal_certainty',
+  }),
+  translateToEnglish({
+    id: "b2-basic-01-t46",
+    focus: "b2_basic_01_en",
+    spanish: "Omar necesita el informe el viernes.",
+    answers: [
+      "Omar needs the report on Friday.",
+      "Omar needs the report by Friday.",
+      "Omar needs that report on Friday.",
+    ],
+    why: "“Necesita” is a present-simple need; days take “on Friday”. This item practises Present simple.",
+    tag: 'translation_to_english',
+  }),
+  translateToSpanish({
+    id: "b2-basic-01-t47",
+    focus: "b2_basic_01_es",
+    english: "Omar works in Oxford every Friday.",
+    answers: [
+      "Omar trabaja en Oxford todos los viernes.",
+      "Omar trabaja en Oxford cada viernes.",
+    ],
+    why: "A regular Friday habit is “todos los viernes” or “cada viernes”. This item practises Present simple.",
+    tag: 'translation_to_spanish',
   }),
 ];

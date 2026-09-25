@@ -42,6 +42,10 @@ import {
   stress,
   synonym,
   textGaps,
+
+  translateToEnglish,
+
+  translateToSpanish,
   wordFormation,
   wordToDefinition,
 } from '../b2TrainingTypeBuilders.js';
@@ -587,5 +591,28 @@ export default [
     correct: 'can’t',
     why: 'Five minutes on foot is clearly less than an hour by bus, so we are sure the journey is not longer: “It can’t be longer.”',
     tag: 'modal_certainty',
+  }),
+  translateToEnglish({
+    id: "b2-basic-19-t46",
+    focus: "b2_basic_19_en",
+    spanish: "Hugo necesita el informe el viernes.",
+    answers: [
+      "Hugo needs the report on Friday.",
+      "Hugo needs the report by Friday.",
+      "Hugo needs that report on Friday.",
+    ],
+    why: "“Necesita” is a present-simple need; days take “on Friday”. This item practises Comparatives / superlatives.",
+    tag: 'translation_to_english',
+  }),
+  translateToSpanish({
+    id: "b2-basic-19-t47",
+    focus: "b2_basic_19_es",
+    english: "Hugo works in Glasgow every Friday.",
+    answers: [
+      "Hugo trabaja en Glasgow todos los viernes.",
+      "Hugo trabaja en Glasgow cada viernes.",
+    ],
+    why: "A regular Friday habit is “todos los viernes” or “cada viernes”. This item practises Comparatives / superlatives.",
+    tag: 'translation_to_spanish',
   }),
 ];

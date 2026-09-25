@@ -40,11 +40,16 @@ function stableBaseId(level, skill, difficulty, levelNumber) {
 /**
  * Authored typed gap-fill levels (grammar path). Items keep their blueprint metadata
  * (gaps, acceptedAnswers, errorTag) on top of the shared exercise shape.
+ * A path with level files gives an empty list for a level not written yet, never older content.
  */
 async function loadGapFillExercises(level, skill, difficulty, levelNumber, baseId, difficultyNum) {
-  const { getGapFillExercise } = await import('./trainingGapFillContent.js');
   const skillKey = skill.replace(/_/g, '-');
-  const exercise = getGapFillExercise(level, skillKey, difficulty, levelNumber);
+  const { loadTrainingPathExercise } = await import('./trainingPaths/index.js');
+  let exercise = await loadTrainingPathExercise(level, skillKey, difficulty, levelNumber);
+  if (!exercise) {
+    const { getGapFillExercise } = await import('./trainingGapFillContent.js');
+    exercise = getGapFillExercise(level, skillKey, difficulty, levelNumber);
+  }
   if (!exercise) return null;
 
   return mapExerciseList(

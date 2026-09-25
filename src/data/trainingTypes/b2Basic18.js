@@ -42,6 +42,10 @@ import {
   stress,
   synonym,
   textGaps,
+
+  translateToEnglish,
+
+  translateToSpanish,
   wordFormation,
   wordToDefinition,
 } from '../b2TrainingTypeBuilders.js';
@@ -594,5 +598,28 @@ export default [
     correct: 'can’t have',
     why: 'If he has never been abroad, he cannot have travelled to Rome, so we are sure his claim was false: “He can’t have been telling the truth.”',
     tag: 'modal_certainty',
+  }),
+  translateToEnglish({
+    id: "b2-basic-18-t46",
+    focus: "b2_basic_18_en",
+    spanish: "Nora necesita el informe el viernes.",
+    answers: [
+      "Nora needs the report on Friday.",
+      "Nora needs the report by Friday.",
+      "Nora needs that report on Friday.",
+    ],
+    why: "“Necesita” is a present-simple need; days take “on Friday”. This item practises Reported statements.",
+    tag: 'translation_to_english',
+  }),
+  translateToSpanish({
+    id: "b2-basic-18-t47",
+    focus: "b2_basic_18_es",
+    english: "Nora works in Bath every Friday.",
+    answers: [
+      "Nora trabaja en Bath todos los viernes.",
+      "Nora trabaja en Bath cada viernes.",
+    ],
+    why: "A regular Friday habit is “todos los viernes” or “cada viernes”. This item practises Reported statements.",
+    tag: 'translation_to_spanish',
   }),
 ];

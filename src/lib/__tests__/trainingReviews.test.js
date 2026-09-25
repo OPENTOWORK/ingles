@@ -39,8 +39,8 @@ test('a review stays locked until that block is finished, except for an admin', 
   assert.equal(isTrainingReviewLocked(review, {}, 'administrador'), false);
 });
 
-test('a review mixes the earlier levels and keeps its own id', () => {
-  const exercise = buildReviewExercise(reviews[1]);
+test('a review mixes the earlier levels and keeps its own id', async () => {
+  const exercise = await buildReviewExercise(reviews[1]);
   assert.equal(exercise.exerciseId, 'b2-review-02');
   assert.ok(exercise.items.length >= 12);
   assert.ok(exercise.items.every((item) => item.itemId.startsWith('review-2-')));

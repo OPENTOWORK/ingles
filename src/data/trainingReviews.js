@@ -1,4 +1,4 @@
-import { getGapFillExercise } from './trainingGapFillContent.js';
+import { trainingPathSlug } from './trainingPaths/curricula.js';
 
 /**
  * One review after each path section except the last.
@@ -23,22 +23,44 @@ export function getPathReview(sections, reviewNumber) {
   return getPathReviews(sections).find((review) => review.n === n) || null;
 }
 
-/** Mixed items from the levels that review covers. A session still picks 10. */
-export function buildReviewExercise(review, cefrLevel = 'b2', skill = 'use-of-english', difficulty = 'basico') {
+/**
+ * Mixed items from the levels that review covers; a session picks 20 of them.
+ * Content is imported here, not at the top, so the map that lists the reviews stays light.
+ */
+export async function buildReviewExercise(
+  review,
+  cefrLevel = 'b2',
+  skill = 'use-of-english',
+  difficulty = 'basico',
+) {
   if (!review) return null;
+  const [{ getGapFillExercise }, { loadTrainingPathExercise }] = await Promise.all([
+    import('./trainingGapFillContent.js'),
+    import('./trainingPaths/index.js'),
+  ]);
+  const slug = trainingPathSlug(cefrLevel, difficulty);
+  const exerciseId = `${slug || String(cefrLevel).toLowerCase()}-review-${String(review.n).padStart(2, '0')}`;
+  const levels = [];
+  for (let level = review.from; level <= review.to; level += 1) levels.push(level);
+  const exercises = await Promise.all(
+    levels.map(
+      async (level) =>
+        (await loadTrainingPathExercise(cefrLevel, skill, difficulty, level)) ||
+        getGapFillExercise(cefrLevel, skill, difficulty, level),
+    ),
+  );
+
   const items = [];
-  for (let level = review.from; level <= review.to; level += 1) {
-    const exercise = getGapFillExercise(cefrLevel, skill, difficulty, level);
-    if (!exercise?.items?.length) continue;
-    exercise.items.forEach((item) => {
+  exercises.forEach((exercise) => {
+    (exercise?.items || []).forEach((item) => {
       items.push({
         ...item,
         type: 'gap_fill',
-        exerciseId: `b2-review-${String(review.n).padStart(2, '0')}`,
+        exerciseId,
         itemId: `${review.key}-${item.itemId}`,
       });
     });
-  }
+  });
   if (!items.length) return null;
   return {
     exerciseId: items[0].exerciseId,

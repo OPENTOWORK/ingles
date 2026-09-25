@@ -42,6 +42,10 @@ import {
   stress,
   synonym,
   textGaps,
+
+  translateToEnglish,
+
+  translateToSpanish,
   wordFormation,
   wordToDefinition,
 } from '../b2TrainingTypeBuilders.js';
@@ -578,5 +582,28 @@ export default [
     correct: 'can’t',
     why: 'The noise is strong evidence that what he says isn’t true, so we use “can’t”. For a deduction about now, use modal + be + -ing: “can’t be revising”.',
     tag: 'modal_certainty',
+  }),
+  translateToEnglish({
+    id: "b2-basic-02-t46",
+    focus: "b2_basic_02_en",
+    spanish: "Lucia necesita el informe el viernes.",
+    answers: [
+      "Lucia needs the report on Friday.",
+      "Lucia needs the report by Friday.",
+      "Lucia needs that report on Friday.",
+    ],
+    why: "“Necesita” is a present-simple need; days take “on Friday”. This item practises Present continuous gaps.",
+    tag: 'translation_to_english',
+  }),
+  translateToSpanish({
+    id: "b2-basic-02-t47",
+    focus: "b2_basic_02_es",
+    english: "Lucia works in Leeds every Friday.",
+    answers: [
+      "Lucia trabaja en Leeds todos los viernes.",
+      "Lucia trabaja en Leeds cada viernes.",
+    ],
+    why: "A regular Friday habit is “todos los viernes” or “cada viernes”. This item practises Present continuous gaps.",
+    tag: 'translation_to_spanish',
   }),
 ];
