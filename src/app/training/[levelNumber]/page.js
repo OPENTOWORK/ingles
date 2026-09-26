@@ -5,7 +5,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import AudioPlayer from '@/components/AudioPlayer';
 import TrainingGapFillExercise from '@/components/training/TrainingGapFillExercise';
 import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebration';
+import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
 import { useUserRole } from '@/context/UserRoleContext';
+import { useTrainingLives } from '@/hooks/useTrainingLives';
 import {
   getTrainingPathCurriculum,
   getTrainingPathLevelCount,
@@ -43,6 +45,9 @@ export default function ExercisePage({ params }) {
     }
   }, [levelNumber, router, homeHref]);
   const { userRole } = useUserRole();
+  const trainingLives = useTrainingLives();
+  const spendingLifeRef = useRef(false);
+  const [lifeError, setLifeError] = useState('');
   
   // Convertir level-1 a level1 para la función getExercisesByLevel
   const levelKey = levelNumber.replace('level-', 'level');
@@ -216,7 +221,21 @@ export default function ExercisePage({ params }) {
     }
     const exerciseTime = Math.round((Date.now() - exerciseStartTime) / 1000);
     const exerciseScore = isCorrect ? 100 : 0;
-    
+
+    if (!isCorrect) {
+      if (trainingLives.loading || spendingLifeRef.current) return;
+      if (!trainingLives.unlimited) {
+        if (trainingLives.outOfLives) return;
+        spendingLifeRef.current = true;
+        const result = await trainingLives.loseLife();
+        spendingLifeRef.current = false;
+        if (!(result?.unlimited || result?.spent)) {
+          if (result?.error) setLifeError('Could not update your lives. Try again.');
+          return;
+        }
+      }
+    }
+
     // Actualizar ejercicios completados
     const newCompletedExercises = [...completedExercises, {
       id: exercise.id,
@@ -224,7 +243,7 @@ export default function ExercisePage({ params }) {
       time: exerciseTime
     }];
     setCompletedExercises(newCompletedExercises);
-    
+
     if (isCorrect) {
       setScore(score + 1);
     }
@@ -336,6 +355,7 @@ export default function ExercisePage({ params }) {
         skill={skill}
         difficulty={difficulty}
         userId={user?.id || null}
+        trainingLives={trainingLives}
       />
     );
   }
@@ -352,6 +372,22 @@ export default function ExercisePage({ params }) {
           </Link>
         </div>
       </div>
+    );
+  }
+
+  if (trainingLives.outOfLives && !showResult) {
+    return (
+      <main className={styles.page}>
+        <div className={styles.shell}>
+          <div className={styles.card}>
+            <TrainingLivesEmpty
+              backHref={homeHref}
+              nextLifeAt={trainingLives.nextLifeAt}
+              regenHours={trainingLives.regenHours}
+            />
+          </div>
+        </div>
+      </main>
     );
   }
 
@@ -381,6 +417,13 @@ export default function ExercisePage({ params }) {
             <p className={styles.subtitle}>
               Level {levelNumInt} · Question {currentExercise + 1} of {exercises.length}
             </p>
+            <TrainingLivesMeter
+              loading={trainingLives.loading}
+              unlimited={trainingLives.unlimited}
+              lives={trainingLives.lives}
+              max={trainingLives.max}
+              nextLifeAt={trainingLives.nextLifeAt}
+            />
             <div className={styles.progressTrack}>
               <div className={styles.progressFill} style={{ width: `${progressPct}%` }} />
             </div>
@@ -475,14 +518,22 @@ export default function ExercisePage({ params }) {
               className={styles.primaryBtn}
               onClick={checkAnswer}
               disabled={
-                exercise.type === 'write' || exercise.type === 'transformation'
+                trainingLives.loading ||
+                Boolean(trainingLives.error) ||
+                (exercise.type === 'write' || exercise.type === 'transformation'
                   ? !writtenAnswer.trim()
-                  : !selectedOption
+                  : !selectedOption)
               }
             >
               Check answer
             </button>
           )}
+
+          {lifeError || trainingLives.error ? (
+            <p className={styles.feedbackText} role="alert">
+              Could not update your lives. Try again.
+            </p>
+          ) : null}
 
           {showResult && (
             <div className={styles.feedback}>
@@ -492,9 +543,17 @@ export default function ExercisePage({ params }) {
               <p className={styles.feedbackText}>{exercise.explanation}</p>
               {currentExercise < exercises.length - 1 ? (
                 <div className={styles.actions}>
-                  <button type="button" className={styles.btnNext} onClick={nextExercise}>
-                    Next question →
-                  </button>
+                  {trainingLives.outOfLives ? (
+                    <TrainingLivesEmpty
+                      backHref={homeHref}
+                      nextLifeAt={trainingLives.nextLifeAt}
+                      regenHours={trainingLives.regenHours}
+                    />
+                  ) : (
+                    <button type="button" className={styles.btnNext} onClick={nextExercise}>
+                      Next question →
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div style={{ marginTop: '1rem' }}>

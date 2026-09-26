@@ -663,8 +663,27 @@ body.reading-night-mode .login-page p {
   color: #94a3b8 !important;
 }
 
-body.reading-night-mode .login-page hr {
+body.reading-night-mode .login-page hr,
+body.reading-night-mode .login-page__divider::before,
+body.reading-night-mode .login-page__divider::after {
   border-color: #475569;
+  background: #475569;
+}
+
+body.reading-night-mode .login-page__divider {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .login-page__google {
+  background: #1e293b;
+  border-color: #64748b;
+  color: #f8fafc;
+  box-shadow: none;
+}
+
+body.reading-night-mode .login-page__google:hover {
+  background: #334155;
+  border-color: #94a3b8;
 }
 
 body.reading-night-mode .login-page__checkbox-label {

@@ -122,6 +122,8 @@ const STARTER_LEGACY_PLAN = {
     priorityAccess: false,
     prioritySupport: false,
     examStrategies: false,
+    trainingLives: null,
+    quizLives: null,
   },
 };
 
@@ -134,7 +136,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 36500,
     descripcionCorta: 'Empieza a aprender inglés gratis.',
     descripcion:
-      'Nivel B2 disponible, 1 examen de prueba, Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes. A2 y B1 próximamente.',
+      'Nivel B2 disponible, 1 examen de prueba, Training con 3 vidas (se recupera 1 cada 10 horas), Quiz con 3 vidas (se recupera 1 cada 10 horas), Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes. A2 y B1 próximamente.',
     badge: null,
     badgeVariant: null,
     recommended: false,
@@ -143,6 +145,8 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     activo: true,
     highlights: [
       'Nivel B2',
+      'Training: 3 vidas (se recupera 1 cada 10 h)',
+      'Quiz: 3 vidas (se recupera 1 cada 10 h)',
       'A2 y B1: próximamente',
       '1 examen de prueba',
       'Writing Correction: 1/mes',
@@ -167,6 +171,10 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       priorityAccess: false,
       prioritySupport: false,
       examStrategies: true,
+      trainingLives: 3,
+      trainingLifeRegenHours: 10,
+      quizLives: 3,
+      quizLifeRegenHours: 10,
     },
   },
   {
@@ -181,7 +189,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 30,
     descripcionCorta: 'La opción más popular para preparar exámenes y mejorar rápidamente.',
     descripcion:
-      'Nivel B2, 10 exámenes mensuales, Writing Correction (10/mes), Speaking Correction (10/mes), corrección Writing avanzada y 30 consultas Dralo Assistant al día. A2, B1 y C1 próximamente.',
+      'Nivel B2, 10 exámenes mensuales, Training con vidas ilimitadas, Quiz con vidas ilimitadas, Writing Correction (10/mes), Speaking Correction (10/mes), corrección Writing avanzada y 30 consultas Dralo Assistant al día. A2, B1 y C1 próximamente.',
     badge: '🏆 MÁS POPULAR',
     badgeVariant: 'popular',
     recommended: true,
@@ -190,6 +198,8 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     activo: true,
     highlights: [
       'Nivel B2',
+      'Training: vidas ilimitadas',
+      'Quiz: vidas ilimitadas',
       'A2, B1 y C1: próximamente',
       '10 exámenes mensuales',
       'Writing Correction: 10/mes',
@@ -215,6 +225,8 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       priorityAccess: false,
       prioritySupport: false,
       examStrategies: true,
+      trainingLives: null,
+      quizLives: null,
     },
   },
   {
@@ -229,7 +241,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 30,
     descripcionCorta: 'La experiencia más completa para preparar exámenes al máximo nivel.',
     descripcion:
-      'Todo lo de Plus con exámenes, Writing Correction, Speaking Correction y consultas Dralo Assistant incluidos sin límite, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h). Speaking Coach próximamente.',
+      'Todo lo de Plus, con Training y Quiz ilimitados, exámenes, Writing Correction, Speaking Correction y consultas Dralo Assistant sin límite, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h). Speaking Coach próximamente.',
     badge: '🚀 MEJOR VALOR',
     badgeVariant: 'value',
     recommended: false,
@@ -238,6 +250,8 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     activo: true,
     highlights: [
       'Nivel B2',
+      'Training: vidas ilimitadas',
+      'Quiz: vidas ilimitadas',
       'A2, B1 y C1: próximamente',
       'Exámenes mensuales',
       'Writing Correction',
@@ -264,6 +278,8 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       priorityAccess: true,
       prioritySupport: true,
       examStrategies: true,
+      trainingLives: null,
+      quizLives: null,
     },
   },
 ];
@@ -306,6 +322,8 @@ export const FRIENDLY_GRANT_PLANS = [
       priorityAccess: false,
       prioritySupport: false,
       examStrategies: true,
+      trainingLives: null,
+      quizLives: null,
     },
   },
   {
@@ -344,6 +362,8 @@ export const FRIENDLY_GRANT_PLANS = [
       priorityAccess: true,
       prioritySupport: true,
       examStrategies: true,
+      trainingLives: null,
+      quizLives: null,
     },
   },
 ];
@@ -502,6 +522,18 @@ export const PLAN_COMPARISON_ROWS = [
     values: { free: 'Hasta 72h', premium: 'Hasta 48h', pro: 'Hasta 24h' },
   },
   {
+    id: 'training',
+    label: 'Training',
+    type: 'text',
+    values: { free: '3 vidas · 1 cada 10 h', premium: 'Ilimitado', pro: 'Ilimitado' },
+  },
+  {
+    id: 'quiz',
+    label: 'Quiz',
+    type: 'text',
+    values: { free: '3 vidas · 1 cada 10 h', premium: 'Ilimitado', pro: 'Ilimitado' },
+  },
+  {
     id: 'exams',
     label: 'Exámenes mensuales',
     type: 'text',
@@ -597,6 +629,8 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'Start learning English for free.',
     highlights: [
       'Level B2',
+      'Training: 3 lives (1 recovers every 10 hours)',
+      'Quiz: 3 lives (1 recovers every 10 hours)',
       'A2 and B1: coming soon',
       '1 trial exam',
       'Writing Correction: 1/month',
@@ -611,6 +645,8 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'For students who want steady progress.',
     highlights: [
       'Full access to A2 and B1',
+      'Training: unlimited lives',
+      'Quiz: unlimited lives',
       'Unlimited A2 and B1 exams',
       'Writing Correction: 10/month',
       'Speaking Correction: 1/month',
@@ -623,6 +659,8 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'The most popular option to prepare for exams and improve quickly.',
     highlights: [
       'Level B2',
+      'Training: unlimited lives',
+      'Quiz: unlimited lives',
       'A2, B1 and C1: coming soon',
       '10 exams per month',
       'Writing Correction: 10/month',
@@ -638,6 +676,8 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'The most complete experience with the highest daily limits.',
     highlights: [
       'Level B2',
+      'Training: unlimited lives',
+      'Quiz: unlimited lives',
       'A2, B1 and C1: coming soon',
       'Monthly exams',
       'Writing Correction',

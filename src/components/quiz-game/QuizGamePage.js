@@ -7,6 +7,8 @@ import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
 import { getGuestLoginHref } from '@/config/appNavMenu';
 import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/trainingFeedbackSounds';
+import { TrainingLivesEmpty } from '@/components/training/TrainingLivesMeter';
+import { useTrainingLives } from '@/hooks/useTrainingLives';
 import {
   QUIZ_GAME_CATEGORIES,
   QUIZ_GAME_QUESTIONS,
@@ -52,11 +54,20 @@ function QuizGate({ children }) {
   return children;
 }
 
-function LivesRow({ lives }) {
+function LivesRow({ lives, max = QUIZ_GAME_LIVES, unlimited = false }) {
+  if (unlimited) {
+    return (
+      <span className={styles.lives} aria-label="Unlimited lives">
+        ∞
+      </span>
+    );
+  }
+  const cap = max || QUIZ_GAME_LIVES;
+  const left = Math.max(0, Number(lives) || 0);
   return (
-    <span className={styles.lives} aria-label={`${lives} lives left`}>
-      {Array.from({ length: QUIZ_GAME_LIVES }, (_, index) => (
-        <span key={index} className={index < lives ? styles.lifeOn : styles.lifeOff} aria-hidden>
+    <span className={styles.lives} aria-label={`${left} of ${cap} lives`}>
+      {Array.from({ length: cap }, (_, index) => (
+        <span key={index} className={index < left ? styles.lifeOn : styles.lifeOff} aria-hidden>
           ●
         </span>
       ))}
@@ -74,6 +85,8 @@ export default function QuizGamePage() {
 
 function QuizGameBoard() {
   const { userRole } = useUserRole();
+  const accountLives = useTrainingLives({ path: '/api/quiz/lives' });
+  const livesLimited = !accountLives.loading && !accountLives.unlimited && !accountLives.error;
   const showAdminPill = isAdminRole(userRole);
   const [phase, setPhase] = useState('lobby');
   const [category, setCategory] = useState('use-of-english');
@@ -88,8 +101,10 @@ function QuizGameBoard() {
   const [timedOut, setTimedOut] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [bestScore, setBestScore] = useState(0);
+  const [pendingLife, setPendingLife] = useState(false);
   const scoreRef = useRef(0);
   const advancingRef = useRef(false);
+  const resolvingRef = useRef(false);
 
   const question = round[index] || null;
   const locked = pickedId != null || timedOut;
@@ -99,6 +114,8 @@ function QuizGameBoard() {
   }, []);
 
   const startRound = useCallback((nextCategory = category) => {
+    if (accountLives.loading || accountLives.error) return;
+    if (livesLimited && accountLives.lives <= 0) return;
     const nextRound = buildQuizRound(QUIZ_GAME_QUESTIONS, {
       category: nextCategory,
       count: QUIZ_GAME_QUESTION_COUNT,
@@ -106,9 +123,11 @@ function QuizGameBoard() {
     setCategory(nextCategory);
     setRound(nextRound);
     setIndex(0);
-    setLives(QUIZ_GAME_LIVES);
+    setLives(livesLimited ? accountLives.lives : QUIZ_GAME_LIVES);
     scoreRef.current = 0;
     advancingRef.current = false;
+    resolvingRef.current = false;
+    setPendingLife(false);
     setScore(0);
     setStreak(0);
     setBestStreak(0);
@@ -117,7 +136,7 @@ function QuizGameBoard() {
     setTimedOut(false);
     setAnswers([]);
     setPhase('play');
-  }, [category]);
+  }, [category, accountLives.loading, accountLives.error, accountLives.lives, livesLimited]);
 
   const finishRound = useCallback((finalScore) => {
     const stored = writeQuizBestScore(finalScore);
@@ -128,46 +147,65 @@ function QuizGameBoard() {
 
   const resolveAnswer = useCallback(
     (optionId, fromTimeout = false) => {
-      if (!question || locked) return;
+      if (!question || locked || resolvingRef.current) return;
       const option = question.options.find((item) => item.id === optionId) || null;
       const correct = Boolean(option?.correct);
-      const nextStreak = correct ? streak + 1 : 0;
-      const nextLives = correct ? lives : lives - 1;
-      const gained = scoreQuizAnswer({
-        correct,
-        secondsLeft: fromTimeout ? 0 : secondsLeft,
-        streakAfter: nextStreak,
-      });
 
-      const nextScore = score + gained;
-      playTrainingAnswerSound(correct);
-      setPickedId(optionId || '__timeout');
-      setTimedOut(fromTimeout);
-      setStreak(nextStreak);
-      setBestStreak((value) => Math.max(value, nextStreak));
-      setLives(nextLives);
-      scoreRef.current = nextScore;
-      setScore(nextScore);
-      setAnswers((list) => [
-        ...list,
-        {
-          id: question.id,
-          stem: question.stem,
-          why: question.why,
+      const apply = (nextLives) => {
+        const nextStreak = correct ? streak + 1 : 0;
+        const gained = scoreQuizAnswer({
           correct,
-          picked: option?.text || (fromTimeout ? 'Time ran out' : 'No answer'),
-          answer: question.options.find((item) => item.correct)?.text || '',
-        },
-      ]);
+          secondsLeft: fromTimeout ? 0 : secondsLeft,
+          streakAfter: nextStreak,
+        });
+        const nextScore = score + gained;
+        playTrainingAnswerSound(correct);
+        setPickedId(optionId || '__timeout');
+        setTimedOut(fromTimeout);
+        setStreak(nextStreak);
+        setBestStreak((value) => Math.max(value, nextStreak));
+        setLives(nextLives);
+        scoreRef.current = nextScore;
+        setScore(nextScore);
+        setAnswers((list) => [
+          ...list,
+          {
+            id: question.id,
+            stem: question.stem,
+            why: question.why,
+            correct,
+            picked: option?.text || (fromTimeout ? 'Time ran out' : 'No answer'),
+            answer: question.options.find((item) => item.correct)?.text || '',
+          },
+        ]);
+      };
+
+      if (!correct && livesLimited) {
+        if (accountLives.loading || accountLives.lives <= 0) return;
+        resolvingRef.current = true;
+        setPendingLife(true);
+        void accountLives.loseLife().then((result) => {
+          setPendingLife(false);
+          if (!(result?.unlimited || result?.spent)) {
+            resolvingRef.current = false;
+            return;
+          }
+          apply(result.unlimited ? lives : result.lives);
+        });
+        return;
+      }
+
+      resolvingRef.current = true;
+      apply(correct || !livesLimited ? lives : lives - 1);
     },
-    [question, locked, streak, lives, secondsLeft],
+    [question, locked, streak, lives, secondsLeft, livesLimited, accountLives.loading, accountLives.lives, accountLives.loseLife],
   );
 
   const goNext = useCallback(() => {
     if (advancingRef.current) return;
     advancingRef.current = true;
     const lastQuestion = index >= round.length - 1;
-    if (lives <= 0 || lastQuestion) {
+    if ((livesLimited && lives <= 0) || lastQuestion) {
       finishRound(scoreRef.current);
       return;
     }
@@ -175,8 +213,9 @@ function QuizGameBoard() {
     setPickedId(null);
     setTimedOut(false);
     setSecondsLeft(QUIZ_GAME_SECONDS);
+    resolvingRef.current = false;
     advancingRef.current = false;
-  }, [lives, index, round.length, finishRound]);
+  }, [lives, livesLimited, index, round.length, finishRound]);
 
   useEffect(() => {
     if (phase !== 'play' || locked) return undefined;
@@ -240,10 +279,20 @@ function QuizGameBoard() {
               Beat the clock
             </h1>
             <p className={styles.lead}>
-              {QUIZ_GAME_QUESTION_COUNT} questions, {QUIZ_GAME_SECONDS} seconds each, {QUIZ_GAME_LIVES}{' '}
-              lives. Same success and fail sounds as Training.
+              {accountLives.loading
+                ? `${QUIZ_GAME_QUESTION_COUNT} questions, ${QUIZ_GAME_SECONDS} seconds each.`
+                : accountLives.unlimited
+                  ? `${QUIZ_GAME_QUESTION_COUNT} questions, ${QUIZ_GAME_SECONDS} seconds each, unlimited lives.`
+                  : `${QUIZ_GAME_QUESTION_COUNT} questions, ${QUIZ_GAME_SECONDS} seconds each, ${
+                      accountLives.max || QUIZ_GAME_LIVES
+                    } lives. One life comes back every ${accountLives.regenHours || 10} hours.`}
             </p>
             {bestScore > 0 ? <p className={styles.best}>Best score: {bestScore}</p> : null}
+            {livesLimited ? (
+              <p className={styles.best}>
+                {accountLives.lives} of {accountLives.max} lives left
+              </p>
+            ) : null}
 
             <div className={styles.categories} role="list">
               {QUIZ_GAME_CATEGORIES.map((item) => (
@@ -265,16 +314,34 @@ function QuizGameBoard() {
               ))}
             </div>
 
-            <button type="button" className={styles.primary} onClick={() => startRound(category)}>
-              Start quiz
-            </button>
+            {accountLives.outOfLives ? (
+              <TrainingLivesEmpty
+                feature="Quiz"
+                backHref={HUB_HREF}
+                nextLifeAt={accountLives.nextLifeAt}
+                regenHours={accountLives.regenHours}
+              />
+            ) : (
+              <button
+                type="button"
+                className={styles.primary}
+                onClick={() => startRound(category)}
+                disabled={accountLives.loading || Boolean(accountLives.error)}
+              >
+                Start quiz
+              </button>
+            )}
           </section>
         ) : null}
 
         {phase === 'play' && question ? (
           <section className={styles.panel} aria-labelledby="quiz-question">
             <div className={styles.stats}>
-              <LivesRow lives={lives} />
+              <LivesRow
+                lives={lives}
+                max={accountLives.max || QUIZ_GAME_LIVES}
+                unlimited={!accountLives.loading && accountLives.unlimited}
+              />
               <span className={styles.stat}>
                 {index + 1} / {round.length}
               </span>
@@ -304,7 +371,7 @@ function QuizGameBoard() {
                     ]
                       .filter(Boolean)
                       .join(' ')}
-                    disabled={locked}
+                    disabled={locked || pendingLife}
                     onClick={() => resolveAnswer(option.id)}
                   >
                     <span className={styles.optionKey}>{optionIndex + 1}</span>
@@ -381,9 +448,23 @@ function QuizGameBoard() {
               ))}
             </ol>
             <div className={styles.actions}>
-              <button type="button" className={styles.primary} onClick={() => startRound(category)}>
-                Play again
-              </button>
+              {accountLives.outOfLives ? (
+                <TrainingLivesEmpty
+                  feature="Quiz"
+                  backHref={HUB_HREF}
+                  nextLifeAt={accountLives.nextLifeAt}
+                  regenHours={accountLives.regenHours}
+                />
+              ) : (
+                <button
+                  type="button"
+                  className={styles.primary}
+                  onClick={() => startRound(category)}
+                  disabled={accountLives.loading || Boolean(accountLives.error)}
+                >
+                  Play again
+                </button>
+              )}
               <button type="button" className={styles.secondary} onClick={() => setPhase('lobby')}>
                 Change category
               </button>

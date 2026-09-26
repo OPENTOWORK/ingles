@@ -64,6 +64,18 @@
   margin-bottom: 1.25rem;
 }
 
+.headerSide {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  margin-left: auto;
+}
+
+.headerSide .progressLabel {
+  margin: 0;
+}
+
 .progressLabel {
   margin: 0 0 0 auto;
   color: var(--train-muted);

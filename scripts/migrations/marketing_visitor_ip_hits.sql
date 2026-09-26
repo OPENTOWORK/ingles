@@ -17,3 +17,6 @@ comment on table public.marketing_visitor_hits is
 
 alter table public.marketing_visitors
   add column if not exists last_ip text;
+
+alter table public.marketing_visitors
+  add column if not exists last_seen_at timestamptz;

@@ -92,6 +92,26 @@
   font-size: 0.95rem;
 }
 
+.lives {
+  display: flex;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.livesNote {
+  max-width: 34rem;
+  margin: 0.7rem auto 0;
+  color: var(--train-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.livesNote a {
+  color: var(--train-ink);
+  font-weight: 800;
+}
+
 .loading {
   margin: 0;
   padding: 3rem 1rem;

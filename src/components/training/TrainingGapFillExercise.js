@@ -35,6 +35,8 @@ import {
   trainingSolutionLines,
 } from '@/lib/trainingItemFormats';
 import { expandItem } from '@/lib/trainingQuestionVariants';
+import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
+import { useTrainingLives } from '@/hooks/useTrainingLives';
 import { saveExerciseResult } from '@/utils/progressTracker';
 import { saveTrainingLevelStars } from '@/utils/trainingStarsProgress';
 import styles from './TrainingGapFillExercise.module.css';
@@ -156,7 +158,10 @@ export default function TrainingGapFillExercise({
   userId = null,
   completeLabel = '',
   sessionSize = SESSION_SIZE,
+  trainingLives: trainingLivesProp = null,
 }) {
+  const trainingLivesLocal = useTrainingLives({ enabled: !trainingLivesProp });
+  const trainingLives = trainingLivesProp || trainingLivesLocal;
   const [items] = useState(() => pickSession(exercise.items, sessionSize));
   const [index, setIndex] = useState(0);
   const [values, setValues] = useState({});
@@ -168,8 +173,10 @@ export default function TrainingGapFillExercise({
   const [finished, setFinished] = useState(false);
   const [reviewing, setReviewing] = useState(false);
   const [celebration, setCelebration] = useState(null);
+  const [lifeError, setLifeError] = useState('');
 
   const firstGapRef = useRef(null);
+  const spendingLifeRef = useRef(false);
   const itemStartRef = useRef(Date.now());
   const savedStarsRef = useRef(false);
 
@@ -255,19 +262,51 @@ export default function TrainingGapFillExercise({
       return;
     }
 
-    playTrainingAnswerSound(false);
-
     if (attempt < MAX_ATTEMPTS) {
+      playTrainingAnswerSound(false);
       setAttempt(attempt + 1);
       setStatus('retry');
       setDraloReaction((n) => n + 1);
       return;
     }
 
-    setStatus('revealed');
-    setDraloReaction((n) => n + 1);
-    recordResult({ item, answers: { ...values }, firstTry: false, solved: false, attempts: attempt });
-  }, [status, readyToCheck, item, values, attempt, recordResult]);
+    const revealWrong = () => {
+      playTrainingAnswerSound(false);
+      setLifeError('');
+      setStatus('revealed');
+      setDraloReaction((n) => n + 1);
+      recordResult({ item, answers: { ...values }, firstTry: false, solved: false, attempts: attempt });
+    };
+
+    if (trainingLives.loading || spendingLifeRef.current) return;
+    if (trainingLives.unlimited) {
+      revealWrong();
+      return;
+    }
+    if (trainingLives.outOfLives) return;
+
+    spendingLifeRef.current = true;
+    setLifeError('');
+    void trainingLives.loseLife().then((result) => {
+      spendingLifeRef.current = false;
+      if (result?.unlimited || result?.spent) {
+        revealWrong();
+        return;
+      }
+      if (result?.error) setLifeError('Could not update your lives. Try again.');
+    });
+  }, [
+    status,
+    readyToCheck,
+    item,
+    values,
+    attempt,
+    recordResult,
+    trainingLives.unlimited,
+    trainingLives.loading,
+    trainingLives.outOfLives,
+    trainingLives.loseLife,
+  ]);
 
   const correctCount = results.filter((result) => result.firstTry).length;
   const accuracy = total ? Math.round((correctCount / total) * 100) : 0;
@@ -346,7 +385,18 @@ export default function TrainingGapFillExercise({
   const header = (
     <header className={styles.header}>
       {backLink}
-      {eyebrow}
+      <div className={styles.titleRow}>
+        {eyebrow}
+        <div className={styles.headerSide}>
+          <TrainingLivesMeter
+            loading={trainingLives.loading}
+            unlimited={trainingLives.unlimited}
+            lives={trainingLives.lives}
+            max={trainingLives.max}
+            nextLifeAt={trainingLives.nextLifeAt}
+          />
+        </div>
+      </div>
     </header>
   );
 
@@ -457,13 +507,32 @@ export default function TrainingGapFillExercise({
                   {reviewing ? 'Hide mistakes' : 'Review mistakes'}
                 </button>
               ) : null}
-              <button type="button" className={styles.retryBtn} onClick={restart}>
-                Try again
-              </button>
+              {trainingLives.outOfLives ? null : (
+                <button type="button" className={styles.retryBtn} onClick={restart}>
+                  Try again
+                </button>
+              )}
               <Link href={backHref} className={styles.backBtn}>
                 Back to path
               </Link>
             </div>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
+  if (trainingLives.outOfLives && (status === 'answering' || status === 'retry')) {
+    return (
+      <main className={styles.page}>
+        <div className={styles.shell}>
+          <section className={styles.card}>
+            {header}
+            <TrainingLivesEmpty
+              backHref={backHref}
+              nextLifeAt={trainingLives.nextLifeAt}
+              regenHours={trainingLives.regenHours}
+            />
           </section>
         </div>
       </main>
@@ -478,9 +547,18 @@ export default function TrainingGapFillExercise({
             {backLink}
             <div className={styles.titleRow}>
               {eyebrow}
-              <p className={styles.progressLabel}>
-                Question {index + 1} of {total}
-              </p>
+              <div className={styles.headerSide}>
+                <TrainingLivesMeter
+                  loading={trainingLives.loading}
+                  unlimited={trainingLives.unlimited}
+                  lives={trainingLives.lives}
+                  max={trainingLives.max}
+                  nextLifeAt={trainingLives.nextLifeAt}
+                />
+                <p className={styles.progressLabel}>
+                  Question {index + 1} of {total}
+                </p>
+              </div>
             </div>
           </header>
 
@@ -729,10 +807,16 @@ export default function TrainingGapFillExercise({
                 type="button"
                 className={styles.primaryBtn}
                 onClick={checkAnswer}
-                disabled={!readyToCheck}
+                disabled={!readyToCheck || trainingLives.loading || Boolean(trainingLives.error)}
               >
                 Check answer
               </button>
+            ) : null}
+
+            {lifeError || trainingLives.error ? (
+              <p className={styles.feedbackText} role="alert">
+                Could not update your lives. Try again.
+              </p>
             ) : null}
 
             {status === 'retry' ? (
@@ -778,9 +862,17 @@ export default function TrainingGapFillExercise({
                 ) : null}
                 <p className={styles.feedbackText}>{item.explanation}</p>
                 <div className={styles.actions}>
-                  <button type="button" className={styles.primaryBtn} onClick={goNext}>
-                    {index < total - 1 ? 'Continue →' : 'See results'}
-                  </button>
+                  {trainingLives.outOfLives && index < total - 1 ? (
+                    <TrainingLivesEmpty
+                      backHref={backHref}
+                      nextLifeAt={trainingLives.nextLifeAt}
+                      regenHours={trainingLives.regenHours}
+                    />
+                  ) : (
+                    <button type="button" className={styles.primaryBtn} onClick={goNext}>
+                      {index < total - 1 ? 'Continue →' : 'See results'}
+                    </button>
+                  )}
                 </div>
               </div>
             ) : null}

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -10,6 +11,8 @@ import {
   normalizeTrainingDifficulty,
   trainingHomePath,
 } from '@/utils/trainingStarsProgress';
+import { TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
+import { useTrainingLives } from '@/hooks/useTrainingLives';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 import styles from './page.module.css';
 
@@ -29,6 +32,7 @@ export default function TrainingHome() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { session } = useUserRole();
+  const trainingLives = useTrainingLives();
   const difficulty = normalizeTrainingDifficulty(searchParams.get('difficulty'));
   const cefrLevel = normalizeTrainingCefr(searchParams.get('cefr'));
   const [levelStars, setLevelStars] = useState({});
@@ -70,6 +74,21 @@ export default function TrainingHome() {
       <div className={styles.top}>
         <header className={styles.head}>
           <h1 className={styles.title}>Training</h1>
+          <div className={styles.lives}>
+            <TrainingLivesMeter
+              loading={trainingLives.loading}
+              unlimited={trainingLives.unlimited}
+              lives={trainingLives.lives}
+              max={trainingLives.max}
+              nextLifeAt={trainingLives.nextLifeAt}
+            />
+          </div>
+          {trainingLives.outOfLives ? (
+            <p className={styles.livesNote}>
+              The free plan includes 3 lives. One comes back every {trainingLives.regenHours || 10} hours.{' '}
+              <Link href="/precios">Plus and Premium are unlimited.</Link>
+            </p>
+          ) : null}
         </header>
         <aside className={styles.guide} aria-label="About Training">
           <p className={styles.bubble}>
