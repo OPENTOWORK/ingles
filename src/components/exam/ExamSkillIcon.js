@@ -7,6 +7,7 @@ const THEME_TO_SKILL = {
   listening: 'listening',
   speaking: 'speaking',
   'exam-mode': 'challenge',
+  'quiz-game': 'all',
 };
 
 /**

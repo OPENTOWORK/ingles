@@ -20,6 +20,7 @@ export default function LevelHubPage({ config }) {
   const { planSlug } = usePlanEntitlements();
   const isStudent = usesStudentContentRestrictions(roleName);
   const showStarsWayHub = isAdminRole(roleName);
+  const showQuizGame = config.slug === 'b2';
 
   if (session && isStudent) {
     const planLock = getNivelesLevelPlanLock(config.cefr, planSlug);
@@ -62,6 +63,15 @@ export default function LevelHubPage({ config }) {
           skillsQuadrant
           sectionTitle={config.practiceSectionTitle}
           quadrantFooter={showStarsWayHub ? <StarsWayHubTabs embedded /> : null}
+          quizGame={
+            showQuizGame
+              ? {
+                  href: '/exam-practice/b2/quiz-game',
+                  label: 'Quiz game',
+                  hint: 'Timed English quiz',
+                }
+              : null
+          }
         />
       ) : (
         <ExamPracticeHubSection examLinks={config.examLinks} isStudent={isStudent} />

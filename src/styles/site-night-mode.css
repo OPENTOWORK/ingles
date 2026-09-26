@@ -203,6 +203,11 @@ body.reading-night-mode .exam-practice-hub__card--featured {
   border-color: #3b82f6 !important;
 }
 
+body.reading-night-mode .exam-practice-hub__card--quiz-game {
+  background: linear-gradient(155deg, #3b0764 0%, #1e293b 100%) !important;
+  border-color: rgba(217, 70, 239, 0.4) !important;
+}
+
 /* Theory hub */
 body.reading-night-mode .theory-hub-page,
 body.reading-night-mode .theory-apartado-card,

@@ -103,6 +103,11 @@ export default function ExamSkillHubCardStyles() {
         background: linear-gradient(155deg, #f5f7ff 0%, #ffffff 100%);
         border-color: rgba(99, 102, 241, 0.22);
       }
+      .exam-skill-hub .exam-practice-hub__card--quiz-game {
+        --exam-card-accent: #c026d3;
+        background: linear-gradient(155deg, #fdf4ff 0%, #ffffff 100%);
+        border-color: rgba(192, 38, 211, 0.22);
+      }
       .exam-skill-hub .exam-practice-hub__card--reading,
       .exam-skill-hub .exam-practice-hub__card--reading-writing {
         --exam-card-accent: #38bdf8;

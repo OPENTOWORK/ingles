@@ -3,7 +3,6 @@ import {
   isCoordinatorRole,
   isItRole,
   isMarketingRole,
-  isStudentRole,
   isSupportRole,
   isTeacherRole,
   normalizeRoleName,
@@ -57,19 +56,15 @@ export const NAV_LINK_PRACTICE = {
   menuItems: PRACTICE_MENU_ITEMS,
 };
 
-/** Planes en home: usuarios con sesión excepto estudiantes. */
-export const HOME_PRICING_LINK = { href: '/precios', label: 'Planes', tourId: 'nav-pricing' };
-
 /** Placement Test en la home: solo administradores. */
 export function canViewPlacementAndTraining(userRole) {
   return isAdminRole(userRole);
 }
 
-/** Enlaces de home: placement solo admin; planes no para estudiantes. Training vive en Practice. */
+/** Enlaces de home: placement solo admin. Planes va en el menú de arriba. Training vive en Practice. */
 export function getHomeQuickLinksForRole(userRole) {
   const links = [];
   if (canViewPlacementAndTraining(userRole)) links.push(NAV_LINK_PLACEMENT);
-  if (canViewPricing(userRole) && !isStudentRole(userRole)) links.push(HOME_PRICING_LINK);
   return links;
 }
 

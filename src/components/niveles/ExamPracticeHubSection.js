@@ -49,6 +49,20 @@ function ExamPracticeCard({ exam, isStudent, variant = 'skill' }) {
   );
 }
 
+function QuizGameCard({ quizGame }) {
+  if (!quizGame?.href) return null;
+  return (
+    <div className="exam-practice-hub__quiz-game">
+      <ExamSkillHubCard
+        href={quizGame.href}
+        kind="quiz-game"
+        label={quizGame.label || 'Quiz game'}
+        hint={quizGame.hint || 'Timed English quiz'}
+      />
+    </div>
+  );
+}
+
 export default function ExamPracticeHubSection({
   examLinks = [],
   isStudent,
@@ -56,6 +70,7 @@ export default function ExamPracticeHubSection({
   skillsQuadrant = false,
   sectionTitle = null,
   quadrantFooter = null,
+  quizGame = null,
 }) {
   if (!examLinks.length) return null;
 
@@ -92,6 +107,7 @@ export default function ExamPracticeHubSection({
             ) : null}
             <div className="exam-practice-hub__body">
               {skillsGrid}
+              <QuizGameCard quizGame={quizGame} />
               {examModeLink ? (
                 <div className="exam-practice-hub__exam-mode">
                   <ExamPracticeCard exam={examModeLink} isStudent={isStudent} />
@@ -116,6 +132,7 @@ export default function ExamPracticeHubSection({
         <div className="exam-practice-hub__quadrant-inner">
           <div className="exam-practice-hub__body">
             {skillsGrid}
+            <QuizGameCard quizGame={quizGame} />
             {examModeLink ? (
               <div className="exam-practice-hub__exam-mode">
                 <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
@@ -126,6 +143,7 @@ export default function ExamPracticeHubSection({
       ) : (
         <div className="exam-practice-hub__body">
           {skillsGrid}
+          <QuizGameCard quizGame={quizGame} />
           {examModeLink ? (
             <div className="exam-practice-hub__exam-mode">
               <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
@@ -154,11 +172,13 @@ function ExamPracticeHubLayoutStyles() {
         margin-top: 1.5rem;
         padding: 0;
       }
-      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode {
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode,
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game {
         margin-top: 14px;
         margin-bottom: 0;
       }
-      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card {
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card,
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game .exam-practice-hub__card {
         width: 100%;
         box-sizing: border-box;
       }
@@ -246,8 +266,8 @@ function ExamPracticeHubLayoutStyles() {
       .niveles-level-page .exam-practice-hub__body {
         padding: 16px 18px 18px;
       }
-      .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__exam-mode {
-        margin-top: 14px;
+      .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__exam-mode,
+      .niveles-level-page .exam-practice-hub__quiz-game {
         margin-bottom: 0;
       }
       body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
@@ -344,6 +364,27 @@ function ExamPracticeHubLayoutStyles() {
           grid-column: 3;
           grid-row: 1 / span 2;
           position: static;
+        }
+        .niveles-level-page .exam-practice-hub__quiz-game .exam-practice-hub__card,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game .exam-practice-hub__card {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          flex: 0 0 auto;
+          height: auto;
+          min-height: 64px;
+          padding: 12px 14px;
+        }
+        .niveles-level-page .exam-practice-hub__quiz-game .exam-practice-hub__icon-wrap,
+        .niveles-level-page .exam-practice-hub__quiz-game .exam-practice-hub__label,
+        .niveles-level-page .exam-practice-hub__quiz-game .exam-practice-hub__card-foot,
+        .niveles-level-page .exam-practice-hub__quiz-game .exam-practice-hub__hint,
+        .niveles-level-page .exam-practice-hub__quiz-game .exam-practice-hub__arrow {
+          grid-column: auto;
+          grid-row: auto;
+        }
+        .niveles-level-page .exam-practice-hub__quiz-game .exam-practice-hub__card-foot {
+          display: flex;
         }
         .niveles-level-page .exam-practice-hub .exam-practice-hub__card--disabled .exam-practice-hub__badge {
           position: absolute;

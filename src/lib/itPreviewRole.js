@@ -40,6 +40,7 @@ const PRESET_ROUTES = [
   { label: 'Exam Strategies', path: '/exam-strategies', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Hub exámenes', path: '/exam-practice/b2', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Modo examen', path: '/exam-practice/b2/exam-mode', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
+  { label: 'B2 — Quiz game', path: '/exam-practice/b2/quiz-game', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Reading', path: '/exam-practice/b2/exam-reading', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Writing', path: '/exam-practice/b2/exam-writing', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Listening', path: '/exam-practice/b2/exam-listening', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
@@ -139,7 +140,6 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
   if (pathname === '/prueba-nivel' && !canViewPlacementAndTraining(roleId)) {
     return false;
   }
-
   return true;
 }
 
