@@ -1,6 +1,12 @@
 import { NextResponse } from 'next/server';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { isStudentRole } from '@/utils/authRoles';
+import {
+  labelFromAcquisitionProfile,
+  landingLabelFromAcquisitionProfile,
+  landingLabelFromPath,
+  trafficSourceLabel,
+} from '@/lib/trafficSource';
 
 function isLocalAdminIp(ip) {
   const value = String(ip || '')
@@ -18,24 +24,47 @@ export async function GET(req) {
     }
 
     const db = auth.db;
-    const [{ data: linked, error: linkedError }, { data: hits, error: hitsError }, { data: visitors, error: visitorsError }] =
-      await Promise.all([
-        db.from('marketing_visitors').select('visitor_id, user_id').not('user_id', 'is', null),
-        db
-          .from('marketing_visitor_hits')
-          .select('ip_address, created_at, visitor_id')
-          .order('created_at', { ascending: false })
-          .limit(500),
-        db
-          .from('marketing_visitors')
-          .select('visitor_id, user_id, created_at, last_ip')
-          .order('created_at', { ascending: false })
-          .limit(500),
-      ]);
+    const [
+      { data: linked, error: linkedError },
+      { data: hits, error: hitsError },
+      { data: visitors, error: visitorsError },
+    ] = await Promise.all([
+      db.from('marketing_visitors').select('visitor_id, user_id').not('user_id', 'is', null),
+      db
+        .from('marketing_visitor_hits')
+        .select('ip_address, created_at, visitor_id')
+        .order('created_at', { ascending: false })
+        .limit(500),
+      db
+        .from('marketing_visitors')
+        .select('visitor_id, user_id, created_at, last_ip, last_seen_at, first_source, first_landing_page, first_referrer')
+        .order('created_at', { ascending: false })
+        .limit(500),
+    ]);
 
     if (linkedError) throw linkedError;
     if (hitsError) throw hitsError;
     if (visitorsError) throw visitorsError;
+
+    const visitorIds = [...new Set((visitors || []).map((row) => row.visitor_id).filter(Boolean))];
+    let acquisitions = [];
+    if (visitorIds.length) {
+      const { data: acquisitionRows, error: acquisitionError } = await db
+        .from('marketing_acquisition_profiles')
+        .select(
+          'visitor_id, first_source, first_medium, first_campaign, first_content, first_landing_page, first_utm_source, first_utm_medium, first_utm_campaign, first_gclid',
+        )
+        .in('visitor_id', visitorIds);
+      if (acquisitionError) {
+        console.error('[admin/visitors/summary] acquisition', acquisitionError);
+      } else {
+        acquisitions = acquisitionRows || [];
+      }
+    }
+
+    const acquisitionByVisitor = new Map(
+      acquisitions.map((row) => [row.visitor_id, row]),
+    );
 
     const userIds = [...new Set((linked || []).map((row) => row.user_id).filter(Boolean))];
     const roleByUser = new Map();
@@ -86,11 +115,17 @@ export async function GET(req) {
     }
 
     const latestIp = new Map();
+    const lastSeenByVisitor = new Map();
     for (const visitor of visitors || []) {
       if (visitor.last_ip) latestIp.set(visitor.visitor_id, visitor.last_ip);
+      if (visitor.last_seen_at) lastSeenByVisitor.set(visitor.visitor_id, visitor.last_seen_at);
     }
     for (const hit of hits || []) {
       if (!latestIp.has(hit.visitor_id)) latestIp.set(hit.visitor_id, hit.ip_address);
+      const prev = lastSeenByVisitor.get(hit.visitor_id);
+      if (!prev || new Date(hit.created_at) > new Date(prev)) {
+        lastSeenByVisitor.set(hit.visitor_id, hit.created_at);
+      }
     }
 
     const classified = (visitors || []).map((visitor) => {
@@ -109,11 +144,24 @@ export async function GET(req) {
           : userId
             ? 'returning'
             : 'anon';
+      const lastSeen = lastSeenByVisitor.get(visitor.visitor_id) || visitor.last_seen_at || visitor.created_at;
+      const seconds = Math.max(
+        0,
+        Math.round((new Date(lastSeen).getTime() - new Date(visitor.created_at).getTime()) / 1000),
+      );
       return {
         ip,
         seenAt: visitor.created_at,
+        lastSeen,
+        seconds,
         kind,
         email: userId ? emailByUser.get(userId) || '' : '',
+        source: visitor.first_source
+          ? trafficSourceLabel(visitor.first_source, { referrerHost: visitor.first_referrer })
+          : labelFromAcquisitionProfile(acquisitionByVisitor.get(visitor.visitor_id)),
+        landing: visitor.first_landing_page
+          ? landingLabelFromPath(visitor.first_landing_page)
+          : landingLabelFromAcquisitionProfile(acquisitionByVisitor.get(visitor.visitor_id)),
       };
     });
 

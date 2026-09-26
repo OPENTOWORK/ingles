@@ -947,6 +947,9 @@ export default function AdminAnalyticsPanels({
                           <tr>
                             <th>IP</th>
                             <th>Fecha</th>
+                            <th>Origen</th>
+                            <th>Llegan a</th>
+                            <th>Tiempo</th>
                             <th>Cuenta</th>
                             <th>Estado</th>
                           </tr>
@@ -966,6 +969,9 @@ export default function AdminAnalyticsPanels({
                                     })
                                   : '—'}
                               </td>
+                              <td>{row.source || '—'}</td>
+                              <td>{row.landing || '—'}</td>
+                              <td>{row.seconds > 0 ? formatSessionDuration(row.seconds) : '—'}</td>
                               <td>{row.email || '—'}</td>
                               <td>{kindLabel[row.kind] || 'Sin cuenta'}</td>
                             </tr>
