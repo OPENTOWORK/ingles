@@ -85,6 +85,22 @@
   line-height: 1.55;
 }
 
+.entriesToolbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.entriesToolbar .sectionIntro {
+  margin: 0;
+}
+
+.entriesToolbar .tabList {
+  flex: none;
+}
+
 .filterBar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
@@ -854,4 +870,161 @@
 .statusNo {
   background: #fffbeb;
   color: #b45309;
+}
+
+:global(body.reading-night-mode) .panel,
+:global(body.reading-night-mode) .chartCard,
+:global(body.reading-night-mode) .sideCard,
+:global(body.reading-night-mode) .userListCard,
+:global(body.reading-night-mode) .trackingRow,
+:global(body.reading-night-mode) .kpiCard {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: none;
+}
+
+:global(body.reading-night-mode) .panelHeader {
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  border-bottom-color: #334155;
+}
+
+:global(body.reading-night-mode) .panelTitle,
+:global(body.reading-night-mode) .kpiValue,
+:global(body.reading-night-mode) .chartCardTitle,
+:global(body.reading-night-mode) .sideCardTitle,
+:global(body.reading-night-mode) .peakChipValue,
+:global(body.reading-night-mode) .levelCount,
+:global(body.reading-night-mode) .userListTitle,
+:global(body.reading-night-mode) .userName,
+:global(body.reading-night-mode) .userTime,
+:global(body.reading-night-mode) .trackingName,
+:global(body.reading-night-mode) .monitoredTitle,
+:global(body.reading-night-mode) .registrationTable td {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .panelSubtitle,
+:global(body.reading-night-mode) .sectionIntro,
+:global(body.reading-night-mode) .filterField label,
+:global(body.reading-night-mode) .kpiLabel,
+:global(body.reading-night-mode) .trackingEmail,
+:global(body.reading-night-mode) .trackingMeta,
+:global(body.reading-night-mode) .monitoredIntro,
+:global(body.reading-night-mode) .registrationTable th {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .audienceHint,
+:global(body.reading-night-mode) .trackingScoreValue {
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .tabList {
+  background: #0f172a;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .tab {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .tab:hover {
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .tabActive {
+  background: #334155;
+  color: #f8fafc;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+:global(body.reading-night-mode) .filterBar,
+:global(body.reading-night-mode) .peakChip,
+:global(body.reading-night-mode) .userRow,
+:global(body.reading-night-mode) .areaChip {
+  background: #0f172a;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .filterField select,
+:global(body.reading-night-mode) .filterField input,
+:global(body.reading-night-mode) .registrationFilter {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .btnSecondary {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .btnSecondary:hover {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .levelName,
+:global(body.reading-night-mode) .pageTitle,
+:global(body.reading-night-mode) .heatmapCell,
+:global(body.reading-night-mode) .trackingMeta strong {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .levelBarTrack,
+:global(body.reading-night-mode) .focusBar {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .userRowBtn:hover {
+  background: #334155;
+}
+
+:global(body.reading-night-mode) .userPages {
+  background: #0f172a;
+  border-top-color: #334155;
+}
+
+:global(body.reading-night-mode) .pageItem {
+  border-bottom-color: #334155;
+}
+
+:global(body.reading-night-mode) .filterChip,
+:global(body.reading-night-mode) .areaChipStudy,
+:global(body.reading-night-mode) .registrationFilterActive,
+:global(body.reading-night-mode) .monitoredSummary {
+  background: #312e81;
+  border-color: #4c1d95;
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .legendItem {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .registrationTableWrap {
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .registrationTable th,
+:global(body.reading-night-mode) .registrationTable tbody tr:hover td {
+  background: #0f172a;
+}
+
+:global(body.reading-night-mode) .registrationTable td {
+  border-bottom-color: #334155;
+}
+
+:global(body.reading-night-mode) .statusYes {
+  background: #14532d;
+  color: #86efac;
+}
+
+:global(body.reading-night-mode) .statusNo {
+  background: #422006;
+  color: #fde68a;
+}
+
+:global(body.reading-night-mode) .monitoredBlock {
+  border-top-color: #334155;
 }

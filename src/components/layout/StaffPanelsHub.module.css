@@ -128,3 +128,21 @@
   color: rgb(107 114 128);
   font-size: 0.9rem;
 }
+
+:global(body.reading-night-mode) .card {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .label {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .description,
+:global(body.reading-night-mode) .empty {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .empty {
+  border-color: #475569;
+}

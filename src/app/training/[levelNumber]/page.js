@@ -186,45 +186,15 @@ export default function ExercisePage({ params }) {
 
   if (exercisesReady && (!exercises || exercises.length === 0)) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '1.2rem',
-        textAlign: 'center',
-        padding: '2rem',
-        fontFamily: "Segoe UI, sans-serif",
-        background: "linear-gradient(to right, #f0f8ff, #e6f0ff)"
-      }}>
-        <div style={{
-          backgroundColor: "#fff",
-          padding: "2rem",
-          borderRadius: "16px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-          maxWidth: "500px"
-        }}>
-          <h1 style={{ color: "#e74c3c", marginBottom: "1rem" }}>⚠️ No Exercises Available</h1>
-          <p style={{ color: "#64748b", marginBottom: "2rem" }}>
+      <div className={styles.emptyPage}>
+        <div className={styles.emptyCard}>
+          <h1 className={styles.emptyTitle}>No exercises available</h1>
+          <p className={styles.emptyText}>
             {level === 'b2' && difficulty === 'basico'
               ? `No exercises found for level ${levelNumber.replace('level-', '')}`
               : 'Exercises for this level are not ready yet.'}
           </p>
-          <Link
-            href={homeHref}
-            style={{
-              backgroundColor: "#6b7280",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              padding: "0.75rem 1.5rem",
-              fontSize: "14px",
-              fontWeight: "bold",
-              cursor: "pointer",
-              textDecoration: "none",
-              display: "inline-block"
-            }}
-          >
+          <Link href={homeHref} className={styles.emptyBtn}>
             ← Back to Training
           </Link>
         </div>
@@ -342,15 +312,7 @@ export default function ExercisePage({ params }) {
 
   if (loading || !exercisesReady) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '1.2rem'
-      }}>
-        Loading…
-      </div>
+      <div className={styles.loadingPage}>Loading…</div>
     );
   }
 
@@ -381,43 +343,11 @@ export default function ExercisePage({ params }) {
   // Verificación adicional para asegurar que exercise existe
   if (!exercise) {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        fontSize: '1.2rem',
-        textAlign: 'center',
-        padding: '2rem',
-        fontFamily: "Segoe UI, sans-serif",
-        background: "linear-gradient(to right, #f0f8ff, #e6f0ff)"
-      }}>
-        <div style={{
-          backgroundColor: "#fff",
-          padding: "2rem",
-          borderRadius: "16px",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-          maxWidth: "500px"
-        }}>
-          <h1 style={{ color: "#e74c3c", marginBottom: "1rem" }}>⚠️ Exercise Not Found</h1>
-          <p style={{ color: "#64748b", marginBottom: "2rem" }}>
-            The requested exercise could not be loaded.
-          </p>
-          <Link
-            href={homeHref}
-            style={{
-              backgroundColor: "#6b7280",
-              color: "white",
-              border: "none",
-              borderRadius: "8px",
-              padding: "0.75rem 1.5rem",
-              fontSize: "14px",
-              fontWeight: "bold",
-              cursor: "pointer",
-              textDecoration: "none",
-              display: "inline-block"
-            }}
-          >
+      <div className={styles.emptyPage}>
+        <div className={styles.emptyCard}>
+          <h1 className={styles.emptyTitle}>Exercise not found</h1>
+          <p className={styles.emptyText}>The requested exercise could not be loaded.</p>
+          <Link href={homeHref} className={styles.emptyBtn}>
             ← Back to Training
           </Link>
         </div>
@@ -472,15 +402,7 @@ export default function ExercisePage({ params }) {
             
             {/* Mostrar texto para reading */}
             {skill === 'reading' && exercise.text && (
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#f9fafb',
-                borderRadius: '8px',
-                border: '1px solid #e5e7eb',
-                marginBottom: '1rem',
-                lineHeight: '1.6',
-                color: '#374151'
-              }}>
+              <div className={styles.passage}>
                 {exercise.text}
               </div>
             )}
@@ -496,43 +418,21 @@ export default function ExercisePage({ params }) {
             
             {/* Mostrar situación para speaking */}
             {skill === 'speaking' && exercise.situation && (
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#fce7f3',
-                borderRadius: '8px',
-                border: '2px solid #f9a8d4',
-                marginBottom: '1rem',
-                fontStyle: 'italic',
-                color: '#831843'
-              }}>
+              <div className={styles.situation}>
                 <strong>Situation:</strong> {exercise.situation}
               </div>
             )}
             
             {/* Mostrar prompt para writing */}
             {skill === 'writing' && exercise.prompt && (
-              <div style={{
-                padding: '1rem',
-                backgroundColor: '#dbeafe',
-                borderRadius: '8px',
-                border: '2px solid #60a5fa',
-                marginBottom: '1rem',
-                color: '#1e3a8a'
-              }}>
+              <div className={styles.task}>
                 <strong>Task:</strong> {exercise.prompt}
               </div>
             )}
             
             {/* Progress indicator for this exercise */}
             {userProgress[exercise.id] && (
-              <div style={{
-                marginTop: '1rem',
-                padding: '0.5rem',
-                backgroundColor: '#f0f9ff',
-                borderRadius: '6px',
-                fontSize: '0.9rem',
-                color: '#0369a1'
-              }}>
+              <div className={styles.prior}>
                 <strong>Previous attempt:</strong> {userProgress[exercise.id].score}% 
                 ({userProgress[exercise.id].attempts} attempt{userProgress[exercise.id].attempts > 1 ? 's' : ''})
               </div>

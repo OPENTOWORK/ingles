@@ -23,3 +23,16 @@
   font-size: 0.92rem;
   line-height: 1.5;
 }
+
+:global(body.reading-night-mode) .card {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .lead {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .meta {
+  color: #94a3b8;
+}

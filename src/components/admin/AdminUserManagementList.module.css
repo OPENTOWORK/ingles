@@ -6,29 +6,29 @@
   gap: 0.85rem;
   margin-bottom: 1.15rem;
   padding: 0.85rem 1rem;
-  border: 1px solid #e8edf5;
+  border: 1px solid var(--admin-border, #e8edf5);
   border-radius: 1rem;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  background: var(--admin-surface, #fff);
 }
 
 .toolbarHint {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.5;
-  color: #64748b;
+  color: var(--admin-text-muted, #64748b);
 }
 
 .toolbarHint strong {
-  color: #0f172a;
+  color: var(--admin-text, #0f172a);
   font-weight: 700;
 }
 
 .viewToggle {
   display: inline-flex;
   padding: 0.2rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--admin-border, #e2e8f0);
   border-radius: 0.85rem;
-  background: #fff;
+  background: var(--admin-surface, #fff);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
@@ -61,10 +61,10 @@
   flex-direction: column;
   gap: 0.9rem;
   padding: 1rem 1.05rem 0.95rem;
-  border: 1px solid #e8edf5;
+  border: 1px solid var(--admin-border, #e8edf5);
   border-radius: 1.1rem;
-  background: #fff;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+  background: var(--admin-surface, #fff);
+  box-shadow: var(--admin-shadow-md, 0 10px 28px rgba(15, 23, 42, 0.04));
   overflow: hidden;
 }
 
@@ -78,7 +78,7 @@
 
 .userCardStarred {
   border-color: #fde68a;
-  background: linear-gradient(180deg, #fffdf5 0%, #ffffff 100%);
+  background: var(--admin-surface, #fff);
 }
 
 .userCardStarred::before {
@@ -118,7 +118,7 @@
   font-weight: 800;
   letter-spacing: 0.03em;
   color: #4338ca;
-  background: linear-gradient(145deg, #eef2ff 0%, #e0e7ff 100%);
+  background: var(--admin-primary-soft, #eef2ff);
   border: 1px solid rgba(99, 102, 241, 0.14);
 }
 
@@ -139,14 +139,14 @@
   font-size: 0.98rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: #0f172a;
+  color: var(--admin-text, #0f172a);
   line-height: 1.25;
 }
 
 .cardEmail {
   margin: 0.2rem 0 0;
   font-size: 0.78rem;
-  color: #64748b;
+  color: var(--admin-text-muted, #64748b);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -167,9 +167,9 @@
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.01em;
-  background: #f8fafc;
-  color: #475569;
-  border: 1px solid #e8edf5;
+  background: var(--admin-surface-muted, #f8fafc);
+  color: var(--admin-text-muted, #475569);
+  border: 1px solid var(--admin-border, #e8edf5);
 }
 
 .badgeOnline {
@@ -179,9 +179,9 @@
 }
 
 .badgeOffline {
-  background: #f8fafc;
-  color: #64748b;
-  border-color: #e2e8f0;
+  background: var(--admin-surface-muted, #f8fafc);
+  color: var(--admin-text-muted, #64748b);
+  border-color: var(--admin-border, #e2e8f0);
 }
 
 .badgeEmailYes {
@@ -219,9 +219,9 @@
 }
 
 .badgePlanFree {
-  background: #f8fafc;
-  color: #475569;
-  border-color: #e2e8f0;
+  background: var(--admin-surface-muted, #f8fafc);
+  color: var(--admin-text-muted, #475569);
+  border-color: var(--admin-border, #e2e8f0);
 }
 
 .badgePlanPlus {
@@ -261,8 +261,8 @@
   margin: 0;
   padding: 0.75rem;
   border-radius: 0.85rem;
-  background: #f8fafc;
-  border: 1px solid #eef2f7;
+  background: var(--admin-surface-muted, #f8fafc);
+  border: 1px solid var(--admin-border, #eef2f7);
 }
 
 .metaItem {
@@ -282,7 +282,7 @@
   margin: 0;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--admin-text, #1e293b);
   line-height: 1.35;
 }
 
@@ -290,7 +290,7 @@
   display: flex;
   margin-top: 0.05rem;
   padding-top: 0.15rem;
-  border-top: 1px solid #f1f5f9;
+  border-top: 1px solid var(--admin-border, #f1f5f9);
 }
 
 .openBtn {
@@ -299,10 +299,10 @@
   justify-content: center;
   gap: 0.45rem;
   width: 100%;
-  border: 1px solid #dbe3f0;
+  border: 1px solid var(--admin-border-strong, #dbe3f0);
   border-radius: 0.8rem;
-  background: #fff;
-  color: #334155;
+  background: var(--admin-surface-muted, #fff);
+  color: var(--admin-text, #334155);
   font-size: 0.8125rem;
   font-weight: 700;
   padding: 0.58rem 0.85rem;
@@ -325,9 +325,9 @@
   flex-shrink: 0;
   width: 2rem;
   height: 2rem;
-  border: 1px solid #e8edf5;
+  border: 1px solid var(--admin-border, #e8edf5);
   border-radius: 0.7rem;
-  background: #fff;
+  background: var(--admin-surface, #fff);
   font-size: 1rem;
   line-height: 1;
   color: #94a3b8;
@@ -363,7 +363,7 @@
   z-index: 70;
   width: min(100%, 480px);
   height: 100%;
-  background: #fff;
+  background: var(--admin-surface, #fff);
   box-shadow: -12px 0 40px rgba(15, 23, 42, 0.14);
   display: flex;
   flex-direction: column;
@@ -385,8 +385,8 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 1.15rem 1.25rem;
-  border-bottom: 1px solid #e8edf5;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  border-bottom: 1px solid var(--admin-border, #e8edf5);
+  background: var(--admin-surface-muted, #f8fafc);
 }
 
 .drawerTitle {
@@ -425,10 +425,10 @@
 }
 
 .section {
-  border: 1px solid #e8edf5;
+  border: 1px solid var(--admin-border, #e8edf5);
   border-radius: 0.9rem;
   padding: 0.95rem;
-  background: #fff;
+  background: var(--admin-surface, #fff);
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.03);
 }
 
@@ -694,4 +694,118 @@
 
 .sortBtnActive .sortIcon {
   opacity: 1;
+}
+
+:global(body.reading-night-mode) .toolbar,
+:global(body.reading-night-mode) .userCard,
+:global(body.reading-night-mode) .drawer,
+:global(body.reading-night-mode) .viewToggle,
+:global(body.reading-night-mode) .formResponse {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: none;
+}
+
+:global(body.reading-night-mode) .toolbarHint,
+:global(body.reading-night-mode) .cardEmail,
+:global(body.reading-night-mode) .cardMeta dt,
+:global(body.reading-night-mode) .drawerSubtitle,
+:global(body.reading-night-mode) .infoLabel,
+:global(body.reading-night-mode) .formResponseDate {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .toolbarHint strong,
+:global(body.reading-night-mode) .cardName,
+:global(body.reading-night-mode) .drawerTitle,
+:global(body.reading-night-mode) .sectionTitle,
+:global(body.reading-night-mode) .infoValue,
+:global(body.reading-night-mode) .cardMeta dd,
+:global(body.reading-night-mode) .formResponseTitle,
+:global(body.reading-night-mode) .formAnswer dd {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .viewBtn {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .viewBtnActive,
+:global(body.reading-night-mode) .sortBtnActive {
+  background: #312e81;
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .openBtn,
+:global(body.reading-night-mode) .closeBtn,
+:global(body.reading-night-mode) .field select,
+:global(body.reading-night-mode) .actionBtn {
+  background: #0f172a;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .openBtn:hover,
+:global(body.reading-night-mode) .sortBtn:hover {
+  background: #312e81;
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .sortBtn {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .drawerBackdrop {
+  background: rgba(2, 6, 23, 0.72);
+}
+
+:global(body.reading-night-mode) .drawerHeader,
+:global(body.reading-night-mode) .cardFooter,
+:global(body.reading-night-mode) .tableWrap {
+  border-color: #334155;
+}
+
+:global(body.reading-night-mode) .emptyState,
+:global(body.reading-night-mode) .formAnswer dt {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .userCard,
+:global(body.reading-night-mode) .userCardStarred,
+:global(body.reading-night-mode) .toolbar,
+:global(body.reading-night-mode) .section {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .cardMeta,
+:global(body.reading-night-mode) .badge,
+:global(body.reading-night-mode) .badgeOffline,
+:global(body.reading-night-mode) .badgePlanFree,
+:global(body.reading-night-mode) .avatar,
+:global(body.reading-night-mode) .starBtn {
+  background: #0f172a;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .avatar {
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .badge {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .openBtn:hover {
+  background: #312e81;
+  border-color: #818cf8;
+  color: #e0e7ff;
+}
+
+:global(body.reading-night-mode) .field label {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .fullLink {
+  color: #a5b4fc;
 }

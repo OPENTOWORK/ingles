@@ -144,6 +144,7 @@ export default function AdminDashboard() {
   const [analytics, setAnalytics] = useState({
     incorporaciones: [],
     abandonos: 0,
+    mediaPorDia: 0,
     usuariosPorNivel: [],
     heatmap: [],
     patrones: {
@@ -454,6 +455,19 @@ export default function AdminDashboard() {
       }
 
       const filteredUsers = eligibleUserRows.filter((u) => withinClosedDates(u.creado_en));
+      const createdTimes = filteredUsers
+        .map((item) => new Date(item.creado_en).getTime())
+        .filter((time) => Number.isFinite(time));
+      const rangeStart = startDate
+        ? new Date(`${startDate}T00:00:00`)
+        : createdTimes.length
+          ? new Date(Math.min(...createdTimes))
+          : new Date();
+      const rangeEnd = endDate ? new Date(`${endDate}T00:00:00`) : new Date();
+      const startDay = Date.UTC(rangeStart.getFullYear(), rangeStart.getMonth(), rangeStart.getDate());
+      const endDay = Date.UTC(rangeEnd.getFullYear(), rangeEnd.getMonth(), rangeEnd.getDate());
+      const daysInRange = Math.max(1, Math.round((endDay - startDay) / 86400000) + 1);
+      const mediaPorDia = filteredUsers.length / daysInRange;
       const incorporacionesByPeriod = filteredUsers.reduce((acc, item) => {
         const key = formatDateByPeriod(item.creado_en, period);
         acc[key] = (acc[key] || 0) + 1;
@@ -507,6 +521,7 @@ export default function AdminDashboard() {
       setAnalytics({
         incorporaciones,
         abandonos,
+        mediaPorDia,
         usuariosPorNivel,
         heatmap,
         patrones: {

@@ -1,5 +1,30 @@
 /* Site-wide night mode — solo estilos visuales, sin ocultar contenido */
 
+html.reading-night-mode {
+  color-scheme: dark;
+  --bg: #0f172a;
+  --text: #e2e8f0;
+  --card: #1e293b;
+  background-color: #0f172a;
+}
+
+html.reading-night-mode body,
+html.reading-night-mode .page-content,
+html.reading-night-mode .route-loading,
+html.reading-night-mode .full-page-layout {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+html.reading-night-mode .route-loading__label {
+  color: #94a3b8;
+}
+
+html.reading-night-mode .site-header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 55%, #1e1b4b 100%);
+  border-bottom-color: #334155;
+}
+
 body.reading-night-mode {
   color-scheme: dark;
   --bg: #0f172a;
@@ -33,7 +58,14 @@ body.reading-night-mode .card:hover {
   background: #334155;
 }
 
-body.reading-night-mode .route-loading__spinner {
+body.reading-night-mode .route-loading,
+html.reading-night-mode .route-loading {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .route-loading__spinner,
+html.reading-night-mode .route-loading__spinner {
   border-color: rgba(56, 189, 248, 0.2);
   border-top-color: #38bdf8;
 }

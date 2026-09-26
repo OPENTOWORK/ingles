@@ -175,3 +175,41 @@
     transform: translateY(0);
   }
 }
+
+:global(body.reading-night-mode) .digestCard {
+  background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);
+  border-color: #6366f1;
+}
+
+:global(body.reading-night-mode) .digestTitle {
+  color: #e0e7ff;
+}
+
+:global(body.reading-night-mode) .digestText {
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .pushCard {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .pushButtonSecondary {
+  color: #c4b5fd;
+  background: #312e81;
+}
+
+:global(body.reading-night-mode) .tabNav {
+  background: #0f172a;
+  border-color: #475569;
+  box-shadow: none;
+}
+
+:global(body.reading-night-mode) .tabBtn {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .tabBtn:hover {
+  color: #c4b5fd;
+  background: #1e293b;
+}

@@ -37,8 +37,13 @@ export default function VisitorPresence() {
   useEffect(() => {
     const visitorId = readOrCreateVisitorId();
     if (!visitorId) return undefined;
+    let cancelled = false;
 
-    sendVisit(visitorId).catch(() => {});
+    supabase.auth.getSession().then(({ data: sessionData }) => {
+      if (cancelled) return;
+      const token = sessionData?.session?.access_token;
+      sendVisit(visitorId, token || undefined).catch(() => {});
+    });
 
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       const token = session?.access_token;
@@ -46,7 +51,10 @@ export default function VisitorPresence() {
       sendVisit(visitorId, token).catch(() => {});
     });
 
-    return () => data.subscription.unsubscribe();
+    return () => {
+      cancelled = true;
+      data.subscription.unsubscribe();
+    };
   }, []);
 
   return null;

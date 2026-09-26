@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import '../styles/training-theme.css';
 
 /* Reset básico */
 html {

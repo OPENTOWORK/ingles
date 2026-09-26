@@ -88,3 +88,37 @@
   --accent: #f59e0b;
   --icon-bg: #fffbeb;
 }
+
+:global(body.reading-night-mode) .card {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-color: #475569;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+
+:global(body.reading-night-mode) .label {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .value {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .accentIndigo {
+  --icon-bg: #312e81;
+}
+
+:global(body.reading-night-mode) .accentEmerald {
+  --icon-bg: #14532d;
+}
+
+:global(body.reading-night-mode) .accentSky {
+  --icon-bg: #0c4a6e;
+}
+
+:global(body.reading-night-mode) .accentViolet {
+  --icon-bg: #2e1065;
+}
+
+:global(body.reading-night-mode) .accentAmber {
+  --icon-bg: #422006;
+}

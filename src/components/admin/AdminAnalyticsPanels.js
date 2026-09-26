@@ -22,12 +22,14 @@ import {
   LogIn,
   Target,
   TrendingUp,
+  CalendarDays,
   UserMinus,
   UserPlus,
   Users,
 } from 'lucide-react';
 import { formatSessionDuration } from '@/lib/userActivity';
 import { isStudentRole } from '@/utils/authRoles';
+import { useReadingNightMode } from '@/hooks/useReadingNightMode';
 import styles from './AdminAnalyticsPanels.module.css';
 
 const PERIOD_LABELS = {
@@ -706,6 +708,10 @@ export default function AdminAnalyticsPanels({
 }) {
   const [activeTab, setActiveTab] = useState('growth');
   const [visitStats, setVisitStats] = useState(null);
+  const [entriesWithoutStaff, setEntriesWithoutStaff] = useState(true);
+  const isNight = useReadingNightMode();
+  const chartGrid = isNight ? '#334155' : '#e2e8f0';
+  const chartTick = { fontSize: 11, fill: isNight ? '#94a3b8' : '#64748b' };
 
   const totalIncorporaciones = analytics.incorporaciones.reduce((acc, row) => acc + row.total, 0);
   const selectedConnectionRole =
@@ -844,26 +850,59 @@ export default function AdminAnalyticsPanels({
       <div className={styles.panelBody}>
         {activeTab === 'entries' ? (
           <>
-            <p className={styles.sectionIntro}>
-              Desde ahora se guarda cada visita, también sin cuenta. Si esa misma persona se
-              registra después, pasa al grupo de registrados. El equipo no cuenta.
-              {visitStats?.since
-                ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}.`
-                : ' Todavía no hay ninguna visita guardada.'}
-            </p>
+            <div className={styles.entriesToolbar}>
+              <p className={styles.sectionIntro}>
+                Solo cuenta gente que entra sin ser usuaria. Si después crea cuenta, pasa a
+                registrados. Quien ya tenía cuenta no entra en estas cifras.
+                {entriesWithoutStaff
+                  ? ' El equipo tampoco.'
+                  : ' Con staff incluye las visitas del equipo.'}
+                {visitStats?.since
+                  ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}.`
+                  : ' Todavía no hay ninguna visita guardada.'}
+              </p>
+              <div className={styles.tabList} role="group" aria-label="Incluir al equipo">
+                <button
+                  type="button"
+                  className={`${styles.tab} ${entriesWithoutStaff ? styles.tabActive : ''}`}
+                  aria-pressed={entriesWithoutStaff}
+                  onClick={() => setEntriesWithoutStaff(true)}
+                >
+                  Sin staff
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.tab} ${entriesWithoutStaff ? '' : styles.tabActive}`}
+                  aria-pressed={!entriesWithoutStaff}
+                  onClick={() => setEntriesWithoutStaff(false)}
+                >
+                  Con staff
+                </button>
+              </div>
+            </div>
 
             <div className={styles.kpiGrid}>
               <KpiCard
                 icon={Users}
                 label="Entraron"
-                value={visitStats ? visitStats.entered.toLocaleString('es-ES') : '…'}
-                hint="Visitas distintas desde ahora"
+                value={
+                  visitStats
+                    ? (
+                        visitStats.entered + (entriesWithoutStaff ? 0 : visitStats.staff || 0)
+                      ).toLocaleString('es-ES')
+                    : '…'
+                }
+                hint={
+                  entriesWithoutStaff
+                    ? `Personas que no eran usuarias${visitStats?.staff ? ` (${visitStats.staff} del equipo fuera)` : ''}`
+                    : 'Personas que no eran usuarias, más el equipo'
+                }
                 accent="#6366f1"
                 iconBg="#eef2ff"
               />
@@ -871,7 +910,7 @@ export default function AdminAnalyticsPanels({
                 icon={UserPlus}
                 label="Se registraron"
                 value={visitStats ? visitStats.registered.toLocaleString('es-ES') : '…'}
-                hint="De esas visitas, crearon cuenta"
+                hint="De esas entradas, crearon cuenta"
                 accent="#10b981"
                 iconBg="#ecfdf5"
               />
@@ -879,10 +918,63 @@ export default function AdminAnalyticsPanels({
                 icon={UserMinus}
                 label="Sin registrarse"
                 value={visitStats ? visitStats.unregistered.toLocaleString('es-ES') : '…'}
-                hint="Entraron y no crearon cuenta"
+                hint="Entraron y siguieron sin cuenta"
                 accent="#f59e0b"
                 iconBg="#fffbeb"
               />
+            </div>
+
+            <div className={styles.chartCard}>
+              <h3 className={styles.chartCardTitle}>Registro de entradas</h3>
+              {(() => {
+                const rows = (visitStats?.ipLog || []).filter(
+                  (row) => !entriesWithoutStaff || row.kind !== 'staff',
+                );
+                if (!visitStats) return <p className={styles.emptyState}>Cargando…</p>;
+                if (!rows.length) {
+                  return <p className={styles.emptyState}>Todavía no hay visitas guardadas.</p>;
+                }
+                const kindLabel = {
+                  anon: 'Sin cuenta',
+                  account: 'Cuenta nueva',
+                  returning: 'Ya tenía cuenta',
+                  staff: 'Equipo',
+                };
+                return (
+                  <div className={styles.registrationTableWrap}>
+                      <table className={styles.registrationTable}>
+                        <thead>
+                          <tr>
+                            <th>IP</th>
+                            <th>Fecha</th>
+                            <th>Cuenta</th>
+                            <th>Estado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rows.map((row, index) => (
+                            <tr key={`${row.seenAt}-${index}`}>
+                              <td>{row.ip || 'No guardada'}</td>
+                              <td>
+                                {row.seenAt
+                                  ? new Date(row.seenAt).toLocaleString('es-ES', {
+                                      day: '2-digit',
+                                      month: 'short',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })
+                                  : '—'}
+                              </td>
+                              <td>{row.email || '—'}</td>
+                              <td>{kindLabel[row.kind] || 'Sin cuenta'}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                );
+              })()}
             </div>
 
             <div className={styles.chartCard}>
@@ -905,9 +997,9 @@ export default function AdminAnalyticsPanels({
                       data={registrationReport.months}
                       margin={{ top: 8, right: 8, left: -12, bottom: 0 }}
                     >
-                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                      <XAxis dataKey="label" tick={{ fontSize: 11, fill: '#64748b' }} />
-                      <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke={chartGrid} vertical={false} />
+                      <XAxis dataKey="label" tick={chartTick} />
+                      <YAxis allowDecimals={false} tick={chartTick} />
                       <Tooltip
                         content={({ active, payload, label }) => (
                           <ChartTooltip active={active} payload={payload} label={label} />
@@ -983,6 +1075,17 @@ export default function AdminAnalyticsPanels({
                 iconBg="#eef2ff"
               />
               <KpiCard
+                icon={CalendarDays}
+                label="Media por día"
+                value={(Number(analytics.mediaPorDia) || 0).toLocaleString('es-ES', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+                hint="Altas de media cada día del periodo"
+                accent="#8b5cf6"
+                iconBg="#f5f3ff"
+              />
+              <KpiCard
                 icon={UserMinus}
                 label="Abandonos"
                 value={analytics.abandonos.toLocaleString('es-ES')}
@@ -1012,9 +1115,9 @@ export default function AdminAnalyticsPanels({
                         data={analytics.incorporaciones}
                         margin={{ top: 8, right: 8, left: -12, bottom: 0 }}
                       >
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                        <XAxis dataKey="bucket" tick={{ fontSize: 11, fill: '#64748b' }} />
-                        <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                        <CartesianGrid strokeDasharray="3 3" stroke={chartGrid} vertical={false} />
+                        <XAxis dataKey="bucket" tick={chartTick} />
+                        <YAxis allowDecimals={false} tick={chartTick} />
                         <Tooltip
                           content={({ active, payload, label }) => (
                             <ChartTooltip
@@ -1138,13 +1241,13 @@ export default function AdminAnalyticsPanels({
                   <div className={styles.chartBox}>
                     <ResponsiveContainer width="100%" height="100%">
                       <ComposedChart data={sessionChart} margin={{ top: 8, right: 12, left: -12, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                        <XAxis dataKey="bucket" tick={{ fontSize: 11, fill: '#64748b' }} />
-                        <YAxis yAxisId="users" allowDecimals={false} tick={{ fontSize: 11, fill: '#64748b' }} />
+                        <CartesianGrid strokeDasharray="3 3" stroke={chartGrid} vertical={false} />
+                        <XAxis dataKey="bucket" tick={chartTick} />
+                        <YAxis yAxisId="users" allowDecimals={false} tick={chartTick} />
                         <YAxis
                           yAxisId="time"
                           orientation="right"
-                          tick={{ fontSize: 11, fill: '#64748b' }}
+                          tick={chartTick}
                           tickFormatter={(v) => formatSessionDuration(v)}
                         />
                         <Tooltip

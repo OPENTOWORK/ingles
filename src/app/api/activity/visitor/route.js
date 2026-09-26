@@ -45,10 +45,21 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Servidor sin configurar.' }, { status: 503 });
     }
 
-    const { error: insertError } = await db.from('marketing_visitors').insert({ visitor_id: visitorId });
+    const { error: insertError } = await db.from('marketing_visitors').insert({
+      visitor_id: visitorId,
+      last_ip: ip,
+    });
     if (insertError && insertError.code !== '23505') {
       console.error('[activity/visitor] insert', insertError);
       return NextResponse.json({ error: 'No se pudo guardar la visita.' }, { status: 500 });
+    }
+
+    const { error: ipError } = await db
+      .from('marketing_visitors')
+      .update({ last_ip: ip })
+      .eq('visitor_id', visitorId);
+    if (ipError) {
+      console.error('[activity/visitor] last_ip', ipError);
     }
 
     const auth = await getSupabaseUserFromRequest(req);
@@ -64,6 +75,14 @@ export async function POST(req) {
       if (linkError) {
         console.error('[activity/visitor] link', linkError);
       }
+    }
+
+    const { error: hitError } = await db.from('marketing_visitor_hits').insert({
+      visitor_id: visitorId,
+      ip_address: ip,
+    });
+    if (hitError) {
+      console.error('[activity/visitor] hit', hitError);
     }
 
     return NextResponse.json({ ok: true });

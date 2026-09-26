@@ -81,3 +81,28 @@
   color: #64748b;
   line-height: 1.45;
 }
+
+:global(body.reading-night-mode) .panel {
+  background: #1e293b;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .header {
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-bottom-color: #475569;
+}
+
+:global(body.reading-night-mode) .title,
+:global(body.reading-night-mode) .feature h3 {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .subtitle,
+:global(body.reading-night-mode) .feature p {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .feature {
+  background: #0f172a;
+  border-color: #475569;
+}

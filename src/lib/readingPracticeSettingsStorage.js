@@ -67,7 +67,9 @@ export function toggleReadingTheme() {
 
 export function applyReadingNightBodyClass(theme) {
   if (typeof document === 'undefined') return;
-  document.body.classList.toggle('reading-night-mode', theme === 'night');
+  const on = theme === 'night';
+  document.documentElement.classList.toggle('reading-night-mode', on);
+  document.body?.classList.toggle('reading-night-mode', on);
 }
 
 export function readingSettingsToStyle(settings) {

@@ -20,7 +20,7 @@ const TrainingLevelPathMap = dynamic(
   {
     ssr: false,
     loading: () => (
-      <p style={{ textAlign: 'center', color: '#64748b', padding: '2rem 0' }}>Loading path…</p>
+      <p className={styles.loading}>Loading path…</p>
     ),
   },
 );
@@ -62,7 +62,7 @@ export default function TrainingHome() {
   }, [loadLevelStars]);
 
   if (!session) {
-    return <p style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>Loading…</p>;
+    return <p className={styles.loading}>Loading…</p>;
   }
 
   return (

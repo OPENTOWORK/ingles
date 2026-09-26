@@ -345,3 +345,70 @@
   color: #64748b;
   font-size: 0.88rem;
 }
+
+:global(body.reading-night-mode) .tabBar {
+  background: #0f172a;
+  border-color: #475569;
+  box-shadow: none;
+}
+
+:global(body.reading-night-mode) .tab {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .tab:hover {
+  color: #e2e8f0;
+  background: #1e293b;
+}
+
+:global(body.reading-night-mode) .tabActive {
+  background: #1e293b;
+  border-color: #6366f1;
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .hint,
+:global(body.reading-night-mode) .kpi,
+:global(body.reading-night-mode) .card,
+:global(body.reading-night-mode) .chartBox,
+:global(body.reading-night-mode) .tableWrap {
+  background: #1e293b;
+  border-color: #475569;
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .kpiLabel,
+:global(body.reading-night-mode) .sectionDesc,
+:global(body.reading-night-mode) .cardText,
+:global(body.reading-night-mode) .empty,
+:global(body.reading-night-mode) .table th {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .kpiValue,
+:global(body.reading-night-mode) .sectionTitle,
+:global(body.reading-night-mode) .cardTitle {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .sectionHead,
+:global(body.reading-night-mode) .table th,
+:global(body.reading-night-mode) .table td {
+  border-color: #334155;
+}
+
+:global(body.reading-night-mode) .cardMeta,
+:global(body.reading-night-mode) .table th,
+:global(body.reading-night-mode) .table tbody tr:hover {
+  background: #0f172a;
+}
+
+:global(body.reading-night-mode) .linkBtnSecondary {
+  background: #1e293b;
+  color: #c4b5fd;
+  border-color: #6366f1;
+}
+
+:global(body.reading-night-mode) .linkBtnSecondary:hover {
+  background: #312e81;
+}

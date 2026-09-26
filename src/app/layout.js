@@ -1,8 +1,10 @@
 // src/app/layout.js
 import '@/styles/accessibility.css';
 import '@/styles/site-night-mode.css';
+import '@/styles/training-theme.css';
 import '@/styles/staff-panels-night-mode.css';
 import '@/styles/admin-theme.css';
+import '@/styles/admin-night-mode.css';
 import './globals.css';
 import '@/styles/mascot.css';
 import Script from 'next/script';
@@ -107,6 +109,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         ) : null}
       </head>
       <body className="full-page-layout">
+        <Script id="night-mode-boot" strategy="beforeInteractive">
+          {`(function(){try{var r=localStorage.getItem('dralo_reading_practice_settings');var t=r?JSON.parse(r).theme:'normal';var on=t==='night';document.documentElement.classList.toggle('reading-night-mode',on);if(document.body)document.body.classList.toggle('reading-night-mode',on);}catch(e){}})();`}
+        </Script>
         {ENABLE_MARKETING_TAGS ? (
           <noscript>
             <iframe

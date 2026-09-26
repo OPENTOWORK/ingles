@@ -8,9 +8,9 @@
   margin: 0;
   padding: 0.75rem 1rem;
   border-radius: 0.75rem;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  color: #475569;
+  background: var(--admin-surface-muted, #f8fafc);
+  border: 1px solid var(--admin-border, #e2e8f0);
+  color: var(--admin-text-muted, #475569);
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -46,29 +46,29 @@
   width: 100%;
   padding: 0.75rem 0.9rem;
   border-radius: 0.85rem;
-  border: 1px solid #e2e8f0;
-  background: #fff;
+  border: 1px solid var(--admin-border, #e2e8f0);
+  background: var(--admin-surface, #fff);
   cursor: pointer;
   text-align: left;
   font: inherit;
-  color: #0f172a;
+  color: var(--admin-text, #0f172a);
 }
 
 .roleActive {
   border-color: #818cf8;
-  background: #eef2ff;
+  background: var(--admin-primary-soft, #eef2ff);
   box-shadow: 0 4px 14px rgba(99, 102, 241, 0.1);
 }
 
 .roleMeta {
   font-size: 0.78rem;
-  color: #64748b;
+  color: var(--admin-text-muted, #64748b);
 }
 
 .panel {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--admin-border, #e2e8f0);
   border-radius: 1rem;
-  background: #fff;
+  background: var(--admin-surface, #fff);
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -86,12 +86,12 @@
 .panelTitle {
   margin: 0;
   font-size: 1.1rem;
-  color: #0f172a;
+  color: var(--admin-text, #0f172a);
 }
 
 .panelDesc {
   margin: 0.25rem 0 0;
-  color: #64748b;
+  color: var(--admin-text-muted, #64748b);
   font-size: 0.88rem;
 }
 
@@ -122,9 +122,9 @@
 }
 
 .btnGhost {
-  border: 1px solid #cbd5e1;
-  background: #fff;
-  color: #334155;
+  border: 1px solid var(--admin-border-strong, #cbd5e1);
+  background: var(--admin-surface, #fff);
+  color: var(--admin-text, #334155);
 }
 
 .category {
@@ -138,7 +138,7 @@
   font-size: 0.82rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #64748b;
+  color: var(--admin-text-muted, #64748b);
 }
 
 .permissionGrid {
@@ -152,16 +152,16 @@
   align-items: center;
   gap: 0.55rem;
   padding: 0.65rem 0.75rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--admin-border, #e2e8f0);
   border-radius: 0.75rem;
-  background: #f8fafc;
+  background: var(--admin-surface-muted, #f8fafc);
   cursor: pointer;
 }
 
 .permissionLabel {
   flex: 1;
   font-size: 0.9rem;
-  color: #0f172a;
+  color: var(--admin-text, #0f172a);
 }
 
 .permissionChanged {
@@ -174,4 +174,36 @@
   .layout {
     grid-template-columns: 1fr;
   }
+}
+
+:global(body.reading-night-mode) .hint,
+:global(body.reading-night-mode) .roleBtn,
+:global(body.reading-night-mode) .panel,
+:global(body.reading-night-mode) .permissionItem,
+:global(body.reading-night-mode) .btnGhost {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .roleActive {
+  background: #312e81;
+  border-color: #818cf8;
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .roleMeta,
+:global(body.reading-night-mode) .panelDesc,
+:global(body.reading-night-mode) .categoryTitle,
+:global(body.reading-night-mode) .hint {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .panelTitle,
+:global(body.reading-night-mode) .permissionLabel {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .permissionItem {
+  background: #0f172a;
 }

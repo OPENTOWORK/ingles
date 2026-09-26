@@ -384,3 +384,84 @@
     animation: none;
   }
 }
+
+:global(body.reading-night-mode) .sidebar {
+  border-right-color: #334155;
+  background: linear-gradient(180deg, #0f172a 0%, #111827 42%, #1e1b4b 100%);
+  box-shadow: 12px 0 32px rgba(0, 0, 0, 0.28);
+}
+
+:global(body.reading-night-mode) .sidebarTop,
+:global(body.reading-night-mode) .navSection + .navSection {
+  border-color: #334155;
+}
+
+:global(body.reading-night-mode) .sidebarTitle {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .sidebarCollapsedLabel {
+  background: linear-gradient(145deg, #312e81, #1e1b4b);
+  color: #c4b5fd;
+  box-shadow: inset 0 0 0 1px rgba(165, 180, 252, 0.28);
+}
+
+:global(body.reading-night-mode) .collapseBtn {
+  background: #1e293b;
+  border-color: #475569;
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .collapseBtn:hover {
+  background: #334155;
+  border-color: #818cf8;
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .nav {
+  scrollbar-color: #475569 transparent;
+}
+
+:global(body.reading-night-mode) .navItem:hover {
+  border-color: #475569;
+  background: rgba(30, 41, 59, 0.88);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+:global(body.reading-night-mode) .navItemActive {
+  border-color: rgba(129, 140, 248, 0.55);
+  background: linear-gradient(90deg, rgba(49, 46, 129, 0.7) 0%, rgba(30, 27, 75, 0.9) 100%);
+  box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.28);
+}
+
+:global(body.reading-night-mode) .navLink {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .navLink:hover {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .navLinkActive {
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .navItem:hover .dragHandle,
+:global(body.reading-night-mode) .navItemActive .dragHandle,
+:global(body.reading-night-mode) .navItemOverlay .dragHandle {
+  border-right-color: #334155;
+}
+
+:global(body.reading-night-mode) .dragHandle:hover {
+  background: rgba(49, 46, 129, 0.45);
+}
+
+:global(body.reading-night-mode) .navItemOverlay {
+  background: #1e293b;
+}
+
+@media (max-width: 960px) {
+  :global(body.reading-night-mode) .sidebar {
+    border-bottom-color: #334155;
+  }
+}

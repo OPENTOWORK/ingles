@@ -1427,3 +1427,16 @@
     align-self: stretch;
   }
 }
+
+:global(body.reading-night-mode) .layout,
+:global(body.reading-night-mode) .loading {
+  --buzon-surface: #1e293b;
+  --buzon-sidebar-bg: linear-gradient(180deg, #1e293b 0%, #0f172a 48%, #111827 100%);
+  --buzon-border: #475569;
+  --buzon-text: #f8fafc;
+  --buzon-muted: #94a3b8;
+  --buzon-accent-soft: #312e81;
+  --buzon-shadow:
+    0 28px 56px -18px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(71, 85, 105, 0.6);
+}

@@ -52,12 +52,13 @@
   margin: 0;
   padding: 0.4rem 0.75rem;
   border-radius: 16px;
-  background: #fff;
-  color: #4f46e5;
+  background: var(--train-bubble);
+  color: var(--train-bubble-ink);
   font-size: 0.82rem;
   font-weight: 800;
   line-height: 1.25;
   white-space: nowrap;
+  border: 1px solid var(--train-line);
   box-shadow: 0 8px 18px rgba(15, 23, 42, 0.12);
   animation: pop 0.28s ease-out;
 }
@@ -69,14 +70,14 @@
   top: 14px;
   width: 10px;
   height: 10px;
-  background: #fff;
+  background: var(--train-bubble);
   transform: rotate(45deg);
 }
 
 .prompt {
   width: max-content;
   max-width: 13.5rem;
-  color: #312e81;
+  color: var(--train-bubble-ink);
   font-size: 0.78rem;
   font-weight: 700;
   white-space: normal;
@@ -84,7 +85,7 @@
 }
 
 .wrong .bubble {
-  color: #9f1239;
+  color: #fda4af;
 }
 
 @keyframes bob {

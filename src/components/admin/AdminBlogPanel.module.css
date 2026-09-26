@@ -306,3 +306,41 @@
 .viewLink:hover {
   text-decoration: underline;
 }
+
+:global(body.reading-night-mode) .newBtnSecondary,
+:global(body.reading-night-mode) .typeTab,
+:global(body.reading-night-mode) .sidebar,
+:global(body.reading-night-mode) .sidebarItem,
+:global(body.reading-night-mode) .secondaryBtn,
+:global(body.reading-night-mode) .dangerBtn {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .typeTabActive,
+:global(body.reading-night-mode) .sidebarItemActive {
+  background: #312e81;
+  border-color: #818cf8;
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .sidebarItem:hover {
+  background: #0f172a;
+  border-color: #6366f1;
+}
+
+:global(body.reading-night-mode) .sidebarTitle,
+:global(body.reading-night-mode) .sidebarText strong {
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .empty,
+:global(body.reading-night-mode) .sidebarMeta {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .topLink,
+:global(body.reading-night-mode) .viewLink {
+  color: #a5b4fc;
+}
