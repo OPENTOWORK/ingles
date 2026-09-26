@@ -50,16 +50,16 @@ const COPY = {
       title: 'Desbloquea más exámenes',
       subtitle: (slot) =>
         slot
-          ? `El examen ${slot} no está incluido en tu plan actual.`
-          : 'Este examen no está incluido en tu plan actual.',
+          ? `El Test ${slot} no está en el plan gratuito. El Test 1 es el examen de prueba.`
+          : 'Este test no está en el plan gratuito. El Test 1 es el examen de prueba.',
       message:
-        'Tu plan gratuito incluye solo el Test 1. Con Plus se desbloquean 10 exámenes nuevos cada mes; con Premium tienes todo el catálogo desde el primer día.',
+        'Con el plan gratis solo puedes hacer el Test 1, que es de prueba. El Test 2 y el resto se desbloquean con Plus o Premium.',
       benefits: [
         'Plus: 10 exámenes nuevos cada mes',
         'Premium: catálogo completo B2',
         'Correcciones de Writing y Speaking incluidas',
       ],
-      cta: 'Ver planes',
+      cta: 'Ver precios',
       dismiss: 'Ahora no',
     },
     quota_exceeded: {
@@ -72,7 +72,7 @@ const COPY = {
         'Catálogo completo B2',
         'Soporte prioritario en Premium',
       ],
-      cta: 'Ver planes',
+      cta: 'Ver precios',
       dismiss: 'Entendido',
     },
     custom: {
@@ -80,7 +80,19 @@ const COPY = {
       subtitle: 'Esta acción requiere un plan superior.',
       message: null,
       benefits: [],
-      cta: 'Ver planes',
+      cta: 'Ver precios',
+      dismiss: 'Cerrar',
+    },
+    paid_place: {
+      title: 'Esto es de pago',
+      subtitle: 'Tu plan gratuito no incluye este contenido.',
+      message:
+        'Para entrar aquí necesitas Plus o Premium. En precios puedes ver qué incluye cada plan.',
+      benefits: [
+        'Plus: más exámenes y el nivel C1',
+        'Premium: catálogo completo, incluido C2',
+      ],
+      cta: 'Ver precios',
       dismiss: 'Cerrar',
     },
   },
@@ -91,7 +103,7 @@ const COPY = {
  * @param {{
  *   open: boolean,
  *   onClose: () => void,
- *   variant?: 'locked_slot' | 'quota_exceeded' | 'custom',
+ *   variant?: 'locked_slot' | 'quota_exceeded' | 'custom' | 'paid_place',
  *   message?: string | null,
  *   slot?: number | null,
  *   lang?: 'en' | 'es',
@@ -103,7 +115,7 @@ export default function PlanUpgradeModal({
   variant = 'locked_slot',
   message = null,
   slot = null,
-  lang = 'en',
+  lang = 'es',
 }) {
   const titleId = useId();
   const descId = useId();

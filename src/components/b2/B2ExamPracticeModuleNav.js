@@ -12,6 +12,8 @@ import {
 import { buildProgressBySlotWithLiveOverlay } from '@/utils/skillPartFirstProgress';
 import { getModuleNavPartLabel } from '@/utils/formatLevelsPartDisplayName';
 import { buildExamModePracticeHref } from '@/utils/examModeSession';
+import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
+import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
 
 function NavChevron({ direction = 'back' }) {
@@ -68,6 +70,7 @@ export default function B2ExamPracticeModuleNav({
 }) {
   const searchParams = useSearchParams();
   const bypassStarGating = useExamStarGatingBypass();
+  const planGating = useExamSlotPlanGating(progressBySlot || {});
   const examModeParam = searchParams.get('examMode');
   const examFlowFromUrl = examModeParam === '1' || examModeParam === 'review';
   const inExamFlow = examMode || examFlowFromUrl;
@@ -161,6 +164,28 @@ export default function B2ExamPracticeModuleNav({
       ? `Continue — ${nav.continueModuleTitle}`
       : `Continuar — ${nav.continueModuleTitle}`;
   }
+
+  const nextExamSlot = skillExerciseNav?.pendingNextSlot ?? skillExerciseNav?.nextSlot ?? null;
+  const nextBlockedByPlan =
+    planGating.applyLimits &&
+    nextExamSlot != null &&
+    nextExamSlot > planGating.maxExamSlot;
+
+  const openPlanLockedExam = () => {
+    const isPlus = isPlusTierPlanSlug(planGating.planSlug);
+    const message = isPlus
+      ? `Con Plus tienes desbloqueados los exámenes 1–${planGating.maxExamSlot}. Cada mes se desbloquean 10 nuevos hasta completar el catálogo. El Test ${nextExamSlot} estará disponible pronto.`
+      : null;
+    planGating.onLockedSlotClick(nextExamSlot, message);
+  };
+
+  const handleNextExercise = () => {
+    if (nextBlockedByPlan) {
+      openPlanLockedExam();
+      return;
+    }
+    onContinueInPage?.();
+  };
 
   const showPreviousExercise = effectiveSkillPractice && typeof onSelectExamSlot === 'function';
   const previousExerciseLabel = isEn ? 'Previous test' : 'Test anterior';
@@ -296,9 +321,11 @@ export default function B2ExamPracticeModuleNav({
             <button
               type="button"
               className="levels-exam-module-nav__btn levels-exam-module-nav__btn--continue levels-exam-module-nav__btn--next-exercise"
-              onClick={onContinueInPage}
+              onClick={handleNextExercise}
               disabled={
-                effectiveSkillPractice && skillExerciseNav ? !skillExerciseNav.canGoNext : false
+                effectiveSkillPractice && skillExerciseNav
+                  ? !skillExerciseNav.canGoNext && !nextBlockedByPlan
+                  : false
               }
               aria-describedby={
                 effectiveSkillPractice &&
@@ -317,6 +344,7 @@ export default function B2ExamPracticeModuleNav({
     ) : null;
 
   return (
+    <>
     <nav
       className={`levels-exam-module-nav${
         effectiveSkillPractice ? ' levels-exam-module-nav--skill' : ''
@@ -391,5 +419,7 @@ export default function B2ExamPracticeModuleNav({
           : null}
       </div>
     </nav>
+    {planGating.planUpgradeModal}
+    </>
   );
 }

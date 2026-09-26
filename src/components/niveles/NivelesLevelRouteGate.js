@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
 import usePlanEntitlements from '@/hooks/usePlanEntitlements';
 import { cefrSlugFromNivelesPath } from '@/lib/placementLevelAccess';
+import { isLevelIncludedInPlan } from '@/data/financialPlanConfig';
 import { getNivelesLevelPlanLock } from '@/lib/nivelesPlanLevelAccess';
 import { isNivelesLevelComingSoonForUser, usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { getStudentBlockedExamSkillFromPath } from '@/data/nivelesLevelHub';
@@ -17,7 +18,7 @@ import NivelesPlanLevelLockedNotice from '@/components/niveles/NivelesPlanLevelL
 export default function NivelesLevelRouteGate({ children }) {
   const pathname = usePathname();
   const { userRole, session } = useUserRole();
-  const { planSlug } = usePlanEntitlements();
+  const { planSlug, loading: planLoading, applyLimits } = usePlanEntitlements();
 
   const level = cefrSlugFromNivelesPath(pathname);
   const isStudentView = usesStudentContentRestrictions(userRole);
@@ -27,7 +28,16 @@ export default function NivelesLevelRouteGate({ children }) {
     return children;
   }
 
-  if (session && isStudentView && !isPartTipsRoute) {
+  const levelOutsideFreePlan = !isLevelIncludedInPlan(level, 'free');
+  if (session && isStudentView && !isPartTipsRoute && levelOutsideFreePlan && planLoading) {
+    return (
+      <main className="shell" style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
+        <p>Cargando…</p>
+      </main>
+    );
+  }
+
+  if (session && isStudentView && !isPartTipsRoute && applyLimits && !planLoading) {
     const planLock = getNivelesLevelPlanLock(level, planSlug);
     if (planLock) {
       return (

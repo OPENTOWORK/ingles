@@ -1,28 +1,37 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
+import PlanUpgradeModal from '@/components/subscriptions/PlanUpgradeModal';
 
 export default function NivelesPlanLevelLockedNotice({
   level,
-  requiredPlanName = 'PREMIUM',
+  requiredPlanName = 'PLUS',
   backHref = '/niveles',
 }) {
+  const [open, setOpen] = useState(true);
+  const message = `El nivel ${level} está incluido en el plan ${requiredPlanName}. Con el plan gratuito no puedes entrar.`;
+
   return (
     <main className="shell niveles-coming-soon-page">
+      <PlanUpgradeModal
+        open={open}
+        onClose={() => setOpen(false)}
+        variant="paid_place"
+        lang="es"
+        message={message}
+      />
       <div className="niveles-coming-soon-card">
         <span className="niveles-coming-soon-badge" aria-hidden>
           🔒
         </span>
-        <h1>Plan {requiredPlanName} required</h1>
-        <p>
-          Level {level} is included in the {requiredPlanName} plan. Upgrade your subscription to
-          access this level when it launches.
-        </p>
+        <h1>Esto es de pago</h1>
+        <p>{message}</p>
         <Link href="/precios" className="niveles-coming-soon-link">
-          View plans
+          Ver precios
         </Link>
         <Link href={backHref} className="niveles-coming-soon-link niveles-coming-soon-link--secondary">
-          Back to levels
+          Volver
         </Link>
       </div>
       <style jsx>{`

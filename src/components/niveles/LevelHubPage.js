@@ -6,6 +6,7 @@ import StarsWayHubTabs from '@/components/niveles/StarsWayHubTabs';
 import { useUserRole } from '@/context/UserRoleContext';
 import usePlanEntitlements from '@/hooks/usePlanEntitlements';
 import { isNivelesLevelComingSoonForUser, usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { isLevelIncludedInPlan } from '@/data/financialPlanConfig';
 import { getNivelesLevelPlanLock } from '@/lib/nivelesPlanLevelAccess';
 import { isAdminRole } from '@/utils/authRoles';
 import NivelesComingSoonNotice from '@/components/niveles/NivelesComingSoonNotice';
@@ -17,12 +18,21 @@ import NivelesPlanLevelLockedNotice from '@/components/niveles/NivelesPlanLevelL
  */
 export default function LevelHubPage({ config }) {
   const { userRole: roleName, session } = useUserRole();
-  const { planSlug } = usePlanEntitlements();
+  const { planSlug, loading: planLoading, applyLimits } = usePlanEntitlements();
   const isStudent = usesStudentContentRestrictions(roleName);
   const showStarsWayHub = isAdminRole(roleName);
   const showQuizGame = config.slug === 'b2';
 
-  if (session && isStudent) {
+  const levelOutsideFreePlan = !isLevelIncludedInPlan(config.cefr, 'free');
+  if (session && isStudent && levelOutsideFreePlan && planLoading) {
+    return (
+      <main className="shell" style={{ padding: '2rem 1.5rem', textAlign: 'center' }}>
+        <p>Cargando…</p>
+      </main>
+    );
+  }
+
+  if (session && isStudent && applyLimits && !planLoading) {
     const planLock = getNivelesLevelPlanLock(config.cefr, planSlug);
     if (planLock) {
       return (

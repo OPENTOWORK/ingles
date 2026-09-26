@@ -1778,7 +1778,6 @@ body.nav-open {
 
 /* Acceso directo, iniciar estudio y mascota: solo con el menú lateral abierto. */
 @media (max-width: 1099px) {
-  body.has-home-side-menu:not(:has(.app-side-menu--open)) .site-header__install,
   body.has-home-side-menu:not(:has(.app-side-menu--open)) .site-assistant-fab,
   body.has-home-side-menu:not(:has(.app-side-menu--open)) .site-assistant-panel,
   body.has-home-side-menu:not(:has(.app-side-menu--open)) .study-session-launcher {
@@ -3323,10 +3322,6 @@ body.nav-open {
   }
 
   .site-header__install {
-    display: none;
-  }
-
-  body:has(.app-side-menu--open) .site-header__install {
     display: flex;
     align-items: center;
     margin-left: auto;
@@ -8100,6 +8095,18 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   cursor: not-allowed;
   background: #f1f5f9;
   color: #94a3b8;
+  border-color: #e2e8f0;
+}
+
+button.exam-practice-level-strip__pill {
+  font: inherit;
+}
+
+.exam-practice-level-strip__pill--paywall {
+  opacity: 0.92;
+  cursor: pointer;
+  background: #f8fafc;
+  color: #64748b;
   border-color: #e2e8f0;
 }
 

@@ -21,9 +21,9 @@ function slotHasPriorProgress(progressBySlot, slot) {
 /**
  * Bloqueo de slots y cuota mensual de exámenes según plan (solo estudiantes).
  * @param {Record<number, object>} progressBySlot
- * @param {{ lang?: 'en' | 'es' }} [options]
+ * El aviso de plan se muestra siempre en español.
  */
-export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {}) {
+export function useExamSlotPlanGating(progressBySlot = {}) {
   const { applyLimits, maxExamSlot, isExamSlotLocked, refresh, planSlug } = usePlanEntitlements();
   const [modalState, setModalState] = useState({
     open: false,
@@ -69,9 +69,7 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
       if (applyLimits && isExamSlotLocked(n)) {
         const isPlus = isPlusTierPlanSlug(planSlug);
         const message = isPlus
-          ? lang === 'es'
-            ? `Con Plus tienes desbloqueados los exámenes 1–${maxExamSlot}. Cada mes se desbloquean 10 nuevos hasta completar el catálogo. El examen ${n} estará disponible pronto.`
-            : `Your Plus plan includes Exams 1–${maxExamSlot}. Ten new exams unlock each month until the full catalogue is available. Exam ${n} will be available soon.`
+          ? `Con Plus tienes desbloqueados los exámenes 1–${maxExamSlot}. Cada mes se desbloquean 10 nuevos hasta completar el catálogo. El examen ${n} estará disponible pronto.`
           : null;
         onLockedSlotClick(n, message);
         return false;
@@ -102,7 +100,6 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
     [
       applyLimits,
       isExamSlotLocked,
-      lang,
       maxExamSlot,
       onLockedSlotClick,
       planSlug,
@@ -126,13 +123,14 @@ export function useExamSlotPlanGating(progressBySlot = {}, { lang = 'en' } = {})
       variant={modalState.variant}
       message={modalState.message}
       slot={modalState.slot}
-      lang={lang}
+      lang="es"
     />
   );
 
   return {
     applyLimits,
     maxExamSlot,
+    planSlug,
     lockedSlots,
     onLockedSlotClick,
     guardExamSlotSelect,

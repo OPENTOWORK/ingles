@@ -112,6 +112,18 @@ export default function NivelesPageStyles() {
         position: relative;
         list-style: none;
       }
+      .niveles-page button.area-card--paywall {
+        width: 100%;
+        font: inherit;
+        text-align: left;
+        color: inherit;
+        cursor: pointer;
+        position: relative;
+        filter: grayscale(0.15);
+        opacity: 0.92;
+        background: #f8fafc;
+        border-color: #e2e8f0;
+      }
       .niveles-page .area-card--disabled {
         position: relative;
         cursor: not-allowed;
