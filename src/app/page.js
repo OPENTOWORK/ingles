@@ -70,7 +70,7 @@ export default function Home() {
                 Prepare for the smart and interactive way to learn English
               </p>
             ) : (
-              <Link href="/registro" className="home-cta__btn home-hero__auth-btn">
+              <Link href="/login" className="home-cta__btn home-hero__auth-btn">
                 Sign up / Log in
               </Link>
             )}
