@@ -69,6 +69,7 @@ import {
   buildKeyWordExplanationEntries,
 } from '@/utils/buildOpenGapExplanationEntries';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
+import { playSkillPracticeAnswerSound } from '@/lib/skillPracticeFeedbackSounds';
 
 const UOE_PAGE_PART_MAX = 4;
 
@@ -972,6 +973,7 @@ function UseOfEnglishExamsPageInner() {
       setSelectedOptions(nextSelected);
       setCheckedQuestions(nextChecked);
       if (!wasChecked) {
+        playSkillPracticeAnswerSound(!!option.correcta);
         void (async () => {
           const uid = await getSessionUserId();
           const pid = selectedQuestion?.preguntaId;
@@ -1040,6 +1042,7 @@ function UseOfEnglishExamsPageInner() {
         const grade = gradeB2Part4Gap(currentValue, part4ParsedKeys, questionNumber);
         const nextOpenGrades = { ...openGrades, [questionKey]: grade };
         setOpenGrades(nextOpenGrades);
+        playSkillPracticeAnswerSound(grade.score === 2);
         void (async () => {
           const uid = await getSessionUserId();
           const pid = selectedQuestion?.preguntaId;
@@ -1068,6 +1071,7 @@ function UseOfEnglishExamsPageInner() {
       const isCorrect = openGapAnswerMatches(currentValue, expectedAnswers);
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
+      playSkillPracticeAnswerSound(isCorrect);
       void (async () => {
         const uid = await getSessionUserId();
         const pid = selectedQuestion?.preguntaId;

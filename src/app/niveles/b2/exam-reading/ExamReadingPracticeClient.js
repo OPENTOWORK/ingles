@@ -104,6 +104,11 @@ import {
   resolvePracticeHideFeedback,
   shouldShowCheckAnswersButton,
 } from '@/utils/practiceCheckAnswers';
+import {
+  collectNewBulkCheckResults,
+  playSkillPracticeAnswerSound,
+  playSkillPracticeCheckSounds,
+} from '@/lib/skillPracticeFeedbackSounds';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
@@ -1516,6 +1521,7 @@ function B2ReadingExamsPageInner() {
         selectedOptions: nextSelected,
       });
       if (!wasChecked && !hideFeedback) {
+        if (isSkillPracticeSession) playSkillPracticeAnswerSound(!!option.correcta);
         void (async () => {
           const uid = await getSessionUserId();
           const pid = selectedQuestion?.preguntaId;
@@ -1540,6 +1546,7 @@ function B2ReadingExamsPageInner() {
       selectedOptions,
       hideFeedback,
       hideInstantFeedback,
+      isSkillPracticeSession,
       selectedPart?.id,
       selectedQuestion?.preguntaId,
       trySavePartAfterAnswer,
@@ -1580,6 +1587,7 @@ function B2ReadingExamsPageInner() {
         const grade = gradeB2Part4Gap(currentValue, part4ParsedKeys, questionNumber);
         const nextOpenGrades = { ...openGrades, [questionKey]: grade };
         setOpenGrades(nextOpenGrades);
+        if (isSkillPracticeSession) playSkillPracticeAnswerSound(grade.score === 2);
         readingSession.incrementCheckAttempts();
         void (async () => {
           const uid = await getSessionUserId();
@@ -1609,6 +1617,7 @@ function B2ReadingExamsPageInner() {
       const isCorrect = openGapAnswerMatches(currentValue, expectedAnswers);
       const nextOpenChecks = { ...openChecks, [questionKey]: isCorrect };
       setOpenChecks(nextOpenChecks);
+      if (isSkillPracticeSession) playSkillPracticeAnswerSound(isCorrect);
       readingSession.incrementCheckAttempts();
       void (async () => {
         const uid = await getSessionUserId();
@@ -1641,6 +1650,7 @@ function B2ReadingExamsPageInner() {
       partNumberReading,
       trySavePartAfterAnswer,
       readingSession,
+      isSkillPracticeSession,
     ],
   );
 
@@ -1734,6 +1744,21 @@ function B2ReadingExamsPageInner() {
     });
 
     const { nextOpenChecks, nextOpenGrades, nextChecked, hasAnyAnswer } = bulkUpdate;
+    if (isSkillPracticeSession) {
+      playSkillPracticeCheckSounds(
+        collectNewBulkCheckResults({
+          prevOpenChecks: openChecks,
+          nextOpenChecks,
+          prevOpenGrades: openGrades,
+          nextOpenGrades,
+          prevChecked: checkedQuestions,
+          nextChecked,
+          mcqGroups: mcqGroupsForCheck,
+          getMcqQuestionKey: resolveMcqQuestionKey,
+          selectedOptions,
+        }),
+      );
+    }
 
     if (scoringV2Part4) {
       setOpenGrades(nextOpenGrades);
@@ -1787,6 +1812,7 @@ function B2ReadingExamsPageInner() {
     groupedAnswersForUiAndScore,
     getQuestionKey,
     readingSession,
+    isSkillPracticeSession,
   ]);
 
   /** Explicación lazy para huecos open cloze / word formation / key word. */

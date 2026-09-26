@@ -188,6 +188,11 @@ import {
   resolvePracticeHideFeedback,
   shouldShowCheckAnswersButton,
 } from '@/utils/practiceCheckAnswers';
+import {
+  collectNewBulkCheckResults,
+  playSkillPracticeAnswerSound,
+  playSkillPracticeCheckSounds,
+} from '@/lib/skillPracticeFeedbackSounds';
 import { formatLevelsPartDisplayName, getExamSectionPartTitle, getSkillPartPracticeTitle, formatSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
@@ -1549,6 +1554,7 @@ function B2ExamPaperPracticePageInner({
       const prevResult = openChecks[questionKey];
       setOpenChecks((prev) => ({ ...prev, [questionKey]: isCorrect }));
       if (typeof prevResult !== 'boolean') {
+        if (isSkillPracticeSession) playSkillPracticeAnswerSound(isCorrect);
         const correctChoiceText = [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
         const answersFromDatabase = [...expectedAnswers].join(' · ');
         requestAiJustification(questionKey, {
@@ -1588,6 +1594,7 @@ function B2ExamPaperPracticePageInner({
     [
       openAnswerMap,
       openChecks,
+      isSkillPracticeSession,
       requestAiJustification,
       selectedPart?.id,
       selectedPart?.nombre,
@@ -2591,6 +2598,7 @@ function B2ExamPaperPracticePageInner({
       setCheckedQuestions(nextChecked);
       trySavePartAfterAnswer({ checkedQuestions: nextChecked, selectedOptions: nextSelected });
       if (!wasChecked && !hideFeedbackResolved) {
+        if (isSkillPracticeSession) playSkillPracticeAnswerSound(!!option.correcta);
         const correctOpt = group.options.find((o) => o.correcta);
         const answersFromDatabase = group.options
           .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -2628,6 +2636,7 @@ function B2ExamPaperPracticePageInner({
       checkedQuestions,
       selectedOptions,
       hideFeedbackResolved,
+      isSkillPracticeSession,
       requestAiJustification,
       selectedPart?.id,
       selectedPart?.nombre,
@@ -2843,6 +2852,19 @@ function B2ExamPaperPracticePageInner({
 
     setOpenChecks(nextOpenChecks);
     setCheckedQuestions(nextChecked);
+    if (isSkillPracticeSession) {
+      playSkillPracticeCheckSounds(
+        collectNewBulkCheckResults({
+          prevOpenChecks: openChecks,
+          nextOpenChecks,
+          prevChecked: checkedQuestions,
+          nextChecked,
+          mcqGroups: mcqGroupsForBulkCheck,
+          getMcqQuestionKey: resolveBulkMcqQuestionKey,
+          selectedOptions,
+        }),
+      );
+    }
     trySavePartAfterAnswer({ openChecks: nextOpenChecks, checkedQuestions: nextChecked });
     readingSession.revealAnswers();
     if (hasAnyAnswer) readingSession.incrementCheckAttempts();
@@ -2859,6 +2881,7 @@ function B2ExamPaperPracticePageInner({
     trySavePartAfterAnswer,
     readingSession,
     getQuestionKey,
+    isSkillPracticeSession,
   ]);
 
   const renderA2McqBlock = useCallback(
@@ -4580,6 +4603,7 @@ function B2ExamPaperPracticePageInner({
                                   setOpenChecks(nextOpenChecks);
                                   trySavePartAfterAnswer({ openChecks: nextOpenChecks });
                                   if (typeof prevResult !== 'boolean') {
+                                    if (isSkillPracticeSession) playSkillPracticeAnswerSound(isCorrect);
                                     const correctChoiceText =
                                       [...expectedAnswers].slice(0, 4).join(' · ') || 'respuesta modelo';
                                     const answersFromDatabase = [...expectedAnswers].join(' · ');
