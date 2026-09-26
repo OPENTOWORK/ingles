@@ -11,6 +11,9 @@ import { isMinimalLandingPath } from '@/utils/minimalLandingRoutes';
 import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 import { nextRoleConfirmation } from '@/lib/userRoleResolution';
+import { capturePwaInstallPrompt } from '@/lib/pwaInstallPrompt';
+
+if (typeof window !== 'undefined') capturePwaInstallPrompt();
 
 const AUTH_FLOW_PATH_PREFIXES = ['/auth/callback', '/auth/confirm'];
 import Link from 'next/link';

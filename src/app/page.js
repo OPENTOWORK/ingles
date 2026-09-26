@@ -54,11 +54,10 @@ export default function Home() {
   }, [session?.user?.id]);
 
   return (
-    <main className={`home-page${showAppHome ? ' home-page--student-mobile' : ''}`}>
+    <main className={`home-page${showAppHome ? ' home-page--student-mobile' : ''}${isGuestHome ? ' home-page--guest' : ''}`}>
       <div className="home-page__inner">
         {isRegistered ? <InviteFriendPromoBanner /> : null}
         {isGuestHome ? <FoundingMemberSlotsBanner /> : null}
-        {isGuestHome ? <InviteFriendPromoBanner guest /> : null}
         <section className="home-hero" aria-labelledby="home-title">
           <HomeInstallAppButton />
 
@@ -66,9 +65,15 @@ export default function Home() {
             <h1 id="home-title" className="home-page__title">
               Welcome to Dralo
             </h1>
-            <p className="home-hero__subtitle">
-              Prepare for the smart and interactive way to learn English
-            </p>
+            {isRegistered ? (
+              <p className="home-hero__subtitle">
+                Prepare for the smart and interactive way to learn English
+              </p>
+            ) : (
+              <Link href="/registro" className="home-cta__btn home-hero__auth-btn">
+                Sign up / Log in
+              </Link>
+            )}
             <ul className="home-page__features" aria-label="Platform highlights">
               {FEATURES.map((item) => (
                 <li key={item} className="home-feature">

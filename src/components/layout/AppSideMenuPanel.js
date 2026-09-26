@@ -88,6 +88,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
         type="button"
         className="app-side-menu__tab"
         onClick={() => setOpen((v) => !v)}
+        aria-label={open ? 'Close menu' : 'Open menu'}
         aria-expanded={open}
         aria-controls="app-side-menu-panel"
       >

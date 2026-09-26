@@ -115,42 +115,33 @@ export default function FoundingMemberSlotsBanner() {
 
   return (
     <div className="founding-slots-banner founding-slots-banner--home" role="status" aria-live="polite">
-      <div className="founding-slots-banner__inner">
-        <span className="founding-slots-banner__icon" aria-hidden>
-          <Sparkles size={18} strokeWidth={2.25} />
-        </span>
-        <p className="founding-slots-banner__text">
-          {formatSlotsMessage(availability.remaining, availability.total)}
-        </p>
-        <div className="founding-slots-banner__conditions" ref={conditionsRef}>
-          <button
-            type="button"
-            className="founding-slots-banner__conditions-btn"
-            onClick={() => setShowConditions((open) => !open)}
-            aria-expanded={showConditions}
-            aria-controls="founding-slots-conditions-popover"
-          >
-            Condiciones
-          </button>
-          {showConditions ? (
-            <div
-              id="founding-slots-conditions-popover"
-              className="founding-slots-banner__conditions-popover"
-              role="dialog"
-              aria-label="Condiciones del Plan Plus founding"
+      <div
+        className={`founding-slots-banner__inner${showConditions ? ' founding-slots-banner__inner--details' : ''}`}
+      >
+        <div className="founding-slots-banner__row">
+          <span className="founding-slots-banner__icon" aria-hidden>
+            <Sparkles size={18} strokeWidth={2.25} />
+          </span>
+          <p className="founding-slots-banner__text">
+            {formatSlotsMessage(availability.remaining, availability.total)}
+          </p>
+          <div className="founding-slots-banner__conditions" ref={conditionsRef}>
+            <button
+              type="button"
+              className="founding-slots-banner__conditions-btn"
+              onClick={() => setShowConditions((open) => !open)}
+              aria-expanded={showConditions}
+              aria-controls="founding-slots-conditions-note"
             >
-              <p>{CONDITIONS_TEXT}</p>
-              <button
-                type="button"
-                className="founding-slots-banner__conditions-close"
-                onClick={() => setShowConditions(false)}
-                aria-label="Cerrar condiciones"
-              >
-                ×
-              </button>
-            </div>
-          ) : null}
+              Condiciones
+            </button>
+          </div>
         </div>
+        {showConditions ? (
+          <p id="founding-slots-conditions-note" className="founding-slots-banner__note">
+            {CONDITIONS_TEXT}
+          </p>
+        ) : null}
       </div>
     </div>
   );
