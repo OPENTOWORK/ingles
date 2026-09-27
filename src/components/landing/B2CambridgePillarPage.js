@@ -157,16 +157,16 @@ const FAQ_ITEMS = [
   },
 ];
 
-function useRegistroHref() {
+function useCampaignAuthHref() {
   const searchParams = useSearchParams();
   const qs = searchParams.toString();
-  return qs ? `/registro?${qs}` : '/registro';
+  return qs ? `/login?${qs}` : '/login';
 }
 
 function PillarCta({ children, className = '' }) {
-  const registroHref = useRegistroHref();
+  const authHref = useCampaignAuthHref();
   return (
-    <Link href={registroHref} className={`conversion-landing__cta ${className}`.trim()}>
+    <Link href={authHref} className={`conversion-landing__cta ${className}`.trim()}>
       {children}
       <ArrowRight size={18} aria-hidden />
     </Link>
