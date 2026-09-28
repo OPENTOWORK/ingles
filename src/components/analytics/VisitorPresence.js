@@ -3,23 +3,7 @@
 import { useEffect } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { readBrowserTrafficFields } from '@/lib/trafficSource';
-
-const STORAGE_KEY = 'dralo_visitor_id';
-const VISITOR_ID_PATTERN = /^vis_[a-f0-9]{32}$/;
-
-function readOrCreateVisitorId() {
-  try {
-    const existing = window.localStorage.getItem(STORAGE_KEY);
-    if (VISITOR_ID_PATTERN.test(existing || '')) return existing;
-    const bytes = new Uint8Array(16);
-    window.crypto.getRandomValues(bytes);
-    const visitorId = `vis_${[...bytes].map((byte) => byte.toString(16).padStart(2, '0')).join('')}`;
-    window.localStorage.setItem(STORAGE_KEY, visitorId);
-    return visitorId;
-  } catch {
-    return null;
-  }
-}
+import { readOrCreateVisitorId } from '@/lib/visitorPresence';
 
 async function sendVisit(visitorId, accessToken, heartbeat = false) {
   const traffic = readBrowserTrafficFields();

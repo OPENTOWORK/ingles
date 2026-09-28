@@ -150,6 +150,8 @@ export async function GET(req) {
         Math.round((new Date(lastSeen).getTime() - new Date(visitor.created_at).getTime()) / 1000),
       );
       return {
+        visitorId: visitor.visitor_id,
+        userId: userId || null,
         ip,
         seenAt: visitor.created_at,
         lastSeen,

@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import {
   Bar,
@@ -749,6 +750,10 @@ export default function AdminAnalyticsPanels({
   const [visitStats, setVisitStats] = useState(null);
   const [entriesWithoutStaff, setEntriesWithoutStaff] = useState(true);
   const [entriesRange, setEntriesRange] = useState('all');
+  const [expandedVisitorId, setExpandedVisitorId] = useState(null);
+  const [pagesByVisitor, setPagesByVisitor] = useState({});
+  const [loadingVisitorId, setLoadingVisitorId] = useState(null);
+  const [journeyError, setJourneyError] = useState('');
   const isNight = useReadingNightMode();
   const chartGrid = isNight ? '#334155' : '#e2e8f0';
   const chartTick = { fontSize: 11, fill: isNight ? '#94a3b8' : '#64748b' };
@@ -837,6 +842,46 @@ export default function AdminAnalyticsPanels({
     () => entryView.rows.filter((row) => !entriesWithoutStaff || row.kind !== 'staff'),
     [entryView.rows, entriesWithoutStaff],
   );
+
+  useEffect(() => {
+    setExpandedVisitorId(null);
+    setPagesByVisitor({});
+    setJourneyError('');
+  }, [entriesRange, entriesWithoutStaff]);
+
+  const toggleVisitorJourney = async (row) => {
+    const visitorId = row?.visitorId;
+    if (!visitorId) return;
+
+    if (expandedVisitorId === visitorId) {
+      setExpandedVisitorId(null);
+      setJourneyError('');
+      return;
+    }
+
+    setExpandedVisitorId(visitorId);
+    setJourneyError('');
+    if (pagesByVisitor[visitorId]) return;
+
+    setLoadingVisitorId(visitorId);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      const res = await fetch(`/api/admin/visitors/${encodeURIComponent(visitorId)}/pages/`, {
+        credentials: 'include',
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'No se pudo cargar el recorrido.');
+      }
+      setPagesByVisitor((prev) => ({ ...prev, [visitorId]: payload.pages || [] }));
+    } catch (err) {
+      setJourneyError(err?.message || 'Error al cargar el recorrido.');
+    } finally {
+      setLoadingVisitorId(null);
+    }
+  };
 
   const exportEntriesToExcel = async () => {
     if (!visibleEntryRows.length) return;
@@ -1069,31 +1114,88 @@ export default function AdminAnalyticsPanels({
                             <th>Llegan a</th>
                             <th>Tiempo</th>
                             <th>Cuenta</th>
+                            <th>Páginas</th>
                             <th>Estado</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {rows.map((row, index) => (
-                            <tr key={`${row.seenAt}-${index}`}>
-                              <td>{row.ip || 'No guardada'}</td>
-                              <td>
-                                {row.seenAt
-                                  ? new Date(row.seenAt).toLocaleString('es-ES', {
-                                      day: '2-digit',
-                                      month: 'short',
-                                      year: 'numeric',
-                                      hour: '2-digit',
-                                      minute: '2-digit',
-                                    })
-                                  : '—'}
-                              </td>
-                              <td>{row.source || '—'}</td>
-                              <td>{row.landing || '—'}</td>
-                              <td>{row.seconds > 0 ? formatSessionDuration(row.seconds) : '—'}</td>
-                              <td>{row.email || '—'}</td>
-                              <td>{ENTRY_KIND_LABEL[row.kind] || 'Sin cuenta'}</td>
-                            </tr>
-                          ))}
+                          {rows.map((row, index) => {
+                            const visitorKey = row.visitorId || `${row.seenAt}-${index}`;
+                            const isExpanded = Boolean(row.visitorId) && expandedVisitorId === row.visitorId;
+                            const pages = pagesByVisitor[row.visitorId];
+                            const isLoading = loadingVisitorId === row.visitorId;
+                            return (
+                              <Fragment key={visitorKey}>
+                                <tr>
+                                  <td>{row.ip || 'No guardada'}</td>
+                                  <td>
+                                    {row.seenAt
+                                      ? new Date(row.seenAt).toLocaleString('es-ES', {
+                                          day: '2-digit',
+                                          month: 'short',
+                                          year: 'numeric',
+                                          hour: '2-digit',
+                                          minute: '2-digit',
+                                        })
+                                      : '—'}
+                                  </td>
+                                  <td>{row.source || '—'}</td>
+                                  <td>{row.landing || '—'}</td>
+                                  <td>{row.seconds > 0 ? formatSessionDuration(row.seconds) : '—'}</td>
+                                  <td>{row.email || '—'}</td>
+                                  <td>
+                                    <button
+                                      type="button"
+                                      className={styles.journeyLink}
+                                      disabled={!row.visitorId}
+                                      onClick={() => toggleVisitorJourney(row)}
+                                    >
+                                      {isExpanded ? 'Ocultar' : 'Ver'}
+                                    </button>
+                                  </td>
+                                  <td>{ENTRY_KIND_LABEL[row.kind] || 'Sin cuenta'}</td>
+                                </tr>
+                                {isExpanded ? (
+                                  <tr className={styles.journeyDetailRow}>
+                                    <td colSpan={8}>
+                                      <div className={styles.journeyDetail}>
+                                        {isLoading ? (
+                                          <p className={styles.pageMeta}>Cargando páginas…</p>
+                                        ) : journeyError && expandedVisitorId === row.visitorId ? (
+                                          <p className={styles.pageMeta} style={{ color: '#dc2626' }}>
+                                            {journeyError}
+                                          </p>
+                                        ) : pages?.length === 0 ? (
+                                          <p className={styles.pageMeta}>
+                                            Todavía no hay páginas registradas de esta visita.
+                                          </p>
+                                        ) : (
+                                          (pages || []).map((page) => (
+                                            <div key={page.id} className={styles.pageItem}>
+                                              <p className={styles.pageTitle}>{page.pageTitle}</p>
+                                              <p className={styles.pagePath}>{page.path}</p>
+                                              <p className={styles.pageMeta}>
+                                                {page.visitedLabel}
+                                                {page.durationLabel ? ` · ${page.durationLabel}` : ''}
+                                              </p>
+                                            </div>
+                                          ))
+                                        )}
+                                        {row.userId ? (
+                                          <Link
+                                            href={`/admin/usuarios/${row.userId}`}
+                                            className={styles.journeyProfileLink}
+                                          >
+                                            Ver ficha de la cuenta
+                                          </Link>
+                                        ) : null}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                ) : null}
+                              </Fragment>
+                            );
+                          })}
                         </tbody>
                       </table>
                     </div>

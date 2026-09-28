@@ -146,7 +146,7 @@ function RootLayoutClientInner({ children }) {
     !isClarityExcludedPath(pathname);
 
   useActivityHeartbeat(session, heartbeatEnabled);
-  usePageViewTracker(session, heartbeatEnabled);
+  usePageViewTracker(session, true);
   useClarityPageTags(clarityAnalyticsEnabled);
   useLevelsStarsBackfill(session);
 

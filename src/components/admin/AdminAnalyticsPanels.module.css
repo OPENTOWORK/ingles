@@ -867,6 +867,53 @@
   background: #f8fafc;
 }
 
+.journeyLink {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.25rem;
+  border: 1px solid #c7d2fe;
+  background: #eef2ff;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  color: #3730a3;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.journeyLink:hover:not(:disabled) {
+  background: #e0e7ff;
+  border-color: #a5b4fc;
+}
+
+.journeyLink:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.journeyDetailRow td {
+  background: #f8fafc;
+  padding: 0.35rem 0.9rem 0.9rem;
+}
+
+.journeyDetail {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.journeyProfileLink {
+  display: inline-block;
+  margin-top: 0.55rem;
+  color: #4f46e5;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 .statusYes,
 .statusNo {
   display: inline-flex;
@@ -995,9 +1042,25 @@
   background: #334155;
 }
 
-:global(body.reading-night-mode) .userPages {
+:global(body.reading-night-mode) .userPages,
+:global(body.reading-night-mode) .journeyDetailRow td {
   background: #0f172a;
   border-top-color: #334155;
+}
+
+:global(body.reading-night-mode) .journeyLink {
+  background: #312e81;
+  border-color: #4c1d95;
+  color: #c7d2fe;
+}
+
+:global(body.reading-night-mode) .journeyLink:hover:not(:disabled) {
+  background: #3730a3;
+  color: #e0e7ff;
+}
+
+:global(body.reading-night-mode) .journeyProfileLink {
+  color: #a5b4fc;
 }
 
 :global(body.reading-night-mode) .pageItem {

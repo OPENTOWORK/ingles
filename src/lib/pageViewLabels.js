@@ -1,5 +1,16 @@
 /** Etiquetas legibles para rutas de la app (ficha admin / historial). */
 const PATH_LABELS = [
+  { prefix: '/exam-practice', label: 'Exam Practice' },
+  { prefix: '/exam-strategies', label: 'Exam Strategies' },
+  { prefix: '/exam-theory', label: 'Theory' },
+  { prefix: '/exam-mode', label: 'Exam mode' },
+  { prefix: '/quiz-game', label: 'Quiz game' },
+  { prefix: '/preparar-b2', label: 'Landing B2' },
+  { prefix: '/campana', label: 'Landing B2' },
+  { prefix: '/precios', label: 'Precios' },
+  { prefix: '/pricing', label: 'Precios' },
+  { prefix: '/contacto', label: 'Contacto' },
+  { prefix: '/contact', label: 'Contacto' },
   { prefix: '/training/', label: 'Training' },
   { prefix: '/niveles/', label: 'Niveles' },
   { prefix: '/teoria/', label: 'Teoría' },

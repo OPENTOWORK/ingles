@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { getPageTitleForPath } from '@/lib/pageViewLabels';
-import { isDevLightweightMode } from '@/lib/devRuntime';
+import { isTrackedPublicPath, readOrCreateVisitorId } from '@/lib/visitorPresence';
 
 const MIN_DURATION_SEC = 2;
 
@@ -12,18 +12,27 @@ export function usePageViewTracker(session, enabled = true) {
   const pathRef = useRef(null);
   const enteredAtRef = useRef(Date.now());
   const visitedAtRef = useRef(null);
+  const lastFlushKeyRef = useRef('');
 
   const flushView = async (path, durationSeconds, visitedAtIso) => {
-    if (!session?.access_token || !path || durationSeconds < MIN_DURATION_SEC) return;
+    if (!path || durationSeconds < MIN_DURATION_SEC || !isTrackedPublicPath(path)) return;
+
+    const flushKey = `${path}|${visitedAtIso || ''}|${durationSeconds}`;
+    if (lastFlushKeyRef.current === flushKey) return;
+    lastFlushKeyRef.current = flushKey;
+
+    const visitorId = readOrCreateVisitorId();
+    if (!session?.access_token && !visitorId) return;
 
     try {
-      await fetch('/api/activity/page-view', {
+      await fetch('/api/activity/page-view/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${session.access_token}`,
+          ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {}),
         },
         body: JSON.stringify({
+          visitorId,
           path,
           pageTitle: getPageTitleForPath(path),
           durationSeconds,
@@ -37,7 +46,7 @@ export function usePageViewTracker(session, enabled = true) {
   };
 
   useEffect(() => {
-    if (isDevLightweightMode() || !enabled || !session?.access_token) return undefined;
+    if (!enabled) return undefined;
 
     const now = Date.now();
     const previousPath = pathRef.current;
@@ -60,9 +69,11 @@ export function usePageViewTracker(session, enabled = true) {
     };
 
     document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', onHide);
 
     return () => {
       document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', onHide);
       if (!pathRef.current) return;
       const durationSeconds = Math.round((Date.now() - enteredAtRef.current) / 1000);
       void flushView(pathRef.current, durationSeconds, visitedAtRef.current);
