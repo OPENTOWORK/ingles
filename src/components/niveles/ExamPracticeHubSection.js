@@ -2,6 +2,11 @@
 
 import ExamSkillHubCard, { getExamSkillKindFromSlug } from '@/components/exam/ExamSkillHubCard';
 import ExamSkillHubCardStyles from '@/components/exam/ExamSkillHubCardStyles';
+import {
+  GUEST_PREVIEW_REGISTER_LABEL,
+  getGuestRegisterHref,
+  isGuestExamPracticeLockedHref,
+} from '@/lib/guestPreviewAccess';
 
 function classifyExamLink(href = '', text = '') {
   const h = href.toLowerCase();
@@ -29,35 +34,44 @@ function getExamLinkMeta(exam) {
   };
 }
 
-function ExamPracticeCard({ exam, isStudent, variant = 'skill' }) {
+function ExamPracticeCard({ exam, isStudent, guestPreview = false, variant = 'skill' }) {
   const blockedForStudent = isStudent && !exam.enabledForStudents;
+  const guestLocked = guestPreview && isGuestExamPracticeLockedHref(exam.href);
   const { kind, label, isExamMode } = getExamLinkMeta(exam);
   const isBanner = variant === 'banner';
 
   return (
     <ExamSkillHubCard
-      href={blockedForStudent ? null : exam.href}
+      href={
+        guestLocked
+          ? getGuestRegisterHref(exam.href)
+          : blockedForStudent
+            ? null
+            : exam.href
+      }
       kind={kind}
       label={label}
       hint={isExamMode ? 'Full timed simulation' : 'Practise'}
-      badge={blockedForStudent ? 'Coming soon' : null}
-      disabled={blockedForStudent}
+      badge={guestLocked ? GUEST_PREVIEW_REGISTER_LABEL : blockedForStudent ? 'Coming soon' : null}
+      disabled={blockedForStudent && !guestLocked}
       featured={isExamMode}
       banner={isBanner}
-      {...(isExamMode && !blockedForStudent ? { 'data-tour': 'level-exam-mode' } : {})}
+      {...(isExamMode && !blockedForStudent && !guestLocked ? { 'data-tour': 'level-exam-mode' } : {})}
     />
   );
 }
 
-function QuizGameCard({ quizGame }) {
+function QuizGameCard({ quizGame, guestPreview = false }) {
   if (!quizGame?.href) return null;
+  const guestLocked = guestPreview && isGuestExamPracticeLockedHref(quizGame.href);
   return (
     <div className="exam-practice-hub__quiz-game">
       <ExamSkillHubCard
-        href={quizGame.href}
+        href={guestLocked ? getGuestRegisterHref(quizGame.href) : quizGame.href}
         kind="quiz-game"
         label={quizGame.label || 'Quiz game'}
         hint={quizGame.hint || 'Timed English quiz'}
+        badge={guestLocked ? GUEST_PREVIEW_REGISTER_LABEL : null}
       />
     </div>
   );
@@ -66,6 +80,7 @@ function QuizGameCard({ quizGame }) {
 export default function ExamPracticeHubSection({
   examLinks = [],
   isStudent,
+  guestPreview = false,
   quadrant = false,
   skillsQuadrant = false,
   sectionTitle = null,
@@ -90,7 +105,12 @@ export default function ExamPracticeHubSection({
     skillLinks.length > 0 ? (
       <div className="exam-practice-hub__skills-grid">
         {skillLinks.map((exam) => (
-          <ExamPracticeCard key={exam.href} exam={exam} isStudent={isStudent} />
+          <ExamPracticeCard
+            key={exam.href}
+            exam={exam}
+            isStudent={isStudent}
+            guestPreview={guestPreview}
+          />
         ))}
       </div>
     ) : null;
@@ -107,10 +127,14 @@ export default function ExamPracticeHubSection({
             ) : null}
             <div className="exam-practice-hub__body">
               {skillsGrid}
-              <QuizGameCard quizGame={quizGame} />
+              <QuizGameCard quizGame={quizGame} guestPreview={guestPreview} />
               {examModeLink ? (
                 <div className="exam-practice-hub__exam-mode">
-                  <ExamPracticeCard exam={examModeLink} isStudent={isStudent} />
+                  <ExamPracticeCard
+                    exam={examModeLink}
+                    isStudent={isStudent}
+                    guestPreview={guestPreview}
+                  />
                 </div>
               ) : null}
             </div>
@@ -132,10 +156,15 @@ export default function ExamPracticeHubSection({
         <div className="exam-practice-hub__quadrant-inner">
           <div className="exam-practice-hub__body">
             {skillsGrid}
-            <QuizGameCard quizGame={quizGame} />
+            <QuizGameCard quizGame={quizGame} guestPreview={guestPreview} />
             {examModeLink ? (
               <div className="exam-practice-hub__exam-mode">
-                <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
+                <ExamPracticeCard
+                  exam={examModeLink}
+                  isStudent={isStudent}
+                  guestPreview={guestPreview}
+                  variant="banner"
+                />
               </div>
             ) : null}
           </div>
@@ -143,10 +172,15 @@ export default function ExamPracticeHubSection({
       ) : (
         <div className="exam-practice-hub__body">
           {skillsGrid}
-          <QuizGameCard quizGame={quizGame} />
+          <QuizGameCard quizGame={quizGame} guestPreview={guestPreview} />
           {examModeLink ? (
             <div className="exam-practice-hub__exam-mode">
-              <ExamPracticeCard exam={examModeLink} isStudent={isStudent} variant="banner" />
+              <ExamPracticeCard
+                exam={examModeLink}
+                isStudent={isStudent}
+                guestPreview={guestPreview}
+                variant="banner"
+              />
             </div>
           ) : null}
         </div>

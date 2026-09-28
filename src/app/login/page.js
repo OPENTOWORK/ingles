@@ -11,14 +11,28 @@ import {
 import { completeSignIn } from '@/utils/completeSignIn';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { clearLogoutPending } from '@/utils/logout';
-import { isPublicPath } from '@/utils/publicRoutes';
 import toast from 'react-hot-toast';
 import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 
+function isAuthOrLandingNextPath(path = '') {
+  const p = String(path || '').split('?')[0];
+  return (
+    p === '/login' ||
+    p.startsWith('/login/') ||
+    p === '/registro' ||
+    p.startsWith('/registro/') ||
+    p.startsWith('/auth/') ||
+    p.startsWith('/reset-password') ||
+    p.startsWith('/update-password') ||
+    p.startsWith('/campana') ||
+    p.startsWith('/preparar-b2')
+  );
+}
+
 function getSafeNextPath(searchParams) {
   const next = searchParams?.get('next')?.trim();
-  if (!next || !next.startsWith('/') || next.startsWith('//') || isPublicPath(next.split('?')[0])) {
+  if (!next || !next.startsWith('/') || next.startsWith('//') || isAuthOrLandingNextPath(next)) {
     return null;
   }
   return next;

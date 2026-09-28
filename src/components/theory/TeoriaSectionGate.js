@@ -59,7 +59,9 @@ export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics })
       return <ExamStrategiesBlockedScreen />;
     }
     const unitLocked =
-      isStudent && isExamTheorySlugLocked(sectionSlug, examProgress.units, true);
+      Boolean(session) &&
+      isStudent &&
+      isExamTheorySlugLocked(sectionSlug, examProgress.units, true);
     if (unitLocked) {
       const info = getExamTheoryUnlockInfo(sectionSlug, examProgress.units, true);
       return (

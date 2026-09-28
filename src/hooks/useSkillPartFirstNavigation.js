@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getSkillPracticeThemeKey, resolveSkillPracticeExamSlot } from '@/utils/skillPartFirstProgress';
-import { getSortedExamSlots } from '@/utils/skillPracticeNavigation';
 import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
@@ -170,21 +169,24 @@ export function useSkillPartFirstNavigation({
     const qExam = searchParams.get('examen');
     const explicitSlot =
       qExam && Number.isFinite(Number(qExam)) ? clampB2ExamSlot(qExam) : null;
+    const currentSlot = Number(examSlot);
     const progressForResume = resumeProgressBySlot ?? progressBySlot;
 
-    if (
-      explicitSlot &&
-      examSlot === explicitSlot &&
-      examPracticeOpen &&
-      getSortedExamSlots(examenIdBySlot).includes(explicitSlot)
-    ) {
+    if (explicitSlot && currentSlot === explicitSlot && examPracticeOpen) {
       lastResolvedSlotRef.current = `${selectedPartNumber}:${explicitSlot}`;
       slotBootstrapRef.current = true;
       return;
     }
 
+    // After the first open, Previous / Next own the slot. Do not snap back
+    // to the first test without stars.
+    if (slotBootstrapRef.current && examPracticeOpen && currentSlot >= 1) {
+      lastResolvedSlotRef.current = `${selectedPartNumber}:${currentSlot}`;
+      return;
+    }
+
     const requestedSlot = slotBootstrapRef.current
-      ? examSlot
+      ? currentSlot
       : hasExplicitExamQuery
         ? Number(qExam)
         : null;
@@ -197,13 +199,13 @@ export function useSkillPartFirstNavigation({
     );
 
     const resolutionKey = `${selectedPartNumber}:${allowedSlot}`;
-    if (lastResolvedSlotRef.current === resolutionKey && examSlot === allowedSlot && examPracticeOpen) {
+    if (lastResolvedSlotRef.current === resolutionKey && currentSlot === allowedSlot && examPracticeOpen) {
       if (!slotBootstrapRef.current) slotBootstrapRef.current = true;
       return;
     }
 
-    if (!slotBootstrapRef.current || examSlot !== allowedSlot || !examPracticeOpen) {
-      if (lastResolvedSlotRef.current !== resolutionKey || examSlot !== allowedSlot) {
+    if (!slotBootstrapRef.current || currentSlot !== allowedSlot || !examPracticeOpen) {
+      if (lastResolvedSlotRef.current !== resolutionKey || currentSlot !== allowedSlot) {
         lastResolvedSlotRef.current = resolutionKey;
         planGating.wrapSelectHandler(onSelectExam)(allowedSlot);
       }

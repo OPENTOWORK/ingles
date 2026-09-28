@@ -156,7 +156,7 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
                       {item.menuId === 'exam-strategies' ? (
                         <ExamStrategiesNavMenuItems
                           locked={navModel.examStrategiesLocked}
-                          guestRequiresLogin={navModel.guest}
+                          guestRequiresLogin={false}
                           variant="desktop"
                           onNavigate={closeDesktopDropdowns}
                         />
@@ -244,6 +244,16 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
         <div className="app-nav__account" role="group" aria-label="Account">
           {navModel.guest ? (
             <>
+              {navModel.showPricing ? (
+                <NavLink
+                  href={NAV_LINK_PRICING.href}
+                  className={desktopLinkClass(NAV_LINK_PRICING.href)}
+                  onClick={closeDesktopDropdowns}
+                  {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
+                >
+                  {NAV_LINK_PRICING.label}
+                </NavLink>
+              ) : null}
               <NavLink
                 href={NAV_LINK_CONTACT.href}
                 className={desktopLinkClass(NAV_LINK_CONTACT.href)}

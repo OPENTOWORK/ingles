@@ -4,7 +4,6 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useUserRole } from '@/context/UserRoleContext';
 import {
   TRAINING_STARS_UPDATED_EVENT,
   normalizeTrainingCefr,
@@ -31,7 +30,6 @@ const TrainingLevelPathMap = dynamic(
 export default function TrainingHome() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { session } = useUserRole();
   const trainingLives = useTrainingLives();
   const difficulty = normalizeTrainingDifficulty(searchParams.get('difficulty'));
   const cefrLevel = normalizeTrainingCefr(searchParams.get('cefr'));
@@ -50,12 +48,6 @@ export default function TrainingHome() {
   }, [cefrLevel, difficulty]);
 
   useEffect(() => {
-    if (!session) {
-      router.push('/login');
-    }
-  }, [router, session]);
-
-  useEffect(() => {
     loadLevelStars();
   }, [loadLevelStars]);
 
@@ -65,24 +57,11 @@ export default function TrainingHome() {
     return () => window.removeEventListener(TRAINING_STARS_UPDATED_EVENT, onStarsUpdated);
   }, [loadLevelStars]);
 
-  if (!session) {
-    return <p className={styles.loading}>Loading…</p>;
-  }
-
   return (
     <main className={styles.page}>
       <div className={styles.top}>
         <header className={styles.head}>
           <h1 className={styles.title}>Training</h1>
-          <div className={styles.lives}>
-            <TrainingLivesMeter
-              loading={trainingLives.loading}
-              unlimited={trainingLives.unlimited}
-              lives={trainingLives.lives}
-              max={trainingLives.max}
-              nextLifeAt={trainingLives.nextLifeAt}
-            />
-          </div>
           {trainingLives.outOfLives ? (
             <p className={styles.livesNote}>
               The free plan includes 3 lives. One comes back every {trainingLives.regenHours || 10} hours.{' '}
@@ -114,6 +93,15 @@ export default function TrainingHome() {
         skill={ENTRY_SKILL}
         onCefrChange={(id) => router.replace(trainingHomePath(difficulty, id), { scroll: false })}
         onDifficultyChange={(id) => router.replace(trainingHomePath(id, cefrLevel), { scroll: false })}
+        lives={
+          <TrainingLivesMeter
+            loading={trainingLives.loading}
+            unlimited={trainingLives.unlimited}
+            lives={trainingLives.lives}
+            max={trainingLives.max}
+            nextLifeAt={trainingLives.nextLifeAt}
+          />
+        }
       />
     </main>
   );

@@ -1,10 +1,13 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import PlanUpgradeModal from '@/components/subscriptions/PlanUpgradeModal';
 import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
+import { useUserRole } from '@/context/UserRoleContext';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
+import { getGuestRegisterHref, isGuestExamSlotAllowed } from '@/lib/guestPreviewAccess';
 import { requestStartExamSession } from '@/utils/requestStartExamSession';
 
 function slotHasPriorProgress(progressBySlot, slot) {
@@ -25,6 +28,13 @@ function slotHasPriorProgress(progressBySlot, slot) {
  */
 export function useExamSlotPlanGating(progressBySlot = {}) {
   const { applyLimits, maxExamSlot, isExamSlotLocked, refresh, planSlug } = usePlanEntitlements();
+  const { session } = useUserRole();
+  const isGuest = !session;
+  const router = useRouter();
+  const pathname = usePathname();
+  const guestMaxExamSlot = 1;
+  const effectiveApplyLimits = applyLimits || isGuest;
+  const effectiveMaxExamSlot = isGuest ? guestMaxExamSlot : maxExamSlot;
   const [modalState, setModalState] = useState({
     open: false,
     variant: 'locked_slot',
@@ -33,11 +43,11 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
   });
 
   const lockedSlots = useMemo(() => {
-    if (!applyLimits) return [];
+    if (!effectiveApplyLimits) return [];
     const slots = [];
-    for (let s = maxExamSlot + 1; s <= B2_EXAM_SLOT_MAX; s += 1) slots.push(s);
+    for (let s = effectiveMaxExamSlot + 1; s <= B2_EXAM_SLOT_MAX; s += 1) slots.push(s);
     return slots;
-  }, [applyLimits, maxExamSlot]);
+  }, [effectiveApplyLimits, effectiveMaxExamSlot]);
 
   const closePlanUpgradeModal = useCallback(() => {
     setModalState((current) => ({ ...current, open: false }));
@@ -56,15 +66,24 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
 
   const onLockedSlotClick = useCallback(
     (slot, message = null) => {
+      if (isGuest) {
+        router.push(getGuestRegisterHref(pathname || '/exam-practice/b2/'));
+        return;
+      }
       showPlanUpgradeModal({ variant: 'locked_slot', slot: slot ?? null, message });
     },
-    [showPlanUpgradeModal],
+    [isGuest, pathname, router, showPlanUpgradeModal],
   );
 
   const guardExamSlotSelect = useCallback(
     async (slot, onAllowed) => {
       const n = Number(slot);
       if (!Number.isFinite(n) || n < 1) return false;
+
+      if (isGuest && !isGuestExamSlotAllowed(n)) {
+        onLockedSlotClick(n);
+        return false;
+      }
 
       if (applyLimits && isExamSlotLocked(n)) {
         const isPlus = isPlusTierPlanSlug(planSlug);
@@ -100,6 +119,7 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
     [
       applyLimits,
       isExamSlotLocked,
+      isGuest,
       maxExamSlot,
       onLockedSlotClick,
       planSlug,
@@ -128,8 +148,8 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
   );
 
   return {
-    applyLimits,
-    maxExamSlot,
+    applyLimits: effectiveApplyLimits,
+    maxExamSlot: effectiveMaxExamSlot,
     planSlug,
     lockedSlots,
     onLockedSlotClick,

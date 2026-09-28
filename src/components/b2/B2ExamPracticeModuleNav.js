@@ -126,6 +126,7 @@ export default function B2ExamPracticeModuleNav({
       partMax: pagePartMax,
       progressBySlot: effectiveProgress,
       bypassStarGating,
+      maxExamSlot: planGating.maxExamSlot,
     });
   }, [
     effectiveSkillPractice,
@@ -138,6 +139,7 @@ export default function B2ExamPracticeModuleNav({
     progressBySlot,
     livePartProgress,
     bypassStarGating,
+    planGating.maxExamSlot,
   ]);
 
   let continueLabel = '';
@@ -189,7 +191,8 @@ export default function B2ExamPracticeModuleNav({
 
   const showPreviousExercise = effectiveSkillPractice && typeof onSelectExamSlot === 'function';
   const previousExerciseLabel = isEn ? 'Previous test' : 'Test anterior';
-  const canGoPreviousExercise = skillExerciseNav?.canGoPrevious ?? false;
+  const canGoPreviousExercise =
+    (skillExerciseNav?.canGoPrevious ?? false) || Number(examSlot) > 1;
 
   const useBalancedLayout = effectiveSkillPractice || showCheckAnswersButton;
 
@@ -274,7 +277,12 @@ export default function B2ExamPracticeModuleNav({
 
   const handlePreviousExercise = () => {
     if (typeof onSelectExamSlot !== 'function') return;
-    runBackExerciseSkillFlow({ examSlot, examenIdBySlot, onSelectExamSlot });
+    const wentBack = runBackExerciseSkillFlow({ examSlot, examenIdBySlot, onSelectExamSlot });
+    if (wentBack) return;
+    const fallbackSlot = Number(examSlot) - 1;
+    if (Number.isFinite(fallbackSlot) && fallbackSlot >= 1) {
+      onSelectExamSlot(fallbackSlot);
+    }
   };
 
   const previousExerciseButton =

@@ -92,12 +92,6 @@
   font-size: 0.95rem;
 }
 
-.lives {
-  display: flex;
-  justify-content: center;
-  margin-top: 0.75rem;
-}
-
 .livesNote {
   max-width: 34rem;
   margin: 0.7rem auto 0;

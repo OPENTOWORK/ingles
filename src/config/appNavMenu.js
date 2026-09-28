@@ -8,6 +8,7 @@ import {
   normalizeRoleName,
 } from '@/utils/authRoles';
 import { canViewPricing } from '@/utils/pricingAccess';
+import { isGuestBrowsablePath } from '@/lib/guestPreviewAccess';
 import { getExamUnitSlugFromPathname } from '@/lib/examTheoryUnlock';
 import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
@@ -93,9 +94,9 @@ export function getGuestLoginHref(targetHref) {
   return `/login?next=${encodeURIComponent(targetHref)}`;
 }
 
-/** Href real del ítem de menú: visitantes van a login con `next`. */
+/** Href real del ítem de menú: Practice, Strategies, Training y Pricing se abren. */
 export function resolveNavItemHref(href, session) {
-  if (isGuestNavSession(session)) {
+  if (isGuestNavSession(session) && !isGuestBrowsablePath(href)) {
     return getGuestLoginHref(href);
   }
   return href;
@@ -144,7 +145,7 @@ export function shouldShowDraloNav(_session) {
 export function buildAppNavModel(userRole, session) {
   const guest = isGuestNavSession(session);
   const admin = isAdminRole(userRole);
-  const showPricing = !guest && canViewPricing(userRole);
+  const showPricing = guest || canViewPricing(userRole);
   const staffItems = guest ? [] : getStaffPanelMenuItemsForRole(userRole);
   const useAdminSidebarNav = admin && staffItems.length > 0;
 

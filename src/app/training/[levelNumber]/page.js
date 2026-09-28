@@ -8,6 +8,8 @@ import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebra
 import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
 import { useUserRole } from '@/context/UserRoleContext';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
+import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
+import { isGuestTrainingNodeAllowed } from '@/lib/guestPreviewAccess';
 import {
   getTrainingPathCurriculum,
   getTrainingPathLevelCount,
@@ -44,7 +46,8 @@ export default function ExercisePage({ params }) {
       router.replace(homeHref);
     }
   }, [levelNumber, router, homeHref]);
-  const { userRole } = useUserRole();
+  const { userRole, session } = useUserRole();
+  const guestPreview = !session;
   const trainingLives = useTrainingLives();
   const spendingLifeRef = useRef(false);
   const [lifeError, setLifeError] = useState('');
@@ -94,19 +97,25 @@ export default function ExercisePage({ params }) {
       const storageKey = `stars_${level}_${skill}_${difficulty}`;
       const savedStars = JSON.parse(localStorage.getItem(storageKey) || '{}');
       if (reviewNum) {
+        if (guestPreview) {
+          return;
+        }
         if (!review || isTrainingReviewLocked(review, savedStars, userRole)) {
           router.replace(homeHref);
         }
         return;
       }
       const levelNum = parseInt(levelNumber.replace('level-', ''), 10);
+      if (guestPreview) {
+        return;
+      }
       if (isTrainingLevelLocked(levelNum, savedStars, userRole, pathLevelCount)) {
         router.replace(homeHref);
       }
     } catch {
       /* ignore */
     }
-  }, [level, skill, difficulty, levelNumber, userRole, router, pathLevelCount, review, reviewNum, homeHref]);
+  }, [level, skill, difficulty, levelNumber, userRole, guestPreview, router, pathLevelCount, review, reviewNum, homeHref]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -189,6 +198,17 @@ export default function ExercisePage({ params }) {
     setExerciseStartTime(Date.now());
   }, [currentExercise]);
 
+  if (guestPreview && !isGuestTrainingNodeAllowed(levelNumber)) {
+    return (
+      <main className={styles.emptyPage}>
+        <GuestRegisterTeaser
+          nextHref={`/training/${levelNumber}`}
+          message="Create a free account to continue along the Training path."
+        />
+      </main>
+    );
+  }
+
   if (exercisesReady && (!exercises || exercises.length === 0)) {
     return (
       <div className={styles.emptyPage}>
@@ -208,7 +228,7 @@ export default function ExercisePage({ params }) {
   }
 
   const checkAnswer = async () => {
-    if (!user) return;
+    if (!user && !guestPreview) return;
     
     // Verificar la respuesta según el tipo de ejercicio
     let isCorrect = false;
@@ -263,6 +283,10 @@ export default function ExercisePage({ params }) {
 
     // Save progress
     try {
+      if (!user) {
+        setShowResult(true);
+        return;
+      }
       const existingProgress = userProgress[exercise.id];
       const attempts = existingProgress ? existingProgress.attempts + 1 : 1;
       

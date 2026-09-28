@@ -33,6 +33,7 @@ import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 import { PASS_THRESHOLD } from '@/utils/examModeStats';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isExamModeSectionKeyBlockedForStudent } from '@/constants/studentFeatureAccess';
+import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
 
 function formatMinutes(m) {
   const h = Math.floor(m / 60);
@@ -65,7 +66,7 @@ function LevelExamModePracticeInner({ slug }) {
   const config = getNivelesLevelHub(slug);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { userRole } = useUserRole();
+  const { userRole, session: authSession } = useUserRole();
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const { session, ready, repeatExam, userId, resetExam } = useExamModeSession(slug, examSlot);
   const [examNamesBySlot, setExamNamesBySlot] = useState({});
@@ -236,6 +237,17 @@ function LevelExamModePracticeInner({ slug }) {
     return (
       <main style={{ padding: '2rem', textAlign: 'center' }}>
         <p>Level not configured.</p>
+      </main>
+    );
+  }
+
+  if (!authSession) {
+    return (
+      <main className="shell content-hub-shell">
+        <GuestRegisterTeaser
+          nextHref={`/exam-practice/${slug}/exam-mode`}
+          message="Create a free account to unlock Exam Mode."
+        />
       </main>
     );
   }

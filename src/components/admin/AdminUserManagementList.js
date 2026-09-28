@@ -194,7 +194,7 @@ function UserDrawer({
     !ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS.includes(assignedPlanSlug);
   const selectValue = ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS.includes(assignedPlanSlug)
     ? assignedPlanSlug
-    : 'free';
+    : '';
   const displayName = user.nombre || 'Sin nombre';
 
   return (
@@ -253,6 +253,11 @@ function UserDrawer({
                     onChange={(event) => onPlanChange(user.id, event.target.value)}
                     disabled={saving}
                   >
+                    {selectValue === '' ? (
+                      <option value="" disabled>
+                        {getPlanDisplayLabel(assignedPlanSlug)} (actual) — elige un plan
+                      </option>
+                    ) : null}
                     {ADMIN_PANEL_ASSIGNABLE_PLAN_OPTIONS.map((plan) => (
                       <option key={plan.slug} value={plan.slug}>
                         {plan.label}

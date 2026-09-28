@@ -2574,6 +2574,11 @@ body.nav-open {
   .invite-promo-banner--guest {
     display: none;
   }
+
+  /* En escritorio ya está Log in en la cabecera. */
+  .home-cta__btn.home-hero__auth-btn {
+    display: none;
+  }
 }
 
 @media (max-width: 639px) {
@@ -5115,6 +5120,14 @@ body.study-session-active .levels-exam-module-nav {
   font-size: 0.8rem;
   font-weight: 700;
   color: var(--index-accent);
+}
+
+.exam-strategies-index__link--guest-lock {
+  opacity: 0.92;
+}
+
+.exam-strategies-index__link--guest-lock .exam-strategies-index__link-cta {
+  color: #5b4bb7;
 }
 
 .exam-strategies-chapter-aside .exam-strategies-index--sidebar {

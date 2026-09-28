@@ -2,10 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
+import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
-import { getGuestLoginHref } from '@/config/appNavMenu';
+import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
 import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/trainingFeedbackSounds';
 import { TrainingLivesEmpty } from '@/components/training/TrainingLivesMeter';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
@@ -32,21 +31,15 @@ function categoryLabel(id) {
 }
 
 function QuizGate({ children }) {
-  const router = useRouter();
   const { session } = useUserRole();
-  const { roleConfirmed } = useConfirmedUserRole();
 
-  useEffect(() => {
-    if (!roleConfirmed) return;
-    if (!session) {
-      router.replace(getGuestLoginHref('/exam-practice/b2/quiz-game'));
-    }
-  }, [roleConfirmed, session, router]);
-
-  if (!roleConfirmed || !session) {
+  if (!session) {
     return (
       <main className={styles.page}>
-        <p className={styles.gate}>Checking access…</p>
+        <GuestRegisterTeaser
+          nextHref="/exam-practice/b2/quiz-game"
+          message="Create a free account to play the Quiz Game."
+        />
       </main>
     );
   }

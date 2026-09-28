@@ -33,6 +33,8 @@ export default function ExamTheoryTopicList({
 }) {
   const { userRole, session } = useUserRole();
   const isStudent = usesStudentContentRestrictions(userRole);
+  const isGuest = !session;
+  const showStudentIndex = isStudent || isGuest;
   const { topicProgressByHref: globalTopicProgress } = useExamTheoryProgress(
     session?.user?.id,
     session?.access_token,
@@ -66,8 +68,8 @@ export default function ExamTheoryTopicList({
 
   const filtered = useMemo(() => filterTopics(topics, { query }), [topics, query]);
   const studentIndex = useMemo(
-    () => (isStudent ? getExamStrategiesStudentIndex(sectionSlug) : null),
-    [isStudent, sectionSlug],
+    () => (showStudentIndex ? getExamStrategiesStudentIndex(sectionSlug) : null),
+    [showStudentIndex, sectionSlug],
   );
 
   return (
@@ -89,7 +91,7 @@ export default function ExamTheoryTopicList({
         accent={sectionHeroAccent}
       />
 
-      {!isStudent ? (
+      {!showStudentIndex ? (
         <div
           className="exam-theory-section-progress"
           style={{ '--section-accent': sectionAccent }}
@@ -110,8 +112,12 @@ export default function ExamTheoryTopicList({
         </div>
       ) : null}
 
-      {isStudent && studentIndex ? (
-        <ExamStrategiesStudentIndex sectionSlug={sectionSlug} sectionAccent={sectionAccent} />
+      {showStudentIndex && studentIndex ? (
+        <ExamStrategiesStudentIndex
+          sectionSlug={sectionSlug}
+          sectionAccent={sectionAccent}
+          guestPreview={isGuest}
+        />
       ) : (
         <ExamTheoryPartTipsSection
           sectionSlug={sectionSlug}
@@ -120,7 +126,7 @@ export default function ExamTheoryTopicList({
         />
       )}
 
-      {!isStudent ? (
+      {!showStudentIndex ? (
         <>
           <header className="exam-theory-topics-block">
             <h2 className="exam-theory-topics-block__title">Theory topics</h2>

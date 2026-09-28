@@ -32,6 +32,45 @@ import { isStudentRole } from '@/utils/authRoles';
 import { useReadingNightMode } from '@/hooks/useReadingNightMode';
 import styles from './AdminAnalyticsPanels.module.css';
 
+const ENTRY_RANGES = [
+  { id: 'all', label: 'Todo' },
+  { id: 'day', label: 'Diario' },
+  { id: 'week', label: 'Semanal' },
+  { id: 'month', label: 'Mensual' },
+];
+
+const ENTRY_KIND_LABEL = {
+  anon: 'Sin cuenta',
+  account: 'Cuenta nueva',
+  returning: 'Ya tenía cuenta',
+  staff: 'Equipo',
+};
+
+function entriesRangeStart(range, now = new Date()) {
+  if (range === 'day') return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  if (range === 'week') {
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const weekday = start.getDay();
+    start.setDate(start.getDate() - (weekday === 0 ? 6 : weekday - 1));
+    return start;
+  }
+  if (range === 'month') return new Date(now.getFullYear(), now.getMonth(), 1);
+  return null;
+}
+
+function entriesRangeLabel(range, start) {
+  if (!start) return null;
+  if (range === 'day') return 'Hoy, desde las 00:00';
+  if (range === 'week') {
+    return `Esta semana, desde el ${start.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    })}`;
+  }
+  return `Este mes, desde el ${start.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`;
+}
+
 const PERIOD_LABELS = {
   dias: 'Días',
   semanas: 'Semanas',
@@ -709,6 +748,7 @@ export default function AdminAnalyticsPanels({
   const [activeTab, setActiveTab] = useState('growth');
   const [visitStats, setVisitStats] = useState(null);
   const [entriesWithoutStaff, setEntriesWithoutStaff] = useState(true);
+  const [entriesRange, setEntriesRange] = useState('all');
   const isNight = useReadingNightMode();
   const chartGrid = isNight ? '#334155' : '#e2e8f0';
   const chartTick = { fontSize: 11, fill: isNight ? '#94a3b8' : '#64748b' };
@@ -772,6 +812,59 @@ export default function AdminAnalyticsPanels({
       months,
     };
   }, [users, roles]);
+
+  const entryView = useMemo(() => {
+    const start = entriesRangeStart(entriesRange);
+    const rows = (visitStats?.ipLog || []).filter((row) => {
+      if (!start) return true;
+      if (!row.seenAt) return false;
+      return new Date(row.seenAt).getTime() >= start.getTime();
+    });
+    const counts = { entered: 0, registered: 0, unregistered: 0, staff: 0 };
+    for (const row of rows) {
+      if (row.kind === 'staff') {
+        counts.staff += 1;
+      } else {
+        counts.entered += 1;
+        if (row.kind === 'account') counts.registered += 1;
+        if (row.kind === 'anon') counts.unregistered += 1;
+      }
+    }
+    return { start, rows, counts };
+  }, [visitStats, entriesRange]);
+
+  const visibleEntryRows = useMemo(
+    () => entryView.rows.filter((row) => !entriesWithoutStaff || row.kind !== 'staff'),
+    [entryView.rows, entriesWithoutStaff],
+  );
+
+  const exportEntriesToExcel = async () => {
+    if (!visibleEntryRows.length) return;
+    const XLSX = await import('xlsx');
+    const rows = visibleEntryRows.map((row) => ({
+      IP: row.ip || 'No guardada',
+      Fecha: row.seenAt
+        ? new Date(row.seenAt).toLocaleString('es-ES', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })
+        : '',
+      Origen: row.source || '',
+      'Llegan a': row.landing || '',
+      Tiempo: row.seconds > 0 ? formatSessionDuration(row.seconds) : '',
+      Cuenta: row.email || '',
+      Estado: ENTRY_KIND_LABEL[row.kind] || 'Sin cuenta',
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Entradas');
+    const rangeName = ENTRY_RANGES.find((option) => option.id === entriesRange)?.label || 'entradas';
+    const stamp = new Date().toISOString().slice(0, 10);
+    XLSX.writeFile(workbook, `entradas_${rangeName.toLowerCase()}_${stamp}.xlsx`);
+  };
 
   useEffect(() => {
     if (activeTab !== 'entries') return undefined;
@@ -857,16 +950,41 @@ export default function AdminAnalyticsPanels({
                 {entriesWithoutStaff
                   ? ' El equipo tampoco.'
                   : ' Con staff incluye las visitas del equipo.'}
-                {visitStats?.since
-                  ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}.`
-                  : ' Todavía no hay ninguna visita guardada.'}
+                {entriesRangeLabel(entriesRange, entryView.start)
+                  ? ` ${entriesRangeLabel(entriesRange, entryView.start)}.`
+                  : visitStats?.since
+                    ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}.`
+                    : ' Todavía no hay ninguna visita guardada.'}
               </p>
+              <div className={styles.entriesFilters}>
+              <div className={styles.tabList} role="group" aria-label="Periodo de entradas">
+                {ENTRY_RANGES.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    className={`${styles.tab} ${entriesRange === option.id ? styles.tabActive : ''}`}
+                    aria-pressed={entriesRange === option.id}
+                    onClick={() => setEntriesRange(option.id)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+              <div className={styles.entriesStaffRow}>
+              <button
+                type="button"
+                className="admin-btn admin-btn--export"
+                onClick={exportEntriesToExcel}
+                disabled={!visibleEntryRows.length}
+              >
+                Exportar Excel
+              </button>
               <div className={styles.tabList} role="group" aria-label="Incluir al equipo">
                 <button
                   type="button"
@@ -885,6 +1003,8 @@ export default function AdminAnalyticsPanels({
                   Con staff
                 </button>
               </div>
+              </div>
+              </div>
             </div>
 
             <div className={styles.kpiGrid}>
@@ -894,13 +1014,13 @@ export default function AdminAnalyticsPanels({
                 value={
                   visitStats
                     ? (
-                        visitStats.entered + (entriesWithoutStaff ? 0 : visitStats.staff || 0)
+                        entryView.counts.entered + (entriesWithoutStaff ? 0 : entryView.counts.staff)
                       ).toLocaleString('es-ES')
                     : '…'
                 }
                 hint={
                   entriesWithoutStaff
-                    ? `Personas que no eran usuarias${visitStats?.staff ? ` (${visitStats.staff} del equipo fuera)` : ''}`
+                    ? `Personas que no eran usuarias${entryView.counts.staff ? ` (${entryView.counts.staff} del equipo fuera)` : ''}`
                     : 'Personas que no eran usuarias, más el equipo'
                 }
                 accent="#6366f1"
@@ -909,7 +1029,7 @@ export default function AdminAnalyticsPanels({
               <KpiCard
                 icon={UserPlus}
                 label="Se registraron"
-                value={visitStats ? visitStats.registered.toLocaleString('es-ES') : '…'}
+                value={visitStats ? entryView.counts.registered.toLocaleString('es-ES') : '…'}
                 hint="De esas entradas, crearon cuenta"
                 accent="#10b981"
                 iconBg="#ecfdf5"
@@ -917,7 +1037,7 @@ export default function AdminAnalyticsPanels({
               <KpiCard
                 icon={UserMinus}
                 label="Sin registrarse"
-                value={visitStats ? visitStats.unregistered.toLocaleString('es-ES') : '…'}
+                value={visitStats ? entryView.counts.unregistered.toLocaleString('es-ES') : '…'}
                 hint="Entraron y siguieron sin cuenta"
                 accent="#f59e0b"
                 iconBg="#fffbeb"
@@ -927,19 +1047,17 @@ export default function AdminAnalyticsPanels({
             <div className={styles.chartCard}>
               <h3 className={styles.chartCardTitle}>Registro de entradas</h3>
               {(() => {
-                const rows = (visitStats?.ipLog || []).filter(
-                  (row) => !entriesWithoutStaff || row.kind !== 'staff',
-                );
+                const rows = visibleEntryRows;
                 if (!visitStats) return <p className={styles.emptyState}>Cargando…</p>;
                 if (!rows.length) {
-                  return <p className={styles.emptyState}>Todavía no hay visitas guardadas.</p>;
+                  return (
+                    <p className={styles.emptyState}>
+                      {entriesRange === 'all'
+                        ? 'Todavía no hay visitas guardadas.'
+                        : 'No hay entradas en este periodo.'}
+                    </p>
+                  );
                 }
-                const kindLabel = {
-                  anon: 'Sin cuenta',
-                  account: 'Cuenta nueva',
-                  returning: 'Ya tenía cuenta',
-                  staff: 'Equipo',
-                };
                 return (
                   <div className={styles.registrationTableWrap}>
                       <table className={styles.registrationTable}>
@@ -973,7 +1091,7 @@ export default function AdminAnalyticsPanels({
                               <td>{row.landing || '—'}</td>
                               <td>{row.seconds > 0 ? formatSessionDuration(row.seconds) : '—'}</td>
                               <td>{row.email || '—'}</td>
-                              <td>{kindLabel[row.kind] || 'Sin cuenta'}</td>
+                              <td>{ENTRY_KIND_LABEL[row.kind] || 'Sin cuenta'}</td>
                             </tr>
                           ))}
                         </tbody>

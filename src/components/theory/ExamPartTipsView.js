@@ -8,6 +8,12 @@ import { getExamStrategiesPartContent } from '@/data/examStrategiesPartContent';
 import { buildTeoriaExamPartTipsHref } from '@/lib/examPartTipsHref';
 import { examTheoryBackHrefFromPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
+import { useGuestPreview } from '@/hooks/useGuestPreview';
+import {
+  getGuestRegisterHref,
+  isGuestExamStrategiesChapterAllowed,
+} from '@/lib/guestPreviewAccess';
 
 /** Fallback para niveles sin ficha redactada: reusa el texto plano de part-info. */
 function buildFallbackContent(info) {
@@ -30,8 +36,10 @@ export default function ExamPartTipsView({
   exercisesConfig,
   getExercise,
 }) {
-  const { userRole } = useUserRole();
+  const { userRole, session } = useUserRole();
+  const { isGuest } = useGuestPreview();
   const isStudent = usesStudentContentRestrictions(userRole);
+  const guestLocked = !session && !isGuestExamStrategiesChapterAllowed(pathname);
 
   const partNum = parseInt(String(partParam).replace(/^part-/, ''), 10);
   const title = info.title || `Part ${partNum}`;
@@ -39,12 +47,20 @@ export default function ExamPartTipsView({
   const sectionBackHref = examTheoryBackHrefFromPartTipsPath(pathname);
 
   const nav = getLevelPartNavLinks(levelSlug, skillFolder, partNum);
-  const prevHref = nav.showPrev
+  const prevHrefRaw = nav.showPrev
     ? buildTeoriaExamPartTipsHref(levelSlug, skillFolder, partNum - 1)
     : null;
-  const nextHref = nav.showNext
+  const nextHrefRaw = nav.showNext
     ? buildTeoriaExamPartTipsHref(levelSlug, skillFolder, partNum + 1)
     : null;
+  const prevHref =
+    prevHrefRaw && isGuest && !isGuestExamStrategiesChapterAllowed(prevHrefRaw)
+      ? getGuestRegisterHref(prevHrefRaw)
+      : prevHrefRaw;
+  const nextHref =
+    nextHrefRaw && isGuest && !isGuestExamStrategiesChapterAllowed(nextHrefRaw)
+      ? getGuestRegisterHref(nextHrefRaw)
+      : nextHrefRaw;
 
   const content =
     getExamStrategiesPartContent(levelSlug, skillFolder, partNum) || buildFallbackContent(info);
@@ -53,6 +69,17 @@ export default function ExamPartTipsView({
   const [selected, setSelected] = useState(0);
   const exercise = getExercise?.(partNum, selected + 1);
   const showExercises = !isStudent && Boolean(getExercise && exercise);
+
+  if (guestLocked) {
+    return (
+      <main className="shell content-hub-shell teoria-page exam-strategies-chapter-page">
+        <GuestRegisterTeaser
+          nextHref={pathname}
+          message="Create a free account to read the rest of Exam Strategies."
+        />
+      </main>
+    );
+  }
 
   return (
     <ExamStrategiesArticle

@@ -67,9 +67,10 @@ export default function LevelHubPage({ config }) {
       </div>
 
       {isB2Hub ? (
-        <ExamPracticeHubSection
+          <ExamPracticeHubSection
           examLinks={config.examLinks}
           isStudent={isStudent}
+          guestPreview={!session}
           skillsQuadrant
           sectionTitle={config.practiceSectionTitle}
           quadrantFooter={showStarsWayHub ? <StarsWayHubTabs embedded /> : null}
@@ -84,7 +85,11 @@ export default function LevelHubPage({ config }) {
           }
         />
       ) : (
-        <ExamPracticeHubSection examLinks={config.examLinks} isStudent={isStudent} />
+        <ExamPracticeHubSection
+          examLinks={config.examLinks}
+          isStudent={isStudent}
+          guestPreview={!session}
+        />
       )}
     </>
   );

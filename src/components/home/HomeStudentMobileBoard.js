@@ -8,7 +8,6 @@ import { getLevelExamSkillRoute, getLevelSkillNavLinks } from '@/data/nivelesLev
 import { nivelesPathToExamPractice } from '@/config/appRoutes';
 
 const LEVEL_SLUG = 'b2';
-const GUEST_LOGIN_HREF = '/login';
 
 /**
  * Accesos a las skills de B2.
@@ -47,7 +46,7 @@ export default function HomeStudentMobileBoard({ guest = false }) {
                   </span>
                 ) : (
                   <Link
-                    href={guest ? GUEST_LOGIN_HREF : nivelesPathToExamPractice(item.href)}
+                    href={nivelesPathToExamPractice(item.href)}
                     className={`home-student-board__skill${comingSoon ? ' home-student-board__skill--locked' : ''}`}
                     data-skill={item.theme}
                     aria-label={comingSoon ? `${label}, coming soon` : undefined}

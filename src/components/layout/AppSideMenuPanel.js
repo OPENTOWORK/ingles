@@ -121,7 +121,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             onToggleAdminPanels={() => setAdminPanelsOpen((v) => !v)}
             onLogout={handleLogout}
             draloVariant="side"
-            guestEntryHref={!session && isPhone ? '/login' : null}
+            guestEntryHref={null}
           />
         </nav>
       </div>

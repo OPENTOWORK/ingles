@@ -104,6 +104,13 @@
 
 /* ——— Board ——— */
 
+.livesCorner {
+  position: absolute;
+  z-index: 4;
+  top: 1.2rem;
+  right: 1.6rem;
+}
+
 .canvas {
   position: relative;
   width: 100%;
@@ -304,6 +311,17 @@
 
 .station:hover .stationTopic {
   color: #c4b5fd;
+}
+
+.guestLockHint {
+  display: block;
+  max-width: 11rem;
+  margin-top: 0.2rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #5b4bb7;
+  text-align: center;
 }
 
 .stars {
@@ -544,6 +562,13 @@
 }
 
 @media (max-width: 640px) {
+  .livesCorner {
+    position: static;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.85rem 1rem 0;
+  }
+
   .canvas {
     border-radius: 22px;
   }

@@ -2,6 +2,11 @@
 
 import Link from 'next/link';
 import { getExamStrategiesStudentIndex } from '@/data/examStrategiesStudentIndex';
+import {
+  GUEST_PREVIEW_REGISTER_LABEL,
+  getGuestRegisterHref,
+  isGuestExamStrategiesChapterAllowed,
+} from '@/lib/guestPreviewAccess';
 
 function normalizePath(path = '') {
   const raw = String(path || '').split('?')[0].split('#')[0];
@@ -31,6 +36,7 @@ export default function ExamStrategiesStudentIndex({
   sectionAccent = '#38bdf8',
   variant = 'hub',
   activeHref = '',
+  guestPreview = false,
 }) {
   const chapters = getExamStrategiesStudentIndex(sectionSlug);
   if (!chapters?.length) return null;
@@ -55,6 +61,7 @@ export default function ExamStrategiesStudentIndex({
             chapter={chapter}
             activeHref={activeHref}
             isSidebar={isSidebar}
+            guestPreview={guestPreview}
           />
         ))}
       </ol>
@@ -62,7 +69,7 @@ export default function ExamStrategiesStudentIndex({
   );
 }
 
-function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false }) {
+function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false, guestPreview = false }) {
   if (chapter.children?.length) {
     const groupActive = chapterTreeIsActive(chapter, activeHref);
     return (
@@ -85,6 +92,7 @@ function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false }) {
               activeHref={activeHref}
               isSidebar={isSidebar}
               nested
+              guestPreview={guestPreview}
             />
           ))}
         </ol>
@@ -103,6 +111,7 @@ function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false }) {
   }
 
   const isActive = hrefMatchesActive(chapter.href, activeHref);
+  const guestLocked = guestPreview && !isGuestExamStrategiesChapterAllowed(chapter.href);
 
   return (
     <li
@@ -110,14 +119,24 @@ function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false }) {
         isActive ? ' exam-strategies-index__item--current' : ''
       }`}
     >
-      <Link
-        href={chapter.href}
-        className={`exam-strategies-index__link${isActive ? ' exam-strategies-index__link--active' : ''}`}
-        aria-current={isActive ? 'page' : undefined}
-      >
-        <ChapterLinkText chapter={chapter} />
-        {!isSidebar ? <span className="exam-strategies-index__link-cta">Open →</span> : null}
-      </Link>
+      {guestLocked ? (
+        <Link
+          href={getGuestRegisterHref(chapter.href)}
+          className="exam-strategies-index__link exam-strategies-index__link--guest-lock"
+        >
+          <ChapterLinkText chapter={chapter} />
+          <span className="exam-strategies-index__link-cta">{GUEST_PREVIEW_REGISTER_LABEL}</span>
+        </Link>
+      ) : (
+        <Link
+          href={chapter.href}
+          className={`exam-strategies-index__link${isActive ? ' exam-strategies-index__link--active' : ''}`}
+          aria-current={isActive ? 'page' : undefined}
+        >
+          <ChapterLinkText chapter={chapter} />
+          {!isSidebar ? <span className="exam-strategies-index__link-cta">Open →</span> : null}
+        </Link>
+      )}
     </li>
   );
 }

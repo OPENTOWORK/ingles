@@ -13,19 +13,24 @@ export function getSortedExamSlots(examenIdBySlot = {}) {
 
 /** Previous exercise slot before `currentSlot`, or null if none. */
 export function getPreviousExamSlot(currentSlot, examenIdBySlot = {}) {
+  const slot = Number(currentSlot);
+  if (!Number.isFinite(slot) || slot <= 1) return null;
   const slots = getSortedExamSlots(examenIdBySlot);
-  const idx = slots.indexOf(currentSlot);
+  const idx = slots.indexOf(slot);
   if (idx > 0) return slots[idx - 1];
-  const behind = [...slots].reverse().find((s) => s < currentSlot);
-  return behind ?? null;
+  const behind = [...slots].reverse().find((s) => s < slot);
+  if (behind != null) return behind;
+  return slot - 1;
 }
 
 /** Next exercise slot after `currentSlot`, or null if none. */
 export function getNextExamSlot(currentSlot, examenIdBySlot = {}) {
+  const slot = Number(currentSlot);
+  if (!Number.isFinite(slot) || slot < 1) return null;
   const slots = getSortedExamSlots(examenIdBySlot);
-  const idx = slots.indexOf(currentSlot);
+  const idx = slots.indexOf(slot);
   if (idx >= 0 && idx < slots.length - 1) return slots[idx + 1];
-  const ahead = slots.find((s) => s > currentSlot);
+  const ahead = slots.find((s) => s > slot);
   return ahead ?? null;
 }
 
@@ -45,7 +50,7 @@ export function canGoToNextExercise(
   return isExerciseSlotUnlocked(progressBySlot, partNumber, nextSlot, examenIdBySlot, options);
 }
 
-/** Whether there is a previous exam variant in the catalog. */
+/** Whether there is a previous exam variant to open. */
 export function canGoToPreviousExercise(examSlot, examenIdBySlot = {}) {
   return getPreviousExamSlot(examSlot, examenIdBySlot) != null;
 }

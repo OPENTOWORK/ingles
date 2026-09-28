@@ -2,7 +2,62 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import {
+  TRAINING_LIFE_REGEN_HOURS,
+  TRAINING_LIVES_MAX,
+  applyTrainingLifeRegen,
+  loseTrainingLife,
+} from '@/lib/trainingLives';
 import { supabase } from '@/utils/supabaseClient';
+
+const GUEST_LIVES_KEY = 'dralo-guest-training-lives';
+
+function guestLivesPayload(state) {
+  return {
+    loading: false,
+    unlimited: false,
+    lives: state.lives,
+    max: TRAINING_LIVES_MAX,
+    nextLifeAt: state.nextLifeAt,
+    regenHours: TRAINING_LIFE_REGEN_HOURS,
+    error: '',
+  };
+}
+
+function readGuestLives() {
+  if (typeof window === 'undefined') {
+    return guestLivesPayload({ lives: TRAINING_LIVES_MAX, nextLifeAt: null });
+  }
+  let stored = { lives: TRAINING_LIVES_MAX, nextLifeAt: null };
+  try {
+    const raw = window.localStorage.getItem(GUEST_LIVES_KEY);
+    if (raw) stored = JSON.parse(raw);
+  } catch {
+    /* keep default */
+  }
+  const next = applyTrainingLifeRegen(stored, Date.now());
+  try {
+    window.localStorage.setItem(
+      GUEST_LIVES_KEY,
+      JSON.stringify({ lives: next.lives, nextLifeAt: next.nextLifeAt }),
+    );
+  } catch {
+    /* ignore */
+  }
+  return guestLivesPayload(next);
+}
+
+function writeGuestLives(state) {
+  try {
+    window.localStorage.setItem(
+      GUEST_LIVES_KEY,
+      JSON.stringify({ lives: state.lives, nextLifeAt: state.nextLifeAt }),
+    );
+  } catch {
+    /* ignore */
+  }
+  return guestLivesPayload(state);
+}
 
 const OPEN = {
   loading: false,
@@ -38,14 +93,23 @@ async function authHeaders() {
  * Pass `{ enabled: false }` when a parent already loaded them.
  */
 export function useTrainingLives({ enabled = true, path = '/api/training/lives' } = {}) {
-  const [state, setState] = useState(() => ({ ...OPEN, loading: enabled }));
+  const [state, setState] = useState(() => ({
+    loading: enabled,
+    unlimited: false,
+    lives: TRAINING_LIVES_MAX,
+    max: TRAINING_LIVES_MAX,
+    nextLifeAt: null,
+    regenHours: TRAINING_LIFE_REGEN_HOURS,
+    error: '',
+  }));
 
   const refresh = useCallback(async () => {
     if (!enabled) return null;
     const headers = await authHeaders();
     if (!headers) {
-      setState(OPEN);
-      return OPEN;
+      const guest = readGuestLives();
+      setState(guest);
+      return guest;
     }
     try {
       const res = await fetch(buildClientApiUrl(path), {
@@ -54,8 +118,9 @@ export function useTrainingLives({ enabled = true, path = '/api/training/lives' 
       });
       const json = await res.json().catch(() => ({}));
       if (res.status === 401) {
-        setState(OPEN);
-        return OPEN;
+        const guest = readGuestLives();
+        setState(guest);
+        return guest;
       }
       if (!res.ok) {
         const next = { ...OPEN, unlimited: false, error: 'unavailable' };
@@ -74,7 +139,16 @@ export function useTrainingLives({ enabled = true, path = '/api/training/lives' 
 
   const loseLife = useCallback(async () => {
     const headers = await authHeaders();
-    if (!headers) return { unlimited: true, spent: false };
+    if (!headers) {
+      const current = readGuestLives();
+      const result = loseTrainingLife(
+        { lives: current.lives, nextLifeAt: current.nextLifeAt },
+        Date.now(),
+      );
+      const next = writeGuestLives(result);
+      setState(next);
+      return { ...next, spent: result.allowed, unlimited: false };
+    }
     try {
       const res = await fetch(buildClientApiUrl(path), {
         method: 'POST',
@@ -97,12 +171,16 @@ export function useTrainingLives({ enabled = true, path = '/api/training/lives' 
   }, [path]);
 
   useEffect(() => {
+    if (enabled) void refresh();
+  }, [enabled, refresh]);
+
+  useEffect(() => {
     if (!enabled) return undefined;
     let active = true;
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!active) return;
       if (!session?.access_token) {
-        setState(OPEN);
+        setState(readGuestLives());
         return;
       }
       void refresh();

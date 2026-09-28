@@ -5,6 +5,11 @@ import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
 import { getTrainingPathCurriculum } from '@/data/trainingPathCurriculum';
 import { useUserRole } from '@/context/UserRoleContext';
+import {
+  GUEST_PREVIEW_REGISTER_LABEL,
+  getGuestRegisterHref,
+  isGuestTrainingLevelAllowed,
+} from '@/lib/guestPreviewAccess';
 import { getPathReviews } from '@/data/trainingReviews';
 import {
   TRAINING_MASTERY_STARS,
@@ -127,7 +132,7 @@ function StarRow({ count = 0 }) {
   );
 }
 
-function Station({ node, row, tag }) {
+function Station({ node, row, tag, guestPreview = false }) {
   const stateClass = node.isLocked
     ? styles.nodeLocked
     : node.isMastered
@@ -139,9 +144,12 @@ function Station({ node, row, tag }) {
           : styles.nodeUpcoming;
 
   const prefix = node.isSectionStart ? `${node.sectionTitle}. ` : '';
-  const ariaLabel = node.isLocked
-    ? `${prefix}${node.topic}, level ${node.n}, locked — complete previous levels first`
-    : `${prefix}${node.topic}, level ${node.n}${node.isCompleted ? `, ${node.stars} stars` : node.isCurrent ? ', up next' : ''}`;
+  const guestLocked = guestPreview && node.isLocked;
+  const ariaLabel = guestLocked
+    ? `${prefix}${node.topic}, level ${node.n}, ${GUEST_PREVIEW_REGISTER_LABEL}`
+    : node.isLocked
+      ? `${prefix}${node.topic}, level ${node.n}, locked — complete previous levels first`
+      : `${prefix}${node.topic}, level ${node.n}${node.isCompleted ? `, ${node.stars} stars` : node.isCurrent ? ', up next' : ''}`;
 
   const body = (
     <>
@@ -172,6 +180,21 @@ function Station({ node, row, tag }) {
   const style = { gridColumn: node.gridColumn, gridRow: 1, '--i': node.n };
 
   if (node.isLocked) {
+    if (guestLocked) {
+      return (
+        <Link
+          href={getGuestRegisterHref(node.href)}
+          prefetch={false}
+          className={className}
+          style={style}
+          aria-label={ariaLabel}
+          title={GUEST_PREVIEW_REGISTER_LABEL}
+        >
+          {body}
+          <span className={styles.guestLockHint}>{GUEST_PREVIEW_REGISTER_LABEL}</span>
+        </Link>
+      );
+    }
     return (
       <div
         className={className}
@@ -199,7 +222,7 @@ function Station({ node, row, tag }) {
   );
 }
 
-function ReviewStation({ review, side, stars, locked }) {
+function ReviewStation({ review, side, stars, locked, guestPreview = false }) {
   const isCompleted = stars >= TRAINING_UNLOCK_STARS;
   const isMastered = stars >= TRAINING_MASTERY_STARS;
   const stateClass = locked
@@ -210,9 +233,12 @@ function ReviewStation({ review, side, stars, locked }) {
         ? styles.nodeCompleted
         : styles.nodeUpcoming;
 
-  const ariaLabel = locked
-    ? `Review ${review.n}, ${review.sectionTitle}, locked — finish this block first`
-    : `Review ${review.n}, ${review.sectionTitle}${isCompleted ? `, ${stars} stars` : ''}`;
+  const ariaLabel =
+    locked && guestPreview
+      ? `Review ${review.n}, ${review.sectionTitle}, ${GUEST_PREVIEW_REGISTER_LABEL}`
+      : locked
+        ? `Review ${review.n}, ${review.sectionTitle}, locked — finish this block first`
+        : `Review ${review.n}, ${review.sectionTitle}${isCompleted ? `, ${stars} stars` : ''}`;
 
   const body = (
     <>
@@ -237,6 +263,20 @@ function ReviewStation({ review, side, stars, locked }) {
   const className = `${styles.station} ${styles.review} ${side === 'right' ? styles.reviewRight : styles.reviewLeft} ${styles.nodeReview} ${stateClass}`;
 
   if (locked) {
+    if (guestPreview) {
+      return (
+        <Link
+          href={getGuestRegisterHref(review.href)}
+          prefetch={false}
+          className={className}
+          aria-label={ariaLabel}
+          title={GUEST_PREVIEW_REGISTER_LABEL}
+        >
+          {body}
+          <span className={styles.guestLockHint}>{GUEST_PREVIEW_REGISTER_LABEL}</span>
+        </Link>
+      );
+    }
     return (
       <div className={className} aria-label={ariaLabel} title="Finish this block to unlock the review">
         {body}
@@ -270,8 +310,10 @@ export default function TrainingLevelPathMap({
   skill = 'use-of-english',
   onDifficultyChange,
   onCefrChange,
+  lives = null,
 }) {
-  const { userRole } = useUserRole();
+  const { userRole, session } = useUserRole();
+  const guestPreview = !session;
   const gradientId = `path-progress-${useId().replace(/:/g, '')}`;
   const trackRef = useRef(null);
   const [rowSize, setRowSize] = useState(initialRowSize);
@@ -311,13 +353,15 @@ export default function TrainingLevelPathMap({
             isCompleted,
             isMastered,
             isCurrent: n === currentLevel && !isCompleted,
-            isLocked: isTrainingLevelLocked(n, levelStars, userRole, total),
+            isLocked: guestPreview
+              ? !isGuestTrainingLevelAllowed(n)
+              : isTrainingLevelLocked(n, levelStars, userRole, total),
             isSectionStart: n === section.from,
             sectionTitle: section.title,
           };
         }),
       })),
-    [curriculum, levelStars, baseHref, currentLevel, userRole, total, difficulty, cefrLevel],
+    [curriculum, levelStars, baseHref, currentLevel, userRole, guestPreview, total, difficulty, cefrLevel],
   );
 
   const reviews = useMemo(
@@ -328,10 +372,10 @@ export default function TrainingLevelPathMap({
           ...review,
           href: trainingNodePath(baseHref, review.key, difficulty, cefrLevel),
           stars,
-          isLocked: isTrainingReviewLocked(review, levelStars, userRole),
+          isLocked: guestPreview ? true : isTrainingReviewLocked(review, levelStars, userRole),
         };
       }),
-    [curriculum, levelStars, baseHref, userRole, difficulty, cefrLevel],
+    [curriculum, levelStars, baseHref, userRole, guestPreview, difficulty, cefrLevel],
   );
 
   const layout = useMemo(() => buildLayout(parts, rowSize), [parts, rowSize]);
@@ -460,6 +504,7 @@ export default function TrainingLevelPathMap({
       </div>
 
       <div className={styles.canvas}>
+        {lives ? <div className={styles.livesCorner}>{lives}</div> : null}
         <div ref={trackRef} className={styles.track}>
           {geometry ? (
             <svg
@@ -526,7 +571,13 @@ export default function TrainingLevelPathMap({
                   style={{ gridTemplateColumns: `repeat(${rowSize * 2}, minmax(0, 1fr))` }}
                 >
                   {row.nodes.map((node) => (
-                    <Station key={node.n} node={node} row={row} tag={tag} />
+                    <Station
+                      key={node.n}
+                      node={node}
+                      row={row}
+                      tag={tag}
+                      guestPreview={guestPreview}
+                    />
                   ))}
                 </div>
               ))}
@@ -536,6 +587,7 @@ export default function TrainingLevelPathMap({
                   side={part.rows[part.rows.length - 1]?.ltr ? 'right' : 'left'}
                   stars={reviews[partIndex].stars}
                   locked={reviews[partIndex].isLocked}
+                  guestPreview={guestPreview}
                 />
               ) : null}
             </div>
