@@ -123,8 +123,8 @@ const DRALO_TOOLS = [
     title: 'Grammar Coach y Pronunciation Coach',
     text: 'Refuerzan justo los puntos débiles detectados en tu práctica.',
     links: [
-      { href: '/dralo-ai/grammar-coach', label: 'Grammar Coach' },
-      { href: '/dralo-ai/pronunciation-coach', label: 'Pronunciation Coach' },
+      { href: '/', label: 'Grammar Coach' },
+      { href: '/', label: 'Pronunciation Coach' },
     ],
   },
 ];
@@ -160,7 +160,7 @@ const FAQ_ITEMS = [
 function useCampaignAuthHref() {
   const searchParams = useSearchParams();
   const qs = searchParams.toString();
-  return qs ? `/login?${qs}` : '/login';
+  return qs ? `/?${qs}` : '/';
 }
 
 function PillarCta({ children, className = '' }) {

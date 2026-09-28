@@ -449,7 +449,7 @@ function RootLayoutClientInner({ children }) {
 
       {isMinimalLanding ? (
         <>
-          <SiteHeaderBrand logoOnly logoHref="/campana" />
+          <SiteHeaderBrand logoOnly logoHref="/" />
           <main className="page-content page-content--conversion-landing">{children}</main>
         </>
       ) : (
