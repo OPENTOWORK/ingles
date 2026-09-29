@@ -98,33 +98,56 @@ async function fetchPromotionPlans(db) {
   return rows;
 }
 
-async function fetchUsersSnapshot(db) {
-  const { data, error } = await db
-    .from('Usuarios_y_Perfil_users')
-    .select('id, email, creado_en, marketing_updates, metadata')
-    .order('creado_en', { ascending: false })
-    .limit(5000);
+function isMissingColumnError(error) {
+  const message = String(error?.message || '').toLowerCase();
+  return error?.code === '42703' || message.includes('column') || message.includes('schema cache');
+}
 
-  if (error) {
-    if (isMissingTableError(error)) return { users: [], tableReady: false };
-    throw error;
+/** Mismo criterio que las fichas de administración: columna consentimiento_comercial. */
+export function readCommercialConsent(row) {
+  if (typeof row?.consentimiento_comercial === 'boolean') return row.consentimiento_comercial;
+  if (typeof row?.marketing_updates === 'boolean') return row.marketing_updates;
+  const metadata = row?.metadata && typeof row.metadata === 'object' ? row.metadata : {};
+  if (typeof metadata?.legal_acceptance?.marketing_updates === 'boolean') {
+    return metadata.legal_acceptance.marketing_updates;
+  }
+  if (typeof metadata?.marketing_updates === 'boolean') return metadata.marketing_updates;
+  return false;
+}
+
+async function fetchUsersSnapshot(db) {
+  const selects = [
+    'id, email, creado_en, consentimiento_comercial',
+    'id, email, creado_en, marketing_updates, metadata',
+    'id, email, creado_en',
+  ];
+
+  let data = null;
+  let lastError = null;
+  for (const select of selects) {
+    const result = await db
+      .from('Usuarios_y_Perfil_users')
+      .select(select)
+      .order('creado_en', { ascending: false })
+      .limit(5000);
+    if (!result.error) {
+      data = result.data || [];
+      lastError = null;
+      break;
+    }
+    lastError = result.error;
+    if (isMissingTableError(result.error)) return { users: [], tableReady: false };
+    if (!isMissingColumnError(result.error)) break;
   }
 
-  const users = (data || []).map((row) => {
-    const metadata = row.metadata && typeof row.metadata === 'object' ? row.metadata : {};
-    const marketingAccepted =
-      typeof row.marketing_updates === 'boolean'
-        ? row.marketing_updates
-        : typeof metadata?.legal_acceptance?.marketing_updates === 'boolean'
-          ? metadata.legal_acceptance.marketing_updates
-          : false;
-    return {
-      id: row.id,
-      email: row.email || '',
-      createdAt: row.creado_en,
-      marketingAccepted,
-    };
-  });
+  if (lastError) throw lastError;
+
+  const users = (data || []).map((row) => ({
+    id: row.id,
+    email: row.email || '',
+    createdAt: row.creado_en,
+    marketingAccepted: readCommercialConsent(row),
+  }));
 
   return { users, tableReady: true };
 }

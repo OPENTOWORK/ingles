@@ -80,6 +80,14 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
       continue;
     }
 
+    if (/^\d{6}$/.test(block)) {
+      bodyBlocks.push({
+        type: 'otp',
+        html: `<p style="margin:4px 0 20px;text-align:center;font-size:34px;font-weight:800;letter-spacing:0.32em;color:#1e293b;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;">${escapeHtml(block)}</p>`,
+      });
+      continue;
+    }
+
     if (/Contraseña temporal:/i.test(block)) {
       bodyBlocks.push({
         type: 'credentials',

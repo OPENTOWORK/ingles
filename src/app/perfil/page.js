@@ -144,6 +144,7 @@ export default function ProfilePage() {
   const [referralInvitations, setReferralInvitations] = useState([]);
   const [loadingReferrals, setLoadingReferrals] = useState(false);
   const [deleteCode, setDeleteCode] = useState('');
+  const [deleteOtpType, setDeleteOtpType] = useState('magiclink');
   const [deleteFlowActive, setDeleteFlowActive] = useState(false);
   const [deleteCodeSentAt, setDeleteCodeSentAt] = useState(null);
   const [deletingAccount, setDeletingAccount] = useState(false);
@@ -620,20 +621,26 @@ export default function ProfilePage() {
 
     setSendingDeleteCode(true);
     try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: user.email,
-        options: {
-          shouldCreateUser: false,
-        },
-      });
-
-      if (error) {
-        throw error;
+      const accessToken =
+        layoutSession?.access_token ||
+        (await supabase.auth.getSession()).data?.session?.access_token;
+      if (!accessToken) {
+        throw new Error('Session expired. Sign in again and retry.');
       }
 
+      const res = await fetch('/api/account/delete-code', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'Could not send verification code.');
+      }
+
+      setDeleteOtpType(payload.otpType === 'email' ? 'email' : 'magiclink');
       setDeleteFlowActive(true);
       setDeleteCodeSentAt(new Date().toISOString());
-      alert('We sent a 6-digit code to your email to confirm deletion.');
+      alert('We sent a 6-digit code to your email to confirm deletion. Check your inbox and spam.');
     } catch (error) {
       console.error('Error sending delete code:', error);
       alert(error.message || 'Could not send verification code.');
@@ -657,7 +664,7 @@ export default function ProfilePage() {
       const { error: otpError } = await supabase.auth.verifyOtp({
         email: user.email,
         token: deleteCode.trim(),
-        type: 'email',
+        type: deleteOtpType === 'email' ? 'email' : 'magiclink',
       });
 
       if (otpError) {
@@ -1543,7 +1550,8 @@ export default function ProfilePage() {
                       placeholder="123456"
                     />
                     <small className="profile-settings-panel__danger-hint">
-                      Code sent to {user?.email}. {deleteCodeSentAt ? 'If it expires, request a new one.' : ''}
+                      Code sent to {user?.email}. Check inbox and spam.
+                      {deleteCodeSentAt ? ' If it expires, request a new one.' : ''}
                     </small>
                   </div>
                   <button

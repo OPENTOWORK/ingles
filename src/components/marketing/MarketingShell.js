@@ -18,6 +18,7 @@ export const MARKETING_NAV = [
   { href: '/admin/marketing/conversiones', label: 'Conversiones' },
   { href: '/admin/marketing/roi', label: 'ROI' },
   { href: '/admin/marketing/promociones', label: 'Promociones' },
+  { href: '/admin/marketing/correos', label: 'Correos' },
 ];
 
 function normalizePath(pathname = '') {
