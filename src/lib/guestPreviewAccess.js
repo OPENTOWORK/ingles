@@ -45,7 +45,10 @@ export function isGuestExamStrategiesChapterAllowed(pathname = '') {
 
 export function isGuestExamPracticeLockedHref(href = '') {
   const path = normalizeGuestPath(href);
-  return path.includes('/exam-mode') || path.includes('/quiz-game');
+  if (path.includes('/exam-mode') || path.includes('/quiz-game')) return true;
+  if (path.includes('/exam-writing') || path.includes('/exam-listening')) return true;
+  if (path.includes('/exam-strategies') || path.includes('/teoria/exam-part-tips')) return false;
+  return /\/(writing|listening)(\/|$)/.test(path);
 }
 
 export function isGuestExamSlotAllowed(slot) {

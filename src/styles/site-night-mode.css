@@ -686,6 +686,10 @@ body.reading-night-mode .login-page__google:hover {
   border-color: #94a3b8;
 }
 
+body.reading-night-mode .login-page__google-fallback {
+  color: #94a3b8;
+}
+
 body.reading-night-mode .login-page__checkbox-label {
   color: #cbd5e1 !important;
 }

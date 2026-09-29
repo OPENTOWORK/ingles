@@ -21,8 +21,14 @@ function AuthCallbackInner() {
 
     const finishAuth = async () => {
       try {
+        const errorCode = searchParams.get('error_code');
         const errorDescription =
           searchParams.get('error_description') || searchParams.get('error');
+        if (errorCode === 'bad_oauth_state' || /oauth state/i.test(errorDescription || '')) {
+          throw new Error(
+            'La conexión con Google caducó. Vuelve al login y acepta el acceso enseguida.',
+          );
+        }
         if (errorDescription) {
           throw new Error(errorDescription);
         }

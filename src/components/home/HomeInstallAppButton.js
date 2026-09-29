@@ -1,15 +1,13 @@
 'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useRef, useState } from 'react';
 import {
   capturePwaInstallPrompt,
   getPwaInstallPrompt,
   subscribePwaInstallPrompt,
 } from '@/lib/pwaInstallPrompt';
 
-const MOBILE_TABLET_MEDIA_QUERY = '(max-width: 1024px)';
-const PHONE_MEDIA_QUERY = '(max-width: 639px)';
+const TABLET_MEDIA_QUERY = '(min-width: 640px) and (max-width: 1024px)';
 
 function isIosDevice() {
   if (typeof window === 'undefined') return false;
@@ -27,23 +25,18 @@ function installHelpText() {
 export default function HomeInstallAppButton() {
   const [installPrompt, setInstallPrompt] = useState(null);
   const [installed, setInstalled] = useState(false);
-  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
-  const [isPhone, setIsPhone] = useState(false);
-  const [headerSlot, setHeaderSlot] = useState(null);
+  const [isTablet, setIsTablet] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const helpRef = useRef(null);
 
   useEffect(() => {
     capturePwaInstallPrompt();
-    const mediaQuery = window.matchMedia(MOBILE_TABLET_MEDIA_QUERY);
-    const phoneQuery = window.matchMedia(PHONE_MEDIA_QUERY);
+    const mediaQuery = window.matchMedia(TABLET_MEDIA_QUERY);
     const syncViewport = () => {
-      setIsMobileOrTablet(mediaQuery.matches);
-      setIsPhone(phoneQuery.matches);
+      setIsTablet(mediaQuery.matches);
     };
     syncViewport();
     mediaQuery.addEventListener('change', syncViewport);
-    phoneQuery.addEventListener('change', syncViewport);
 
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
@@ -57,7 +50,6 @@ export default function HomeInstallAppButton() {
 
     return () => {
       mediaQuery.removeEventListener('change', syncViewport);
-      phoneQuery.removeEventListener('change', syncViewport);
       unsubscribe();
       window.removeEventListener('appinstalled', handleInstalled);
     };
@@ -82,29 +74,6 @@ export default function HomeInstallAppButton() {
     };
   }, [showHelp]);
 
-  useLayoutEffect(() => {
-    if (!isPhone) {
-      setHeaderSlot(null);
-      return undefined;
-    }
-
-    const findSlot = () => document.querySelector('[data-home-install-slot]');
-    const existing = findSlot();
-    if (existing) {
-      setHeaderSlot(existing);
-      return undefined;
-    }
-
-    const observer = new MutationObserver(() => {
-      const slot = findSlot();
-      if (!slot) return;
-      setHeaderSlot(slot);
-      observer.disconnect();
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-    return () => observer.disconnect();
-  }, [isPhone]);
-
   const handleInstall = async () => {
     if (installPrompt) {
       setShowHelp(false);
@@ -117,7 +86,7 @@ export default function HomeInstallAppButton() {
     setShowHelp((open) => !open);
   };
 
-  if (!isMobileOrTablet || installed) return null;
+  if (!isTablet || installed) return null;
 
   const content = (
     <div className="home-install-app__wrap" ref={helpRef}>
@@ -134,14 +103,6 @@ export default function HomeInstallAppButton() {
       ) : null}
     </div>
   );
-
-  if (isPhone) {
-    if (!headerSlot) return null;
-    return createPortal(
-      <div className="home-install-app home-install-app--header">{content}</div>,
-      headerSlot,
-    );
-  }
 
   return <div className="home-install-app">{content}</div>;
 }

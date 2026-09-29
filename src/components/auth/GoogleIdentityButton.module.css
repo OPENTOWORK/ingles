@@ -1,0 +1,20 @@
+.wrap {
+  width: 100%;
+  min-height: 44px;
+}
+
+.wrap.disabled {
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.buttonHost {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.buttonHost :global(iframe),
+.buttonHost :global(div[role='button']) {
+  max-width: 100%;
+}

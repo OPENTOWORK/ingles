@@ -43,6 +43,15 @@ export default function Home() {
   const showAppHome = showStudentBoard || isGuestHome || authPending || rolePending;
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('error_code') || '';
+    const description = params.get('error_description') || '';
+    if (code === 'bad_oauth_state' || /oauth state/i.test(description)) {
+      window.location.replace('/login/?error=oauth_state');
+    }
+  }, []);
+
+  useEffect(() => {
     let cancelled = false;
     supabase.auth.getSession().then(({ data }) => {
       if (cancelled) return;
@@ -83,7 +92,7 @@ export default function Home() {
             </ul>
             {!isStudentView ? (
               <div className="home-hero__cta">
-                <Link href="/niveles" className="home-cta__btn home-cta__btn--inline">
+                <Link href="/niveles" className="home-cta__btn home-cta__btn--inline home-cta__btn--start">
                   Start practising
                 </Link>
               </div>

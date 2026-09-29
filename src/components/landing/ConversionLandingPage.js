@@ -54,7 +54,7 @@ const FAQ_ITEMS = [
 function useCampaignAuthHref() {
   const searchParams = useSearchParams();
   const qs = searchParams.toString();
-  return qs ? `/?${qs}` : '/';
+  return qs ? `/login/?${qs}` : '/login/';
 }
 
 function ConversionUrgencyBanner() {

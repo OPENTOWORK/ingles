@@ -78,6 +78,8 @@ import {
 } from '@/data/b2WritingTasks';
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
+import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
+import { useUserRole } from '@/context/UserRoleContext';
 
 const B2WritingLongFormAiPanel = dynamic(
   () => import('@/components/b2/B2WritingLongFormAiPanel'),
@@ -1264,6 +1266,18 @@ function B2WritingExamPracticePageInner() {
 }
 
 export default function B2WritingExamPracticePage() {
+  const { session } = useUserRole();
+  if (!session) {
+    return (
+      <main className="shell content-hub-shell">
+        <GuestRegisterTeaser
+          nextHref="/exam-practice/b2/exam-writing"
+          message="Create a free account to unlock Writing practice."
+        />
+      </main>
+    );
+  }
+
   return (
     <Suspense fallback={<p style={{ padding: '2rem', textAlign: 'center' }}>Loading…</p>}>
       <ReadingPracticeSessionProvider>

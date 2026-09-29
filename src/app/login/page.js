@@ -14,6 +14,8 @@ import { clearLogoutPending } from '@/utils/logout';
 import toast from 'react-hot-toast';
 import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
+import GoogleIdentityButton from '@/components/auth/GoogleIdentityButton';
+import { getGoogleClientId } from '@/lib/googleIdentity';
 
 function isAuthOrLandingNextPath(path = '') {
   const p = String(path || '').split('?')[0];
@@ -58,10 +60,15 @@ async function resolvePostLoginPath(user, searchParams) {
 }
 
 /** Mensajes de /auth/confirm cuando un enlace de correo no se puede canjear. */
+let lastLoginErrorToastKey = '';
+let lastLoginErrorToastAt = 0;
+
 const LINK_ERRORS = {
   link_expired: 'El enlace del correo ha caducado. Inicia sesión con tu contraseña o pide uno nuevo.',
   link_used: 'Ese enlace ya se había usado. Inicia sesión con tu email y contraseña.',
   link_invalid: 'El enlace del correo no es válido. Inicia sesión con tu email y contraseña.',
+  oauth_state:
+    'La conexión con Google caducó antes de volver. Pulsa Continuar con Google otra vez y acepta el acceso enseguida.',
 };
 
 function LoginPageInner() {
@@ -73,6 +80,8 @@ function LoginPageInner() {
   /** Email cuya cuenta existe pero sigue sin confirmar. */
   const [unconfirmedEmail, setUnconfirmedEmail] = useState('');
   const [resendState, setResendState] = useState('idle');
+  const [showGoogleOAuthFallback, setShowGoogleOAuthFallback] = useState(!getGoogleClientId());
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -92,10 +101,22 @@ function LoginPageInner() {
   }, [router, searchParams]);
 
   useEffect(() => {
+    const errorCode = searchParams.get('error_code');
     const linkError = searchParams.get('error');
-    if (linkError && linkError !== 'null') {
-      toast.error(LINK_ERRORS[linkError] || LINK_ERRORS.link_invalid);
-    }
+    const key =
+      errorCode === 'bad_oauth_state' || linkError === 'oauth_state'
+        ? 'oauth_state'
+        : linkError && linkError !== 'null'
+          ? linkError
+          : '';
+    if (!key) return;
+
+    const now = Date.now();
+    if (lastLoginErrorToastKey === key && now - lastLoginErrorToastAt < 1500) return;
+    lastLoginErrorToastKey = key;
+    lastLoginErrorToastAt = now;
+
+    toast.error(key === 'oauth_state' ? LINK_ERRORS.oauth_state : LINK_ERRORS[key] || LINK_ERRORS.link_invalid);
   }, [searchParams]);
 
   useEffect(() => {
@@ -233,13 +254,7 @@ function LoginPageInner() {
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
-      options: {
-        redirectTo,
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-        },
-      },
+      options: { redirectTo },
     });
 
     if (error) {
@@ -253,6 +268,45 @@ function LoginPageInner() {
         toast.error('No se pudo iniciar sesión con ' + provider + '. ' + error.message);
       }
     }
+  };
+
+  const handleGoogleIdToken = async ({ credential, nonce }) => {
+    if (!credential || googleLoading) return;
+    setGoogleLoading(true);
+    const loadingToast = toast.loading('Iniciando sesión con Google...');
+    clearLogoutPending();
+
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: 'google',
+      token: credential,
+      nonce,
+    });
+
+    if (error) {
+      toast.dismiss(loadingToast);
+      setGoogleLoading(false);
+      console.error('[login] google id token', error);
+      toast.error('No se pudo iniciar sesión con Google. Prueba el botón de respaldo.');
+      setShowGoogleOAuthFallback(true);
+      return;
+    }
+
+    const result = await completeSignIn(data);
+    toast.dismiss(loadingToast);
+    setGoogleLoading(false);
+
+    if (!result.ok) {
+      console.error('completeSignIn failed:', result.reason, result.error);
+      toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
+      return;
+    }
+
+    toast.success('Inicio de sesión exitoso');
+    const [path] = await Promise.all([
+      resolvePostLoginPath(result.user, searchParams),
+      ensureAppUserProfile().catch(() => {}),
+    ]);
+    router.replace(path);
   };
 
   return (
@@ -340,17 +394,37 @@ function LoginPageInner() {
         <span>o</span>
       </p>
 
-      <button type="button" className="login-page__google" onClick={() => handleOAuthLogin('google')}>
-        <span className="login-page__google-icon" aria-hidden>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
-            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
-            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
-            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
-            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-          </svg>
-        </span>
-        Continuar con Google
-      </button>
+      <GoogleIdentityButton
+        disabled={googleLoading}
+        onCredential={handleGoogleIdToken}
+        onUnavailable={() => setShowGoogleOAuthFallback(true)}
+      />
+      {showGoogleOAuthFallback ? (
+        <button
+          type="button"
+          className="login-page__google"
+          onClick={() => handleOAuthLogin('google')}
+          disabled={googleLoading}
+        >
+          <span className="login-page__google-icon" aria-hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+              <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+              <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+              <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+              <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+            </svg>
+          </span>
+          Continuar con Google
+        </button>
+      ) : (
+        <button
+          type="button"
+          className="login-page__google-fallback"
+          onClick={() => handleOAuthLogin('google')}
+        >
+          Si el botón no carga, continúa aquí
+        </button>
+      )}
     </main>
   );
 }

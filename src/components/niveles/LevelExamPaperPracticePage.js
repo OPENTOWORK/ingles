@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
+import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
+import { useUserRole } from '@/context/UserRoleContext';
 import { getExamSkillPartRange, getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import { getLevelExamSkillRoute, getNivelesLevelHub } from '@/data/nivelesLevelHub';
 
@@ -38,6 +40,17 @@ export default function LevelExamPaperPracticePage({ slug, skillRoute }) {
   const subtitle = formatPartsLabelEn(partMin, partMax);
   const isListening = skillRoute === 'exam-listening';
   const isWriting = skillRoute === 'exam-writing';
+  const { session } = useUserRole();
+  if (!session && (isWriting || isListening)) {
+    return (
+      <main className="shell content-hub-shell">
+        <GuestRegisterTeaser
+          nextHref={`/exam-practice/${levelSlug}/${skillRoute}`}
+          message={`Create a free account to unlock ${isWriting ? 'Writing' : 'Listening'} practice.`}
+        />
+      </main>
+    );
+  }
   const isA2Rw =
     levelSlug === 'a2' &&
     (skillRoute === 'exam-reading' || skillRoute === 'exam-useofenglish');
