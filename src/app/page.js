@@ -89,7 +89,7 @@ export default function Home() {
               ))}
             </ul>
             <div className="home-hero__cta">
-              <Link href="/niveles" className="home-cta__btn home-cta__btn--inline home-cta__btn--start">
+              <Link href="/exam-practice/b2/exam-reading-and-use-of-english/?examen=1" className="home-cta__btn home-cta__btn--inline home-cta__btn--start">
                 Start practising
               </Link>
             </div>

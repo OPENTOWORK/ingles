@@ -3243,31 +3243,31 @@ body.nav-open {
   font-size: 1.125rem;
   font-weight: 800;
   color: #fff;
-  background: linear-gradient(135deg, #fb923c 0%, #f97316 48%, #ea580c 100%);
-  border-color: rgba(255, 237, 213, 0.7);
+  background: linear-gradient(135deg, #e07ad4 0%, #cb55be 52%, #a83a9c 100%);
+  border-color: rgba(253, 232, 248, 0.72);
   box-shadow:
-    0 0 0 4px rgba(251, 146, 60, 0.28),
-    0 10px 24px rgba(234, 88, 12, 0.42);
+    0 0 0 4px rgba(203, 85, 190, 0.34),
+    0 10px 24px rgba(168, 58, 156, 0.45);
 }
 
 .home-cta__btn--start:hover {
   color: #fff;
-  background: linear-gradient(135deg, #fdba74 0%, #fb923c 48%, #f97316 100%);
+  background: linear-gradient(135deg, #ee8fe2 0%, #e07ad4 52%, #cb55be 100%);
   box-shadow:
-    0 0 0 5px rgba(251, 146, 60, 0.38),
-    0 14px 28px rgba(234, 88, 12, 0.5);
+    0 0 0 5px rgba(203, 85, 190, 0.42),
+    0 14px 28px rgba(168, 58, 156, 0.52);
 }
 
 .home-cta__btn--start:active {
   color: #fff;
-  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+  background: linear-gradient(135deg, #cb55be 0%, #a83a9c 100%);
   box-shadow:
-    0 0 0 3px rgba(251, 146, 60, 0.32),
-    0 4px 12px rgba(234, 88, 12, 0.35);
+    0 0 0 3px rgba(203, 85, 190, 0.36),
+    0 4px 12px rgba(168, 58, 156, 0.38);
 }
 
 .home-cta__btn--start:focus-visible {
-  outline: 3px solid #fff7ed;
+  outline: 3px solid #fdf2f8;
   outline-offset: 3px;
 }
 
@@ -5470,8 +5470,8 @@ body.study-session-active .levels-exam-module-nav {
 .levels-b2-practice__toolbar-sub-rail {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.45rem;
   width: 100%;
   min-width: 0;
@@ -5484,12 +5484,12 @@ body.study-session-active .levels-exam-module-nav {
 }
 
 .levels-b2-practice__toolbar-sub-rail-side {
-  flex: 1 1 12rem;
+  flex: 0 1 auto;
   min-width: 0;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -5506,19 +5506,19 @@ body.study-session-active .levels-exam-module-nav {
   top: auto;
   max-height: none;
   overflow: visible;
-  width: 100%;
-  flex: 1 1 auto;
+  width: auto;
+  flex: 0 1 auto;
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.5rem;
 }
 
 .levels-b2-practice__toolbar-sub-rail .levels-listening-practice-side__top {
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.5rem;
   flex: 0 0 auto;
   width: auto;
@@ -5526,11 +5526,12 @@ body.study-session-active .levels-exam-module-nav {
 
 .levels-b2-practice__toolbar-sub-rail .levels-listening-practice-side__panels {
   flex-direction: row;
-  flex-wrap: wrap;
-  align-items: stretch;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 0.45rem;
-  flex: 1 1 auto;
-  min-width: min(100%, 12rem);
+  flex: 0 0 auto;
+  min-width: 0;
+  width: auto;
 }
 
 .levels-b2-practice__toolbar-sub-rail .levels-listening-practice-side__top-notes {
@@ -5656,8 +5657,100 @@ body.study-session-active .levels-exam-module-nav {
 }
 
 .levels-b2-practice__toolbar-sub-rail-finish {
-  flex: 1 1 12rem;
+  flex: 1 1 auto;
   min-width: 0;
+  align-self: stretch;
+}
+
+.reading-dictionary-tool__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.15rem;
+  padding: 0 0.2rem;
+  border-radius: 4px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.levels-b2-practice__toolbar-sub-rail .reading-dictionary-tool.exam-practice-rail-disclosure--open .levels-listening-strategy__toggle {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  color: #1e3a8a;
+  box-shadow: 0 2px 12px rgba(37, 99, 235, 0.16);
+}
+
+.levels-b2-practice__toolbar-sub-rail .exam-practice-rail-disclosure--open .reading-dictionary-tool__icon,
+.reading-dictionary-tool.exam-practice-rail-disclosure--open .reading-dictionary-tool__icon {
+  background: #dbeafe;
+  color: #1e3a8a;
+}
+
+body.reading-dictionary-armed .levels-b2-practice__work-body {
+  cursor: text;
+}
+
+::highlight(reading-dictionary) {
+  color: inherit;
+  background-color: rgba(37, 99, 235, 0.16);
+  text-decoration: underline;
+  text-decoration-color: #2563eb;
+  text-decoration-thickness: 2px;
+}
+
+mark.reading-dictionary-mark {
+  background: rgba(37, 99, 235, 0.16);
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: #2563eb;
+  text-decoration-thickness: 2px;
+}
+
+.reading-dictionary-pop {
+  position: fixed;
+  z-index: 80;
+  box-sizing: border-box;
+  padding: 0.55rem 0.7rem 0.6rem;
+  border-radius: 12px;
+  border: 1px solid #dbeafe;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.14);
+  pointer-events: none;
+}
+
+.reading-dictionary-pop__source {
+  margin: 0 0 0.2rem;
+  color: #64748b;
+  font-size: 0.72rem;
+  line-height: 1.3;
+}
+
+.reading-dictionary-pop__translation {
+  margin: 0;
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+body.reading-night-mode .reading-dictionary-pop {
+  background: #0f172a;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+body.reading-night-mode .reading-dictionary-pop__source {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .reading-dictionary-pop__translation {
+  color: #f8fafc;
 }
 
 .levels-listening-practice-layout--with-strategy.levels-listening-practice-layout--side-under-toolbar {

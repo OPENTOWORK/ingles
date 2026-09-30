@@ -10,18 +10,20 @@ export default function ExamPracticeSideRail({
   strategy = null,
   progress = null,
   tools = null,
+  dictionary = null,
   finishNotice = null,
 }) {
-  if (!topRail && !strategy && !progress && !tools && !finishNotice) return null;
+  if (!topRail && !strategy && !progress && !tools && !dictionary && !finishNotice) return null;
 
   const rail = (
     <div className="levels-listening-practice-side">
       {topRail}
-      {strategy || progress || tools || finishNotice ? (
+      {strategy || progress || tools || dictionary || finishNotice ? (
         <div className="levels-listening-practice-side__panels">
           {strategy}
           {progress}
           {tools}
+          {dictionary}
           {finishNotice}
         </div>
       ) : null}

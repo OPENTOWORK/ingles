@@ -34,12 +34,12 @@ function writeCollapsePreference(collapsed) {
 function defaultCollapsed() {
   const preference = readCollapsePreference();
   if (preference !== null) return preference;
-  return window.matchMedia('(max-width: 639px)').matches;
+  return true;
 }
 
 /**
  * Promo de referidos en la home (zona morada).
- * En móvil (<640px) empieza plegado. Al abrirlo o cerrarlo se recuerda en la sesión.
+ * Empieza plegado. Al abrirlo o cerrarlo se recuerda en la sesión.
  */
 export default function InviteFriendPromoBanner({ guest = false }) {
   const { session } = useUserRole();
@@ -66,7 +66,7 @@ export default function InviteFriendPromoBanner({ guest = false }) {
     } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
         writeCollapsePreference(null);
-        setCollapsed(window.matchMedia('(max-width: 639px)').matches);
+        setCollapsed(true);
       }
     });
     return () => subscription.unsubscribe();
