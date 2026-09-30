@@ -321,10 +321,13 @@ export function resolveReadingPart6SentencePool(raw = '', passageText = '', mcqG
   const block = extractReadingPart6SentencesBlock(raw);
   const optionLinesBlock = extractReadingPart6OptionLinesBlock(raw);
 
+  // If the item has an explicit "Sentences" block, treat it as authoritative.
+  // The looser global scan can otherwise mistake a passage line such as
+  // "A few years ago..." for option A.
   const trySources = [
-    () => extractReadingPart6GlobalPoolFromRaw(raw),
     () => parseReadingPart6SentencePool(block),
     () => parseReadingPart6SentencePoolFromOptionLines(block),
+    () => extractReadingPart6GlobalPoolFromRaw(raw),
     () => parseReadingPart6SentencePoolFromOptionLines(optionLinesBlock),
     () => parseReadingPart6SentencePoolFromOptionLines(raw),
     () => parseReadingPart6SentencePoolFromOptionLines(passageText),
