@@ -123,8 +123,8 @@ const DRALO_TOOLS = [
     title: 'Grammar Coach y Pronunciation Coach',
     text: 'Refuerzan justo los puntos débiles detectados en tu práctica.',
     links: [
-      { href: '/', label: 'Grammar Coach' },
-      { href: '/', label: 'Pronunciation Coach' },
+      { href: '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1', label: 'Grammar Coach' },
+      { href: '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1', label: 'Pronunciation Coach' },
     ],
   },
 ];
@@ -157,14 +157,17 @@ const FAQ_ITEMS = [
   },
 ];
 
-function useCampaignAuthHref() {
+const READING_TEST_1_PATH = '/exam-practice/b2/exam-reading-and-use-of-english/';
+
+function useReadingTestHref() {
   const searchParams = useSearchParams();
-  const qs = searchParams.toString();
-  return qs ? `/login/?${qs}` : '/login/';
+  const params = new URLSearchParams(searchParams.toString());
+  params.set('examen', '1');
+  return `${READING_TEST_1_PATH}?${params.toString()}`;
 }
 
 function PillarCta({ children, className = '' }) {
-  const authHref = useCampaignAuthHref();
+  const authHref = useReadingTestHref();
   return (
     <Link href={authHref} className={`conversion-landing__cta ${className}`.trim()}>
       {children}

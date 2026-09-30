@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 import { useGuidedTour } from '@/context/GuidedTourContext';
 import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
-import { isStudentRole } from '@/utils/authRoles';
 import { supabase } from '@/utils/supabaseClient';
 
 const HomeInstallAppButton = dynamic(() => import('@/components/home/HomeInstallAppButton'), {
@@ -27,11 +26,10 @@ const FEATURES = [
 ];
 
 export default function Home() {
-  const { session, userRole } = useUserRole();
+  const { session } = useUserRole();
   const { roleConfirmed, userRole: confirmedRole } = useConfirmedUserRole();
   const { startTour } = useGuidedTour();
   const isRegistered = Boolean(session?.user);
-  const isStudentView = isRegistered && isStudentRole(userRole);
   /** Home de alumno en móvil: exige rol resuelto para esta misma sesión, no el valor por defecto. */
   const showStudentBoard = roleConfirmed && usesStudentContentRestrictions(confirmedRole);
   /** null hasta leer la sesión; false = invitado, true = hay usuario. */
@@ -90,13 +88,11 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-            {!isStudentView ? (
-              <div className="home-hero__cta">
-                <Link href="/niveles" className="home-cta__btn home-cta__btn--inline home-cta__btn--start">
-                  Start practising
-                </Link>
-              </div>
-            ) : null}
+            <div className="home-hero__cta">
+              <Link href="/niveles" className="home-cta__btn home-cta__btn--inline home-cta__btn--start">
+                Start practising
+              </Link>
+            </div>
           </div>
 
           <div className="home-hero__mascot">
@@ -110,7 +106,9 @@ export default function Home() {
           <DraloTagline />
         </blockquote>
 
-        {isRegistered ? <HomeHowItWorks onStartTour={startTour} /> : null}
+        {isRegistered && roleConfirmed && !usesStudentContentRestrictions(confirmedRole) ? (
+          <HomeHowItWorks onStartTour={startTour} />
+        ) : null}
         {isRegistered ? <HomeQuickNav /> : null}
       </div>
     </main>

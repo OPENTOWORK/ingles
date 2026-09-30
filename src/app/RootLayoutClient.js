@@ -449,7 +449,10 @@ function RootLayoutClientInner({ children }) {
 
       {isMinimalLanding ? (
         <>
-          <SiteHeaderBrand logoOnly logoHref="/" />
+          <SiteHeaderBrand
+            logoOnly
+            logoHref="/exam-practice/b2/exam-reading-and-use-of-english/?examen=1"
+          />
           <main className="page-content page-content--conversion-landing">{children}</main>
         </>
       ) : (

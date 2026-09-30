@@ -51,10 +51,13 @@ const FAQ_ITEMS = [
   },
 ];
 
-function useCampaignAuthHref() {
+const READING_TEST_1_PATH = '/exam-practice/b2/exam-reading-and-use-of-english/';
+
+function useReadingTestHref() {
   const searchParams = useSearchParams();
-  const qs = searchParams.toString();
-  return qs ? `/login/?${qs}` : '/login/';
+  const params = new URLSearchParams(searchParams.toString());
+  params.set('examen', '1');
+  return `${READING_TEST_1_PATH}?${params.toString()}`;
 }
 
 function ConversionUrgencyBanner() {
@@ -113,7 +116,7 @@ function ConversionUrgencyBanner() {
 }
 
 function ConversionCta({ children, className = '' }) {
-  const authHref = useCampaignAuthHref();
+  const authHref = useReadingTestHref();
   return (
     <Link href={authHref} className={`conversion-landing__cta ${className}`.trim()}>
       {children}
