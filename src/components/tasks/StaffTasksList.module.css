@@ -1,0 +1,212 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.group,
+.task {
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.group--phase {
+  border-left: 3px solid #7c3aed;
+}
+
+.group--sub {
+  margin: 0.35rem 0.45rem 0.45rem 1.15rem;
+  border-left: 3px solid #6366f1;
+  background: #f8fafc;
+}
+
+.group--root {
+  margin: 0;
+}
+
+.head,
+.taskMain {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  width: 100%;
+  min-height: 2.15rem;
+  padding: 0.28rem 0.55rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: #0f172a;
+}
+
+.head:hover,
+.taskMain:hover {
+  background: #f8fafc;
+}
+
+.chevron {
+  flex: 0 0 auto;
+  width: 1rem;
+  color: #64748b;
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+.name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.name button {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+.meta {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.track {
+  flex: 0 0 4.25rem;
+  height: 4px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+
+.track > span {
+  display: block;
+  height: 100%;
+  background: #7c3aed;
+}
+
+.body {
+  padding: 0 0.35rem 0.35rem;
+}
+
+.task {
+  margin: 0.28rem 0.4rem 0.35rem 1.35rem;
+  border-left: 3px solid #94a3b8;
+}
+
+.task--pendiente { border-left-color: #64748b; }
+.task--en_progreso { border-left-color: #2563eb; }
+.task--en_revision { border-left-color: #d97706; }
+.task--completada { border-left-color: #059669; }
+.task--bloqueada { border-left-color: #dc2626; }
+.task--cancelada { border-left-color: #9ca3af; }
+
+.task--loose {
+  margin-left: 0;
+}
+
+.check {
+  flex: 0 0 auto;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 4px;
+  border: 1.5px solid #cbd5e1;
+  background: #fff;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.check:hover {
+  border-color: #7c3aed;
+}
+
+.checkOn {
+  background: #7c3aed;
+  border-color: #6d28d9;
+}
+
+.check:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.taskTitle {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #1e293b;
+}
+
+.taskTitleDone {
+  color: #64748b;
+  text-decoration: line-through;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  flex: 0 1 auto;
+  justify-content: flex-end;
+}
+
+.detail {
+  padding: 0.15rem 0.65rem 0.55rem 2.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.detail p {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #475569;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.actions button,
+.actions a {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #6d28d9;
+  cursor: pointer;
+}
+
+.actions :global(button.danger) {
+  color: #dc2626;
+}
+
+.empty {
+  margin: 0;
+  padding: 1.25rem 0.5rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: #64748b;
+}

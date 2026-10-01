@@ -140,6 +140,7 @@ export const STAFF_TASKS_VIEW_MODES = [
   { id: 'kanban-phases', label: 'Kanban fases' },
   { id: 'kanban-subphases', label: 'Kanban subfases' },
   { id: 'kanban-tasks', label: 'Kanban tareas' },
+  { id: 'list', label: 'Lista' },
 ];
 
 export const KANBAN_FASE_COLUMN_STYLES = {

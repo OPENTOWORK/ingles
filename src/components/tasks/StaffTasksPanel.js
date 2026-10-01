@@ -15,6 +15,7 @@ import {
   FECHA_LIMITE_FILTERS,
   KANBAN_FASE_COLUMN_STYLES,
   KANBAN_TASK_COLUMN_STYLES,
+  STAFF_TASKS_VIEW_MODES,
   STAFF_TASKS_VIEW_STORAGE_KEY,
   TASK_ESTADOS,
   TASK_ESTADO_LABELS,
@@ -42,6 +43,7 @@ import {
   formatStaffDateTimeLabel,
 } from '@/lib/staffTaskHelpers';
 import StaffTasksKanbanBoard, { kanbanStyles } from '@/components/tasks/StaffTasksKanbanBoard';
+import StaffTasksListView, { CompleteCheck } from '@/components/tasks/StaffTasksListView';
 import StaffTasksViewSwitcher from '@/components/tasks/StaffTasksViewSwitcher';
 import StaffTaskTemplatesSection from '@/components/tasks/StaffTaskTemplatesSection';
 import StaffTaskFormModal, { ROL_OPTIONS } from '@/components/tasks/StaffTaskFormModal';
@@ -70,6 +72,15 @@ const PANEL_METRIC_FILTERS = [
   { key: 'bloqueada', label: 'Bloqueadas', estado: 'bloqueada', cumplimiento: '' },
   { key: 'a_tiempo', label: '% cumplimiento', estado: 'completada', cumplimiento: 'a_tiempo' },
 ];
+
+function toggleSetMember(setter, id) {
+  setter((current) => {
+    const next = new Set(current);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    return next;
+  });
+}
 
 function getActiveMetricKey(filters = {}) {
   if (filters.cumplimiento === 'a_tiempo') return 'a_tiempo';
@@ -359,11 +370,19 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const [detailTask, setDetailTask] = useState(null);
   const [showTemplates, setShowTemplates] = useState(false);
   const [viewMode, setViewMode] = useState('classic');
+  const [openClassicPhases, setOpenClassicPhases] = useState(() => new Set());
+  const [openClassicSubphases, setOpenClassicSubphases] = useState(() => new Set());
+  const [openClassicTasks, setOpenClassicTasks] = useState(() => new Set());
+  const [phasesSectionOpen, setPhasesSectionOpen] = useState(false);
+  const [subphasesSectionOpen, setSubphasesSectionOpen] = useState(false);
+  const [tasksSectionOpen, setTasksSectionOpen] = useState(true);
 
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STAFF_TASKS_VIEW_STORAGE_KEY);
-      if (stored) setViewMode(stored);
+      if (stored && STAFF_TASKS_VIEW_MODES.some((mode) => mode.id === stored)) {
+        setViewMode(stored);
+      }
     } catch {
       /* ignore */
     }
@@ -863,7 +882,9 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     [],
   );
 
-  const isKanbanView = viewMode !== 'classic';
+  const isKanbanView = viewMode.startsWith('kanban');
+  const isListView = viewMode === 'list';
+  const isClassicView = viewMode === 'classic';
 
   const clearFilters = () => {
     setFilters({
@@ -1247,16 +1268,73 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         </section>
       ) : null}
 
+      {isListView ? (
+        <section className="rounded-xl border bg-white p-4 shadow-sm">
+          {loading && !tasks.length && !phases.length ? (
+            <p className="text-sm text-gray-500 py-8 text-center">Cargando tareas…</p>
+          ) : (
+            <StaffTasksListView
+              phases={visiblePhases}
+              subphases={visibleSubphases}
+              tasks={visibleTasks}
+              saving={saving}
+              onComplete={(task, estado) => void moveTaskEstado(task, estado)}
+              onOpen={setDetailTask}
+              renderTaskActions={(task) => (
+                <>
+                  {canRemind ? (
+                    <TaskReminderButton
+                      task={task}
+                      busy={remindingId === task.id}
+                      onRemind={remindTask}
+                      className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-amber-200 bg-amber-50 text-amber-700 hover:bg-amber-100 disabled:opacity-50"
+                    />
+                  ) : null}
+                  <button type="button" onClick={() => openEditTask(task)}>
+                    Editar
+                  </button>
+                  <button type="button" onClick={() => void duplicateTask(task)}>
+                    Duplicar
+                  </button>
+                  {canDelete ? (
+                    <button type="button" className="danger" onClick={() => void deleteTask(task)}>
+                      Eliminar
+                    </button>
+                  ) : canCancel && task.estado !== 'cancelada' ? (
+                    <button type="button" onClick={() => void quickEstado(task, 'cancelada')}>
+                      Cancelar
+                    </button>
+                  ) : null}
+                </>
+              )}
+            />
+          )}
+        </section>
+      ) : null}
+
       {/* Phases */}
-      {!isKanbanView ? (
+      {isClassicView ? (
       <>
       <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <div>
+        <button
+          type="button"
+          className={`flex w-full items-center justify-between gap-3 text-left ${phasesSectionOpen ? 'mb-4' : ''}`}
+          aria-expanded={phasesSectionOpen}
+          onClick={() => setPhasesSectionOpen((open) => !open)}
+        >
+          <span>
             <h3 className="font-semibold text-gray-900">Fases del proyecto</h3>
             <p className="text-xs text-gray-500 mt-0.5">Visible para todo el equipo</p>
-          </div>
-        </div>
+          </span>
+          <span
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-violet-200 bg-violet-50 text-sm text-violet-700"
+            aria-hidden="true"
+          >
+            {phasesSectionOpen ? '▾' : '▸'}
+          </span>
+        </button>
+        {phasesSectionOpen ? (
+        <>
         {phasesError ? (
           <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800 mb-3">
             No se pudieron cargar las fases: {phasesError}
@@ -1284,71 +1362,94 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
             ) : null}
           </div>
         ) : (
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {visiblePhases.map((phase) => (
-              <div
-                key={phase.id}
-                className="min-w-[240px] max-w-[280px] flex-shrink-0 rounded-xl border border-violet-100 bg-violet-50/30 p-4"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <h4 className="font-semibold text-gray-900 text-sm leading-snug">{phase.nombre}</h4>
-                  {canManagePhases ? (
+          <div className="flex flex-col gap-2">
+            {visiblePhases.map((phase) => {
+              const open = openClassicPhases.has(phase.id);
+              return (
+                <div
+                  key={phase.id}
+                  className="rounded-xl border border-violet-100 bg-violet-50/40"
+                >
+                  <div className="flex items-center gap-2 px-3 py-2">
                     <button
                       type="button"
-                      onClick={() => openEditPhase(phase)}
-                      className="text-xs text-violet-600 hover:underline shrink-0"
+                      className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                      aria-expanded={open}
+                      onClick={() => toggleSetMember(setOpenClassicPhases, phase.id)}
                     >
-                      Editar
+                      <span className="w-4 shrink-0 text-xs text-slate-500">{open ? '▾' : '▸'}</span>
+                      <span className="truncate text-sm font-semibold text-gray-900">{phase.nombre}</span>
+                      <FaseEstadoBadge estado={phase.estado} compact />
+                      <span className="ml-auto shrink-0 text-xs text-gray-500">
+                        {phase.completedCount}/{phase.taskCount}
+                      </span>
                     </button>
+                    {canManagePhases ? (
+                      <button
+                        type="button"
+                        onClick={() => openEditPhase(phase)}
+                        className="shrink-0 text-xs text-violet-600 hover:underline"
+                      >
+                        Editar
+                      </button>
+                    ) : null}
+                  </div>
+                  {open ? (
+                    <div className="space-y-2 px-4 pb-4">
+                      {phase.descripcion ? (
+                        <p className="text-xs text-gray-600">{phase.descripcion}</p>
+                      ) : null}
+                      <ProgressBar pct={phase.progressPct} />
+                      <p className="text-xs text-gray-600">
+                        {phase.completedCount}/{phase.taskCount} tareas · {phase.progressLabel}
+                      </p>
+                      {(phase.fecha_inicio || phase.fecha_limite) && (
+                        <p className="text-xs text-gray-500">
+                          {phase.fecha_inicio ? `Inicio: ${formatStaffDateLabel(phase.fecha_inicio)}` : ''}
+                          {phase.fecha_limite
+                            ? ` · Límite: ${formatStaffDateLabel(phase.fecha_limite)}`
+                            : ''}
+                        </p>
+                      )}
+                      {formatPhaseResponsablesLabel(phase) ? (
+                        <p className="text-xs text-gray-500">
+                          Resp.: {formatPhaseResponsablesLabel(phase)}
+                        </p>
+                      ) : null}
+                      <button
+                        type="button"
+                        onClick={() => setFilters((f) => ({ ...f, faseId: phase.id, subfaseId: '' }))}
+                        className="text-xs text-violet-700 hover:underline"
+                      >
+                        Ver tareas de esta fase
+                      </button>
+                    </div>
                   ) : null}
                 </div>
-                {phase.descripcion ? (
-                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">{phase.descripcion}</p>
-                ) : null}
-                <div className="mt-3 space-y-2">
-                  <FaseEstadoBadge estado={phase.estado} />
-                  <ProgressBar pct={phase.progressPct} />
-                  <p className="text-xs text-gray-600">
-                    {phase.completedCount}/{phase.taskCount} tareas · {phase.progressLabel}
-                  </p>
-                  {(phase.fecha_inicio || phase.fecha_limite) && (
-                    <p className="text-xs text-gray-500">
-                      {phase.fecha_inicio ? `Inicio: ${formatStaffDateLabel(phase.fecha_inicio)}` : ''}
-                      {phase.fecha_limite
-                        ? ` · Límite: ${formatStaffDateLabel(phase.fecha_limite)}`
-                        : ''}
-                    </p>
-                  )}
-                  {formatPhaseResponsablesLabel(phase) ? (
-                    <p className="text-xs text-gray-500">
-                      Resp.: {formatPhaseResponsablesLabel(phase)}
-                    </p>
-                  ) : null}
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setFilters((f) => ({ ...f, faseId: phase.id, subfaseId: '' }))}
-                  className="mt-3 text-xs text-violet-700 hover:underline"
-                >
-                  Ver tareas de esta fase
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
+        </>
+        ) : null}
       </section>
 
       {/* Subphases */}
       <section className="rounded-xl border bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <div>
+        <div className={`flex items-center justify-between gap-3 ${subphasesSectionOpen ? 'mb-4' : ''}`}>
+          <button
+            type="button"
+            className="min-w-0 flex-1 text-left"
+            aria-expanded={subphasesSectionOpen}
+            onClick={() => setSubphasesSectionOpen((open) => !open)}
+          >
             <h3 className="font-semibold text-gray-900">Subfases del proyecto</h3>
             <p className="text-xs text-gray-500 mt-0.5">
               {filters.faseId
                 ? 'Subfases de la fase seleccionada'
                 : 'Desglose dentro de cada fase'}
             </p>
-          </div>
+          </button>
           {canManagePhases && phases.length ? (
             <button
               type="button"
@@ -1359,7 +1460,18 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
               + Nueva subfase
             </button>
           ) : null}
+          <button
+            type="button"
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-indigo-200 bg-indigo-50 text-sm text-indigo-700"
+            aria-expanded={subphasesSectionOpen}
+            aria-label={subphasesSectionOpen ? 'Plegar subfases' : 'Desplegar subfases'}
+            onClick={() => setSubphasesSectionOpen((open) => !open)}
+          >
+            {subphasesSectionOpen ? '▾' : '▸'}
+          </button>
         </div>
+        {subphasesSectionOpen ? (
+        <>
         {loading && !subphases.length ? (
           <p className="text-sm text-gray-500">Cargando subfases…</p>
         ) : !phases.length ? (
@@ -1386,68 +1498,84 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
             ) : null}
           </div>
         ) : (
-          <div className="flex gap-4 overflow-x-auto pb-2">
-            {visibleSubphases.map((subphase) => (
-              <div
-                key={subphase.id}
-                className="min-w-[220px] max-w-[260px] flex-shrink-0 rounded-xl border border-indigo-100 bg-indigo-50/30 p-4"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0">
-                    <p className="text-[10px] uppercase tracking-wide text-indigo-600 font-medium truncate">
-                      {subphase.fase_nombre || '—'}
-                    </p>
-                    <h4 className="font-semibold text-gray-900 text-sm leading-snug mt-0.5">
-                      {subphase.nombre}
-                    </h4>
-                  </div>
-                  {canManagePhases ? (
+          <div className="flex flex-col gap-2">
+            {visibleSubphases.map((subphase) => {
+              const open = openClassicSubphases.has(subphase.id);
+              return (
+                <div
+                  key={subphase.id}
+                  className="rounded-xl border border-indigo-100 bg-indigo-50/40"
+                >
+                  <div className="flex items-center gap-2 px-3 py-2">
                     <button
                       type="button"
-                      onClick={() => openEditSubphase(subphase)}
-                      className="text-xs text-indigo-600 hover:underline shrink-0"
+                      className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                      aria-expanded={open}
+                      onClick={() => toggleSetMember(setOpenClassicSubphases, subphase.id)}
                     >
-                      Editar
+                      <span className="w-4 shrink-0 text-xs text-slate-500">{open ? '▾' : '▸'}</span>
+                      <span className="min-w-0 truncate">
+                        <span className="mr-2 text-[10px] font-medium uppercase tracking-wide text-indigo-600">
+                          {subphase.fase_nombre || '—'}
+                        </span>
+                        <span className="text-sm font-semibold text-gray-900">{subphase.nombre}</span>
+                      </span>
+                      <FaseEstadoBadge estado={subphase.estado} compact />
+                      <span className="ml-auto shrink-0 text-xs text-gray-500">
+                        {subphase.completedCount}/{subphase.taskCount}
+                      </span>
                     </button>
+                    {canManagePhases ? (
+                      <button
+                        type="button"
+                        onClick={() => openEditSubphase(subphase)}
+                        className="shrink-0 text-xs text-indigo-600 hover:underline"
+                      >
+                        Editar
+                      </button>
+                    ) : null}
+                  </div>
+                  {open ? (
+                    <div className="space-y-2 px-4 pb-4">
+                      {subphase.descripcion ? (
+                        <p className="text-xs text-gray-600">{subphase.descripcion}</p>
+                      ) : null}
+                      <ProgressBar pct={subphase.progressPct} />
+                      <p className="text-xs text-gray-600">
+                        {subphase.completedCount}/{subphase.taskCount} tareas · {subphase.progressLabel}
+                      </p>
+                      {(subphase.fecha_inicio || subphase.fecha_limite) && (
+                        <p className="text-xs text-gray-500">
+                          {subphase.fecha_inicio
+                            ? `Inicio: ${formatStaffDateLabel(subphase.fecha_inicio)}`
+                            : ''}
+                          {subphase.fecha_limite
+                            ? ` · Límite: ${formatStaffDateLabel(subphase.fecha_limite)}`
+                            : ''}
+                        </p>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setFilters((f) => ({
+                            ...f,
+                            faseId: subphase.fase_id,
+                            subfaseId: subphase.id,
+                          }))
+                        }
+                        className="text-xs text-indigo-700 hover:underline"
+                      >
+                        Ver tareas de esta subfase
+                      </button>
+                    </div>
                   ) : null}
                 </div>
-                {subphase.descripcion ? (
-                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">{subphase.descripcion}</p>
-                ) : null}
-                <div className="mt-3 space-y-2">
-                  <FaseEstadoBadge estado={subphase.estado} />
-                  <ProgressBar pct={subphase.progressPct} />
-                  <p className="text-xs text-gray-600">
-                    {subphase.completedCount}/{subphase.taskCount} tareas · {subphase.progressLabel}
-                  </p>
-                  {(subphase.fecha_inicio || subphase.fecha_limite) && (
-                    <p className="text-xs text-gray-500">
-                      {subphase.fecha_inicio
-                        ? `Inicio: ${formatStaffDateLabel(subphase.fecha_inicio)}`
-                        : ''}
-                      {subphase.fecha_limite
-                        ? ` · Límite: ${formatStaffDateLabel(subphase.fecha_limite)}`
-                        : ''}
-                    </p>
-                  )}
-                </div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setFilters((f) => ({
-                      ...f,
-                      faseId: subphase.fase_id,
-                      subfaseId: subphase.id,
-                    }))
-                  }
-                  className="mt-3 text-xs text-indigo-700 hover:underline"
-                >
-                  Ver tareas de esta subfase
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
+        </>
+        ) : null}
       </section>
 
       {/* Templates */}
@@ -1463,56 +1591,99 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         />
       ) : null}
 
-      {/* Table */}
+      {/* Tasks */}
       <section className="rounded-xl border bg-white shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm">
-            <thead className="bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wide border-b">
-              <tr>
-                <th className="px-5 py-3.5 w-[28%]">Tarea</th>
-                <th className="px-4 py-3.5 w-[18%]">Ubicación</th>
-                <th className="px-4 py-3.5 w-[16%]">Asignado</th>
-                <th className="px-4 py-3.5 w-[14%]">Plazo</th>
-                <th className="px-4 py-3.5 w-[24%] text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
-              {loading && !tasks.length ? (
-                <tr>
-                  <td colSpan={5} className="px-5 py-12 text-center text-gray-500">
-                    Cargando tareas…
-                  </td>
-                </tr>
-              ) : visibleTasks.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="px-5 py-12 text-center">
-                    <p className="text-gray-500">
-                      {tasks.length && activeMetricKey === 'total' && !filters.search
-                        ? 'No hay tareas activas. Las completadas aparecen en el contador superior.'
-                        : 'No hay tareas con estos filtros.'}
-                    </p>
+        <div className={`flex items-center justify-between gap-3 bg-gray-50 px-5 py-3 ${tasksSectionOpen ? 'border-b' : ''}`}>
+          <button
+            type="button"
+            className="min-w-0 flex-1 text-left"
+            aria-expanded={tasksSectionOpen}
+            onClick={() => setTasksSectionOpen((open) => !open)}
+          >
+            <h3 className="text-sm font-semibold text-gray-900">Tareas</h3>
+          </button>
+          <button
+            type="button"
+            onClick={() => openNewTask()}
+            disabled={saving || tasksReady === false}
+            className="shrink-0 rounded-lg bg-violet-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-50"
+          >
+            + Nueva tarea
+          </button>
+          <button
+            type="button"
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 bg-white text-sm text-slate-600"
+            aria-expanded={tasksSectionOpen}
+            aria-label={tasksSectionOpen ? 'Plegar tareas' : 'Desplegar tareas'}
+            onClick={() => setTasksSectionOpen((open) => !open)}
+          >
+            {tasksSectionOpen ? '▾' : '▸'}
+          </button>
+        </div>
+        {tasksSectionOpen ? (
+        <>
+        {loading && !tasks.length ? (
+          <p className="px-5 py-12 text-center text-sm text-gray-500">Cargando tareas…</p>
+        ) : visibleTasks.length === 0 ? (
+          <div className="px-5 py-12 text-center">
+            <p className="text-gray-500">
+              {tasks.length && activeMetricKey === 'total' && !filters.search
+                ? 'No hay tareas activas. Las completadas aparecen en el contador superior.'
+                : 'No hay tareas con estos filtros.'}
+            </p>
+            <button
+              type="button"
+              onClick={() => openNewTask()}
+              className="mt-2 text-sm text-violet-600 hover:underline"
+            >
+              + Crear la primera tarea
+            </button>
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-100">
+            {visibleTasks.map((task) => {
+              const open = openClassicTasks.has(task.id);
+              const done = task.estado === 'completada';
+              return (
+                <div key={task.id} className="hover:bg-violet-50/30">
+                  <div className="flex items-center gap-2 px-4 py-2">
+                    <CompleteCheck
+                      checked={done}
+                      disabled={saving}
+                      onChange={() => void moveTaskEstado(task, done ? 'pendiente' : 'completada')}
+                    />
                     <button
                       type="button"
-                      onClick={() => openNewTask()}
-                      className="mt-2 text-violet-600 hover:underline text-sm"
+                      className="flex min-w-0 flex-1 items-center gap-2 text-left"
+                      aria-expanded={open}
+                      onClick={() => toggleSetMember(setOpenClassicTasks, task.id)}
                     >
-                      + Crear la primera tarea
+                      <span className="w-4 shrink-0 text-xs text-slate-500">{open ? '▾' : '▸'}</span>
+                      <span
+                        className={`truncate text-sm font-semibold ${
+                          done ? 'text-gray-500 line-through' : 'text-gray-900'
+                        }`}
+                      >
+                        {task.titulo}
+                      </span>
+                      <TaskEstadoBadge estado={task.displayEstado || task.estado} compact />
+                      <TaskPrioridadBadge prioridad={task.prioridad} compact />
+                      <span
+                        className={`ml-auto max-w-[14rem] shrink-0 truncate text-xs font-medium ${
+                          task.asignado?.nombre || task.asignado?.email || task.asignado_rol
+                            ? 'text-gray-700'
+                            : 'text-gray-400'
+                        }`}
+                      >
+                        {task.asignado?.nombre || task.asignado?.email || task.asignado_rol || 'Sin asignar'}
+                      </span>
                     </button>
-                  </td>
-                </tr>
-              ) : (
-                visibleTasks.map((task) => (
-                  <tr key={task.id} className="hover:bg-violet-50/30 align-top">
-                    <td className="px-5 py-4">
+                  </div>
+                  {open ? (
+                    <div className="grid gap-4 px-5 pb-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,0.9fr)_minmax(0,0.8fr)_auto]">
                       <TaskTableTitleCell task={task} onOpen={() => setDetailTask(task)} />
-                    </td>
-                    <td className="px-4 py-4">
                       <TaskTableLocationCell fase={task.fase} subfase={task.subfase} />
-                    </td>
-                    <td className="px-4 py-4">
                       <TaskTableAssigneeCell task={task} />
-                    </td>
-                    <td className="px-4 py-4">
                       <TaskTableDeadlineCell
                         fechaLabel={
                           task.fecha_limite ? formatStaffDateTimeLabel(task.fecha_limite) : ''
@@ -1521,8 +1692,6 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                         isOverdue={task.isOverdue}
                         cumplimiento={task.cumplimiento}
                       />
-                    </td>
-                    <td className="px-4 py-4">
                       <div className="flex flex-col items-end gap-2.5 min-w-[9rem]">
                         <select
                           value={task.estado}
@@ -1579,13 +1748,15 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                           ) : null}
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
+          </div>
+        )}
+        </>
+        ) : null}
       </section>
       </>
       ) : null}
