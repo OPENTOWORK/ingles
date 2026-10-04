@@ -188,6 +188,7 @@ function UserDrawer({
     plansByUser[user.id]?.assignedPlanSlug ?? user.plan_id,
   );
   const stripeLocked = plansByUser[user.id]?.source === 'stripe';
+  const authSyncPending = plansByUser[user.id]?.authSync === 'pending';
   const legacyManualPaid =
     !stripeLocked &&
     isStripeManagedPlanSlug(assignedPlanSlug) &&
@@ -242,7 +243,8 @@ function UserDrawer({
                     {getPlanDisplayLabel(planSlug)}
                   </p>
                   <p className={styles.stripeNote}>
-                    Suscripción Stripe activa. El plan de pago se gestiona en Stripe, no desde aquí.
+                    El plan efectivo lo marca la suscripción activa de Stripe ({getPlanDisplayLabel(planSlug)}).
+                    Un cambio en la ficha no modifica Stripe ni sustituye ese plan mientras la suscripción siga activa.
                   </p>
                 </>
               ) : (
@@ -275,6 +277,22 @@ function UserDrawer({
                       de pago solo vía Stripe.
                     </p>
                   )}
+                  {authSyncPending ? (
+                    <>
+                      <p className={styles.stripeNote}>
+                        El plan de la ficha y el historial ya están guardados. La sincronización con
+                        Auth sigue pendiente. Reintentar no crea otro registro.
+                      </p>
+                      <button
+                        type="button"
+                        className={styles.retryAuth}
+                        onClick={() => onPlanChange(user.id, assignedPlanSlug)}
+                        disabled={saving || !assignedPlanSlug}
+                      >
+                        Reintentar sincronización con Auth
+                      </button>
+                    </>
+                  ) : null}
                 </>
               )}
             </div>

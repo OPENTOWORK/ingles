@@ -65,7 +65,14 @@ export function TrainingLivesMeter({
   );
 }
 
-export function TrainingLivesEmpty({ backHref, nextLifeAt, regenHours = 10, feature = 'Training' }) {
+export function TrainingLivesEmpty({
+  backHref,
+  nextLifeAt,
+  regenHours = 10,
+  feature = 'Training',
+  guest = false,
+  registerHref = '/login',
+}) {
   const [, setTick] = useState(0);
 
   useEffect(() => {
@@ -79,13 +86,19 @@ export function TrainingLivesEmpty({ backHref, nextLifeAt, regenHours = 10, feat
     <div className={styles.empty} role="status">
       <h2 className={styles.emptyTitle}>Out of lives</h2>
       <p className={styles.emptyText}>
-        The free plan includes 3 {feature} lives. One life comes back every {hours} hours
+        {guest
+          ? `Without an account you have 3 ${feature} lives. One life comes back every ${hours} hours`
+          : `The free plan includes 3 ${feature} lives. One life comes back every ${hours} hours`}
         {nextLifeAt ? ` — next one in ${formatTrainingLifeWait(nextLifeAt)}` : ''}.
       </p>
-      <p className={styles.emptyText}>Plus and Premium include unlimited lives.</p>
+      {guest ? (
+        <p className={styles.emptyText}>Create a free account to keep the same lives on this device.</p>
+      ) : (
+        <p className={styles.emptyText}>Plus and Premium include unlimited lives.</p>
+      )}
       <div className={styles.emptyActions}>
-        <Link href="/precios" className={styles.primary}>
-          See plans
+        <Link href={guest ? registerHref : '/precios'} className={styles.primary}>
+          {guest ? 'Sign up / Log in' : 'See plans'}
         </Link>
         {backHref ? (
           <Link href={backHref} className={styles.secondary}>

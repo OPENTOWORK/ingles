@@ -50,9 +50,11 @@ test('exam strategies preview is overall + part 1 only', () => {
 
 test('exam practice locks exam mode, quiz game and slots after 1', () => {
   assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/exam-mode'), true);
-  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/quiz-game'), true);
-  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/exam-writing'), true);
-  assert.equal(isGuestExamPracticeLockedHref('/niveles/b2/exam-listening'), true);
+  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/quiz-game'), false);
+  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/exam-writing'), false);
+  assert.equal(isGuestExamPracticeLockedHref('/niveles/b2/exam-listening'), false);
+  assert.equal(isGuestExamPracticeLockedHref('/niveles/b1/exam-listening'), true);
+  assert.equal(isGuestExamPracticeLockedHref('/niveles/c1/exam-writing'), true);
   assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/reading-and-use-of-english'), false);
   assert.equal(isGuestExamPracticeLockedHref('/exam-strategies/writing'), false);
   assert.equal(isGuestExamSlotAllowed(1), true);

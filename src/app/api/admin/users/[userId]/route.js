@@ -12,6 +12,7 @@ import {
   withinDateRange,
 } from '@/lib/userActivity';
 import { resolveRegistrationDeviceType } from '@/lib/registrationDevice';
+import { applyAuditedProfileField, assertAuditTransactionReady } from '@/lib/adminChangeLog';
 
 async function loadProfile(db, userId) {
   const variants = [
@@ -67,6 +68,102 @@ async function deleteAppUserRows(db, userId) {
     if (!String(error.message || '').includes('does not exist')) {
       console.warn('[admin/users DELETE] app user row:', error.message);
     }
+  }
+}
+
+async function roleLabel(db, roleId) {
+  if (!roleId) return 'sin rol';
+  const { data, error } = await db
+    .from('Usuarios_y_Perfil_roles')
+    .select('id, nombre')
+    .eq('id', roleId)
+    .maybeSingle();
+  if (error) throw new Error(error.message || 'No se pudo leer el rol.');
+  if (!data?.id) return null;
+  return data.nombre || 'sin nombre';
+}
+
+export async function PATCH(req, { params }) {
+  try {
+    const auth = await authenticateAdminRequest(req);
+    if (auth.error) {
+      return NextResponse.json({ error: auth.error }, { status: auth.status });
+    }
+
+    const userId = String((await params)?.userId || '').trim();
+    if (!userId) {
+      return NextResponse.json({ error: 'Usuario no válido.' }, { status: 400 });
+    }
+
+    const body = await req.json().catch(() => ({}));
+    const action = String(body?.action || '').trim();
+    const { db, user } = auth;
+
+    if (action === 'role') {
+      const roleId = String(body?.roleId || '').trim();
+      const nextLabel = await roleLabel(db, roleId);
+      if (!nextLabel) {
+        return NextResponse.json({ error: 'El rol no existe.' }, { status: 400 });
+      }
+      const { data: profile, error: readError } = await db
+        .from('Usuarios_y_Perfil_users')
+        .select('rol_id')
+        .eq('id', userId)
+        .maybeSingle();
+      if (readError) {
+        return NextResponse.json({ error: readError.message || 'No se pudo leer el usuario.' }, { status: 500 });
+      }
+      if (!profile) {
+        return NextResponse.json({ error: 'Usuario no encontrado.' }, { status: 404 });
+      }
+      const previousLabel = await roleLabel(db, profile.rol_id);
+      await assertAuditTransactionReady(db, user.id);
+      const result = await applyAuditedProfileField(db, {
+        actorId: user.id,
+        userId,
+        column: 'rol_id',
+        nextValue: roleId,
+        campo: 'rol',
+        before: previousLabel || 'sin rol',
+        after: nextLabel,
+      });
+      return NextResponse.json({ ok: true, changed: result.changed, roleId });
+    }
+
+    if (action === 'active') {
+      if (typeof body?.activo !== 'boolean') {
+        return NextResponse.json({ error: 'Indica si la cuenta queda activa o pausada.' }, { status: 400 });
+      }
+      const { data: profile, error: readError } = await db
+        .from('Usuarios_y_Perfil_users')
+        .select('activo')
+        .eq('id', userId)
+        .maybeSingle();
+      if (readError) {
+        return NextResponse.json({ error: readError.message || 'No se pudo leer el usuario.' }, { status: 500 });
+      }
+      if (!profile) {
+        return NextResponse.json({ error: 'Usuario no encontrado.' }, { status: 404 });
+      }
+      const wasActive = profile.activo !== false;
+      await assertAuditTransactionReady(db, user.id);
+      const result = await applyAuditedProfileField(db, {
+        actorId: user.id,
+        userId,
+        column: 'activo',
+        nextValue: body.activo,
+        campo: 'activo',
+        before: wasActive ? 'activa' : 'pausada',
+        after: body.activo ? 'activa' : 'pausada',
+      });
+      return NextResponse.json({ ok: true, changed: result.changed, activo: body.activo });
+    }
+
+    return NextResponse.json({ error: 'Acción no reconocida.' }, { status: 400 });
+  } catch (error) {
+    const status = error?.status || 500;
+    console.error('[admin/users PATCH]', error);
+    return NextResponse.json({ error: error?.message || 'No se pudo actualizar el usuario.' }, { status });
   }
 }
 

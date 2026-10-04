@@ -89,6 +89,8 @@ export async function runAiPreflight(userId, action, options = {}) {
         };
       }
       daily = { allowed: true, planUsage: planResult, planBased: true };
+    } else if (options.allowAnonymous && !userId) {
+      daily = { allowed: true, unlimited: true, anonymous: true };
     } else {
       daily = await consumeDailyAiLimit(userId, action, options);
       if (!daily.allowed) {

@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import { isOpenAIConfigured, getDefaultModel } from '@/lib/ai/draloAiEngine';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
+import {
+  guestWritingAlreadyUsed,
+  handleGuestWritingPreview,
+} from '@/lib/guestWritingPreviewServer';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import {
@@ -183,7 +187,10 @@ export async function POST(request) {
         );
       }
 
-      const preflight = await runAiPreflight(userId, action, aiCtx);
+      const preflight = await runAiPreflight(userId, action, {
+        ...aiCtx,
+        allowAnonymous: !userId,
+      });
       if (!preflight.ok) return preflight.response;
 
       const out = await handleExplainCorrectAnswer(userId, body, aiCtx);

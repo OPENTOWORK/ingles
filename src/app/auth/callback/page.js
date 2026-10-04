@@ -10,6 +10,7 @@ import {
 } from '@/utils/postAuthNavigation';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import toast from 'react-hot-toast';
+import { reportLoginAttempt } from '@/utils/reportLoginAttempt';
 
 function AuthCallbackInner() {
   const router = useRouter();
@@ -88,6 +89,13 @@ function AuthCallbackInner() {
         router.replace(destination);
       } catch (err) {
         console.error('Error en /auth/callback:', err);
+        const detail = String(err?.message || '').toLowerCase();
+        reportLoginAttempt({
+          code: detail.includes('email not confirmed') || detail.includes('no está confirmado')
+            ? 'email_not_confirmed'
+            : 'oauth_failed',
+          provider: 'google',
+        });
         if (cancelled) return;
         toast.error(
           'No se pudo completar el inicio de sesión. ' +

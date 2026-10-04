@@ -4,9 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isAdminRole } from '@/utils/authRoles';
-import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
 import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/trainingFeedbackSounds';
-import { TrainingLivesEmpty } from '@/components/training/TrainingLivesMeter';
+import { getGuestRegisterHref } from '@/lib/guestPreviewAccess';
+import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
 import {
   QUIZ_GAME_CATEGORIES,
@@ -28,23 +28,6 @@ const FEEDBACK_MS = 1600;
 
 function categoryLabel(id) {
   return QUIZ_GAME_CATEGORIES.find((item) => item.id === id)?.label || 'Mixed';
-}
-
-function QuizGate({ children }) {
-  const { session } = useUserRole();
-
-  if (!session) {
-    return (
-      <main className={styles.page}>
-        <GuestRegisterTeaser
-          nextHref="/exam-practice/b2/quiz-game"
-          message="Create a free account to play the Quiz Game."
-        />
-      </main>
-    );
-  }
-
-  return children;
 }
 
 function LivesRow({ lives, max = QUIZ_GAME_LIVES, unlimited = false }) {
@@ -69,15 +52,12 @@ function LivesRow({ lives, max = QUIZ_GAME_LIVES, unlimited = false }) {
 }
 
 export default function QuizGamePage() {
-  return (
-    <QuizGate>
-      <QuizGameBoard />
-    </QuizGate>
-  );
+  return <QuizGameBoard />;
 }
 
 function QuizGameBoard() {
-  const { userRole } = useUserRole();
+  const { session, userRole } = useUserRole();
+  const guest = !session;
   const accountLives = useTrainingLives({ path: '/api/quiz/lives' });
   const livesLimited = !accountLives.loading && !accountLives.unlimited && !accountLives.error;
   const showAdminPill = isAdminRole(userRole);
@@ -267,10 +247,21 @@ function QuizGameBoard() {
 
         {phase === 'lobby' ? (
           <section className={styles.panel} aria-labelledby="quiz-game-title">
-            <p className={styles.eyebrow}>Quiz game</p>
-            <h1 id="quiz-game-title" className={styles.title}>
-              Beat the clock
-            </h1>
+            <div className={styles.lobbyHead}>
+              <div>
+                <p className={styles.eyebrow}>Quiz game</p>
+                <h1 id="quiz-game-title" className={styles.title}>
+                  Beat the clock
+                </h1>
+              </div>
+              <TrainingLivesMeter
+                loading={accountLives.loading}
+                unlimited={accountLives.unlimited}
+                lives={accountLives.lives}
+                max={accountLives.max}
+                nextLifeAt={accountLives.nextLifeAt}
+              />
+            </div>
             <p className={styles.lead}>
               {accountLives.loading
                 ? `${QUIZ_GAME_QUESTION_COUNT} questions, ${QUIZ_GAME_SECONDS} seconds each.`
@@ -313,6 +304,8 @@ function QuizGameBoard() {
                 backHref={HUB_HREF}
                 nextLifeAt={accountLives.nextLifeAt}
                 regenHours={accountLives.regenHours}
+                guest={guest}
+                registerHref={getGuestRegisterHref('/exam-practice/b2/quiz-game')}
               />
             ) : (
               <button
@@ -447,6 +440,8 @@ function QuizGameBoard() {
                   backHref={HUB_HREF}
                   nextLifeAt={accountLives.nextLifeAt}
                   regenHours={accountLives.regenHours}
+                  guest={guest}
+                  registerHref={getGuestRegisterHref('/exam-practice/b2/quiz-game')}
                 />
               ) : (
                 <button

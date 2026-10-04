@@ -52,6 +52,17 @@
   font-weight: 600;
 }
 
+.lobbyHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.lobbyHead .title {
+  margin-bottom: 0;
+}
+
 .panel {
   padding: clamp(20px, 3vw, 28px);
   border-radius: 20px;

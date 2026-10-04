@@ -9,6 +9,7 @@ import {
   markOpenMainMenuAfterLogin,
 } from '@/utils/postAuthNavigation';
 import { completeSignIn } from '@/utils/completeSignIn';
+import { reportLoginAttempt } from '@/utils/reportLoginAttempt';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { clearLogoutPending } from '@/utils/logout';
 import toast from 'react-hot-toast';
@@ -162,6 +163,7 @@ function LoginPageInner() {
       // intento fallido, así que no cuenta para el bloqueo temporal.
       if (error.code === 'email_not_confirmed' || message.includes('email not confirmed')) {
         setUnconfirmedEmail(email.trim().toLowerCase());
+        reportLoginAttempt({ email, code: 'email_not_confirmed' });
         toast.error('Tu email todavía no está confirmado.');
         return;
       }
@@ -176,11 +178,17 @@ function LoginPageInner() {
       });
 
       if (message.includes("invalid login credentials")) {
+        reportLoginAttempt({ email, code: 'invalid_credentials' });
         toast.error("Email o contraseña incorrectos. Revisa que el email esté bien escrito.");
       } else if (message.includes("user not found")) {
+        reportLoginAttempt({ email, code: 'user_not_found' });
         toast.error("Usuario no encontrado.");
+      } else if (message.includes('rate limit') || error.code === 'over_request_rate_limit') {
+        reportLoginAttempt({ email, code: 'rate_limit' });
+        toast.error("Ha ocurrido un error inesperado. Intenta más tarde.");
       } else {
         console.error("Error desconocido de Supabase:", error);
+        reportLoginAttempt({ email, code: 'unexpected' });
         toast.error("Ha ocurrido un error inesperado. Intenta más tarde.");
       }
       return;
@@ -193,6 +201,7 @@ function LoginPageInner() {
 
     if (!result.ok) {
       console.error('completeSignIn failed:', result.reason, result.error);
+      reportLoginAttempt({ email, code: 'session_not_saved' });
       toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
       return;
     }
@@ -259,6 +268,10 @@ function LoginPageInner() {
 
     if (error) {
       console.error(`Error OAuth (${provider}):`, error);
+      reportLoginAttempt({
+        code: 'oauth_failed',
+        provider: provider === 'google' ? 'google' : '',
+      });
       const msg = (error.message || '').toLowerCase();
       if (msg.includes('provider is not enabled') || msg.includes('unsupported provider')) {
         toast.error(
@@ -286,6 +299,7 @@ function LoginPageInner() {
       toast.dismiss(loadingToast);
       setGoogleLoading(false);
       console.error('[login] google id token', error);
+      reportLoginAttempt({ code: 'oauth_failed', provider: 'google' });
       toast.error('No se pudo iniciar sesión con Google. Prueba el botón de respaldo.');
       setShowGoogleOAuthFallback(true);
       return;
@@ -297,6 +311,11 @@ function LoginPageInner() {
 
     if (!result.ok) {
       console.error('completeSignIn failed:', result.reason, result.error);
+      reportLoginAttempt({
+        email: data?.user?.email || '',
+        code: 'session_not_saved',
+        provider: 'google',
+      });
       toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
       return;
     }

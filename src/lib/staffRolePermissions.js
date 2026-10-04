@@ -12,7 +12,8 @@ import {
 export const STAFF_PERMISSION_PANELS = {
   buzon: { href: '/buzon', label: 'Buzón y reuniones' },
   tareas: { href: '/tareas', label: 'Tareas' },
-  admin: { href: '/admin', label: 'Administración' },
+  admin: { href: '/admin', label: 'Analíticas' },
+  administracion: { href: '/admin/administracion', label: 'Administración' },
   profesorAdmin: { href: '/admin/profesor', label: 'Profesor' },
   profesor: { href: '/teacher', label: 'Profesor' },
   coordinador: { href: '/coordinador', label: 'Coordinador' },
@@ -35,7 +36,8 @@ export const STAFF_PERMISSION_PANELS = {
 export const STAFF_PERMISSION_DEFINITIONS = [
   { key: 'buzon', label: 'Buzón y reuniones', category: 'Comunicación' },
   { key: 'tareas', label: 'Tareas', category: 'Operaciones' },
-  { key: 'admin', label: 'Administración', category: 'Administración' },
+  { key: 'admin', label: 'Analíticas', category: 'Administración' },
+  { key: 'administracion', label: 'Administración', category: 'Administración' },
   { key: 'profesorAdmin', label: 'Profesor (admin)', category: 'Pedagogía' },
   { key: 'profesor', label: 'Profesor', category: 'Pedagogía' },
   { key: 'coordinador', label: 'Coordinador', category: 'Pedagogía' },

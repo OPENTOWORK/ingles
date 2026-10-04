@@ -43,9 +43,45 @@ export function isGuestExamStrategiesChapterAllowed(pathname = '') {
   return false;
 }
 
+/** Cookie y marca local del único intento de Writing sin cuenta. */
+export const GUEST_WRITING_COOKIE = 'dralo_guest_writing_used';
+export const GUEST_WRITING_ATTEMPT_KEY = 'dralo-guest-writing-used';
+
+export function hasGuestWritingAttempt() {
+  if (typeof window === 'undefined') return false;
+  try {
+    return window.localStorage.getItem(GUEST_WRITING_ATTEMPT_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function markGuestWritingAttempt() {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(GUEST_WRITING_ATTEMPT_KEY, '1');
+  } catch {
+    /* ignore */
+  }
+}
+
+function isGuestB2SkillPracticePath(path, skill) {
+  return (
+    path === `/exam-practice/b2/${skill}` ||
+    path === `/niveles/b2/${skill}` ||
+    path.endsWith(`/b2/${skill}`)
+  );
+}
+
 export function isGuestExamPracticeLockedHref(href = '') {
   const path = normalizeGuestPath(href);
-  if (path.includes('/exam-mode') || path.includes('/quiz-game')) return true;
+  if (path.includes('/exam-mode')) return true;
+  if (
+    isGuestB2SkillPracticePath(path, 'exam-listening') ||
+    isGuestB2SkillPracticePath(path, 'exam-writing')
+  ) {
+    return false;
+  }
   if (path.includes('/exam-writing') || path.includes('/exam-listening')) return true;
   if (path.includes('/exam-strategies') || path.includes('/teoria/exam-part-tips')) return false;
   return /\/(writing|listening)(\/|$)/.test(path);

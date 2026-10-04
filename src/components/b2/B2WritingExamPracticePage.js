@@ -79,6 +79,7 @@ import {
 import { getSessionUserId } from '@/utils/levelsEstadisticas';
 import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
 import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
+import { hasGuestWritingAttempt } from '@/lib/guestPreviewAccess';
 import { useUserRole } from '@/context/UserRoleContext';
 
 const B2WritingLongFormAiPanel = dynamic(
@@ -116,7 +117,7 @@ function resolveWritingPart2ChoiceKey(part, selectedQuestionByPart) {
   return id ? `b2-writing-p2-choice-${id}` : null;
 }
 
-function B2WritingExamPracticePageInner() {
+function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBlocked }) {
   const searchParams = useSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoreSource = resolvePracticeScoreSourceFromExamModeParam(searchParams.get('examMode'));
@@ -576,6 +577,7 @@ function B2WritingExamPracticePageInner() {
     (scores) => {
       if (!scores || typeof scores.total !== 'number') return;
       setWritingLiveCorrect(scores.total);
+      if (guestPreview) return;
       if (!scoring.examPracticeOpen || !selectedPart?.id) return;
       const preguntaId =
         selectedQuestion?.preguntaId || selectedPart.questions?.[0]?.preguntaId || selectedPart.id;
@@ -613,6 +615,7 @@ function B2WritingExamPracticePageInner() {
       examModeActive,
       reviewMode,
       persistPartSessionTime,
+      guestPreview,
     ],
   );
 
@@ -1134,6 +1137,8 @@ function B2WritingExamPracticePageInner() {
                         onScoresReady={handleWritingScoresReady}
                         examMode={writingExamMode}
                         reviewExamCorrection={reviewMode}
+                        guestPreview={guestPreview}
+                        onGuestAttemptBlocked={onGuestAttemptBlocked}
                         lang="en"
                       />
                     </>
@@ -1163,6 +1168,8 @@ function B2WritingExamPracticePageInner() {
                           onScoresReady={handleWritingScoresReady}
                           examMode={writingExamMode}
                           reviewExamCorrection={reviewMode}
+                          guestPreview={guestPreview}
+                          onGuestAttemptBlocked={onGuestAttemptBlocked}
                           lang="en"
                         />
                       ) : (
@@ -1265,14 +1272,21 @@ function B2WritingExamPracticePageInner() {
   );
 }
 
-export default function B2WritingExamPracticePage() {
+function B2WritingGuestGate() {
   const { session } = useUserRole();
-  if (!session) {
+  const [guestBlocked, setGuestBlocked] = useState(false);
+
+  useEffect(() => {
+    if (session) return;
+    if (hasGuestWritingAttempt()) setGuestBlocked(true);
+  }, [session]);
+
+  if (!session && guestBlocked) {
     return (
       <main className="shell content-hub-shell">
         <GuestRegisterTeaser
           nextHref="/exam-practice/b2/exam-writing"
-          message="Create a free account to unlock Writing practice."
+          message="You can try Writing once without an account. Create a free account to practise again."
         />
       </main>
     );
@@ -1281,8 +1295,15 @@ export default function B2WritingExamPracticePage() {
   return (
     <Suspense fallback={<p style={{ padding: '2rem', textAlign: 'center' }}>Loading…</p>}>
       <ReadingPracticeSessionProvider>
-        <B2WritingExamPracticePageInner />
+        <B2WritingExamPracticePageInner
+          guestPreview={!session}
+          onGuestAttemptBlocked={() => setGuestBlocked(true)}
+        />
       </ReadingPracticeSessionProvider>
     </Suspense>
   );
+}
+
+export default function B2WritingExamPracticePage() {
+  return <B2WritingGuestGate />;
 }

@@ -82,7 +82,17 @@ function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/' }) {
 function ClientToaster() {
   const mounted = useClientMounted();
   if (!mounted) return null;
-  return <Toaster position="top-center" reverseOrder={false} toastOptions={TOAST_OPTIONS} />;
+  return (
+    <Toaster
+      position="top-center"
+      reverseOrder={false}
+      containerStyle={{ top: 'calc(var(--site-header-height) + 12px)' }}
+      toastOptions={{
+        ...TOAST_OPTIONS,
+        style: { ...TOAST_OPTIONS.style, maxWidth: 'min(28rem, calc(100vw - 2rem))' },
+      }}
+    />
+  );
 }
 
 function RootLayoutClientFallback() {

@@ -1,5 +1,7 @@
 import LegalPageShell from '@/components/legal/LegalPageShell';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Términos y condiciones | Dralo',
   description: 'Condiciones de uso de la plataforma Dralo.',

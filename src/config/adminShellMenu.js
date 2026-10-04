@@ -24,7 +24,8 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
     id: 'direccion',
     title: 'Dirección y Estrategia',
     items: [
-      { href: '/admin', label: 'Administración' },
+      { href: '/admin', label: 'Analíticas' },
+      { href: '/admin/administracion', label: 'Administración' },
       STAFF_TASKS_PANEL_ITEM,
       { href: '/admin/plan-financiero', label: 'Financiero' },
       { href: '/admin/configuracion', label: 'Permisos' },

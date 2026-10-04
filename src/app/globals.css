@@ -11815,6 +11815,53 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   color: #3730a3;
 }
 
+.levels-answer-justification {
+  margin: 0.55rem 0 0;
+}
+
+.levels-answer-justification__text,
+.levels-answer-justification__spanish {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #2d3748;
+  font-weight: 500;
+}
+
+.levels-answer-justification__spanish {
+  margin-top: 0.4rem;
+  color: #334155;
+}
+
+.levels-answer-justification__translate {
+  margin-top: 0.45rem;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+  cursor: pointer;
+}
+
+.levels-answer-justification__translate:hover:not(:disabled) {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.levels-answer-justification__translate:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.levels-answer-justification__error {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  color: #718096;
+  font-style: italic;
+}
+
 @media (min-width: 1400px) {
   .levels-exam-split-page {
     max-width: var(--levels-b2-page-max-width);
@@ -17981,10 +18028,20 @@ body.reading-night-mode .levels-exam-mcq-explanations__number {
   color: #e2e8f0;
 }
 
-body.reading-night-mode .levels-exam-mcq-explanations__toggle {
+body.reading-night-mode .levels-exam-mcq-explanations__toggle,
+body.reading-night-mode .levels-answer-justification__translate {
   background: #334155;
   border-color: #64748b;
   color: #e2e8f0;
+}
+
+body.reading-night-mode .levels-answer-justification__text,
+body.reading-night-mode .levels-answer-justification__spanish {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .levels-answer-justification__error {
+  color: #cbd5e1;
 }
 
 body.reading-night-mode .reading-question-meta {

@@ -89,6 +89,7 @@ function NavSection({
   pathname,
   onReorder,
 }) {
+  const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState(null);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -108,6 +109,10 @@ function NavSection({
     onReorder(section.id, arrayMove(section.items, oldIndex, newIndex));
   };
 
+  const canFold = Boolean(section.title) && !collapsed;
+  const itemsVisible = !canFold || open;
+  const panelId = `admin-nav-section-${section.id}`;
+
   return (
     <DndContext
       sensors={sensors}
@@ -117,20 +122,35 @@ function NavSection({
       onDragEnd={handleDragEnd}
     >
       <div className={styles.navSection}>
-        {!collapsed && section.title ? (
-          <p className={styles.navSectionTitle}>{section.title}</p>
+        {canFold ? (
+          <button
+            type="button"
+            className={styles.navSectionToggle}
+            aria-expanded={open}
+            aria-controls={panelId}
+            onClick={() => setOpen((current) => !current)}
+          >
+            <span className={styles.navSectionTitle}>{section.title}</span>
+            <span className={styles.navSectionChevron} aria-hidden>
+              {open ? '▴' : '▾'}
+            </span>
+          </button>
         ) : null}
-        <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
-          {(section.items || []).map((item) => (
-            <SortableNavItem
-              key={item.href}
-              item={item}
-              active={isAdminNavActive(item.href, pathname)}
-              collapsed={collapsed}
-              disabled={sortDisabled}
-            />
-          ))}
-        </SortableContext>
+        {itemsVisible ? (
+          <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
+            <div id={canFold ? panelId : undefined}>
+              {(section.items || []).map((item) => (
+                <SortableNavItem
+                  key={item.href}
+                  item={item}
+                  active={isAdminNavActive(item.href, pathname)}
+                  collapsed={collapsed}
+                  disabled={sortDisabled}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        ) : null}
       </div>
 
       <DragOverlay dropAnimation={{ duration: 220, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }}>

@@ -1,4 +1,5 @@
 import { deliverTransactionalEmail } from '@/lib/emailDelivery';
+import { loadPersistedEmailBranding } from '@/lib/orgSettingsServer';
 import { buildBrandedEmailFromPlainText } from '@/lib/emailBrandedLayout';
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
 import {
@@ -90,10 +91,14 @@ async function sendNow(template, to, variables, adminClient, replyTo) {
 
   const subject = renderEmailTemplate(template.asunto, merged).trim();
   const text = renderEmailTemplate(template.cuerpo, merged).trim();
+  const branding = await loadPersistedEmailBranding(adminClient);
   const { html } = buildBrandedEmailFromPlainText(text, {
     preheader: subject,
     headline: subject,
     ctaLabel: CTA_LABEL_BY_TRIGGER[template.trigger_event] || 'Empezar a practicar',
+    ...(branding.brandName ? { brandName: branding.brandName } : {}),
+    ...(branding.legalName ? { legalName: branding.legalName } : {}),
+    ...(branding.supportEmail ? { supportEmail: branding.supportEmail } : {}),
   });
 
   const result = await deliverTransactionalEmail({ to, subject, text, html, replyTo });

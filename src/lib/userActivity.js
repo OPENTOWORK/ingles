@@ -120,8 +120,7 @@ export function buildConnectionAnalytics(sessions, startDate, endDate) {
   const diaPicoEntry = Object.entries(weekdays).sort((a, b) => b[1] - a[1])[0];
   const heatmap = Object.entries(heatmapMap)
     .map(([slot, total]) => ({ slot, total }))
-    .sort((a, b) => b.total - a.total)
-    .slice(0, 12);
+    .sort((a, b) => b.total - a.total);
 
   const avgPerUserSeconds =
     activeUsers > 0 ? Math.round(totalSeconds / activeUsers) : 0;

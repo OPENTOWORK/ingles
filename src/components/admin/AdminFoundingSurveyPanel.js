@@ -16,6 +16,7 @@ const ESTADO_LABEL = {
  * estado, envío de prueba al equipo y ejecución manual de la pasada diaria.
  */
 export default function AdminFoundingSurveyPanel() {
+  const [open, setOpen] = useState(false);
   const [estado, setEstado] = useState(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState('');
@@ -71,10 +72,22 @@ export default function AdminFoundingSurveyPanel() {
 
   return (
     <div className="admin-section">
-      <div className="admin-section__header">
-        <h2>Encuesta founding · 50 primeras inscripciones</h2>
+      <div className={`admin-section__header ${open ? '' : styles.headerCollapsed}`}>
+        <button
+          type="button"
+          className={styles.toggle}
+          aria-expanded={open}
+          aria-controls="admin-founding-survey"
+          onClick={() => setOpen((current) => !current)}
+        >
+          <h2>Encuesta founding · 50 primeras inscripciones</h2>
+          <span className={styles.chevron} aria-hidden>
+            {open ? '▴' : '▾'}
+          </span>
+        </button>
       </div>
-      <div className="admin-section__body">
+      {open ? (
+      <div id="admin-founding-survey" className="admin-section__body">
         <p className={styles.intro}>
           A los 30 días del alta, cada founding member (cupos 2–50) recibe un formulario. Si lo
           responde, su Plan Plus queda confirmado de por vida; si no lo hace en 7 días, la cuenta
@@ -192,6 +205,7 @@ export default function AdminFoundingSurveyPanel() {
           </>
         )}
       </div>
+      ) : null}
     </div>
   );
 }

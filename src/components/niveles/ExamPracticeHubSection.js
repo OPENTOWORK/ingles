@@ -2,6 +2,8 @@
 
 import ExamSkillHubCard, { getExamSkillKindFromSlug } from '@/components/exam/ExamSkillHubCard';
 import ExamSkillHubCardStyles from '@/components/exam/ExamSkillHubCardStyles';
+import { TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
+import { useTrainingLives } from '@/hooks/useTrainingLives';
 import {
   GUEST_PREVIEW_REGISTER_LABEL,
   getGuestRegisterHref,
@@ -62,6 +64,7 @@ function ExamPracticeCard({ exam, isStudent, guestPreview = false, variant = 'sk
 }
 
 function QuizGameCard({ quizGame, guestPreview = false }) {
+  const quizLives = useTrainingLives({ path: '/api/quiz/lives' });
   if (!quizGame?.href) return null;
   const guestLocked = guestPreview && isGuestExamPracticeLockedHref(quizGame.href);
   return (
@@ -73,6 +76,15 @@ function QuizGameCard({ quizGame, guestPreview = false }) {
         hint={quizGame.hint || 'Timed English quiz'}
         badge={guestLocked ? GUEST_PREVIEW_REGISTER_LABEL : null}
       />
+      <span className="exam-practice-hub__quiz-lives">
+        <TrainingLivesMeter
+          loading={quizLives.loading}
+          unlimited={quizLives.unlimited}
+          lives={quizLives.lives}
+          max={quizLives.max}
+          nextLifeAt={quizLives.nextLifeAt}
+        />
+      </span>
     </div>
   );
 }
@@ -210,6 +222,16 @@ function ExamPracticeHubLayoutStyles() {
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game {
         margin-top: 14px;
         margin-bottom: 0;
+      }
+      .exam-practice-hub__quiz-game {
+        position: relative;
+      }
+      .exam-practice-hub__quiz-lives {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        z-index: 1;
+        pointer-events: none;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card,
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game .exam-practice-hub__card {

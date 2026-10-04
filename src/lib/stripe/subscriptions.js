@@ -91,14 +91,22 @@ function resolvePlanSlug(subscription) {
  * que es lo que lee hoy la ficha de perfil.
  */
 export async function syncAuthPlanMetadata(db, userId, planSlug) {
-  if (!db || !userId || !planSlug) return;
+  if (!db || !userId || !planSlug) {
+    return { ok: false, error: 'Datos incompletos para sincronizar Auth.' };
+  }
   const { data, error } = await db.auth.admin.getUserById(userId);
-  if (error || !data?.user) return;
+  if (error || !data?.user) {
+    return { ok: false, error: error?.message || 'No se pudo leer la ficha de Auth.' };
+  }
   const current = data.user.user_metadata || {};
-  if (current.subscription_plan === planSlug) return;
-  await db.auth.admin.updateUserById(userId, {
+  if (current.subscription_plan === planSlug) return { ok: true, unchanged: true };
+  const { error: updateError } = await db.auth.admin.updateUserById(userId, {
     user_metadata: { ...current, subscription_plan: planSlug },
   });
+  if (updateError) {
+    return { ok: false, error: updateError.message || 'No se pudo actualizar la ficha de Auth.' };
+  }
+  return { ok: true };
 }
 
 /**

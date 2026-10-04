@@ -10,7 +10,14 @@ import {
 } from '@/lib/trainingLives';
 import { supabase } from '@/utils/supabaseClient';
 
-const GUEST_LIVES_KEY = 'dralo-guest-training-lives';
+const GUEST_LIVES_KEYS = {
+  '/api/training/lives': 'dralo-guest-training-lives',
+  '/api/quiz/lives': 'dralo-guest-quiz-lives',
+};
+
+function guestLivesKey(path) {
+  return GUEST_LIVES_KEYS[path] || GUEST_LIVES_KEYS['/api/training/lives'];
+}
 
 function guestLivesPayload(state) {
   return {
@@ -24,13 +31,14 @@ function guestLivesPayload(state) {
   };
 }
 
-function readGuestLives() {
+function readGuestLives(path) {
+  const key = guestLivesKey(path);
   if (typeof window === 'undefined') {
     return guestLivesPayload({ lives: TRAINING_LIVES_MAX, nextLifeAt: null });
   }
   let stored = { lives: TRAINING_LIVES_MAX, nextLifeAt: null };
   try {
-    const raw = window.localStorage.getItem(GUEST_LIVES_KEY);
+    const raw = window.localStorage.getItem(key);
     if (raw) stored = JSON.parse(raw);
   } catch {
     /* keep default */
@@ -38,7 +46,7 @@ function readGuestLives() {
   const next = applyTrainingLifeRegen(stored, Date.now());
   try {
     window.localStorage.setItem(
-      GUEST_LIVES_KEY,
+      key,
       JSON.stringify({ lives: next.lives, nextLifeAt: next.nextLifeAt }),
     );
   } catch {
@@ -47,10 +55,10 @@ function readGuestLives() {
   return guestLivesPayload(next);
 }
 
-function writeGuestLives(state) {
+function writeGuestLives(path, state) {
   try {
     window.localStorage.setItem(
-      GUEST_LIVES_KEY,
+      guestLivesKey(path),
       JSON.stringify({ lives: state.lives, nextLifeAt: state.nextLifeAt }),
     );
   } catch {
@@ -107,7 +115,7 @@ export function useTrainingLives({ enabled = true, path = '/api/training/lives' 
     if (!enabled) return null;
     const headers = await authHeaders();
     if (!headers) {
-      const guest = readGuestLives();
+      const guest = readGuestLives(path);
       setState(guest);
       return guest;
     }
@@ -118,7 +126,7 @@ export function useTrainingLives({ enabled = true, path = '/api/training/lives' 
       });
       const json = await res.json().catch(() => ({}));
       if (res.status === 401) {
-        const guest = readGuestLives();
+        const guest = readGuestLives(path);
         setState(guest);
         return guest;
       }
@@ -140,12 +148,12 @@ export function useTrainingLives({ enabled = true, path = '/api/training/lives' 
   const loseLife = useCallback(async () => {
     const headers = await authHeaders();
     if (!headers) {
-      const current = readGuestLives();
+      const current = readGuestLives(path);
       const result = loseTrainingLife(
         { lives: current.lives, nextLifeAt: current.nextLifeAt },
         Date.now(),
       );
-      const next = writeGuestLives(result);
+      const next = writeGuestLives(path, result);
       setState(next);
       return { ...next, spent: result.allowed, unlimited: false };
     }
@@ -180,7 +188,7 @@ export function useTrainingLives({ enabled = true, path = '/api/training/lives' 
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!active) return;
       if (!session?.access_token) {
-        setState(readGuestLives());
+        setState(readGuestLives(path));
         return;
       }
       void refresh();

@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
+import { isSchemaNotReadyError } from '@/lib/teacherAccess';
+import { journeyTrail } from '@/lib/visitorJourney';
 import { isStudentRole } from '@/utils/authRoles';
 import {
   labelFromAcquisitionProfile,
@@ -7,6 +9,33 @@ import {
   landingLabelFromPath,
   trafficSourceLabel,
 } from '@/lib/trafficSource';
+
+async function loadVisitorPages(db, visitorIds) {
+  const rows = [];
+  const chunkSize = 100;
+  for (let index = 0; index < visitorIds.length; index += chunkSize) {
+    const chunk = visitorIds.slice(index, index + chunkSize);
+    let from = 0;
+    const pageSize = 1000;
+    for (;;) {
+      const { data, error } = await db
+        .from('marketing_visitor_pages')
+        .select('visitor_id, path, page_title, visited_at')
+        .in('visitor_id', chunk)
+        .order('visited_at', { ascending: true })
+        .range(from, from + pageSize - 1);
+      if (error) {
+        if (isSchemaNotReadyError(error)) return rows;
+        console.error('[admin/visitors/summary] pages', error);
+        return rows;
+      }
+      rows.push(...(data || []));
+      if (!data || data.length < pageSize) break;
+      from += pageSize;
+    }
+  }
+  return rows;
+}
 
 function isLocalAdminIp(ip) {
   const value = String(ip || '')
@@ -47,6 +76,13 @@ export async function GET(req) {
     if (visitorsError) throw visitorsError;
 
     const visitorIds = [...new Set((visitors || []).map((row) => row.visitor_id).filter(Boolean))];
+    const pageRows = await loadVisitorPages(db, visitorIds);
+    const pagesByVisitor = new Map();
+    for (const row of pageRows) {
+      const list = pagesByVisitor.get(row.visitor_id) || [];
+      list.push(row);
+      pagesByVisitor.set(row.visitor_id, list);
+    }
     let acquisitions = [];
     if (visitorIds.length) {
       const { data: acquisitionRows, error: acquisitionError } = await db
@@ -164,6 +200,12 @@ export async function GET(req) {
         landing: visitor.first_landing_page
           ? landingLabelFromPath(visitor.first_landing_page)
           : landingLabelFromAcquisitionProfile(acquisitionByVisitor.get(visitor.visitor_id)),
+        stops: journeyTrail(
+          pagesByVisitor.get(visitor.visitor_id) || [],
+          visitor.first_landing_page
+            || acquisitionByVisitor.get(visitor.visitor_id)?.first_landing_page
+            || '',
+        ),
       };
     });
 

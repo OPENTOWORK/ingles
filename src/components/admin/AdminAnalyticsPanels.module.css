@@ -1,9 +1,9 @@
 .panel {
   background: #fff;
-  border-radius: 1.15rem;
+  border-radius: 1.25rem;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
-  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+  margin: 0;
   overflow: hidden;
 }
 
@@ -13,14 +13,45 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1.25rem 1.5rem;
+  padding: 1rem 1.35rem;
   border-bottom: 1px solid #e2e8f0;
   background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
 }
 
+.panelHeaderCollapsed {
+  border-bottom: 0;
+}
+
+.panelHeaderMain {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.panelToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+}
+
+.panelChevron {
+  flex: 0 0 auto;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
 .panelTitle {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #0f172a;
   letter-spacing: -0.02em;
@@ -62,6 +93,25 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.tabWithDate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  line-height: 1.15;
+}
+
+.tabDates {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+.tabActive .tabDates {
+  color: #6366f1;
 }
 
 .tab:hover {
@@ -107,6 +157,24 @@
   align-items: flex-end;
   gap: 0.5rem;
   flex: none;
+}
+
+.entriesDateField {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.entriesDateField input {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #0f172a;
+  font: inherit;
+  padding: 0.35rem 0.5rem;
 }
 
 .entriesStaffRow {
@@ -285,6 +353,48 @@
   padding: 1rem 1rem 0.75rem;
 }
 
+.chartCardCollapsed {
+  padding-bottom: 1rem;
+}
+
+.stackCard {
+  margin-top: 1rem;
+}
+
+.foldStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.foldCount {
+  margin-left: 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #94a3b8;
+}
+
+.chartCardToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.chartCardToggle .chartCardTitle {
+  margin: 0;
+}
+
 .chartCardTitle,
 .sideCardTitle {
   margin: 0 0 0.75rem;
@@ -403,45 +513,6 @@
   background: linear-gradient(90deg, #eef2ff, #6366f1);
 }
 
-.levelList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.levelRow {
-  display: grid;
-  grid-template-columns: 4.5rem 1fr 2.5rem;
-  gap: 0.65rem;
-  align-items: center;
-}
-
-.levelName {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #334155;
-}
-
-.levelBarTrack {
-  height: 0.55rem;
-  border-radius: 999px;
-  background: #f1f5f9;
-  overflow: hidden;
-}
-
-.levelBarFill {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #6366f1, #818cf8);
-}
-
-.levelCount {
-  text-align: right;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
 .userListCard {
   border: 1px solid #e2e8f0;
   border-radius: 0.85rem;
@@ -452,8 +523,21 @@
   flex-direction: column;
 }
 
+.userListCardCollapsed {
+  min-height: 0;
+  align-self: start;
+}
+
+.trackingStudentsCard {
+  min-height: 0;
+}
+
 .userListHeader {
   margin-bottom: 0.75rem;
+}
+
+.userListCardCollapsed .userListHeader {
+  margin-bottom: 0;
 }
 
 .userListTitle {
@@ -546,6 +630,27 @@
   border-top: 1px solid #e2e8f0;
   background: #fff;
   padding: 0.65rem 0.75rem;
+}
+
+.trail {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 8rem;
+}
+
+.trail li {
+  font-size: 0.78rem;
+  line-height: 1.3;
+  color: #334155;
+}
+
+.trail li + li::before {
+  content: '→ ';
+  color: #94a3b8;
 }
 
 .pageItem {
@@ -950,12 +1055,15 @@
   border-bottom-color: #334155;
 }
 
+:global(body.reading-night-mode) .panelChevron {
+  color: #94a3b8;
+}
+
 :global(body.reading-night-mode) .panelTitle,
 :global(body.reading-night-mode) .kpiValue,
 :global(body.reading-night-mode) .chartCardTitle,
 :global(body.reading-night-mode) .sideCardTitle,
 :global(body.reading-night-mode) .peakChipValue,
-:global(body.reading-night-mode) .levelCount,
 :global(body.reading-night-mode) .userListTitle,
 :global(body.reading-night-mode) .userName,
 :global(body.reading-night-mode) .userTime,
@@ -1000,6 +1108,24 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
+:global(body.reading-night-mode) .entriesDateField {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .entriesDateField input {
+  background: #0f172a;
+  border-color: #475569;
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .tabDates {
+  color: #64748b;
+}
+
+:global(body.reading-night-mode) .tabActive .tabDates {
+  color: #c4b5fd;
+}
+
 :global(body.reading-night-mode) .filterBar,
 :global(body.reading-night-mode) .peakChip,
 :global(body.reading-night-mode) .userRow,
@@ -1026,14 +1152,13 @@
   background: #334155;
 }
 
-:global(body.reading-night-mode) .levelName,
+:global(body.reading-night-mode) .trail li,
 :global(body.reading-night-mode) .pageTitle,
 :global(body.reading-night-mode) .heatmapCell,
 :global(body.reading-night-mode) .trackingMeta strong {
   color: #cbd5e1;
 }
 
-:global(body.reading-night-mode) .levelBarTrack,
 :global(body.reading-night-mode) .focusBar {
   background: #334155;
 }

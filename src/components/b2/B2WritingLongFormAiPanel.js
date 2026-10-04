@@ -11,6 +11,8 @@ import WritingFeedbackPage from '@/components/writing/v3/WritingFeedbackPage';
 import DraloThinking from '@/components/dralo/DraloThinking';
 import { trackWritingErrors } from '@/lib/errorTracker';
 import { writingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
+import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
+import { hasGuestWritingAttempt, markGuestWritingAttempt } from '@/lib/guestPreviewAccess';
 
 function countWords(text) {
   return String(text || '')
@@ -69,7 +71,21 @@ export default function B2WritingLongFormAiPanel({
   const [usageUnlimited, setUsageUnlimited] = useState(false);
   const feedbackRef = useRef(null);
 
+  const [guestNotice, setGuestNotice] = useState(false);
+
+  const finishGuestAttempt = () => {
+    if (!guestPreview) return;
+    markGuestWritingAttempt();
+    setGuestNotice(true);
+  };
+
   const refreshUsageHint = useCallback(async () => {
+    if (guestPreview) {
+      setUsageHint('');
+      setUsageRemaining(null);
+      setUsageUnlimited(false);
+      return;
+    }
     const status = await fetchAiUsageStatus();
     if (!status?.writing) {
       setUsageHint('');
@@ -104,7 +120,7 @@ export default function B2WritingLongFormAiPanel({
         used,
       }),
     );
-  }, [isEn]);
+  }, [guestPreview, isEn]);
 
   useEffect(() => {
     void refreshUsageHint();
@@ -156,6 +172,10 @@ export default function B2WritingLongFormAiPanel({
   const evaluateEssay = async () => {
     const text = essay.trim();
     if (!text) return;
+    if (guestPreview && hasGuestWritingAttempt()) {
+      onGuestAttemptBlocked?.();
+      return;
+    }
 
     setLastError('');
     setLoading(true);
@@ -193,9 +213,12 @@ export default function B2WritingLongFormAiPanel({
         });
         if (data.scores && typeof data.scores === 'object') {
           setScores(data.scores);
+          finishGuestAttempt();
           if (typeof onScoresReady === 'function') {
             onScoresReady(data.scores);
           }
+        } else if (guestPreview) {
+          finishGuestAttempt();
         }
       } else {
         const feedbackText = String(data.feedback || '').trim();
@@ -208,6 +231,7 @@ export default function B2WritingLongFormAiPanel({
         }
 
         setAiFeedback(feedbackText);
+        finishGuestAttempt();
         if (data.scores && typeof data.scores === 'object') {
           setScores(data.scores);
           if (typeof onScoresReady === 'function') {
@@ -230,6 +254,11 @@ export default function B2WritingLongFormAiPanel({
         feedbackRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     } catch (err) {
+      if (err?.code === 'GUEST_WRITING_USED') {
+        markGuestWritingAttempt();
+        onGuestAttemptBlocked?.();
+        return;
+      }
       if (isDailyLimitError(err)) {
         const limit = usageLimit ?? 3;
         setUsageRemaining(0);
@@ -324,8 +353,8 @@ export default function B2WritingLongFormAiPanel({
             type="button"
             className="levels-b2-writing-panel__submit"
             onClick={() => void evaluateEssay()}
-            disabled={loading || !essay.trim() || limitReached}
-            aria-disabled={loading || !essay.trim() || limitReached}
+            disabled={loading || !essay.trim() || limitReached || guestNotice}
+            aria-disabled={loading || !essay.trim() || limitReached || guestNotice}
           >
             {loading
               ? isEn
@@ -427,6 +456,13 @@ export default function B2WritingLongFormAiPanel({
             );
           })()}
         </div>
+      ) : null}
+
+      {guestNotice ? (
+        <GuestRegisterTeaser
+          nextHref="/exam-practice/b2/exam-writing"
+          message="You can try Writing once without an account. Create a free account to practise again."
+        />
       ) : null}
     </div>
   );

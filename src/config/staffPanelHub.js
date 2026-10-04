@@ -16,7 +16,12 @@ export const STAFF_PANEL_HUB_META = {
   '/admin': {
     icon: 'admin',
     accent: 'indigo',
-    description: 'Usuarios, analíticas y configuración',
+    description: 'Analíticas de uso de la plataforma',
+  },
+  '/admin/administracion': {
+    icon: 'admin',
+    accent: 'indigo',
+    description: 'Gestión de usuarios y roles',
   },
   '/admin/profesor': {
     icon: 'teacher',

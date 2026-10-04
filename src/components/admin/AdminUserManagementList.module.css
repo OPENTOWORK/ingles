@@ -627,6 +627,25 @@
   color: #64748b;
 }
 
+.retryAuth {
+  margin: 0.35rem 0 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #4f46e5;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: left;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.retryAuth:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
 .planReadonly {
   margin: 0;
   padding: 0.55rem 0.65rem;
@@ -806,6 +825,7 @@
   color: #94a3b8;
 }
 
-:global(body.reading-night-mode) .fullLink {
+:global(body.reading-night-mode) .fullLink,
+:global(body.reading-night-mode) .retryAuth {
   color: #a5b4fc;
 }

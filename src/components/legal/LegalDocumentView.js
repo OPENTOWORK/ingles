@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { parseBodyBlocks } from '@/lib/legal/parseLegalContent';
+import { applyLegalIdentityDescription } from '@/lib/orgSettings';
 import { getLegalCategoryLabel, getLegalMainMenuLabelForSlug } from '@/lib/legal/legalDocuments';
 import LegalZoneNav from '@/components/legal/LegalZoneNav';
 import styles from './LegalDocumentView.module.css';
@@ -23,7 +24,7 @@ function slugifySection(number, title) {
     .replace(/^-|-$/g, '')}`;
 }
 
-function LegalBlock({ block }) {
+function LegalBlock({ block, identity }) {
   if (block.type === 'table') {
     return (
       <div className={styles.tableWrap}>
@@ -69,7 +70,7 @@ function LegalBlock({ block }) {
         {block.entries.map((entry) => (
           <div key={entry.term} className={styles.definitionRow}>
             <dt>{entry.term}</dt>
-            <dd>{entry.description}</dd>
+            <dd>{applyLegalIdentityDescription(entry.term, entry.description, identity)}</dd>
           </div>
         ))}
       </dl>
@@ -132,6 +133,9 @@ export default function LegalDocumentView({ document }) {
             {document.sections.map((section) => {
               const sectionId = slugifySection(section.number, section.title);
               const blocks = parseBodyBlocks(section.body, { sectionNumber: section.number });
+              const identity = /identificaci[oó]n del titular/i.test(section.title || '')
+                ? document.legalIdentity
+                : null;
 
               return (
                 <section
@@ -147,7 +151,7 @@ export default function LegalDocumentView({ document }) {
                   <div className={styles.sectionBody}>
                     {blocks.map((block, index) => (
                       <div key={`${sectionId}-block-${index}`} className={styles.sectionBlock}>
-                        <LegalBlock block={block} />
+                        <LegalBlock block={block} identity={identity} />
                       </div>
                     ))}
                   </div>

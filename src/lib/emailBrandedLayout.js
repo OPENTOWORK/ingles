@@ -111,6 +111,17 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
   }
 
   const preheader = escapeHtml(options.preheader || options.headline || blocks[0]?.slice(0, 120) || 'Dralo English');
+  const brandName = String(options.brandName || '').trim();
+  const legalName = String(options.legalName || '').trim();
+  const supportEmail = String(options.supportEmail || '').trim();
+  const logoWord = escapeHtml(brandName || 'Dralo');
+  const copyrightName = escapeHtml(brandName ? `${brandName} English` : 'Dralo English');
+  const legalLine = legalName
+    ? `<p style="margin:0 0 8px;color:#94a3b8;">${escapeHtml(legalName)}</p>`
+    : '';
+  const supportLine = supportEmail
+    ? ` o escribe a <a href="mailto:${escapeHtml(supportEmail)}" style="color:#4f46e5;text-decoration:none;font-weight:600;">${escapeHtml(supportEmail)}</a>`
+    : '';
   const headline = options.headline ? escapeHtml(options.headline) : '';
   const bodyHtml = bodyBlocks.map((b) => b.html).join('\n');
   const senderLabel = footerLine.split('·')[0]?.trim() || 'Equipo Dralo';
@@ -153,7 +164,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
               <table role="presentation" cellspacing="0" cellpadding="0" align="center">
                 <tr>
                   <td style="border-radius:16px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:14px 22px;box-shadow:0 10px 30px rgba(15,23,42,0.18);">
-                    <span style="font-size:22px;font-weight:800;color:#f8fafc;letter-spacing:-0.03em;">Dralo</span>
+                    <span style="font-size:22px;font-weight:800;color:#f8fafc;letter-spacing:-0.03em;">${logoWord}</span>
                     <span style="font-size:22px;font-weight:600;color:#93c5fd;margin-left:5px;">English</span>
                   </td>
                 </tr>
@@ -176,14 +187,15 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
             <td style="padding:22px 10px 0;text-align:center;font-size:12px;line-height:1.7;color:#64748b;">
               <p style="margin:0 0 10px;color:#475569;">
                 Este correo no admite respuesta. Si quieres escribirnos, usa
-                <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;font-weight:600;">Contacto</a>.
+                <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;font-weight:600;">Contacto</a>${supportLine}.
               </p>
               <p style="margin:0 0 8px;">
                 <a href="https://www.dralo.es" style="color:#4f46e5;text-decoration:none;font-weight:600;">dralo.es</a>
                 &nbsp;·&nbsp;
                 <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;">Contacto</a>
               </p>
-              <p style="margin:0;color:#94a3b8;">© ${new Date().getFullYear()} Dralo English. Todos los derechos reservados.</p>
+              ${legalLine}
+              <p style="margin:0;color:#94a3b8;">© ${new Date().getFullYear()} ${copyrightName}. Todos los derechos reservados.</p>
             </td>
           </tr>
         </table>

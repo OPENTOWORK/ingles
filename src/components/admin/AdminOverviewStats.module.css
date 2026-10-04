@@ -7,11 +7,26 @@
 
 .card {
   position: relative;
+  width: 100%;
   padding: 1.05rem 1rem 1.05rem 3.45rem;
   border-radius: 1rem;
   border: 1px solid #e2e8f0;
   background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
   box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent, #6366f1);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--accent, #6366f1);
+  outline-offset: 2px;
 }
 
 .card::before {
@@ -40,6 +55,7 @@
 }
 
 .label {
+  display: block;
   margin: 0;
   font-size: 0.72rem;
   font-weight: 700;
@@ -49,6 +65,7 @@
 }
 
 .value {
+  display: block;
   margin: 0.25rem 0 0;
   font-size: 1.75rem;
   font-weight: 800;
@@ -58,6 +75,7 @@
 }
 
 .hint {
+  display: block;
   margin: 0.4rem 0 0;
   font-size: 0.75rem;
   color: #94a3b8;
@@ -87,6 +105,16 @@
 .accentAmber {
   --accent: #f59e0b;
   --icon-bg: #fffbeb;
+}
+
+.accentRose {
+  --accent: #e11d48;
+  --icon-bg: #fff1f2;
+}
+
+.accentOrange {
+  --accent: #ea580c;
+  --icon-bg: #fff7ed;
 }
 
 :global(body.reading-night-mode) .card {
@@ -121,4 +149,12 @@
 
 :global(body.reading-night-mode) .accentAmber {
   --icon-bg: #422006;
+}
+
+:global(body.reading-night-mode) .accentRose {
+  --icon-bg: #4c0519;
+}
+
+:global(body.reading-night-mode) .accentOrange {
+  --icon-bg: #431407;
 }

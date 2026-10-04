@@ -31,6 +31,7 @@ import {
 import { formatSessionDuration } from '@/lib/userActivity';
 import { isStudentRole } from '@/utils/authRoles';
 import { useReadingNightMode } from '@/hooks/useReadingNightMode';
+import AdminLandingPass from './AdminLandingPass';
 import styles from './AdminAnalyticsPanels.module.css';
 
 const ENTRY_RANGES = [
@@ -47,29 +48,93 @@ const ENTRY_KIND_LABEL = {
   staff: 'Equipo',
 };
 
-function entriesRangeStart(range, now = new Date()) {
-  if (range === 'day') return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+function startOfDay(date) {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function entriesRangeStart(range, anchor = new Date()) {
+  const day = startOfDay(anchor);
+  if (range === 'day') return day;
   if (range === 'week') {
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const start = new Date(day);
     const weekday = start.getDay();
     start.setDate(start.getDate() - (weekday === 0 ? 6 : weekday - 1));
     return start;
   }
-  if (range === 'month') return new Date(now.getFullYear(), now.getMonth(), 1);
+  if (range === 'month') return new Date(day.getFullYear(), day.getMonth(), 1);
   return null;
 }
 
-function entriesRangeLabel(range, start) {
-  if (!start) return null;
-  if (range === 'day') return 'Hoy, desde las 00:00';
-  if (range === 'week') {
-    return `Esta semana, desde el ${start.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-    })}`;
+function entriesRangeBounds(range, anchor = new Date()) {
+  const start = entriesRangeStart(range, anchor);
+  if (!start) return { start: null, end: null };
+  const end = new Date(start);
+  if (range === 'day') end.setDate(end.getDate() + 1);
+  else if (range === 'week') end.setDate(end.getDate() + 7);
+  else end.setMonth(end.getMonth() + 1);
+  return { start, end };
+}
+
+function formatLongDate(date) {
+  return date.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+function entriesRangeLabel(range, start, end) {
+  if (!start || !end) return null;
+  const last = new Date(end);
+  last.setDate(last.getDate() - 1);
+  if (range === 'day') {
+    const isToday = start.toDateString() === startOfDay(new Date()).toDateString();
+    return isToday ? `Hoy, ${formatLongDate(start)}` : formatLongDate(start);
   }
-  return `Este mes, desde el ${start.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`;
+  return `Del ${formatLongDate(start)} al ${formatLongDate(last)}`;
+}
+
+function entriesRangeButtonDates(range, anchor = new Date()) {
+  const { start, end } = entriesRangeBounds(range, anchor);
+  if (!start || !end) return null;
+  const last = new Date(end);
+  last.setDate(last.getDate() - 1);
+  const endLabel = last.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+  if (start.toDateString() === last.toDateString()) return endLabel;
+  const startLabel = start.toLocaleDateString('es-ES', {
+    day: 'numeric',
+    month: 'short',
+    year: start.getFullYear() === last.getFullYear() ? undefined : 'numeric',
+  });
+  return `${startLabel} – ${endLabel}`;
+}
+
+function toDateInputValue(date) {
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${date.getFullYear()}-${month}-${day}`;
+}
+
+function toMonthInputValue(date) {
+  return toDateInputValue(date).slice(0, 7);
+}
+
+function parseDateInput(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || ''));
+  if (!match) return null;
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function parseMonthInput(value) {
+  const match = /^(\d{4})-(\d{2})$/.exec(String(value || ''));
+  if (!match) return null;
+  const date = new Date(Number(match[1]), Number(match[2]) - 1, 1);
+  return Number.isNaN(date.getTime()) ? null : date;
 }
 
 const PERIOD_LABELS = {
@@ -102,7 +167,21 @@ function normalizeDayKey(value = '') {
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .replace(/\./g, '')
+    .trim()
     .slice(0, 3);
+}
+
+function parseHeatSlot(slot) {
+  const raw = String(slot || '').trim();
+  const hyphen = raw.match(/^(.+?)-(\d{1,2})$/);
+  if (hyphen) {
+    return { day: normalizeDayKey(hyphen[1]), hour: Number(hyphen[2]) };
+  }
+  const spaced = raw.match(/^(\D+?)\s+(\d{1,2})(?::\d{2})?$/);
+  if (spaced) {
+    return { day: normalizeDayKey(spaced[1]), hour: Number(spaced[2]) };
+  }
+  return null;
 }
 
 function ChartTooltip({ active, payload, label, valueLabel }) {
@@ -263,10 +342,10 @@ function ActivityHeatmap({ heatmap = [], horaPico = '-', diaPico = '-' }) {
     let peak = 0;
 
     for (const item of heatmap) {
-      const [dayRaw, hourRaw] = String(item.slot || '').split('-');
-      const day = normalizeDayKey(dayRaw);
-      const hour = Number(hourRaw);
-      if (!day || Number.isNaN(hour)) continue;
+      const parsed = parseHeatSlot(item.slot);
+      if (!parsed || Number.isNaN(parsed.hour)) continue;
+      const { day, hour } = parsed;
+      if (!day) continue;
 
       const bucket = HOUR_BUCKETS.find((b) => hour >= b.start && hour <= b.end);
       if (!bucket) continue;
@@ -348,40 +427,13 @@ function ActivityHeatmap({ heatmap = [], horaPico = '-', diaPico = '-' }) {
   );
 }
 
-function LevelDistribution({ rows = [] }) {
-  const max = Math.max(...rows.map((r) => r.total), 1);
-
-  if (!rows.length) {
-    return <p className={styles.emptyState}>Sin datos de niveles asignados.</p>;
-  }
-
-  return (
-    <div className={styles.levelList}>
-      {rows.map((row, index) => (
-        <div key={row.nivel} className={styles.levelRow}>
-          <span className={styles.levelName}>{row.nivel}</span>
-          <div className={styles.levelBarTrack}>
-            <div
-              className={styles.levelBarFill}
-              style={{
-                width: `${(row.total / max) * 100}%`,
-                background: CHART_COLORS.levels[index % CHART_COLORS.levels.length],
-              }}
-            />
-          </div>
-          <span className={styles.levelCount}>{row.total}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 function ConnectionUsersActivityPanel({
   users = [],
   onLoadUserPages,
   queryKey = '',
   emptyLabel = 'Sin usuarios con actividad en el rango.',
 }) {
+  const [listOpen, setListOpen] = useState(false);
   const [expandedUserId, setExpandedUserId] = useState(null);
   const [pagesByUser, setPagesByUser] = useState({});
   const [loadingUserId, setLoadingUserId] = useState(null);
@@ -417,15 +469,33 @@ function ConnectionUsersActivityPanel({
     }
   };
 
+  const userCountLabel = `${users.length.toLocaleString('es-ES')} usuario${users.length === 1 ? '' : 's'}`;
+
   return (
-    <div className={styles.userListCard}>
+    <div className={`${styles.userListCard} ${listOpen ? '' : styles.userListCardCollapsed}`}>
       <div className={styles.userListHeader}>
-        <h3 className={styles.userListTitle}>Usuarios con actividad</h3>
-        <p className={styles.userListHint}>
-          Pulsa un usuario para ver las páginas visitadas en el periodo.
-        </p>
+        <button
+          type="button"
+          className={styles.panelToggle}
+          aria-expanded={listOpen}
+          aria-controls="admin-active-users-list"
+          onClick={() => setListOpen((current) => !current)}
+        >
+          <span>
+            <h3 className={styles.userListTitle}>Usuarios con actividad</h3>
+            <p className={styles.userListHint}>
+              {listOpen
+                ? 'Pulsa un usuario para ver las páginas visitadas en el periodo.'
+                : userCountLabel}
+            </p>
+          </span>
+          <span className={styles.panelChevron} aria-hidden>
+            {listOpen ? '▴' : '▾'}
+          </span>
+        </button>
       </div>
-      <div className={styles.userListBody}>
+      {listOpen ? (
+      <div id="admin-active-users-list" className={styles.userListBody}>
         {users.length === 0 && <p className={styles.emptyState}>{emptyLabel}</p>}
         {users.map((user) => {
           const isExpanded = expandedUserId === user.userId;
@@ -485,6 +555,7 @@ function ConnectionUsersActivityPanel({
           );
         })}
       </div>
+      ) : null}
     </div>
   );
 }
@@ -531,30 +602,30 @@ function formatMonitoredDate(value) {
   });
 }
 
-function StudyTrackingPanel({ tracking, loading, navigationReady }) {
+function StudyTrackingPanel({ tracking, loading, navigationReady, filters = null, footnote = null }) {
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [studentsOpen, setStudentsOpen] = useState(false);
+  const [monitoredOpen, setMonitoredOpen] = useState(false);
   const summary = tracking?.summary;
   const users = tracking?.users || [];
   const monitored = tracking?.monitoredSessions || [];
 
-  if (loading && !summary) {
-    return <p className={styles.emptyState}>Cargando seguimiento de estudio…</p>;
-  }
-
-  if (navigationReady === false) {
+  const summaryBody = (() => {
+    if (loading && !summary) {
+      return <p className={styles.emptyState}>Cargando seguimiento de estudio…</p>;
+    }
+    if (navigationReady === false) {
+      return (
+        <p className={styles.emptyState}>
+          La tabla <code>usuario_navegacion</code> todavía no está disponible. El seguimiento se
+          activará en cuanto se registre navegación.
+        </p>
+      );
+    }
+    if (!summary) {
+      return <p className={styles.emptyState}>Sin datos de seguimiento en el rango.</p>;
+    }
     return (
-      <p className={styles.emptyState}>
-        La tabla <code>usuario_navegacion</code> todavía no está disponible. El seguimiento se
-        activará en cuanto se registre navegación.
-      </p>
-    );
-  }
-
-  if (!summary) {
-    return <p className={styles.emptyState}>Sin datos de seguimiento en el rango.</p>;
-  }
-
-  return (
-    <>
       <div className={styles.kpiGrid}>
         <KpiCard
           icon={BookOpen}
@@ -589,120 +660,189 @@ function StudyTrackingPanel({ tracking, loading, navigationReady }) {
           iconBg="#fffbeb"
         />
       </div>
+    );
+  })();
 
-      <div className={styles.legendRow}>
-        <span className={styles.legendItem}>
-          <span className={`${styles.legendDot} ${styles.focusStudy}`} /> Estudio
-        </span>
-        <span className={styles.legendItem}>
-          <span className={`${styles.legendDot} ${styles.focusBrowsing}`} /> Navegación en Dralo
-        </span>
-        <span className={styles.legendItem}>
-          <span className={`${styles.legendDot} ${styles.focusIdle}`} /> Sin actividad / fuera de
-          pestaña
-        </span>
+  return (
+    <div className={styles.foldStack}>
+      <div className={`${styles.chartCard} ${summaryOpen ? '' : styles.chartCardCollapsed}`}>
+        <button
+          type="button"
+          className={styles.chartCardToggle}
+          aria-expanded={summaryOpen}
+          aria-controls="admin-study-summary"
+          onClick={() => setSummaryOpen((current) => !current)}
+        >
+          <h3 className={styles.chartCardTitle}>Resumen de seguimiento</h3>
+          <span className={styles.panelChevron} aria-hidden>
+            {summaryOpen ? '▴' : '▾'}
+          </span>
+        </button>
+        {summaryOpen ? (
+          <div id="admin-study-summary">
+            {filters}
+            {summaryBody}
+          </div>
+        ) : null}
       </div>
 
-      {users.length === 0 ? (
-        <p className={styles.emptyState}>Sin alumnos con actividad en el rango seleccionado.</p>
-      ) : (
-        <div className={styles.trackingList}>
-          {users.map((row) => (
-            <article key={row.userId} className={styles.trackingRow}>
-              <div className={styles.trackingHead}>
-                <div className={styles.trackingIdentity}>
-                  <p className={styles.trackingName}>{row.name}</p>
-                  <p className={styles.trackingEmail}>{row.email}</p>
-                </div>
-                <div className={styles.trackingScore}>
-                  <p className={styles.trackingScoreValue}>{row.focusRatio}%</p>
-                  <p className={styles.trackingScoreLabel}>foco</p>
-                </div>
+      {summary ? (
+      <div className={`${styles.chartCard} ${studentsOpen ? '' : styles.chartCardCollapsed}`}>
+        <button
+          type="button"
+          className={styles.chartCardToggle}
+          aria-expanded={studentsOpen}
+          aria-controls="admin-study-students"
+          onClick={() => setStudentsOpen((current) => !current)}
+        >
+          <h3 className={styles.chartCardTitle}>
+            Alumnos
+            <span className={styles.foldCount}>
+              {`${users.length.toLocaleString('es-ES')} alumno${users.length === 1 ? '' : 's'}`}
+            </span>
+          </h3>
+          <span className={styles.panelChevron} aria-hidden>
+            {studentsOpen ? '▴' : '▾'}
+          </span>
+        </button>
+
+        {studentsOpen ? (
+          <div id="admin-study-students">
+            <div className={styles.legendRow}>
+              <span className={styles.legendItem}>
+                <span className={`${styles.legendDot} ${styles.focusStudy}`} /> Estudio
+              </span>
+              <span className={styles.legendItem}>
+                <span className={`${styles.legendDot} ${styles.focusBrowsing}`} /> Navegación en Dralo
+              </span>
+              <span className={styles.legendItem}>
+                <span className={`${styles.legendDot} ${styles.focusIdle}`} /> Sin actividad / fuera de
+                pestaña
+              </span>
+            </div>
+
+            {users.length === 0 ? (
+              <p className={styles.emptyState}>Sin alumnos con actividad en el rango seleccionado.</p>
+            ) : (
+              <div className={styles.trackingList}>
+                {users.map((row) => (
+                  <article key={row.userId} className={styles.trackingRow}>
+                    <div className={styles.trackingHead}>
+                      <div className={styles.trackingIdentity}>
+                        <p className={styles.trackingName}>{row.name}</p>
+                        <p className={styles.trackingEmail}>{row.email}</p>
+                      </div>
+                      <div className={styles.trackingScore}>
+                        <p className={styles.trackingScoreValue}>{row.focusRatio}%</p>
+                        <p className={styles.trackingScoreLabel}>foco</p>
+                      </div>
+                    </div>
+
+                    <StudyFocusBar
+                      studySeconds={row.studySeconds}
+                      browsingSeconds={row.browsingSeconds}
+                      unattributedSeconds={row.unattributedSeconds}
+                    />
+
+                    <div className={styles.trackingMeta}>
+                      <span>
+                        Estudio <strong>{row.studyLabel}</strong>
+                      </span>
+                      <span>
+                        Navegación <strong>{row.browsingLabel}</strong>
+                      </span>
+                      <span>
+                        Sin actividad <strong>{row.unattributedLabel}</strong>
+                      </span>
+                      <span>
+                        Sesiones <strong>{row.sessionCount}</strong>
+                      </span>
+                    </div>
+
+                    {row.topAreas?.length ? (
+                      <div className={styles.trackingAreas}>
+                        {row.topAreas.map((area) => (
+                          <span
+                            key={area.area}
+                            className={`${styles.areaChip} ${area.isStudy ? styles.areaChipStudy : ''}`}
+                          >
+                            {area.area} · {area.label}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
               </div>
-
-              <StudyFocusBar
-                studySeconds={row.studySeconds}
-                browsingSeconds={row.browsingSeconds}
-                unattributedSeconds={row.unattributedSeconds}
-              />
-
-              <div className={styles.trackingMeta}>
-                <span>
-                  Estudio <strong>{row.studyLabel}</strong>
-                </span>
-                <span>
-                  Navegación <strong>{row.browsingLabel}</strong>
-                </span>
-                <span>
-                  Sin actividad <strong>{row.unattributedLabel}</strong>
-                </span>
-                <span>
-                  Sesiones <strong>{row.sessionCount}</strong>
-                </span>
-              </div>
-
-              {row.topAreas?.length ? (
-                <div className={styles.trackingAreas}>
-                  {row.topAreas.map((area) => (
-                    <span
-                      key={area.area}
-                      className={`${styles.areaChip} ${area.isStudy ? styles.areaChipStudy : ''}`}
-                    >
-                      {area.area} · {area.label}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </article>
-          ))}
-        </div>
-      )}
+            )}
+          </div>
+        ) : null}
+      </div>
+      ) : null}
 
       {monitored.length > 0 ? (
-        <div className={styles.monitoredBlock}>
-          <h3 className={styles.monitoredTitle}>Sesiones de estudio monitorizadas</h3>
-          <p className={styles.monitoredIntro}>
-            Sesiones que el alumno inició y consintió de forma expresa, con el resumen generado al
-            cerrarlas.
-          </p>
-          <div className={styles.trackingList}>
-            {monitored.map((entry) => (
-              <article key={entry.sessionId} className={styles.trackingRow}>
-                <div className={styles.trackingHead}>
-                  <div className={styles.trackingIdentity}>
-                    <p className={styles.trackingName}>{entry.name}</p>
-                    <p className={styles.trackingEmail}>{formatMonitoredDate(entry.startedAt)}</p>
-                  </div>
-                  <div className={styles.trackingScore}>
-                    <p className={styles.trackingScoreValue}>{entry.focusRatio}%</p>
-                    <p className={styles.trackingScoreLabel}>foco</p>
-                  </div>
-                </div>
+        <div className={`${styles.chartCard} ${monitoredOpen ? '' : styles.chartCardCollapsed}`}>
+          <button
+            type="button"
+            className={styles.chartCardToggle}
+            aria-expanded={monitoredOpen}
+            aria-controls="admin-monitored-sessions"
+            onClick={() => setMonitoredOpen((current) => !current)}
+          >
+            <h3 className={styles.chartCardTitle}>Sesiones de estudio monitorizadas</h3>
+            <span className={styles.panelChevron} aria-hidden>
+              {monitoredOpen ? '▴' : '▾'}
+            </span>
+          </button>
+          {monitoredOpen ? (
+            <div id="admin-monitored-sessions">
+              <p className={styles.monitoredIntro}>
+                Sesiones que el alumno inició y consintió de forma expresa, con el resumen generado al
+                cerrarlas.
+              </p>
+              <div className={styles.trackingList}>
+                {monitored.map((entry) => (
+                  <article key={entry.sessionId} className={styles.trackingRow}>
+                    <div className={styles.trackingHead}>
+                      <div className={styles.trackingIdentity}>
+                        <p className={styles.trackingName}>{entry.name}</p>
+                        <p className={styles.trackingEmail}>{formatMonitoredDate(entry.startedAt)}</p>
+                      </div>
+                      <div className={styles.trackingScore}>
+                        <p className={styles.trackingScoreValue}>{entry.focusRatio}%</p>
+                        <p className={styles.trackingScoreLabel}>foco</p>
+                      </div>
+                    </div>
 
-                <div className={styles.trackingMeta}>
-                  <span>
-                    Concentrado <strong>{entry.focusLabel}</strong>
-                  </span>
-                  <span>
-                    Salidas <strong>{entry.awayCount}</strong>
-                  </span>
-                  <span>
-                    Pausa m&aacute;s larga <strong>{entry.longestAwayLabel}</strong>
-                  </span>
-                  <span>
-                    Total <strong>{entry.totalLabel}</strong>
-                  </span>
-                </div>
+                    <div className={styles.trackingMeta}>
+                      <span>
+                        Concentrado <strong>{entry.focusLabel}</strong>
+                      </span>
+                      <span>
+                        Salidas <strong>{entry.awayCount}</strong>
+                      </span>
+                      <span>
+                        Pausa m&aacute;s larga <strong>{entry.longestAwayLabel}</strong>
+                      </span>
+                      <span>
+                        Total <strong>{entry.totalLabel}</strong>
+                      </span>
+                    </div>
 
-                {entry.resumen ? (
-                  <p className={styles.monitoredSummary}>{entry.resumen}</p>
-                ) : null}
-              </article>
-            ))}
-          </div>
+                    {entry.resumen ? (
+                      <p className={styles.monitoredSummary}>{entry.resumen}</p>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+              {footnote}
+            </div>
+          ) : null}
         </div>
-      ) : null}
-    </>
+      ) : (
+        footnote
+      )}
+    </div>
   );
 }
 
@@ -746,10 +886,14 @@ export default function AdminAnalyticsPanels({
   onRunStudyTrackingQuery,
   users = [],
 }) {
+  const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('growth');
   const [visitStats, setVisitStats] = useState(null);
   const [entriesWithoutStaff, setEntriesWithoutStaff] = useState(true);
   const [entriesRange, setEntriesRange] = useState('all');
+  const [entriesAnchor, setEntriesAnchor] = useState(() => startOfDay(new Date()));
+  const [entriesLogOpen, setEntriesLogOpen] = useState(false);
+  const [registrationsOpen, setRegistrationsOpen] = useState(false);
   const [expandedVisitorId, setExpandedVisitorId] = useState(null);
   const [pagesByVisitor, setPagesByVisitor] = useState({});
   const [loadingVisitorId, setLoadingVisitorId] = useState(null);
@@ -765,8 +909,6 @@ export default function AdminAnalyticsPanels({
       : null;
   const selectedConnectionUserId = appliedConnectionUserIdFilter?.trim() || '';
   const excludeStaff = platformAnalyticsAudience === 'sin_staff';
-
-  const sortedLevels = [...(analytics.usuariosPorNivel || [])].sort((a, b) => b.total - a.total);
 
   const registrationReport = useMemo(() => {
     const roleById = new Map(roles.map((role) => [String(role.id), role.nombre || '']));
@@ -819,11 +961,12 @@ export default function AdminAnalyticsPanels({
   }, [users, roles]);
 
   const entryView = useMemo(() => {
-    const start = entriesRangeStart(entriesRange);
+    const { start, end } = entriesRangeBounds(entriesRange, entriesAnchor);
     const rows = (visitStats?.ipLog || []).filter((row) => {
-      if (!start) return true;
+      if (!start || !end) return true;
       if (!row.seenAt) return false;
-      return new Date(row.seenAt).getTime() >= start.getTime();
+      const seen = new Date(row.seenAt).getTime();
+      return seen >= start.getTime() && seen < end.getTime();
     });
     const counts = { entered: 0, registered: 0, unregistered: 0, staff: 0 };
     for (const row of rows) {
@@ -835,8 +978,8 @@ export default function AdminAnalyticsPanels({
         if (row.kind === 'anon') counts.unregistered += 1;
       }
     }
-    return { start, rows, counts };
-  }, [visitStats, entriesRange]);
+    return { start, end, rows, counts };
+  }, [visitStats, entriesRange, entriesAnchor]);
 
   const visibleEntryRows = useMemo(
     () => entryView.rows.filter((row) => !entriesWithoutStaff || row.kind !== 'staff'),
@@ -847,7 +990,7 @@ export default function AdminAnalyticsPanels({
     setExpandedVisitorId(null);
     setPagesByVisitor({});
     setJourneyError('');
-  }, [entriesRange, entriesWithoutStaff]);
+  }, [entriesRange, entriesAnchor, entriesWithoutStaff]);
 
   const toggleVisitorJourney = async (row) => {
     const visitorId = row?.visitorId;
@@ -899,6 +1042,7 @@ export default function AdminAnalyticsPanels({
         : '',
       Origen: row.source || '',
       'Llegan a': row.landing || '',
+      Recorrido: (row.stops || []).map((stop) => stop.title).join(' → '),
       Tiempo: row.seconds > 0 ? formatSessionDuration(row.seconds) : '',
       Cuenta: row.email || '',
       Estado: ENTRY_KIND_LABEL[row.kind] || 'Sin cuenta',
@@ -937,14 +1081,22 @@ export default function AdminAnalyticsPanels({
 
   return (
     <section className={styles.panel}>
-      <header className={styles.panelHeader}>
-        <div>
-          <h2 className={styles.panelTitle}>Analíticas de la plataforma</h2>
-          <p className={styles.panelSubtitle}>
-            Visualiza incorporaciones, accesos y tiempo de conexión. Usa los filtros para acotar cada
-            bloque al periodo que necesites.
-          </p>
+      <header className={`${styles.panelHeader} ${open ? '' : styles.panelHeaderCollapsed}`}>
+        <div className={styles.panelHeaderMain}>
+          <button
+            type="button"
+            className={styles.panelToggle}
+            aria-expanded={open}
+            aria-controls="admin-platform-analytics"
+            onClick={() => setOpen((current) => !current)}
+          >
+            <h2 className={styles.panelTitle}>Analíticas de la plataforma</h2>
+            <span className={styles.panelChevron} aria-hidden>
+              {open ? '▴' : '▾'}
+            </span>
+          </button>
         </div>
+        {open ? (
         <div className={styles.tabList} role="tablist" aria-label="Secciones de analíticas">
           <button
             type="button"
@@ -983,9 +1135,11 @@ export default function AdminAnalyticsPanels({
             Seguimiento
           </button>
         </div>
+        ) : null}
       </header>
 
-      <div className={styles.panelBody}>
+      {open ? (
+      <div id="admin-platform-analytics" className={styles.panelBody}>
         {activeTab === 'entries' ? (
           <>
             <div className={styles.entriesToolbar}>
@@ -995,8 +1149,8 @@ export default function AdminAnalyticsPanels({
                 {entriesWithoutStaff
                   ? ' El equipo tampoco.'
                   : ' Con staff incluye las visitas del equipo.'}
-                {entriesRangeLabel(entriesRange, entryView.start)
-                  ? ` ${entriesRangeLabel(entriesRange, entryView.start)}.`
+                {entriesRangeLabel(entriesRange, entryView.start, entryView.end)
+                  ? ` ${entriesRangeLabel(entriesRange, entryView.start, entryView.end)}.`
                   : visitStats?.since
                     ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
                         day: 'numeric',
@@ -1009,18 +1163,44 @@ export default function AdminAnalyticsPanels({
               </p>
               <div className={styles.entriesFilters}>
               <div className={styles.tabList} role="group" aria-label="Periodo de entradas">
-                {ENTRY_RANGES.map((option) => (
-                  <button
-                    key={option.id}
-                    type="button"
-                    className={`${styles.tab} ${entriesRange === option.id ? styles.tabActive : ''}`}
-                    aria-pressed={entriesRange === option.id}
-                    onClick={() => setEntriesRange(option.id)}
-                  >
-                    {option.label}
-                  </button>
-                ))}
+                {ENTRY_RANGES.map((option) => {
+                  const dates = entriesRangeButtonDates(option.id, entriesAnchor);
+                  return (
+                    <button
+                      key={option.id}
+                      type="button"
+                      className={`${styles.tab} ${dates ? styles.tabWithDate : ''} ${entriesRange === option.id ? styles.tabActive : ''}`}
+                      aria-pressed={entriesRange === option.id}
+                      onClick={() => setEntriesRange(option.id)}
+                    >
+                      <span>{option.label}</span>
+                      {dates ? <span className={styles.tabDates}>{dates}</span> : null}
+                    </button>
+                  );
+                })}
               </div>
+              {entriesRange !== 'all' ? (
+                <label className={styles.entriesDateField}>
+                  <span>
+                    {entriesRange === 'month' ? 'Mes' : entriesRange === 'week' ? 'Semana' : 'Día'}
+                  </span>
+                  <input
+                    type={entriesRange === 'month' ? 'month' : 'date'}
+                    value={
+                      entriesRange === 'month'
+                        ? toMonthInputValue(entriesAnchor)
+                        : toDateInputValue(entriesAnchor)
+                    }
+                    onChange={(event) => {
+                      const next =
+                        entriesRange === 'month'
+                          ? parseMonthInput(event.target.value)
+                          : parseDateInput(event.target.value);
+                      if (next) setEntriesAnchor(next);
+                    }}
+                  />
+                </label>
+              ) : null}
               <div className={styles.entriesStaffRow}>
               <button
                 type="button"
@@ -1089,8 +1269,22 @@ export default function AdminAnalyticsPanels({
               />
             </div>
 
-            <div className={styles.chartCard}>
-              <h3 className={styles.chartCardTitle}>Registro de entradas</h3>
+            <div className={styles.foldStack}>
+            <div className={`${styles.chartCard} ${entriesLogOpen ? '' : styles.chartCardCollapsed}`}>
+              <button
+                type="button"
+                className={styles.chartCardToggle}
+                aria-expanded={entriesLogOpen}
+                aria-controls="admin-entries-log"
+                onClick={() => setEntriesLogOpen((current) => !current)}
+              >
+                <h3 className={styles.chartCardTitle}>Registro de entradas</h3>
+                <span className={styles.panelChevron} aria-hidden>
+                  {entriesLogOpen ? '▴' : '▾'}
+                </span>
+              </button>
+              {entriesLogOpen ? (
+              <div id="admin-entries-log">
               {(() => {
                 const rows = visibleEntryRows;
                 if (!visitStats) return <p className={styles.emptyState}>Cargando…</p>;
@@ -1111,7 +1305,7 @@ export default function AdminAnalyticsPanels({
                             <th>IP</th>
                             <th>Fecha</th>
                             <th>Origen</th>
-                            <th>Llegan a</th>
+                            <th>Recorrido</th>
                             <th>Tiempo</th>
                             <th>Cuenta</th>
                             <th>Páginas</th>
@@ -1140,7 +1334,17 @@ export default function AdminAnalyticsPanels({
                                       : '—'}
                                   </td>
                                   <td>{row.source || '—'}</td>
-                                  <td>{row.landing || '—'}</td>
+                                  <td>
+                                    {(row.stops || []).length > 0 ? (
+                                      <ol className={styles.trail}>
+                                        {(row.stops || []).map((stop, stopIndex) => (
+                                          <li key={`${stop.path}-${stopIndex}`}>{stop.title}</li>
+                                        ))}
+                                      </ol>
+                                    ) : (
+                                      row.landing || '—'
+                                    )}
+                                  </td>
                                   <td>{row.seconds > 0 ? formatSessionDuration(row.seconds) : '—'}</td>
                                   <td>{row.email || '—'}</td>
                                   <td>
@@ -1170,7 +1374,13 @@ export default function AdminAnalyticsPanels({
                                             Todavía no hay páginas registradas de esta visita.
                                           </p>
                                         ) : (
-                                          (pages || []).map((page) => (
+                                          [...(pages || [])]
+                                            .sort((a, b) => {
+                                              const aTime = a.visitedAt ? new Date(a.visitedAt).getTime() : 0;
+                                              const bTime = b.visitedAt ? new Date(b.visitedAt).getTime() : 0;
+                                              return aTime - bTime;
+                                            })
+                                            .map((page, pageIndex, ordered) => (
                                             <div key={page.id} className={styles.pageItem}>
                                               <p className={styles.pageTitle}>{page.pageTitle}</p>
                                               <p className={styles.pagePath}>{page.path}</p>
@@ -1178,6 +1388,9 @@ export default function AdminAnalyticsPanels({
                                                 {page.visitedLabel}
                                                 {page.durationLabel ? ` · ${page.durationLabel}` : ''}
                                               </p>
+                                              {pageIndex === ordered.length - 1 && ordered.length === 1 ? (
+                                                <p className={styles.pageMeta}>No abrió ninguna página más.</p>
+                                              ) : null}
                                             </div>
                                           ))
                                         )}
@@ -1201,19 +1414,36 @@ export default function AdminAnalyticsPanels({
                     </div>
                 );
               })()}
+              </div>
+              ) : null}
             </div>
 
-            <div className={styles.chartCard}>
-              <h3 className={styles.chartCardTitle}>
-                Cuentas creadas desde el inicio
-                {registrationReport.firstDate
-                  ? ` (${registrationReport.firstDate.toLocaleDateString('es-ES', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric',
-                    })})`
-                  : ''}
-              </h3>
+            <AdminLandingPass />
+
+            <div className={`${styles.chartCard} ${registrationsOpen ? '' : styles.chartCardCollapsed}`}>
+              <button
+                type="button"
+                className={styles.chartCardToggle}
+                aria-expanded={registrationsOpen}
+                aria-controls="admin-registrations-since-start"
+                onClick={() => setRegistrationsOpen((current) => !current)}
+              >
+                <h3 className={styles.chartCardTitle}>
+                  Cuentas creadas desde el inicio
+                  {registrationReport.firstDate
+                    ? ` (${registrationReport.firstDate.toLocaleDateString('es-ES', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })})`
+                    : ''}
+                </h3>
+                <span className={styles.panelChevron} aria-hidden>
+                  {registrationsOpen ? '▴' : '▾'}
+                </span>
+              </button>
+              {registrationsOpen ? (
+              <div id="admin-registrations-since-start">
               {registrationReport.months.length === 0 ? (
                 <p className={styles.emptyState}>Sin cuentas en este corte.</p>
               ) : (
@@ -1236,49 +1466,47 @@ export default function AdminAnalyticsPanels({
                   </ResponsiveContainer>
                 </div>
               )}
-            </div>
-
-            {registrationReport.rows.length === 0 ? (
-              <p className={styles.emptyState}>Nadie en este corte.</p>
-            ) : (
-              <div className={styles.registrationTableWrap}>
-                <table className={styles.registrationTable}>
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Correo</th>
-                      <th>Fecha</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {registrationReport.rows.map((row) => (
-                      <tr key={row.id}>
-                        <td>{row.nombre}</td>
-                        <td>{row.email}</td>
-                        <td>
-                          {row.creadoEn
-                            ? row.creadoEn.toLocaleDateString('es-ES', {
-                                day: '2-digit',
-                                month: 'short',
-                                year: 'numeric',
-                              })
-                            : '—'}
-                        </td>
+              {registrationReport.rows.length === 0 ? (
+                <p className={styles.emptyState}>Nadie en este corte.</p>
+              ) : (
+                <div className={styles.registrationTableWrap}>
+                  <table className={styles.registrationTable}>
+                    <thead>
+                      <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Fecha</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {registrationReport.rows.map((row) => (
+                        <tr key={row.id}>
+                          <td>{row.nombre}</td>
+                          <td>{row.email}</td>
+                          <td>
+                            {row.creadoEn
+                              ? row.creadoEn.toLocaleDateString('es-ES', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric',
+                                })
+                              : '—'}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
               </div>
-            )}
+              ) : null}
+            </div>
+            </div>
           </>
         ) : null}
 
         {activeTab === 'growth' ? (
           <>
-            <p className={styles.sectionIntro}>
-              Altas de usuario, abandonos y patrones de inicio de sesión en el rango seleccionado.
-              {excludeStaff ? ' Los usuarios del equipo con estrella no se incluyen.' : ''}
-            </p>
             <PeriodFilters
               period={period}
               setPeriod={setPeriod}
@@ -1322,8 +1550,14 @@ export default function AdminAnalyticsPanels({
               <KpiCard
                 icon={LogIn}
                 label="Éxito en accesos"
-                value={`${analytics.patrones.tasaExito}%`}
-                hint="Inicios de sesión correctos"
+                value={
+                  analytics.patrones.tasaExito == null ? '—' : `${analytics.patrones.tasaExito}%`
+                }
+                hint={
+                  analytics.patrones.tasaExito != null && analytics.patrones.tasaExito < 100
+                    ? 'Hay accesos fallidos: ábrelos en el resumen de arriba'
+                    : 'Inicios de sesión correctos'
+                }
                 accent="#10b981"
                 iconBg="#ecfdf5"
               />
@@ -1375,11 +1609,6 @@ export default function AdminAnalyticsPanels({
                   diaPico={analytics.patrones.diaPico}
                 />
               </div>
-            </div>
-
-            <div className={styles.chartCard}>
-              <h3 className={styles.chartCardTitle}>Usuarios por nivel (placement)</h3>
-              <LevelDistribution rows={sortedLevels} />
             </div>
           </>
         ) : activeTab === 'engagement' ? (
@@ -1527,50 +1756,45 @@ export default function AdminAnalyticsPanels({
               Los datos de conexión se actualizan automáticamente cada 45 segundos.
             </p>
           </>
-        ) : (
-          <>
-            <p className={styles.sectionIntro}>
-              Reparto del tiempo conectado de cada alumno entre estudio real (ejercicios, teoría,
-              speaking), navegación por la plataforma y tiempo sin actividad.
-              {excludeStaff ? ' Los usuarios del equipo con estrella no se incluyen.' : ''}
-            </p>
-
-            <PeriodFilters
-              period={period}
-              setPeriod={setPeriod}
-              startDate={trackingStartDate}
-              setStartDate={setTrackingStartDate}
-              endDate={trackingEndDate}
-              setEndDate={setTrackingEndDate}
-              audienceFilter={platformAnalyticsAudience}
-              setAudienceFilter={setPlatformAnalyticsAudience}
-              starredTeamCount={starredTeamCount}
-              onExecute={onRunStudyTrackingQuery}
-              executing={studyTrackingLoading}
-              onClear={
-                typeof setTrackingStartDate === 'function'
-                  ? () => {
-                      setTrackingStartDate('');
-                      setTrackingEndDate('');
-                    }
-                  : undefined
-              }
-            />
-
-            <StudyTrackingPanel
+        ) : activeTab === 'tracking' ? (
+          <StudyTrackingPanel
               tracking={studyTracking}
               loading={studyTrackingLoading}
               navigationReady={studyTracking?.navigationReady}
+              filters={
+                <PeriodFilters
+                  period={period}
+                  setPeriod={setPeriod}
+                  startDate={trackingStartDate}
+                  setStartDate={setTrackingStartDate}
+                  endDate={trackingEndDate}
+                  setEndDate={setTrackingEndDate}
+                  audienceFilter={platformAnalyticsAudience}
+                  setAudienceFilter={setPlatformAnalyticsAudience}
+                  starredTeamCount={starredTeamCount}
+                  onExecute={onRunStudyTrackingQuery}
+                  executing={studyTrackingLoading}
+                  onClear={
+                    typeof setTrackingStartDate === 'function'
+                      ? () => {
+                          setTrackingStartDate('');
+                          setTrackingEndDate('');
+                        }
+                      : undefined
+                  }
+                />
+              }
+              footnote={
+                <p className={styles.footnote}>
+                  El navegador no permite ver a qué sitios externos va el alumno. &quot;Sin
+                  actividad&quot; es tiempo conectado sin página de Dralo en primer plano: pestaña en
+                  segundo plano, otra aplicación o inactividad.
+                </p>
+              }
             />
-
-            <p className={styles.footnote}>
-              El navegador no permite ver a qué sitios externos va el alumno. &quot;Sin
-              actividad&quot; es tiempo conectado sin página de Dralo en primer plano: pestaña en
-              segundo plano, otra aplicación o inactividad.
-            </p>
-          </>
-        )}
+        ) : null}
       </div>
+      ) : null}
     </section>
   );
 }

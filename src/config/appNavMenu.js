@@ -326,7 +326,8 @@ export const COORDINATOR_PANEL_MENU_ITEMS = [
 ];
 
 const STAFF_PANEL_BY_KEY = {
-  admin: { href: '/admin', label: 'Administración' },
+  admin: { href: '/admin', label: 'Analíticas' },
+  administracion: { href: '/admin/administracion', label: 'Administración' },
   profesorAdmin: { href: '/admin/profesor', label: 'Profesor' },
   profesor: { href: '/teacher', label: 'Profesor' },
   coordinador: { href: '/coordinador', label: 'Coordinador' },

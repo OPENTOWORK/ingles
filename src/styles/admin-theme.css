@@ -87,11 +87,20 @@
 }
 
 /* Secciones tipo card */
+.admin-org-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  min-width: 0;
+}
+
 .admin-section {
   border: 1px solid var(--admin-border);
   border-radius: var(--admin-radius-xl);
   background: var(--admin-surface);
   box-shadow: var(--admin-shadow-sm);
+  margin: 0;
   overflow: hidden;
 }
 
@@ -99,6 +108,33 @@
   padding: 1rem 1.35rem;
   border-bottom: 1px solid var(--admin-border);
   background: linear-gradient(180deg, var(--admin-surface-muted) 0%, var(--admin-surface) 100%);
+}
+
+.admin-section__header--collapsed {
+  border-bottom: 0;
+}
+
+.admin-section__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+}
+
+.admin-section__chevron {
+  flex: 0 0 auto;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 .admin-section__header h2,

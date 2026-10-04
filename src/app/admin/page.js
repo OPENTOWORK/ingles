@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
@@ -17,7 +17,11 @@ import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
 import { getPlanDisplayLabel, normalizeUserPlanSlug } from '@/data/financialPlanConfig';
 import AdminUserManagementList from '@/components/admin/AdminUserManagementList';
 import AdminOverviewStats from '@/components/admin/AdminOverviewStats';
+import AdminOverviewDetail, { buildOverviewDetail } from '@/components/admin/AdminOverviewDetail';
 import AdminFoundingSurveyPanel from '@/components/admin/AdminFoundingSurveyPanel';
+import AdminWebsPrograms from '@/components/admin/AdminWebsPrograms';
+import AdminChangeHistory from '@/components/admin/AdminChangeHistory';
+import AdminGeneralSettings from '@/components/admin/AdminGeneralSettings';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import { useClientMounted } from '@/hooks/useClientMounted';
@@ -145,16 +149,21 @@ export default function AdminDashboard() {
     incorporaciones: [],
     abandonos: 0,
     mediaPorDia: 0,
-    usuariosPorNivel: [],
     heatmap: [],
     patrones: {
       horaPico: '-',
       diaPico: '-',
-      tasaExito: 0,
+      tasaExito: null,
     },
   });
   const [userActivityByUser, setUserActivityByUser] = useState({});
   const [emailConfirmedByUser, setEmailConfirmedByUser] = useState(null);
+  const [usersSectionOpen, setUsersSectionOpen] = useState(false);
+  const [authAccounts, setAuthAccounts] = useState(null);
+  const [accessCodeProblems, setAccessCodeProblems] = useState(null);
+  const [passwordResetProblems, setPasswordResetProblems] = useState(null);
+  const [loginAttempts, setLoginAttempts] = useState(null);
+  const [overviewKind, setOverviewKind] = useState(null);
   const loadUserFormResponses = useCallback(async (userId) => {
     const res = await fetch(`/api/admin/users/formularios/?userId=${encodeURIComponent(userId)}`, {
       credentials: 'include',
@@ -194,6 +203,8 @@ export default function AdminDashboard() {
     heatmap: [],
   });
   const router = useRouter();
+  const pathname = usePathname() ?? '';
+  const isUserAdmin = pathname.replace(/\/$/, '').endsWith('/administracion');
 
   useEffect(() => {
     initAdminData();
@@ -337,6 +348,13 @@ export default function AdminDashboard() {
         throw new Error(payload.error || 'No se pudo cargar la confirmación de correo.');
       }
       setEmailConfirmedByUser(payload.emailConfirmedByUser || {});
+      setAuthAccounts(Array.isArray(payload.authAccounts) ? payload.authAccounts : []);
+      setAccessCodeProblems(
+        Array.isArray(payload.accessCodeProblems) ? payload.accessCodeProblems : [],
+      );
+      setPasswordResetProblems(
+        Array.isArray(payload.passwordResetProblems) ? payload.passwordResetProblems : [],
+      );
     } catch (error) {
       console.error('Error loading email confirmation:', error);
     }
@@ -411,22 +429,12 @@ export default function AdminDashboard() {
     try {
       const excludeStaff = platformAnalyticsAudience === 'sin_staff';
 
-      const [usersRes, placementRes, authRes] = await Promise.all([
-        supabase
-          .from('user_profiles')
-          .select('id, creado_en, activo, destacado_equipo'),
-        supabase
-          .from('placement_results')
-          .select('user_id, nivel_asignado, fecha')
-          .order('fecha', { ascending: false }),
-        supabase
-          .from('auth_sesiones')
-          .select('user_id, creado_en, exitoso, tipo_evento')
-          .order('creado_en', { ascending: false })
-          .limit(5000),
-      ]);
+      const { data: userRowsData, error: usersError } = await supabase
+        .from('user_profiles')
+        .select('id, creado_en, activo, destacado_equipo');
+      if (usersError) throw usersError;
 
-      const userRows = usersRes.data || [];
+      const userRows = userRowsData || [];
       const starredUserIds = new Set(
         userRows
           .filter((row) => Boolean(row.destacado_equipo))
@@ -480,56 +488,42 @@ export default function AdminDashboard() {
       const inactiveUsers = eligibleUserRows.filter((u) => u.activo === false).length;
       const abandonos = sesionesNivelAbandonadas + inactiveUsers;
 
-      const latestLevelByUser = new Map();
-      for (const row of placementRes.data || []) {
-        if (!row.user_id || latestLevelByUser.has(row.user_id)) continue;
-        if (!isEligibleUser(row.user_id)) continue;
-        latestLevelByUser.set(row.user_id, row.nivel_asignado || 'Sin nivel');
+      let sessionHeatmap = [];
+      let sessionHoraPico = '-';
+      let sessionDiaPico = '-';
+      try {
+        const headers = await getAdminFetchHeaders();
+        const params = new URLSearchParams({ period });
+        if (startDate) params.set('startDate', startDate);
+        if (endDate) params.set('endDate', endDate);
+        if (excludeStaff) params.set('excludeStaff', '1');
+        const activityRes = await fetch(`/api/admin/user-activity?${params}`, {
+          credentials: 'include',
+          headers,
+        });
+        const activityData = await activityRes.json().catch(() => ({}));
+        if (activityRes.ok && activityData.connection) {
+          sessionHeatmap = activityData.connection.heatmap || [];
+          sessionHoraPico = activityData.connection.horaPico || '-';
+          sessionDiaPico = activityData.connection.diaPico || '-';
+        } else if (!activityRes.ok) {
+          console.error('[admin] activity heatmap', activityData.error);
+        }
+      } catch (activityError) {
+        console.error('[admin] activity heatmap', activityError);
       }
-      const usuariosPorNivelMap = {};
-      for (const [, nivel] of latestLevelByUser.entries()) {
-        usuariosPorNivelMap[nivel] = (usuariosPorNivelMap[nivel] || 0) + 1;
-      }
-      const usuariosPorNivel = Object.entries(usuariosPorNivelMap).map(([nivel, total]) => ({ nivel, total }));
 
-      const authRows = (authRes.data || []).filter(
-        (row) => withinClosedDates(row.creado_en) && (!row.user_id || isEligibleUser(row.user_id)),
-      );
-      const hours = {};
-      const weekdays = {};
-      const heatmapMap = {};
-      let ok = 0;
-      let totalAuth = 0;
-      for (const row of authRows) {
-        const d = new Date(row.creado_en);
-        const hour = d.getHours();
-        const day = d.toLocaleDateString('es-ES', { weekday: 'short' });
-        hours[hour] = (hours[hour] || 0) + 1;
-        weekdays[day] = (weekdays[day] || 0) + 1;
-        const heatKey = `${day}-${hour}`;
-        heatmapMap[heatKey] = (heatmapMap[heatKey] || 0) + 1;
-        if (row.exitoso === true) ok += 1;
-        totalAuth += 1;
-      }
-      const horaPico = Object.entries(hours).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '-';
-      const diaPico = Object.entries(weekdays).sort((a, b) => b[1] - a[1])[0]?.[0] ?? '-';
-      const heatmap = Object.entries(heatmapMap)
-        .map(([slot, total]) => ({ slot, total }))
-        .sort((a, b) => b.total - a.total)
-        .slice(0, 12);
-
-      setAnalytics({
+      setAnalytics((prev) => ({
         incorporaciones,
         abandonos,
         mediaPorDia,
-        usuariosPorNivel,
-        heatmap,
+        heatmap: sessionHeatmap,
         patrones: {
-          horaPico: horaPico === '-' ? '-' : `${horaPico}:00`,
-          diaPico,
-          tasaExito: totalAuth > 0 ? Math.round((ok / totalAuth) * 100) : 0,
+          horaPico: sessionHoraPico,
+          diaPico: sessionDiaPico,
+          tasaExito: prev.patrones?.tasaExito ?? null,
         },
-      });
+      }));
     } catch (error) {
       console.error('Error loading analytics:', error);
     }
@@ -551,9 +545,33 @@ export default function AdminDashboard() {
   const connectionQueryRef = useRef(connectionQuery);
   connectionQueryRef.current = connectionQuery;
 
+  const loadLoginStats = async () => {
+    try {
+      const res = await fetch('/api/admin/login-attempts', {
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(payload.error || 'No se pudieron cargar los accesos.');
+      }
+      setLoginAttempts(Array.isArray(payload.failures) ? payload.failures : []);
+      setAnalytics((prev) => ({
+        ...prev,
+        patrones: {
+          ...prev.patrones,
+          tasaExito: typeof payload.successRate === 'number' ? payload.successRate : null,
+        },
+      }));
+    } catch (error) {
+      console.error('Error loading login stats:', error);
+    }
+  };
+
   useEffect(() => {
     if (!user || loading || !chartsReady) return;
     loadAnalytics();
+    loadLoginStats();
   }, [period, startDate, endDate, user, loading, chartsReady, platformAnalyticsAudience]);
 
   useEffect(() => {
@@ -733,7 +751,7 @@ export default function AdminDashboard() {
         body: JSON.stringify({ planSlug: newPlanSlug }),
       });
       const payload = await res.json().catch(() => ({}));
-      if (!res.ok) {
+      if (!res.ok || payload.planSaved !== true) {
         throw new Error(payload.error || 'No se pudo cambiar el plan.');
       }
       setPlansByUser((prev) => ({
@@ -743,6 +761,7 @@ export default function AdminDashboard() {
           assignedPlanSlug: payload.assignedPlanSlug,
           source: payload.source,
           stripeStatus: payload.stripeStatus || null,
+          authSync: payload.authSync === 'pending' ? 'pending' : 'synced',
         },
       }));
       setUsers((prev) =>
@@ -762,16 +781,18 @@ export default function AdminDashboard() {
   const handleRoleChange = async (targetUserId, newRoleId) => {
     setSavingByUser((prev) => ({ ...prev, [targetUserId]: true }));
     try {
-      const { error } = await supabase
-        .from('user_profiles')
-        .update({ rol_id: newRoleId })
-        .eq('id', targetUserId);
-
-      if (error) throw error;
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(targetUserId)}/`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+        body: JSON.stringify({ action: 'role', roleId: newRoleId }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload.error || 'No se pudo cambiar el rol.');
       await Promise.all([loadUsers(), loadPlacementByUser()]);
     } catch (error) {
       console.error('Error changing user role:', error);
-      toast.error('No se pudo cambiar el rol. Revisa permisos RLS del admin.');
+      toast.error(error.message || 'No se pudo cambiar el rol.');
     } finally {
       setSavingByUser((prev) => ({ ...prev, [targetUserId]: false }));
     }
@@ -811,16 +832,18 @@ export default function AdminDashboard() {
   const toggleUserActive = async (targetUser) => {
     setSavingByUser((prev) => ({ ...prev, [targetUser.id]: true }));
     try {
-      const { error } = await supabase
-        .from('user_profiles')
-        .update({ activo: !targetUser.activo })
-        .eq('id', targetUser.id);
-
-      if (error) throw error;
+      const res = await fetch(`/api/admin/users/${encodeURIComponent(targetUser.id)}/`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+        body: JSON.stringify({ action: 'active', activo: targetUser.activo === false }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload.error || 'No se pudo cambiar el estado de la cuenta.');
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
     } catch (error) {
       console.error('Error toggling user active state:', error);
-      toast.error('No se pudo cambiar el estado de la cuenta.');
+      toast.error(error.message || 'No se pudo cambiar el estado de la cuenta.');
     } finally {
       setSavingByUser((prev) => ({ ...prev, [targetUser.id]: false }));
     }
@@ -882,10 +905,16 @@ export default function AdminDashboard() {
     setBulkProcessing(true);
     const ids = targets.map((item) => item.id);
     try {
-      const { error } = await supabase.from('user_profiles').update({ activo: active }).in('id', ids);
-      if (error) throw error;
+      const res = await fetch('/api/admin/users/account-state/', {
+        method: 'POST',
+        credentials: 'include',
+        headers: await getAdminFetchHeaders(),
+        body: JSON.stringify({ userIds: ids, activo: active }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload.error || 'No se pudo actualizar el estado.');
       await Promise.all([loadUsers(), loadPlacementByUser(), loadAnalytics()]);
-      toast.success(`${active ? 'Reactivadas' : 'Pausadas'} ${targets.length} cuenta(s).`);
+      toast.success(`${active ? 'Reactivadas' : 'Pausadas'} ${payload.changed ?? targets.length} cuenta(s).`);
     } catch (error) {
       console.error(`Error bulk ${verb} users:`, error);
       toast.error(`No se pudieron ${active ? 'reactivar' : 'pausar'} las cuentas seleccionadas.`);
@@ -940,6 +969,31 @@ export default function AdminDashboard() {
     }
   };
 
+  const accountIssues = useMemo(() => {
+    if (!emailConfirmedByUser) {
+      return { accessProblems: null, registrationProblems: null };
+    }
+
+    const profileIds = new Set(users.map((item) => item.id));
+    const authIds = new Set(Object.keys(emailConfirmedByUser));
+    let accessProblems = 0;
+    let registrationProblems = 0;
+
+    for (const [id, confirmed] of Object.entries(emailConfirmedByUser)) {
+      if (!profileIds.has(id)) {
+        registrationProblems += 1;
+        continue;
+      }
+      if (!confirmed) accessProblems += 1;
+    }
+
+    for (const item of users) {
+      if (!authIds.has(item.id)) registrationProblems += 1;
+    }
+
+    return { unconfirmedEmails: accessProblems, registrationProblems };
+  }, [users, emailConfirmedByUser]);
+
   if (loading) {
     return (
       <div className="admin-dashboard admin-dashboard--loading">
@@ -951,12 +1005,6 @@ export default function AdminDashboard() {
   if (!user) {
     return null;
   }
-
-  const roleStats = users.reduce((acc, item) => {
-    const roleName = normalizeRoleName(getRoleNameById(item.rol_id));
-    acc[roleName] = (acc[roleName] || 0) + 1;
-    return acc;
-  }, {});
 
   const filteredUsers = users
     .filter((item) => {
@@ -1299,18 +1347,43 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dashboard">
-      <PanelPageHeader title="Panel de Administración" mascotVariant={5} mascotWidth={92}>
+      <PanelPageHeader title={isUserAdmin ? 'Administración' : 'Analíticas'} mascotVariant={5} mascotWidth={92}>
         <span>Bienvenido, {user.email}</span>
       </PanelPageHeader>
 
       <div className="admin-dashboard__content">
+        {isUserAdmin ? null : (
+        <>
         <AdminOverviewStats
-          totalUsers={users.length}
-          activeUsers={users.filter((item) => item.activo !== false).length}
+          totalUsers={users.filter((item) => !item.destacado_equipo).length}
+          activeUsers={users.filter((item) => !item.destacado_equipo && item.activo !== false).length}
           onlineUsers={users.filter((item) => Boolean(userActivityByUser[item.id]?.online)).length}
-          placementDone={Object.keys(placementByUser).length}
+          accessProblems={accessCodeProblems == null ? null : accessCodeProblems.length}
+          passwordResetProblems={passwordResetProblems == null ? null : passwordResetProblems.length}
+          unconfirmedEmails={accountIssues.unconfirmedEmails}
+          registrationProblems={accountIssues.registrationProblems}
           loginSuccessRate={analytics.patrones.tasaExito}
-          roleStats={roleStats}
+          onOpen={setOverviewKind}
+        />
+        <AdminOverviewDetail
+          detail={
+            overviewKind
+              ? buildOverviewDetail(overviewKind, {
+                  users:
+                    overviewKind === 'registered'
+                      ? users.filter((item) => !item.destacado_equipo)
+                      : users,
+                  activityByUser: userActivityByUser,
+                  emailConfirmedByUser,
+                  authAccounts,
+                  accessCodeProblems,
+                  passwordResetProblems,
+                  loginAttempts,
+                  roleName: (item) => normalizeRoleName(getRoleNameById(item.rol_id)),
+                })
+              : null
+          }
+          onClose={() => setOverviewKind(null)}
         />
 
         {chartsReady ? (
@@ -1361,12 +1434,28 @@ export default function AdminDashboard() {
         {chartsReady ? <AdminClarityPanel /> : null}
 
         <AdminFoundingSurveyPanel />
+        </>
+        )}
 
+        {isUserAdmin ? (
+        <>
         <div className="admin-section">
-          <div className="admin-section__header">
-            <h2>Gestión de usuarios y roles</h2>
+          <div className={`admin-section__header${usersSectionOpen ? '' : ' admin-section__header--collapsed'}`}>
+            <button
+              type="button"
+              className="admin-section__toggle"
+              aria-expanded={usersSectionOpen}
+              aria-controls="admin-user-management"
+              onClick={() => setUsersSectionOpen((current) => !current)}
+            >
+              <h2>Gestión de usuarios y roles</h2>
+              <span className="admin-section__chevron" aria-hidden>
+                {usersSectionOpen ? '▴' : '▾'}
+              </span>
+            </button>
           </div>
-          <div className="admin-section__body">
+          {usersSectionOpen ? (
+          <div id="admin-user-management" className="admin-section__body">
             <div className="admin-subsection">
               <h3>Alta de usuario por administrador</h3>
               <p>
@@ -1638,7 +1727,15 @@ export default function AdminDashboard() {
               onSendMail={handleSingleMail}
             />
           </div>
+          ) : null}
         </div>
+        <div className="admin-org-blocks">
+          <AdminWebsPrograms />
+          <AdminChangeHistory />
+          <AdminGeneralSettings />
+        </div>
+        </>
+        ) : null}
       </div>
     </div>
   );
