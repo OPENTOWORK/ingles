@@ -1043,7 +1043,7 @@ export default function AdminAnalyticsPanels({
       Origen: row.source || '',
       'Llegan a': row.landing || '',
       Recorrido: (row.stops || []).map((stop) => stop.title).join(' → '),
-      Tiempo: row.seconds > 0 ? formatSessionDuration(row.seconds) : '',
+      'Tiempo transcurrido (no tiempo de uso)': row.elapsedSeconds != null ? formatSessionDuration(row.elapsedSeconds) : '',
       Cuenta: row.email || '',
       Estado: ENTRY_KIND_LABEL[row.kind] || 'Sin cuenta',
     }));
@@ -1144,8 +1144,9 @@ export default function AdminAnalyticsPanels({
           <>
             <div className={styles.entriesToolbar}>
               <p className={styles.sectionIntro}>
-                Solo cuenta gente que entra sin ser usuaria. Si después crea cuenta, pasa a
-                registrados. Quien ya tenía cuenta no entra en estas cifras.
+                Cuenta identificadores de navegador que entran sin cuenta, no personas únicas. Si después
+                crean cuenta, pasan a registrados. Quien ya tenía cuenta no entra en estas cifras.
+                El tiempo transcurrido incluye los intervalos entre visitas; no mide uso activo.
                 {entriesWithoutStaff
                   ? ' El equipo tampoco.'
                   : ' Con staff incluye las visitas del equipo.'}
@@ -1306,7 +1307,7 @@ export default function AdminAnalyticsPanels({
                             <th>Fecha</th>
                             <th>Origen</th>
                             <th>Recorrido</th>
-                            <th>Tiempo</th>
+                            <th title="Intervalo entre la primera y la última actividad; no mide tiempo de uso.">Tiempo transcurrido</th>
                             <th>Cuenta</th>
                             <th>Páginas</th>
                             <th>Estado</th>
@@ -1345,7 +1346,7 @@ export default function AdminAnalyticsPanels({
                                       row.landing || '—'
                                     )}
                                   </td>
-                                  <td>{row.seconds > 0 ? formatSessionDuration(row.seconds) : '—'}</td>
+                                  <td>{row.elapsedSeconds != null ? formatSessionDuration(row.elapsedSeconds) : '—'}</td>
                                   <td>{row.email || '—'}</td>
                                   <td>
                                     <button

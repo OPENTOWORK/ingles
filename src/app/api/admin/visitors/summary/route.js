@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
-import { isSchemaNotReadyError } from '@/lib/teacherAccess';
+import {
+  readAllMarketingRows,
+  readMarketingRowsByIds,
+  visitorElapsedSeconds,
+  summarizeClassifiedVisitors,
+} from '@/lib/marketingMetrics';
 import { journeyTrail } from '@/lib/visitorJourney';
 import { isStudentRole } from '@/utils/authRoles';
 import {
@@ -10,41 +15,6 @@ import {
   trafficSourceLabel,
 } from '@/lib/trafficSource';
 
-async function loadVisitorPages(db, visitorIds) {
-  const rows = [];
-  const chunkSize = 100;
-  for (let index = 0; index < visitorIds.length; index += chunkSize) {
-    const chunk = visitorIds.slice(index, index + chunkSize);
-    let from = 0;
-    const pageSize = 1000;
-    for (;;) {
-      const { data, error } = await db
-        .from('marketing_visitor_pages')
-        .select('visitor_id, path, page_title, visited_at')
-        .in('visitor_id', chunk)
-        .order('visited_at', { ascending: true })
-        .range(from, from + pageSize - 1);
-      if (error) {
-        if (isSchemaNotReadyError(error)) return rows;
-        console.error('[admin/visitors/summary] pages', error);
-        return rows;
-      }
-      rows.push(...(data || []));
-      if (!data || data.length < pageSize) break;
-      from += pageSize;
-    }
-  }
-  return rows;
-}
-
-function isLocalAdminIp(ip) {
-  const value = String(ip || '')
-    .trim()
-    .toLowerCase()
-    .replace(/^::ffff:/, '');
-  return value === '::1' || value === '127.0.0.1' || value === 'localhost';
-}
-
 export async function GET(req) {
   try {
     const auth = await authenticateAdminRequest(req);
@@ -53,66 +23,42 @@ export async function GET(req) {
     }
 
     const db = auth.db;
-    const [
-      { data: linked, error: linkedError },
-      { data: hits, error: hitsError },
-      { data: visitors, error: visitorsError },
-    ] = await Promise.all([
-      db.from('marketing_visitors').select('visitor_id, user_id').not('user_id', 'is', null),
-      db
-        .from('marketing_visitor_hits')
-        .select('ip_address, created_at, visitor_id')
-        .order('created_at', { ascending: false })
-        .limit(500),
-      db
-        .from('marketing_visitors')
+    const [visitors, hits] = await Promise.all([
+      readAllMarketingRows(() => db.from('marketing_visitors')
         .select('visitor_id, user_id, created_at, last_ip, last_seen_at, first_source, first_landing_page, first_referrer')
-        .order('created_at', { ascending: false })
-        .limit(500),
+        .order('created_at', { ascending: false }).order('visitor_id')),
+      readAllMarketingRows(() => db.from('marketing_visitor_hits')
+        .select('ip_address, created_at, visitor_id')
+        .order('created_at', { ascending: false }).order('id')),
     ]);
-
-    if (linkedError) throw linkedError;
-    if (hitsError) throw hitsError;
-    if (visitorsError) throw visitorsError;
-
-    const visitorIds = [...new Set((visitors || []).map((row) => row.visitor_id).filter(Boolean))];
-    const pageRows = await loadVisitorPages(db, visitorIds);
+    const visitorIds = visitors.map((row) => row.visitor_id);
+    const pageRows = await readMarketingRowsByIds(visitorIds, (ids) => db
+      .from('marketing_visitor_pages').select('visitor_id, path, page_title, visited_at')
+      .in('visitor_id', ids).order('visited_at').order('id'));
     const pagesByVisitor = new Map();
     for (const row of pageRows) {
       const list = pagesByVisitor.get(row.visitor_id) || [];
       list.push(row);
       pagesByVisitor.set(row.visitor_id, list);
     }
-    let acquisitions = [];
-    if (visitorIds.length) {
-      const { data: acquisitionRows, error: acquisitionError } = await db
-        .from('marketing_acquisition_profiles')
-        .select(
-          'visitor_id, first_source, first_medium, first_campaign, first_content, first_landing_page, first_utm_source, first_utm_medium, first_utm_campaign, first_gclid',
-        )
-        .in('visitor_id', visitorIds);
-      if (acquisitionError) {
-        console.error('[admin/visitors/summary] acquisition', acquisitionError);
-      } else {
-        acquisitions = acquisitionRows || [];
-      }
-    }
+    const acquisitions = await readMarketingRowsByIds(visitorIds, (ids) => db
+      .from('marketing_acquisition_profiles')
+      .select('visitor_id, first_source, first_medium, first_campaign, first_content, first_landing_page, first_utm_source, first_utm_medium, first_utm_campaign, first_gclid')
+      .in('visitor_id', ids).order('visitor_id'));
 
     const acquisitionByVisitor = new Map(
       acquisitions.map((row) => [row.visitor_id, row]),
     );
 
-    const userIds = [...new Set((linked || []).map((row) => row.user_id).filter(Boolean))];
+    const userIds = [...new Set(visitors.map((row) => row.user_id).filter(Boolean))];
     const roleByUser = new Map();
     const createdAtByUser = new Map();
     const emailByUser = new Map();
 
     if (userIds.length) {
-      const { data: profiles, error: profileError } = await db
-        .from('Usuarios_y_Perfil_users')
-        .select('id, rol_id, email, creado_en')
-        .in('id', userIds);
-      if (profileError) throw profileError;
+      const profiles = await readMarketingRowsByIds(userIds, (ids) => db
+        .from('Usuarios_y_Perfil_users').select('id, rol_id, email, creado_en')
+        .in('id', ids).order('id'));
 
       const roleIds = [...new Set((profiles || []).map((row) => row.rol_id).filter(Boolean))];
       const roleNameById = new Map();
@@ -173,7 +119,7 @@ export async function GET(req) {
         accountCreatedAt &&
         new Date(accountCreatedAt).getTime() >= new Date(visitor.created_at).getTime() - 2 * 60 * 1000;
       const staffByRole = Boolean(roleName && !isStudentRole(roleName));
-      const kind = staffByRole || isLocalAdminIp(ip)
+      const kind = staffByRole
         ? 'staff'
         : signedUpOnThisVisit
           ? 'account'
@@ -181,17 +127,15 @@ export async function GET(req) {
             ? 'returning'
             : 'anon';
       const lastSeen = lastSeenByVisitor.get(visitor.visitor_id) || visitor.last_seen_at || visitor.created_at;
-      const seconds = Math.max(
-        0,
-        Math.round((new Date(lastSeen).getTime() - new Date(visitor.created_at).getTime()) / 1000),
-      );
+      const elapsedSeconds = visitorElapsedSeconds(visitor.created_at, lastSeen);
       return {
         visitorId: visitor.visitor_id,
         userId: userId || null,
         ip,
         seenAt: visitor.created_at,
         lastSeen,
-        seconds,
+        seconds: null, // Active duration is not measured by this dataset.
+        elapsedSeconds,
         kind,
         email: userId ? emailByUser.get(userId) || '' : '',
         source: visitor.first_source
@@ -209,39 +153,7 @@ export async function GET(req) {
       };
     });
 
-    const blockedIps = new Set(
-      classified
-        .filter((row) => (row.kind === 'staff' || row.kind === 'returning') && row.ip)
-        .map((row) => row.ip),
-    );
-
-    const withoutAccountRows = { entered: 0, unregistered: 0, registered: 0, staff: 0 };
-    const ipLog = classified
-      .map((row) => {
-        const kind =
-          row.kind === 'anon' && row.ip && blockedIps.has(row.ip) ? 'staff' : row.kind;
-        if (kind === 'returning') return null;
-        if (kind === 'staff') {
-          withoutAccountRows.staff += 1;
-          return { ...row, kind };
-        }
-        withoutAccountRows.entered += 1;
-        if (kind === 'account') withoutAccountRows.registered += 1;
-        if (kind === 'anon') withoutAccountRows.unregistered += 1;
-        return { ...row, kind };
-      })
-      .filter(Boolean);
-
-    const firstPublic = ipLog.find((row) => row.kind === 'anon' || row.kind === 'account');
-
-    return NextResponse.json({
-      entered: withoutAccountRows.entered,
-      registered: withoutAccountRows.registered,
-      unregistered: withoutAccountRows.unregistered,
-      staff: withoutAccountRows.staff,
-      since: firstPublic?.seenAt || null,
-      ipLog,
-    });
+    return NextResponse.json(summarizeClassifiedVisitors(classified));
   } catch (err) {
     console.error('[admin/visitors/summary]', err);
     return NextResponse.json({ error: 'No se pudo cargar las visitas.' }, { status: 500 });
