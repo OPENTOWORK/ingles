@@ -92,13 +92,15 @@ export function isGuestExamSlotAllowed(slot) {
   return Number.isFinite(n) && n === 1;
 }
 
+/** Cualquier nivel del camino. Avanzar pide 1 estrella en el anterior. */
 export function isGuestTrainingLevelAllowed(levelNum) {
-  return Number(levelNum) === 1;
+  const n = Number(levelNum);
+  return Number.isFinite(n) && n >= 1;
 }
 
 export function isGuestTrainingNodeAllowed(levelNumber = '') {
   const raw = String(levelNumber || '');
-  if (/^review-\d+$/i.test(raw)) return false;
+  if (/^review-\d+$/i.test(raw)) return true;
   const n = parseInt(raw.replace(/^level-/, ''), 10);
   return isGuestTrainingLevelAllowed(n);
 }

@@ -11,6 +11,7 @@ import {
   trainingHomePath,
 } from '@/utils/trainingStarsProgress';
 import { TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
+import { useUserRole } from '@/context/UserRoleContext';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 import styles from './page.module.css';
@@ -30,6 +31,8 @@ const TrainingLevelPathMap = dynamic(
 export default function TrainingHome() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { session } = useUserRole();
+  const guestPreview = !session;
   const trainingLives = useTrainingLives();
   const difficulty = normalizeTrainingDifficulty(searchParams.get('difficulty'));
   const cefrLevel = normalizeTrainingCefr(searchParams.get('cefr'));
@@ -64,15 +67,22 @@ export default function TrainingHome() {
           <h1 className={styles.title}>Training</h1>
           {trainingLives.outOfLives ? (
             <p className={styles.livesNote}>
-              The free plan includes 3 lives. One comes back every {trainingLives.regenHours || 10} hours.{' '}
-              <Link href="/precios">Plus and Premium are unlimited.</Link>
+              {guestPreview ? (
+                <>You have 3 lives. One comes back every {trainingLives.regenHours || 10} hours.</>
+              ) : (
+                <>
+                  The free plan includes 3 lives. One comes back every {trainingLives.regenHours || 10} hours.{' '}
+                  <Link href="/precios">Plus and Premium are unlimited.</Link>
+                </>
+              )}
             </p>
           ) : null}
         </header>
         <aside className={styles.guide} aria-label="About Training">
           <p className={styles.bubble}>
-            This is Training. Follow the levels in order. Each one practises one grammar
-            point, and two stars unlock the next.
+            {guestPreview
+              ? 'This is Training. Follow the levels in order. Each one practises one grammar point, and one star unlocks the next. You have 3 lives, and one comes back every 10 hours.'
+              : 'This is Training. Follow the levels in order. Each one practises one grammar point, and two stars unlock the next.'}
           </p>
           <img
             className={styles.mascot}

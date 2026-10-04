@@ -1,11 +1,12 @@
 'use client';
 
-import MarketingShell, { MarketingPlaceholder } from '@/components/marketing/MarketingShell';
+import MarketingShell from '@/components/marketing/MarketingShell';
+import MarketingOperationsPanel from '@/components/marketing/MarketingOperationsPanel';
 
 export default function AdminMarketingAdquisicionPage() {
   return (
-    <MarketingShell title="Adquisición" subtitle="Fuentes, medios y UTMs por periodo.">
-      <MarketingPlaceholder moduleName="Adquisición" description="canales y campañas de entrada" />
+    <MarketingShell title="Adquisición" subtitle="Fuentes de las últimas visitas y cuántas acaban en cuenta o en pago.">
+      <MarketingOperationsPanel section="acquisition" />
     </MarketingShell>
   );
 }

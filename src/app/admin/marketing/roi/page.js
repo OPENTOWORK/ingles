@@ -1,14 +1,12 @@
 'use client';
 
-import MarketingShell, { MarketingPlaceholder } from '@/components/marketing/MarketingShell';
+import MarketingShell from '@/components/marketing/MarketingShell';
+import MarketingOperationsPanel from '@/components/marketing/MarketingOperationsPanel';
 
 export default function AdminMarketingRoiPage() {
   return (
-    <MarketingShell title="ROI" subtitle="Revenue, costes, CAC, ROAS y atribución.">
-      <MarketingPlaceholder
-        moduleName="ROI"
-        description="CAC, CPL, CPA, ROAS (cálculos en fases posteriores)"
-      />
+    <MarketingShell title="ROI" subtitle="Ingreso de las suscripciones activas.">
+      <MarketingOperationsPanel section="roi" />
     </MarketingShell>
   );
 }

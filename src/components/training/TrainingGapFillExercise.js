@@ -143,6 +143,7 @@ function GapSentence({ item, values, onChange, disabled, inputRef, onSubmit, gap
  *   skill: string,
  *   difficulty: string,
  *   userId?: string | null,
+ *   guest?: boolean,
  * }} props
  */
 export default function TrainingGapFillExercise({
@@ -156,6 +157,7 @@ export default function TrainingGapFillExercise({
   skill,
   difficulty,
   userId = null,
+  guest = false,
   completeLabel = '',
   sessionSize = SESSION_SIZE,
   trainingLives: trainingLivesProp = null,
@@ -532,6 +534,7 @@ export default function TrainingGapFillExercise({
               backHref={backHref}
               nextLifeAt={trainingLives.nextLifeAt}
               regenHours={trainingLives.regenHours}
+              guest={guest}
             />
           </section>
         </div>
@@ -867,6 +870,7 @@ export default function TrainingGapFillExercise({
                       backHref={backHref}
                       nextLifeAt={trainingLives.nextLifeAt}
                       regenHours={trainingLives.regenHours}
+                      guest={guest}
                     />
                   ) : (
                     <button type="button" className={styles.primaryBtn} onClick={goNext}>

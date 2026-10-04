@@ -8,15 +8,18 @@ import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebra
 import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
 import { useUserRole } from '@/context/UserRoleContext';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
-import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
-import { isGuestTrainingNodeAllowed } from '@/lib/guestPreviewAccess';
+import {
+  isGuestTrainingLevelLocked,
+  isGuestTrainingReviewLocked,
+  isTrainingLevelLocked,
+  isTrainingReviewLocked,
+} from '@/lib/trainingPathUnlock';
 import {
   getTrainingPathCurriculum,
   getTrainingPathLevelCount,
   getLevelTopic,
 } from '@/data/trainingPathCurriculum';
 import { getPathReview, buildReviewExercise } from '@/data/trainingReviews';
-import { isTrainingLevelLocked, isTrainingReviewLocked } from '@/lib/trainingPathUnlock';
 import { saveExerciseResult, getUserProgressForExercises, progressTracker } from '@/utils/progressTracker';
 import { supabase } from '@/utils/supabaseClient';
 import {
@@ -97,21 +100,17 @@ export default function ExercisePage({ params }) {
       const storageKey = `stars_${level}_${skill}_${difficulty}`;
       const savedStars = JSON.parse(localStorage.getItem(storageKey) || '{}');
       if (reviewNum) {
-        if (guestPreview) {
-          return;
-        }
-        if (!review || isTrainingReviewLocked(review, savedStars, userRole)) {
-          router.replace(homeHref);
-        }
+        const reviewLocked = guestPreview
+          ? !review || isGuestTrainingReviewLocked(review, savedStars)
+          : !review || isTrainingReviewLocked(review, savedStars, userRole);
+        if (reviewLocked) router.replace(homeHref);
         return;
       }
       const levelNum = parseInt(levelNumber.replace('level-', ''), 10);
-      if (guestPreview) {
-        return;
-      }
-      if (isTrainingLevelLocked(levelNum, savedStars, userRole, pathLevelCount)) {
-        router.replace(homeHref);
-      }
+      const levelLocked = guestPreview
+        ? isGuestTrainingLevelLocked(levelNum, savedStars, pathLevelCount)
+        : isTrainingLevelLocked(levelNum, savedStars, userRole, pathLevelCount);
+      if (levelLocked) router.replace(homeHref);
     } catch {
       /* ignore */
     }
@@ -197,17 +196,6 @@ export default function ExercisePage({ params }) {
   useEffect(() => {
     setExerciseStartTime(Date.now());
   }, [currentExercise]);
-
-  if (guestPreview && !isGuestTrainingNodeAllowed(levelNumber)) {
-    return (
-      <main className={styles.emptyPage}>
-        <GuestRegisterTeaser
-          nextHref={`/training/${levelNumber}`}
-          message="Create a free account to continue along the Training path."
-        />
-      </main>
-    );
-  }
 
   if (exercisesReady && (!exercises || exercises.length === 0)) {
     return (
@@ -379,6 +367,7 @@ export default function ExercisePage({ params }) {
         skill={skill}
         difficulty={difficulty}
         userId={user?.id || null}
+        guest={guestPreview}
         trainingLives={trainingLives}
       />
     );
@@ -408,6 +397,7 @@ export default function ExercisePage({ params }) {
               backHref={homeHref}
               nextLifeAt={trainingLives.nextLifeAt}
               regenHours={trainingLives.regenHours}
+              guest={guestPreview}
             />
           </div>
         </div>
@@ -572,6 +562,7 @@ export default function ExercisePage({ params }) {
                       backHref={homeHref}
                       nextLifeAt={trainingLives.nextLifeAt}
                       regenHours={trainingLives.regenHours}
+                      guest={guestPreview}
                     />
                   ) : (
                     <button type="button" className={styles.btnNext} onClick={nextExercise}>

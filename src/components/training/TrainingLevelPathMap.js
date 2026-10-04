@@ -5,16 +5,15 @@ import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { TRAINING_LEVEL_COUNT } from '@/constants/trainingLevels';
 import { getTrainingPathCurriculum } from '@/data/trainingPathCurriculum';
 import { useUserRole } from '@/context/UserRoleContext';
-import {
-  GUEST_PREVIEW_REGISTER_LABEL,
-  getGuestRegisterHref,
-  isGuestTrainingLevelAllowed,
-} from '@/lib/guestPreviewAccess';
 import { getPathReviews } from '@/data/trainingReviews';
 import {
+  GUEST_TRAINING_UNLOCK_STARS,
   TRAINING_MASTERY_STARS,
   TRAINING_UNLOCK_STARS,
+  getGuestTrainingCurrentLevelNumber,
   getTrainingCurrentLevelNumber,
+  isGuestTrainingLevelLocked,
+  isGuestTrainingReviewLocked,
   isTrainingLevelLocked,
   isTrainingReviewLocked,
 } from '@/lib/trainingPathUnlock';
@@ -144,12 +143,9 @@ function Station({ node, row, tag, guestPreview = false }) {
           : styles.nodeUpcoming;
 
   const prefix = node.isSectionStart ? `${node.sectionTitle}. ` : '';
-  const guestLocked = guestPreview && node.isLocked;
-  const ariaLabel = guestLocked
-    ? `${prefix}${node.topic}, level ${node.n}, ${GUEST_PREVIEW_REGISTER_LABEL}`
-    : node.isLocked
-      ? `${prefix}${node.topic}, level ${node.n}, locked — complete previous levels first`
-      : `${prefix}${node.topic}, level ${node.n}${node.isCompleted ? `, ${node.stars} stars` : node.isCurrent ? ', up next' : ''}`;
+  const ariaLabel = node.isLocked
+    ? `${prefix}${node.topic}, level ${node.n}, locked — complete previous levels first`
+    : `${prefix}${node.topic}, level ${node.n}${node.isCompleted ? `, ${node.stars} stars` : node.isCurrent ? ', up next' : ''}`;
 
   const body = (
     <>
@@ -180,27 +176,16 @@ function Station({ node, row, tag, guestPreview = false }) {
   const style = { gridColumn: node.gridColumn, gridRow: 1, '--i': node.n };
 
   if (node.isLocked) {
-    if (guestLocked) {
-      return (
-        <Link
-          href={getGuestRegisterHref(node.href)}
-          prefetch={false}
-          className={className}
-          style={style}
-          aria-label={ariaLabel}
-          title={GUEST_PREVIEW_REGISTER_LABEL}
-        >
-          {body}
-          <span className={styles.guestLockHint}>{GUEST_PREVIEW_REGISTER_LABEL}</span>
-        </Link>
-      );
-    }
     return (
       <div
         className={className}
         style={style}
         aria-label={ariaLabel}
-        title="Get 2 stars on the previous level to unlock"
+        title={
+          guestPreview
+            ? 'Get 1 star on the previous level to unlock'
+            : 'Get 2 stars on the previous level to unlock'
+        }
       >
         {body}
       </div>
@@ -222,8 +207,8 @@ function Station({ node, row, tag, guestPreview = false }) {
   );
 }
 
-function ReviewStation({ review, side, stars, locked, guestPreview = false }) {
-  const isCompleted = stars >= TRAINING_UNLOCK_STARS;
+function ReviewStation({ review, side, stars, locked, unlockStars = TRAINING_UNLOCK_STARS }) {
+  const isCompleted = stars >= unlockStars;
   const isMastered = stars >= TRAINING_MASTERY_STARS;
   const stateClass = locked
     ? styles.nodeLocked
@@ -233,12 +218,9 @@ function ReviewStation({ review, side, stars, locked, guestPreview = false }) {
         ? styles.nodeCompleted
         : styles.nodeUpcoming;
 
-  const ariaLabel =
-    locked && guestPreview
-      ? `Review ${review.n}, ${review.sectionTitle}, ${GUEST_PREVIEW_REGISTER_LABEL}`
-      : locked
-        ? `Review ${review.n}, ${review.sectionTitle}, locked — finish this block first`
-        : `Review ${review.n}, ${review.sectionTitle}${isCompleted ? `, ${stars} stars` : ''}`;
+  const ariaLabel = locked
+    ? `Review ${review.n}, ${review.sectionTitle}, locked — finish this block first`
+    : `Review ${review.n}, ${review.sectionTitle}${isCompleted ? `, ${stars} stars` : ''}`;
 
   const body = (
     <>
@@ -263,20 +245,6 @@ function ReviewStation({ review, side, stars, locked, guestPreview = false }) {
   const className = `${styles.station} ${styles.review} ${side === 'right' ? styles.reviewRight : styles.reviewLeft} ${styles.nodeReview} ${stateClass}`;
 
   if (locked) {
-    if (guestPreview) {
-      return (
-        <Link
-          href={getGuestRegisterHref(review.href)}
-          prefetch={false}
-          className={className}
-          aria-label={ariaLabel}
-          title={GUEST_PREVIEW_REGISTER_LABEL}
-        >
-          {body}
-          <span className={styles.guestLockHint}>{GUEST_PREVIEW_REGISTER_LABEL}</span>
-        </Link>
-      );
-    }
     return (
       <div className={className} aria-label={ariaLabel} title="Finish this block to unlock the review">
         {body}
@@ -325,10 +293,13 @@ export default function TrainingLevelPathMap({
   );
 
   const total = curriculum.totalLevels ?? TRAINING_LEVEL_COUNT;
-  const currentLevel = getTrainingCurrentLevelNumber(levelStars, total);
+  const unlockStars = guestPreview ? GUEST_TRAINING_UNLOCK_STARS : TRAINING_UNLOCK_STARS;
+  const currentLevel = guestPreview
+    ? getGuestTrainingCurrentLevelNumber(levelStars, total)
+    : getTrainingCurrentLevelNumber(levelStars, total);
   let completedCount = 0;
   for (let n = 1; n <= total; n += 1) {
-    if ((Number(levelStars[`level-${n}`]) || 0) >= TRAINING_UNLOCK_STARS) completedCount += 1;
+    if ((Number(levelStars[`level-${n}`]) || 0) >= unlockStars) completedCount += 1;
   }
   const allCompleted = completedCount >= total;
   const progressPct = Math.round((completedCount / Math.max(1, total)) * 100);
@@ -343,7 +314,7 @@ export default function TrainingLevelPathMap({
         nodes: (section.levels || []).map((level) => {
           const n = level.n;
           const stars = Number(levelStars[`level-${n}`]) || 0;
-          const isCompleted = stars >= TRAINING_UNLOCK_STARS;
+          const isCompleted = stars >= unlockStars;
           const isMastered = stars >= TRAINING_MASTERY_STARS;
           return {
             n,
@@ -354,14 +325,14 @@ export default function TrainingLevelPathMap({
             isMastered,
             isCurrent: n === currentLevel && !isCompleted,
             isLocked: guestPreview
-              ? !isGuestTrainingLevelAllowed(n)
+              ? isGuestTrainingLevelLocked(n, levelStars, total)
               : isTrainingLevelLocked(n, levelStars, userRole, total),
             isSectionStart: n === section.from,
             sectionTitle: section.title,
           };
         }),
       })),
-    [curriculum, levelStars, baseHref, currentLevel, userRole, guestPreview, total, difficulty, cefrLevel],
+    [curriculum, levelStars, baseHref, currentLevel, userRole, guestPreview, total, difficulty, cefrLevel, unlockStars],
   );
 
   const reviews = useMemo(
@@ -372,7 +343,9 @@ export default function TrainingLevelPathMap({
           ...review,
           href: trainingNodePath(baseHref, review.key, difficulty, cefrLevel),
           stars,
-          isLocked: guestPreview ? true : isTrainingReviewLocked(review, levelStars, userRole),
+          isLocked: guestPreview
+            ? isGuestTrainingReviewLocked(review, levelStars)
+            : isTrainingReviewLocked(review, levelStars, userRole),
         };
       }),
     [curriculum, levelStars, baseHref, userRole, guestPreview, difficulty, cefrLevel],
@@ -587,7 +560,7 @@ export default function TrainingLevelPathMap({
                   side={part.rows[part.rows.length - 1]?.ltr ? 'right' : 'left'}
                   stars={reviews[partIndex].stars}
                   locked={reviews[partIndex].isLocked}
-                  guestPreview={guestPreview}
+                  unlockStars={unlockStars}
                 />
               ) : null}
             </div>

@@ -61,11 +61,12 @@ test('exam practice locks exam mode, quiz game and slots after 1', () => {
   assert.equal(isGuestExamSlotAllowed(2), false);
 });
 
-test('training preview is only path level 1', () => {
+test('training preview can open any path level or review', () => {
   assert.equal(isGuestTrainingLevelAllowed(1), true);
-  assert.equal(isGuestTrainingLevelAllowed(2), false);
+  assert.equal(isGuestTrainingLevelAllowed(2), true);
+  assert.equal(isGuestTrainingLevelAllowed(0), false);
   assert.equal(isGuestTrainingNodeAllowed('level-1'), true);
-  assert.equal(isGuestTrainingNodeAllowed('level-2'), false);
-  assert.equal(isGuestTrainingNodeAllowed('review-1'), false);
+  assert.equal(isGuestTrainingNodeAllowed('level-12'), true);
+  assert.equal(isGuestTrainingNodeAllowed('review-1'), true);
   assert.match(getGuestRegisterHref('/training/level-2'), /next=/);
 });
