@@ -21,20 +21,25 @@ export async function readMarketingRowsByIds(ids, queryFactory) {
   return rows;
 }
 
-/** Non-referral does not establish an organic or direct acquisition source. */
-export function buildAttributionSummary(users = [], invitations = []) {
+/** Invitation attribution takes priority; every account belongs to exactly one channel. */
+export function buildAttributionSummary(users = [], invitations = [], sources = new Map()) {
   const referredIds = new Set(invitations.map((row) => row.invited_user_id).filter(Boolean));
-  const referred = users.filter((user) => referredIds.has(user.id)).length;
-  const unattributed = users.length - referred;
+  const counts = new Map([['Referido (invitación)', 0], ['Sin atribuir', 0]]);
+  for (const user of users) {
+    const channel = referredIds.has(user.id) ? 'Referido (invitación)' : sources.get(user.id) || 'Sin atribuir';
+    counts.set(channel, (counts.get(channel) || 0) + 1);
+  }
+  const referred = counts.get('Referido (invitación)');
+  const unattributed = counts.get('Sin atribuir');
+  const attributed = users.length - unattributed;
   return {
     referred,
     unattributed,
+    attributed,
     total: users.length,
+    attributionRate: users.length ? Math.round(attributed / users.length * 100) : 0,
     referralRate: users.length ? Math.round(referred / users.length * 100) : 0,
-    channels: [
-      { canal: 'Referido (invitación)', leads: referred },
-      { canal: 'Sin atribuir', leads: unattributed },
-    ],
+    channels: [...counts].map(([canal, leads]) => ({ canal, leads })),
   };
 }
 

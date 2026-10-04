@@ -266,7 +266,7 @@ function AttributionTab({ data }) {
       <div className={styles.sectionHead}>
         <h2 className={styles.sectionTitle}>Atribución del lead</h2>
         <p className={styles.sectionDesc}>
-          Referidos confirmados y registros sin atribución verificada. «Sin atribuir» puede incluir publicidad, tráfico orgánico o acceso directo.
+          Atribución orientativa al primer contacto del navegador vinculado durante los 30 días anteriores al registro (tolerancia de 2 minutos). Las invitaciones tienen prioridad. No equivale a conversiones verificadas por Google o Meta.
         </p>
       </div>
 
@@ -284,6 +284,12 @@ function AttributionTab({ data }) {
           <p className={styles.kpiValue}>{attribution.summary.referralRate}%</p>
         </div>
       </div>
+
+      <p className={styles.sectionDesc}>
+        {attribution.summary.attributed} de {attribution.summary.total} registros tienen origen identificado
+        {' '}({attribution.summary.attributionRate}%). «Sin atribuir» significa que falta evidencia;
+        no se presupone tráfico orgánico. Los accesos posteriores al registro no se usan para atribuirlo.
+      </p>
 
       <div className={styles.chartBox}>
         <ResponsiveContainer width="100%" height="100%">

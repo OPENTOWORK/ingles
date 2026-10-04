@@ -1,3 +1,4 @@
+import { loadRegistrationSources } from '@/lib/marketingRegistrationAttribution';
 import { buildAttributionSummary, readAllMarketingRows } from '@/lib/marketingMetrics';
 import {
   DEFAULT_MONETIZATION_PLANS,
@@ -294,6 +295,7 @@ export async function fetchMarketingPlanDashboard(db) {
 
   const users = usersSnapshot.users;
   const invitations = referralSnapshot.invitations;
+  const registrationSourceByUser = await loadRegistrationSources(db, users);
   const since30d = daysAgo(30);
 
   const registrationsLast30d = users.filter((user) => user.createdAt && user.createdAt >= since30d)
@@ -338,7 +340,7 @@ export async function fetchMarketingPlanDashboard(db) {
       },
     },
     attribution: {
-      summary: buildAttributionSummary(users, invitations),
+      summary: buildAttributionSummary(users, invitations, registrationSourceByUser),
       referrals: mapReferralRows(invitations),
       tablesReady: {
         users: usersSnapshot.tableReady,
