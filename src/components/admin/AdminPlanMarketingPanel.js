@@ -266,7 +266,7 @@ function AttributionTab({ data }) {
       <div className={styles.sectionHead}>
         <h2 className={styles.sectionTitle}>Atribución del lead</h2>
         <p className={styles.sectionDesc}>
-          Origen de los registros y seguimiento del programa de referidos.
+          Referidos confirmados y registros sin atribución verificada. «Sin atribuir» puede incluir publicidad, tráfico orgánico o acceso directo.
         </p>
       </div>
 
@@ -276,8 +276,8 @@ function AttributionTab({ data }) {
           <p className={styles.kpiValue}>{attribution.summary.referred}</p>
         </div>
         <div className={styles.kpi}>
-          <p className={styles.kpiLabel}>Leads orgánicos</p>
-          <p className={styles.kpiValue}>{attribution.summary.organic}</p>
+          <p className={styles.kpiLabel}>Registros sin atribuir</p>
+          <p className={styles.kpiValue}>{attribution.summary.unattributed}</p>
         </div>
         <div className={styles.kpi}>
           <p className={styles.kpiLabel}>% atribución referido</p>

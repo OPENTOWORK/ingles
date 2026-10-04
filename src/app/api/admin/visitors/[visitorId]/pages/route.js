@@ -44,11 +44,6 @@ export async function GET(req, { params }) {
     const startMs = new Date(visitor.created_at).getTime() - VISIT_WINDOW_BEFORE_MS;
     const lastSeen = visitor.last_seen_at || visitor.created_at;
     const endMs = new Date(lastSeen).getTime() + VISIT_WINDOW_AFTER_MS;
-    const seconds = Math.max(
-      0,
-      Math.round((new Date(lastSeen).getTime() - new Date(visitor.created_at).getTime()) / 1000),
-    );
-
     const [pagesRes, userPagesRes, eventsRes] = await Promise.all([
       db
         .from('marketing_visitor_pages')
@@ -104,7 +99,7 @@ export async function GET(req, { params }) {
       fallback: fallbackJourneyFromVisit({
         landing: visitor.first_landing_page,
         seenAt: visitor.created_at,
-        seconds,
+        // No measured duration: do not assign days between visits to the landing page.
       }),
     });
 

@@ -1,3 +1,4 @@
+import { buildAttributionSummary, readAllMarketingRows } from '@/lib/marketingMetrics';
 import {
   DEFAULT_MONETIZATION_PLANS,
   LAUNCH_PRICE_LABEL,
@@ -125,11 +126,10 @@ async function fetchUsersSnapshot(db) {
   let data = null;
   let lastError = null;
   for (const select of selects) {
-    const result = await db
-      .from('Usuarios_y_Perfil_users')
-      .select(select)
-      .order('creado_en', { ascending: false })
-      .limit(5000);
+    const result = await readAllMarketingRows(() => db
+      .from('Usuarios_y_Perfil_users').select(select)
+      .order('creado_en', { ascending: false }).order('id'))
+      .then((data) => ({ data }), (error) => ({ error }));
     if (!result.error) {
       data = result.data || [];
       lastError = null;
@@ -153,13 +153,14 @@ async function fetchUsersSnapshot(db) {
 }
 
 async function fetchReferralSnapshot(db) {
-  const { data, error } = await db
+  const { data, error } = await readAllMarketingRows(() => db
     .from(REFERRAL_INVITATIONS_TABLE)
     .select(
       'id, inviter_user_id, invitee_email, status, invited_user_id, paid_plan_slug, email_sent_at, registered_at, paid_at, created_at',
     )
     .order('created_at', { ascending: false })
-    .limit(500);
+    .order('id'))
+    .then((data) => ({ data }), (error) => ({ error }));
 
   if (error) {
     if (isMissingTableError(error)) {
@@ -215,33 +216,6 @@ function buildReferralFunnel(invitations = []) {
     { etapa: 'Registro completado', total: registered },
     { etapa: 'Plan de pago', total: paid },
   ];
-}
-
-function buildAttributionSummary(users = [], invitations = []) {
-  const referredUserIds = new Set(
-    invitations.filter((row) => row.invited_user_id).map((row) => row.invited_user_id),
-  );
-
-  let referred = 0;
-  let organic = 0;
-  users.forEach((user) => {
-    if (referredUserIds.has(user.id)) referred += 1;
-    else organic += 1;
-  });
-
-  const total = referred + organic;
-  const referralRate = total ? Math.round((referred / total) * 100) : 0;
-
-  return {
-    referred,
-    organic,
-    total,
-    referralRate,
-    channels: [
-      { canal: 'Referido (invitación)', leads: referred },
-      { canal: 'Orgánico / directo', leads: organic },
-    ],
-  };
 }
 
 function buildReferralProgramCampaign(invitations = [], tableReady = false) {
