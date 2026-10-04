@@ -56,6 +56,8 @@ export default function B2WritingLongFormAiPanel({
   onDraftStats,
   examMode = false,
   reviewExamCorrection = false,
+  guestPreview = false,
+  onGuestAttemptBlocked,
   lang = 'en',
 }) {
   const isEn = lang === 'en';
