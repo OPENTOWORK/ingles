@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { processAutomatedEmailQueue } from '@/lib/dispatchAutomatedEmail';
 import { runFoundingSurveyCampaign } from '@/lib/foundingSurveyServer';
+import { runConfirmationReminders } from '@/lib/confirmationReminderServer';
+import { runPracticeReminders } from '@/lib/practiceReminderServer';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 export async function GET(req) {
@@ -27,7 +29,14 @@ export async function GET(req) {
 
   // Antes de vaciar la cola, por si la campaña deja correos programados en ella.
   const foundingSurvey = await runFoundingSurveyCampaign(adminClient);
+  const confirmationReminders = await runConfirmationReminders(adminClient);
+  const practiceReminders = await runPracticeReminders(adminClient);
   const result = await processAutomatedEmailQueue(adminClient, { limit: 50 });
 
-  return NextResponse.json({ ...result, foundingSurvey });
+  return NextResponse.json({
+    ...result,
+    foundingSurvey,
+    confirmationReminders,
+    practiceReminders,
+  });
 }

@@ -1,0 +1,67 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.card {
+  width: min(26rem, 100%);
+  padding: 1.5rem 1.35rem;
+  border-radius: 1.15rem;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 1.15rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #0f172a;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.6rem;
+  padding: 0 1.15rem;
+  border-radius: 999px;
+  background: #5b4bb7;
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cta:hover {
+  background: #4c3ea0;
+}
+
+.dismiss {
+  min-height: 2.6rem;
+  padding: 0 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #334155;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dismiss:hover {
+  background: #f8fafc;
+}

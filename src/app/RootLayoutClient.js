@@ -23,6 +23,7 @@ import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
 import ClientAnalyticsLoader from '@/components/analytics/ClientAnalyticsLoader';
 import VisitorPresence from '@/components/analytics/VisitorPresence';
+import GuestCloseRegisterPrompt from '@/components/auth/GuestCloseRegisterPrompt';
 import { isClarityExcludedPath } from '@/lib/clarity';
 import { SITE_FOOTER_TAGLINE } from '@/lib/siteSeo';
 import DeferredSiteAssistant from '@/components/chat/DeferredSiteAssistant';
@@ -121,6 +122,8 @@ function RootLayoutClientInner({ children }) {
   /** Siempre true en SSR y primer render cliente; se resuelve en useEffect. */
   const [authPending, setAuthPending] = useState(true);
   const [session, setSession] = useState(null);
+  /** getSession ya confirmó que no hay sesión. Evita quedarse cargando con un token viejo. */
+  const [loggedOut, setLoggedOut] = useState(false);
   const [userRole, setUserRole] = useState('student');
   /** Id del usuario cuyo rol se ha leído realmente; null mientras esté pendiente o falle. */
   const [roleConfirmedForUserId, setRoleConfirmedForUserId] = useState(null);
@@ -161,19 +164,22 @@ function RootLayoutClientInner({ children }) {
   useLevelsStarsBackfill(session);
 
   useEffect(() => {
-    if (allowWithoutAuth || authPending || session) return undefined;
+    if (
+      allowWithoutAuth ||
+      authPending ||
+      session ||
+      (!loggedOut && hasStoredSupabaseSession())
+    ) {
+      return undefined;
+    }
     const search = typeof window !== 'undefined' ? window.location.search : '';
     const next = encodeURIComponent(`${pathname}${search}`);
     router.replace(`/login?next=${next}`);
     return undefined;
-  }, [allowWithoutAuth, authPending, session, pathname, router]);
+  }, [allowWithoutAuth, authPending, session, loggedOut, pathname, router]);
 
   useEffect(() => {
     if (allowWithoutAuth) {
-      setAuthPending(false);
-      return;
-    }
-    if (hasStoredSupabaseSession()) {
       setAuthPending(false);
     }
   }, [allowWithoutAuth]);
@@ -201,9 +207,12 @@ function RootLayoutClientInner({ children }) {
       if (!uid) {
         roleFetchedForUserIdRef.current = null;
         setUserRole('student');
+        setLoggedOut(true);
         if (!allowWithoutAuth) setAuthPending(false);
         return;
       }
+
+      setLoggedOut(false);
 
       if (!allowWithoutAuth) setAuthPending(false);
 
@@ -241,6 +250,7 @@ function RootLayoutClientInner({ children }) {
         const uid = newSession.user?.id ?? null;
         currentUserIdRef.current = uid;
         setRoleConfirmedForUserId(null);
+        setLoggedOut(false);
         setSession(newSession);
         setAuthPending(false);
         if (uid) {
@@ -267,6 +277,7 @@ function RootLayoutClientInner({ children }) {
         roleFetchedForUserIdRef.current = null;
         currentUserIdRef.current = null;
         setRoleConfirmedForUserId(null);
+        setLoggedOut(true);
         setSession(null);
         setUserRole('student');
         if (!allowWithoutAuth) setAuthPending(false);
@@ -386,6 +397,19 @@ function RootLayoutClientInner({ children }) {
     );
   }
 
+  if (!allowWithoutAuth && !session && !loggedOut && hasStoredSupabaseSession()) {
+    return (
+      <>
+        <SiteNightModeInit />
+        <ClientToaster />
+        <SiteHeaderBrand />
+        <main className="page-content">
+          <RouteLoadingMascot label="Cargando" variant={3} />
+        </main>
+      </>
+    );
+  }
+
   if (!allowWithoutAuth && !session) {
     return (
       <>
@@ -477,6 +501,7 @@ function RootLayoutClientInner({ children }) {
       )}
 
       <VisitorPresence />
+      <GuestCloseRegisterPrompt />
       <DeferredSiteAssistant enabled={Boolean(session) && !isMinimalLanding} />
 
       {session && !isMinimalLanding ? (

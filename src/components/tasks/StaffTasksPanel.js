@@ -1,7 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Bell } from 'lucide-react';
 import { getStaffRoleLabel } from '@/utils/staffBuzon';
 import { staffTasksFetch } from '@/lib/staffTasksClient';
@@ -320,6 +320,9 @@ function formatPhaseResponsablesLabel(phase) {
 
 export default function StaffTasksPanel({ currentUserId, userRole, embedded = false }) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const dismissedOpenIdRef = useRef('');
   const canPickAssignee = canPickAnyAssignee(userRole);
   const canManagePhases = canManageStaffPhases(userRole);
   const canDelete = canDeleteStaffTask(userRole);
@@ -476,12 +479,32 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     void loadTasks();
   }, [loadTasks]);
 
+  const closeDetail = useCallback(() => {
+    const openId = String(searchParams?.get('abierta') || '').trim();
+    if (openId) dismissedOpenIdRef.current = openId;
+    setDetailTask(null);
+    if (!openId) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('abierta');
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+  }, [pathname, router, searchParams]);
+
   useEffect(() => {
     const openId = String(searchParams?.get('abierta') || '').trim();
-    if (!openId || !tasks.length) return;
+    if (!openId || !tasks.length || dismissedOpenIdRef.current === openId) return;
     const match = tasks.find((task) => String(task.id) === openId);
     if (match) setDetailTask(match);
   }, [searchParams, tasks]);
+
+  useEffect(() => {
+    if (!detailTask) return undefined;
+    const onKey = (event) => {
+      if (event.key === 'Escape') closeDetail();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [detailTask, closeDetail]);
 
   const taskAssignee = useMemo(
     () => assignees.find((u) => u.id === taskForm.asignado_id),
@@ -697,7 +720,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         method: 'POST',
         body: JSON.stringify({ action: 'delete', id: task.id }),
       });
-      setDetailTask(null);
+      closeDetail();
       await loadTasks();
     } catch (e) {
       alert(e.message);
@@ -1763,15 +1786,29 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
 
       {/* Detail drawer */}
       {detailTask ? (
-        <div className="fixed inset-0 z-40 flex justify-end bg-black/30">
-          <div className="w-full max-w-lg bg-white h-full shadow-xl overflow-y-auto">
-            <div className="sticky top-0 bg-white border-b px-5 py-4 flex justify-between items-center">
-              <h3 className="font-semibold">Detalle de tarea</h3>
-              <button type="button" onClick={() => setDetailTask(null)} className="text-gray-400 text-xl">
-                ×
+        <div
+          className="fixed inset-x-0 bottom-0 z-40 flex justify-end bg-black/30"
+          style={{ top: 'var(--site-header-height, 5.3rem)' }}
+          onClick={closeDetail}
+        >
+          <div
+            className="flex h-full w-full max-w-lg flex-col bg-white shadow-xl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="staff-task-detail-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-center justify-between border-b bg-white px-5 py-4">
+              <h3 id="staff-task-detail-title" className="font-semibold">Detalle de tarea</h3>
+              <button
+                type="button"
+                onClick={closeDetail}
+                className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-800 hover:bg-gray-50"
+              >
+                Cerrar
               </button>
             </div>
-            <div className="p-5 space-y-4 text-sm">
+            <div className="min-h-0 flex-1 space-y-4 overflow-y-auto p-5 text-sm">
               <div className="flex flex-wrap gap-2">
                 <TaskEstadoBadge estado={detailTask.displayEstado} />
                 <TaskPrioridadBadge prioridad={detailTask.prioridad} />
@@ -1818,7 +1855,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                   type="button"
                   onClick={() => {
                     openEditTask(detailTask);
-                    setDetailTask(null);
+                    closeDetail();
                   }}
                   className="px-3 py-1.5 bg-violet-600 text-white rounded-lg text-xs"
                 >

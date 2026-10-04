@@ -15,12 +15,14 @@ const CTA_LABEL_BY_TRIGGER = {
   staff_task_reminder: 'Ver la tarea',
   staff_task_message: 'Ver conversación',
   user_email_confirmation: 'Confirmar mi email',
+  confirmation_reminder: 'Confirmar mi email',
   password_reset_requested: 'Crear nueva contraseña',
   founding_member_plus_granted: 'Entrar en Dralo',
   founding_member_survey: 'Responder el formulario',
   founding_member_survey_reminder: 'Responder ahora',
   founding_member_survey_confirmed: 'Entrar en Dralo',
   founding_member_survey_revoked: 'Ver los planes',
+  practice_reminder: 'Volver a practicar',
 };
 
 const TABLE = 'soporte_correos_automaticos';

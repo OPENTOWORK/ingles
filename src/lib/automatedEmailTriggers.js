@@ -2,6 +2,7 @@
 export const AUTOMATED_EMAIL_TRIGGERS = {
   USER_REGISTERED: 'user_registered',
   USER_EMAIL_CONFIRMATION: 'user_email_confirmation',
+  CONFIRMATION_REMINDER: 'confirmation_reminder',
   PASSWORD_RESET_REQUESTED: 'password_reset_requested',
   SUPPORT_TICKET_CREATED: 'support_ticket_created',
   ADMIN_USER_CREATED: 'admin_user_created',
@@ -15,6 +16,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   FOUNDING_MEMBER_SURVEY_REMINDER: 'founding_member_survey_reminder',
   FOUNDING_MEMBER_SURVEY_CONFIRMED: 'founding_member_survey_confirmed',
   FOUNDING_MEMBER_SURVEY_REVOKED: 'founding_member_survey_revoked',
+  PRACTICE_REMINDER: 'practice_reminder',
 };
 
 export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
@@ -26,7 +28,13 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
   {
     value: AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION,
     label: 'Confirmación de email',
-    description: 'Enlace para que el alumno confirme su correo tras registrarse.',
+    description: 'Enlace que sale en el momento del registro. Sin confirmarlo no se puede iniciar sesión.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.CONFIRMATION_REMINDER,
+    label: 'Recordatorio de confirmación',
+    description:
+      'Si a los 2–3 días el email sigue sin confirmar. Después se repite cada 15 días, hasta 6 veces o hasta que confirmen.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.PASSWORD_RESET_REQUESTED,
@@ -96,6 +104,12 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_SURVEY_REVOKED,
     label: 'Plan Plus founding retirado',
     description: 'Se envía cuando pasan los 7 días sin respuesta y se retira el Plan Plus.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.PRACTICE_REMINDER,
+    label: 'Recordatorio para practicar',
+    description:
+      'A quien ya confirmó su cuenta y lleva varios días sin practicar. Como máximo uno a la semana, y se detiene al volver.',
   },
 ];
 

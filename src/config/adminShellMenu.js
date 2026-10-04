@@ -18,15 +18,13 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
   {
     id: 'principal',
     title: null,
-    items: [STAFF_BUZON_PANEL_ITEM],
+    items: [STAFF_BUZON_PANEL_ITEM, STAFF_TASKS_PANEL_ITEM],
   },
   {
     id: 'direccion',
     title: 'Dirección y Estrategia',
     items: [
-      { href: '/admin', label: 'Analíticas' },
       { href: '/admin/administracion', label: 'Administración' },
-      STAFF_TASKS_PANEL_ITEM,
       { href: '/admin/plan-financiero', label: 'Financiero' },
       { href: '/admin/configuracion', label: 'Permisos' },
     ],
@@ -50,6 +48,7 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
     id: 'comercial',
     title: 'Comercial',
     items: [
+      { href: '/admin', label: 'Analíticas' },
       { href: '/admin/marketing', label: 'Marketing' },
       { href: '/admin/blog', label: 'Blog' },
     ],

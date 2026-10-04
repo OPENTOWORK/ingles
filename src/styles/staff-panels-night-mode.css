@@ -129,6 +129,18 @@ body.reading-night-mode .support-hub-tab {
   color: #cbd5e1;
 }
 
+body.reading-night-mode .auto-emails-views__btn {
+  background: #334155;
+  border-color: #64748b;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .auto-emails-views__btn.is-active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
 body.reading-night-mode .support-filter--active,
 body.reading-night-mode .support-hub-tab--active {
   background: #2563eb;

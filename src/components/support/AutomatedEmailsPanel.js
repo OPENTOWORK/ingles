@@ -49,6 +49,13 @@ async function apiFetch(path, options = {}) {
   return data;
 }
 
+const VIEW_STORAGE_KEY = 'dralo-auto-emails-view';
+const VIEW_MODES = [
+  { id: 'actual', label: 'Como está' },
+  { id: 'grid', label: 'Cuadrícula' },
+  { id: 'list', label: 'Lista' },
+];
+
 const EMPTY_FORM = {
   nombre: '',
   trigger_event: AUTOMATED_EMAIL_TRIGGER_OPTIONS[0]?.value || 'user_registered',
@@ -69,6 +76,7 @@ export default function AutomatedEmailsPanel() {
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
   const [creating, setCreating] = useState(false);
+  const [view, setView] = useState('actual');
 
   const selected = useMemo(
     () => templates.find((t) => t.id === selectedId) || null,
@@ -92,6 +100,24 @@ export default function AutomatedEmailsPanel() {
   useEffect(() => {
     void loadTemplates();
   }, [loadTemplates]);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(VIEW_STORAGE_KEY);
+      if (VIEW_MODES.some((mode) => mode.id === saved)) setView(saved);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  const changeView = (next) => {
+    setView(next);
+    try {
+      window.localStorage.setItem(VIEW_STORAGE_KEY, next);
+    } catch {
+      /* ignore */
+    }
+  };
 
   useEffect(() => {
     if (!selected) {
@@ -188,13 +214,31 @@ export default function AutomatedEmailsPanel() {
             Tipos de correo que la plataforma envía sola, cuándo se disparan y su contenido.
             Puedes crear plantillas nuevas, editarlas, programar el retraso y desactivarlas.
           </p>
+          <div className="auto-emails-views" role="tablist" aria-label="Vista de plantillas">
+            {VIEW_MODES.map((mode) => (
+              <button
+                key={mode.id}
+                type="button"
+                role="tab"
+                aria-selected={view === mode.id}
+                className={`auto-emails-views__btn${view === mode.id ? ' is-active' : ''}`}
+                onClick={() => changeView(mode.id)}
+              >
+                {mode.label}
+              </button>
+            ))}
+          </div>
         </div>
         <button type="button" className="auto-emails-panel__create" onClick={startCreate}>
           + Nueva plantilla
         </button>
       </header>
 
-      <div className="auto-emails-panel__grid">
+      <div
+        className={`auto-emails-panel__grid${
+          view === 'grid' ? ' is-grid' : view === 'list' ? ' is-list' : ''
+        }`}
+      >
         <section className="auto-emails-list">
           {loading ? (
             <p className="auto-emails-muted">Cargando plantillas…</p>
@@ -230,6 +274,7 @@ export default function AutomatedEmailsPanel() {
           )}
         </section>
 
+        {view === 'actual' || form ? (
         <section className="auto-emails-editor">
           {!form ? (
             <p className="auto-emails-muted auto-emails-editor__empty">
@@ -366,6 +411,7 @@ export default function AutomatedEmailsPanel() {
             </>
           )}
         </section>
+        ) : null}
       </div>
 
       <style jsx>{`
@@ -396,6 +442,27 @@ export default function AutomatedEmailsPanel() {
           line-height: 1.5;
           font-size: 0.95rem;
         }
+        .auto-emails-views {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+          margin-top: 0.75rem;
+        }
+        .auto-emails-views__btn {
+          border: 1px solid #d1d5db;
+          background: #fff;
+          color: #374151;
+          border-radius: 999px;
+          padding: 0.32rem 0.8rem;
+          font-size: 0.82rem;
+          font-weight: 600;
+          cursor: pointer;
+        }
+        .auto-emails-views__btn.is-active {
+          background: #0070f3;
+          border-color: #0070f3;
+          color: #fff;
+        }
         .auto-emails-panel__create {
           background: #0070f3;
           color: #fff;
@@ -412,8 +479,46 @@ export default function AutomatedEmailsPanel() {
           gap: 1.25rem;
           align-items: start;
         }
+        .auto-emails-panel__grid.is-grid,
+        .auto-emails-panel__grid.is-list {
+          grid-template-columns: 1fr;
+        }
+        .auto-emails-panel__grid.is-grid .auto-emails-list,
+        .auto-emails-panel__grid.is-list .auto-emails-list,
+        .auto-emails-panel__grid.is-grid .auto-emails-editor,
+        .auto-emails-panel__grid.is-list .auto-emails-editor {
+          min-height: 0;
+        }
+        .auto-emails-panel__grid.is-grid .auto-emails-list__items,
+        .auto-emails-panel__grid.is-list .auto-emails-list__items {
+          display: grid;
+          gap: 0.75rem;
+        }
+        .auto-emails-panel__grid.is-grid .auto-emails-list__items {
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        }
+        .auto-emails-panel__grid.is-grid .auto-emails-row,
+        .auto-emails-panel__grid.is-list .auto-emails-row {
+          margin-bottom: 0;
+          height: 100%;
+        }
+        .auto-emails-panel__grid.is-list .auto-emails-row {
+          display: grid;
+          grid-template-columns: minmax(10rem, 1.5fr) minmax(8rem, 1fr) minmax(9rem, 1fr) auto;
+          gap: 0.35rem 1rem;
+          align-items: center;
+        }
+        .auto-emails-panel__grid.is-list .auto-emails-row__name,
+        .auto-emails-panel__grid.is-list .auto-emails-row__trigger,
+        .auto-emails-panel__grid.is-list .auto-emails-row__schedule,
+        .auto-emails-panel__grid.is-list .auto-emails-row__status {
+          margin: 0;
+        }
         @media (max-width: 900px) {
           .auto-emails-panel__grid {
+            grid-template-columns: 1fr;
+          }
+          .auto-emails-panel__grid.is-list .auto-emails-row {
             grid-template-columns: 1fr;
           }
         }

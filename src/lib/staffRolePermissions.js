@@ -36,7 +36,7 @@ export const STAFF_PERMISSION_PANELS = {
 export const STAFF_PERMISSION_DEFINITIONS = [
   { key: 'buzon', label: 'Buzón y reuniones', category: 'Comunicación' },
   { key: 'tareas', label: 'Tareas', category: 'Operaciones' },
-  { key: 'admin', label: 'Analíticas', category: 'Administración' },
+  { key: 'admin', label: 'Analíticas', category: 'Comercial' },
   { key: 'administracion', label: 'Administración', category: 'Administración' },
   { key: 'profesorAdmin', label: 'Profesor (admin)', category: 'Pedagogía' },
   { key: 'profesor', label: 'Profesor', category: 'Pedagogía' },

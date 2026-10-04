@@ -208,12 +208,9 @@ function LoginPageInner() {
 
     toast.success("Inicio de sesión exitoso");
     setFailedAttempts(0);
+    void ensureAppUserProfile().catch(() => {});
 
-    const [path] = await Promise.all([
-      resolvePostLoginPath(result.user, searchParams),
-      ensureAppUserProfile().catch(() => {}),
-    ]);
-
+    const path = await resolvePostLoginPath(result.user, searchParams);
     router.replace(path);
   };
 
@@ -321,10 +318,8 @@ function LoginPageInner() {
     }
 
     toast.success('Inicio de sesión exitoso');
-    const [path] = await Promise.all([
-      resolvePostLoginPath(result.user, searchParams),
-      ensureAppUserProfile().catch(() => {}),
-    ]);
+    void ensureAppUserProfile().catch(() => {});
+    const path = await resolvePostLoginPath(result.user, searchParams);
     router.replace(path);
   };
 

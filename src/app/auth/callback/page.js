@@ -68,9 +68,8 @@ function AuthCallbackInner() {
 
         const user = session.user;
 
-        // Quien entra por Google no pasa por /registro, así que su fila de
-        // aplicación puede no existir todavía.
-        await ensureAppUserProfile().catch(() => {});
+        // El perfil y el correo de bienvenida no bloquean la entrada.
+        void ensureAppUserProfile().catch(() => {});
 
         const redirectPath = await getRedirectPathByUserId(user?.id, user?.email);
         const phone = isPhoneViewport();
