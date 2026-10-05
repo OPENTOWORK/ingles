@@ -4,6 +4,7 @@ import {
   isGuestTrainingLevelLocked,
   isGuestTrainingReviewLocked,
   isTrainingLevelLocked,
+  isTrainingReviewLocked,
 } from '../trainingPathUnlock.js';
 
 test('a student needs two stars on the previous level', () => {
@@ -29,7 +30,23 @@ test('a guest needs one star on the previous level', () => {
   assert.equal(isGuestTrainingReviewLocked({ to: 5 }, { 'level-5': 1 }), false);
 });
 
-test('teachers and coordinators still follow the star lock', () => {
-  assert.equal(isTrainingLevelLocked(4, {}, 'teacher', 25), true);
-  assert.equal(isTrainingLevelLocked(4, {}, 'coordinador', 25), true);
+test('every role except a student can open any level without stars', () => {
+  for (const role of [
+    'teacher',
+    'profesor',
+    'coordinador',
+    'coordinator',
+    'soporte',
+    'support',
+    'informatico',
+    'marketing',
+    'centro/empresa',
+  ]) {
+    assert.equal(isTrainingLevelLocked(4, {}, role, 25), false);
+    assert.equal(isTrainingLevelLocked(25, {}, role, 25), false);
+    assert.equal(isTrainingReviewLocked({ to: 6 }, {}, role), false);
+  }
+  assert.equal(isTrainingLevelLocked(4, {}, '', 25), true);
+  assert.equal(isTrainingLevelLocked(4, {}, 'student', 25), true);
+  assert.equal(isTrainingReviewLocked({ to: 6 }, {}, 'alumno'), true);
 });
