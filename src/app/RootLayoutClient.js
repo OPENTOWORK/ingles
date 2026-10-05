@@ -7,7 +7,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, resolveRoleByUserId, peekCachedRoleName } from '@/utils/authRoles';
 import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
-import { isMinimalLandingPath } from '@/utils/minimalLandingRoutes';
+import { isAbExperimentPath, isMinimalLandingPath } from '@/utils/minimalLandingRoutes';
 import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 import { nextRoleConfirmation } from '@/lib/userRoleResolution';
@@ -65,12 +65,16 @@ const TOAST_OPTIONS = {
   },
 };
 
-function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/' }) {
+function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/', decorativeFlag = false }) {
   return (
     <header className={`site-header${logoOnly ? ' site-header--logo-only' : ''}`}>
       <div className="site-header__bar">
         <Link href={logoHref} className="site-header__logo">
-          <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
+          <img
+            src="/uk-flag.png"
+            alt={decorativeFlag ? '' : 'UK Flag'}
+            className="site-header__flag bandera"
+          />
           <span>Dralo Academy</span>
         </Link>
         {nav ? <div className="site-header__nav">{nav}</div> : null}
@@ -113,6 +117,7 @@ function RootLayoutClientInner({ children }) {
   const pathname = usePathname() ?? '';
   const isPublic = isPublicPath(pathname);
   const isMinimalLanding = isMinimalLandingPath(pathname);
+  const isAbLanding = isAbExperimentPath(pathname);
   const isAuthFlow = AUTH_FLOW_PATH_PREFIXES.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
@@ -485,7 +490,8 @@ function RootLayoutClientInner({ children }) {
         <>
           <SiteHeaderBrand
             logoOnly
-            logoHref="/exam-practice/b2/exam-reading-and-use-of-english/?examen=1"
+            decorativeFlag={isAbLanding}
+            logoHref={isAbLanding ? '/' : '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1'}
           />
           <main className="page-content page-content--conversion-landing">{children}</main>
         </>

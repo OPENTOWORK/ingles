@@ -7,3 +7,9 @@ export function isMinimalLandingPath(pathname = '') {
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 }
+
+/** Variantes A/B. Las URLs originales de campaña y guía no entran aquí. */
+export function isAbExperimentPath(pathname = '') {
+  const path = String(pathname || '').split('?')[0];
+  return /^\/(campana|preparar-b2-cambridge)\/(a|b)\/?$/.test(path);
+}

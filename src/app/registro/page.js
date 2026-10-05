@@ -9,6 +9,8 @@ import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 import { detectClientDeviceType } from '@/lib/clientDeviceType';
+import { readAttributionFromSearch } from '@/lib/abExperiment';
+import { trackRegistrationComplete, trackRegistrationStart } from '@/lib/abExperimentTrack';
 
 const PASSWORD_RULES = [
   { id: 'length', label: 'Al menos 8 caracteres', test: (p) => p.length >= 8 },
@@ -27,6 +29,11 @@ export default function RegistroPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showPasswordRules, setShowPasswordRules] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const attribution = readAttributionFromSearch(window.location.search);
+    if (attribution) trackRegistrationStart(attribution);
+  }, []);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -217,6 +224,7 @@ export default function RegistroPage() {
           ? 'Cuenta creada. Revisa tu correo (y la carpeta de spam) para confirmar antes de iniciar sesión.'
           : '¡Registro exitoso! Ya puedes iniciar sesión.',
       );
+      trackRegistrationComplete();
       router.push('/login');
       return true;
     };
@@ -229,6 +237,7 @@ export default function RegistroPage() {
           server.data?.message ||
             'Cuenta creada. Confirma tu email desde el correo que te hemos enviado para poder entrar.',
         );
+        trackRegistrationComplete();
         router.push('/login');
         return;
       }
