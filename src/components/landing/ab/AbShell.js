@@ -104,21 +104,26 @@ export function AbSplit({ title, text, points, media, flip = false }) {
 }
 
 export function AbOffer({ title, text, points, cta, seats }) {
+  const chips = points?.length ? points : null;
   return (
-    <section className="ab-offer">
-      <div>
+    <section className={`ab-offer${chips ? ' ab-offer--chips' : ''}`}>
+      <div className="ab-offer__main">
         <h2>{title}</h2>
         {text ? <p>{text}</p> : null}
-        {points?.length ? (
-          <ul className="ab-ticks">
-            {points.map((point) => (
+        {chips ? (
+          <ul className="ab-chips">
+            {chips.map((point) => (
               <li key={point}>{point}</li>
             ))}
           </ul>
-        ) : null}
-        {cta}
+        ) : (
+          cta
+        )}
       </div>
-      {seats}
+      <div className="ab-offer__aside">
+        {seats}
+        {chips ? cta : null}
+      </div>
     </section>
   );
 }

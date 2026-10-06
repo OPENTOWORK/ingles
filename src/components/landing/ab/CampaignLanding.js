@@ -111,7 +111,7 @@ export default function CampaignLanding({ variant = 'a', source = 'direct' }) {
         }
         points={PLUS_HIGHLIGHTS.length ? PLUS_HIGHLIGHTS : ['[COMPLETAR FUNCIONES PLAN PLUS]']}
         cta={<Cta source={origin} />}
-        seats={<FoundingSlotsStatus variant="badge" />}
+        seats={<FoundingSlotsStatus variant="headline" />}
       />
 
       <AbFaq title="Preguntas frecuentes" items={CAMPAIGN_FAQ} />
