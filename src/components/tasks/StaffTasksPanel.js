@@ -44,6 +44,7 @@ import {
 } from '@/lib/staffTaskHelpers';
 import StaffTasksKanbanBoard, { kanbanStyles } from '@/components/tasks/StaffTasksKanbanBoard';
 import StaffTasksListView, { CompleteCheck } from '@/components/tasks/StaffTasksListView';
+import StaffTasksAssigneeChart from '@/components/tasks/StaffTasksAssigneeChart';
 import StaffTasksViewSwitcher from '@/components/tasks/StaffTasksViewSwitcher';
 import StaffTaskTemplatesSection from '@/components/tasks/StaffTaskTemplatesSection';
 import StaffTaskFormModal, { ROL_OPTIONS } from '@/components/tasks/StaffTaskFormModal';
@@ -908,6 +909,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
   const isKanbanView = viewMode.startsWith('kanban');
   const isListView = viewMode === 'list';
   const isClassicView = viewMode === 'classic';
+  const isChartView = viewMode === 'chart';
 
   const clearFilters = () => {
     setFilters({
@@ -1189,6 +1191,8 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           </button>
         </div>
       </section>
+
+      {isChartView ? <StaffTasksAssigneeChart tasks={tasks} /> : null}
 
       {isKanbanView ? (
         <section className="rounded-xl border bg-white p-5 shadow-sm">

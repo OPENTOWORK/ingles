@@ -247,54 +247,56 @@ function RootLayoutClientInner({ children }) {
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, newSession) => {
-      if (event === 'SIGNED_IN' && newSession) {
+      // Este callback corre con el candado de auth cogido. Cualquier consulta
+      // a Supabase aquí dentro deja el login esperando hasta que el candado vence.
+      setTimeout(() => {
         if (cancelled) return;
-        clearAssistantDismissed();
-        lastAccessTokenRef.current = newSession.access_token ?? null;
-        roleFetchedForUserIdRef.current = null;
-        const uid = newSession.user?.id ?? null;
-        currentUserIdRef.current = uid;
-        setRoleConfirmedForUserId(null);
-        setLoggedOut(false);
-        setSession(newSession);
-        setAuthPending(false);
-        if (uid) {
-          const cachedRole = peekCachedRoleName(uid);
-          if (cachedRole) setUserRole(normalizeRoleName(cachedRole));
-          void resolveRoleByUserId(uid, newSession.user.email).then(({ role, confirmed }) => {
-            if (cancelled) return;
-            const next = nextRoleConfirmation({
-              currentUserId: currentUserIdRef.current,
-              resolvedForUserId: uid,
-              confirmed,
+        if (event === 'SIGNED_IN' && newSession) {
+          clearAssistantDismissed();
+          lastAccessTokenRef.current = newSession.access_token ?? null;
+          roleFetchedForUserIdRef.current = null;
+          const uid = newSession.user?.id ?? null;
+          currentUserIdRef.current = uid;
+          setRoleConfirmedForUserId(null);
+          setLoggedOut(false);
+          setSession(newSession);
+          setAuthPending(false);
+          if (uid) {
+            const cachedRole = peekCachedRoleName(uid);
+            if (cachedRole) setUserRole(normalizeRoleName(cachedRole));
+            void resolveRoleByUserId(uid, newSession.user.email).then(({ role, confirmed }) => {
+              if (cancelled) return;
+              const next = nextRoleConfirmation({
+                currentUserId: currentUserIdRef.current,
+                resolvedForUserId: uid,
+                confirmed,
+              });
+              if (!next.apply) return;
+              roleFetchedForUserIdRef.current = uid;
+              setUserRole(normalizeRoleName(role));
+              setRoleConfirmedForUserId(next.confirmedForUserId);
             });
-            if (!next.apply) return;
-            roleFetchedForUserIdRef.current = uid;
-            setUserRole(normalizeRoleName(role));
-            setRoleConfirmedForUserId(next.confirmedForUserId);
-          });
+          }
+          return;
         }
-        return;
-      }
-      if (event === 'SIGNED_OUT') {
-        if (cancelled) return;
-        lastAccessTokenRef.current = null;
-        roleFetchedForUserIdRef.current = null;
-        currentUserIdRef.current = null;
-        setRoleConfirmedForUserId(null);
-        setLoggedOut(true);
-        setSession(null);
-        setUserRole('student');
-        if (!allowWithoutAuth) setAuthPending(false);
-        return;
-      }
-      if (event === 'TOKEN_REFRESHED') {
-        if (cancelled) return;
-        lastAccessTokenRef.current = newSession?.access_token ?? null;
-        setSession(newSession);
-        return;
-      }
-      void hydrateAuth(newSession);
+        if (event === 'SIGNED_OUT') {
+          lastAccessTokenRef.current = null;
+          roleFetchedForUserIdRef.current = null;
+          currentUserIdRef.current = null;
+          setRoleConfirmedForUserId(null);
+          setLoggedOut(true);
+          setSession(null);
+          setUserRole('student');
+          if (!allowWithoutAuth) setAuthPending(false);
+          return;
+        }
+        if (event === 'TOKEN_REFRESHED') {
+          lastAccessTokenRef.current = newSession?.access_token ?? null;
+          setSession(newSession);
+          return;
+        }
+        void hydrateAuth(newSession);
+      }, 0);
     });
     return () => {
       cancelled = true;

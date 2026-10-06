@@ -103,6 +103,20 @@ export default function Home() {
         {showAppHome ? <HomeStudentMobileBoard guest={isGuestHome || authPending} /> : null}
 
         <blockquote className="home-quote">
+          <div className="home-quote__frame">
+            <video
+              className="home-quote__video"
+              controls
+              muted
+              autoPlay
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="Práctica en Dralo: reading, writing y quiz"
+            >
+              <source src="/dralo-tour.mp4?v=3" type="video/mp4" />
+            </video>
+          </div>
           <DraloTagline />
         </blockquote>
 

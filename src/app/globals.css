@@ -2193,12 +2193,15 @@ body.nav-open {
 
 .home-quote {
   margin: 0 auto;
-  width: min(92%, 680px);
+  width: min(92%, 760px);
   max-width: 100%;
-  padding: clamp(1.35rem, 3vw, 2rem) clamp(1.25rem, 4vw, 2.25rem);
+  padding: 0.7rem 0.8rem 0.75rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.55rem;
+  min-height: 0;
   font-style: normal;
   line-height: 1.55;
   text-align: center;
@@ -2210,6 +2213,25 @@ body.nav-open {
     0 10px 28px rgba(15, 10, 40, 0.22);
   box-sizing: border-box;
   isolation: isolate;
+}
+
+.home-quote__frame {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-quote__video {
+  display: block;
+  width: min(100%, calc(min(34vh, 280px) * 16 / 9));
+  height: auto;
+  max-height: min(34vh, 280px);
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: 12px;
+  background: transparent;
 }
 
 .home-quote .dralo-tagline {
@@ -2575,6 +2597,104 @@ body.nav-open {
     display: none;
   }
 
+  /* La home de invitado cabe en una pantalla: el vídeo ocupa el hueco que queda, sin scroll. */
+  body:has(.home-page--guest) {
+    overflow: hidden;
+  }
+
+  body:has(.home-page--guest) .full-page-layout {
+    height: 100dvh;
+    max-height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  body:has(.home-page--guest) .page-content {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .home-page--guest {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0.85rem 1.25rem 0.7rem;
+    overflow: hidden;
+  }
+
+  .home-page--guest .home-page__inner {
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 1.35rem;
+  }
+
+  .home-page--guest .home-hero {
+    flex: 0 0 auto;
+    min-height: auto;
+    gap: 0.75rem;
+  }
+
+  .home-page--guest .home-hero__mascot .site-mascot {
+    width: min(150px, 18vh) !important;
+  }
+
+  .home-page--guest .home-page__title {
+    margin-bottom: 0.3rem;
+    font-size: clamp(1.65rem, 3.2vw, 2.25rem);
+  }
+
+  .home-page--guest .home-page__features {
+    margin-bottom: 0.35rem;
+    gap: 0.35rem;
+  }
+
+  .home-page--guest .home-feature {
+    padding: 0.28rem 0.7rem;
+    font-size: 0.78rem;
+  }
+
+  .home-page--guest .home-hero__cta {
+    margin-top: 0;
+  }
+
+  .home-page--guest .home-quote {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    width: min(100%, 820px);
+    align-self: center;
+    justify-content: flex-start;
+  }
+
+  .home-page--guest .home-quote__frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-page--guest .home-quote__video {
+    flex: 0 1 auto;
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background: transparent;
+  }
+
+  .home-page--guest .home-quote .dralo-tagline {
+    flex: 0 0 auto;
+    font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+  }
+
   /* En escritorio ya está Log in en la cabecera. */
   .home-cta__btn.home-hero__auth-btn {
     display: none;
@@ -2925,9 +3045,46 @@ body.nav-open {
   }
 
   .home-page--student-mobile.home-page--guest .home-hero,
-  .home-page--student-mobile.home-page--guest .home-student-board,
+  .home-page--student-mobile.home-page--guest .home-student-board {
+    flex: 0 1 auto;
+    min-height: 0;
+  }
+
   .home-page--student-mobile.home-page--guest .home-quote {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    width: min(100%, 820px);
+    align-self: center;
+    padding: 0.45rem 0.5rem 0.5rem;
+    gap: 0.35rem;
+    justify-content: flex-start;
+  }
+
+  .home-page--student-mobile.home-page--guest .home-quote__frame {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .home-page--student-mobile.home-page--guest .home-quote__video {
+    flex: 0 1 auto;
+    width: auto;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    background: transparent;
+  }
+
+  .home-page--student-mobile.home-page--guest .home-quote .dralo-tagline {
     flex: 0 0 auto;
+    font-size: 1.05rem;
   }
 }
 
@@ -2941,7 +3098,7 @@ body.nav-open {
   }
 
   .home-page--student-mobile.home-page--guest .home-quote {
-    padding: 0.95rem 1.1rem;
+    padding: 0.35rem 0.45rem 0.4rem;
   }
 }
 
@@ -3426,8 +3583,8 @@ body.nav-open {
   }
 
   .home-quote {
-    width: min(92%, 680px);
-    padding: clamp(1.2rem, 4vw, 1.65rem) clamp(1rem, 3vw, 1.5rem);
+    width: min(100%, 760px);
+    padding: 0.55rem 0.6rem 0.6rem;
   }
 }
 
