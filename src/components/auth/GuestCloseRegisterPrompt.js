@@ -14,10 +14,20 @@ function isAuthScreen(pathname = '') {
   return path === '/login' || path === '/registro' || path.startsWith('/auth');
 }
 
-/** El cursor sale por arriba, hacia el botón de cerrar la ventana. */
-export function isWindowCloseIntent(event) {
+/** Ancho aproximado de los botones de la ventana; la X es el de la derecha. */
+const CLOSE_BUTTON_ZONE_PX = 140;
+
+/**
+ * El cursor sale de la página por la esquina superior derecha, hacia la X de cerrar.
+ * Salir por las pestañas, la barra de direcciones o el resto del borde no cuenta.
+ */
+export function isWindowCloseIntent(event, viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 0) {
   if (!event || event.relatedTarget || event.toElement) return false;
-  return Number(event.clientY) <= 0;
+  if (Number(event.clientY) > 0) return false;
+  const x = Number(event.clientX);
+  const width = Number(viewportWidth) || 0;
+  if (!width || !Number.isFinite(x)) return false;
+  return x >= width - CLOSE_BUTTON_ZONE_PX;
 }
 
 export default function GuestCloseRegisterPrompt() {
@@ -45,11 +55,21 @@ export default function GuestCloseRegisterPrompt() {
 
   useEffect(() => {
     if (!active) return undefined;
+    let pointerInside = false;
+    const markInside = () => {
+      pointerInside = true;
+    };
     const onLeave = (event) => {
+      if (!pointerInside) return;
+      pointerInside = false;
       if (isWindowCloseIntent(event)) setOpen(true);
     };
-    document.documentElement.addEventListener('mouseout', onLeave);
-    return () => document.documentElement.removeEventListener('mouseout', onLeave);
+    document.addEventListener('mousemove', markInside);
+    document.documentElement.addEventListener('mouseleave', onLeave);
+    return () => {
+      document.removeEventListener('mousemove', markInside);
+      document.documentElement.removeEventListener('mouseleave', onLeave);
+    };
   }, [active]);
 
   useEffect(() => {

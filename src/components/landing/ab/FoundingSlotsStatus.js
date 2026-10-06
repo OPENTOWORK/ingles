@@ -7,7 +7,7 @@ import { FOUNDING_OFFER } from '@/lib/abExperiment';
  * Muestra plazas solo cuando el endpoint público ya existente devuelve un número.
  * Si no hay dato, no inventa una cifra.
  */
-export default function FoundingSlotsStatus() {
+export default function FoundingSlotsStatus({ variant = 'text' }) {
   const [state, setState] = useState({ status: 'loading' });
 
   useEffect(() => {
@@ -36,6 +36,29 @@ export default function FoundingSlotsStatus() {
       cancelled = true;
     };
   }, []);
+
+  if (variant === 'badge') {
+    const remaining = state.status === 'ready' && !state.soldOut ? state.remaining : null;
+    const label =
+      state.status === 'ready' && state.soldOut
+        ? 'Plazas asignadas'
+        : state.status === 'loading'
+          ? 'Plazas'
+          : 'Plazas limitadas';
+    return (
+      <p className={`ab-seats${remaining == null ? ' ab-seats--plain' : ''}`} role="status">
+        {remaining == null ? (
+          label
+        ) : (
+          <>
+            <span>Quedan</span>
+            <strong>{remaining}</strong>
+            <span>plazas</span>
+          </>
+        )}
+      </p>
+    );
+  }
 
   if (state.status === 'ready' && state.soldOut) {
     return (
