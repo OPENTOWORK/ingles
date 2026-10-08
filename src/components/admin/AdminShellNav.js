@@ -23,10 +23,20 @@ import { loadAdminShellMenuOrder, saveAdminShellMenuOrder } from '@/lib/adminShe
 import AdminShellDragHandle from '@/components/admin/AdminShellDragHandle';
 import styles from './AdminShell.module.css';
 
+function LockIcon() {
+  return (
+    <svg className={styles.navLockIcon} viewBox="0 0 16 16" aria-hidden="true">
+      <rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M5.2 7V5.2a2.8 2.8 0 0 1 5.6 0V7" fill="none" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
 function SortableNavItem({ item, active, collapsed, disabled }) {
+  const locked = Boolean(item.locked);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: item.href,
-    disabled,
+    disabled: disabled || locked,
   });
 
   const style = {
@@ -36,7 +46,8 @@ function SortableNavItem({ item, active, collapsed, disabled }) {
 
   const itemClass = [
     styles.navItem,
-    active ? styles.navItemActive : '',
+    active && !locked ? styles.navItemActive : '',
+    locked ? styles.navItemLocked : '',
     isDragging ? styles.navItemDragging : '',
   ]
     .filter(Boolean)
@@ -44,7 +55,7 @@ function SortableNavItem({ item, active, collapsed, disabled }) {
 
   return (
     <div ref={setNodeRef} style={style} className={itemClass}>
-      {!collapsed ? (
+      {!collapsed && !locked ? (
         <button
           type="button"
           className={styles.dragHandle}
@@ -56,14 +67,25 @@ function SortableNavItem({ item, active, collapsed, disabled }) {
           <AdminShellDragHandle className={styles.dragHandleIcon} />
         </button>
       ) : null}
-      <Link
-        href={item.href}
-        className={active ? styles.navLinkActive : styles.navLink}
-        aria-current={active ? 'page' : undefined}
-        title={collapsed ? item.label : undefined}
-      >
-        <span className={styles.navLabel}>{item.label}</span>
-      </Link>
+      {locked ? (
+        <span
+          className={styles.navLinkLocked}
+          title={`${item.label}. Sin permiso`}
+        >
+          <span className={styles.navLabel}>{item.label}</span>
+          <LockIcon />
+          <span className={styles.visuallyHidden}>Sin permiso</span>
+        </span>
+      ) : (
+        <Link
+          href={item.href}
+          className={active ? styles.navLinkActive : styles.navLink}
+          aria-current={active ? 'page' : undefined}
+          title={collapsed ? item.label : undefined}
+        >
+          <span className={styles.navLabel}>{item.label}</span>
+        </Link>
+      )}
     </div>
   );
 }

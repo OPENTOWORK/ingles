@@ -3,6 +3,7 @@ import {
   isCoordinatorRole,
   isItRole,
   isMarketingRole,
+  isStudentRole,
   isSupportRole,
   isTeacherRole,
   normalizeRoleName,
@@ -278,19 +279,27 @@ export function getAdminShellMenuItems(roleName = '', permissionOverridesByRole 
   return flattenAdminShellMenuSections(getAdminShellMenuSections(roleName, permissionOverridesByRole));
 }
 
-/** Índice lateral agrupado por departamento. */
-export function getAdminShellMenuSections(roleName = '', permissionOverridesByRole = {}) {
-  if (isAdminRole(roleName)) {
-    return ADMIN_SHELL_MENU_SECTIONS;
-  }
+function canViewAdminShell(roleName = '') {
+  return Boolean(String(roleName || '').trim()) && !isStudentRole(roleName);
+}
 
-  const items = getStaffPanelMenuItemsForRole(roleName, permissionOverridesByRole).filter((item) =>
-    item.href.startsWith('/admin'),
+/** Índice lateral agrupado por departamento. Los módulos sin permiso se ven, bloqueados. */
+export function getAdminShellMenuSections(roleName = '', permissionOverridesByRole = {}) {
+  if (!canViewAdminShell(roleName)) return [];
+
+  const allowed = new Set(
+    getStaffPanelMenuItemsForRole(roleName, permissionOverridesByRole).map((item) =>
+      normalizeStaffShellPath(item.href),
+    ),
   );
 
-  if (!items.length) return [];
-
-  return [{ id: 'modules', title: null, items }];
+  return ADMIN_SHELL_MENU_SECTIONS.map((section) => ({
+    ...section,
+    items: (section.items || []).map((item) => ({
+      ...item,
+      locked: !allowed.has(normalizeStaffShellPath(item.href)),
+    })),
+  }));
 }
 
 function flattenAdminShellMenuSections(sections = []) {
@@ -307,14 +316,16 @@ function flattenAdminShellMenuSections(sections = []) {
   return items;
 }
 
-/** Muestra el shell lateral solo en rutas de gestión admin (rol administrador u otros con /admin/*). */
+/** Shell lateral para cualquier rol salvo el estudiante, en sus paneles y en el resto de módulos. */
 export function shouldShowAdminShell(pathname = '', roleName = '') {
-  if (isAdminRole(roleName) && normalizeStaffShellPath(pathname) === STAFF_PANELS_HUB_PATH) {
-    return true;
-  }
-  const menuItems = getAdminShellMenuItems(roleName);
-  if (!menuItems.length) return false;
-  return menuItems.some((item) => staffShellPathMatches(pathname, item.href));
+  if (!canViewAdminShell(roleName)) return false;
+  if (normalizeStaffShellPath(pathname) === STAFF_PANELS_HUB_PATH) return true;
+
+  const hrefs = [
+    ...getAdminShellMenuItems(roleName),
+    ...getStaffPanelMenuItemsForRole(roleName),
+  ];
+  return hrefs.some((item) => staffShellPathMatches(pathname, item.href));
 }
 
 export const TEACHER_PANEL_MENU_ITEMS = [
