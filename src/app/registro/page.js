@@ -9,7 +9,7 @@ import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 import { detectClientDeviceType } from '@/lib/clientDeviceType';
-import { readAttributionFromSearch } from '@/lib/abExperiment';
+import { readAttributionFromSearch, FOUNDING_OFFER } from '@/lib/abExperiment';
 import { trackRegistrationComplete, trackRegistrationStart } from '@/lib/abExperimentTrack';
 
 const PASSWORD_RULES = [
@@ -28,11 +28,15 @@ export default function RegistroPage() {
   const [acceptedMarketing, setAcceptedMarketing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [showPasswordRules, setShowPasswordRules] = useState(false);
+  const [fromCampaign, setFromCampaign] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     const attribution = readAttributionFromSearch(window.location.search);
-    if (attribution) trackRegistrationStart(attribution);
+    if (attribution) {
+      setFromCampaign(attribution.pageType === 'campaign');
+      trackRegistrationStart(attribution);
+    }
   }, []);
 
   useEffect(() => {
@@ -285,6 +289,14 @@ export default function RegistroPage() {
         <SiteMascot variant={5} width={120} alt="Dralo" />
       </div>
       <h2 style={authHeadingStyle}>Crear cuenta</h2>
+      {fromCampaign ? (
+        <div style={campaignNoteStyle}>
+          <p style={campaignNoteTitleStyle}>Crea tu cuenta y accede a la promoción del Plan Plus</p>
+          <p style={campaignNoteBodyStyle}>
+            {`Para los primeros ${FOUNDING_OFFER.total} registros. Sin tarjeta. Para conservar el Plus gratis, completa el formulario que recibirás a los ${FOUNDING_OFFER.delayDays} días dentro de los ${FOUNDING_OFFER.responseDays} días siguientes.`}
+          </p>
+        </div>
+      ) : null}
 
       <form onSubmit={handleRegister} noValidate>
         <label htmlFor="registro-nombre" style={authLabelStyle}>
@@ -316,7 +328,7 @@ export default function RegistroPage() {
         />
 
         <label htmlFor="registro-password" style={{ ...authLabelStyle, margin: '1rem 0 0.5rem' }}>
-          Password
+          Contraseña
         </label>
         <PasswordInput
           id="registro-password"
@@ -432,6 +444,25 @@ const authMainStyle = {
 const authHeadingStyle = {
   textAlign: 'center',
   marginBottom: '1.5rem',
+};
+
+const campaignNoteStyle = {
+  margin: '-0.65rem 0 1.35rem',
+  textAlign: 'center',
+};
+
+const campaignNoteTitleStyle = {
+  margin: '0 0 0.4rem',
+  color: '#1e1b4b',
+  fontWeight: 700,
+  lineHeight: 1.35,
+};
+
+const campaignNoteBodyStyle = {
+  margin: 0,
+  color: '#3f3a5a',
+  fontSize: '0.95rem',
+  lineHeight: 1.5,
 };
 
 const authLabelStyle = {

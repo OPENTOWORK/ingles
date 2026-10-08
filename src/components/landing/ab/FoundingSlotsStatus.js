@@ -37,6 +37,31 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
     };
   }, []);
 
+  if (variant === 'sentence') {
+    if (state.status === 'ready' && state.soldOut) {
+      return (
+        <p className="ab-seats-line" role="status">
+          Las {state.total} plazas de esta promoción ya están asignadas.
+        </p>
+      );
+    }
+    if (state.status === 'ready') {
+      return (
+        <p className="ab-seats-line" role="status">
+          Quedan {state.remaining} plazas.
+        </p>
+      );
+    }
+    if (state.status === 'loading') {
+      return (
+        <p className="ab-seats-line" role="status">
+          Comprobando plazas.
+        </p>
+      );
+    }
+    return null;
+  }
+
   if (variant === 'headline') {
     const remaining = state.status === 'ready' && !state.soldOut ? state.remaining : null;
     const label =

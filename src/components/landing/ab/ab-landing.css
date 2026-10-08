@@ -77,12 +77,173 @@
   box-shadow: 0 16px 40px rgba(30, 27, 75, 0.06);
 }
 
+.ab-hero__offer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.ab-hero__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.ab-offer-line {
+  margin: 0.15rem 0 0;
+  color: var(--ab-ink);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
 .ab-hero__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0.85rem;
   margin-top: 0.35rem;
+}
+
+.ab-hero__actions:has(.ab-hero__offer) {
+  display: block;
+}
+
+.ab-support {
+  margin: 0;
+  color: var(--ab-ink);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ab-condition {
+  margin: 0.35rem 0 0;
+  max-width: 40rem;
+  color: var(--ab-ink);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.ab-seats-line {
+  margin: 0;
+  color: var(--ab-ink);
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.ab-writing-shot {
+  margin: 0;
+}
+
+.ab-writing-card {
+  padding: 1rem 1rem 0.9rem;
+  border-radius: 1.15rem;
+  border: 1px solid var(--ab-line);
+  background: #fff;
+  box-shadow: 0 16px 36px rgba(30, 27, 75, 0.1);
+}
+
+.ab-writing-card__label {
+  margin: 0 0 0.45rem;
+  color: var(--ab-purple);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ab-writing-card__text {
+  margin: 0;
+  color: var(--ab-ink);
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.ab-writing-card mark {
+  padding: 0.05rem 0.2rem;
+  border-radius: 0.25rem;
+  background: #ffe1d6;
+  color: #9a3412;
+  font-weight: 750;
+}
+
+.ab-writing-card__note {
+  margin-top: 0.9rem;
+  padding: 0.85rem 0.9rem;
+  border-radius: 0.9rem;
+  background: #f7f5ff;
+  border: 1px solid #e4def8;
+}
+
+.ab-writing-card__note p {
+  margin: 0 0 0.35rem;
+  color: var(--ab-ink);
+}
+
+.ab-writing-card__note p:last-child {
+  margin-bottom: 0;
+}
+
+.ab-writing-card__tag {
+  color: var(--ab-purple) !important;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.ab-writing-card__try {
+  margin-top: 0.45rem !important;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.55rem;
+  background: #e8f8ef;
+  color: #166534 !important;
+  font-weight: 750;
+}
+
+.ab-writing-shot figcaption {
+  margin: 0.55rem 0 0;
+  color: var(--ab-muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.ab-plan__primary,
+.ab-plan__secondary {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ab-plan__primary {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.ab-plan__primary li {
+  padding: 0.9rem 1rem;
+  border-radius: 1rem;
+  background: #fff;
+  border: 1px solid var(--ab-line);
+  color: var(--ab-ink);
+  font-weight: 750;
+}
+
+.ab-plan__secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.ab-plan__secondary li {
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 1px solid var(--ab-line);
+  color: var(--ab-muted);
+  font-size: 0.92rem;
 }
 
 .ab-cta {

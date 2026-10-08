@@ -26,6 +26,15 @@ describe('ab experiment routes and attribution', () => {
       buildRegisterHref({ pageType: 'campaign', variant: 'A', source: 'b2-guide' }),
       '/registro/?ab_page=campaign&ab_variant=a&ab_source=b2-guide',
     );
+    assert.equal(
+      buildRegisterHref({
+        pageType: 'campaign',
+        variant: 'a',
+        source: 'direct',
+        searchParams: { utm_source: 'google', gclid: 'click-1', ab_source: 'ignored' },
+      }),
+      '/registro/?ab_page=campaign&ab_variant=a&ab_source=direct&utm_source=google&gclid=click-1',
+    );
     assert.deepEqual(readAttributionFromSearch('?ab_page=campaign&ab_variant=b&ab_source=b2-guide'), {
       pageType: 'campaign',
       variant: 'b',

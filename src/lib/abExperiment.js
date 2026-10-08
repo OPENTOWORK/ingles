@@ -60,12 +60,37 @@ export function guideToCampaignHref(variant) {
  * Alta real existente. La query solo identifica la variante del experimento.
  * No incluye email ni otros datos personales.
  */
-export function buildRegisterHref({ pageType, variant, source = 'direct' }) {
+const PRESERVED_ACQUISITION_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_content',
+  'utm_term',
+  'gclid',
+  'gbraid',
+  'wbraid',
+  'fbclid',
+  'ttclid',
+  'msclkid',
+];
+
+function firstSearchValue(value) {
+  const raw = Array.isArray(value) ? value[0] : value;
+  const text = typeof raw === 'string' ? raw.trim() : '';
+  return text || '';
+}
+
+export function buildRegisterHref({ pageType, variant, source = 'direct', searchParams } = {}) {
   const params = new URLSearchParams({
     ab_page: pageType === 'guide' ? 'guide' : 'campaign',
     ab_variant: normalizeAbVariant(variant),
     ab_source: source === 'b2-guide' ? 'b2-guide' : 'direct',
   });
+  const incoming = searchParams && typeof searchParams === 'object' ? searchParams : {};
+  for (const key of PRESERVED_ACQUISITION_KEYS) {
+    const value = firstSearchValue(incoming[key]);
+    if (value) params.set(key, value);
+  }
   return `/registro/?${params.toString()}`;
 }
 
@@ -99,6 +124,7 @@ export const PLUS_LIST_PRICE = plusPlan?.precioLista
   : '[COMPLETAR PRECIO]';
 export const PREMIUM_PUBLIC_PRICE = premiumPlan?.precioLabel || '[COMPLETAR]';
 export const PLUS_HIGHLIGHTS = Array.isArray(plusPlan?.highlights) ? plusPlan.highlights : [];
+export const PLUS_ENTITLEMENTS = plusPlan?.entitlements || null;
 
 export const FOUNDING_OFFER = {
   total: MAX_FOUNDING_SLOT,
@@ -269,7 +295,7 @@ export function campaignMetadata(variant) {
   const description =
     normalizeAbVariant(variant) === 'b'
       ? `Mira la corrección de Writing y las fotos de Speaking. Plan Plus gratis para los primeros ${MAX_FOUNDING_SLOT}, si completas el formulario a los ${FOUNDING_SURVEY_DELAY_DAYS} días.`
-      : `Plan Plus gratis para siempre para los primeros ${MAX_FOUNDING_SLOT} registros. A los ${FOUNDING_SURVEY_DELAY_DAYS} días hay que completar un formulario para conservarlo.`;
+      : `Practica el B2 First y mejora tu Writing. Plan Plus gratis para los primeros ${MAX_FOUNDING_SLOT} registros, si completas el formulario a los ${FOUNDING_SURVEY_DELAY_DAYS} días.`;
   return {
     title: { absolute: title },
     description,
