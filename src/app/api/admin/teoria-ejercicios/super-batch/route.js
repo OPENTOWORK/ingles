@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { requireAdminFromRequest } from '@/lib/adminApiAuth';
+import { requireModuleFromRequest } from '@/lib/adminApiAuth';
 import {
   fetchRecentTeoriaPreguntas,
   fetchTeoriaExerciseCatalog,
@@ -17,7 +17,7 @@ export const maxDuration = 300;
 
 export async function GET(req) {
   try {
-    const auth = await requireAdminFromRequest(req);
+    const auth = await requireModuleFromRequest(req, ['ejercicios']);
     if (!auth.ok) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -37,7 +37,7 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const auth = await requireAdminFromRequest(req);
+    const auth = await requireModuleFromRequest(req, ['ejercicios']);
     if (!auth.ok) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

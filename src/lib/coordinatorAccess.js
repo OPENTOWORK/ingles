@@ -6,6 +6,8 @@ import {
   normalizeRoleName,
   userHasRole,
 } from '@/utils/authRoles';
+import { getUserRoleNameServer } from '@/lib/userRoleServer';
+import { actorMayEnterModules } from '@/lib/staffRolePermissionsServer';
 
 export { canAccessCoordinatorPanel };
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
@@ -21,7 +23,13 @@ export async function assertCoordinatorApiAccess(userId, email = '') {
     email,
   );
   if (!isAdmin && !isCoordinator) {
-    return { ok: false, status: 403, error: 'Sin permiso de coordinador o administrador.' };
+    const db = getServiceDb('');
+    const roleName = await getUserRoleNameServer(userId, db);
+    const allowed = await actorMayEnterModules(db, roleName, ['coordinador', 'coordinadorAdmin']);
+    if (!allowed) {
+      return { ok: false, status: 403, error: 'Sin permiso de coordinador o administrador.' };
+    }
+    return { ok: true, isAdmin: false, isCoordinator: true };
   }
   return { ok: true, isAdmin, isCoordinator };
 }

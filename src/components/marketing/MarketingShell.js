@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { canAccessMarketingPlanAdminPanel, getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import styles from './MarketingShell.module.css';
@@ -62,7 +63,7 @@ export default function MarketingShell({
       }
 
       const role = await getRoleNameByUserId(user.id, user.email);
-      if (!canAccessMarketingPlanAdminPanel(role)) {
+      if (!(await mayEnterStaffModule(role, 'planMarketing'))) {
         router.push('/perfil');
         return;
       }

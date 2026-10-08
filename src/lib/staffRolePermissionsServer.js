@@ -5,6 +5,7 @@ import {
   buildPermissionMatrix,
   normalizePermissionKeys,
   resolvePermissionKeysForRole,
+  roleMayEnterModule,
 } from '@/lib/staffRolePermissions';
 
 const TABLE = 'staff_role_permissions';
@@ -45,6 +46,16 @@ export async function loadStaffRolePermissionOverrides(db) {
 /**
  * @param {import('@supabase/supabase-js').SupabaseClient} db
  */
+export async function actorMayEnterModules(db, roleName = '', permissionKeys = []) {
+  let overrides = {};
+  try {
+    overrides = await loadStaffRolePermissionOverrides(db);
+  } catch {
+    overrides = {};
+  }
+  return roleMayEnterModule(roleName, permissionKeys, overrides);
+}
+
 export async function saveStaffRolePermissionOverrides(db, roleKey, permissionKeys = []) {
   const key = String(roleKey || '').trim();
   if (!key || key === 'admin') {

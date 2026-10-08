@@ -13,7 +13,8 @@ import {
   getRegistrationDeviceType,
   normalizeRegistrationDeviceType,
 } from '@/lib/registrationDevice';
-import { userHasRole, normalizeRoleName } from '@/utils/authRoles';
+import { getRoleNameByUserId, normalizeRoleName } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import { getPlanDisplayLabel, normalizeUserPlanSlug } from '@/data/financialPlanConfig';
 import AdminUserManagementList from '@/components/admin/AdminUserManagementList';
 import AdminOverviewStats from '@/components/admin/AdminOverviewStats';
@@ -218,8 +219,9 @@ export default function AdminDashboard() {
         return;
       }
 
-      const isAdmin = await userHasRole(currentUser.id, ['admin', 'administrador'], currentUser.email);
-      if (!isAdmin) {
+      const role = await getRoleNameByUserId(currentUser.id, currentUser.email);
+      const moduleKey = isUserAdmin ? 'administracion' : 'admin';
+      if (!(await mayEnterStaffModule(role, moduleKey))) {
         router.push('/perfil');
         return;
       }

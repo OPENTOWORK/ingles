@@ -4,7 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { canAccessItPanel, getRoleNameByUserId, isAdminRole } from '@/utils/authRoles';
+import { getRoleNameByUserId, isAdminRole } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import TeacherActivityCharts from '@/components/teacher/TeacherActivityCharts';
 import SupportHub from '@/components/support/SupportHub';
 import PanelPageHeader from '@/components/PanelPageHeader';
@@ -161,7 +162,7 @@ export default function ItPanel() {
         return;
       }
       const role = await getRoleNameByUserId(u.id, u.email);
-      if (!canAccessItPanel(role)) {
+      if (!(await mayEnterStaffModule(role, 'informatico'))) {
         router.push('/perfil');
         return;
       }

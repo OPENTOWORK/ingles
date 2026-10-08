@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { canAccessStaffBuzon, getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import StaffBuzonPanelPage from '@/components/buzon/StaffBuzonPanelPage';
 import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -25,7 +26,7 @@ export default function BuzonPage() {
       }
 
       const role = await getRoleNameByUserId(user.id, user.email);
-      if (!canAccessStaffBuzon(role)) {
+      if (!(await mayEnterStaffModule(role, 'buzon'))) {
         router.push('/perfil');
         return;
       }

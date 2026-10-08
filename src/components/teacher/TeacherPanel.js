@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import {
   canAccessAdminTeacherPanelView,
-  canAccessTeacherPanel,
   getRoleNameByUserId,
 } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import TeacherActivityCharts from '@/components/teacher/TeacherActivityCharts';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -147,7 +147,7 @@ export default function TeacherPanel({ title = 'Panel de Profesor' }) {
           return;
         }
         const role = await getRoleNameByUserId(u.id, u.email);
-        if (!canAccessTeacherPanel(role)) {
+        if (!(await mayEnterStaffModule(role, ['profesor', 'profesorAdmin']))) {
           router.push('/perfil');
           return;
         }

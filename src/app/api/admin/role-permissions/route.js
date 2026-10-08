@@ -6,7 +6,7 @@ import {
 } from '@/lib/staffRolePermissionsServer';
 
 export async function GET(req) {
-  const auth = await authenticateAdminRequest(req);
+  const auth = await authenticateAdminRequest(req, ['configuracion']);
   if (auth.error) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }
@@ -21,7 +21,7 @@ export async function GET(req) {
 }
 
 export async function PUT(req) {
-  const auth = await authenticateAdminRequest(req);
+  const auth = await authenticateAdminRequest(req, ['configuracion']);
   if (auth.error) {
     return NextResponse.json({ error: auth.error }, { status: auth.status });
   }

@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { userHasRole } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import {
@@ -148,8 +149,8 @@ export default function AdminEjerciciosPanel() {
         router.push('/login');
         return;
       }
-      const isAdmin = await userHasRole(user.id, ['admin', 'administrador'], user.email);
-      if (!isAdmin) {
+      const role = await getRoleNameByUserId(user.id, user.email);
+      if (!(await mayEnterStaffModule(role, 'ejercicios'))) {
         router.push('/perfil');
         return;
       }

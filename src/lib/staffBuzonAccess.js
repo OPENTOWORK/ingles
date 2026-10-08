@@ -1,4 +1,5 @@
 import { ADMIN_EMAIL, canAccessStaffBuzon, normalizeEmail } from '@/utils/authRoles';
+import { actorMayEnterModules } from '@/lib/staffRolePermissionsServer';
 import { getUserRoleNameServer } from '@/lib/userRoleServer';
 import { getAuthUserFromRequest, createDbClients } from '@/lib/supportAuth';
 import { isStaffBuzonRole } from '@/utils/staffBuzon';
@@ -12,7 +13,8 @@ export async function getStaffBuzonRoleForUser(userId, email, dbClient) {
 
 export async function userCanAccessStaffBuzon(userId, email, dbClient) {
   const role = await getStaffBuzonRoleForUser(userId, email, dbClient);
-  return canAccessStaffBuzon(role);
+  if (canAccessStaffBuzon(role)) return true;
+  return actorMayEnterModules(dbClient, role, ['buzon']);
 }
 
 export async function userIsStaffBuzonRecipient(userId, dbClient) {

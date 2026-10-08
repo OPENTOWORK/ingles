@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { normalizeRoleName } from '@/utils/authRoles';
+import { actorMayEnterModules } from '@/lib/staffRolePermissionsServer';
 
 const SUPPORT_ROLES = new Set([
   'soporte',
@@ -39,7 +40,9 @@ export async function userIsSupportStaff(userId, adminClient) {
     .eq('id', userRow.rol_id)
     .maybeSingle();
 
-  return SUPPORT_ROLES.has(normalizeRoleName(roleRow?.nombre || ''));
+  const roleName = roleRow?.nombre || '';
+  if (SUPPORT_ROLES.has(normalizeRoleName(roleName))) return true;
+  return actorMayEnterModules(adminClient, roleName, ['soporte']);
 }
 
 export function createDbClients(token) {

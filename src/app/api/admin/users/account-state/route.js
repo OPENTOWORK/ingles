@@ -4,7 +4,7 @@ import { applyAuditedProfileField, assertAuditTransactionReady } from '@/lib/adm
 
 export async function POST(req) {
   try {
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticateAdminRequest(req, ['admin']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

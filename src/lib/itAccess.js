@@ -1,6 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { canAccessItPanel as canAccessItPanelFromRoles, userHasRole } from '@/utils/authRoles';
+import { getUserRoleNameServer } from '@/lib/userRoleServer';
+import { actorMayEnterModules } from '@/lib/staffRolePermissionsServer';
 
 export { canAccessItPanelFromRoles as canAccessItPanel };
 
@@ -8,7 +10,12 @@ export async function assertItApiAccess(userId, email = '') {
   const isAdmin = await userHasRole(userId, ['admin', 'administrador'], email);
   const isIt = await userHasRole(userId, ['informatico', 'it'], email);
   if (!isAdmin && !isIt) {
-    return { ok: false, status: 403, error: 'Sin permiso de informático o administrador.' };
+    const db = getServiceDb('');
+    const roleName = await getUserRoleNameServer(userId, db);
+    const allowed = await actorMayEnterModules(db, roleName, ['informatico']);
+    if (!allowed) {
+      return { ok: false, status: 403, error: 'Sin permiso de informático o administrador.' };
+    }
   }
   return { ok: true, isAdmin, isIt };
 }

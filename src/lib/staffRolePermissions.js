@@ -129,6 +129,11 @@ export function roleHasStaffPermission(roleName = '', permissionKey = '', overri
   return resolvePermissionKeysForRole(roleKey, overridesByRole).includes(permissionKey);
 }
 
+export function roleMayEnterModule(roleName = '', permissionKeys = [], overridesByRole = {}) {
+  const keys = Array.isArray(permissionKeys) ? permissionKeys : [permissionKeys];
+  return keys.some((key) => roleHasStaffPermission(roleName, key, overridesByRole));
+}
+
 export function permissionKeysToMenuItems(permissionKeys = []) {
   return normalizePermissionKeys(permissionKeys)
     .map((key) => STAFF_PERMISSION_PANELS[key])

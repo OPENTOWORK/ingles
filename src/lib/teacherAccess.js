@@ -6,6 +6,8 @@ import {
   normalizeRoleName,
   userHasRole,
 } from '@/utils/authRoles';
+import { getUserRoleNameServer } from '@/lib/userRoleServer';
+import { actorMayEnterModules } from '@/lib/staffRolePermissionsServer';
 
 export function canAccessTeacherPanel(roleName) {
   return canAccessTeacherPanelFromRoles(roleName);
@@ -33,7 +35,19 @@ export async function assertTeacherApiAccess(userId, email = '') {
   const isTeacher = await userHasRole(userId, ['teacher', 'profesor'], email);
   const isCoordinator = await userHasRole(userId, ['coordinador', 'coordinator'], email);
   if (!isAdmin && !isTeacher && !isCoordinator) {
-    return { ok: false, status: 403, error: 'Sin permiso de profesor o administrador.' };
+    const db = getServiceDb('');
+    const roleName = await getUserRoleNameServer(userId, db);
+    const allowed = await actorMayEnterModules(db, roleName, ['profesor', 'profesorAdmin']);
+    if (!allowed) {
+      return { ok: false, status: 403, error: 'Sin permiso de profesor o administrador.' };
+    }
+    return {
+      ok: true,
+      isAdmin: false,
+      isTeacher: true,
+      isCoordinator: false,
+      professorId: userId,
+    };
   }
   return {
     ok: true,

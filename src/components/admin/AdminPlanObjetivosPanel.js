@@ -5,7 +5,8 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { canAccessPlanObjetivosAdminPanel, getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import FormularioRunner from '@/components/formularios/FormularioRunner';
@@ -164,7 +165,7 @@ export default function AdminPlanObjetivosPanel() {
       }
 
       const role = await getRoleNameByUserId(user.id, user.email);
-      if (!canAccessPlanObjetivosAdminPanel(role)) {
+      if (!(await mayEnterStaffModule(role, 'planObjetivos'))) {
         router.push('/perfil');
         return;
       }

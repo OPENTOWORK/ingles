@@ -138,7 +138,7 @@ function aggregateRevenueByMonth(payments) {
 
 export async function GET(req) {
   try {
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticateAdminRequest(req, ['planFinanciero']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -275,7 +275,7 @@ export async function GET(req) {
 /** Crea o sincroniza catálogo FREE · PLUS · PREMIUM (solo admin). */
 export async function POST(req) {
   try {
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticateAdminRequest(req, ['planFinanciero']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -425,7 +425,7 @@ async function updatePlanById(db, id, payload) {
 /** Actualiza un plan activo (solo admin). */
 export async function PATCH(req) {
   try {
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticateAdminRequest(req, ['planFinanciero']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -478,7 +478,7 @@ export async function PATCH(req) {
 /** Elimina un plan (soft-delete si tiene suscripciones). */
 export async function DELETE(req) {
   try {
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticateAdminRequest(req, ['planFinanciero']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

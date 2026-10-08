@@ -13,7 +13,7 @@ export async function PATCH(req, { params }) {
   try {
     const { id } = params;
     if (!UUID.test(String(id || ''))) return invalidId();
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticateAdminRequest(req, ['administracion']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }
@@ -34,7 +34,7 @@ export async function DELETE(req, { params }) {
   try {
     const { id } = params;
     if (!UUID.test(String(id || ''))) return invalidId();
-    const auth = await authenticateAdminRequest(req);
+    const auth = await authenticateAdminRequest(req, ['administracion']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

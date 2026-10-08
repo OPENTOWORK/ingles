@@ -17,7 +17,8 @@ import {
 } from 'recharts';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { canAccessMarketingPlanAdminPanel, getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import {
@@ -391,7 +392,7 @@ export default function AdminPlanMarketingPanel({ embedded = false } = {}) {
         }
 
         const role = await getRoleNameByUserId(user.id, user.email);
-        if (!canAccessMarketingPlanAdminPanel(role)) {
+        if (!(await mayEnterStaffModule(role, 'planMarketing'))) {
           router.push('/perfil');
           return;
         }

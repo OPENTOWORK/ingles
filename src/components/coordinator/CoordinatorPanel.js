@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { canAccessCoordinatorPanel, getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
@@ -100,7 +101,7 @@ export default function CoordinatorPanel({ title = 'Panel de coordinador' }) {
           return;
         }
         const role = await getRoleNameByUserId(u.id, u.email);
-        if (!canAccessCoordinatorPanel(role)) {
+        if (!(await mayEnterStaffModule(role, ['coordinador', 'coordinadorAdmin']))) {
           router.push('/perfil');
           return;
         }

@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
 import { getRoleNameByUserId } from '@/utils/authRoles';
-import { canAccessRolePermissionsAdmin } from '@/lib/staffRolePermissions';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import styles from './AdminRolePermissionsPanel.module.css';
@@ -63,7 +63,7 @@ export default function AdminRolePermissionsPanel() {
       }
 
       const role = await getRoleNameByUserId(user.id, user.email);
-      if (!canAccessRolePermissionsAdmin(role)) {
+      if (!(await mayEnterStaffModule(role, 'configuracion'))) {
         router.push('/perfil');
         return;
       }

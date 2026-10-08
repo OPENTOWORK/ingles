@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { userHasRole } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 
@@ -19,8 +20,8 @@ export default function ClasesGruposPage() {
         return;
       }
 
-      const canAccess = await userHasRole(user.id, ['clases/grupos', 'clases_grupos', 'group', 'admin', 'administrador']);
-      if (!canAccess) {
+      const role = await getRoleNameByUserId(user.id, user.email);
+      if (!(await mayEnterStaffModule(role, 'clasesGrupos'))) {
         router.push('/perfil');
         return;
       }

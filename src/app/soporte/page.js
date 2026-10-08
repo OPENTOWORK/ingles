@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { userHasRole } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import SupportHub from '@/components/support/SupportHub';
 import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -20,8 +21,8 @@ export default function SoportePage() {
         return;
       }
 
-      const canAccess = await userHasRole(user.id, ['soporte', 'admin', 'administrador']);
-      if (!canAccess) {
+      const role = await getRoleNameByUserId(user.id, user.email);
+      if (!(await mayEnterStaffModule(role, 'soporte'))) {
         router.push('/perfil');
         return;
       }

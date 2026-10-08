@@ -11,7 +11,7 @@ import {
 
 /** Estado de la campaña de la encuesta founding. */
 export async function GET(req) {
-  const auth = await authenticateAdminRequest(req);
+  const auth = await authenticateAdminRequest(req, ['admin']);
   if (auth.error) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   try {
@@ -32,7 +32,7 @@ export async function GET(req) {
  * `accion: 'ejecutar'` → fuerza la pasada diaria sin esperar al cron.
  */
 export async function POST(req) {
-  const auth = await authenticateAdminRequest(req);
+  const auth = await authenticateAdminRequest(req, ['admin']);
   if (auth.error) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   const body = await req.json().catch(() => ({}));

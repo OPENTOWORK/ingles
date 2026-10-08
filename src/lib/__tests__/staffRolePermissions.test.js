@@ -6,6 +6,7 @@ import {
   resolvePermissionKeysForRole,
   resolveStaffRolePermissionKey,
   roleHasStaffPermission,
+  roleMayEnterModule,
 } from '@/lib/staffRolePermissions';
 
 test('resolveStaffRolePermissionKey maps role aliases', () => {
@@ -23,6 +24,14 @@ test('resolvePermissionKeysForRole falls back to defaults', () => {
   const keys = resolvePermissionKeysForRole('soporte', {});
   assert.ok(keys.includes('soporte'));
   assert.ok(keys.includes('buzon'));
+});
+
+test('roleMayEnterModule accepts any granted module and blocks students', () => {
+  const overrides = { marketing: ['admin', 'soporte', 'planObjetivos'] };
+  assert.equal(roleMayEnterModule('Resp.marketing', ['admin', 'soporte'], overrides), true);
+  assert.equal(roleMayEnterModule('Resp.marketing', 'ejercicios', overrides), false);
+  assert.equal(roleMayEnterModule('student', 'admin', overrides), false);
+  assert.equal(roleMayEnterModule('admin', 'facturacion', {}), true);
 });
 
 test('roleHasStaffPermission follows the tareas grant and blocks students', () => {

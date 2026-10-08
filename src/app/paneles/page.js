@@ -8,6 +8,7 @@ import {
   getStaffPanelMenuItemsForRole,
   getStaffPanelMenuLabel,
 } from '@/config/appNavMenu';
+import { fetchStaffPermissionOverrides } from '@/lib/staffModuleGate';
 import { STAFF_PANELS_HUB_PATH } from '@/config/staffPanelHub';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -18,6 +19,7 @@ export default function PanelesPage() {
   const [loading, setLoading] = useState(true);
   const [userEmail, setUserEmail] = useState('');
   const [userRole, setUserRole] = useState('');
+  const [permissionOverrides, setPermissionOverrides] = useState({});
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -31,7 +33,8 @@ export default function PanelesPage() {
       }
 
       const role = await getRoleNameByUserId(user.id, user.email);
-      const items = getStaffPanelMenuItemsForRole(role);
+      const overrides = await fetchStaffPermissionOverrides();
+      const items = getStaffPanelMenuItemsForRole(role, overrides);
 
       if (!items.length) {
         router.push('/perfil');
@@ -44,6 +47,7 @@ export default function PanelesPage() {
       }
 
       setUserRole(role);
+      setPermissionOverrides(overrides);
       setUserEmail(user.email || '');
       setLoading(false);
     };
@@ -52,8 +56,8 @@ export default function PanelesPage() {
   }, [router]);
 
   const panelItems = useMemo(
-    () => getStaffPanelMenuItemsForRole(userRole),
-    [userRole],
+    () => getStaffPanelMenuItemsForRole(userRole, permissionOverrides),
+    [userRole, permissionOverrides],
   );
   const menuLabel = getStaffPanelMenuLabel(userRole);
 

@@ -14,7 +14,8 @@ import {
 } from 'recharts';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { userHasRole } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import {
   PREMIUM_EXAM_LEVELS,
   SUBSCRIPTION_STATUS_LABELS,
@@ -92,8 +93,8 @@ export default function AdminPlanFinancieroPanel() {
         router.push('/login');
         return;
       }
-      const isAdmin = await userHasRole(user.id, ['admin', 'administrador'], user.email);
-      if (!isAdmin) {
+      const role = await getRoleNameByUserId(user.id, user.email);
+      if (!(await mayEnterStaffModule(role, 'planFinanciero'))) {
         router.push('/perfil');
         return;
       }

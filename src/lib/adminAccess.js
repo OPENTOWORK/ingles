@@ -11,6 +11,7 @@ import {
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { getUserRoleNameServer } from '@/lib/userRoleServer';
+import { actorMayEnterModules } from '@/lib/staffRolePermissionsServer';
 
 async function userIsAdmin(user, db) {
   if (normalizeEmail(user.email) === normalizeEmail(ADMIN_EMAIL)) {
@@ -21,7 +22,7 @@ async function userIsAdmin(user, db) {
   return normalized === 'admin' || normalized === 'administrador';
 }
 
-export async function authenticateAdminRequest(req) {
+export async function authenticateAdminRequest(req, permissionKeys = null) {
   const auth = await getSupabaseUserFromRequest(req);
   if (!auth?.user) {
     return {
@@ -46,7 +47,12 @@ export async function authenticateAdminRequest(req) {
 
   const isAdmin = await userIsAdmin(auth.user, db);
   if (!isAdmin) {
-    return { error: 'Sin permiso.', status: 403 };
+    const keys = Array.isArray(permissionKeys) ? permissionKeys : [];
+    const roleName = keys.length ? await getUserRoleNameServer(auth.user.id, db) : '';
+    const allowed = keys.length && (await actorMayEnterModules(db, roleName, keys));
+    if (!allowed) {
+      return { error: 'Sin permiso.', status: 403 };
+    }
   }
 
   return { user: auth.user, token, db };
@@ -80,7 +86,9 @@ export async function authenticatePlanObjetivosAdminRequest(req) {
   const roleName = await getUserRoleNameServer(auth.user.id, db);
   const isCoordinator = isCoordinatorRole(roleName);
 
-  if (!isAdmin && !isCoordinator) {
+  const permitted =
+    isAdmin || isCoordinator || (await actorMayEnterModules(db, roleName, ['planObjetivos']));
+  if (!permitted) {
     return { error: 'Sin permiso.', status: 403 };
   }
 
@@ -116,7 +124,12 @@ export async function authenticateBlogAdminRequest(req) {
   const isCoordinator = isCoordinatorRole(roleName);
   const isMarketing = isMarketingRole(roleName);
 
-  if (!isAdmin && !isCoordinator && !isMarketing) {
+  const permitted =
+    isAdmin ||
+    isCoordinator ||
+    isMarketing ||
+    (await actorMayEnterModules(db, roleName, ['blog']));
+  if (!permitted) {
     return { error: 'Sin permiso.', status: 403 };
   }
 
@@ -151,7 +164,9 @@ export async function authenticateMarketingPlanAdminRequest(req) {
   const roleName = await getUserRoleNameServer(auth.user.id, db);
   const isMarketing = isMarketingRole(roleName);
 
-  if (!isAdmin && !isMarketing) {
+  const permitted =
+    isAdmin || isMarketing || (await actorMayEnterModules(db, roleName, ['planMarketing']));
+  if (!permitted) {
     return { error: 'Sin permiso.', status: 403 };
   }
 

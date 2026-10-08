@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getClientAuth } from '@/utils/getClientAuth';
-import { canAccessBlogAdminPanel, getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import PanelPageHeader from '@/components/PanelPageHeader';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import BlogArticleEditor, { BLOG_EMPTY_FORM } from '@/components/admin/BlogArticleEditor';
@@ -96,7 +97,7 @@ export default function AdminBlogPanel() {
         return;
       }
       const role = await getRoleNameByUserId(user.id, user.email);
-      if (!canAccessBlogAdminPanel(role)) {
+      if (!(await mayEnterStaffModule(role, 'blog'))) {
         router.push('/perfil');
         return;
       }
