@@ -1,7 +1,9 @@
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
-import { ADMIN_EMAIL, canAccessStaffTasks, normalizeEmail } from '@/utils/authRoles';
+import { ADMIN_EMAIL, normalizeEmail } from '@/utils/authRoles';
 import { getServiceDb } from '@/lib/coordinatorAccess';
 import { getUserRoleNameServer, isStudentRole } from '@/lib/userRoleServer';
+import { roleHasStaffPermission } from '@/lib/staffRolePermissions';
+import { loadStaffRolePermissionOverrides } from '@/lib/staffRolePermissionsServer';
 
 export async function assertStaffTasksApiAccess(userId, email = '', db) {
   if (normalizeEmail(email) === normalizeEmail(ADMIN_EMAIL)) {
@@ -9,8 +11,19 @@ export async function assertStaffTasksApiAccess(userId, email = '', db) {
   }
 
   const roleName = await getUserRoleNameServer(userId, db);
-  if (isStudentRole(roleName) || !canAccessStaffTasks(roleName)) {
+  if (isStudentRole(roleName)) {
     return { ok: false, status: 403, error: 'Los estudiantes no pueden gestionar tareas.' };
+  }
+
+  let overrides = {};
+  try {
+    overrides = await loadStaffRolePermissionOverrides(db);
+  } catch {
+    overrides = {};
+  }
+
+  if (!roleHasStaffPermission(roleName, 'tareas', overrides)) {
+    return { ok: false, status: 403, error: 'Sin permiso para tareas.' };
   }
 
   return { ok: true };

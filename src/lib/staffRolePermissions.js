@@ -3,6 +3,7 @@ import {
   isCoordinatorRole,
   isItRole,
   isMarketingRole,
+  isStudentRole,
   isSupportRole,
   isTeacherRole,
   normalizeRoleName,
@@ -119,6 +120,13 @@ export function resolvePermissionKeysForRole(roleKey = '', overridesByRole = {})
   const override = overridesByRole?.[key];
   if (Array.isArray(override)) return normalizePermissionKeys(override);
   return getDefaultPermissionKeysForRole(key);
+}
+
+export function roleHasStaffPermission(roleName = '', permissionKey = '', overridesByRole = {}) {
+  if (!permissionKey || isStudentRole(roleName)) return false;
+  const roleKey = resolveStaffRolePermissionKey(roleName);
+  if (!roleKey) return false;
+  return resolvePermissionKeysForRole(roleKey, overridesByRole).includes(permissionKey);
 }
 
 export function permissionKeysToMenuItems(permissionKeys = []) {

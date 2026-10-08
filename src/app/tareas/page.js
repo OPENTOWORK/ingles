@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
-import { canAccessStaffTasks, getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId } from '@/utils/authRoles';
+import { roleHasStaffPermission } from '@/lib/staffRolePermissions';
 import StaffTasksPanelPage from '@/components/tasks/StaffTasksPanelPage';
 import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -26,7 +27,17 @@ export default function TareasPage() {
       }
 
       const role = await getRoleNameByUserId(user.id, user.email);
-      if (!canAccessStaffTasks(role)) {
+      let overrides = {};
+      try {
+        const res = await fetch('/api/staff/role-permissions', { cache: 'no-store' });
+        if (res.ok) {
+          const data = await res.json();
+          overrides = data?.overrides || {};
+        }
+      } catch {
+        overrides = {};
+      }
+      if (!roleHasStaffPermission(role, 'tareas', overrides)) {
         router.push('/perfil');
         return;
       }
