@@ -246,35 +246,21 @@ export default function AdminDashboard() {
     setRoles(data || []);
   };
 
-  const loadUsers = async () => {
-    const selectVariants = [
-      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo, consentimiento_comercial',
-      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo, marketing_updates',
-      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo, metadata',
-      'id, email, nombre, rol_id, plan_id, creado_en, activo, destacado_equipo',
-      'id, email, nombre, rol_id, plan_id, creado_en, activo, consentimiento_comercial',
-      'id, email, nombre, rol_id, plan_id, creado_en, activo, marketing_updates',
-      'id, email, nombre, rol_id, plan_id, creado_en, activo, metadata',
-      'id, email, nombre, rol_id, plan_id, creado_en, activo',
-    ];
-
-    let rows = null;
-    let lastError = null;
-    for (const selectClause of selectVariants) {
-      const { data, error } = await supabase
-        .from('user_profiles')
-        .select(selectClause)
-        .order('creado_en', { ascending: false });
-
-      if (!error) {
-        rows = data || [];
-        lastError = null;
-        break;
-      }
-      lastError = error;
+  const loadUserDirectory = async () => {
+    const res = await fetch('/api/admin/user-directory/', {
+      credentials: 'include',
+      headers: await getAdminFetchHeaders(),
+    });
+    const payload = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      throw new Error(payload.error || 'No se pudieron cargar los usuarios.');
     }
+    return payload;
+  };
 
-    if (lastError) throw lastError;
+  const loadUsers = async () => {
+    const payload = await loadUserDirectory();
+    const rows = payload.users || [];
 
     const normalizedUsers = (rows || []).map((item) => {
       const consentFromDirectColumn =
@@ -430,13 +416,8 @@ export default function AdminDashboard() {
   const loadAnalytics = async () => {
     try {
       const excludeStaff = platformAnalyticsAudience === 'sin_staff';
-
-      const { data: userRowsData, error: usersError } = await supabase
-        .from('user_profiles')
-        .select('id, creado_en, activo, destacado_equipo');
-      if (usersError) throw usersError;
-
-      const userRows = userRowsData || [];
+      const directory = await loadUserDirectory();
+      const userRows = directory.users || [];
       const starredUserIds = new Set(
         userRows
           .filter((row) => Boolean(row.destacado_equipo))
@@ -445,24 +426,9 @@ export default function AdminDashboard() {
       const isEligibleUser = (userId) => !excludeStaff || !starredUserIds.has(String(userId));
       const eligibleUserRows = userRows.filter((row) => isEligibleUser(row.id));
 
-      let sesionesNivelAbandonadas = 0;
-      if (excludeStaff && starredUserIds.size > 0) {
-        const quotedIds = Array.from(starredUserIds)
-          .map((id) => `"${id}"`)
-          .join(',');
-        const sesionesNivelRes = await supabase
-          .from('sesiones_nivel')
-          .select('id', { count: 'exact', head: true })
-          .eq('estado', 'abandonada')
-          .not('user_id', 'in', `(${quotedIds})`);
-        sesionesNivelAbandonadas = sesionesNivelRes.count || 0;
-      } else {
-        const sesionesNivelRes = await supabase
-          .from('sesiones_nivel')
-          .select('id', { count: 'exact', head: true })
-          .eq('estado', 'abandonada');
-        sesionesNivelAbandonadas = sesionesNivelRes.count || 0;
-      }
+      const sesionesNivelAbandonadas = excludeStaff
+        ? directory.abandonedSessionsExcludingStaff || 0
+        : directory.abandonedSessions || 0;
 
       const filteredUsers = eligibleUserRows.filter((u) => withinClosedDates(u.creado_en));
       const createdTimes = filteredUsers
