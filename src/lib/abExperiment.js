@@ -57,7 +57,7 @@ export function guideToCampaignHref(variant) {
 }
 
 /**
- * Alta real existente. La query solo identifica la variante del experimento.
+ * Las campañas abren el login. La query solo identifica la variante del experimento.
  * No incluye email ni otros datos personales.
  */
 const PRESERVED_ACQUISITION_KEYS = [
@@ -91,7 +91,7 @@ export function buildRegisterHref({ pageType, variant, source = 'direct', search
     const value = firstSearchValue(incoming[key]);
     if (value) params.set(key, value);
   }
-  return `/registro/?${params.toString()}`;
+  return `/login/?${params.toString()}`;
 }
 
 export function readAttributionFromSearch(search = '') {

@@ -3102,6 +3102,39 @@ body.nav-open {
   }
 }
 
+.login-page__mascot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.login-page__bubble {
+  position: relative;
+  flex: 0 1 11.5rem;
+  margin: 0.2rem 0 0;
+  padding: 0.5rem 0.65rem;
+  border-radius: 1rem;
+  background: #f3efff;
+  color: #3c2f86;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(91, 75, 183, 0.12);
+}
+
+.login-page__bubble::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 16px;
+  border-width: 7px 8px 7px 0;
+  border-style: solid;
+  border-color: transparent #f3efff transparent transparent;
+}
+
 @media (max-width: 639px) {
   .login-page__mascot {
     display: none;

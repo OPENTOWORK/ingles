@@ -22,8 +22,6 @@ export function AppSharedDrawerNav({
   navModel,
   linkClass,
   onNavigate,
-  adminPanelsOpen,
-  onToggleAdminPanels,
   onLogout,
   draloVariant = 'mobile',
   /** Si viene informado, las opciones de la app (no el bloque legal) van aquí. Solo Home móvil sin sesión: login. */
@@ -42,7 +40,6 @@ export function AppSharedDrawerNav({
     showProfile,
     showLogout,
     staffItems,
-    staffMenuLabel,
     showStaffDropdown,
     showStaffSingleLink,
     showStaffAdminLink,
@@ -134,12 +131,8 @@ export function AppSharedDrawerNav({
 
       {showStaffDropdown ? (
         <AdminPanelsNav
-          variant={draloVariant === 'side' ? 'side' : 'mobile'}
-          open={adminPanelsOpen}
-          onToggle={onToggleAdminPanels}
           linkClassName={linkClass}
-          items={staffItems}
-          menuLabel={staffMenuLabel}
+          menuLabel="Paneles"
           isActive={staffPanelsNavActive}
           onNavigate={onNavigate}
         />

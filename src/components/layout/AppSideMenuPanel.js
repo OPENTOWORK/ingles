@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useUserRole } from '@/context/UserRoleContext';
@@ -18,10 +17,8 @@ import {
  * Usa el mismo modelo que el drawer móvil de AppNav (prioriza barra desktop).
  */
 export default function AppSideMenuPanel({ defaultOpen = true }) {
-  const pathname = usePathname();
   const { userRole, session } = useUserRole();
   const [open, setOpen] = useState(defaultOpen);
-  const [adminPanelsOpen, setAdminPanelsOpen] = useState(false);
   const [isPhone, setIsPhone] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
   const { locked: examStrategiesPlanLocked } = useExamStrategiesAccess({ userRole, session });
@@ -44,10 +41,6 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
     const timeoutId = window.setTimeout(clearOpenMainMenuAfterLogin, 1000);
     return () => window.clearTimeout(timeoutId);
   }, []);
-
-  useEffect(() => {
-    setAdminPanelsOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     setPortalReady(true);
@@ -117,8 +110,6 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             navModel={navModel}
             linkClass={linkClass}
             onNavigate={closeMenu}
-            adminPanelsOpen={adminPanelsOpen}
-            onToggleAdminPanels={() => setAdminPanelsOpen((v) => !v)}
             onLogout={handleLogout}
             draloVariant="side"
             guestEntryHref={null}

@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
+import { notifyAdminsOfRegistration } from '@/lib/notifyAdminsOfRegistration';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
 import { markReferralRegistered } from '@/lib/referrals';
@@ -346,15 +347,24 @@ export async function POST(req) {
     // Solo la confirmación: la bienvenida y el aviso de Plan Plus los envía
     // /api/auth/ensure-profile cuando el alumno entra con el email ya confirmado.
     try {
-      const confirmationMail = await withTimeout(
-        dispatchAutomatedEmail({
-          adminClient,
-          triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION,
-          to: email,
-          variables: { email, nombre, action_url: signup.url },
-        }),
-        SIGNUP_EMAIL_TIMEOUT_MS,
-      );
+      const [confirmationMail] = await Promise.all([
+        withTimeout(
+          dispatchAutomatedEmail({
+            adminClient,
+            triggerEvent: AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION,
+            to: email,
+            variables: { email, nombre, action_url: signup.url },
+          }),
+          SIGNUP_EMAIL_TIMEOUT_MS,
+        ),
+        withTimeout(
+          notifyAdminsOfRegistration(adminClient, { email, nombre }).catch((err) => {
+            console.error('api/auth/register admin notice:', err);
+            return null;
+          }),
+          SIGNUP_EMAIL_TIMEOUT_MS,
+        ),
+      ]);
       confirmationEmailSent = Boolean(confirmationMail?.sent || confirmationMail?.queued);
       if (!confirmationEmailSent) {
         console.error('api/auth/register confirmation email:', confirmationMail?.error);

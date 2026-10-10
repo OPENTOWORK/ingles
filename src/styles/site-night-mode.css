@@ -649,6 +649,16 @@ body.reading-night-mode .login-page h2 {
   color: #f8fafc;
 }
 
+body.reading-night-mode .login-page__bubble {
+  background: #312e81;
+  color: #ede9fe !important;
+  box-shadow: none;
+}
+
+body.reading-night-mode .login-page__bubble::before {
+  border-right-color: #312e81;
+}
+
 body.reading-night-mode .login-page label {
   color: #cbd5e1;
 }

@@ -17,6 +17,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   FOUNDING_MEMBER_SURVEY_CONFIRMED: 'founding_member_survey_confirmed',
   FOUNDING_MEMBER_SURVEY_REVOKED: 'founding_member_survey_revoked',
   PRACTICE_REMINDER: 'practice_reminder',
+  ADMIN_REGISTRATION_NOTICE: 'admin_registration_notice',
 };
 
 export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
@@ -110,6 +111,11 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     label: 'Recordatorio para practicar',
     description:
       'A quien ya confirmó su cuenta y lleva varios días sin practicar. Como máximo uno a la semana, y se detiene al volver.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,
+    label: 'Aviso a administración: nuevo registro',
+    description: 'Se envía a los administradores cada vez que alguien crea una cuenta.',
   },
 ];
 

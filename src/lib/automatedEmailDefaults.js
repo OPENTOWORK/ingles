@@ -423,6 +423,22 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
     delay_minutos: 0,
     es_sistema: true,
   },
+  {
+    slug: 'admin_registration_notice',
+    nombre: 'Aviso a administración: nuevo registro',
+    trigger_event: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,
+    trigger_reason: 'Se envía a los administradores cada vez que alguien crea una cuenta.',
+    asunto: 'Nuevo registro en Dralo',
+    cuerpo: [
+      'Alguien acaba de registrarse en Dralo.',
+      '',
+      'Nombre: {{nombre}}',
+      'Email: {{email}}',
+    ].join('\n'),
+    activo: true,
+    delay_minutos: 0,
+    es_sistema: true,
+  },
 ];
 
 export function getDefaultTemplatesByTrigger(triggerEvent) {

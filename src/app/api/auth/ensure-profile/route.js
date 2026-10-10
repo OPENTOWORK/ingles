@@ -7,6 +7,7 @@ import {
 } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { maybeSendWelcomeRegistrationEmail } from '@/lib/welcomeRegistrationEmail';
+import { notifyAdminsOfRegistration } from '@/lib/notifyAdminsOfRegistration';
 import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
 import {
   normalizeRegistrationDeviceType,
@@ -118,6 +119,19 @@ export async function POST(req) {
       await grantFoundingPlusForAuthUser(adminClient, user);
       await persistRegistrationDevice(adminClient, user.id, registrationDevice);
       const welcomeMail = await maybeSendWelcomeRegistrationEmail(adminClient, user);
+      try {
+        await notifyAdminsOfRegistration(adminClient, {
+          email: user.email,
+          nombre:
+            user.user_metadata?.name ||
+            user.user_metadata?.full_name ||
+            user.user_metadata?.nombre ||
+            '',
+          createdAt: user.created_at,
+        });
+      } catch (err) {
+        console.error('api/auth/ensure-profile admin notice:', err);
+      }
       return NextResponse.json({
         ok: true,
         created: false,
@@ -153,6 +167,18 @@ export async function POST(req) {
 
     if (user.email) {
       await maybeSendWelcomeRegistrationEmail(adminClient, user);
+      try {
+        await notifyAdminsOfRegistration(adminClient, {
+          email: user.email,
+          nombre:
+            user.user_metadata?.name ||
+            user.user_metadata?.full_name ||
+            user.user_metadata?.nombre ||
+            '',
+        });
+      } catch (err) {
+        console.error('api/auth/ensure-profile admin notice:', err);
+      }
     }
 
     await grantFoundingPlusForAuthUser(adminClient, user);

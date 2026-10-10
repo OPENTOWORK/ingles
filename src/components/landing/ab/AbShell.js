@@ -1,10 +1,12 @@
 import AbTracker from '@/components/landing/ab/AbTracker';
+import AbOrientationQuiz from '@/components/landing/ab/AbOrientationQuiz';
 import './ab-landing.css';
 
 export function AbPage({ pageType, variant, source = 'direct', tone = 'product', children }) {
   return (
     <article className={`ab-landing ab-landing--${tone}`} lang="es">
       <AbTracker pageType={pageType} variant={variant} source={source} />
+      <AbOrientationQuiz pageType={pageType} variant={variant} source={source} />
       <div className="ab-shell">{children}</div>
     </article>
   );

@@ -17,6 +17,22 @@ import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
 import GoogleIdentityButton from '@/components/auth/GoogleIdentityButton';
 import { getGoogleClientId } from '@/lib/googleIdentity';
+import { readAttributionFromSearch } from '@/lib/abExperiment';
+import { trackRegistrationStart } from '@/lib/abExperimentTrack';
+
+const LOGIN_GREETINGS = [
+  '¡Tu B2 empieza aquí! 🚀',
+  '¡Vamos a por ese aprobado! 🎯',
+  '¡Qué alegría verte por aquí! 💜',
+  '¡Entra, que tenemos mucho que practicar!',
+  '¡Cada ejercicio te acerca a tu B2!',
+  '¡Hoy puede ser un gran día para mejorar tu inglés!',
+  '¡Ey! ¿Preparado para superar tu próximo examen?',
+  '¡Yo te ayudo a dominar el B2! 💪',
+  '¡Un poquito de práctica hoy, un gran resultado mañana!',
+  '¡Tu próximo aprobado empieza con un clic!',
+  '¡Hey! 👋 ¿Listo para conseguir tu B2?',
+];
 
 function isAuthOrLandingNextPath(path = '') {
   const p = String(path || '').split('?')[0];
@@ -83,9 +99,15 @@ function LoginPageInner() {
   const [resendState, setResendState] = useState('idle');
   const [showGoogleOAuthFallback, setShowGoogleOAuthFallback] = useState(!getGoogleClientId());
   const [googleLoading, setGoogleLoading] = useState(false);
+  const [greeting, setGreeting] = useState('');
 
   const router = useRouter();
   const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const index = Math.floor(Math.random() * LOGIN_GREETINGS.length);
+    setGreeting(LOGIN_GREETINGS[index]);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -100,6 +122,16 @@ function LoginPageInner() {
       cancelled = true;
     };
   }, [router, searchParams]);
+
+  useEffect(() => {
+    const attribution = readAttributionFromSearch(searchParams.toString());
+    if (attribution) trackRegistrationStart(attribution);
+  }, [searchParams]);
+
+  const registerHref = (() => {
+    const query = searchParams.toString();
+    return query ? `/registro/?${query}` : '/registro';
+  })();
 
   useEffect(() => {
     const errorCode = searchParams.get('error_code');
@@ -325,8 +357,9 @@ function LoginPageInner() {
 
   return (
     <main className="login-page" style={styles.main}>
-      <div className="login-page__mascot" style={{ textAlign: "center", marginBottom: "1rem", lineHeight: 0 }}>
+      <div className="login-page__mascot">
         <SiteMascot variant={3} width={132} alt="Dralo te da la bienvenida" />
+        {greeting ? <p className="login-page__bubble">{greeting}</p> : null}
       </div>
       <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Login / Register</h2>
 
@@ -400,7 +433,7 @@ function LoginPageInner() {
           <a href="/reset-password" style={styles.link}>¿Has olvidado tu contraseña?</a>
         </p>
         <p style={styles.linkText}>
-          ¿No tienes cuenta? <a href="/registro" style={styles.link}>Regístrate</a>
+          ¿No tienes cuenta? <a href={registerHref} style={styles.link}>Regístrate</a>
         </p>
       </form>
 

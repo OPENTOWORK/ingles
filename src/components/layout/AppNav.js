@@ -28,7 +28,6 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
   const router = useRouter();
   const searchParams = useMountedSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [adminPanelsMobileOpen, setAdminPanelsMobileOpen] = useState(false);
   const [desktopHoverMenu, setDesktopHoverMenu] = useState(null);
 
   const { locked: examStrategiesPlanLocked } = useExamStrategiesAccess({ userRole, session });
@@ -55,7 +54,6 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
 
   useEffect(() => {
     setMobileOpen(false);
-    setAdminPanelsMobileOpen(false);
     setDesktopHoverMenu(null);
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -64,7 +62,6 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
 
   const closeMobile = () => {
     setMobileOpen(false);
-    setAdminPanelsMobileOpen(false);
   };
 
   const closeDesktopDropdowns = () => {
@@ -87,10 +84,6 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
     }
     event.preventDefault();
     router.push(examStrategiesHubHref);
-  };
-
-  const toggleAdminMobile = () => {
-    setAdminPanelsMobileOpen((open) => !open);
   };
 
   const mobileLinkClass = 'app-nav__link app-nav__link--mobile';
@@ -279,9 +272,7 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
               ) : null}
               {navModel.showStaffDropdown ? (
                 <AdminPanelsNav
-                  variant="desktop"
-                  items={navModel.staffItems}
-                  menuLabel={navModel.staffMenuLabel}
+                  menuLabel="Paneles"
                   isActive={staffPanelsNavActive}
                   onNavigate={closeDesktopDropdowns}
                 />
@@ -364,8 +355,6 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
             navModel={navModel}
             linkClass={mobileLinkClass}
             onNavigate={closeMobile}
-            adminPanelsOpen={adminPanelsMobileOpen}
-            onToggleAdminPanels={toggleAdminMobile}
             onLogout={onLogout}
           />
         </nav>

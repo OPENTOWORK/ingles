@@ -35,16 +35,16 @@ function resolveLevelLock({
     return { locked: false, reason: null, label: null };
   }
 
+  if (level.nivel !== 'B2') {
+    return { locked: true, reason: 'soon', label: 'Coming soon' };
+  }
+
   if (
     applyLimits &&
     usesStudentContentRestrictions(userRole) &&
     !isLevelIncludedInPlan(level.slug, planSlug)
   ) {
     return { locked: true, reason: 'plan', label: 'De pago' };
-  }
-
-  if (level.nivel !== 'B2') {
-    return { locked: true, reason: 'soon', label: 'Coming soon' };
   }
 
   return { locked: false, reason: null, label: null };

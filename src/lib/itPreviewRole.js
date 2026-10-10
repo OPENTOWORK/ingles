@@ -180,7 +180,8 @@ export function getItPreviewNavSummary(roleId = 'student') {
   if (model.showPricing) items.push('Pricing');
   if (model.showContact) items.push(NAV_LINK_CONTACT.label);
 
-  if (model.showStaffDropdown || model.showStaffSingleLink) {
+  if (model.showStaffDropdown) items.push('Paneles');
+  if (model.showStaffSingleLink) {
     model.staffItems.forEach((panel) => items.push(panel.label));
   }
 
