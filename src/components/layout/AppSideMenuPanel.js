@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useUserRole } from '@/context/UserRoleContext';
+import { useTutorial } from '@/context/TutorialContext';
 import { buildAppNavModel } from '@/config/appNavMenu';
 import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
@@ -18,6 +19,7 @@ import {
  */
 export default function AppSideMenuPanel({ defaultOpen = true }) {
   const { userRole, session } = useUserRole();
+  const { openTutorial } = useTutorial();
   const [open, setOpen] = useState(defaultOpen);
   const [isPhone, setIsPhone] = useState(false);
   const [portalReady, setPortalReady] = useState(false);
@@ -113,6 +115,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             onLogout={handleLogout}
             draloVariant="side"
             guestEntryHref={null}
+            onOpenTutorial={openTutorial}
           />
         </nav>
       </div>

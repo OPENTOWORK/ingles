@@ -58,7 +58,7 @@ function ExamPracticeCard({ exam, isStudent, guestPreview = false, variant = 'sk
       disabled={blockedForStudent && !guestLocked}
       featured={isExamMode}
       banner={isBanner}
-      {...(isExamMode && !blockedForStudent && !guestLocked ? { 'data-tour': 'level-exam-mode' } : {})}
+      data-tour={`practice-${kind}`}
     />
   );
 }
@@ -68,7 +68,7 @@ function QuizGameCard({ quizGame, guestPreview = false }) {
   if (!quizGame?.href) return null;
   const guestLocked = guestPreview && isGuestExamPracticeLockedHref(quizGame.href);
   return (
-    <div className="exam-practice-hub__quiz-game">
+    <div className="exam-practice-hub__quiz-game" data-tour="practice-quiz">
       <ExamSkillHubCard
         href={guestLocked ? getGuestRegisterHref(quizGame.href) : quizGame.href}
         kind="quiz-game"

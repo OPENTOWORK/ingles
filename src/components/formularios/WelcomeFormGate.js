@@ -4,28 +4,14 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import toast from 'react-hot-toast';
 import { supabase } from '@/utils/supabaseClient';
-import { isStudentRole } from '@/utils/authRoles';
 import { isRoleConfirmedForSession } from '@/lib/userRoleResolution';
+import {
+  isWelcomeFormDone,
+  isWelcomeFormEligible,
+  markWelcomeFormDone,
+} from '@/lib/welcomeFormState';
 import FormularioRunner from '@/components/formularios/FormularioRunner';
 import styles from './WelcomeFormGate.module.css';
-
-const DONE_KEY_PREFIX = 'dralo:welcome-form-done:';
-
-function isMarkedDone(userId) {
-  try {
-    return window.sessionStorage.getItem(`${DONE_KEY_PREFIX}${userId}`) === '1';
-  } catch {
-    return false;
-  }
-}
-
-function markDone(userId) {
-  try {
-    window.sessionStorage.setItem(`${DONE_KEY_PREFIX}${userId}`, '1');
-  } catch {
-    /* ignore */
-  }
-}
 
 async function getAuthHeaders() {
   const { data } = await supabase.auth.getSession();
@@ -42,15 +28,13 @@ export default function WelcomeFormGate({ session, userRole, roleConfirmedForUse
   const user = session?.user || null;
   const userId = user?.id || null;
   const eligible =
-    Boolean(userId) &&
-    Boolean(user?.email_confirmed_at || user?.confirmed_at) &&
-    isRoleConfirmedForSession(session, roleConfirmedForUserId) &&
-    isStudentRole(userRole);
+    isWelcomeFormEligible(user, userRole) &&
+    isRoleConfirmedForSession(session, roleConfirmedForUserId);
 
   useEffect(() => {
     setForm(null);
     setError('');
-    if (!eligible || isMarkedDone(userId)) return undefined;
+    if (!eligible || isWelcomeFormDone(userId)) return undefined;
 
     let cancelled = false;
     (async () => {
@@ -59,7 +43,7 @@ export default function WelcomeFormGate({ session, userRole, roleConfirmedForUse
         const json = await res.json().catch(() => ({}));
         if (cancelled || !res.ok) return;
         if (!json.form || json.answered) {
-          markDone(userId);
+          markWelcomeFormDone(userId);
           return;
         }
         setForm(json.form);
@@ -94,7 +78,7 @@ export default function WelcomeFormGate({ session, userRole, roleConfirmedForUse
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(json.error || 'No se han podido guardar tus respuestas.');
-      markDone(userId);
+      markWelcomeFormDone(userId);
       setForm(null);
       toast.success('¡Gracias! Hemos guardado tus respuestas.');
     } catch (err) {

@@ -26,6 +26,8 @@ export function AppSharedDrawerNav({
   draloVariant = 'mobile',
   /** Si viene informado, las opciones de la app (no el bloque legal) van aquí. Solo Home móvil sin sesión: login. */
   guestEntryHref = null,
+  /** Solo el menú lateral de la Home: en el móvil el botón Tutorial no cabe en la página. */
+  onOpenTutorial = null,
 }) {
   const pathname = usePathname();
   const searchParams = useMountedSearchParams();
@@ -153,6 +155,19 @@ export function AppSharedDrawerNav({
         >
           {NAV_LINK_PROFILE.label}
         </NavLink>
+      ) : null}
+
+      {showProfile && onOpenTutorial ? (
+        <button
+          type="button"
+          className={linkClass}
+          onClick={() => {
+            onNavigate?.();
+            onOpenTutorial();
+          }}
+        >
+          Tutorial
+        </button>
       ) : null}
 
       {showLogout ? (

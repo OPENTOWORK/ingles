@@ -6,7 +6,7 @@ import DeferredAppSideMenu from '@/components/layout/DeferredAppSideMenu';
 import PlacementTestNotice from '@/components/layout/PlacementTestNotice';
 import ExamNavigationGuard from '@/components/ExamNavigationGuard';
 import { UserRoleProvider } from '@/context/UserRoleContext';
-import { GuidedTourProvider } from '@/context/GuidedTourContext';
+import { TutorialProvider } from '@/context/TutorialContext';
 import { PlacementAccessProvider } from '@/context/PlacementAccessContext';
 import { useItPreviewRole } from '@/hooks/useItPreviewRole';
 import { useItPreviewAdminBuzonLayout } from '@/hooks/useItPreviewAdminBuzonLayout';
@@ -67,7 +67,7 @@ export default function AuthenticatedAppShell({
         session={preview.session}
         roleConfirmedForUserId={roleConfirmedForUserId}
       >
-        <GuidedTourProvider>
+        <TutorialProvider>
           <PlacementAccessProvider session={preview.session} userRole={preview.userRole}>
             <PlacementTestNotice />
             <main className="page-content">
@@ -84,7 +84,7 @@ export default function AuthenticatedAppShell({
               <StudySessionBarGate session={preview.session} userRole={preview.userRole} />
             ) : null}
           </PlacementAccessProvider>
-        </GuidedTourProvider>
+        </TutorialProvider>
       </UserRoleProvider>
     </>
   );

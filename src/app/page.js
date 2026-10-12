@@ -4,13 +4,13 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import SiteMascot from '@/components/SiteMascot';
 import DraloTagline from '@/components/DraloTagline';
-import HomeHowItWorks from '@/components/home/HomeHowItWorks';
 import HomeQuickNav from '@/components/home/HomeQuickNav';
+import HomeTutorialButton from '@/components/home/HomeTutorialButton';
 import HomeStudentMobileBoard from '@/components/home/HomeStudentMobileBoard';
 import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
 import FoundingMemberSlotsBanner from '@/components/home/FoundingMemberSlotsBanner';
 import { useEffect, useState } from 'react';
-import { useGuidedTour } from '@/context/GuidedTourContext';
+import { useTutorial } from '@/context/TutorialContext';
 import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { supabase } from '@/utils/supabaseClient';
@@ -28,7 +28,7 @@ const FEATURES = [
 export default function Home() {
   const { session } = useUserRole();
   const { roleConfirmed, userRole: confirmedRole } = useConfirmedUserRole();
-  const { startTour } = useGuidedTour();
+  const { openTutorial } = useTutorial();
   const isRegistered = Boolean(session?.user);
   /** Home de alumno en móvil: exige rol resuelto para esta misma sesión, no el valor por defecto. */
   const showStudentBoard = roleConfirmed && usesStudentContentRestrictions(confirmedRole);
@@ -122,9 +122,7 @@ export default function Home() {
           <DraloTagline />
         </blockquote>
 
-        {isRegistered && roleConfirmed && !usesStudentContentRestrictions(confirmedRole) ? (
-          <HomeHowItWorks onStartTour={startTour} />
-        ) : null}
+        {isRegistered && roleConfirmed ? <HomeTutorialButton onOpen={openTutorial} /> : null}
         {isRegistered ? <HomeQuickNav /> : null}
       </div>
     </main>

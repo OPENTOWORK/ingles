@@ -165,7 +165,11 @@ function Station({ node, row, tag, guestPreview = false }) {
             <IconCheck />
           </span>
         ) : null}
-        {node.isCurrent ? <span className={styles.stationTag}>{tag}</span> : null}
+        {node.isCurrent ? (
+          <span className={styles.stationTag} data-station-tag="">
+            {tag}
+          </span>
+        ) : null}
       </span>
       <span className={styles.stationTopic}>{node.topic}</span>
       {node.isLocked ? null : <StarRow count={node.stars} />}
@@ -419,7 +423,7 @@ export default function TrainingLevelPathMap({
   return (
     <section className={styles.stage} aria-label="Level path">
       <div className={styles.progressRow}>
-        <div className={styles.filters}>
+        <div className={styles.filters} data-tour="training-filters">
           <div className={styles.difficulties} role="radiogroup" aria-label="Level">
             {TRAINING_CEFR_OPTIONS.map((option) => {
               const current = option.id === cefrLevel;
@@ -477,8 +481,12 @@ export default function TrainingLevelPathMap({
       </div>
 
       <div className={styles.canvas}>
-        {lives ? <div className={styles.livesCorner}>{lives}</div> : null}
-        <div ref={trackRef} className={styles.track}>
+        {lives ? (
+          <div className={styles.livesCorner} data-tour="training-lives">
+            {lives}
+          </div>
+        ) : null}
+        <div ref={trackRef} className={styles.track} data-tour="training-path">
           {geometry ? (
             <svg
               className={styles.pathSvg}
