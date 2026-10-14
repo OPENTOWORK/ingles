@@ -111,22 +111,6 @@ a:hover {
   gap: 0.5rem;
 }
 
-.bandera {
-  width: 40px;
-  height: auto;
-  animation: ondear 2.5s infinite ease-in-out;
-  transform-origin: left center;
-}
-
-/* Animación de la bandera */
-@keyframes ondear {
-  0%   { transform: rotate(0deg); }
-  25%  { transform: rotate(2deg); }
-  50%  { transform: rotate(0deg); }
-  75%  { transform: rotate(-2deg); }
-  100% { transform: rotate(0deg); }
-}
-
 /* Navegación */
 .nav a {
   margin-right: 1rem;
@@ -619,14 +603,6 @@ body {
   text-decoration: none;
   color: #1d1857;
   opacity: 0.9;
-}
-
-.site-header__flag {
-  width: 32px;
-  height: 24px;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  object-fit: cover;
 }
 
 .site-header__center-brand {

@@ -22,7 +22,6 @@ function SiteHeaderBrand({ nav = null, homeSideMenu = false }) {
     <header className={`site-header ${landingFont.variable}${homeSideMenu ? ' site-header--home-side' : ''}`}>
       <div className="site-header__bar">
         <a href="/" className="site-header__logo">
-          <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />
           <span>Dralo Academy</span>
         </a>
         {nav ? <div className="site-header__nav">{nav}</div> : null}

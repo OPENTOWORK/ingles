@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight,
+  ChevronRight,
   ChartColumnIncreasing,
   ChartNoAxesColumn,
   Check,
@@ -30,7 +31,6 @@ import { landingFont } from './landingFont';
 import { PracticePickerMock, ResultsMock, ReviewMock, WritingFeedbackMock } from './LandingMocks';
 import './home-guest-landing.css';
 
-const SIGNUP_HREF = APP_ROUTES.login;
 const REGISTER_HREF = '/registro';
 const TOUR_VIDEO_SRC = sitePublicPath('/dralo-tour.mp4?v=4');
 const TOUR_POSTER_SRC = sitePublicPath('/dralo-tour-poster.webp?v=4');
@@ -184,15 +184,24 @@ function SlotsBox({ slots }) {
   const loading = slots.status === 'loading';
   const one = slots.remaining === 1;
   return (
-    <p className="hl-slots" role="status" aria-busy={loading}>
-      <span className="hl-slots__label">{one ? 'Queda' : 'Quedan'}</span>
-      {loading ? (
-        <span className="hl-slots__num hl-slots__num--loading" aria-hidden="true" />
-      ) : (
-        <strong className="hl-slots__num">{slots.remaining}</strong>
-      )}
-      <span className="hl-slots__unit">{one ? 'plaza' : 'plazas'}</span>
-    </p>
+    <Link href={REGISTER_HREF} className="hl-slots" role="status" aria-busy={loading}>
+      <span className="hl-slots__kicker">
+        <span className="hl-slots__dot" aria-hidden="true" />
+        {one ? 'Solo queda' : 'Solo quedan'}
+      </span>
+      <span className="hl-slots__count">
+        {loading ? (
+          <span className="hl-slots__num hl-slots__num--loading" aria-hidden="true" />
+        ) : (
+          <strong className="hl-slots__num">{slots.remaining}</strong>
+        )}
+        <span className="hl-slots__unit">{one ? 'plaza' : 'plazas'}</span>
+      </span>
+      <span className="hl-slots__of">de las {MAX_FOUNDING_SLOT} iniciales</span>
+      <span className="hl-slots__go" aria-hidden="true">
+        <ChevronRight />
+      </span>
+    </Link>
   );
 }
 
@@ -212,13 +221,6 @@ export default function HomeGuestLanding({ pending = false }) {
       <header className="hl-header">
         <div className="hl-container hl-header__bar">
           <Link href="/" className="hl-logo">
-            <img
-              src={sitePublicPath('/uk-flag.png')}
-              alt=""
-              className="hl-logo__flag"
-              width={32}
-              height={24}
-            />
             Dralo Academy
           </Link>
           <nav className="hl-nav" aria-label="Secciones">
@@ -272,7 +274,7 @@ export default function HomeGuestLanding({ pending = false }) {
               Practica con formato de examen y descubre qué necesitas mejorar.
             </p>
             <div className="hl-hero__actions">
-              <Link href={SIGNUP_HREF} className="hl-btn hl-btn--primary hl-btn--lg">
+              <Link href={REGISTER_HREF} className="hl-btn hl-btn--primary hl-btn--lg">
                 Empieza gratis
                 <ArrowRight aria-hidden="true" />
               </Link>
@@ -463,7 +465,7 @@ export default function HomeGuestLanding({ pending = false }) {
                 conservar el Plan Plus gratis. Si no lo completas, tu cuenta pasa al plan gratuito.
               </p>
             </div>
-            <Link href={SIGNUP_HREF} className="hl-btn hl-btn--primary hl-btn--lg">
+            <Link href={REGISTER_HREF} className="hl-btn hl-btn--primary hl-btn--lg">
               Quiero empezar gratis
               <ArrowRight aria-hidden="true" />
             </Link>

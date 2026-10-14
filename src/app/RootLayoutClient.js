@@ -69,16 +69,11 @@ const TOAST_OPTIONS = {
   },
 };
 
-function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/', decorativeFlag = false }) {
+function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/' }) {
   return (
     <header className={`site-header ${landingFont.variable}${logoOnly ? ' site-header--logo-only' : ''}`}>
       <div className="site-header__bar">
         <Link href={logoHref} className="site-header__logo">
-          <img
-            src="/uk-flag.png"
-            alt={decorativeFlag ? '' : 'UK Flag'}
-            className="site-header__flag bandera"
-          />
           <span>Dralo Academy</span>
         </Link>
         {nav ? <div className="site-header__nav">{nav}</div> : null}
@@ -496,7 +491,6 @@ function RootLayoutClientInner({ children }) {
         <>
           <SiteHeaderBrand
             logoOnly
-            decorativeFlag={isAbLanding}
             logoHref={isAbLanding ? '/' : '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1'}
           />
           <main className="page-content page-content--conversion-landing">{children}</main>
