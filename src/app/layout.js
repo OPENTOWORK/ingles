@@ -11,6 +11,7 @@ import Script from 'next/script';
 import ClientAppProviders from './ClientAppProviders';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 import { SEO_PAGE_META, SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
+import { SESSION_HINT_BOOT_SCRIPT } from '@/lib/sessionHint';
 import {
   DRALO_APP_ICON_SRC,
   DRALO_APPLE_TOUCH_ICON_PATH,
@@ -78,8 +79,9 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <script id="session-hint-boot" dangerouslySetInnerHTML={{ __html: SESSION_HINT_BOOT_SCRIPT }} />
         <link rel="preconnect" href="https://qnazrzvwvkwhkfbqsbmr.supabase.co" crossOrigin="" />
         <link rel="dns-prefetch" href="https://qnazrzvwvkwhkfbqsbmr.supabase.co" />
         {ENABLE_MARKETING_TAGS ? (

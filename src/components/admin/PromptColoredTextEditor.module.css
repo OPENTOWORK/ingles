@@ -116,7 +116,7 @@
 }
 
 .langBtn:hover:not(:disabled) {
-  border-color: #6366f1;
+  border-color: #6a4be8;
   background: #e0e7ff;
 }
 

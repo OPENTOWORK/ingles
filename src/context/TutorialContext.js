@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isRoleConfirmedForSession } from '@/lib/userRoleResolution';
 import { isWelcomeFormDone, isWelcomeFormEligible } from '@/lib/welcomeFormState';
+import { shouldOfferOrientationQuiz, wasOrientationQuizSeen } from '@/lib/orientationQuizState';
+import { isStudentRole } from '@/utils/authRoles';
 import {
   TUTORIAL_SEEN_METADATA_KEY,
   isTutorialAutoOpenPath,
@@ -68,7 +70,10 @@ export function TutorialProvider({ children }) {
       if (!isTutorialAutoOpenPath(window.location.pathname, window.location.search)) return;
       const welcomeFormPending =
         isWelcomeFormEligible(user, userRole) && !isWelcomeFormDone(user.id);
-      if (welcomeFormPending || hasBlockingLayer()) {
+      const orientationPending =
+        isStudentRole(userRole) &&
+        shouldOfferOrientationQuiz(user, { seenOnDevice: wasOrientationQuizSeen(user.id) });
+      if (welcomeFormPending || orientationPending || hasBlockingLayer()) {
         timer = window.setTimeout(attempt, AUTO_OPEN_RETRY_MS);
         return;
       }

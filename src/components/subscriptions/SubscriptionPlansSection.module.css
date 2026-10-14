@@ -14,7 +14,7 @@
   margin: 0 0 8px;
   font-size: clamp(1.35rem, 3vw, 1.75rem);
   font-weight: 800;
-  color: #0f172a;
+  color: #1d1857;
   letter-spacing: -0.02em;
 }
 
@@ -23,7 +23,7 @@
   max-width: 62ch;
   font-size: 0.95rem;
   line-height: 1.55;
-  color: #64748b;
+  color: #4a4769;
 }
 
 .billingToggleWrap {
@@ -38,7 +38,7 @@
   display: inline-flex;
   padding: 5px;
   border-radius: 999px;
-  border: 2px solid #c7d2fe;
+  border: 2px solid #e0d6ff;
   background: #fff;
   box-shadow: 0 6px 18px rgba(79, 70, 229, 0.12);
 }
@@ -59,11 +59,11 @@
 }
 
 .billingToggleBtn:hover {
-  color: #4338ca;
+  color: #5634d6;
 }
 
 .billingToggleBtnActive {
-  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.32);
 }
@@ -140,21 +140,21 @@
   flex-direction: column;
   min-width: 0;
   padding: 22px 18px 20px;
-  border-radius: 18px;
-  border: 1px solid #e2e8f0;
+  border-radius: 28px;
+  border: 1px solid #e0d6ff;
   background: #fff;
-  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
   box-sizing: border-box;
 }
 
 .card:hover {
-  border-color: #c7d2fe;
-  box-shadow: 0 14px 36px rgba(99, 102, 241, 0.12);
+  border-color: #cdbfff;
+  box-shadow: 0 14px 36px rgba(106, 75, 232, 0.14);
 }
 
 .cardPopular {
-  border: 2px solid #6366f1;
+  border: 2px solid #6a4be8;
   box-shadow:
     0 0 0 1px rgba(99, 102, 241, 0.15),
     0 16px 40px rgba(99, 102, 241, 0.18);
@@ -181,12 +181,12 @@
 }
 
 .badgePopular {
-  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
 }
 
 .badgeValue {
-  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
 }
 
@@ -195,7 +195,7 @@
   font-size: 1.15rem;
   font-weight: 900;
   letter-spacing: 0.06em;
-  color: #0f172a;
+  color: #1d1857;
   text-align: center;
 }
 
@@ -215,7 +215,7 @@
 .cardPriceAmount {
   font-size: 1.75rem;
   font-weight: 900;
-  color: #4f46e5;
+  color: #5634d6;
 }
 
 .cardPricePeriod {
@@ -315,10 +315,10 @@
   display: block;
   width: 100%;
   padding: 11px 14px;
-  border-radius: 12px;
-  border: 2px solid #e2e8f0;
-  background: #f8fafc;
-  color: #334155;
+  border-radius: 999px;
+  border: 1.5px solid #e0d6ff;
+  background: #fff;
+  color: #5634d6;
   font-size: 0.88rem;
   font-weight: 800;
   text-align: center;
@@ -329,13 +329,13 @@
 
 .cardBtn:hover {
   background: #eef2ff;
-  border-color: #a5b4fc;
-  color: #4338ca;
+  border-color: #cdbfff;
+  color: #5634d6;
 }
 
 .cardBtnPrimary {
   border: none;
-  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
   box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
 }
@@ -363,11 +363,11 @@
   width: 100%;
   max-width: 100%;
   min-width: 0;
-  border-radius: 18px;
-  border: 1px solid #e2e8f0;
+  border-radius: 28px;
+  border: 1px solid #e0d6ff;
   background: #fff;
   padding: 20px 16px 12px;
-  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
   box-sizing: border-box;
 }
 
@@ -376,7 +376,7 @@
   padding: 0 6px;
   font-size: 1.05rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #1d1857;
 }
 
 .tableScroll {
@@ -419,14 +419,14 @@
 
 .thPlan {
   font-weight: 800;
-  color: #0f172a;
+  color: #1d1857;
 }
 
 .thPlanPopular {
   font-weight: 800;
-  color: #4338ca;
-  border-left: 2px solid #6366f1;
-  border-right: 2px solid #6366f1;
+  color: #5634d6;
+  border-left: 2px solid #6a4be8;
+  border-right: 2px solid #6a4be8;
 }
 
 .thBadge {
@@ -434,7 +434,7 @@
   margin-top: 4px;
   font-size: 0.62rem;
   font-weight: 700;
-  color: #6366f1;
+  color: #6a4be8;
 }
 
 .rowLabel {
@@ -509,8 +509,8 @@
   padding: 3px 10px;
   border-radius: 999px;
   background: #eef2ff;
-  border: 1px solid #c7d2fe;
-  color: #4338ca;
+  border: 1px solid #e0d6ff;
+  color: #5634d6;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -697,9 +697,9 @@
   }
 
   .cardsNavBtnActive {
-    border-color: #c7d2fe;
+    border-color: #e0d6ff;
     background: #eef2ff;
-    color: #4338ca;
+    color: #5634d6;
   }
 
   .checkoutError {
@@ -760,7 +760,7 @@
 
 :global(body.reading-night-mode) .billingToggle {
   background: #1e293b;
-  border-color: #6366f1;
+  border-color: #6a4be8;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
@@ -773,7 +773,7 @@
 }
 
 :global(body.reading-night-mode) .billingToggleBtnActive {
-  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
 }
 
@@ -806,7 +806,7 @@
 }
 
 :global(body.reading-night-mode) .cardPriceAmount {
-  color: #a5b4fc;
+  color: #cdbfff;
 }
 
 :global(body.reading-night-mode) .cardPriceDiscount,
@@ -838,7 +838,7 @@
 
 :global(body.reading-night-mode) .cardBtnPrimary {
   border: none;
-  background: linear-gradient(135deg, #6366f1, #7c3aed);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
 }
 
@@ -857,7 +857,7 @@
 :global(body.reading-night-mode) .thPlanPopular,
 :global(body.reading-night-mode) .tdPopular {
   background: linear-gradient(180deg, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0.06) 100%);
-  border-color: #6366f1;
+  border-color: #6a4be8;
 }
 
 :global(body.reading-night-mode) .thPlanPopular {
@@ -865,7 +865,7 @@
 }
 
 :global(body.reading-night-mode) .thBadge {
-  color: #a5b4fc;
+  color: #cdbfff;
 }
 
 :global(body.reading-night-mode) .cellPriceCurrent {
@@ -874,12 +874,12 @@
 
 :global(body.reading-night-mode) .cellSoon {
   background: rgba(99, 102, 241, 0.15);
-  border-color: #6366f1;
+  border-color: #6a4be8;
   color: #c4b5fd;
 }
 
 :global(body.reading-night-mode) .cardsNavBtnActive {
-  border-color: #6366f1;
+  border-color: #6a4be8;
   background: rgba(99, 102, 241, 0.18);
   color: #c4b5fd;
 }

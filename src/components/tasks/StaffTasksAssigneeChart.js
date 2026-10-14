@@ -2,31 +2,10 @@
 
 import { useMemo } from 'react';
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { buildAssigneeTaskChart } from '@/lib/staffTaskAssignees';
 import styles from './StaffTasksKanban.module.css';
 
-function personKey(task) {
-  return task.asignado_id || task.asignado?.id || 'unassigned';
-}
-
-function personName(task) {
-  return task.asignado?.nombre || task.asignado?.email || 'Sin asignar';
-}
-
-export function buildAssigneeTaskChart(tasks = []) {
-  const byPerson = new Map();
-
-  for (const task of tasks) {
-    const key = personKey(task);
-    const row = byPerson.get(key) || { name: personName(task), pendientes: 0, completadas: 0 };
-    if (task.estado === 'completada') row.completadas += 1;
-    else if (task.estado !== 'cancelada') row.pendientes += 1;
-    byPerson.set(key, row);
-  }
-
-  return [...byPerson.values()]
-    .filter((row) => row.pendientes + row.completadas > 0)
-    .sort((a, b) => b.pendientes + b.completadas - (a.pendientes + a.completadas));
-}
+export { buildAssigneeTaskChart };
 
 export default function StaffTasksAssigneeChart({ tasks }) {
   const data = useMemo(() => buildAssigneeTaskChart(tasks), [tasks]);

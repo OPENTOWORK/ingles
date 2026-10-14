@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from 'react';
 import { FaseEstadoBadge, TaskPrioridadBadge } from '@/components/tasks/StaffTaskBadges';
+import { formatTaskAssigneeLabel } from '@/lib/staffTaskAssignees';
+import { formatTaskFileCount } from '@/lib/staffTaskFiles';
 import styles from './StaffTasksList.module.css';
 
 function toggleId(setter, id) {
@@ -63,7 +65,8 @@ function TaskRow({ task, loose = false, open, onToggle, saving, onComplete, onOp
           {task.titulo}
         </button>
         <span className={styles.meta}>
-          {task.asignado?.nombre || task.asignado?.email || task.asignado_rol || 'Sin asignar'}
+          {formatTaskAssigneeLabel(task)}
+          {formatTaskFileCount(task.archivos?.length) ? ` · ${formatTaskFileCount(task.archivos.length)}` : ''}
         </span>
         {task.timeRemaining ? <span className={styles.meta}>{task.timeRemaining}</span> : null}
         <span className={styles.chips}>
@@ -74,7 +77,7 @@ function TaskRow({ task, loose = false, open, onToggle, saving, onComplete, onOp
         <div className={styles.detail}>
           {task.descripcion ? <p>{task.descripcion}</p> : null}
           <p>
-            {task.asignado?.nombre || task.asignado_rol || 'Sin asignar'}
+            {formatTaskAssigneeLabel(task)}
             {task.timeRemaining ? ` · ${task.timeRemaining}` : ''}
           </p>
           <div className={styles.actions}>

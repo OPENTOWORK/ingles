@@ -19,6 +19,7 @@ import GoogleIdentityButton from '@/components/auth/GoogleIdentityButton';
 import { getGoogleClientId } from '@/lib/googleIdentity';
 import { readAttributionFromSearch } from '@/lib/abExperiment';
 import { trackRegistrationStart } from '@/lib/abExperimentTrack';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 const LOGIN_GREETINGS = [
   '¡Tu B2 empieza aquí! 🚀',
@@ -356,12 +357,12 @@ function LoginPageInner() {
   };
 
   return (
-    <main className="login-page" style={styles.main}>
+    <main className={`login-page ${landingFont.variable}`} style={styles.main}>
       <div className="login-page__mascot">
         <SiteMascot variant={3} width={132} alt="Dralo te da la bienvenida" />
         {greeting ? <p className="login-page__bubble">{greeting}</p> : null}
       </div>
-      <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>Login / Register</h2>
+      <h2 className="login-page__title">Login / Register</h2>
 
       {unconfirmedEmail && (
         <div style={styles.noticeBox}>
@@ -421,8 +422,7 @@ function LoginPageInner() {
           type="submit"
           style={{
             ...styles.button,
-            backgroundColor: loading ? "#999" : styles.button.backgroundColor,
-            cursor: loading ? "not-allowed" : "pointer",
+            ...(loading ? { background: '#c4b8f5', boxShadow: 'none', cursor: 'not-allowed' } : null),
           }}
           disabled={loading}
         >
@@ -478,36 +478,47 @@ function LoginPageInner() {
 
 const styles = {
   main: {
-    maxWidth: "400px",
-    margin: "4rem auto",
-    padding: "2rem",
+    maxWidth: "440px",
+    margin: "2.75rem auto 3rem",
+    padding: "2rem 1.75rem 1.75rem",
     backgroundColor: "#fff",
-    borderRadius: "8px",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-    fontFamily: "Segoe UI, sans-serif",
+    borderRadius: "28px",
+    border: "1px solid #e0d6ff",
+    boxShadow: "0 18px 44px rgba(76, 56, 170, 0.12)",
+    color: "#4a4769",
   },
-  label: { display: "block", marginBottom: "0.5rem" },
+  label: {
+    display: "block",
+    marginBottom: "0.5rem",
+    color: "#1d1857",
+    fontWeight: 700,
+    fontSize: "0.92rem",
+  },
   input: {
     width: "100%",
-    padding: "0.75rem",
+    padding: "0.8rem 0.95rem",
     fontSize: "1rem",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
+    border: "1.5px solid #e0d6ff",
+    borderRadius: "14px",
     boxSizing: "border-box",
+    color: "#1d1857",
+    background: "#fff",
   },
   button: {
     width: "100%",
-    padding: "0.75rem",
+    padding: "0.9rem 1.35rem",
     marginTop: "1.5rem",
-    backgroundColor: "#0070f3",
-    color: "white",
-    fontWeight: "bold",
+    background: "linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%)",
+    color: "#fff",
+    fontWeight: 700,
+    fontSize: "1rem",
     border: "none",
-    borderRadius: "4px",
+    borderRadius: "999px",
     cursor: "pointer",
+    boxShadow: "0 10px 24px rgba(99, 67, 236, 0.32)",
   },
-  linkText: { marginTop: "1rem", fontSize: "0.9rem", textAlign: "center", color: "#666" },
-  link: { color: "#0070f3", textDecoration: "none" },
+  linkText: { marginTop: "1rem", fontSize: "0.92rem", textAlign: "center", color: "#6c6989" },
+  link: { color: "#6a4be8", textDecoration: "none", fontWeight: 700 },
   noticeBox: {
     marginBottom: "1.25rem",
     padding: "0.9rem 1rem",

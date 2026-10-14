@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
+import { landingFont } from '@/components/home/landing/landingFont';
 import { usePathname } from 'next/navigation';
 import SiteMascot from '@/components/SiteMascot';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
@@ -138,9 +139,8 @@ function getPartTabLabel(part, lang, customLabelFn, partMinForLocalLabels) {
 export function B2ExamPracticeLayout({ examPracticeOpen, children }) {
   return (
     <main
-      className="levels-exam-practice-root"
+      className={`levels-exam-practice-root ${landingFont.variable}`}
       style={{
-        fontFamily: 'Arial, Helvetica, sans-serif',
         ...(!examPracticeOpen
           ? {
               minHeight: 'calc(100vh - 4rem)',

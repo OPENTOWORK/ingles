@@ -40,6 +40,16 @@ describe('canAccessTaskConversation', () => {
   it('blocks unrelated staff', () => {
     assert.equal(canAccessTaskConversation({ userId: 'user-x', roleName: 'teacher', task: TASK }), false);
   });
+
+  it('lets every assigned person in', () => {
+    const shared = {
+      ...TASK,
+      asignado_id: 'user-a',
+      asignados_ids: ['user-a', 'user-c'],
+    };
+    assert.equal(canAccessTaskConversation({ userId: 'user-c', roleName: 'teacher', task: shared }), true);
+    assert.equal(canAccessTaskConversation({ userId: 'user-z', roleName: 'teacher', task: shared }), false);
+  });
 });
 
 describe('normalizeTaskMessageBody', () => {

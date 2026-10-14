@@ -6,6 +6,7 @@ import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import ExamTheorySection from '@/components/niveles/ExamTheorySection';
 import NivelesPageStyles from '@/components/niveles/NivelesPageStyles';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 function ExamStrategiesInner() {
   const { session, userRole } = useUserRole();
@@ -13,7 +14,7 @@ function ExamStrategiesInner() {
 
   return (
     <main
-      className="shell content-hub-shell niveles-page niveles-page--theory niveles-page--theory-hub niveles-level-page niveles-level-page--b2"
+      className={`shell content-hub-shell niveles-page niveles-page--theory niveles-page--theory-hub niveles-level-page niveles-level-page--b2 ${landingFont.variable}`}
     >
       <div className="levels-b2-page-content">
         <div className="sections">
@@ -35,7 +36,7 @@ export default function ExamStrategiesPage() {
   return (
     <Suspense
       fallback={
-        <main className="shell niveles-page" style={{ padding: '2rem', textAlign: 'center' }}>
+        <main className={`shell niveles-page ${landingFont.variable}`} style={{ padding: '2rem', textAlign: 'center' }}>
           <p>Loading Exam Strategies…</p>
         </main>
       }

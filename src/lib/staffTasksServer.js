@@ -4,11 +4,22 @@ import {
   getTeacherRoleIds,
   isSchemaNotReadyError,
 } from '@/lib/coordinatorAccess';
+import { taskAssigneeIds } from '@/lib/staffTaskAssignees';
+import { loadTaskFilesByTaskIds } from '@/lib/staffTaskFilesServer';
 import {
   computeTaskMetrics,
   enrichTaskRow,
   validateTaskPayload,
 } from '@/lib/staffTaskHelpers';
+
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function assigneeMembershipFilter(userId) {
+  const id = String(userId || '').trim();
+  if (!UUID_RE.test(id)) return 'id.eq.00000000-0000-4000-8000-000000000000';
+  return `asignado_id.eq.${id},asignados_ids.cs.{${id}}`;
+}
 
 const TASKS_TABLE = 'staff_tareas';
 const FASES_TABLE = 'staff_fases';
@@ -70,17 +81,21 @@ export async function enrichTasksList(db, tasks = []) {
   const faseIds = [];
   const subfaseIds = [];
   for (const t of tasks) {
-    if (t.asignado_id) userIds.push(t.asignado_id);
+    userIds.push(...taskAssigneeIds(t));
     if (t.alumno_id) userIds.push(t.alumno_id);
     if (t.fase_id) faseIds.push(t.fase_id);
     if (t.subfase_id) subfaseIds.push(t.subfase_id);
   }
-  const [profilesById, phasesById, subphasesById] = await Promise.all([
+  const [profilesById, phasesById, subphasesById, filesByTask] = await Promise.all([
     loadProfilesByIds(db, userIds),
     loadPhasesByIds(db, faseIds),
     loadSubphasesByIds(db, subfaseIds),
+    loadTaskFilesByTaskIds(db, tasks.map((task) => task.id)),
   ]);
-  return tasks.map((t) => enrichTaskRow(t, profilesById, phasesById, subphasesById));
+  return tasks.map((t) => ({
+    ...enrichTaskRow(t, profilesById, phasesById, subphasesById),
+    archivos: filesByTask[t.id] || [],
+  }));
 }
 
 export async function probeStaffTasksTable(db) {
@@ -97,9 +112,9 @@ export async function buildTasksQuery(db, { assigneeId, mineOnly, userId, estado
   if (assigneeId) {
     const check = await assertStaffAssigneeId(db, assigneeId);
     if (!check.ok) return { error: check.error, status: 404 };
-    query = query.eq('asignado_id', assigneeId);
+    query = query.or(assigneeMembershipFilter(assigneeId));
   } else if (mineOnly && userId) {
-    query = query.eq('asignado_id', userId);
+    query = query.or(assigneeMembershipFilter(userId));
   }
 
   if (estado && estado !== 'vencida') query = query.eq('estado', estado);
@@ -142,6 +157,11 @@ export function buildTaskInsertRow(payload, userId) {
     fase_id: payload.fase_id,
     subfase_id: payload.subfase_id,
     asignado_id: payload.asignado_id,
+    asignados_ids: payload.asignados_ids?.length
+      ? payload.asignados_ids
+      : payload.asignado_id
+        ? [payload.asignado_id]
+        : [],
     asignado_rol: payload.asignado_rol,
     alumno_id: payload.alumno_id,
     fecha_limite: payload.fecha_limite,
@@ -166,6 +186,7 @@ export function buildTaskUpdatePatch(body = {}) {
     'fase_id',
     'subfase_id',
     'asignado_id',
+    'asignados_ids',
     'asignado_rol',
     'alumno_id',
     'fecha_limite',

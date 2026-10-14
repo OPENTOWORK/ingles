@@ -35,7 +35,7 @@
 }
 
 .toggle:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #6a4be8;
   outline-offset: 4px;
 }
 
@@ -164,7 +164,7 @@
 .group select:focus-visible,
 .pager button:focus-visible,
 .actions button:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #6a4be8;
   outline-offset: 2px;
 }
 
@@ -272,8 +272,8 @@
 }
 
 .primary {
-  background: #4f46e5 !important;
-  border-color: #4f46e5 !important;
+  background: #6a4be8 !important;
+  border-color: #6a4be8 !important;
   color: #fff !important;
 }
 
@@ -333,7 +333,7 @@
 }
 
 .facts a {
-  color: #4338ca;
+  color: #5634d6;
 }
 
 .secret {
@@ -351,7 +351,7 @@
 .inlineButton {
   border: 0;
   background: transparent;
-  color: #4338ca;
+  color: #5634d6;
   font: inherit;
   font-size: 0.78rem;
   font-weight: 700;
@@ -360,7 +360,7 @@
 }
 
 .inlineButton:focus-visible {
-  outline: 2px solid #6366f1;
+  outline: 2px solid #6a4be8;
   outline-offset: 2px;
 }
 

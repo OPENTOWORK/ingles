@@ -125,7 +125,7 @@ export default function ContactFaqSection({
 
       <style jsx global>{`
         .contact-section--faq {
-          border-color: #dbeafe;
+          border-color: #e0d6ff;
           background: linear-gradient(180deg, #fff 0%, #f8fbff 100%);
         }
         .contact-faq__intro h2 {
@@ -163,26 +163,26 @@ export default function ContactFaqSection({
           font-family: inherit;
         }
         .contact-faq__filter:hover {
-          border-color: #93c5fd;
-          color: #1d4ed8;
+          border-color: #cdbfff;
+          color: #5634d6;
         }
         .contact-faq__filter--active {
-          border-color: #2563eb;
-          background: #eff6ff;
-          color: #1d4ed8;
+          border-color: #6a4be8;
+          background: #f4f0ff;
+          color: #5634d6;
         }
         .contact-faq__filter-count {
           min-width: 1.25rem;
           padding: 0 5px;
           border-radius: 999px;
-          background: rgba(37, 99, 235, 0.1);
+          background: rgba(106, 75, 232, 0.1);
           font-size: 0.7rem;
           font-weight: 700;
           text-align: center;
           font-variant-numeric: tabular-nums;
         }
         .contact-faq__filter--active .contact-faq__filter-count {
-          background: rgba(37, 99, 235, 0.18);
+          background: rgba(106, 75, 232, 0.18);
         }
         .contact-faq__list {
           display: flex;
@@ -197,8 +197,8 @@ export default function ContactFaqSection({
           transition: box-shadow 0.15s ease;
         }
         .contact-faq__item--open {
-          border-color: #bfdbfe;
-          box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+          border-color: #e0d6ff;
+          box-shadow: 0 4px 16px rgba(106, 75, 232, 0.08);
         }
         .contact-faq__trigger {
           display: flex;
@@ -213,7 +213,7 @@ export default function ContactFaqSection({
           font-family: inherit;
         }
         .contact-faq__item--open .contact-faq__trigger {
-          background: linear-gradient(180deg, #eff6ff 0%, #fff 100%);
+          background: linear-gradient(180deg, #f4f0ff 0%, #fff 100%);
         }
         .contact-faq__chevron {
           flex-shrink: 0;
@@ -223,7 +223,7 @@ export default function ContactFaqSection({
           place-items: center;
           border-radius: 8px;
           background: #f1f5f9;
-          color: #2563eb;
+          color: #6a4be8;
           font-size: 1rem;
           font-weight: 700;
           line-height: 1;
@@ -233,7 +233,7 @@ export default function ContactFaqSection({
           min-width: 0;
           font-size: 0.92rem;
           font-weight: 700;
-          color: #0f172a;
+          color: #1d1857;
           line-height: 1.35;
         }
         .contact-faq__topic-pill {
@@ -265,7 +265,7 @@ export default function ContactFaqSection({
           display: inline-flex;
           font-size: 0.82rem;
           font-weight: 600;
-          color: #2563eb;
+          color: #6a4be8;
           text-decoration: none;
         }
         .contact-faq__link:hover {
@@ -287,7 +287,7 @@ export default function ContactFaqSection({
           line-height: 1.5;
         }
         .contact-faq__footer-link {
-          color: #2563eb;
+          color: #6a4be8;
           font-weight: 600;
           text-decoration: none;
         }

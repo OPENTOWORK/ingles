@@ -62,7 +62,7 @@ function EpicClockIcon() {
       <defs>
         <linearGradient id="pg-clock-ring" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
           <stop stopColor="#22d3ee" />
-          <stop offset="0.5" stopColor="#3b82f6" />
+          <stop offset="0.5" stopColor="#8466ff" />
           <stop offset="1" stopColor="#6366f1" />
         </linearGradient>
         <linearGradient id="pg-clock-face" x1="14" y1="14" x2="34" y2="34" gradientUnits="userSpaceOnUse">
@@ -103,7 +103,7 @@ function EpicClockIcon() {
         y1="24"
         x2="31"
         y2="24"
-        stroke="#2563eb"
+        stroke="#6a4be8"
         strokeWidth="2"
         strokeLinecap="round"
       />

@@ -3,14 +3,31 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { supabase } from '../../utils/supabaseClient';
-import { normalizeEmail } from '@/utils/authRoles';
+import {
+  getRedirectPathByRoleName,
+  getRedirectPathByUserId,
+  normalizeEmail,
+  peekCachedRoleName,
+} from '@/utils/authRoles';
 import { mapSignupErrorMessage } from '@/utils/authSignupErrors';
 import SiteMascot from '@/components/SiteMascot';
 import PasswordInput from '@/components/PasswordInput';
+import GoogleIdentityButton from '@/components/auth/GoogleIdentityButton';
+import { getGoogleClientId } from '@/lib/googleIdentity';
 import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 import { detectClientDeviceType } from '@/lib/clientDeviceType';
 import { readAttributionFromSearch, FOUNDING_OFFER } from '@/lib/abExperiment';
 import { trackRegistrationComplete, trackRegistrationStart } from '@/lib/abExperimentTrack';
+import { completeSignIn } from '@/utils/completeSignIn';
+import { reportLoginAttempt } from '@/utils/reportLoginAttempt';
+import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
+import { clearLogoutPending } from '@/utils/logout';
+import { landingFont } from '@/components/home/landing/landingFont';
+import {
+  destinationAfterLogin,
+  isPhoneViewport,
+  markOpenMainMenuAfterLogin,
+} from '@/utils/postAuthNavigation';
 
 const PASSWORD_RULES = [
   { id: 'length', label: 'Al menos 8 caracteres', test: (p) => p.length >= 8 },
@@ -29,8 +46,9 @@ export default function RegistroPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showPasswordRules, setShowPasswordRules] = useState(false);
   const [fromCampaign, setFromCampaign] = useState(false);
+  const [showGoogleOAuthFallback, setShowGoogleOAuthFallback] = useState(!getGoogleClientId());
+  const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
-
   useEffect(() => {
     const attribution = readAttributionFromSearch(window.location.search);
     if (attribution) {
@@ -283,8 +301,93 @@ export default function RegistroPage() {
     }
   };
 
+  const enterAfterGoogle = async (user) => {
+    const cachedRole = peekCachedRoleName(user?.id);
+    const rolePath = cachedRole
+      ? getRedirectPathByRoleName(cachedRole)
+      : await getRedirectPathByUserId(user?.id, user?.email);
+    const phone = isPhoneViewport();
+    const path = destinationAfterLogin({ rolePath, phone });
+    if (path === '/' && phone) markOpenMainMenuAfterLogin();
+    const createdMs = Date.parse(user?.created_at || '');
+    if (Number.isFinite(createdMs) && Date.now() - createdMs < 3 * 60 * 1000) {
+      trackRegistrationComplete();
+    }
+    await persistMarketingConsent(user?.id, user?.email, acceptedMarketing);
+    router.replace(path);
+  };
+
+  const handleOAuthLogin = async (provider) => {
+    if (googleLoading) return;
+    const redirectTo =
+      typeof window !== 'undefined' ? `${window.location.origin}/auth/callback` : undefined;
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: { redirectTo },
+    });
+
+    if (error) {
+      console.error(`Error OAuth (${provider}):`, error);
+      reportLoginAttempt({
+        code: 'oauth_failed',
+        provider: provider === 'google' ? 'google' : '',
+      });
+      const msg = (error.message || '').toLowerCase();
+      if (msg.includes('provider is not enabled') || msg.includes('unsupported provider')) {
+        toast.error(
+          `El proveedor ${provider} no está habilitado en Supabase. Actívalo en Authentication → Providers.`,
+        );
+      } else {
+        toast.error(`No se pudo iniciar sesión con ${provider}. ${error.message}`);
+      }
+    }
+  };
+
+  const handleGoogleIdToken = async ({ credential, nonce }) => {
+    if (!credential || googleLoading) return;
+    setGoogleLoading(true);
+    const loadingToast = toast.loading('Creando cuenta con Google...');
+    clearLogoutPending();
+
+    const { data, error } = await supabase.auth.signInWithIdToken({
+      provider: 'google',
+      token: credential,
+      nonce,
+    });
+
+    if (error) {
+      toast.dismiss(loadingToast);
+      setGoogleLoading(false);
+      console.error('[registro] google id token', error);
+      reportLoginAttempt({ code: 'oauth_failed', provider: 'google' });
+      toast.error('No se pudo continuar con Google. Prueba el botón de respaldo.');
+      setShowGoogleOAuthFallback(true);
+      return;
+    }
+
+    const result = await completeSignIn(data);
+    toast.dismiss(loadingToast);
+    setGoogleLoading(false);
+
+    if (!result.ok) {
+      console.error('completeSignIn failed:', result.reason, result.error);
+      reportLoginAttempt({
+        email: data?.user?.email || '',
+        code: 'session_not_saved',
+        provider: 'google',
+      });
+      toast.error('No se pudo guardar la sesión. Inténtalo de nuevo.');
+      return;
+    }
+
+    toast.success('Cuenta lista');
+    void ensureAppUserProfile().catch(() => {});
+    await enterAfterGoogle(result.user);
+  };
+
   return (
-    <main className="login-page" style={authMainStyle}>
+    <main className={`login-page ${landingFont.variable}`} style={authMainStyle}>
       <div style={{ textAlign: 'center', marginBottom: '0.75rem', lineHeight: 0 }}>
         <SiteMascot variant={5} width={120} alt="Dralo" />
       </div>
@@ -361,6 +464,44 @@ export default function RegistroPage() {
           </p>
         )}
 
+        <p className="login-page__divider" role="separator">
+          <span>o</span>
+        </p>
+
+        <div className="login-page__google-slot">
+          <GoogleIdentityButton
+            disabled={googleLoading}
+            onCredential={handleGoogleIdToken}
+            onUnavailable={() => setShowGoogleOAuthFallback(true)}
+          />
+        </div>
+        {showGoogleOAuthFallback ? (
+          <button
+            type="button"
+            className="login-page__google"
+            onClick={() => handleOAuthLogin('google')}
+            disabled={googleLoading}
+          >
+            <span className="login-page__google-icon" aria-hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+                <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+                <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+              </svg>
+            </span>
+            Continuar con Google
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="login-page__google-fallback"
+            onClick={() => handleOAuthLogin('google')}
+          >
+            Si el botón no carga, continúa aquí
+          </button>
+        )}
+
         <button
           type="submit"
           style={
@@ -432,18 +573,23 @@ export default function RegistroPage() {
 }
 
 const authMainStyle = {
-  maxWidth: '400px',
-  margin: '4rem auto',
-  padding: '2rem',
+  maxWidth: '440px',
+  margin: '2.75rem auto 3rem',
+  padding: '2rem 1.75rem 1.75rem',
   backgroundColor: '#fff',
-  borderRadius: '8px',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  fontFamily: 'Segoe UI, sans-serif',
+  borderRadius: '28px',
+  border: '1px solid #e0d6ff',
+  boxShadow: '0 18px 44px rgba(76, 56, 170, 0.12)',
+  color: '#4a4769',
 };
 
 const authHeadingStyle = {
   textAlign: 'center',
-  marginBottom: '1.5rem',
+  margin: '0 0 1.5rem',
+  color: '#1d1857',
+  fontWeight: 800,
+  letterSpacing: '-0.03em',
+  fontSize: '1.65rem',
 };
 
 const campaignNoteStyle = {
@@ -468,27 +614,34 @@ const campaignNoteBodyStyle = {
 const authLabelStyle = {
   display: 'block',
   marginBottom: '0.5rem',
+  color: '#1d1857',
+  fontWeight: 700,
+  fontSize: '0.92rem',
 };
 
 const authInputStyle = {
   width: '100%',
-  padding: '0.75rem',
+  padding: '0.8rem 0.95rem',
   fontSize: '1rem',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
+  border: '1.5px solid #e0d6ff',
+  borderRadius: '14px',
   boxSizing: 'border-box',
+  color: '#1d1857',
+  background: '#fff',
 };
 
 const authButtonStyle = {
   width: '100%',
-  padding: '0.75rem',
-  marginTop: '1.5rem',
-  backgroundColor: '#0070f3',
-  color: 'white',
-  fontWeight: 'bold',
+  padding: '0.9rem 1.35rem',
+  marginTop: '1.35rem',
+  background: 'linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%)',
+  color: '#fff',
+  fontWeight: 700,
+  fontSize: '1rem',
   border: 'none',
-  borderRadius: '4px',
+  borderRadius: '999px',
   cursor: 'pointer',
+  boxShadow: '0 10px 24px rgba(99, 67, 236, 0.32)',
 };
 
 const optionalTagStyle = {
@@ -533,5 +686,7 @@ const footerNoteStyle = {
 };
 
 const linkStyle = {
-  textDecoration: 'underline',
+  color: '#6a4be8',
+  fontWeight: 700,
+  textDecoration: 'none',
 };

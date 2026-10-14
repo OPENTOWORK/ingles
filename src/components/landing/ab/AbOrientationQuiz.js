@@ -21,6 +21,7 @@ import {
   X,
 } from 'lucide-react';
 import { buildRegisterHref } from '@/lib/abExperiment';
+import './ab-landing.css';
 
 const QUESTIONS = [
   {
@@ -174,7 +175,13 @@ function QuestionStep({ titleId, question, index, total, selectedId, onChoose, o
   );
 }
 
-export default function AbOrientationQuiz({ pageType, variant, source = 'direct' }) {
+export default function AbOrientationQuiz({
+  pageType,
+  variant,
+  source = 'direct',
+  autoOpen = false,
+  onDismiss,
+}) {
   const titleId = useId();
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(0);
@@ -188,14 +195,17 @@ export default function AbOrientationQuiz({ pageType, variant, source = 'direct'
   }, [pageType, variant, source]);
 
   useEffect(() => {
+    if (!autoOpen) return undefined;
     const timer = window.setTimeout(() => setOpen(true), 500);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [autoOpen]);
 
   useEffect(() => {
     if (!open) return undefined;
     const onKey = (event) => {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key !== 'Escape') return;
+      setOpen(false);
+      onDismiss?.();
     };
     window.addEventListener('keydown', onKey);
     const previous = document.body.style.overflow;
@@ -204,7 +214,7 @@ export default function AbOrientationQuiz({ pageType, variant, source = 'direct'
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = previous;
     };
-  }, [open]);
+  }, [open, onDismiss]);
 
   function choose(questionId, optionId) {
     const next = { ...answers, [questionId]: optionId };
@@ -223,10 +233,17 @@ export default function AbOrientationQuiz({ pageType, variant, source = 'direct'
     setStep((current) => Math.max(0, current - 1));
   }
 
+  function dismiss() {
+    setOpen(false);
+    onDismiss?.();
+  }
+
+  if (!open && onDismiss) return null;
+
   return (
     <>
       {open ? (
-        <div className="ab-ask" role="presentation" onClick={() => setOpen(false)}>
+        <div className="ab-ask" role="presentation" onClick={dismiss}>
           <div
             className="ab-ask__card"
             role="dialog"
@@ -234,7 +251,7 @@ export default function AbOrientationQuiz({ pageType, variant, source = 'direct'
             aria-labelledby={titleId}
             onClick={(event) => event.stopPropagation()}
           >
-            <button type="button" className="ab-ask__close" onClick={() => setOpen(false)} aria-label="Cerrar">
+            <button type="button" className="ab-ask__close" onClick={dismiss} aria-label="Cerrar">
               <X size={18} aria-hidden />
             </button>
 
@@ -248,12 +265,19 @@ export default function AbOrientationQuiz({ pageType, variant, source = 'direct'
                   ))}
                 </ul>
                 <div className="ab-ask__actions">
-                  <Link href={href} className="ab-ask__go">
-                    Quiero mi plan gratis
-                    <span aria-hidden>→</span>
-                  </Link>
-                  <button type="button" className="ab-ask__explore" onClick={() => setOpen(false)}>
-                    Seguir explorando
+                  {onDismiss ? (
+                    <button type="button" className="ab-ask__go" onClick={dismiss}>
+                      Empezar
+                      <span aria-hidden>→</span>
+                    </button>
+                  ) : (
+                    <Link href={href} className="ab-ask__go">
+                      Quiero mi plan gratis
+                      <span aria-hidden>→</span>
+                    </Link>
+                  )}
+                  <button type="button" className="ab-ask__explore" onClick={dismiss}>
+                    {onDismiss ? 'Ahora no' : 'Seguir explorando'}
                   </button>
                 </div>
               </div>

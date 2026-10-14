@@ -80,7 +80,7 @@
 .field input:focus,
 .field textarea:focus {
   outline: 2px solid rgba(99, 102, 241, 0.35);
-  border-color: #6366f1;
+  border-color: #6a4be8;
 }
 
 .footer {
@@ -107,8 +107,8 @@
 }
 
 .btnPrimary {
-  border: 1px solid #4f46e5;
-  background: #4f46e5;
+  border: 1px solid #6a4be8;
+  background: #6a4be8;
   color: #fff;
 }
 

@@ -7,6 +7,7 @@ import PageHero from '@/components/PageHero';
 import { DRALO_SUBSCRIPTION_PLANS } from '@/data/financialPlanConfig';
 import { useUserRole } from '@/context/UserRoleContext';
 import { canViewPricing } from '@/utils/pricingAccess';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 function planHeroStatLabel(plan) {
   if (!plan.precio || plan.precio <= 0) return 'Gratis';
@@ -33,14 +34,14 @@ function PreciosContent() {
 
   if (!allowed) {
     return (
-      <main className="dralo-ai-page precios-page">
+      <main className={`dralo-ai-page precios-page ${landingFont.variable}`}>
         <p style={{ padding: 24, color: '#64748b' }}>Redirigiendo…</p>
       </main>
     );
   }
 
   return (
-    <main className="dralo-ai-page precios-page" style={{ '--dralo-accent-solid': '#6366f1' }}>
+    <main className={`dralo-ai-page precios-page ${landingFont.variable}`}>
       <PageHero
         eyebrow="Planes Dralo"
         title="Elige el plan que necesitas"
@@ -62,7 +63,7 @@ function PreciosContent() {
 
 export default function PreciosPage() {
   return (
-    <Suspense fallback={<main className="dralo-ai-page"><p style={{ padding: 24 }}>Cargando…</p></main>}>
+    <Suspense fallback={<main className={`dralo-ai-page precios-page ${landingFont.variable}`}><p style={{ padding: 24 }}>Cargando…</p></main>}>
       <PreciosContent />
     </Suspense>
   );

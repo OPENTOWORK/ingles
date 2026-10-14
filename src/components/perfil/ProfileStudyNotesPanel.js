@@ -251,8 +251,8 @@ export default function ProfileStudyNotesPanel({ lang = 'en' }) {
           color: #334155;
         }
         .note-save-btn {
-          background: #0070f3;
-          border-color: #0070f3;
+          background: #6a4be8;
+          border-color: #6a4be8;
           color: #fff;
         }
         .note-save-btn:disabled {
@@ -264,7 +264,7 @@ export default function ProfileStudyNotesPanel({ lang = 'en' }) {
           background: #f8fafc;
         }
         .note-save-btn:hover:not(:disabled) {
-          background: #0059c9;
+          background: #5634d6;
         }
       `}</style>
     </ProfileCollapsibleSection>

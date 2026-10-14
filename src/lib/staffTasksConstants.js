@@ -99,6 +99,7 @@ export const EMPTY_TASK_FORM = {
   fase_id: '',
   subfase_id: '',
   asignado_id: '',
+  asignados_ids: [],
   asignado_rol: '',
   alumno_id: '',
   fecha_limite: '',

@@ -122,8 +122,8 @@ export default function ProfileSkillAnalysis({ userId }) {
             <Radar
               name="Your level"
               dataKey="A"
-              stroke="#0070f3"
-              fill="#0070f3"
+              stroke="#6a4be8"
+              fill="#6a4be8"
               fillOpacity={0.3}
             />
             <Radar name="Target" dataKey="B" stroke="#eaeaea" fill="transparent" />

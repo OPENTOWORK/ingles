@@ -10,6 +10,7 @@ import {
   TASK_PRIORIDAD_COLORS,
   TASK_PRIORIDAD_LABELS,
 } from '@/lib/staffTasksConstants';
+import { formatTaskAssigneeLabel, taskAssigneePeople } from '@/lib/staffTaskAssignees';
 
 export function TaskEstadoBadge({ estado = 'pendiente', compact = false }) {
   const label = TASK_ESTADO_LABELS[estado] || estado;
@@ -164,10 +165,11 @@ export function TaskTableLocationCell({ fase, subfase }) {
 }
 
 export function TaskTableAssigneeCell({ task }) {
-  const name = task.asignado?.nombre || task.asignado?.email;
+  const people = taskAssigneePeople(task);
+  const name = formatTaskAssigneeLabel(task, '');
   if (!name) return <span className="text-xs text-gray-400">—</span>;
 
-  const initials = String(name)
+  const initials = String(people[0]?.nombre || people[0]?.email || name)
     .split(/\s+/)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase() || '')
@@ -180,7 +182,9 @@ export function TaskTableAssigneeCell({ task }) {
       </span>
       <div className="min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate">{name}</p>
-        {task.asignado_rol ? (
+        {people.length > 1 ? (
+          <p className="text-xs text-gray-500 truncate">{people.length} personas</p>
+        ) : task.asignado_rol ? (
           <p className="text-xs text-gray-500 truncate">{task.asignado_rol}</p>
         ) : null}
       </div>

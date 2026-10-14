@@ -1,5 +1,6 @@
 'use client';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { landingFont } from '@/components/home/landing/landingFont';
 import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps } from '@/hooks/useLevelsExamAdminFlow';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
@@ -1287,9 +1288,8 @@ function UseOfEnglishExamsPageInner() {
 
   return (
     <main
-      className="levels-exam-practice-root"
+      className={`levels-exam-practice-root ${landingFont.variable}`}
       style={{
-        fontFamily: 'Arial, Helvetica, sans-serif',
         ...(!examPracticeOpen
           ? {
               minHeight: 'calc(100vh - 4rem)',

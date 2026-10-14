@@ -7,6 +7,7 @@ import { getRoleNameByUserId } from '@/utils/authRoles';
 import { getClientAuth } from '@/utils/getClientAuth';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import AdminShellNav from '@/components/admin/AdminShellNav';
+import { landingFont } from '@/components/home/landing/landingFont';
 import styles from './AdminShell.module.css';
 
 const SIDEBAR_COLLAPSED_KEY = 'dralo_admin_sidebar_collapsed';
@@ -100,7 +101,7 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
 
   if (loading) {
     return (
-      <div className="admin-shell-page admin-shell-page--full-bleed">
+      <div className={`admin-shell-page admin-shell-page--full-bleed ${landingFont.variable}`}>
         <div className={styles.loading}>
           <RouteLoadingMascot label="Cargando administración…" variant={5} width={120} />
         </div>
@@ -110,7 +111,7 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
 
   return (
     <div
-      className={`admin-shell-page admin-shell-page--full-bleed${collapsed ? ' admin-shell-page--collapsed' : ''}`}
+      className={`admin-shell-page admin-shell-page--full-bleed ${landingFont.variable}${collapsed ? ' admin-shell-page--collapsed' : ''}`}
     >
       <div className={styles.layout}>
         <aside

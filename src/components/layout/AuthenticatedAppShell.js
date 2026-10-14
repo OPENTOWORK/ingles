@@ -11,6 +11,7 @@ import { PlacementAccessProvider } from '@/context/PlacementAccessContext';
 import { useItPreviewRole } from '@/hooks/useItPreviewRole';
 import { useItPreviewAdminBuzonLayout } from '@/hooks/useItPreviewAdminBuzonLayout';
 import AppNav from '@/components/layout/AppNav';
+import { landingFont } from '@/components/home/landing/landingFont';
 import AdminShell from '@/components/admin/AdminShell';
 import { shouldShowAdminShell } from '@/config/appNavMenu';
 import StudySessionBarGate from '@/components/study/StudySessionBarGate';
@@ -18,7 +19,7 @@ import ProfileStudyTimerPill from '@/components/study/ProfileStudyTimerPill';
 
 function SiteHeaderBrand({ nav = null, homeSideMenu = false }) {
   return (
-    <header className={`site-header${homeSideMenu ? ' site-header--home-side' : ''}`}>
+    <header className={`site-header ${landingFont.variable}${homeSideMenu ? ' site-header--home-side' : ''}`}>
       <div className="site-header__bar">
         <a href="/" className="site-header__logo">
           <img src="/uk-flag.png" alt="UK Flag" className="site-header__flag bandera" />

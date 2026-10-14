@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import ContactFaqSection from '@/components/contact/ContactFaqSection';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 export default function ContactFaqPage() {
   return (
-    <main className="shell contacto-page contacto-faq-page">
+    <main className={`shell contacto-page contacto-faq-page ${landingFont.variable}`}>
       <PageHero
         eyebrow="Help centre"
         title="Frequently asked questions"
@@ -48,7 +49,7 @@ export default function ContactFaqPage() {
         .contact-faq-page__back a {
           font-size: 0.9rem;
           font-weight: 600;
-          color: #2563eb;
+          color: #6a4be8;
           text-decoration: none;
         }
         .contact-faq-page__back a:hover {

@@ -4,7 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Bell } from 'lucide-react';
 import { getStaffRoleLabel } from '@/utils/staffBuzon';
-import { staffTasksFetch } from '@/lib/staffTasksClient';
+import { staffTasksDownloadFile, staffTasksFetch, staffTasksUploadFile } from '@/lib/staffTasksClient';
+import { formatTaskAssigneeLabel, taskAssigneeIds } from '@/lib/staffTaskAssignees';
+import { formatTaskFileCount } from '@/lib/staffTaskFiles';
 import {
   CUMPLIMIENTO_LABELS,
   EMPTY_FASE_FORM,
@@ -226,7 +228,8 @@ function taskToForm(task) {
     prioridad: task.prioridad || 'media',
     fase_id: task.fase_id || '',
     subfase_id: task.subfase_id || '',
-    asignado_id: task.asignado_id || '',
+    asignado_id: taskAssigneeIds(task)[0] || '',
+    asignados_ids: taskAssigneeIds(task),
     asignado_rol: task.asignado_rol || '',
     fecha_limite: task.fecha_limite
       ? new Date(task.fecha_limite).toISOString().slice(0, 16)
@@ -280,7 +283,7 @@ function taskCanBeReminded(task) {
 
 function TaskReminderButton({ task, busy, onRemind, className }) {
   if (!taskCanBeReminded(task)) return null;
-  const assignee = task.asignado?.nombre || task.asignado?.email;
+  const assignee = formatTaskAssigneeLabel(task, '');
   const label = assignee
     ? `Enviar recordatorio a ${assignee}`
     : 'Esta tarea no tiene persona asignada';
@@ -462,8 +465,11 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         setError(data.error);
         return;
       }
-      setTasks(data.tasks || []);
+      const nextTasks = data.tasks || [];
+      setTasks(nextTasks);
+      setDetailTask((current) => nextTasks.find((task) => task.id === current?.id) || current);
       if (typeof data.tablesReady === 'boolean') setTasksReady(data.tablesReady);
+      return nextTasks;
     } finally {
       setLoading(false);
     }
@@ -507,16 +513,21 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     return () => window.removeEventListener('keydown', onKey);
   }, [detailTask, closeDetail]);
 
-  const taskAssignee = useMemo(
-    () => assignees.find((u) => u.id === taskForm.asignado_id),
-    [assignees, taskForm.asignado_id],
-  );
+  const editingTaskFiles = useMemo(() => {
+    if (!editingTaskId) return [];
+    return tasks.find((task) => task.id === editingTaskId)?.archivos || [];
+  }, [editingTaskId, tasks]);
 
   const openNewTask = (template = null) => {
+    const presetId = filters.assigneeId || (!canPickAssignee && currentUserId ? currentUserId : '');
+    const preset = assignees.find((user) => user.id === presetId);
     const base = {
       ...EMPTY_TASK_FORM,
-      asignado_id: filters.assigneeId || '',
-      asignado_rol: template?.asignado_rol_default || '',
+      asignado_id: presetId,
+      asignados_ids: presetId ? [presetId] : [],
+      asignado_rol: preset?.roleName
+        ? getStaffDepartmentLabel(preset.roleName)
+        : template?.asignado_rol_default || '',
       fase_id: template?.fase_id || filters.faseId || '',
       subfase_id: filters.subfaseId || '',
       prioridad: template?.prioridad_default || 'media',
@@ -540,21 +551,26 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
     setTaskModalOpen(true);
   };
 
-  const saveTask = async (form) => {
+  const saveTask = async (form, fileChanges = {}) => {
     setSaving(true);
     try {
+      const assigneeIds = form.asignados_ids?.length
+        ? form.asignados_ids
+        : form.asignado_id
+          ? [form.asignado_id]
+          : [];
+      const first = assignees.find((user) => user.id === assigneeIds[0]);
       const payload = {
         ...form,
         fecha_limite: form.fecha_limite ? new Date(form.fecha_limite).toISOString() : null,
         fase_id: form.fase_id || null,
         subfase_id: form.subfase_id || null,
-        asignado_id: form.asignado_id || null,
+        asignado_id: assigneeIds[0] || null,
+        asignados_ids: assigneeIds,
         alumno_id: null,
-        asignado_rol:
-          form.asignado_rol ||
-          (taskAssignee ? getStaffDepartmentLabel(taskAssignee.roleName) : ''),
+        asignado_rol: form.asignado_rol || (first ? getStaffDepartmentLabel(first.roleName) : ''),
       };
-      await staffTasksFetch('/api/coordinator/tasks', {
+      const result = await staffTasksFetch('/api/coordinator/tasks', {
         method: 'POST',
         body: JSON.stringify({
           action: editingTaskId ? 'update' : 'create',
@@ -562,6 +578,18 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
           ...payload,
         }),
       });
+      const taskId = result.task?.id || editingTaskId;
+      if (!editingTaskId && taskId) setEditingTaskId(taskId);
+      for (const file of fileChanges.files || []) {
+        const saved = await staffTasksUploadFile(taskId, file);
+        fileChanges.onFileUploaded?.(file, saved);
+      }
+      for (const fileId of fileChanges.removeFileIds || []) {
+        await staffTasksFetch(`/api/coordinator/tasks/${taskId}/files`, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'delete', id: fileId }),
+        });
+      }
       setTaskModalOpen(false);
       await loadTasks();
     } catch (e) {
@@ -678,7 +706,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
 
   const remindTask = (task) => {
     if (!taskCanBeReminded(task)) return;
-    const assigneeName = task.asignado?.nombre || task.asignado?.email;
+    const assigneeName = formatTaskAssigneeLabel(task, '');
     if (!assigneeName) {
       setRemindNotice({
         task,
@@ -1260,9 +1288,12 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                     </p>
                     <div className={kanbanStyles.cardBadges}>
                       <TaskPrioridadBadge prioridad={task.prioridad} />
-                      {task.asignado?.nombre || task.asignado_rol ? (
+                      {formatTaskAssigneeLabel(task, '') ? (
                         <span className="text-xs text-gray-500">
-                          {task.asignado?.nombre || task.asignado_rol}
+                          {formatTaskAssigneeLabel(task, '')}
+                          {formatTaskFileCount(task.archivos?.length)
+                            ? ` · ${formatTaskFileCount(task.archivos.length)}`
+                            : ''}
                         </span>
                       ) : null}
                     </div>
@@ -1697,12 +1728,13 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                       <TaskPrioridadBadge prioridad={task.prioridad} compact />
                       <span
                         className={`ml-auto max-w-[14rem] shrink-0 truncate text-xs font-medium ${
-                          task.asignado?.nombre || task.asignado?.email || task.asignado_rol
-                            ? 'text-gray-700'
-                            : 'text-gray-400'
+                          formatTaskAssigneeLabel(task, '') ? 'text-gray-700' : 'text-gray-400'
                         }`}
                       >
-                        {task.asignado?.nombre || task.asignado?.email || task.asignado_rol || 'Sin asignar'}
+                        {formatTaskAssigneeLabel(task)}
+                        {formatTaskFileCount(task.archivos?.length)
+                          ? ` · ${formatTaskFileCount(task.archivos.length)}`
+                          : ''}
                       </span>
                     </button>
                   </div>
@@ -1822,7 +1854,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
               <dl className="space-y-2 text-gray-700">
                 <div>
                   <dt className="text-xs text-gray-500">Asignado</dt>
-                  <dd>{detailTask.asignado?.nombre || detailTask.asignado_rol || '—'}</dd>
+                  <dd>{formatTaskAssigneeLabel(detailTask, '—')}</dd>
                 </div>
                 <div>
                   <dt className="text-xs text-gray-500">Fase</dt>
@@ -1840,6 +1872,30 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
                   <div>
                     <dt className="text-xs text-gray-500">Notas</dt>
                     <dd>{detailTask.notas}</dd>
+                  </div>
+                ) : null}
+                {detailTask.archivos?.length ? (
+                  <div>
+                    <dt className="text-xs text-gray-500">Archivos</dt>
+                    <dd>
+                      <ul className="mt-1 space-y-1">
+                        {detailTask.archivos.map((file) => (
+                          <li key={file.id}>
+                            <button
+                              type="button"
+                              className="text-violet-700 hover:underline text-left"
+                              onClick={() => {
+                                void staffTasksDownloadFile(detailTask.id, file).catch((error) => {
+                                  alert(error.message);
+                                });
+                              }}
+                            >
+                              {file.nombre}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    </dd>
                   </div>
                 ) : null}
               </dl>
@@ -1905,6 +1961,7 @@ export default function StaffTasksPanel({ currentUserId, userRole, embedded = fa
         phases={phases}
         subphases={subphases}
         assignees={canPickAssignee ? assignees : assignees.filter((u) => u.id === currentUserId)}
+        existingFiles={editingTaskFiles}
         onAssigneeChange={setTaskForm}
         saving={saving}
         title={editingTaskId ? 'Editar tarea' : 'Nueva tarea'}

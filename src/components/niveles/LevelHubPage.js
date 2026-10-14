@@ -1,6 +1,7 @@
 'use client';
 
 import PageHero from '@/components/PageHero';
+import { landingFont } from '@/components/home/landing/landingFont';
 import ExamPracticeHubSection from '@/components/niveles/ExamPracticeHubSection';
 import StarsWayHubTabs from '@/components/niveles/StarsWayHubTabs';
 import { useUserRole } from '@/context/UserRoleContext';
@@ -95,7 +96,7 @@ export default function LevelHubPage({ config }) {
   );
 
   return (
-    <main className={`shell ${pageClass}`}>
+    <main className={`shell content-hub-shell exam-practice-level-hub ${pageClass} ${landingFont.variable}`}>
       {isB2Hub ? <div className="levels-b2-page-content">{hubBody}</div> : hubBody}
 
       <LevelHubStyles />

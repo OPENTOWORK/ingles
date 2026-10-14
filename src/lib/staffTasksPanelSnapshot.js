@@ -1,4 +1,5 @@
 import { getServiceDb, isSchemaNotReadyError, listStaffAssignees } from '@/lib/coordinatorAccess';
+import { taskIncludesAssignee } from '@/lib/staffTaskAssignees';
 import {
   buildPanelLookupMaps,
   computePanelSummary,
@@ -140,7 +141,7 @@ export async function loadStaffTasksPanelSnapshot(options = {}) {
   }
 
   const rawTasks = (tasksRes.data || []).filter((task) => {
-    if (assigneeId && task.asignado_id !== assigneeId) return false;
+    if (assigneeId && !taskIncludesAssignee(task, assigneeId)) return false;
     return true;
   });
 

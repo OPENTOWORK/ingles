@@ -36,7 +36,11 @@ const Toaster = dynamic(
 const WelcomeFormGate = dynamic(() => import('@/components/formularios/WelcomeFormGate'), {
   ssr: false,
 });
+const OrientationQuizGate = dynamic(() => import('@/components/landing/ab/OrientationQuizGate'), {
+  ssr: false,
+});
 import AuthenticatedAppShell from '@/components/layout/AuthenticatedAppShell';
+import { landingFont } from '@/components/home/landing/landingFont';
 import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
 import { useLevelsStarsBackfill } from '@/hooks/useLevelsStarsBackfill';
 import { useClientMounted } from '@/hooks/useClientMounted';
@@ -67,7 +71,7 @@ const TOAST_OPTIONS = {
 
 function SiteHeaderBrand({ nav = null, logoOnly = false, logoHref = '/', decorativeFlag = false }) {
   return (
-    <header className={`site-header${logoOnly ? ' site-header--logo-only' : ''}`}>
+    <header className={`site-header ${landingFont.variable}${logoOnly ? ' site-header--logo-only' : ''}`}>
       <div className="site-header__bar">
         <Link href={logoHref} className="site-header__logo">
           <img
@@ -513,11 +517,18 @@ function RootLayoutClientInner({ children }) {
       <DeferredSiteAssistant enabled={Boolean(session) && !isMinimalLanding} />
 
       {session && !isMinimalLanding ? (
-        <WelcomeFormGate
-          session={session}
-          userRole={userRole}
-          roleConfirmedForUserId={roleConfirmedForUserId}
-        />
+        <>
+          <WelcomeFormGate
+            session={session}
+            userRole={userRole}
+            roleConfirmedForUserId={roleConfirmedForUserId}
+          />
+          <OrientationQuizGate
+            session={session}
+            userRole={userRole}
+            roleConfirmedForUserId={roleConfirmedForUserId}
+          />
+        </>
       ) : null}
 
       {cookieConsentHydrated && !cookieConsent && (

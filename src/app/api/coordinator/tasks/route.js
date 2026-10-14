@@ -7,6 +7,7 @@ import {
   sendStaffTaskAssignedEmail,
   sendStaffTaskReminderEmail,
 } from '@/lib/sendStaffTaskAssignedEmail';
+import { copyTaskFiles } from '@/lib/staffTaskFilesServer';
 import {
   buildTaskInsertRow,
   buildTaskUpdatePatch,
@@ -22,20 +23,58 @@ import { getRoleNameByUserId } from '@/utils/authRoles';
 
 const TASKS_TABLE = 'staff_tareas';
 
-async function notifyTaskAssignee(auth, task) {
-  if (!task?.asignado?.email) {
-    return { sent: false, skipped: true };
-  }
+function assigneeRecipients(task) {
+  const people =
+    Array.isArray(task?.asignados) && task.asignados.length
+      ? task.asignados
+      : task?.asignado
+        ? [task.asignado]
+        : [];
+  const seen = new Set();
+  return people.filter((person) => {
+    const email = String(person?.email || '').trim().toLowerCase();
+    if (!email || seen.has(email)) return false;
+    seen.add(email);
+    return true;
+  });
+}
+
+async function notifyTaskAssignees(auth, task, send) {
+  const recipients = assigneeRecipients(task);
+  if (!recipients.length) return { sent: false, skipped: true, names: [] };
 
   const profiles = await loadProfilesByIds(auth.db, [auth.user.id]);
   const creator = profiles[auth.user.id];
   const creatorName = creator?.nombre || auth.user.email || 'Un miembro del equipo';
+  const names = [];
+  let sent = false;
+  let queued = false;
+  let error = '';
 
-  return sendStaffTaskAssignedEmail({
-    adminClient: auth.db,
-    task,
-    creatorName,
-  });
+  for (const person of recipients) {
+    const mail = await send({
+      adminClient: auth.db,
+      task: { ...task, asignado: person },
+      creatorName,
+    });
+    if (mail.sent || mail.queued) {
+      sent = Boolean(mail.sent) || sent;
+      queued = Boolean(mail.queued) || queued;
+      names.push(person.nombre || person.email);
+    } else if (!mail.skipped) {
+      error = mail.error || error;
+    }
+  }
+
+  return { sent, queued, skipped: names.length === 0 && !error, error, names };
+}
+
+async function validateAssignees(db, ids, alumnoId) {
+  for (const id of ids) {
+    const check = await validateAssigneeAndStudent(db, id, id === ids[0] ? alumnoId : null);
+    if (!check.ok) return check;
+  }
+  return { ok: true };
 }
 
 export async function GET(req) {
@@ -119,18 +158,16 @@ export async function POST(req) {
         return NextResponse.json({ error: validated.error }, { status: 400 });
       }
 
-      if (validated.data.asignado_id) {
-        const assigneeCheck = await validateAssigneeAndStudent(
-          auth.db,
-          validated.data.asignado_id,
-          validated.data.alumno_id,
+      const assigneeCheck = await validateAssignees(
+        auth.db,
+        validated.data.asignados_ids,
+        validated.data.alumno_id,
+      );
+      if (!assigneeCheck.ok) {
+        return NextResponse.json(
+          { error: assigneeCheck.error },
+          { status: assigneeCheck.status || 400 },
         );
-        if (!assigneeCheck.ok) {
-          return NextResponse.json(
-            { error: assigneeCheck.error },
-            { status: assigneeCheck.status || 400 },
-          );
-        }
       }
 
       const row = buildTaskInsertRow(validated.data, auth.user.id);
@@ -148,7 +185,7 @@ export async function POST(req) {
       }
 
       const [task] = await enrichTasksList(auth.db, [data]);
-      const mail = await notifyTaskAssignee(auth, task);
+      const mail = await notifyTaskAssignees(auth, task, sendStaffTaskAssignedEmail);
       if (!mail.sent && !mail.skipped && mail.error) {
         console.warn('[coordinator/tasks create] assignment email:', mail.error);
       }
@@ -196,6 +233,7 @@ export async function POST(req) {
           fase_id: source.fase_id,
           subfase_id: source.subfase_id,
           asignado_id: source.asignado_id,
+          asignados_ids: source.asignados_ids,
           asignado_rol: source.asignado_rol,
           alumno_id: source.alumno_id,
           fecha_limite: source.fecha_limite,
@@ -210,8 +248,13 @@ export async function POST(req) {
       if (error) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
+      try {
+        await copyTaskFiles(auth.db, id, data.id, auth.user.id);
+      } catch (copyError) {
+        console.warn('[coordinator/tasks duplicate] files:', copyError?.message || copyError);
+      }
       const [task] = await enrichTasksList(auth.db, [data]);
-      const mail = await notifyTaskAssignee(auth, task);
+      const mail = await notifyTaskAssignees(auth, task, sendStaffTaskAssignedEmail);
       if (!mail.sent && !mail.skipped && mail.error) {
         console.warn('[coordinator/tasks duplicate] assignment email:', mail.error);
       }
@@ -247,14 +290,7 @@ export async function POST(req) {
       }
 
       const [task] = await enrichTasksList(auth.db, [source]);
-      const profiles = await loadProfilesByIds(auth.db, [auth.user.id]);
-      const creator = profiles[auth.user.id];
-      const creatorName = creator?.nombre || auth.user.email || 'Administración';
-      const mail = await sendStaffTaskReminderEmail({
-        adminClient: auth.db,
-        task,
-        creatorName,
-      });
+      const mail = await notifyTaskAssignees(auth, task, sendStaffTaskReminderEmail);
 
       if (!mail.sent && !mail.queued) {
         return NextResponse.json(
@@ -263,7 +299,7 @@ export async function POST(req) {
         );
       }
 
-      const assigneeLabel = task?.asignado?.nombre || task?.asignado?.email || 'la persona asignada';
+      const assigneeLabel = mail.names.filter(Boolean).join(', ') || 'la persona asignada';
       return NextResponse.json({
         success: true,
         emailSent: Boolean(mail.sent),
@@ -275,30 +311,29 @@ export async function POST(req) {
     }
 
     if (action === 'update' || action === 'updateEstado') {
+      let validated = null;
       if (action === 'update') {
-        const validated = validateTaskPayload(body);
+        validated = validateTaskPayload(body);
         if (!validated.ok) {
           return NextResponse.json({ error: validated.error }, { status: 400 });
         }
-        if (validated.data.asignado_id) {
-          const assigneeCheck = await validateAssigneeAndStudent(
-            auth.db,
-            validated.data.asignado_id,
-            validated.data.alumno_id,
+        const assigneeCheck = await validateAssignees(
+          auth.db,
+          validated.data.asignados_ids,
+          validated.data.alumno_id,
+        );
+        if (!assigneeCheck.ok) {
+          return NextResponse.json(
+            { error: assigneeCheck.error },
+            { status: assigneeCheck.status || 400 },
           );
-          if (!assigneeCheck.ok) {
-            return NextResponse.json(
-              { error: assigneeCheck.error },
-              { status: assigneeCheck.status || 400 },
-            );
-          }
         }
       }
 
       const patch =
         action === 'updateEstado'
           ? buildTaskUpdatePatch({ estado: body.estado })
-          : buildTaskUpdatePatch(body);
+          : buildTaskUpdatePatch(validated.data);
 
       const { data, error } = await auth.db
         .from(TASKS_TABLE)

@@ -1,30 +1,36 @@
 /* Admin shell — tema unificado (solo dentro de .admin-shell-page) */
 
+body:not(.reading-night-mode):has(.admin-shell-page) {
+  background: #fbfaff;
+}
+
 .admin-shell-page {
-  --admin-bg: #f4f6fb;
-  --admin-bg-accent: #eef2ff;
+  --admin-bg: #fbfaff;
+  --admin-bg-accent: #f4f0ff;
   --admin-surface: #ffffff;
-  --admin-surface-muted: #f8fafc;
-  --admin-border: #e2e8f0;
-  --admin-border-strong: #cbd5e1;
-  --admin-text: #0f172a;
-  --admin-text-muted: #64748b;
-  --admin-primary: #4f46e5;
-  --admin-primary-hover: #4338ca;
-  --admin-primary-soft: #eef2ff;
-  --admin-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
-  --admin-shadow-md: 0 10px 30px rgba(15, 23, 42, 0.06);
-  --admin-shadow-lg: 0 18px 48px rgba(79, 70, 229, 0.08);
-  --admin-radius-lg: 1rem;
-  --admin-radius-xl: 1.25rem;
+  --admin-surface-muted: #f8f5ff;
+  --admin-border: #e8e4f7;
+  --admin-border-strong: #e0d6ff;
+  --admin-text: #1d1857;
+  --admin-text-muted: #6c6989;
+  --admin-primary: #6a4be8;
+  --admin-primary-hover: #5634d6;
+  --admin-primary-soft: #f0ebff;
+  --admin-shadow-sm: 0 8px 22px rgba(76, 56, 170, 0.06);
+  --admin-shadow-md: 0 18px 44px rgba(76, 56, 170, 0.08);
+  --admin-shadow-lg: 0 18px 44px rgba(76, 56, 170, 0.12);
+  --admin-radius-lg: 1.15rem;
+  --admin-radius-xl: 1.5rem;
   --admin-transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--admin-bg);
+  color: var(--admin-text-muted);
+  font-family: var(--font-landing), 'Segoe UI', system-ui, sans-serif;
 }
 
 .admin-shell__main {
   background:
-    radial-gradient(1200px 420px at 100% -10%, rgba(99, 102, 241, 0.07), transparent 55%),
-    radial-gradient(900px 360px at -5% 0%, rgba(14, 165, 233, 0.05), transparent 50%),
+    radial-gradient(48% 36% at 100% 0%, rgba(196, 181, 253, 0.34), transparent 70%),
+    radial-gradient(36% 32% at 0% 0%, rgba(237, 233, 254, 0.9), transparent 72%),
     var(--admin-bg);
 }
 
@@ -64,8 +70,8 @@
 .admin-shell__main .panel-page-header {
   padding: 1.15rem 1.35rem;
   border-radius: var(--admin-radius-xl);
-  border: 1px solid rgba(199, 210, 254, 0.65);
-  background: linear-gradient(135deg, #ffffff 0%, #f8faff 48%, #f5f3ff 100%);
+  border: 1px solid #e0d6ff;
+  background: #fff;
   box-shadow: var(--admin-shadow-md);
 }
 
@@ -187,8 +193,8 @@
 .admin-shell__main select,
 .admin-shell__main textarea {
   width: 100%;
-  border: 1px solid var(--admin-border);
-  border-radius: 0.7rem;
+  border: 1.5px solid #e0d6ff;
+  border-radius: 14px;
   background: var(--admin-surface);
   color: var(--admin-text);
   padding: 0.58rem 0.8rem;
@@ -204,24 +210,25 @@
 .admin-shell__main select:focus,
 .admin-shell__main textarea:focus {
   outline: none;
-  border-color: #a5b4fc;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.16);
+  border-color: #6a4be8;
+  box-shadow: 0 0 0 4px rgba(106, 75, 232, 0.16);
 }
 
 .admin-shell__main label {
-  color: var(--admin-text-muted);
+  color: var(--admin-text);
   font-size: 0.8125rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* Botones genéricos en admin (tailwind legacy) */
 .admin-shell__main button[class*='bg-indigo'],
 .admin-shell__main button[class*='bg-blue'] {
   border: none;
-  border-radius: 0.7rem;
-  font-weight: 600;
+  border-radius: 999px;
+  font-weight: 700;
   letter-spacing: 0.01em;
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  box-shadow: 0 10px 24px rgba(99, 67, 236, 0.28);
   transition:
     transform var(--admin-transition),
     box-shadow var(--admin-transition),
@@ -231,7 +238,7 @@
 .admin-shell__main button[class*='bg-indigo']:not(:disabled):hover,
 .admin-shell__main button[class*='bg-blue']:not(:disabled):hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 14px 30px rgba(99, 67, 236, 0.38);
 }
 
 .admin-shell__main button:disabled {
@@ -271,10 +278,51 @@
   padding: 0;
 }
 
-/* Page hero dentro de módulos staff */
-.admin-shell__main .page-hero {
-  border-radius: var(--admin-radius-xl);
-  box-shadow: var(--admin-shadow-lg);
+/* Page hero de los módulos, en claro, como la home. */
+body:not(.reading-night-mode) .admin-shell-page .page-hero {
+  background: #fff;
+  border: 1px solid #e0d6ff;
+  border-radius: 28px;
+  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.12);
+}
+
+body:not(.reading-night-mode) .admin-shell-page .page-hero__orb,
+body:not(.reading-night-mode) .admin-shell-page .page-hero__grid {
+  display: none;
+}
+
+body:not(.reading-night-mode) .admin-shell-page .page-hero__title {
+  color: #1d1857;
+  text-shadow: none;
+}
+
+body:not(.reading-night-mode) .admin-shell-page .page-hero__desc {
+  color: #4a4769;
+}
+
+body:not(.reading-night-mode) .admin-shell-page .page-hero__eyebrow {
+  color: #5634d6;
+  background: #f0ebff;
+  border-color: #e0d6ff;
+  backdrop-filter: none;
+}
+
+body:not(.reading-night-mode) .admin-shell-page .page-hero__stats li {
+  background: #fbfaff;
+  border-color: #e0d6ff;
+  backdrop-filter: none;
+}
+
+body:not(.reading-night-mode) .admin-shell-page .page-hero__stat-value {
+  color: #1d1857;
+}
+
+body:not(.reading-night-mode) .admin-shell-page .page-hero__stat-label {
+  color: #6c6989;
+}
+
+body:not(.reading-night-mode) .admin-shell-page a {
+  margin-right: 0;
 }
 
 .admin-shell__main .staff-tasks-panel,
@@ -354,14 +402,14 @@
   margin-bottom: 1rem;
   padding: 0.85rem 1rem;
   border-radius: var(--admin-radius-lg);
-  border: 1px solid #c7d2fe;
-  background: linear-gradient(90deg, #eef2ff 0%, #f5f3ff 100%);
+  border: 1px solid #e0d6ff;
+  background: linear-gradient(90deg, #f4f0ff 0%, #fbfaff 100%);
 }
 
 .admin-bulk-bar__label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #312e81;
+  color: #5634d6;
 }
 
 .admin-btn {
@@ -369,7 +417,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  border-radius: 0.7rem;
+  border-radius: 999px;
   padding: 0.5rem 0.9rem;
   font-size: 0.875rem;
   font-weight: 600;
@@ -394,20 +442,21 @@
 }
 
 .admin-btn--primary {
-  background: var(--admin-primary);
+  border: none;
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
+  box-shadow: 0 10px 24px rgba(99, 67, 236, 0.28);
 }
 
 .admin-btn--primary:not(:disabled):hover {
-  background: var(--admin-primary-hover);
-  box-shadow: 0 12px 24px rgba(79, 70, 229, 0.28);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  box-shadow: 0 14px 30px rgba(99, 67, 236, 0.38);
 }
 
 .admin-btn--secondary {
   background: var(--admin-surface);
-  color: #334155;
-  border-color: var(--admin-border);
+  color: #5634d6;
+  border-color: #e0d6ff;
 }
 
 .admin-btn--secondary:not(:disabled):hover {
@@ -512,7 +561,7 @@
 
 .admin-config-page code {
   font-size: 0.85em;
-  background: rgba(99, 102, 241, 0.08);
+  background: rgba(106, 75, 232, 0.1);
   padding: 0.1rem 0.35rem;
   border-radius: 0.35rem;
 }

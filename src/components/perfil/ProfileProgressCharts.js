@@ -64,8 +64,8 @@ export default function ProfileProgressCharts({ stats, loading = false }) {
               <Area
                 type="monotone"
                 dataKey="score"
-                stroke="#0070f3"
-                fill="#0070f3"
+                stroke="#6a4be8"
+                fill="#6a4be8"
                 fillOpacity={0.3}
               />
             </AreaChart>

@@ -207,13 +207,13 @@
 }
 
 .btnPrimary {
-  border-color: #4f46e5;
-  background: #4f46e5;
+  border-color: #6a4be8;
+  background: #6a4be8;
   color: #fff;
 }
 
 .btnPrimary:hover {
-  background: #4338ca;
+  background: #5634d6;
 }
 
 .error {
@@ -265,7 +265,7 @@
 
 :global(body.reading-night-mode) .levelCard--premium {
   background: linear-gradient(145deg, #312e81 0%, #1e293b 100%);
-  border-color: #6366f1;
+  border-color: #6a4be8;
 }
 
 :global(body.reading-night-mode) .levelCard--free {

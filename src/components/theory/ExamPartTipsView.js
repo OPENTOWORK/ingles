@@ -7,6 +7,7 @@ import { useUserRole } from '@/context/UserRoleContext';
 import { getExamStrategiesPartContent } from '@/data/examStrategiesPartContent';
 import { buildTeoriaExamPartTipsHref } from '@/lib/examPartTipsHref';
 import { examTheoryBackHrefFromPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
+import { landingFont } from '@/components/home/landing/landingFont';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
 import { useGuestPreview } from '@/hooks/useGuestPreview';
@@ -72,7 +73,7 @@ export default function ExamPartTipsView({
 
   if (guestLocked) {
     return (
-      <main className="shell content-hub-shell teoria-page exam-strategies-chapter-page">
+      <main className={`shell content-hub-shell teoria-page exam-strategies-chapter-page ${landingFont.variable}`}>
         <GuestRegisterTeaser
           nextHref={pathname}
           message="Create a free account to read the rest of Exam Strategies."

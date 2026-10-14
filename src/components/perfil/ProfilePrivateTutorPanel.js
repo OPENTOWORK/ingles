@@ -512,7 +512,7 @@ function ProfilePrivateTutorStyles() {
         border-radius: 4px;
       }
       .profile-tutor-setup a {
-        color: #2563eb;
+        color: #6a4be8;
         font-weight: 600;
       }
       .profile-tutor-status {
@@ -611,7 +611,7 @@ function ProfilePrivateTutorStyles() {
       }
       .profile-tutor-modality--online {
         background: #dbeafe;
-        color: #1d4ed8;
+        color: #5634d6;
       }
       .profile-tutor-modality--inperson {
         background: #dcfce7;
@@ -632,7 +632,7 @@ function ProfilePrivateTutorStyles() {
         padding: 2px 8px;
         border-radius: 999px;
         background: #dbeafe;
-        color: #1d4ed8;
+        color: #5634d6;
         font-size: 11px;
         font-weight: 700;
         vertical-align: middle;
@@ -667,7 +667,7 @@ function ProfilePrivateTutorStyles() {
       .profile-tutor-contact-link {
         font-size: 13px;
         font-weight: 700;
-        color: #0070f3;
+        color: #6a4be8;
         text-decoration: none;
       }
       .profile-tutor-contact-link:hover {

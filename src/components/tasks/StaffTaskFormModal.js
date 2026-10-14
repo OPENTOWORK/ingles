@@ -1,5 +1,8 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+import { validateBuzonAttachmentFile } from '@/lib/staffBuzonAttachments';
+import { STAFF_TASK_FILES_MAX_COUNT, formatTaskFileSize } from '@/lib/staffTaskFiles';
 import { EMPTY_TASK_FORM, TASK_ESTADOS, TASK_PRIORIDADES } from '@/lib/staffTasksConstants';
 import { TASK_ESTADO_LABELS, TASK_PRIORIDAD_LABELS } from '@/lib/staffTasksConstants';
 import { getStaffDepartmentLabel } from '@/lib/staffTasksPermissions';
@@ -45,14 +48,78 @@ export default function StaffTaskFormModal({
   phases = [],
   subphases = [],
   assignees = [],
+  existingFiles = [],
   onAssigneeChange,
   saving,
   title = 'Nueva tarea',
 }) {
+  const fileInputRef = useRef(null);
+  const wasOpenRef = useRef(false);
+  const [pendingFiles, setPendingFiles] = useState([]);
+  const [removedFileIds, setRemovedFileIds] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [formError, setFormError] = useState('');
+
+  useEffect(() => {
+    if (open && !wasOpenRef.current) {
+      setPendingFiles([]);
+      setRemovedFileIds([]);
+      setUploadedFiles([]);
+      setFormError('');
+    }
+    wasOpenRef.current = open;
+  }, [open]);
+
   if (!open) return null;
 
   const form = initial || EMPTY_TASK_FORM;
+  const selectedIds = Array.isArray(form.asignados_ids)
+    ? form.asignados_ids
+    : form.asignado_id
+      ? [form.asignado_id]
+      : [];
   const subphasesForFase = subphases.filter((s) => s.fase_id === form.fase_id);
+  const keptFiles = [
+    ...existingFiles.filter((file) => file?.id && !removedFileIds.includes(file.id)),
+    ...uploadedFiles.filter((file) => !removedFileIds.includes(file.id)),
+  ];
+
+  const setAssignees = (ids) => {
+    const first = assignees.find((user) => user.id === ids[0]);
+    onAssigneeChange({
+      ...form,
+      asignados_ids: ids,
+      asignado_id: ids[0] || '',
+      asignado_rol: first?.roleName ? getStaffDepartmentLabel(first.roleName) : '',
+    });
+  };
+
+  const toggleAssignee = (userId, checked) => {
+    const ids = checked
+      ? [...new Set([...selectedIds, userId])]
+      : selectedIds.filter((id) => id !== userId);
+    setAssignees(ids);
+  };
+
+  const addFiles = (fileList) => {
+    const incoming = Array.from(fileList || []);
+    if (!incoming.length) return;
+    const next = [...pendingFiles];
+    for (const file of incoming) {
+      const validation = validateBuzonAttachmentFile(file);
+      if (!validation.ok) {
+        setFormError(validation.error);
+        return;
+      }
+      if (keptFiles.length + next.length >= STAFF_TASK_FILES_MAX_COUNT) {
+        setFormError(`Una tarea puede tener hasta ${STAFF_TASK_FILES_MAX_COUNT} archivos.`);
+        return;
+      }
+      next.push(file);
+    }
+    setFormError('');
+    setPendingFiles(next);
+  };
 
   return (
     <ModalShell title={title} onClose={onClose} wide>
@@ -60,7 +127,19 @@ export default function StaffTaskFormModal({
         className="space-y-4"
         onSubmit={(e) => {
           e.preventDefault();
-          void onSave(form);
+          if (!selectedIds.length) {
+            setFormError('Selecciona al menos una persona.');
+            return;
+          }
+          setFormError('');
+          void onSave(form, {
+            files: pendingFiles,
+            removeFileIds: removedFileIds,
+            onFileUploaded: (file, saved) => {
+              setPendingFiles((current) => current.filter((item) => item !== file));
+              if (saved?.id) setUploadedFiles((current) => [...current, saved]);
+            },
+          });
         }}
       >
         <div>
@@ -83,28 +162,27 @@ export default function StaffTaskFormModal({
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Persona asignada *</label>
-            <select
-              value={form.asignado_id}
-              onChange={(e) => {
-                const user = assignees.find((u) => u.id === e.target.value);
-                onAssigneeChange({
-                  ...form,
-                  asignado_id: e.target.value,
-                  asignado_rol: user?.roleName ? getStaffDepartmentLabel(user.roleName) : '',
-                });
-              }}
-              className="border rounded-lg px-3 py-2 text-sm w-full"
-              required
-            >
-              <option value="">Selecciona persona…</option>
-              {assignees.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.nombre || u.email}
-                  {u.roleName ? ` (${getStaffDepartmentLabel(u.roleName)})` : ''}
-                </option>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Personas asignadas *</label>
+            <div className="border rounded-lg p-3 max-h-48 overflow-y-auto space-y-2 bg-gray-50">
+              {assignees.map((user) => (
+                <label key={user.id} className="flex items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.includes(user.id)}
+                    onChange={(e) => toggleAssignee(user.id, e.target.checked)}
+                  />
+                  <span>
+                    {user.nombre || user.email}
+                    {user.roleName ? ` (${getStaffDepartmentLabel(user.roleName)})` : ''}
+                  </span>
+                </label>
               ))}
-            </select>
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              {selectedIds.length
+                ? `${selectedIds.length} ${selectedIds.length === 1 ? 'persona seleccionada' : 'personas seleccionadas'}`
+                : 'Selecciona al menos una persona.'}
+            </p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Fase</label>
@@ -194,6 +272,62 @@ export default function StaffTaskFormModal({
             />
           </div>
         </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Archivos</label>
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            className="hidden"
+            onChange={(e) => {
+              addFiles(e.target.files);
+              e.target.value = '';
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="px-3 py-2 border rounded-lg text-sm text-gray-700"
+          >
+            Subir archivos
+          </button>
+          {keptFiles.length || pendingFiles.length ? (
+            <ul className="mt-2 space-y-1">
+              {keptFiles.map((file) => (
+                <li key={file.id} className="flex items-center justify-between gap-2 text-sm text-gray-700">
+                  <span className="min-w-0 truncate">
+                    {file.nombre}
+                    {file.size_bytes ? ` · ${formatTaskFileSize(file.size_bytes)}` : ''}
+                  </span>
+                  <button
+                    type="button"
+                    className="text-xs text-red-600 shrink-0"
+                    onClick={() => setRemovedFileIds((current) => [...current, file.id])}
+                  >
+                    Quitar
+                  </button>
+                </li>
+              ))}
+              {pendingFiles.map((file, index) => (
+                <li key={`${file.name}-${index}`} className="flex items-center justify-between gap-2 text-sm text-gray-700">
+                  <span className="min-w-0 truncate">
+                    {file.name} · {formatTaskFileSize(file.size)}
+                  </span>
+                  <button
+                    type="button"
+                    className="text-xs text-red-600 shrink-0"
+                    onClick={() => setPendingFiles((current) => current.filter((_, itemIndex) => itemIndex !== index))}
+                  >
+                    Quitar
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-gray-500 mt-1">Puedes adjuntar varios archivos, de hasta 15 MB cada uno.</p>
+          )}
+        </div>
+        {formError ? <p className="text-sm text-red-600">{formError}</p> : null}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Notas internas</label>
           <textarea

@@ -166,8 +166,8 @@ export default function InternalMessagesSection({ session }) {
 
       <style jsx global>{`
         .contact-section--internal {
-          border: 1px solid #fce7f3;
-          background: linear-gradient(180deg, #fff 0%, #fff7fb 100%);
+          border: 1px solid #e0d6ff;
+          background: #fff;
         }
         .internal-messages__header {
           display: flex;
@@ -183,8 +183,8 @@ export default function InternalMessagesSection({ session }) {
           place-items: center;
           font-size: 1.35rem;
           border-radius: 14px;
-          background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-          box-shadow: 0 4px 14px rgba(219, 39, 119, 0.15);
+          background: #f0ebff;
+          box-shadow: none;
         }
         .contact-section--internal h2 {
           margin: 0 0 6px;
@@ -202,25 +202,25 @@ export default function InternalMessagesSection({ session }) {
           margin-bottom: 18px;
           padding: 14px 16px;
           border-radius: 12px;
-          background: #fff1f2;
-          border: 1px solid #fecdd3;
+          background: #f4f0ff;
+          border: 1px solid #e0d6ff;
         }
         .internal-messages__signin strong {
           display: block;
           margin-bottom: 4px;
-          color: #9f1239;
+          color: #1d1857;
         }
         .internal-messages__signin p {
           margin: 0;
           font-size: 0.9rem;
-          color: #be123c;
+          color: #4a4769;
         }
         .internal-messages__coming-soon {
           margin-bottom: 0;
           padding: 2rem 1.5rem;
           border-radius: 16px;
           background: #fff;
-          border: 1px dashed #f9a8d4;
+          border: 1px dashed #e0d6ff;
           text-align: center;
         }
         .internal-messages__coming-soon-badge {
@@ -228,8 +228,8 @@ export default function InternalMessagesSection({ session }) {
           margin-bottom: 0.75rem;
           padding: 0.35rem 1rem;
           border-radius: 999px;
-          background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-          color: #9d174d;
+          background: #f0ebff;
+          color: #5634d6;
           font-size: 0.95rem;
           font-weight: 700;
           letter-spacing: 0.04em;
@@ -272,14 +272,14 @@ export default function InternalMessagesSection({ session }) {
             transform 0.2s;
         }
         .internal-channel:hover:not(:disabled) {
-          border-color: #f9a8d4;
+          border-color: #cdbfff;
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(219, 39, 119, 0.12);
+          box-shadow: 0 8px 24px rgba(106, 75, 232, 0.12);
         }
         .internal-channel--active {
-          border-color: #ec4899;
-          background: linear-gradient(180deg, #fff 0%, #fdf2f8 100%);
-          box-shadow: 0 8px 28px rgba(219, 39, 119, 0.18);
+          border-color: #6a4be8;
+          background: linear-gradient(180deg, #f4f0ff 0%, #fff 100%);
+          box-shadow: 0 8px 28px rgba(106, 75, 232, 0.14);
         }
         .internal-channel:disabled {
           opacity: 0.55;
@@ -292,7 +292,7 @@ export default function InternalMessagesSection({ session }) {
         .internal-channel__label {
           font-size: 0.95rem;
           font-weight: 700;
-          color: #1e293b;
+          color: #1d1857;
         }
         .internal-channel__desc {
           font-size: 0.8rem;
@@ -325,11 +325,11 @@ export default function InternalMessagesSection({ session }) {
           line-height: 1.45;
         }
         .submit-btn--internal {
-          background: linear-gradient(135deg, #e11d48 0%, #db2777 100%);
-          box-shadow: 0 10px 28px rgba(219, 39, 119, 0.35);
+          background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+          box-shadow: 0 10px 24px rgba(99, 67, 236, 0.28);
         }
         .submit-btn--internal:hover:not(:disabled) {
-          box-shadow: 0 14px 36px rgba(219, 39, 119, 0.45);
+          box-shadow: 0 14px 30px rgba(99, 67, 236, 0.38);
         }
       `}</style>
     </section>

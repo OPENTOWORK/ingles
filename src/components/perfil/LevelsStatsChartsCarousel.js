@@ -18,14 +18,14 @@ import { useReadingNightMode } from '@/hooks/useReadingNightMode';
 
 const BAR_GRADIENTS = {
   high: ['#22c55e', '#15803d'],
-  mid: ['#60a5fa', '#2563eb'],
+  mid: ['#c4b5fd', '#6a4be8'],
   low: ['#f87171', '#dc2626'],
   empty: ['#e2e8f0', '#cbd5e1'],
 };
 
 const BAR_GRADIENTS_NIGHT = {
   high: ['#22c55e', '#15803d'],
-  mid: ['#60a5fa', '#2563eb'],
+  mid: ['#c4b5fd', '#6a4be8'],
   low: ['#f87171', '#dc2626'],
   empty: ['#475569', '#334155'],
 };
@@ -540,8 +540,8 @@ export default function LevelsStatsChartsCarousel({
         }
 
         .lsp-chart__nav-btn:hover:not(:disabled) {
-          border-color: #2563eb;
-          color: #2563eb;
+          border-color: #6a4be8;
+          color: #6a4be8;
           background: #eff6ff;
         }
 
@@ -557,7 +557,7 @@ export default function LevelsStatsChartsCarousel({
           font-weight: 800;
           font-size: 0.875rem;
           color: #fff;
-          background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+          background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
           border-radius: 10px;
           box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }
@@ -655,7 +655,7 @@ export default function LevelsStatsChartsCarousel({
         }
 
         .lsp-chart__dot--mid {
-          background: linear-gradient(180deg, #60a5fa, #2563eb);
+          background: linear-gradient(180deg, #c4b5fd, #6a4be8);
         }
 
         .lsp-chart__dot--low {

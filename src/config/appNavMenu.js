@@ -156,7 +156,7 @@ export function buildAppNavModel(userRole, session) {
     sectionLinks: getNavLinksForMobileDrawer(userRole, session),
     showPrimaryNav: shouldShowLoggedInPrimaryNav(session),
     showDralo: shouldShowDraloNav(session),
-    draloLocked: !guest && isDraloAiLockedForRole(userRole),
+    draloLocked: isDraloAiLockedForRole(userRole),
     /** Sobrescribir con useExamStrategiesAccess() cuando haya sesión (plan real). */
     examStrategiesLocked: false,
     showPricing,

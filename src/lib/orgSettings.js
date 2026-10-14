@@ -65,7 +65,7 @@ export const ORG_SETTING_FIELDS = [
     label: 'Correo de soporte',
     type: 'email',
     maxLength: 120,
-    fallback: 'soporte@dralo.es',
+    fallback: 'draloenglish@gmail.com',
     scope:
       'Dirección que se muestra en el pie de los correos automáticos. No cambia la cuenta desde la que se envían.',
   },

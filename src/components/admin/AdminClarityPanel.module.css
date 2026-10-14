@@ -72,7 +72,7 @@
   gap: 0.45rem;
   padding: 0.55rem 0.95rem;
   border-radius: 0.55rem;
-  background: #4f46e5;
+  background: #6a4be8;
   color: #fff;
   font-size: 0.8125rem;
   font-weight: 600;
@@ -81,7 +81,7 @@
 }
 
 .cta:hover {
-  background: #4338ca;
+  background: #5634d6;
 }
 
 .grid {
@@ -98,7 +98,7 @@
   border-radius: 0.75rem;
   border: 1px solid #e2e8f0;
   background: #f8fafc;
-  color: #6366f1;
+  color: #6a4be8;
   text-decoration: none;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;

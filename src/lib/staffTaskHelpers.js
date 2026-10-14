@@ -1,3 +1,9 @@
+import {
+  MAX_TASK_ASSIGNEES,
+  parseTaskAssigneeIds,
+  taskAssigneeIds,
+  taskIncludesAssignee,
+} from '@/lib/staffTaskAssignees';
 import { TASK_ESTADOS } from '@/lib/staffTasksConstants';
 
 const TERMINAL_ESTADOS = new Set(['completada', 'cancelada']);
@@ -400,7 +406,7 @@ export function filterTasksClientSide(tasks, filters = {}, now = new Date()) {
   const fechaFilter = String(filters.fechaLimite || '').trim();
 
   return (tasks || []).filter((task) => {
-    if (assigneeFilter && task.asignado_id !== assigneeFilter) return false;
+    if (assigneeFilter && !taskIncludesAssignee(task, assigneeFilter)) return false;
     if (faseFilter && task.fase_id !== faseFilter) return false;
     if (subfaseFilter && task.subfase_id !== subfaseFilter) return false;
     if (prioridadFilter && task.prioridad !== prioridadFilter) return false;
@@ -430,14 +436,18 @@ export function filterTasksClientSide(tasks, filters = {}, now = new Date()) {
 
 export function validateTaskPayload(body = {}) {
   const titulo = String(body.titulo || '').trim();
-  const asignado_id = body.asignado_id ? String(body.asignado_id) : null;
+  const asignados_ids = parseTaskAssigneeIds(body);
+  const asignado_id = asignados_ids[0] || null;
   const asignado_rol = String(body.asignado_rol || '').trim() || null;
   const estado = String(body.estado || 'pendiente').trim();
   const prioridad = String(body.prioridad || 'media').trim();
 
   if (!titulo) return { ok: false, error: 'El título es obligatorio.' };
-  if (!asignado_id) {
-    return { ok: false, error: 'Indica la persona asignada.' };
+  if (!asignados_ids.length) {
+    return { ok: false, error: 'Selecciona al menos una persona.' };
+  }
+  if (asignados_ids.length > MAX_TASK_ASSIGNEES) {
+    return { ok: false, error: `Puedes asignar hasta ${MAX_TASK_ASSIGNEES} personas.` };
   }
   if (!TASK_ESTADOS.includes(estado)) {
     return { ok: false, error: 'Estado no válido.' };
@@ -453,6 +463,7 @@ export function validateTaskPayload(body = {}) {
       fase_id: body.fase_id ? String(body.fase_id) : null,
       subfase_id: body.subfase_id ? String(body.subfase_id) : null,
       asignado_id,
+      asignados_ids,
       asignado_rol,
       alumno_id: body.alumno_id ? String(body.alumno_id) : null,
       fecha_limite: body.fecha_limite || null,
@@ -465,7 +476,10 @@ export function validateTaskPayload(body = {}) {
 }
 
 export function enrichTaskRow(task, profilesById = {}, phasesById = {}, subphasesById = {}) {
-  const asignado = task.asignado_id ? profilesById[task.asignado_id] : null;
+  const asignados = taskAssigneeIds(task)
+    .map((id) => profilesById[id])
+    .filter(Boolean);
+  const asignado = asignados[0] || (task.asignado_id ? profilesById[task.asignado_id] : null);
   const alumno = task.alumno_id ? profilesById[task.alumno_id] : null;
   const subfase = task.subfase_id ? subphasesById[task.subfase_id] : null;
   const fase =
@@ -477,6 +491,7 @@ export function enrichTaskRow(task, profilesById = {}, phasesById = {}, subphase
   return {
     ...task,
     asignado,
+    asignados,
     alumno,
     fase,
     subfase,

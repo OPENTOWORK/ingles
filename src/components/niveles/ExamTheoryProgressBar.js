@@ -28,7 +28,7 @@ export default function ExamTheoryProgressBar({
         aria-label={label ? `${label}: ${safePercent}%` : `${safePercent}%`}
       >
         <span
-          className={styles.fill}
+          className={`${styles.fill} exam-theory-progress-fill`}
           style={{
             width: `${safePercent}%`,
             background: `linear-gradient(90deg, ${accentColor}, #58cc02)`,

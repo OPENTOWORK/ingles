@@ -8,6 +8,7 @@ import { TeoriaGlobalStyles } from '@/components/theory/TeoriaStyles';
 import { EXAM_SKILL_SECTION_META } from '@/data/examSkillTheme';
 import { getExamStrategiesStudentIndex } from '@/data/examStrategiesStudentIndex';
 import { APP_ROUTES, examStrategiesSkillPath } from '@/config/appRoutes';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 const SKILL_META = Object.fromEntries(EXAM_SKILL_SECTION_META.map((s) => [s.slug, s]));
 
@@ -46,7 +47,7 @@ export default function ExamStrategiesArticle({
 
   return (
     <main
-      className="shell content-hub-shell teoria-page exam-strategies-chapter-page niveles-level-page--b2"
+      className={`shell content-hub-shell teoria-page exam-strategies-chapter-page niveles-level-page--b2 ${landingFont.variable}`}
       style={{ '--chapter-accent': sectionAccent, '--exam-skill-accent': sectionAccent }}
     >
       <div className="levels-b2-page-content">

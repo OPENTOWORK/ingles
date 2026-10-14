@@ -109,7 +109,7 @@
 .progressFraction {
   font-size: 1.25rem;
   font-weight: 800;
-  color: #0070f3;
+  color: #6a4be8;
 }
 
 .progressFraction span {
@@ -142,7 +142,7 @@
 .barFill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  background: linear-gradient(90deg, #8466ff, #6545ec);
   transition: width 0.35s ease;
 }
 
@@ -191,7 +191,7 @@
   padding: 12px 22px;
   border: none;
   border-radius: 10px;
-  background: #0070f3;
+  background: #6a4be8;
   color: #fff;
   font-weight: 700;
   font-size: 14px;

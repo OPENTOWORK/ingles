@@ -17,6 +17,7 @@ import {
 } from '@/utils/contactModuleConfig';
 import PageHero from '@/components/PageHero';
 import InternalMessagesSection from '@/components/contact/InternalMessagesSection';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 function ticketStatusClass(status) {
   switch (status) {
@@ -151,14 +152,14 @@ export default function ContactPage() {
 
   if (pageLoading) {
     return (
-      <main className="shell contacto-page center">
+      <main className={`shell contacto-page center ${landingFont.variable}`}>
         <div className="loader" aria-label="Loading" />
       </main>
     );
   }
 
   return (
-    <main className="shell contacto-page">
+    <main className={`shell contacto-page ${landingFont.variable}`}>
       <PageHero
         eyebrow="Support & messaging"
         title="Contact"
@@ -373,10 +374,10 @@ function GlobalStyles() {
       .contact-section {
         margin: 24px 0;
         padding: 28px;
-        border: 1px solid var(--color-border-tertiary, #e2e8f0);
-        border-radius: 20px;
-        background: var(--card, #fff);
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+        border: 1px solid #e0d6ff;
+        border-radius: 28px;
+        background: #fff;
+        box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
       }
       .contact-section--support {
         background: linear-gradient(
@@ -397,8 +398,8 @@ function GlobalStyles() {
         width: 48px;
         height: 48px;
         border-radius: 14px;
-        background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
-        color: #2563eb;
+        background: #f0ebff;
+        color: #6a4be8;
         flex-shrink: 0;
       }
       .contact-section__copy h2 {
@@ -454,16 +455,16 @@ function GlobalStyles() {
       .form-group label {
         font-size: 0.82rem;
         font-weight: 700;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        color: var(--color-text-secondary, #64748b);
+        letter-spacing: 0;
+        text-transform: none;
+        color: #1d1857;
       }
       .form-input,
       .form-textarea {
         padding: 12px 14px;
         font-size: 0.95rem;
-        border: 1px solid var(--color-border-tertiary, #cbd5e1);
-        border-radius: 12px;
+        border: 1.5px solid #e0d6ff;
+        border-radius: 14px;
         background: var(--card, #fff);
         color: var(--text);
         outline: none;
@@ -471,8 +472,8 @@ function GlobalStyles() {
       }
       .form-input:focus,
       .form-textarea:focus {
-        border-color: #2563eb;
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+        border-color: #6a4be8;
+        box-shadow: 0 0 0 4px rgba(106, 75, 232, 0.12);
       }
       .form-textarea {
         resize: vertical;
@@ -484,20 +485,20 @@ function GlobalStyles() {
         align-self: flex-start;
         min-width: 220px;
         padding: 13px 22px;
-        background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+        background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
         color: #fff;
         font-size: 0.95rem;
         font-weight: 700;
         border: none;
-        border-radius: 12px;
+        border-radius: 999px;
         cursor: pointer;
         transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
-        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.28);
+        box-shadow: 0 10px 24px rgba(106, 75, 232, 0.28);
       }
       .submit-btn:hover:not(:disabled) {
         transform: translateY(-1px);
         filter: brightness(1.03);
-        box-shadow: 0 14px 30px rgba(37, 99, 235, 0.34);
+        box-shadow: 0 14px 30px rgba(106, 75, 232, 0.34);
       }
       .submit-btn:disabled {
         opacity: 0.7;
@@ -590,13 +591,13 @@ function GlobalStyles() {
         display: inline-block;
         padding: 4px 10px;
         border-radius: 8px;
-        background: #eff6ff;
-        border: 1px solid #dbeafe;
+        background: #f4f0ff;
+        border: 1px solid #e4dcff;
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.04em;
-        color: #1d4ed8;
+        color: #5634d6;
       }
       .contact-status {
         display: inline-flex;
@@ -609,8 +610,8 @@ function GlobalStyles() {
         white-space: nowrap;
       }
       .contact-status--open {
-        background: #eff6ff;
-        color: #1d4ed8;
+        background: #f4f0ff;
+        color: #5634d6;
       }
       .contact-status--pending {
         background: #fff7ed;
@@ -632,10 +633,10 @@ function GlobalStyles() {
         gap: 16px 24px;
         margin: 24px 0 0;
         padding: 24px 26px;
-        border: 1px solid #dbeafe;
+        border: 1px solid #e4dcff;
         border-radius: 18px;
-        background: linear-gradient(135deg, #eff6ff 0%, #fff 55%, #f8fafc 100%);
-        box-shadow: 0 8px 24px rgba(37, 99, 235, 0.08);
+        background: linear-gradient(135deg, #f4f0ff 0%, #fff 55%, #f8fafc 100%);
+        box-shadow: 0 8px 24px rgba(106, 75, 232, 0.08);
       }
       .contact-faq-entry__copy {
         flex: 1 1 240px;
@@ -658,25 +659,25 @@ function GlobalStyles() {
         align-items: center;
         gap: 8px;
         padding: 12px 20px;
-        border-radius: 12px;
-        background: #2563eb;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
         color: #fff;
         font-size: 0.92rem;
         font-weight: 700;
         text-decoration: none;
-        box-shadow: 0 10px 24px rgba(37, 99, 235, 0.24);
+        box-shadow: 0 10px 24px rgba(106, 75, 232, 0.24);
         transition: transform 0.2s, box-shadow 0.2s;
       }
       .contact-faq-entry__btn:hover {
         transform: translateY(-1px);
-        box-shadow: 0 14px 30px rgba(37, 99, 235, 0.3);
+        box-shadow: 0 14px 30px rgba(106, 75, 232, 0.3);
       }
       .loader {
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        border: 3px solid rgba(37, 99, 235, 0.2);
-        border-top-color: #2563eb;
+        border: 3px solid rgba(106, 75, 232, 0.2);
+        border-top-color: #6a4be8;
         animation: spin 1s linear infinite;
       }
       @media (max-width: 768px) {

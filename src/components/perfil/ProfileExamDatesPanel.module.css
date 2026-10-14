@@ -29,7 +29,7 @@
 }
 
 .searchWrap:focus-within {
-  border-color: #0070f3;
+  border-color: #6a4be8;
   box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.15);
 }
 
@@ -105,12 +105,12 @@
 }
 
 .regionSelect:hover {
-  border-color: #93c5fd;
+  border-color: #cdbfff;
 }
 
 .regionSelect:focus {
   outline: none;
-  border-color: #0070f3;
+  border-color: #6a4be8;
   box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.15);
 }
 
@@ -132,7 +132,7 @@
   background: transparent;
   font-size: 13px;
   font-weight: 700;
-  color: #0070f3;
+  color: #6a4be8;
   cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 2px;
@@ -254,7 +254,7 @@
   height: 7px;
   margin-top: 6px;
   border-radius: 50%;
-  background: #0070f3;
+  background: #6a4be8;
 }
 
 .sessionItem[data-digital='true'] .sessionDot {
@@ -281,7 +281,7 @@
 }
 
 .cityLinkPrimary {
-  background: #0070f3;
+  background: #6a4be8;
   color: #fff;
   border: 1px solid transparent;
 }
@@ -299,8 +299,8 @@
 
 .cityLinkSecondary:hover {
   background: #eff6ff;
-  border-color: #93c5fd;
-  color: #1d4ed8;
+  border-color: #cdbfff;
+  color: #5634d6;
 }
 
 .cityLinkIcon {
@@ -330,7 +330,7 @@
 }
 
 .officialLink:hover {
-  border-color: #0070f3;
+  border-color: #6a4be8;
   box-shadow: 0 10px 24px rgba(0, 112, 243, 0.12);
   transform: translateY(-2px);
 }
@@ -351,7 +351,7 @@
   margin-top: 4px;
   font-size: 13px;
   font-weight: 700;
-  color: #0070f3;
+  color: #6a4be8;
 }
 
 .cityNote {

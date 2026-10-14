@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '../../utils/supabaseClient';
 import PasswordInput from '@/components/PasswordInput';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 const PASSWORD_RULES = [
   { id: 'length', label: 'Al menos 8 caracteres', test: (p) => p.length >= 8 },
@@ -155,7 +156,7 @@ export default function UpdatePasswordPage() {
   };
 
   return (
-    <main className="login-page" style={authMainStyle}>
+    <main className={`login-page ${landingFont.variable}`} style={authMainStyle}>
       <h2 style={authHeadingStyle}>Nueva contraseña</h2>
 
       {status === 'checking' && (
@@ -196,8 +197,7 @@ export default function UpdatePasswordPage() {
             type="submit"
             style={{
               ...authButtonStyle,
-              backgroundColor: saving ? '#94a3b8' : authButtonStyle.backgroundColor,
-              cursor: saving ? 'not-allowed' : 'pointer',
+              ...(saving ? { background: '#c4b8f5', boxShadow: 'none', cursor: 'not-allowed' } : null),
             }}
             disabled={saving}
           >
@@ -216,44 +216,56 @@ export default function UpdatePasswordPage() {
 }
 
 const authMainStyle = {
-  maxWidth: '400px',
-  margin: '4rem auto',
-  padding: '2rem',
+  maxWidth: '440px',
+  margin: '2.75rem auto 3rem',
+  padding: '2rem 1.75rem 1.75rem',
   backgroundColor: '#fff',
-  borderRadius: '8px',
-  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  fontFamily: 'Segoe UI, sans-serif',
+  borderRadius: '28px',
+  border: '1px solid #e0d6ff',
+  boxShadow: '0 18px 44px rgba(76, 56, 170, 0.12)',
+  color: '#4a4769',
 };
 
 const authHeadingStyle = {
   textAlign: 'center',
-  marginBottom: '1.5rem',
+  margin: '0 0 1.5rem',
+  color: '#1d1857',
+  fontWeight: 800,
+  letterSpacing: '-0.03em',
+  fontSize: '1.65rem',
 };
 
 const authLabelStyle = {
   display: 'block',
   marginBottom: '0.5rem',
+  color: '#1d1857',
+  fontWeight: 700,
+  fontSize: '0.92rem',
 };
 
 const authInputStyle = {
   width: '100%',
-  padding: '0.75rem',
+  padding: '0.8rem 0.95rem',
   fontSize: '1rem',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
+  border: '1.5px solid #e0d6ff',
+  borderRadius: '14px',
   boxSizing: 'border-box',
+  color: '#1d1857',
+  background: '#fff',
 };
 
 const authButtonStyle = {
   width: '100%',
-  padding: '0.75rem',
+  padding: '0.9rem 1.35rem',
   marginTop: '1.5rem',
-  backgroundColor: '#0070f3',
-  color: 'white',
-  fontWeight: 'bold',
+  background: 'linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%)',
+  color: '#fff',
+  fontWeight: 700,
+  fontSize: '1rem',
   border: 'none',
-  borderRadius: '4px',
+  borderRadius: '999px',
   cursor: 'pointer',
+  boxShadow: '0 10px 24px rgba(99, 67, 236, 0.32)',
 };
 
 const errorStyle = {
@@ -270,12 +282,13 @@ const errorStyle = {
 const linkButtonStyle = {
   display: 'block',
   textAlign: 'center',
-  padding: '0.75rem',
-  backgroundColor: '#0070f3',
-  color: 'white',
-  fontWeight: 'bold',
-  borderRadius: '4px',
+  padding: '0.9rem 1.35rem',
+  background: 'linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%)',
+  color: '#fff',
+  fontWeight: 700,
+  borderRadius: '999px',
   textDecoration: 'none',
+  boxShadow: '0 10px 24px rgba(99, 67, 236, 0.32)',
 };
 
 const rulesListStyle = {

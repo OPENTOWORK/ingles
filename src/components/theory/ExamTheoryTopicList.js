@@ -22,6 +22,7 @@ import ExamTheoryPartTipsSection from '@/components/theory/ExamTheoryPartTipsSec
 import ExamStrategiesStudentIndex from '@/components/theory/ExamStrategiesStudentIndex';
 import ExamStrategiesChapterStyles from '@/components/theory/ExamStrategiesChapterStyles';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { landingFont } from '@/components/home/landing/landingFont';
 
 export default function ExamTheoryTopicList({
   sectionSlug,
@@ -74,7 +75,7 @@ export default function ExamTheoryTopicList({
 
   return (
     <main
-      className="shell content-hub-shell teoria-page exam-theory-topics-page niveles-level-page--b2"
+      className={`shell content-hub-shell teoria-page exam-theory-topics-page niveles-level-page--b2 ${landingFont.variable}`}
       style={{ '--exam-skill-accent': sectionAccent }}
     >
       <div className="levels-b2-page-content">

@@ -18,7 +18,7 @@
 }
 
 .topLink {
-  color: #4f46e5;
+  color: #6a4be8;
   font-weight: 600;
   text-decoration: none;
 }
@@ -33,7 +33,7 @@
   border: none;
   border-radius: 0.7rem;
   padding: 0.55rem 1rem;
-  background: #4f46e5;
+  background: #6a4be8;
   color: #fff;
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
@@ -56,7 +56,7 @@
 
 .newBtnSecondary {
   background: #fff;
-  color: #4338ca;
+  color: #5634d6;
   border: 1px solid #c7d2fe;
 }
 
@@ -81,7 +81,7 @@
 .typeTabActive {
   background: #eef2ff;
   border-color: #818cf8;
-  color: #4338ca;
+  color: #5634d6;
 }
 
 .error {
@@ -298,7 +298,7 @@
 }
 
 .viewLink {
-  color: #4f46e5;
+  color: #6a4be8;
   font-weight: 600;
   text-decoration: none;
 }
@@ -327,7 +327,7 @@
 
 :global(body.reading-night-mode) .sidebarItem:hover {
   background: #0f172a;
-  border-color: #6366f1;
+  border-color: #6a4be8;
 }
 
 :global(body.reading-night-mode) .sidebarTitle,

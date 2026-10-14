@@ -4,6 +4,7 @@ import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
+import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import {
   NAV_LINK_CONTACT,
   NAV_LINK_DRALO_AI,
@@ -35,6 +36,8 @@ export function AppSharedDrawerNav({
   const {
     sectionLinks,
     showDralo,
+    draloLocked,
+    guest,
     examStrategiesLocked,
     showPricing,
     showContact,
@@ -93,10 +96,33 @@ export function AppSharedDrawerNav({
       })}
 
       {showDralo ? (
-        <span className={`${linkClass} app-nav__dralo-soon`} aria-disabled="true">
-          <span>{NAV_LINK_DRALO_AI.label}</span>
-          <span className="app-nav__dralo-soon-pill">Coming soon</span>
-        </span>
+        draloLocked ? (
+          <div data-tour="nav-dralo-ai">
+            <span className={`${linkClass} app-nav__link--locked-preview`} aria-disabled="true">
+              {NAV_LINK_DRALO_AI.label}
+            </span>
+            <div
+              className={`${draloVariant === 'side' ? 'app-side-menu__sub' : 'app-nav__sub'} app-nav__sub--locked`}
+            >
+              <DraloAiNavMenuItems
+                locked
+                guestRequiresLogin={guest}
+                guestEntryHref={guestEntryHref}
+                variant={draloVariant}
+              />
+              <DraloAiComingSoonRibbon />
+            </div>
+          </div>
+        ) : (
+          <NavLink
+            href={guestEntryHref || NAV_LINK_DRALO_AI.href}
+            className={linkClass}
+            onClick={onNavigate}
+            data-tour="nav-dralo-ai"
+          >
+            {NAV_LINK_DRALO_AI.label}
+          </NavLink>
+        )
       ) : null}
 
       {showPricing ? (

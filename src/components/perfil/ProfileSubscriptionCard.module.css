@@ -287,7 +287,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 100%);
+  background: linear-gradient(90deg, #8466ff 0%, #6545ec 100%);
   transition: width 0.35s ease;
 }
 
@@ -316,7 +316,7 @@
   margin-top: 14px;
   padding: 11px 16px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #0e7490 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   color: #fff;
   font-size: 0.875rem;
   font-weight: 700;
@@ -428,7 +428,7 @@
 .footerLink {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #0070f3;
+  color: #6a4be8;
   text-decoration: none;
 }
 
@@ -447,15 +447,15 @@
 }
 
 .card_free .status {
-  color: #0e7490;
+  color: #5634d6;
 }
 
 .card_free .statusDot {
-  background: #06b6d4;
+  background: #6a4be8;
 }
 
 .card_free .planName {
-  background: linear-gradient(135deg, #0e7490 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

@@ -1,3 +1,4 @@
+import { taskIncludesAssignee } from '@/lib/staffTaskAssignees';
 import { isTaskTerminal } from '@/lib/staffTaskHelpers';
 
 export const TASK_MESSAGE_MAX_LENGTH = 4000;
@@ -38,13 +39,13 @@ export function isTaskConversationAdminRole(roleName = '') {
 
 /**
  * ¿Puede ver y escribir en el chat de esta tarea?
- * - El responsable asignado
+ * - Cualquiera de las personas asignadas
  * - Quien creó la tarea
  * - Admin / coordinación / soporte
  */
 export function canAccessTaskConversation({ userId, roleName, task }) {
   if (!userId || !task) return false;
-  if (String(task.asignado_id || '') === String(userId)) return true;
+  if (taskIncludesAssignee(task, userId)) return true;
   if (String(task.created_by || '') === String(userId)) return true;
   return isTaskConversationAdminRole(roleName);
 }

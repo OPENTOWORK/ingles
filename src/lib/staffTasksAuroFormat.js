@@ -1,5 +1,7 @@
+import { formatTaskAssigneeLabel, taskAssigneeIds } from '@/lib/staffTaskAssignees';
+
 export function compactTaskForAssistant(task) {
-  const assignee = task.asignado?.nombre || task.asignado?.email || '';
+  const assignee = formatTaskAssigneeLabel(task, '');
   const fase = task.fase?.nombre || '';
   const subfase = task.subfase?.nombre || '';
   return {
@@ -12,6 +14,7 @@ export function compactTaskForAssistant(task) {
     fecha_limite: task.fecha_limite,
     asignado: assignee,
     asignado_id: task.asignado_id || null,
+    asignados_ids: taskAssigneeIds(task),
     fase,
     fase_id: task.fase_id || null,
     subfase,

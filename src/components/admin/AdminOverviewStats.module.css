@@ -10,9 +10,9 @@
   width: 100%;
   padding: 1.05rem 1rem 1.05rem 3.45rem;
   border-radius: 1rem;
-  border: 1px solid #e2e8f0;
-  background: linear-gradient(180deg, #ffffff 0%, #fafbff 100%);
-  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+  border: 1px solid #e0d6ff;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
   text-align: left;
   font: inherit;
   color: inherit;
@@ -20,12 +20,12 @@
 }
 
 .card:hover {
-  border-color: var(--accent, #6366f1);
+  border-color: var(--accent, #6a4be8);
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
 }
 
 .card:focus-visible {
-  outline: 2px solid var(--accent, #6366f1);
+  outline: 2px solid var(--accent, #6a4be8);
   outline-offset: 2px;
 }
 
@@ -37,7 +37,7 @@
   bottom: 0;
   width: 4px;
   border-radius: 0.9rem 0 0 0.9rem;
-  background: var(--accent, #6366f1);
+  background: var(--accent, #6a4be8);
 }
 
 .iconWrap {
@@ -51,7 +51,7 @@
   align-items: center;
   justify-content: center;
   background: var(--icon-bg, #eef2ff);
-  color: var(--accent, #6366f1);
+  color: var(--accent, #6a4be8);
 }
 
 .label {
@@ -61,7 +61,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #64748b;
+  color: #6c6989;
 }
 
 .value {
@@ -69,7 +69,7 @@
   margin: 0.25rem 0 0;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #0f172a;
+  color: #1d1857;
   line-height: 1.1;
   letter-spacing: -0.03em;
 }
@@ -83,8 +83,8 @@
 }
 
 .accentIndigo {
-  --accent: #6366f1;
-  --icon-bg: #eef2ff;
+  --accent: #6a4be8;
+  --icon-bg: #f0ebff;
 }
 
 .accentEmerald {
@@ -98,8 +98,8 @@
 }
 
 .accentViolet {
-  --accent: #8b5cf6;
-  --icon-bg: #f5f3ff;
+  --accent: #6a4be8;
+  --icon-bg: #f0ebff;
 }
 
 .accentAmber {
