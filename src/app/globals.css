@@ -1561,14 +1561,41 @@ body {
   cursor: pointer;
 }
 
-.app-nav__group-label {
-  display: block;
+.app-nav__group-label,
+.app-nav__group-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin: 0;
   padding: 0.85rem 1.25rem 0.2rem;
+  border: none;
+  background: transparent;
+  font: inherit;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  text-align: left;
   color: #64748b;
+  cursor: pointer;
+}
+
+.app-nav__group-toggle[aria-expanded='true'] .app-nav__chevron,
+.app-nav__group-toggle--link[aria-expanded='true'] .app-nav__chevron {
+  transform: rotate(180deg);
+}
+
+button.app-nav__group-toggle--link {
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #334155;
+  cursor: pointer;
 }
 
 .app-nav__drawer-nav {
@@ -2594,8 +2621,7 @@ body.nav-open {
   color: #fff;
 }
 
-/* Home con sesión, en ordenador: el mismo formato claro que la landing. */
-@media (min-width: 640px) {
+/* Home con sesión: el mismo formato claro que la landing, también en el móvil. */
   body:not(.reading-night-mode) .home-page:not(.home-page--guest) {
     background:
       radial-gradient(48% 70% at 86% 28%, rgba(196, 181, 253, 0.42) 0%, rgba(196, 181, 253, 0) 70%),
@@ -2669,10 +2695,32 @@ body.nav-open {
   body:not(.reading-night-mode) .home-page:not(.home-page--guest) .home-hero__mascot {
     filter: drop-shadow(0 18px 22px rgba(76, 56, 170, 0.2));
   }
-}
 
 /* ——— Home del alumno en móvil (<640px): skills de B2 ——— */
 .home-student-board {
+  display: none;
+}
+
+/* Invitado: se ve la landing y la home de app queda oculta, también en el móvil. */
+.home-page--guest,
+html:not(.has-stored-session) .home-page--pending {
+  display: none;
+}
+
+/* Con cookie de sesión no se enseña la landing mientras se confirma. */
+html.has-stored-session .home-landing--pending {
+  display: none;
+}
+
+/* La landing trae su propia cabecera. */
+body:has(.home-landing:not(.home-landing--pending)) .site-header,
+body:has(.home-landing:not(.home-landing--pending)) .app-side-menu,
+html:not(.has-stored-session) body:has(.home-landing--pending) .site-header,
+html:not(.has-stored-session) body:has(.home-landing--pending) .app-side-menu {
+  display: none;
+}
+
+.home-cta__btn.home-hero__auth-btn {
   display: none;
 }
 
@@ -2680,464 +2728,11 @@ body.nav-open {
   .invite-promo-banner--guest {
     display: none;
   }
-
-  /* Invitado en ordenador: se ve la landing y la home de móvil queda oculta. */
-  .home-page--guest,
-  html:not(.has-stored-session) .home-page--pending {
-    display: none;
-  }
-
-  /* Con cookie de sesión no se enseña la landing mientras se confirma. */
-  html.has-stored-session .home-landing--pending {
-    display: none;
-  }
-
-  /* La landing trae su propia cabecera. */
-  body:has(.home-landing:not(.home-landing--pending)) .site-header,
-  body:has(.home-landing:not(.home-landing--pending)) .app-side-menu,
-  html:not(.has-stored-session) body:has(.home-landing--pending) .site-header,
-  html:not(.has-stored-session) body:has(.home-landing--pending) .app-side-menu {
-    display: none;
-  }
-
-  /* En escritorio ya está Log in en la cabecera. */
-  .home-cta__btn.home-hero__auth-btn {
-    display: none;
-  }
 }
 
 @media (max-width: 639px) {
   .it-preview-role-banner {
     display: none;
-  }
-
-  .home-landing {
-    display: none;
-  }
-
-  /* Features y CTA comerciales: no deben verse en la Home de app. El banner founding sí, si es invitado. */
-  .home-page:not(.home-page--guest) .founding-slots-banner--home,
-  .home-page .home-hero__cta,
-  .home-page .home-page__features {
-    display: none !important;
-  }
-
-  /* La Home de app ocupa la pantalla y no se desplaza. El recorte va en la página, no en html/body, para no cortar el menú fijo. */
-  html:has(.home-page--student-mobile),
-  body:has(.home-page--student-mobile) {
-    height: 100%;
-    overscroll-behavior: none;
-    background-color: #5b4bb7;
-  }
-
-  body:has(.home-page--student-mobile) .page-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: visible;
-  }
-
-  .home-page--student-mobile {
-    flex: 1 1 auto;
-    min-height: 0;
-    height: calc(100dvh - var(--site-header-height));
-    max-height: calc(100dvh - var(--site-header-height));
-    overflow: hidden;
-  }
-
-  .home-page--student-mobile:not(.home-page--guest) .founding-slots-banner--home,
-  .home-page--student-mobile .home-hero__cta {
-    display: none;
-  }
-
-  /* La pestaña «Menu» es fija sobre el borde derecho: el banner no pasa por debajo. */
-  body.has-home-side-menu .home-page--student-mobile .invite-promo-banner--home,
-  body.has-home-side-menu .home-page--student-mobile.home-page--guest .founding-slots-banner--home {
-    padding-right: 1.6rem;
-  }
-
-  .invite-promo-banner--folded .invite-promo-banner__fold-trigger {
-    width: auto;
-    max-width: calc(100% - 0.4rem);
-    gap: 5px;
-    padding: 4px 9px;
-    font-size: 0.66rem;
-    font-weight: 700;
-    line-height: 1.2;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14);
-  }
-
-  .invite-promo-banner--folded .invite-promo-banner__fold-trigger svg {
-    width: 12px;
-    height: 12px;
-  }
-
-  .home-page--student-mobile .home-student-board {
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .home-page--student-mobile .home-student-board__skills {
-    width: 100%;
-  }
-
-  .home-page--student-mobile .home-student-board__list {
-    list-style: none;
-    margin: 0 auto;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.6rem;
-    justify-content: center;
-    width: calc(100% - 1.45rem);
-    margin-inline: auto;
-  }
-
-  .home-page--student-mobile .home-student-board__list > li {
-    display: flex;
-    min-width: 0;
-  }
-
-  .home-page--student-mobile .home-student-board__skill {
-    display: flex;
-    flex: 1 1 auto;
-    width: 100%;
-    height: 100%;
-    min-height: 5.5rem;
-    box-sizing: border-box;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    padding: 0.9rem 0.7rem;
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.18);
-    color: #fff;
-    font-size: 0.9375rem;
-    font-weight: 700;
-    line-height: 1.25;
-    text-align: center;
-    text-decoration: none;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  }
-
-  .home-page--student-mobile a.home-student-board__skill:active {
-    background: rgba(255, 255, 255, 0.3);
-  }
-
-  .home-page--student-mobile .home-student-board__skill:focus-visible {
-    outline: 3px solid rgba(255, 255, 255, 0.85);
-    outline-offset: 2px;
-  }
-
-  .home-page--student-mobile .home-student-board__skill--locked {
-    border-style: dashed;
-    background: rgba(255, 255, 255, 0.09);
-    color: rgba(255, 255, 255, 0.75);
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill='reading'] {
-    --skill-accent: #0ea5e9;
-    --skill-chip: #0369a1;
-    --skill-surface: #f0f9ff;
-    --skill-surface-2: #e0f2fe;
-    --skill-border: #7dd3fc;
-    --skill-ink: #0c4a6e;
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill='writing'] {
-    --skill-accent: #059669;
-    --skill-chip: #047857;
-    --skill-surface: #ecfdf5;
-    --skill-surface-2: #d1fae5;
-    --skill-border: #6ee7b7;
-    --skill-ink: #14532d;
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill='listening'] {
-    --skill-accent: #d97706;
-    --skill-chip: #b45309;
-    --skill-surface: #fffbeb;
-    --skill-surface-2: #fef3c7;
-    --skill-border: #fcd34d;
-    --skill-ink: #78350f;
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill='speaking'] {
-    --skill-accent: #db2777;
-    --skill-chip: #be185d;
-    --skill-surface: #fdf2f8;
-    --skill-surface-2: #fce7f3;
-    --skill-border: #f9a8d4;
-    --skill-ink: #831843;
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill] {
-    position: relative;
-    overflow: hidden;
-    border-color: var(--skill-border);
-    border-radius: 18px;
-    background: linear-gradient(165deg, #fff 0%, var(--skill-surface) 58%, var(--skill-surface-2) 100%);
-    color: var(--skill-ink);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.85),
-      0 10px 22px color-mix(in srgb, var(--skill-accent) 24%, transparent);
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill]::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 4px;
-    background: var(--skill-accent);
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill] .exam-skill-icon {
-    width: 2rem;
-    height: 2rem;
-    border-radius: 10px;
-    border-color: transparent;
-    background: var(--skill-chip);
-    color: #fff;
-  }
-
-  .home-page--student-mobile .home-student-board__skill[data-skill] .exam-skill-icon__svg svg {
-    width: 18px;
-    height: 18px;
-  }
-
-  .home-page--student-mobile a.home-student-board__skill[data-skill]:active {
-    background: var(--skill-surface-2);
-  }
-
-  .home-page--student-mobile .home-student-board__skill--locked[data-skill] {
-    border-style: solid;
-  }
-
-  .home-page--student-mobile .home-student-board__skill-note {
-    position: absolute;
-    z-index: 1;
-    top: 50%;
-    left: 50%;
-    width: 145%;
-    margin: 0;
-    padding: 0.28rem 0;
-    transform: translate(-50%, -50%) rotate(-18deg);
-    background: var(--skill-chip);
-    color: #fff;
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    line-height: 1.2;
-    text-align: center;
-    text-transform: uppercase;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.16);
-  }
-
-  /* La Home de app no se desplaza y el botón quedaría cortado: el tutorial se abre desde el menú. */
-  .home-page--student-mobile .home-tutorial-trigger {
-    display: none;
-  }
-
-  /* Cabecera compacta: mascota, título y subtítulo; sin las tres features comerciales. */
-  .home-page--student-mobile .home-page__inner {
-    gap: 1.4rem;
-  }
-
-  .home-page--student-mobile .home-hero {
-    gap: 0.9rem;
-  }
-
-  .home-page--student-mobile .home-page__features {
-    display: none;
-  }
-
-  .home-page--student-mobile .home-page__title {
-    margin-bottom: 0.5rem;
-    font-size: clamp(1.6rem, 7vw, 2.1rem);
-  }
-
-  .home-page--student-mobile .home-hero__subtitle,
-  .home-page--student-mobile .home-hero__auth-btn {
-    margin-bottom: 0;
-    font-size: 1rem;
-  }
-
-  /* SiteMascot fija el ancho con estilo en línea; solo !important puede reducirlo aquí. */
-  .home-page--student-mobile .home-hero__mascot .site-mascot {
-    width: min(150px, 42vw) !important;
-  }
-
-  /* Invitado: mismo layout que el alumno; solo cambia el banner de plazas. */
-  .home-page--student-mobile.home-page--guest .home-page__inner {
-    height: 100%;
-    min-height: 0;
-    gap: 1rem;
-    justify-content: space-between;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner--home {
-    display: block !important;
-    flex: 0 0 auto;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__inner,
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__inner--loading {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-    padding: 7px 10px 7px 8px;
-    border-radius: 999px;
-    border-width: 1.5px;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__inner--details {
-    border-radius: 18px;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__row {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__icon {
-    width: 26px;
-    height: 26px;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__icon svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__text {
-    flex: 1 1 auto;
-    min-width: 0;
-    text-align: left;
-    font-size: 0.72rem;
-    line-height: 1.28;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__gratis {
-    font-size: 0.92em;
-    padding: 0.04em 0.36em;
-    letter-spacing: 0.04em;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__conditions {
-    margin-left: 0;
-    width: auto;
-    display: block;
-    flex-shrink: 0;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__conditions-btn {
-    padding: 5px 9px;
-    font-size: 0.68rem;
-  }
-
-  .home-page--student-mobile.home-page--guest .founding-slots-banner__note {
-    flex: 1 1 100%;
-    padding: 1px 2px 0 34px;
-    font-size: 0.68rem;
-    line-height: 1.3;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-hero {
-    flex: 0 0 auto;
-    gap: 0.4rem;
-    justify-items: center;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-hero__copy {
-    gap: 0.45rem;
-    width: min(100%, 18rem);
-  }
-
-  .home-page--student-mobile.home-page--guest .home-page__title {
-    margin: 0;
-    font-size: clamp(1.4rem, 6vw, 1.75rem);
-    line-height: 1.08;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-hero__auth-btn {
-    margin: 0;
-    width: auto;
-    min-width: 0;
-    min-height: 2.35rem;
-    padding: 0.4rem 1.15rem;
-    font-size: 0.92rem;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-hero__mascot .site-mascot {
-    width: min(112px, 30vw) !important;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-student-board {
-    flex: 0 0 auto;
-    min-height: 0;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-quote {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: hidden;
-    width: min(100%, 820px);
-    align-self: center;
-    padding: 0.45rem 0.5rem 0.5rem;
-    gap: 0.35rem;
-    justify-content: flex-start;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-quote__frame {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: hidden;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-quote__video {
-    flex: 0 1 auto;
-    width: auto;
-    max-width: 100%;
-    height: 100%;
-    max-height: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: contain;
-    background: transparent;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-quote .dralo-tagline {
-    flex: 0 0 auto;
-    font-size: 1.05rem;
-  }
-}
-
-@media (max-width: 639px) and (max-height: 780px) {
-  .home-page--student-mobile.home-page--guest .home-page__inner {
-    gap: 0.7rem;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-hero__mascot .site-mascot {
-    width: min(96px, 26vw) !important;
-  }
-
-  .home-page--student-mobile.home-page--guest .home-quote {
-    padding: 0.35rem 0.45rem 0.4rem;
   }
 }
 
@@ -17660,7 +17255,8 @@ body.reading-night-mode .app-nav__drawer-nav {
   background: #1e293b;
 }
 
-body.reading-night-mode .app-nav__link--mobile {
+body.reading-night-mode .app-nav__link--mobile,
+body.reading-night-mode button.app-nav__group-toggle--link {
   color: #e2e8f0;
 }
 

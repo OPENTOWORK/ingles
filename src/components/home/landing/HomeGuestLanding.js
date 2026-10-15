@@ -34,8 +34,6 @@ import './home-guest-landing.css';
 const REGISTER_HREF = '/registro';
 const TOUR_VIDEO_SRC = sitePublicPath('/dralo-tour.mp4?v=4');
 const TOUR_POSTER_SRC = sitePublicPath('/dralo-tour-poster.webp?v=4');
-/** Mismo corte que la home de móvil, que sigue mandando por debajo. */
-const DESKTOP_MQ = '(min-width: 640px)';
 
 const QUESTIONS = [
   {
@@ -113,17 +111,15 @@ const FAQ = [
   },
 ];
 
-/** `desktop` es null hasta montar, para no cargar el vídeo en móvil. */
+/** No cargar el vídeo hasta saber si la cookie de sesión va a ocultar la landing. */
 function useLandingViewport() {
-  const [view, setView] = useState({ desktop: null, sessionHint: false });
+  const [view, setView] = useState({ ready: false, sessionHint: false });
 
   useEffect(() => {
-    const media = window.matchMedia(DESKTOP_MQ);
-    const sessionHint = document.documentElement.classList.contains(SESSION_HINT_CLASS);
-    const sync = () => setView({ desktop: media.matches, sessionHint });
-    sync();
-    media.addEventListener('change', sync);
-    return () => media.removeEventListener('change', sync);
+    setView({
+      ready: true,
+      sessionHint: document.documentElement.classList.contains(SESSION_HINT_CLASS),
+    });
   }, []);
 
   return view;
@@ -206,12 +202,12 @@ function SlotsBox({ slots }) {
 }
 
 /**
- * Home sin sesión en ordenador (desde 640px). En móvil sigue la home de app.
+ * Home sin sesión, en ordenador y en móvil.
  * `pending`: aún no se sabe si hay sesión; se pinta por si es un invitado.
  */
 export default function HomeGuestLanding({ pending = false }) {
-  const { desktop, sessionHint } = useLandingViewport();
-  const visible = desktop === true && !(pending && sessionHint);
+  const { ready, sessionHint } = useLandingViewport();
+  const visible = ready && !(pending && sessionHint);
   const slots = useFoundingSlots(visible);
   const offerOpen = !(slots.status === 'ready' && slots.soldOut);
   const faq = offerOpen ? FAQ : FAQ.filter((item) => !item.offer);

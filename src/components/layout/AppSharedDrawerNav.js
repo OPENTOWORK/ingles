@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import NavLink from '@/components/layout/NavLink';
 import { usePathname } from 'next/navigation';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
@@ -14,10 +15,30 @@ import {
   shouldShowAdminShell,
 } from '@/config/appNavMenu';
 
+function DrawerMenuGroup({ label, tourId, linkClass, children, panelClass }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div {...(tourId ? { 'data-tour': tourId } : {})}>
+      <button
+        type="button"
+        className={linkClass || 'app-nav__group-toggle'}
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span>{label}</span>
+        <span className="app-nav__chevron" aria-hidden>
+          ▾
+        </span>
+      </button>
+      {open ? <div className={panelClass}>{children}</div> : null}
+    </div>
+  );
+}
+
 /**
  * Bloques compartidos del menú drawer (móvil) y menú lateral (home tablet/móvil).
- * Usa buildAppNavModel para que todos los roles vean lo mismo en cada viewport.
- * Sin desplegables: cada sección es un enlace directo a su hub.
+ * Practice y Dralo AI empiezan plegados.
  */
 export function AppSharedDrawerNav({
   navModel,
@@ -62,21 +83,24 @@ export function AppSharedDrawerNav({
         if (item.menuId === 'practice' && item.menuItems?.length) {
           const subClass = draloVariant === 'side' ? 'app-side-menu__sub' : 'app-nav__sub';
           return (
-            <div key={item.label} {...(item.tourId ? { 'data-tour': item.tourId } : {})}>
-              <span className="app-nav__group-label">{item.label}</span>
-              <div className={subClass}>
-                {item.menuItems.map((sub) => (
-                  <NavLink
-                    key={sub.href}
-                    href={guestEntryHref || sub.href}
-                    className={linkClass}
-                    onClick={onNavigate}
-                  >
-                    {sub.label}
-                  </NavLink>
-                ))}
-              </div>
-            </div>
+            <DrawerMenuGroup
+              key={item.label}
+              label={item.label}
+              tourId={item.tourId}
+              linkClass={`${linkClass} app-nav__group-toggle--link`}
+              panelClass={subClass}
+            >
+              {item.menuItems.map((sub) => (
+                <NavLink
+                  key={sub.href}
+                  href={guestEntryHref || sub.href}
+                  className={linkClass}
+                  onClick={onNavigate}
+                >
+                  {sub.label}
+                </NavLink>
+              ))}
+            </DrawerMenuGroup>
           );
         }
 
@@ -97,22 +121,20 @@ export function AppSharedDrawerNav({
 
       {showDralo ? (
         draloLocked ? (
-          <div data-tour="nav-dralo-ai">
-            <span className={`${linkClass} app-nav__link--locked-preview`} aria-disabled="true">
-              {NAV_LINK_DRALO_AI.label}
-            </span>
-            <div
-              className={`${draloVariant === 'side' ? 'app-side-menu__sub' : 'app-nav__sub'} app-nav__sub--locked`}
-            >
-              <DraloAiNavMenuItems
-                locked
-                guestRequiresLogin={guest}
-                guestEntryHref={guestEntryHref}
-                variant={draloVariant}
-              />
-              <DraloAiComingSoonRibbon />
-            </div>
-          </div>
+          <DrawerMenuGroup
+            label={NAV_LINK_DRALO_AI.label}
+            tourId="nav-dralo-ai"
+            linkClass={`${linkClass} app-nav__group-toggle--link`}
+            panelClass={`${draloVariant === 'side' ? 'app-side-menu__sub' : 'app-nav__sub'} app-nav__sub--locked`}
+          >
+            <DraloAiNavMenuItems
+              locked
+              guestRequiresLogin={guest}
+              guestEntryHref={guestEntryHref}
+              variant={draloVariant}
+            />
+            <DraloAiComingSoonRibbon />
+          </DrawerMenuGroup>
         ) : (
           <NavLink
             href={guestEntryHref || NAV_LINK_DRALO_AI.href}
