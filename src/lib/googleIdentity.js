@@ -1,5 +1,5 @@
-const GSI_SCRIPT_SRC = 'https://accounts.google.com/gsi/client';
-const CLIENT_ID_PATTERN = /^\d+-[a-z0-9]+\.apps\.googleusercontent\.com$/i;
+const GSI_SCRIPT_SRC = 'https://accounts.google.com/gsi/client?hl=es';
+const CLIENT_ID_PATTERN = /^\d+-[a-z0-9_-]+\.apps\.googleusercontent\.com$/i;
 
 export function getGoogleClientId() {
   const raw = String(process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '').trim();

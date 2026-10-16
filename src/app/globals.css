@@ -2972,19 +2972,24 @@ body:not(.reading-night-mode) .precios-page .page-hero__mascot-img {
   cursor: pointer;
 }
 
-.login-page__google-fallback {
-  display: block;
-  width: 100%;
-  margin-top: 0.65rem;
+.login-page__google-note {
+  margin: 0.65rem 0 0;
+  color: #64748b;
+  font-size: 0.82rem;
+  text-align: center;
+}
+
+.login-page__google-note button {
+  margin: 0;
   padding: 0;
   border: 0;
   background: none;
-  color: #64748b;
-  font-size: 0.78rem;
-  text-align: center;
+  color: #6a4be8;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 0.15em;
-  cursor: pointer;
 }
 
 .home-cta__btn {

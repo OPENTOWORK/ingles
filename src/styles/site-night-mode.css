@@ -696,8 +696,12 @@ body.reading-night-mode .login-page__google:hover {
   border-color: #94a3b8;
 }
 
-body.reading-night-mode .login-page__google-fallback {
+body.reading-night-mode .login-page__google-note {
   color: #94a3b8;
+}
+
+body.reading-night-mode .login-page__google-note button {
+  color: #c4b5fd;
 }
 
 body.reading-night-mode .login-page__checkbox-label {
