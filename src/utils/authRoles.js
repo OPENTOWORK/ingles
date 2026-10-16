@@ -94,8 +94,9 @@ export function canAccessMarketingPlanAdminPanel(roleName = '') {
   return isAdminRole(roleName) || isMarketingRole(roleName);
 }
 
-/** Prompts de generación de partes de examen (lectura/edición). */
+/** Prompts de generación de partes de examen (lectura/edición). Nunca un alumno. */
 export function canAccessExamPartPrompts(roleName = '') {
+  if (isStudentRole(roleName)) return false;
   return isAdminRole(roleName) || isCoordinatorRole(roleName) || isTeacherRole(roleName);
 }
 

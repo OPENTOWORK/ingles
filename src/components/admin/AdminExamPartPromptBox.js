@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
-import { canAccessExamPartPrompts, getRoleNameByUserId } from '@/utils/authRoles';
+import { useConfirmedUserRole } from '@/context/UserRoleContext';
+import { canAccessExamPartPrompts } from '@/utils/authRoles';
 import PromptColoredTextEditor, {
   TEXT_COLORS,
 } from '@/components/admin/PromptColoredTextEditor';
@@ -22,7 +23,8 @@ function preventToolbarBlur(event) {
 
 /**
  * Recuadro debajo de cada parte: muestra el prompt actual (Supabase) y permite editarlo.
- * Visible para admin, coordinador y profesor.
+ * Solo admin, coordinador y profesor, con el rol ya confirmado de esta pantalla.
+ * En la vista de alumno (incluida la previsualización) no se pinta.
  */
 export default function AdminExamPartPromptBox({
   enabled = false,
@@ -31,7 +33,9 @@ export default function AdminExamPartPromptBox({
   examSlot = 1,
   lang = 'es',
 }) {
-  const [canAccess, setCanAccess] = useState(false);
+  const { userRole, roleConfirmed } = useConfirmedUserRole();
+  const canAccess = Boolean(enabled && roleConfirmed && canAccessExamPartPrompts(userRole));
+  const [denied, setDenied] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -48,21 +52,8 @@ export default function AdminExamPartPromptBox({
   const part = Number(partNumber);
 
   useEffect(() => {
-    if (!enabled) {
-      setCanAccess(false);
-      return;
-    }
-    void (async () => {
-      const { data } = await supabase.auth.getSession();
-      const user = data?.session?.user;
-      if (!user?.id) {
-        setCanAccess(false);
-        return;
-      }
-      const role = await getRoleNameByUserId(user.id, user.email);
-      setCanAccess(canAccessExamPartPrompts(role));
-    })();
-  }, [enabled]);
+    setDenied(false);
+  }, [slug, part, examSlot, userRole, roleConfirmed]);
 
   const applyPrompt = useCallback((prompt) => {
     setMeta(prompt);
@@ -88,6 +79,10 @@ export default function AdminExamPartPromptBox({
         headers,
       });
       const json = await res.json().catch(() => ({}));
+      if (res.status === 401 || res.status === 403) {
+        setDenied(true);
+        return;
+      }
       if (!res.ok) throw new Error(json.error || 'No se pudo cargar el prompt.');
 
       applyPrompt(json.prompt || {});
@@ -180,7 +175,7 @@ export default function AdminExamPartPromptBox({
       .replace(/&nbsp;/gi, ' ')
       .trim();
 
-  if (!enabled || !canAccess || !Number.isFinite(part) || part <= 0) return null;
+  if (!canAccess || denied || !Number.isFinite(part) || part <= 0) return null;
 
   return (
     <div className="admin-exam-prompt-box">

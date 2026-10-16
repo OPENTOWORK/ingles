@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
+import { canAccessExamPartPrompts } from '@/utils/authRoles.js';
 import {
   isRoleConfirmedForSession,
   nextRoleConfirmation,
@@ -66,6 +67,18 @@ describe('userRoleResolution', () => {
     const fallback = { role: 'student', confirmed: false };
     assert.equal(roleFromConfirmedCache(fallback), null);
     assert.equal(shouldCacheResolvedRole(fallback), false);
+  });
+
+  it('los alumnos no pueden ver los prompts de generación', () => {
+    assert.equal(canAccessExamPartPrompts('student'), false);
+    assert.equal(canAccessExamPartPrompts('alumno'), false);
+    assert.equal(canAccessExamPartPrompts('Student'), false);
+    assert.equal(canAccessExamPartPrompts(''), false);
+    assert.equal(canAccessExamPartPrompts('marketing'), false);
+    assert.equal(canAccessExamPartPrompts('teacher'), true);
+    assert.equal(canAccessExamPartPrompts('profesor'), true);
+    assert.equal(canAccessExamPartPrompts('coordinador'), true);
+    assert.equal(canAccessExamPartPrompts('admin'), true);
   });
 
   it('la lectura confirmada posterior sí cierra la resolución de ese usuario', () => {

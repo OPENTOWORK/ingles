@@ -154,7 +154,6 @@ export async function POST(req) {
         enunciadoPreview: preview.enunciadoPreview,
         payload: preview.generated,
         validation: preview.validation,
-        generationPrompt: preview.generationPrompt || null,
       },
     });
   } catch (err) {

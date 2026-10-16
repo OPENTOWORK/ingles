@@ -4,6 +4,7 @@ import {
   canAccessExamPartPrompts,
   isCoordinatorRole,
   isMarketingRole,
+  isStudentRole,
   isTeacherRole,
   normalizeEmail,
   normalizeRoleName,
@@ -200,7 +201,7 @@ export async function authenticateExamPartPromptRequest(req) {
   const isAdmin = await userIsAdmin(auth.user, db);
   const roleName = await getUserRoleNameServer(auth.user.id, db);
 
-  if (!isAdmin && !canAccessExamPartPrompts(roleName)) {
+  if (isStudentRole(roleName) || (!isAdmin && !canAccessExamPartPrompts(roleName))) {
     return { error: 'Sin permiso.', status: 403 };
   }
 
