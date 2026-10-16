@@ -134,6 +134,8 @@ function RootLayoutClientInner({ children }) {
   const [cookieConsent, setCookieConsent] = useState(null);
   /** Evita renderizar el banner en SSR (LinkedIn y otros crawlers leían los botones como título). */
   const [cookieConsentHydrated, setCookieConsentHydrated] = useState(false);
+  /** El aviso espera 5 s para no competir con la primera pintura, sobre todo en el móvil. */
+  const [cookieBannerVisible, setCookieBannerVisible] = useState(false);
   const [showCookieSettings, setShowCookieSettings] = useState(false);
   /** Bloque Legal/Privacidad del footer: plegado por defecto en móvil. */
   const [footerLegalOpen, setFooterLegalOpen] = useState(false);
@@ -323,6 +325,15 @@ function RootLayoutClientInner({ children }) {
       setCookieConsentHydrated(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (!cookieConsentHydrated || cookieConsent) {
+      setCookieBannerVisible(false);
+      return undefined;
+    }
+    const timer = window.setTimeout(() => setCookieBannerVisible(true), 5000);
+    return () => window.clearTimeout(timer);
+  }, [cookieConsentHydrated, cookieConsent]);
 
   useEffect(() => {
     const openCookieSettingsFromEvent = () => setShowCookieSettings(true);
@@ -525,7 +536,7 @@ function RootLayoutClientInner({ children }) {
         </>
       ) : null}
 
-      {cookieConsentHydrated && !cookieConsent && (
+      {cookieBannerVisible && !cookieConsent && (
         <div
           className="cookie-banner"
           role="dialog"
