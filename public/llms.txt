@@ -1,0 +1,26 @@
+# Dralo Academy
+
+> Dralo es una plataforma online para estudiantes que preparan el examen Cambridge B2 First (B2). Permite practicar ejercicios con formato de examen, revisar errores, recibir feedback sobre Writing y seguir el progreso para orientar el estudio.
+
+Dralo complementa las clases de inglés con práctica autónoma y feedback claro. Ayuda a los estudiantes a identificar qué necesitan mejorar y a organizar su preparación del B2 First.
+
+## Plataforma y acceso
+
+- [Inicio de Dralo](https://www.dralo.es/): Información sobre la plataforma, sus funcionalidades y cómo empezar.
+- [Crear una cuenta gratis](https://www.dralo.es/registro/): Acceso a la oferta de lanzamiento y registro de nuevos estudiantes.
+
+## Preparación del Cambridge B2 First
+
+- [Práctica B2 First](https://www.dralo.es/exam-practice/b2/): Información sobre la práctica de ejercicios y las áreas del examen.
+- [Writing en inglés](https://www.dralo.es/exam-strategies/writing/): Corrección de textos, feedback sobre gramática, vocabulario, coherencia y sugerencias de mejora.
+
+## Información para estudiantes
+
+- [Preguntas frecuentes](https://www.dralo.es/#preguntas-frecuentes): Información sobre el funcionamiento de Dralo, el registro y el Plan Plus.
+- [Contacto](https://www.dralo.es/contact/): Acceso a la web para consultar información sobre la plataforma.
+
+## Información legal y privacidad
+
+- [Política de privacidad](https://www.dralo.es/politica-privacidad/): Información sobre privacidad y tratamiento de datos.
+- [Política de cookies](https://www.dralo.es/politica-cookies/): Información sobre el uso de cookies.
+- [Términos y condiciones](https://www.dralo.es/terminos-condiciones/): Condiciones de uso de la plataforma.
