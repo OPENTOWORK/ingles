@@ -9,6 +9,7 @@ Imagenes
 public/listening
 *.sql
 *.txt
+!public/llms.txt
 *.docx
 *.mpeg
 *.mp3
