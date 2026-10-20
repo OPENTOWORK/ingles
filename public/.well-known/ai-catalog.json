@@ -1,0 +1,18 @@
+{
+  "entries": [
+    {
+      "@context": "https://agenticresourcediscovery.org/context/v1",
+      "identifier": "urn:air:www.dralo.es:llms",
+      "displayName": "Dralo Academy",
+      "type": "text/plain",
+      "url": "https://www.dralo.es/llms.txt",
+      "description": "Dralo es una plataforma online para estudiantes que preparan el examen Cambridge B2 First. Permite practicar ejercicios con formato de examen, revisar errores, recibir feedback sobre Writing y seguir el progreso.",
+      "representativeQueries": [
+        "Qué es Dralo Academy",
+        "Cómo practicar el Cambridge B2 First",
+        "Dónde corregir un writing en inglés",
+        "Cómo crear una cuenta gratis en Dralo"
+      ]
+    }
+  ]
+}

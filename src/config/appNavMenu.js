@@ -297,7 +297,7 @@ export function getAdminShellMenuSections(roleName = '', permissionOverridesByRo
     ...section,
     items: (section.items || []).map((item) => ({
       ...item,
-      locked: !allowed.has(normalizeStaffShellPath(item.href)),
+      locked: !allowed.has(normalizeStaffShellPath(item.accessHref || item.href)),
     })),
   }));
 }

@@ -291,7 +291,7 @@
   font-size: 0.875rem;
   line-height: 1.35;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
   transition: color 0.18s ease;
 }
 

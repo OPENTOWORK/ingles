@@ -333,7 +333,8 @@ describe('correos con la configuración', () => {
   it('sin valores guardados conserva Dralo y no inventa la línea legal ni el mailto', () => {
     const { html } = buildBrandedEmailFromPlainText('Hola', {});
     assert.match(html, />Dralo</);
-    assert.match(html, /Dralo English/);
+    assert.match(html, />Academy</);
+    assert.doesNotMatch(html, /Dralo English/);
     assert.doesNotMatch(html, /mailto:/);
     assert.doesNotMatch(html, /ETT OPEN TO WORK/);
   });

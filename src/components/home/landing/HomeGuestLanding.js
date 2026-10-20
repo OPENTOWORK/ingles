@@ -205,7 +205,7 @@ function SlotsBox({ slots }) {
  * Home sin sesión, en ordenador y en móvil.
  * `pending`: aún no se sabe si hay sesión; se pinta por si es un invitado.
  */
-export default function HomeGuestLanding({ pending = false }) {
+export default function HomeGuestLanding({ pending = false, prioritizeLcp = false }) {
   const { ready, sessionHint } = useLandingViewport();
   const visible = ready && !(pending && sessionHint);
   const slots = useFoundingSlots(visible);
@@ -214,6 +214,9 @@ export default function HomeGuestLanding({ pending = false }) {
 
   return (
     <div className={`home-landing ${landingFont.variable}${pending ? ' home-landing--pending' : ''}`}>
+      {prioritizeLcp ? (
+        <link rel="preload" as="image" href={TOUR_POSTER_SRC} fetchPriority="high" />
+      ) : null}
       <header className="hl-header">
         <div className="hl-container hl-header__bar">
           <Link href="/" className="hl-logo">
@@ -311,6 +314,7 @@ export default function HomeGuestLanding({ pending = false }) {
                 width={220}
                 height={220}
                 sizes="220px"
+                priority={prioritizeLcp}
                 className="hl-hero__mascot"
               />
             </div>

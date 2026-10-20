@@ -30,6 +30,11 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/proteccion-datos',
   /** Encuesta founding: se abre desde el correo, con token y sin iniciar sesión. */
   '/founding/encuesta',
+  /**
+   * Manifiestos ARD. Si el middleware los manda a /login, el auditor recibe HTML.
+   * /.well-known/ai-catalog.json y /.well-known/ard.json viven en public/.
+   */
+  '/.well-known',
   /** OAuth / enlaces de recuperación de contraseña (no son contenido de la app). */
   '/auth/callback',
   '/auth/confirm',

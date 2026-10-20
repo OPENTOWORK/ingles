@@ -1,3 +1,4 @@
+import '@/styles/app-routes.css';
 import '@/styles/dralo-ai.css';
 import DraloAiShell from '@/components/dralo/DraloAiShell';
 import { SEO_PAGE_META } from '@/lib/siteSeo';

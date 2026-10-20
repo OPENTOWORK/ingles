@@ -1,3 +1,4 @@
+import '@/styles/app-routes.css';
 import { SEO_PAGE_META } from '@/lib/siteSeo';
 
 export const metadata = {

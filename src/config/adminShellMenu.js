@@ -32,7 +32,14 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
   {
     id: 'informatica',
     title: 'Informática',
-    items: [{ href: '/informatico', label: 'Informático' }],
+    items: [
+      { href: '/informatico', label: 'Informático' },
+      {
+        href: '/informatico/vista',
+        label: 'Visualización en móvil y tablet',
+        accessHref: '/informatico',
+      },
+    ],
   },
   {
     id: 'ingles',

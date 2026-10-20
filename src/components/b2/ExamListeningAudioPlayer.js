@@ -53,6 +53,8 @@ function formatTime(seconds) {
 export default function ExamListeningAudioPlayer({
   src,
   examMode = false,
+  /** Solo la página de prueba: pausa y barra para avanzar o retroceder. */
+  allowSeek = false,
   clipKey = '',
   lang = 'en',
   className = '',
@@ -62,6 +64,7 @@ export default function ExamListeningAudioPlayer({
   onPlaybackEnd,
 }) {
   const audioRef = useRef(null);
+  const trackRef = useRef(null);
   const maxTimeRef = useRef(0);
   const playingRef = useRef(false);
   const tickRef = useRef(null);
@@ -73,9 +76,9 @@ export default function ExamListeningAudioPlayer({
   const [error, setError] = useState(null);
 
   const isEn = lang !== 'es';
-  const exhausted = attemptsUsed >= MAX_PLAYS && !isPlaying;
-  const showFirstPlay = attemptsUsed === 0 && !isPlaying;
-  const showReplay = attemptsUsed === 1 && hasCompletedOnce && !isPlaying;
+  const exhausted = !allowSeek && attemptsUsed >= MAX_PLAYS && !isPlaying;
+  const showFirstPlay = allowSeek ? !isPlaying : attemptsUsed === 0 && !isPlaying;
+  const showReplay = !allowSeek && attemptsUsed === 1 && hasCompletedOnce && !isPlaying;
 
   const stopTick = useCallback(() => {
     if (tickRef.current != null) {
@@ -139,6 +142,7 @@ export default function ExamListeningAudioPlayer({
 
       // En iPhone, rebobinar currentTime desde un timer pausa el audio.
       if (
+        !allowSeek &&
         !isAppleTouchDevice() &&
         maxTimeRef.current > 0.05 &&
         audio.currentTime < maxTimeRef.current - 0.05
@@ -146,7 +150,7 @@ export default function ExamListeningAudioPlayer({
         audio.currentTime = maxTimeRef.current;
       }
     }, 100);
-  }, [finishPlayback, stopTick, syncProgressFromAudio]);
+  }, [allowSeek, finishPlayback, stopTick, syncProgressFromAudio]);
 
   useEffect(() => {
     maxTimeRef.current = 0;
@@ -215,6 +219,64 @@ export default function ExamListeningAudioPlayer({
       audio.removeEventListener('durationchange', onMeta);
     };
   }, [src, clipKey, examMode]);
+
+  const seekFromPointer = useCallback((event) => {
+    const audio = audioRef.current;
+    const track = trackRef.current;
+    if (!allowSeek || !audio || !track || !(audio.duration > 0)) return;
+    const rect = track.getBoundingClientRect();
+    if (rect.width <= 0) return;
+    const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+    const next = ratio * audio.duration;
+    try {
+      audio.currentTime = next;
+    } catch {
+      return;
+    }
+    maxTimeRef.current = next;
+    setCurrentTime(next);
+  }, [allowSeek]);
+
+  const onSeekPointerDown = useCallback((event) => {
+    if (!allowSeek) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    seekFromPointer(event);
+  }, [allowSeek, seekFromPointer]);
+
+  const onSeekPointerMove = useCallback((event) => {
+    if (!allowSeek || !event.currentTarget.hasPointerCapture?.(event.pointerId)) return;
+    seekFromPointer(event);
+  }, [allowSeek, seekFromPointer]);
+
+  const toggleFreePlayback = useCallback(async () => {
+    const audio = audioRef.current;
+    if (!audio || playLocked) return;
+
+    if (!audio.paused) {
+      audio.pause();
+      playingRef.current = false;
+      stopTick();
+      setIsPlaying(false);
+      return;
+    }
+
+    setError(null);
+    enableIosPlaybackSession();
+    try {
+      pauseOtherListeningAudios(audio);
+      await audio.play();
+      playingRef.current = true;
+      setIsPlaying(true);
+      onPlaybackStart?.();
+      syncProgressFromAudio();
+      startTick();
+    } catch {
+      playingRef.current = false;
+      stopTick();
+      setIsPlaying(false);
+      setError(isEn ? 'Playback was blocked.' : 'La reproducción fue bloqueada.');
+    }
+  }, [isEn, onPlaybackStart, playLocked, startTick, stopTick, syncProgressFromAudio]);
 
   const startPlayback = useCallback(async () => {
     const audio = audioRef.current;
@@ -296,8 +358,12 @@ export default function ExamListeningAudioPlayer({
           ? 'Audio locked.'
           : 'Audio bloqueado.';
 
+  const playLabel = allowSeek && isPlaying
+    ? (isEn ? 'Pause audio' : 'Pausar audio')
+    : (isEn ? 'Play audio' : 'Reproducir audio');
+
   return (
-    <div className={`exam-listening-audio exam-listening-audio--strict${className ? ` ${className}` : ''}`}>
+    <div className={`exam-listening-audio exam-listening-audio--strict${allowSeek ? ' exam-listening-audio--seek' : ''}${className ? ` ${className}` : ''}`}>
       <audio
         ref={audioRef}
         src={src}
@@ -308,19 +374,19 @@ export default function ExamListeningAudioPlayer({
       />
 
       <div className="exam-listening-audio__bar" aria-live="polite">
-        {showFirstPlay ? (
+        {showFirstPlay || (allowSeek && isPlaying) ? (
           <button
             type="button"
             className={`exam-listening-audio__play${
               playbackBlocked ? ' exam-listening-audio__play--locked' : ''
             }`}
             onPointerDown={enableIosPlaybackSession}
-            onClick={() => void startPlayback()}
+            onClick={() => void (allowSeek ? toggleFreePlayback() : startPlayback())}
             disabled={playbackBlocked}
-            aria-label={isEn ? 'Play audio' : 'Reproducir audio'}
+            aria-label={playLabel}
             aria-disabled={playbackBlocked}
           >
-            ▶
+            {allowSeek && isPlaying ? '❚❚' : '▶'}
           </button>
         ) : (
           <span
@@ -334,7 +400,18 @@ export default function ExamListeningAudioPlayer({
         )}
 
         <div className="exam-listening-audio__track-wrap">
-          <div className="exam-listening-audio__track" aria-hidden>
+          <div
+            ref={trackRef}
+            className="exam-listening-audio__track"
+            aria-hidden={allowSeek ? undefined : true}
+            role={allowSeek ? 'slider' : undefined}
+            aria-label={allowSeek ? (isEn ? 'Audio position' : 'Posición del audio') : undefined}
+            aria-valuemin={allowSeek ? 0 : undefined}
+            aria-valuemax={allowSeek ? Math.round(duration || 0) : undefined}
+            aria-valuenow={allowSeek ? Math.round(currentTime || 0) : undefined}
+            onPointerDown={allowSeek ? onSeekPointerDown : undefined}
+            onPointerMove={allowSeek ? onSeekPointerMove : undefined}
+          >
             <div className="exam-listening-audio__fill" style={{ width: `${progressPct}%` }} />
           </div>
           <div className="exam-listening-audio__times">
@@ -350,7 +427,7 @@ export default function ExamListeningAudioPlayer({
         <p className="exam-listening-audio__hint exam-listening-audio__hint--locked">{lockHint}</p>
       ) : null}
 
-      {isPlaying ? (
+      {isPlaying && !allowSeek ? (
         <p className="exam-listening-audio__hint exam-listening-audio__hint--playing">
           {isEn ? 'Playing — cannot be paused.' : 'Reproduciendo — no se puede pausar.'}
         </p>

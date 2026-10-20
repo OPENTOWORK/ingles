@@ -41,7 +41,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
   let ctaUrl = null;
   let ctaLabel = options.ctaLabel || 'Ir a Dralo';
   let footerLine = options.senderName
-    ? `${options.senderName} · Dralo English`
+    ? `${options.senderName} · Dralo Academy`
     : 'Equipo Dralo · dralo.es';
 
   for (const block of blocks) {
@@ -110,12 +110,15 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
     });
   }
 
-  const preheader = escapeHtml(options.preheader || options.headline || blocks[0]?.slice(0, 120) || 'Dralo English');
+  const preheader = escapeHtml(options.preheader || options.headline || blocks[0]?.slice(0, 120) || 'Dralo Academy');
   const brandName = String(options.brandName || '').trim();
   const legalName = String(options.legalName || '').trim();
   const supportEmail = String(options.supportEmail || '').trim();
-  const logoWord = escapeHtml(brandName || 'Dralo');
-  const copyrightName = escapeHtml(brandName ? `${brandName} English` : 'Dralo English');
+  const logoName = brandName || 'Dralo Academy';
+  const logoParts = logoName.split(/\s+/).filter(Boolean);
+  const logoWord = escapeHtml(logoParts[0] || 'Dralo');
+  const logoRest = escapeHtml(logoParts.slice(1).join(' ') || 'Academy');
+  const copyrightName = escapeHtml(logoName);
   const legalLine = legalName
     ? `<p style="margin:0 0 8px;color:#94a3b8;">${escapeHtml(legalName)}</p>`
     : '';
@@ -139,7 +142,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
       </td>
       <td style="vertical-align:middle;padding-left:12px;">
         <p style="margin:0;font-size:14px;font-weight:700;color:#0f172a;">${escapeHtml(senderLabel)}</p>
-        <p style="margin:4px 0 0;font-size:12px;color:#64748b;">Dralo English · Academia online de inglés</p>
+        <p style="margin:4px 0 0;font-size:12px;color:#64748b;">${escapeHtml(logoName)} · Academia online de inglés</p>
       </td>
     </tr>
   </table>`;
@@ -151,7 +154,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light" />
   <meta name="supported-color-schemes" content="light" />
-  <title>Dralo English</title>
+  <title>${escapeHtml(logoName)}</title>
 </head>
 <body style="margin:0;padding:0;background:#eef2ff;font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;">
   <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;">${preheader}</div>
@@ -165,7 +168,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
                 <tr>
                   <td style="border-radius:16px;background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);padding:14px 22px;box-shadow:0 10px 30px rgba(15,23,42,0.18);">
                     <span style="font-size:22px;font-weight:800;color:#f8fafc;letter-spacing:-0.03em;">${logoWord}</span>
-                    <span style="font-size:22px;font-weight:600;color:#93c5fd;margin-left:5px;">English</span>
+                    <span style="font-size:22px;font-weight:600;color:#93c5fd;margin-left:5px;">${logoRest}</span>
                   </td>
                 </tr>
               </table>
@@ -212,7 +215,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
  * Envoltorio rápido para mensajes manuales (admin / profesor).
  */
 export function buildBrandedManualMessageEmail({ message, subject, senderName }) {
-  const text = [message, '', '—', `${senderName} · Dralo English`].join('\n');
+  const text = [message, '', '—', `${senderName} · Dralo Academy`].join('\n');
   return buildBrandedEmailFromPlainText(text, {
     headline: subject,
     preheader: message.slice(0, 140),

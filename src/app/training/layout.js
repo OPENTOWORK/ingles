@@ -1,3 +1,4 @@
+import '@/styles/app-routes.css';
 import '@/styles/training-theme.css';
 
 export default function TrainingLayout({ children }) {

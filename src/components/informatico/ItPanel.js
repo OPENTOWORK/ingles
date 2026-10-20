@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { getRoleNameByUserId, isAdminRole } from '@/utils/authRoles';
 import { mayEnterStaffModule } from '@/lib/staffModuleGate';
@@ -19,8 +19,13 @@ const TABS = [
   { id: 'tickets', label: 'Tickets' },
   { id: 'herramientas', label: 'Herramientas' },
   { id: 'supabase', label: 'Supabase' },
-  { id: 'responsive', label: 'Visualización en móvil y tablet' },
 ];
+
+const VISTA_PATH = '/informatico/vista';
+
+function normalizePath(path = '') {
+  return String(path || '').replace(/\/$/, '') || '/';
+}
 
 async function itFetch(path, options = {}, { soft = false } = {}) {
   const { data: sessionData } = await supabase.auth.getSession();
@@ -69,10 +74,12 @@ function StatusBadge({ ok }) {
 
 export default function ItPanel() {
   const router = useRouter();
+  const pathname = usePathname() ?? '';
+  const onVista = normalizePath(pathname) === VISTA_PATH;
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState('resumen');
+  const [tab, setTab] = useState(onVista ? 'responsive' : 'resumen');
   const [overview, setOverview] = useState(null);
   const [systemStatus, setSystemStatus] = useState(null);
   const [sessionChart, setSessionChart] = useState([]);
@@ -150,6 +157,15 @@ export default function ItPanel() {
       setServiceRoleConfigured(false);
     }
   }, []);
+
+  useEffect(() => {
+    if (onVista) {
+      setTab('responsive');
+      return;
+    }
+    const requested = new URLSearchParams(window.location.search).get('tab');
+    setTab(TABS.some((item) => item.id === requested) ? requested : 'resumen');
+  }, [onVista]);
 
   useEffect(() => {
     (async () => {
@@ -257,7 +273,13 @@ export default function ItPanel() {
             <button
               key={t.id}
               type="button"
-              onClick={() => setTab(t.id)}
+              onClick={() => {
+                if (onVista) {
+                  router.push(t.id === 'resumen' ? '/informatico/' : `/informatico/?tab=${t.id}`);
+                  return;
+                }
+                setTab(t.id);
+              }}
               className={`px-4 py-2 rounded-t text-sm font-medium ${
                 tab === t.id
                   ? 'bg-slate-800 text-white'

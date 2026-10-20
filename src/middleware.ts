@@ -1,8 +1,34 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import aiCatalog from '../public/.well-known/ai-catalog.json';
+import ardManifest from '../public/.well-known/ard.json';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { isPublicPath } from '@/utils/publicRoutes';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
+
+/**
+ * Manifiestos ARD. Si esta petición pasa por el middleware, no puede ir a /login:
+ * el auditor sigue el 307 y lee el HTML de la página de acceso.
+ */
+function discoveryManifestResponse(pathname: string) {
+  let path = pathname || '/';
+  try {
+    path = decodeURIComponent(path);
+  } catch {
+    path = pathname || '/';
+  }
+  path = path.replace(/\/+$/, '') || '/';
+  const body =
+    path === '/.well-known/ai-catalog.json'
+      ? aiCatalog
+      : path === '/.well-known/ard.json'
+        ? ardManifest
+        : null;
+  if (!body) return null;
+  return NextResponse.json(body, {
+    headers: { 'cache-control': 'public, max-age=3600' },
+  });
+}
 
 /**
  * Server-side auth gate — same rules on mobile, tablet and desktop.
@@ -10,6 +36,9 @@ import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
  */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+
+  const manifest = discoveryManifestResponse(pathname);
+  if (manifest) return manifest;
 
   // Google Search Console (and similar) HTML verification files in /public.
   if (/^\/google[a-z0-9]+\.html\/?$/i.test(pathname)) {
@@ -106,6 +135,6 @@ function isItPreviewFrameRequest(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|llms.txt|manifest\\.webmanifest|manifest.json|offline.html|sw-reset.html|sw.js|google[a-z0-9]+\\.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp4|webm|woff2?|ttf|eot)$).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|llms.txt|listening-preview|\\.well-known|manifest\\.webmanifest|manifest.json|offline.html|sw-reset.html|sw.js|google[a-z0-9]+\\.html|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|mp4|webm|woff2?|ttf|eot)$).*)',
   ],
 };
