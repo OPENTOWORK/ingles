@@ -13,5 +13,5 @@ public/listening
 *.docx
 *.mpeg
 *.mp3
-!public/listening-preview/p02-part2.mp3
+!public/listening-preview/*.mp3
 temp_part1_backup.js
