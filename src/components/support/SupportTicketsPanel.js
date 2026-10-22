@@ -180,7 +180,7 @@ export default function SupportTicketsPanel() {
     <div className="support-panel">
       <header className="support-panel__header">
         <div>
-          <h1 className="support-panel__title">Panel de Soporte</h1>
+          <h1 className="support-panel__title">Tickets</h1>
           <p className="support-panel__subtitle">
             Gestiona tickets de la plataforma. Responde desde aquí para que el usuario reciba el
             correo.

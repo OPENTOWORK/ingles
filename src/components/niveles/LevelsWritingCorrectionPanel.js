@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useDraloXpOptional } from '@/context/DraloXpContext';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
 import DraloThinking from '@/components/dralo/DraloThinking';
@@ -70,7 +69,6 @@ export default function LevelsWritingCorrectionPanel({
   const [error, setError] = useState('');
   const [shortWarning, setShortWarning] = useState('');
   const [loading, setLoading] = useState(false);
-  const draloXp = useDraloXpOptional();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -127,14 +125,6 @@ export default function LevelsWritingCorrectionPanel({
       setResult(feedbackText);
       if (data.scores && typeof data.scores === 'object') {
         setScores(data.scores);
-      }
-
-      if (isDralo && draloXp) {
-        void draloXp.awardForCorrectAnswer(`writing-correction-${targetLevel}`, {
-          correct: true,
-          kind: 'text',
-          scorePercent: words >= 140 ? 82 : words >= 60 ? 68 : 52,
-        });
       }
 
       void trackWritingErrors({

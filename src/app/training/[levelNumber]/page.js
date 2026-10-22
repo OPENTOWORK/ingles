@@ -20,6 +20,7 @@ import {
   getLevelTopic,
 } from '@/data/trainingPathCurriculum';
 import { getPathReview, buildReviewExercise } from '@/data/trainingReviews';
+import { syncTrainingExperience } from '@/lib/trainingExperienceClient';
 import { saveExerciseResult, getUserProgressForExercises, progressTracker } from '@/utils/progressTracker';
 import { supabase } from '@/utils/supabaseClient';
 import {
@@ -132,6 +133,7 @@ export default function ExercisePage({ params }) {
       savedStars[levelNumber] = stars;
       localStorage.setItem(storageKey, JSON.stringify(savedStars));
       notifyTrainingStarsUpdated(storageKey);
+      void syncTrainingExperience().catch(() => {});
       celebrationShownRef.current = true;
       setCelebration({
         stars,

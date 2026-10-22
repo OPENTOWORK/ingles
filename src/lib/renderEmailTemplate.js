@@ -50,6 +50,37 @@ export function buildDefaultEmailVariables(extra = {}) {
   };
 }
 
+/**
+ * Saca del cuerpo las líneas de entrega que no deben verse en el correo:
+ * `Preheader: …` (texto de vista previa) y `CTA: …` (etiqueta del botón).
+ * @param {string} template
+ */
+export function splitEmailDeliveryMeta(template) {
+  let preheader = '';
+  let ctaLabel = '';
+  const body = [];
+
+  for (const line of String(template || '').split('\n')) {
+    const preview = line.match(/^\s*Preheader:\s*(.*)$/i);
+    if (preview) {
+      preheader = preview[1].trim();
+      continue;
+    }
+    const cta = line.match(/^\s*CTA:\s*(.*)$/i);
+    if (cta) {
+      ctaLabel = cta[1].trim();
+      continue;
+    }
+    body.push(line);
+  }
+
+  return {
+    preheader,
+    ctaLabel,
+    text: body.join('\n').replace(/^\n+|\n+$/g, '').replace(/\n{3,}/g, '\n\n'),
+  };
+}
+
 export function formatNombreVariable(name) {
   const trimmed = String(name || '').trim();
   if (!trimmed) return '';

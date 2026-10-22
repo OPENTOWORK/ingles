@@ -29,6 +29,29 @@ export function applyAdminShellMenuOrder(items = [], savedOrder = []) {
   return ordered;
 }
 
+/** Items added after a saved order was stored. Keep them next to their anchor until the user reorders. */
+const UNSAVED_ITEM_ANCHORS = [{ href: '/soporte/correos', after: '/admin/marketing' }];
+
+function moveItemAfter(items, href, afterHref) {
+  const index = items.findIndex((item) => normalizeHref(item.href) === href);
+  const afterIndex = items.findIndex((item) => normalizeHref(item.href) === afterHref);
+  if (index < 0 || afterIndex < 0 || index === afterIndex + 1) return items;
+
+  const next = items.slice();
+  const [item] = next.splice(index, 1);
+  const anchor = next.findIndex((entry) => normalizeHref(entry.href) === afterHref);
+  next.splice(anchor + 1, 0, item);
+  return next;
+}
+
+function placeUnsavedItems(items = [], savedOrder = []) {
+  const saved = new Set(savedOrder.map(normalizeHref));
+  return UNSAVED_ITEM_ANCHORS.reduce((current, anchor) => {
+    if (saved.has(normalizeHref(anchor.href))) return current;
+    return moveItemAfter(current, anchor.href, anchor.after);
+  }, items);
+}
+
 function applyLegacyFlatOrder(sections = [], savedOrder = []) {
   const flat = sections.flatMap((section) => section.items || []);
   const orderedFlat = applyAdminShellMenuOrder(flat, savedOrder);
@@ -76,7 +99,10 @@ export function loadAdminShellMenuOrder(roleName = '', sections = []) {
     if (typeof saved === 'object') {
       return sections.map((section) => ({
         ...section,
-        items: applyAdminShellMenuOrder(section.items || [], saved[section.id] || []),
+        items: placeUnsavedItems(
+          applyAdminShellMenuOrder(section.items || [], saved[section.id] || []),
+          saved[section.id] || [],
+        ),
       }));
     }
 

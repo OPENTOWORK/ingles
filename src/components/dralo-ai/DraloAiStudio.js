@@ -17,7 +17,6 @@ import DraloThinking from '@/components/dralo/DraloThinking';
 import LevelsWritingCorrectionPanel from '@/components/niveles/LevelsWritingCorrectionPanel';
 import { DRALO_AI_SITUATIONAL_EYEBROW } from '@/data/draloAiSituationalConfig';
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
-import { useDraloXp } from '@/context/DraloXpContext';
 
 const ACCENT_SOLID = {
   indigo: '#6366f1',
@@ -99,7 +98,6 @@ export default function DraloAiStudio({
   const wordCount = countWords(essay);
 
   const generateRequestRef = useRef(0);
-  const { awardForCorrectAnswer, clearAwardKeys } = useDraloXp();
 
   const clearExerciseState = useCallback(() => {
     setExercise(null);
@@ -110,8 +108,7 @@ export default function DraloAiStudio({
     setEssay('');
     setEssayFeedback('');
     setError('');
-    clearAwardKeys();
-  }, [clearAwardKeys]);
+  }, []);
 
   const generateExercise = useCallback(async () => {
     if (!activityId || isWritingCorrection) return;
@@ -194,14 +191,6 @@ export default function DraloAiStudio({
       } else {
         setUoeFeedback(normalized);
       }
-      const qMeta = (exercise?.questions || []).find((item) => item.id === questionId);
-      void awardForCorrectAnswer(`uoe-${activityId}-${questionId || 'legacy'}`, {
-        correct: normalized.correct,
-        activityId,
-        hasOptions:
-          activityId === 'multiple-choice-cloze' || (qMeta?.options?.length ?? 0) > 0,
-        scorePercent: normalized.scorePercent,
-      });
     } catch (e) {
       setError(e.message);
     } finally {
@@ -229,12 +218,6 @@ export default function DraloAiStudio({
         ...prev,
         [q.id]: normalized,
       }));
-      void awardForCorrectAnswer(`rl-${activityId}-${q.id}`, {
-        correct: normalized.correct,
-        activityId,
-        hasOptions: (q.options?.length ?? 0) > 0,
-        scorePercent: normalized.scorePercent,
-      });
     } catch (e) {
       setError(e.message);
     } finally {
@@ -272,12 +255,6 @@ export default function DraloAiStudio({
       if (!res.ok) throw new Error(data?.error || 'Could not get feedback.');
       const raw = data.feedback || data.text || JSON.stringify(data);
       setEssayFeedback(formatWritingFeedbackDisplay(raw));
-      const inRange = wordCount >= wordMin && wordCount <= wordMax;
-      void awardForCorrectAnswer(`essay-${activityId}-${level}`, {
-        correct: true,
-        kind: 'text',
-        scorePercent: inRange ? 85 : 60,
-      });
     } catch (e) {
       setError(e.message);
     } finally {

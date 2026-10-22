@@ -1,9 +1,9 @@
--- 100 niveles Dralo IA: nivel (nombre) + rango (XP mínimo del nivel, de 200 en 200).
+-- 100 niveles de experiencia de Training: nivel (nombre) + rango (XP mínimo del nivel, de 200 en 200).
 -- Nivel 0 → rango 0 (0–199 XP), nivel 1 → 200, …, nivel 99 → 19800.
 
-DELETE FROM public."DraloIA_Experience";
+DELETE FROM public.training_experiencia_niveles;
 
-INSERT INTO public."DraloIA_Experience" (nivel, rango) VALUES
+INSERT INTO public.training_experiencia_niveles (nivel, rango) VALUES
 ('Rookie Silence', 0),
 ('First Word', 200),
 ('Hello Starter', 400),

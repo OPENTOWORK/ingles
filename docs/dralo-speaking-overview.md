@@ -132,7 +132,6 @@ Se combina con el system base Real-Life: `src/lib/draloAiSystemPrompt.js` → `D
 ### 3.7 Progreso y gamificación
 
 - LocalStorage: `speakingCoachProgress.js`
-- XP global Dralo: `DraloXpContext`
 - Misiones con objetivos indexados (0, 1, 2…)
 
 ---

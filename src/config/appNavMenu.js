@@ -297,9 +297,16 @@ export function getAdminShellMenuSections(roleName = '', permissionOverridesByRo
     ...section,
     items: (section.items || []).map((item) => ({
       ...item,
-      locked: !allowed.has(normalizeStaffShellPath(item.accessHref || item.href)),
+      locked: !adminShellItemUnlocked(item, allowed),
     })),
   }));
+}
+
+function adminShellItemUnlocked(item, allowed) {
+  const hrefs = Array.isArray(item.accessHrefs) && item.accessHrefs.length
+    ? item.accessHrefs
+    : [item.accessHref || item.href];
+  return hrefs.some((href) => allowed.has(normalizeStaffShellPath(href)));
 }
 
 function flattenAdminShellMenuSections(sections = []) {

@@ -17,6 +17,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   FOUNDING_MEMBER_SURVEY_CONFIRMED: 'founding_member_survey_confirmed',
   FOUNDING_MEMBER_SURVEY_REVOKED: 'founding_member_survey_revoked',
   PRACTICE_REMINDER: 'practice_reminder',
+  WEEKLY_TUESDAY_CHALLENGE: 'weekly_tuesday_challenge',
   ADMIN_REGISTRATION_NOTICE: 'admin_registration_notice',
 };
 
@@ -24,7 +25,8 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
   {
     value: AUTOMATED_EMAIL_TRIGGERS.USER_REGISTERED,
     label: 'Registro de usuario',
-    description: 'La primera vez que el alumno entra con su email ya confirmado.',
+    description:
+      'Arranca la serie de bienvenida: el primer correo al confirmar el email, y los siguientes a los 2, 4 y 7 días.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.USER_EMAIL_CONFIRMATION,
@@ -111,6 +113,12 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     label: 'Recordatorio para practicar',
     description:
       'A quien ya confirmó su cuenta y lleva varios días sin practicar. Como máximo uno a la semana, y se detiene al volver.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
+    label: 'Reto del martes',
+    description:
+      'Cada martes, a los alumnos con el email confirmado. Plantea el hueco de la semana sin dar la solución y lleva a Training. Si el martes no cupieron todos, sigue el resto de la semana.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,

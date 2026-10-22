@@ -2,10 +2,12 @@ import { deliverTransactionalEmail } from '@/lib/emailDelivery';
 import { loadPersistedEmailBranding } from '@/lib/orgSettingsServer';
 import { buildBrandedEmailFromPlainText } from '@/lib/emailBrandedLayout';
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
+import { syncAutomatedEmailSystemTemplates } from '@/lib/syncAutomatedEmailSystemTemplates';
 import {
   buildDefaultEmailVariables,
   formatNombreVariable,
   renderEmailTemplate,
+  splitEmailDeliveryMeta,
 } from '@/lib/renderEmailTemplate';
 
 const CTA_LABEL_BY_TRIGGER = {
@@ -23,6 +25,7 @@ const CTA_LABEL_BY_TRIGGER = {
   founding_member_survey_confirmed: 'Entrar en Dralo',
   founding_member_survey_revoked: 'Ver los planes',
   practice_reminder: 'Volver a practicar',
+  weekly_tuesday_challenge: 'Comprobar mi respuesta',
 };
 
 const TABLE = 'soporte_correos_automaticos';
@@ -92,12 +95,16 @@ async function sendNow(template, to, variables, adminClient, replyTo) {
   });
 
   const subject = renderEmailTemplate(template.asunto, merged).trim();
-  const text = renderEmailTemplate(template.cuerpo, merged).trim();
+  const renderedBody = splitEmailDeliveryMeta(renderEmailTemplate(template.cuerpo, merged));
+  const text = renderedBody.text;
   const branding = await loadPersistedEmailBranding(adminClient);
   const { html } = buildBrandedEmailFromPlainText(text, {
-    preheader: subject,
+    preheader: renderedBody.preheader || subject,
     headline: subject,
-    ctaLabel: CTA_LABEL_BY_TRIGGER[template.trigger_event] || 'Empezar a practicar',
+    ctaLabel:
+      renderedBody.ctaLabel ||
+      CTA_LABEL_BY_TRIGGER[template.trigger_event] ||
+      'Empezar a practicar',
     ...(branding.brandName ? { brandName: branding.brandName } : {}),
     ...(branding.legalName ? { legalName: branding.legalName } : {}),
     ...(branding.supportEmail ? { supportEmail: branding.supportEmail } : {}),
@@ -142,6 +149,14 @@ export async function dispatchAutomatedEmail({
   const email = String(to || '').trim().toLowerCase();
   if (!email || !triggerEvent) {
     return { sent: false, error: 'Destinatario o evento no válido.' };
+  }
+
+  if (adminClient) {
+    try {
+      await syncAutomatedEmailSystemTemplates(adminClient);
+    } catch (err) {
+      console.error('[dispatchAutomatedEmail] sync templates', err);
+    }
   }
 
   const templates = await loadTemplatesForTrigger(adminClient, triggerEvent);

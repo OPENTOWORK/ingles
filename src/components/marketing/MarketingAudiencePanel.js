@@ -76,9 +76,12 @@ export default function MarketingAudiencePanel() {
 
   return (
     <section className={styles.card} aria-labelledby="marketing-audience-heading">
-      <h2 id="marketing-audience-heading" className="sr-only">
-        Correos de los usuarios
+      <h2 id="marketing-audience-heading" className={styles.heading}>
+        Correos
       </h2>
+      <p className={styles.lead}>
+        Correo, plan y aceptación de envíos comerciales de cada usuario.
+      </p>
 
       {error ? <p className={styles.error}>{error}</p> : null}
 

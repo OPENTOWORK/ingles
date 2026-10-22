@@ -17,9 +17,9 @@ export type LevelProgressCardProps = {
 
 const COPY = {
   en: {
-    loading: 'Loading your Dralo experience…',
+    loading: 'Loading your Training experience…',
     error: 'Could not load experience.',
-    empty: 'Complete Dralo AI activities to earn XP and unlock new level titles.',
+    empty: 'Complete Training levels to earn XP and unlock new level titles. Each star is worth 10 XP.',
     emptySubtitle: 'No XP earned yet — your journey starts here.',
     maxLevel: 'Maximum level reached — you are an English Legend.',
     progress: 'Level progress',
@@ -29,13 +29,13 @@ const COPY = {
     nextLevel: 'Next level',
     xpStep: 'XP per level',
     totalXp: 'Total XP',
-    cta: 'Try Dralo AI to start earning XP →',
-    ctaHref: '/dralo-ai',
+    cta: 'Go to Training →',
+    ctaHref: '/training/',
   },
   es: {
-    loading: 'Cargando tu experiencia Dralo…',
+    loading: 'Cargando tu experiencia de Training…',
     error: 'No se pudo cargar la experiencia.',
-    empty: 'Completa actividades de Dralo IA para ganar XP y desbloquear nuevos títulos.',
+    empty: 'Completa niveles de Training para ganar XP y desbloquear nuevos títulos. Cada estrella vale 10 XP.',
     emptySubtitle: 'Aún sin XP — tu aventura empieza aquí.',
     maxLevel: 'Nivel máximo alcanzado — eres una English Legend.',
     progress: 'Progreso de nivel',
@@ -45,8 +45,8 @@ const COPY = {
     nextLevel: 'Siguiente nivel',
     xpStep: 'XP por nivel',
     totalXp: 'XP total',
-    cta: 'Prueba Dralo IA para empezar a ganar XP →',
-    ctaHref: '/dralo-ai',
+    cta: 'Ir a Training →',
+    ctaHref: '/training/',
   },
 } as const;
 
@@ -148,7 +148,6 @@ export default function LevelProgressCard({
     return (
       <div className={`${styles.card} ${styles.cardError}${className ? ` ${className}` : ''}`}>
         <p className={styles.status}>{t.error}</p>
-        <p className={styles.meta}>{error}</p>
       </div>
     );
   }

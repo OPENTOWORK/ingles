@@ -57,13 +57,20 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
     items: [
       { href: '/admin', label: 'Analíticas' },
       { href: '/admin/marketing', label: 'Marketing' },
+      {
+        href: '/soporte/correos',
+        label: 'Correos automáticos',
+        accessHrefs: ['/soporte', '/admin/marketing'],
+      },
       { href: '/admin/blog', label: 'Blog' },
     ],
   },
   {
     id: 'soporte',
     title: 'Soporte',
-    items: [{ href: '/soporte', label: 'Soporte' }],
+    items: [
+      { href: '/soporte', label: 'Tickets' },
+    ],
   },
   {
     id: 'finanzas',

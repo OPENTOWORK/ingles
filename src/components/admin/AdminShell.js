@@ -21,7 +21,7 @@ function normalizePath(path = '') {
 function isAdminNavActive(href, pathname) {
   const target = normalizePath(href);
   const current = normalizePath(pathname);
-  if (target === '/admin' || target === '/informatico') return current === target;
+  if (target === '/admin' || target === '/informatico' || target === '/soporte') return current === target;
   return current === target || current.startsWith(`${target}/`);
 }
 

@@ -11,6 +11,8 @@ import {
   trainingHomePath,
 } from '@/utils/trainingStarsProgress';
 import { TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
+import TrainingExperienceMeter from '@/components/training/TrainingExperienceMeter';
+import WeeklyTrainingChallenge from '@/components/training/WeeklyTrainingChallenge';
 import { useUserRole } from '@/context/UserRoleContext';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
 import { sitePublicPath } from '@/utils/sitePublicPath';
@@ -92,6 +94,13 @@ export default function TrainingHome() {
             height={92}
           />
         </aside>
+        <div className={styles.tools}>
+          <WeeklyTrainingChallenge className={styles.toolChallenge} />
+          <TrainingExperienceMeter
+            className={styles.toolXp}
+            accessToken={session?.access_token}
+          />
+        </div>
       </div>
 
       <TrainingLevelPathMap

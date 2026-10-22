@@ -100,13 +100,13 @@ const ProfileAchievementsCarousel = dynamicImport(
 const ProfileGoalsPanel = dynamicImport(
   () => import('@/components/perfil/ProfileGoalsPanel'),
 );
-const DraloLevelProgressSection = dynamic(
-  () => import('@/components/dralo/DraloLevelProgressSection'),
+const TrainingExperienceSection = dynamic(
+  () => import('@/components/training/TrainingExperienceSection'),
   {
     ssr: false,
     loading: () => (
       <div className="dralo-level-card dralo-level-card--loading">
-        <p className="dralo-level-card__status">Loading your Dralo experience…</p>
+        <p className="dralo-level-card__status">Loading your Training experience…</p>
       </div>
     ),
   },
@@ -1039,14 +1039,9 @@ export default function ProfilePage() {
             </section>
           ) : null}
 
-          {!isStudent ? (
-            <ProfileCollapsibleSection title="Dralo IA — Experience">
-              <DraloLevelProgressSection
-                accessToken={layoutSession?.access_token}
-                lang="en"
-              />
-            </ProfileCollapsibleSection>
-          ) : null}
+          <ProfileCollapsibleSection title="Training — Experience">
+            <TrainingExperienceSection accessToken={layoutSession?.access_token} lang="en" />
+          </ProfileCollapsibleSection>
 
           {showProgressTracking ? (
             <ProfileCollapsibleSection

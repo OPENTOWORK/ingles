@@ -13,6 +13,8 @@ const VARIABLE_HINTS = [
   '{{nombre}} — nombre del destinatario (con espacio previo en saludo)',
   '{{email}} — email del usuario',
   '{{login_url}} — enlace de acceso (se convierte en botón)',
+  'Preheader: texto — vista previa del buzón; no se muestra en el cuerpo',
+  'CTA: texto — etiqueta del botón que acompaña a la URL de la línea siguiente',
   '{{app_url}} — URL de la plataforma (invitaciones)',
   '{{sender_name}} — quien envía la invitación',
   '{{invite_message}} — mensaje personal del invitador (opcional)',
@@ -29,6 +31,10 @@ const VARIABLE_HINTS = [
   '{{task_fecha_line}} — línea con fecha límite',
   '{{task_descripcion_line}} — línea con descripción',
   '{{tasks_url}} — enlace al panel /tareas/',
+  '{{challenge_since}} — fecha del martes del reto (sin la solución)',
+  '{{challenge_prompt}} — frase del reto de esa semana',
+  '{{challenge_options}} — opciones A, B y C, sin marcar la correcta',
+  '{{challenge_url}} — enlace a Training, donde se comprueba la respuesta',
 ];
 
 async function apiFetch(path, options = {}) {
@@ -245,6 +251,15 @@ export default function AutomatedEmailsPanel() {
           ) : templates.length === 0 ? (
             <p className="auto-emails-muted">No hay plantillas configuradas.</p>
           ) : (
+            <>
+            {view === 'list' ? (
+              <div className="auto-emails-legend" aria-hidden="true">
+                <span>Plantilla</span>
+                <span>Evento</span>
+                <span>Cuándo sale</span>
+                <span>Estado</span>
+              </div>
+            ) : null}
             <ul className="auto-emails-list__items">
               {templates.map((t) => (
                 <li key={t.id}>
@@ -271,6 +286,7 @@ export default function AutomatedEmailsPanel() {
                 </li>
               ))}
             </ul>
+            </>
           )}
         </section>
 
@@ -502,11 +518,22 @@ export default function AutomatedEmailsPanel() {
           margin-bottom: 0;
           height: 100%;
         }
+        .auto-emails-panel__grid.is-list .auto-emails-legend,
         .auto-emails-panel__grid.is-list .auto-emails-row {
           display: grid;
           grid-template-columns: minmax(10rem, 1.5fr) minmax(8rem, 1fr) minmax(9rem, 1fr) auto;
           gap: 0.35rem 1rem;
           align-items: center;
+        }
+        .auto-emails-panel__grid.is-list .auto-emails-legend {
+          margin: 0 0 0.35rem;
+          padding: 0 0.75rem 0.45rem;
+          border-bottom: 1px solid #e5e7eb;
+          font-size: 0.75rem;
+          font-weight: 700;
+          letter-spacing: 0.02em;
+          text-transform: uppercase;
+          color: #64748b;
         }
         .auto-emails-panel__grid.is-list .auto-emails-row__name,
         .auto-emails-panel__grid.is-list .auto-emails-row__trigger,
@@ -517,6 +544,9 @@ export default function AutomatedEmailsPanel() {
         @media (max-width: 900px) {
           .auto-emails-panel__grid {
             grid-template-columns: 1fr;
+          }
+          .auto-emails-panel__grid.is-list .auto-emails-legend {
+            display: none;
           }
           .auto-emails-panel__grid.is-list .auto-emails-row {
             grid-template-columns: 1fr;

@@ -1,28 +1,10 @@
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
 
-/**
- * Inserta en Supabase las plantillas de sistema que falten (p. ej. tras un deploy nuevo).
- * @param {import('@supabase/supabase-js').SupabaseClient} db
- */
-export async function syncAutomatedEmailSystemTemplates(db) {
-  if (!db) return { inserted: [] };
+/** Asunto anterior de la bienvenida. Si sigue así, se sustituye por la serie nueva. */
+const LEGACY_WELCOME_SUBJECT = '¡Bienvenido/a a Dralo English!';
 
-  const { data: existing, error: loadError } = await db
-    .from('soporte_correos_automaticos')
-    .select('slug');
-
-  if (loadError) {
-    throw loadError;
-  }
-
-  const knownSlugs = new Set((existing || []).map((row) => row.slug));
-  const missing = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.filter((t) => !knownSlugs.has(t.slug));
-
-  if (!missing.length) {
-    return { inserted: [] };
-  }
-
-  const rows = missing.map((template) => ({
+function templateRow(template) {
+  return {
     slug: template.slug,
     nombre: template.nombre,
     trigger_event: template.trigger_event,
@@ -33,13 +15,54 @@ export async function syncAutomatedEmailSystemTemplates(db) {
     delay_minutos: Number(template.delay_minutos) || 0,
     es_sistema: true,
     actualizado_en: new Date().toISOString(),
-  }));
+  };
+}
 
-  const { error: insertError } = await db.from('soporte_correos_automaticos').insert(rows);
+/**
+ * Inserta las plantillas de sistema que falten y sustituye la bienvenida antigua
+ * por la serie del documento (solo si nadie ha cambiado ya el asunto).
+ * @param {import('@supabase/supabase-js').SupabaseClient} db
+ */
+export async function syncAutomatedEmailSystemTemplates(db) {
+  if (!db) return { inserted: [], updated: [] };
 
-  if (insertError) {
-    throw insertError;
+  const { data: existing, error: loadError } = await db
+    .from('soporte_correos_automaticos')
+    .select('slug, asunto');
+
+  if (loadError) {
+    throw loadError;
   }
 
-  return { inserted: missing.map((t) => t.slug) };
+  const bySlug = new Map((existing || []).map((row) => [row.slug, row]));
+  const missing = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.filter((t) => !bySlug.has(t.slug));
+  const welcome = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.find((t) => t.slug === 'welcome_registration');
+  const storedWelcome = bySlug.get('welcome_registration');
+  const shouldRefreshWelcome =
+    welcome && storedWelcome && storedWelcome.asunto === LEGACY_WELCOME_SUBJECT;
+
+  if (!missing.length && !shouldRefreshWelcome) {
+    return { inserted: [], updated: [] };
+  }
+
+  if (missing.length) {
+    const { error: insertError } = await db
+      .from('soporte_correos_automaticos')
+      .insert(missing.map(templateRow));
+    if (insertError) throw insertError;
+  }
+
+  if (shouldRefreshWelcome) {
+    const { slug, ...fields } = templateRow(welcome);
+    const { error: updateError } = await db
+      .from('soporte_correos_automaticos')
+      .update(fields)
+      .eq('slug', slug);
+    if (updateError) throw updateError;
+  }
+
+  return {
+    inserted: missing.map((t) => t.slug),
+    updated: shouldRefreshWelcome ? ['welcome_registration'] : [],
+  };
 }

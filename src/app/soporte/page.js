@@ -44,8 +44,8 @@ export default function SoportePage() {
     <main className="max-w-6xl mx-auto p-4 md:p-8">
       <PageHero
         eyebrow="Soporte"
-        title="Centro de ayuda"
-        description="Gestiona tickets, consultas y correos automáticos de la plataforma."
+        title="Tickets"
+        description="Gestiona los tickets y las consultas de la plataforma."
         mascotVariant={8}
         mascotWidth={130}
         accent="ocean"

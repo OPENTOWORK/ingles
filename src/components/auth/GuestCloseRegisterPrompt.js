@@ -8,26 +8,20 @@ import { getGuestRegisterHref } from '@/lib/guestPreviewAccess';
 import styles from './GuestCloseRegisterPrompt.module.css';
 
 const LEAVE_MESSAGE = 'Si quieres guardar tus progresos, regístrate.';
+const PRACTICE_HUB_PATH = '/exam-practice/b2';
+const PRACTICE_PROMPT_DELAY_MS = 60_000;
+
+function normalizePath(pathname = '') {
+  return String(pathname || '').replace(/\/$/, '') || '/';
+}
 
 function isAuthScreen(pathname = '') {
-  const path = String(pathname || '').replace(/\/$/, '') || '/';
+  const path = normalizePath(pathname);
   return path === '/login' || path === '/registro' || path.startsWith('/auth');
 }
 
-/** Ancho aproximado de los botones de la ventana; la X es el de la derecha. */
-const CLOSE_BUTTON_ZONE_PX = 140;
-
-/**
- * El cursor sale de la página por la esquina superior derecha, hacia la X de cerrar.
- * Salir por las pestañas, la barra de direcciones o el resto del borde no cuenta.
- */
-export function isWindowCloseIntent(event, viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 0) {
-  if (!event || event.relatedTarget || event.toElement) return false;
-  if (Number(event.clientY) > 0) return false;
-  const x = Number(event.clientX);
-  const width = Number(viewportWidth) || 0;
-  if (!width || !Number.isFinite(x)) return false;
-  return x >= width - CLOSE_BUTTON_ZONE_PX;
+function isB2PracticeHub(pathname = '') {
+  return normalizePath(pathname) === PRACTICE_HUB_PATH;
 }
 
 export default function GuestCloseRegisterPrompt() {
@@ -54,33 +48,13 @@ export default function GuestCloseRegisterPrompt() {
   }, []);
 
   useEffect(() => {
-    if (!active) return undefined;
-    let pointerInside = false;
-    const markInside = () => {
-      pointerInside = true;
-    };
-    const onLeave = (event) => {
-      if (!pointerInside) return;
-      pointerInside = false;
-      if (isWindowCloseIntent(event)) setOpen(true);
-    };
-    document.addEventListener('mousemove', markInside);
-    document.documentElement.addEventListener('mouseleave', onLeave);
-    return () => {
-      document.removeEventListener('mousemove', markInside);
-      document.documentElement.removeEventListener('mouseleave', onLeave);
-    };
-  }, [active]);
-
-  useEffect(() => {
-    if (!active) return undefined;
-    const onBeforeUnload = (event) => {
-      event.preventDefault();
-      event.returnValue = LEAVE_MESSAGE;
-    };
-    window.addEventListener('beforeunload', onBeforeUnload);
-    return () => window.removeEventListener('beforeunload', onBeforeUnload);
-  }, [active]);
+    if (!active || !isB2PracticeHub(pathname)) {
+      setOpen(false);
+      return undefined;
+    }
+    const timer = window.setTimeout(() => setOpen(true), PRACTICE_PROMPT_DELAY_MS);
+    return () => window.clearTimeout(timer);
+  }, [active, pathname]);
 
   if (!open || !active) return null;
 

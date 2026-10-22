@@ -37,6 +37,7 @@ import {
 import { expandItem } from '@/lib/trainingQuestionVariants';
 import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
+import { syncTrainingExperience } from '@/lib/trainingExperienceClient';
 import { saveExerciseResult } from '@/utils/progressTracker';
 import { saveTrainingLevelStars } from '@/utils/trainingStarsProgress';
 import styles from './TrainingGapFillExercise.module.css';
@@ -342,6 +343,7 @@ export default function TrainingGapFillExercise({
       levelNumber,
       stars,
     });
+    if (saved) void syncTrainingExperience().catch(() => {});
     if (saved || stars > 0) {
       setCelebration({ stars, improved: saved && stars > previous });
     }

@@ -46,7 +46,6 @@ async function loadProfile(db, userId) {
 
 async function deleteAppUserRows(db, userId) {
   const cleanupTables = [
-  { table: 'DraloIA_nivel_usuario', column: 'id_usuario' },
   { table: 'Usuarios_y_Perfil_profiles', column: 'user_id' },
   ];
 

@@ -15,7 +15,6 @@ import {
   speakingCoachLevel,
 } from '@/lib/speakingCoachProgress';
 import { useSpeechRecognition } from '../../../dralo-speaking/lib/useSpeechRecognition';
-import { useDraloXpOptional } from '@/context/DraloXpContext';
 
 const LEVELS = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -147,7 +146,6 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
   const [avatarState, setAvatarState] = useState('idle');
   const [xpToast, setXpToast] = useState(null);
   const [missionProgress, setMissionProgress] = useState({});
-  const draloXp = useDraloXpOptional();
 
   const chatRef = useRef(null);
   const sendAnswerRef = useRef(null);
@@ -417,12 +415,6 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
       const finalXp = xp + bonus;
       if (bonus > 0) setXp(finalXp);
       setReport({ ...result, totalXp: finalXp });
-      if (draloXp) {
-        void draloXp.awardForCorrectAnswer(`speaking-mission-${level}-${mission.id}`, {
-          correct: true,
-          stars: result.stars,
-        });
-      }
       recordSpeakingMissionComplete(level, mission.id, {
         xpEarned: finalXp,
         stars: result.stars,
