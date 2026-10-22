@@ -34,7 +34,7 @@ export default function PruebaAudioClient() {
   return (
     <main className="main-content" style={{ maxWidth: 880, margin: '0 auto', padding: '1.5rem 1rem 3rem' }}>
       <div
-        className="levels-b2-practice levels-b2-practice--skill-compact"
+        className="levels-b2-practice levels-b2-practice--skill-compact levels-b2-practice--audio-preview"
         data-skill-theme="listening"
       >
         <header className="levels-b2-practice__header">

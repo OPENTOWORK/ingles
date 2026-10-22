@@ -20961,14 +20961,14 @@ body.dark .profile-collapse--open .profile-collapse__head {
    (sin `--skill-compact`) mantiene su cabecera y su barra.
    ——————————————————————————————————————————————————————————— */
 @media (max-width: 639px) {
-  html:has(.levels-b2-practice--skill-compact),
-  body:has(.levels-b2-practice--skill-compact) {
+  html:has(.levels-b2-practice--skill-compact):not(:has(.levels-b2-practice--audio-preview)),
+  body:has(.levels-b2-practice--skill-compact):not(:has(.levels-b2-practice--audio-preview)) {
     height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
   }
 
-  body:has(.levels-b2-practice--skill-compact) .page-content {
+  body:has(.levels-b2-practice--skill-compact):not(:has(.levels-b2-practice--audio-preview)) .page-content {
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -20987,7 +20987,7 @@ body.dark .profile-collapse--open .profile-collapse__head {
     box-sizing: border-box;
   }
 
-  .levels-b2-practice--skill-compact {
+  .levels-b2-practice--skill-compact:not(.levels-b2-practice--audio-preview) {
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
