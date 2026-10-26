@@ -10894,13 +10894,9 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
 }
 
 .b2-writing-essay-instructions__emphasis {
-  font-weight: 700;
-  background: color-mix(in srgb, var(--skill-accent, #059669) 12%, transparent);
-  color: inherit;
-  border-radius: 4px;
-  padding: 0.05em 0.15em;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
 }
 
 .b2-writing-task__title {

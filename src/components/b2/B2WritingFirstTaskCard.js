@@ -23,7 +23,7 @@ export default function B2WritingFirstTaskCard({
               <p key={index}>
                 {line.split(/(using\s+all\s+the\s+notes)/gi).map((text, segment) => (
                   /^using\s+all\s+the\s+notes$/i.test(text)
-                    ? <strong key={segment} className="b2-writing-essay-instructions__emphasis">{text}</strong>
+                    ? <span key={segment} className="b2-writing-essay-instructions__emphasis">{text}</span>
                     : text
                 ))}
               </p>
