@@ -1,5 +1,6 @@
 'use client';
 
+import { useExamPracticeSidebarSlots } from '@/context/ExamPracticeSidebarSlotsContext';
 import ExamPracticeSideColumnAnchor from '@/components/exam/ExamPracticeSideColumnAnchor';
 
 /**
@@ -13,7 +14,31 @@ export default function ExamPracticeSideRail({
   dictionary = null,
   finishNotice = null,
 }) {
+  const { compactToolbar, portSideRailToToolbar, menuHeaderTools, menuExerciseStars, lang } = useExamPracticeSidebarSlots();
+
   if (!topRail && !strategy && !progress && !tools && !dictionary && !finishNotice) return null;
+
+  if (compactToolbar && portSideRailToToolbar) {
+    return (
+      <ExamPracticeSideColumnAnchor>
+        <div className="practice-compact-actions">
+          {topRail}
+          {strategy}
+          <details className="practice-more-tools">
+            <summary>{lang === 'es' ? 'Herramientas' : 'Tools'} <span aria-hidden>⌄</span></summary>
+            <div className="practice-more-tools__menu">
+              {menuHeaderTools}
+              {menuExerciseStars}
+              {progress}
+              {tools}
+              {dictionary}
+            </div>
+          </details>
+          {finishNotice}
+        </div>
+      </ExamPracticeSideColumnAnchor>
+    );
+  }
 
   const rail = (
     <div className="levels-listening-practice-side">
