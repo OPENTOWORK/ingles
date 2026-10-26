@@ -895,7 +895,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
                 }
               />
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                {phoneSkillSteps ? null : speakingInstructionsEl}
+                {speakingInstructionsEl}
           <B2SpeakingPartSession
             key={`${selectedPart.id}-${examSlot}-${speakingDraftEpoch}`}
             part={selectedPart}

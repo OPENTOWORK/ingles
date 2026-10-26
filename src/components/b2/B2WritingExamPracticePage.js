@@ -1123,7 +1123,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                       }
                     />
                     <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                      {!phoneSkillSteps || partNumber === 8 ? writingInstructionsEl : null}
+                      {writingInstructionsEl}
 
                   {partNumber === 8 ? (
                     <>

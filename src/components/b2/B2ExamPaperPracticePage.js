@@ -3831,10 +3831,10 @@ function B2ExamPaperPracticePageInner({
                   }
                 />
 
-                {phoneSkillSteps ? null : listeningBriefingEl}
+                {listeningBriefingEl}
 
                 <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                  {phoneSkillSteps ? null : partInstructionsEl}
+                  {partInstructionsEl}
 
                 {showAudioFromEnunciado && preguntaAudiosError ? (
                   <p

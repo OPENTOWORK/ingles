@@ -2363,7 +2363,7 @@ function B2ReadingExamsPageInner() {
                 }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={directionsLabel}
-                showDirections={!phoneSkillSteps}
+                showDirections={true}
                 textLabel={isUoeExamInlinePart || isPart6GappedText ? null : 'Text'}
                 questionsLabel="Questions"
                 stripExampleFromDirections={isUoeExamInlinePart}

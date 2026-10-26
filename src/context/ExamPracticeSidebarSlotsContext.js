@@ -13,6 +13,7 @@ const ExamPracticeSidebarSlotsContext = createContext({
 export function ExamPracticeSidebarSlotsProvider({
   exerciseStars = null,
   compactToolbar = false,
+  testLabel = null,
   menuHeaderTools = null,
   menuTimerTools = null,
   menuExerciseStars = null,
@@ -27,6 +28,7 @@ export function ExamPracticeSidebarSlotsProvider({
     () => ({
       exerciseStars,
       compactToolbar,
+      testLabel,
       menuHeaderTools,
       menuTimerTools,
       menuExerciseStars,
@@ -36,7 +38,7 @@ export function ExamPracticeSidebarSlotsProvider({
       portSideRailToToolbar,
       sideRailToolbarMounted,
     }),
-    [exerciseStars, compactToolbar, menuHeaderTools, menuTimerTools, menuExerciseStars, lang, sideRailMountRef, overlayContainerRef, portSideRailToToolbar, sideRailToolbarMounted],
+    [exerciseStars, compactToolbar, testLabel, menuHeaderTools, menuTimerTools, menuExerciseStars, lang, sideRailMountRef, overlayContainerRef, portSideRailToToolbar, sideRailToolbarMounted],
   );
 
   return (

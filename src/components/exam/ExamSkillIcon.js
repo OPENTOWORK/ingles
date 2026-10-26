@@ -1,3 +1,4 @@
+import { BookOpen } from 'lucide-react';
 import { TrainingSkillIcon } from '@/components/training/TrainingIcons';
 
 const THEME_TO_SKILL = {
@@ -22,7 +23,7 @@ export default function ExamSkillIcon({ theme = 'reading', className = '', size 
 
   return (
     <span className={[sizeClass, className].filter(Boolean).join(' ')} aria-hidden>
-      <TrainingSkillIcon skillId={skillId} className="exam-skill-icon__svg" />
+      {skillId === 'reading' ? <BookOpen className="exam-skill-icon__svg" strokeWidth={1.5} /> : <TrainingSkillIcon skillId={skillId} className="exam-skill-icon__svg" />}
     </span>
   );
 }
