@@ -3293,6 +3293,15 @@ body:not(.reading-night-mode) .precios-page .page-hero__mascot-img {
 }
 
 
+/* B2 exam practice surfaces use the same primary DRALO typography. */
+.levels-exam-practice-root,
+.levels-exam-practice-root button,
+.levels-exam-practice-root input,
+.levels-exam-practice-root select,
+.levels-exam-practice-root textarea {
+  font-family: var(--font-landing), 'Segoe UI', system-ui, sans-serif;
+}
+
 /* Writing: keep the editor visually aligned with the DRALO interface. */
 .levels-b2-writing-panel__textarea {
   font-family: inherit;
