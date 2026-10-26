@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
@@ -307,10 +306,6 @@ export default function B2ExamInlineMcqClozePassage({
                     </span>
                   </button>
 
-                  <PracticeAnswerCorrection
-                    visible={!hideFeedback && !!isChecked && !selectedOption?.correcta}
-                    answer={getOptionWord(group.options.find((option) => option.correcta))}
-                  />
 
                   {isOpen && typeof document !== 'undefined'
                     ? createPortal(

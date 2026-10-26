@@ -1,6 +1,5 @@
 'use client';
 
-import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
 
 import { useMemo, useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
@@ -254,10 +253,6 @@ export default function B2ExamInlinePart6Passage({
                         })}
                       </select>
                     </label>
-                    <PracticeAnswerCorrection
-                      visible={!hideFeedback && !!isChecked && !selectedOption?.correcta}
-                      answer={getOptionLetter(group.options.find((option) => option.correcta))}
-                    />
                   </span>
                 );
               })}
