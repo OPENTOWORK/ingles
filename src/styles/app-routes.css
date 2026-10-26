@@ -21228,3 +21228,130 @@ body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .
 body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
   background: none; border: 0; box-shadow: none;
 }
+
+/* Match the approved practice preview's type scale, spacing and line icons. */
+.levels-exam-practice-root .levels-b2-practice--compact-toolbar[data-skill-theme] {
+  max-width: 1040px;
+  width: 100%;
+  margin-inline: auto;
+  font-family: var(--font-landing), 'Segoe UI', sans-serif;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  padding: 20px;
+  border-top-width: 2px;
+  gap: 14px;
+  box-shadow: none;
+  margin-bottom: 12px;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  gap: 7px 14px;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title,
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-headline {
+  font-family: var(--font-landing), 'Segoe UI', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -.5px;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__category-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: var(--skill-accent);
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .practice-paper-current-part {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #64748b;
+}
+.levels-b2-practice--compact-toolbar .practice-paper-level { font-size: 12px; font-weight: 600; }
+.levels-b2-practice--compact-toolbar .practice-change-part,
+.levels-b2-practice--compact-toolbar .practice-more-tools > summary,
+.levels-b2-practice--compact-toolbar .practice-compact-actions .exam-notes-popover__trigger,
+.levels-b2-practice--compact-toolbar .practice-compact-actions > .exam-practice-rail-disclosure > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #475569;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: normal;
+  box-shadow: none;
+}
+.levels-b2-practice--compact-toolbar .exam-notes-popover__trigger-label {
+  font-family: inherit; font-size: 12px; font-weight: 400;
+  color: #475569; text-transform: none; letter-spacing: normal;
+}
+.levels-b2-practice--compact-toolbar .practice-compact-toolbar {
+  padding: 11px 12px;
+  gap: 8px;
+  min-height: 66px;
+  margin-bottom: 24px;
+  border-radius: 11px;
+}
+.practice-simple-timer {
+  display: inline-flex; align-items: center; gap: 9px;
+  color: #475569; font-family: inherit; font-size: 12px;
+}
+.practice-simple-timer__time {
+  min-width: 43px; font-size: 15px; line-height: 1.5;
+  font-weight: 600; color: #1d1857; font-variant-numeric: tabular-nums;
+}
+.practice-simple-timer__play {
+  display: grid; place-items: center; width: 30px; height: 30px;
+  padding: 0; border: 0; border-radius: 7px;
+  background: #1d1857; color: #fff; cursor: pointer;
+}
+.practice-simple-timer__play:focus-visible { outline: 2px solid #0284c7; outline-offset: 3px; }
+.practice-timer-menu-actions { display: grid; gap: 5px; }
+.practice-timer-menu-actions > button {
+  padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 7px;
+  background: #fff; color: #475569; font: inherit; font-size: 12px; text-align: left; cursor: pointer;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split-card__title-row--title-mode .levels-exam-split-card__part-title {
+  font-family: var(--font-landing), 'Segoe UI', sans-serif;
+  font-size: 18px; line-height: 1.35; letter-spacing: -.3px; font-weight: 700;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split-card {
+  padding: 22px; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: none;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split__enunciado {
+  background: #fafbfe; border-left: 3px solid var(--skill-accent, #0284c7);
+  border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.75;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split__enunciado p { font-size: 13px; line-height: 1.75; }
+.levels-b2-practice--compact-toolbar .levels-exam-split__section-title {
+  font-size: 11px; font-weight: 600; letter-spacing: .04em;
+}
+body.reading-night-mode .practice-simple-timer,
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .practice-paper-current-part { color: #a6b4c9; }
+body.reading-night-mode .practice-simple-timer__time { color: #eeeaff; }
+body.reading-night-mode .practice-simple-timer__play { background: #c4b5fd; color: #192132; }
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__category-icon,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-change-part,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-more-tools > summary,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-compact-actions .exam-notes-popover__trigger,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-compact-actions > .exam-practice-rail-disclosure > button,
+body.reading-night-mode .practice-timer-menu-actions > button {
+  background: #192132; color: #e2e8f0; border-color: #394458;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar .exam-notes-popover__trigger-label { color: #e2e8f0; }
+body.reading-night-mode .levels-b2-practice--compact-toolbar .levels-exam-split__enunciado { background: #172132; }
+@media (max-width: 600px) {
+  .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header { padding: 16px; }
+  .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-headline { font-size: 18px; }
+  .levels-b2-practice--compact-toolbar .levels-exam-split-card { padding: 16px; }
+}

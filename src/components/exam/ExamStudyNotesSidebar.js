@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
+import { NotebookPen } from 'lucide-react';
 import { useExamPracticeSidebarSlots } from '@/context/ExamPracticeSidebarSlotsContext';
 import { useFloatingOverlayTransition } from '@/hooks/useFloatingOverlayTransition';
 import { useStudyNotes } from '@/hooks/useStudyNotes';
@@ -264,7 +265,7 @@ export default function ExamStudyNotesSidebar({
         aria-haspopup="dialog"
       >
         <span className="exam-notes-popover__trigger-icon" aria-hidden>
-          📝
+          <NotebookPen size={16} strokeWidth={1.5} />
         </span>
         <span className="exam-notes-popover__trigger-label">{labels.toggle}</span>
       </button>

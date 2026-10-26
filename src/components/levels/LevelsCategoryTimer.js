@@ -1,5 +1,7 @@
 'use client';
 
+import { Clock3, Play, Pause } from 'lucide-react';
+
 /**
  * @param {object} props
  * @param {string} props.categoryLabel
@@ -32,6 +34,7 @@ export default function LevelsCategoryTimer({
   timerHidden = false,
   onToggleTimerHidden,
   lang = 'en',
+  compact = false,
 }) {
   if (variant === 'hidden') return null;
 
@@ -61,6 +64,24 @@ export default function LevelsCategoryTimer({
         : variant === 'prominent'
           ? ' levels-b2-timer--prominent'
           : '';
+
+  if (compact) {
+    const playLabel = isRunning ? labels.pause : isPaused || isStopped ? labels.resume : labels.start;
+    return (
+      <div className="practice-simple-timer" role="group" aria-label={labels.timer}>
+        <Clock3 size={15} strokeWidth={1.5} aria-hidden="true" />
+        <span className="practice-simple-timer__time" aria-live="off">
+          {timerHidden ? labels.timerHidden : String(timeLabel || '0:00').padStart(5, '0')}
+        </span>
+        {showTransportControls ? (
+          <button type="button" className="practice-simple-timer__play"
+            onClick={isRunning ? onPause : handlePlay} aria-label={playLabel} title={playLabel}>
+            {isRunning ? <Pause size={13} fill="currentColor" aria-hidden="true" /> : <Play size={13} fill="currentColor" aria-hidden="true" />}
+          </button>
+        ) : null}
+      </div>
+    );
+  }
 
   return (
     <div className={`levels-b2-timer${variantClass}`}>

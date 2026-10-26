@@ -1,5 +1,6 @@
 'use client';
 
+import { SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { useExamPracticeSidebarSlots } from '@/context/ExamPracticeSidebarSlotsContext';
 import ExamPracticeSideColumnAnchor from '@/components/exam/ExamPracticeSideColumnAnchor';
 
@@ -14,7 +15,7 @@ export default function ExamPracticeSideRail({
   dictionary = null,
   finishNotice = null,
 }) {
-  const { compactToolbar, portSideRailToToolbar, menuHeaderTools, menuExerciseStars, lang } = useExamPracticeSidebarSlots();
+  const { compactToolbar, portSideRailToToolbar, menuHeaderTools, menuTimerTools, menuExerciseStars, lang } = useExamPracticeSidebarSlots();
 
   if (!topRail && !strategy && !progress && !tools && !dictionary && !finishNotice) return null;
 
@@ -25,9 +26,10 @@ export default function ExamPracticeSideRail({
           {topRail}
           {strategy}
           <details className="practice-more-tools">
-            <summary>{lang === 'es' ? 'Herramientas' : 'Tools'} <span aria-hidden>⌄</span></summary>
+            <summary><SlidersHorizontal size={15} strokeWidth={1.5} aria-hidden="true" />{lang === 'es' ? 'Herramientas' : 'Tools'}<ChevronDown size={15} strokeWidth={1.5} aria-hidden="true" /></summary>
             <div className="practice-more-tools__menu">
               {menuHeaderTools}
+              {menuTimerTools}
               {menuExerciseStars}
               {progress}
               {tools}
