@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { Lightbulb, ChevronDown } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { useExamPracticeSidebarSlots } from '@/context/ExamPracticeSidebarSlotsContext';
 import { useFloatingOverlayTransition } from '@/hooks/useFloatingOverlayTransition';
@@ -52,6 +53,9 @@ export default function ExamPracticeRailDisclosure({
   overlayContainerRef = null,
   children,
 }) {
+  const { compactToolbar } = useExamPracticeSidebarSlots();
+  const strategyButton = compactToolbar && /^Strategy/.test(title);
+  const buttonTitle = strategyButton ? 'Strategy' : title;
   const [open, setOpen] = useState(false);
   const [panelStyle, setPanelStyle] = useState(null);
   const triggerRef = useRef(null);
@@ -157,10 +161,11 @@ export default function ExamPracticeRailDisclosure({
         aria-expanded={open}
         aria-controls={panelId}
       >
-        <span>{title}</span>
-        <span className="exam-practice-rail-disclosure__chevron" aria-hidden>
-          {open ? '−' : '+'}
-        </span>
+        {strategyButton ? <Lightbulb size={16} strokeWidth={1.5} aria-hidden="true" /> : null}
+        <span>{buttonTitle}</span>
+        {strategyButton ? null : <span className="exam-practice-rail-disclosure__chevron" aria-hidden>
+          {compactToolbar ? <ChevronDown size={14} /> : open ? '−' : '+'}
+        </span>}
       </button>
       {floatingLayer}
     </aside>

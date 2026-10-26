@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { landingFont } from '@/components/home/landing/landingFont';
+import { ArrowLeft, BookOpen } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import SiteMascot from '@/components/SiteMascot';
 import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
@@ -590,6 +591,7 @@ export function B2ExamPracticeChrome({
 
   const categoryTimerEl = showCategoryTimer ? (
     <LevelsCategoryTimer
+      compact={compactPracticeToolbar}
       categoryLabel=""
       timeLabel={timerLabel}
       variant={effectiveTimerVariant}
@@ -704,7 +706,7 @@ export function B2ExamPracticeChrome({
               <div className="levels-b2-practice__title-block">
                 {skillPracticeTheme ? (
                   <span className="levels-b2-practice__category-icon" aria-hidden="true">
-                    <ExamSkillIcon theme={skillPracticeTheme} size="md" />
+                    {compactPracticeToolbar && skillPracticeTheme === 'reading' ? <BookOpen size={18} strokeWidth={1.5} /> : <ExamSkillIcon theme={skillPracticeTheme} size="md" />}
                   </span>
                 ) : null}
                 {parsedTitle.level || (!skillPracticeTheme && modeBadge) ? (
@@ -750,8 +752,8 @@ export function B2ExamPracticeChrome({
                   aria-controls="practice-part-menu"
                   onClick={() => setSkillNavOpen((open) => !open)}
                 >
+                  <ArrowLeft size={15} strokeWidth={1.5} aria-hidden="true" />
                   {lang === 'es' ? 'Cambiar parte' : 'Change part'}
-                  <span aria-hidden>{skillNavOpen ? ' ▴' : ' ▾'}</span>
                 </button>
               </div>
             ) : null}
@@ -882,6 +884,12 @@ export function B2ExamPracticeChrome({
               exerciseStars={sidebarExerciseStars}
               compactToolbar={compactPracticeToolbar}
               menuHeaderTools={headerTools}
+              menuTimerTools={compactPracticeToolbar ? (
+                <div className="practice-timer-menu-actions">
+                  {timerControls?.stop ? <button type="button" onClick={timerControls.stop}>{lang === 'es' ? 'Detener cronómetro' : 'Stop timer'}</button> : null}
+                  {showTimerHideToggle ? <button type="button" onClick={handleToggleTimerHidden}>{lang === 'es' ? (resolvedTimerHidden ? 'Mostrar cronómetro' : 'Ocultar cronómetro') : (resolvedTimerHidden ? 'Show timer' : 'Hide timer')}</button> : null}
+                </div>
+              ) : null}
               menuExerciseStars={exerciseStarsBadge}
               lang={lang}
               overlayContainerRef={workPanelRef}

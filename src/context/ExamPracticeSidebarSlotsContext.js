@@ -14,6 +14,7 @@ export function ExamPracticeSidebarSlotsProvider({
   exerciseStars = null,
   compactToolbar = false,
   menuHeaderTools = null,
+  menuTimerTools = null,
   menuExerciseStars = null,
   lang = 'en',
   overlayContainerRef = null,
@@ -27,6 +28,7 @@ export function ExamPracticeSidebarSlotsProvider({
       exerciseStars,
       compactToolbar,
       menuHeaderTools,
+      menuTimerTools,
       menuExerciseStars,
       lang,
       sideRailMountRef,
@@ -34,7 +36,7 @@ export function ExamPracticeSidebarSlotsProvider({
       portSideRailToToolbar,
       sideRailToolbarMounted,
     }),
-    [exerciseStars, compactToolbar, menuHeaderTools, menuExerciseStars, lang, sideRailMountRef, overlayContainerRef, portSideRailToToolbar, sideRailToolbarMounted],
+    [exerciseStars, compactToolbar, menuHeaderTools, menuTimerTools, menuExerciseStars, lang, sideRailMountRef, overlayContainerRef, portSideRailToToolbar, sideRailToolbarMounted],
   );
 
   return (
