@@ -312,13 +312,14 @@ export function buildWritingMarkPopupNotes({
   const normProblem = normalizeComparable(problem);
   const normChip = normalizeComparable(chip);
 
-  if (severity && /^(minor|medium|major)$/i.test(severity)) {
-    notes.push(isEn ? `Severity: ${severity}` : `Gravedad: ${severity}`);
-  }
-
   if (why) notes.push(why);
 
-  if (problem && normProblem !== normWhy) {
+  const isInternalCodeOnly =
+    /^(ww|rep\.?\s*vocab\.?|spelling|gram|grammar|voc|vocabulary|cont|content|good)$/i.test(
+      problem,
+    );
+
+  if (problem && !isInternalCodeOnly && normProblem !== normWhy) {
     const chipIsSubset =
       normChip && (normProblem.includes(normChip) || normProblem.startsWith(normChip));
     if (normProblem !== normChip || problem.length > chip.length + 8 || chipIsSubset) {
