@@ -10885,6 +10885,24 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
 }
 
+.b2-writing-essay-instructions__task {
+  margin-top: 1.25rem;
+}
+
+.b2-writing-essay-instructions__task .b2-writing-task__question {
+  margin-bottom: 1rem;
+}
+
+.b2-writing-essay-instructions__emphasis {
+  font-weight: 700;
+  background: color-mix(in srgb, var(--skill-accent, #059669) 12%, transparent);
+  color: inherit;
+  border-radius: 4px;
+  padding: 0.05em 0.15em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .b2-writing-task__title {
   margin: 0 0 0.85rem;
   font-size: 1.125rem;
