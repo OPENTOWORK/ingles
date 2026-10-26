@@ -113,7 +113,7 @@ export default function WritingInteractiveAnnotatedText({
     <div ref={containerRef} className="writing-annotated-text writing-annotated-text--interactive">
       <p className="writing-annotated-text__hint">
         {isEn
-          ? 'Tap a highlighted word — correction appears above it (like on paper).'
+          ? 'Tap the highlights to find explanations'
           : 'Pulsa una palabra resaltada — la corrección aparece encima (como en papel).'}
       </p>
 
