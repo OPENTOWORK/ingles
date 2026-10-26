@@ -546,6 +546,10 @@ function ConnectionUsersActivityPanel({
                   </div>
                   <div className={styles.userStats}>
                     <p className={styles.userTime}>Tiempo activo: {user.totalLabel}</p>
+                    <p className={styles.userSessions}>
+                      Tiempo de estudio: {user.studyLabel || '0 s'}
+                      {Number.isFinite(user.studyRatio) ? ` · ${user.studyRatio}% del tiempo activo` : ''}
+                    </p>
                     <p className={styles.userSessions}>{user.sessionCount} sesión(es)</p>
                   </div>
                 </div>
@@ -1716,11 +1720,23 @@ export default function AdminAnalyticsPanels({
             <div className={styles.kpiGrid}>
               <KpiCard
                 icon={Clock3}
-                label="Tiempo total"
+                label="Tiempo activo total"
                 value={connectionAnalytics.totalSessionLabel}
-                hint="Suma de sesiones en el rango"
+                hint="Suma de sesiones activas en el rango"
                 accent="#0ea5e9"
                 iconBg="#f0f9ff"
+              />
+              <KpiCard
+                icon={BookOpen}
+                label="Tiempo de estudio"
+                value={connectionAnalytics.studyLabel || '0 s'}
+                hint={
+                  Number.isFinite(connectionAnalytics.studyRatio)
+                    ? `${connectionAnalytics.studyRatio}% del tiempo activo`
+                    : 'Tiempo en secciones de estudio'
+                }
+                accent="#8b5cf6"
+                iconBg="#f5f3ff"
               />
               <KpiCard
                 icon={Users}
