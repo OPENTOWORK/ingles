@@ -8,6 +8,7 @@ import {
 } from '@/lib/userActivity';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { isStarredTeamMember, resolveStarredTeamUserIds } from '@/lib/adminStarredUsers';
+import { classifyStudyPath } from '@/lib/studyFocus';
 
 async function resolveUserIdsForRoleFilter(db, roleId) {
   if (!roleId || roleId === 'all') return null;
@@ -56,13 +57,18 @@ export async function GET(req) {
     const db = auth.db;
     const starredUserIds = excludeStaff ? await resolveStarredTeamUserIds(db) : null;
 
-    const [presenceRes, sessionsRes] = await Promise.all([
+    const [presenceRes, sessionsRes, navigationRes] = await Promise.all([
       db.from('usuario_presencia').select('user_id, last_seen_at, total_session_seconds'),
       db
         .from('usuario_sesiones_app')
         .select('user_id, started_at, duration_seconds')
         .order('started_at', { ascending: false })
         .limit(10000),
+      db
+        .from('usuario_navegacion')
+        .select('user_id, path, visited_at, duration_seconds')
+        .order('visited_at', { ascending: false })
+        .limit(20000),
     ]);
 
     if (presenceRes.error) {
@@ -70,6 +76,9 @@ export async function GET(req) {
     }
     if (sessionsRes.error) {
       console.error('[admin/user-activity] sessions', sessionsRes.error);
+    }
+    if (navigationRes.error) {
+      console.error('[admin/user-activity] navigation', navigationRes.error);
     }
 
     const byUser = {};
@@ -98,6 +107,21 @@ export async function GET(req) {
     const connection = buildConnectionAnalytics(sessions, startDate, endDate);
     const activeUsersBase = buildActiveUsersActivityReport(sessions, startDate, endDate);
 
+    const studySecondsByUser = new Map();
+    for (const row of navigationRes.data || []) {
+      if (isStarredTeamMember(starredUserIds, row.user_id)) continue;
+      if (!row.user_id || !withinDateRange(row.visited_at, startDate, endDate)) continue;
+      if (allowedUserIds !== null && !allowedUserIds.has(row.user_id)) continue;
+      if (userIdFilter && String(row.user_id) !== userIdFilter) continue;
+
+      const { isStudy } = classifyStudyPath(row.path);
+      if (!isStudy) continue;
+
+      const key = String(row.user_id);
+      const seconds = Math.max(0, Number(row.duration_seconds) || 0);
+      studySecondsByUser.set(key, (studySecondsByUser.get(key) || 0) + seconds);
+    }
+
     const profileIds = activeUsersBase.map((row) => row.userId);
     const profileById = new Map();
     if (profileIds.length > 0) {
@@ -116,10 +140,18 @@ export async function GET(req) {
 
     const activeUsers = activeUsersBase.map((row) => {
       const profile = profileById.get(row.userId);
+      const rawStudySeconds = studySecondsByUser.get(row.userId) || 0;
+      const studySeconds = Math.min(row.totalSeconds, rawStudySeconds);
+      const studyRatio =
+        row.totalSeconds > 0 ? Math.round((studySeconds / row.totalSeconds) * 100) : 0;
+
       return {
         ...row,
         name: profile?.nombre || profile?.name || '—',
         email: profile?.email || '—',
+        studySeconds,
+        studyLabel: formatSessionDuration(studySeconds),
+        studyRatio,
       };
     });
 
