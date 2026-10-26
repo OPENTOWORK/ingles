@@ -5,6 +5,7 @@ import {
   buildSessionChartSeries,
   isUserOnline,
   formatSessionDuration,
+  withinDateRange,
 } from '@/lib/userActivity';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { isStarredTeamMember, resolveStarredTeamUserIds } from '@/lib/adminStarredUsers';
@@ -155,10 +156,21 @@ export async function GET(req) {
       };
     });
 
+    const totalStudySeconds = activeUsers.reduce((sum, row) => sum + (row.studySeconds || 0), 0);
+    const connectionWithStudy = {
+      ...connection,
+      studySeconds: totalStudySeconds,
+      studyLabel: formatSessionDuration(totalStudySeconds),
+      studyRatio:
+        connection.totalSessionSeconds > 0
+          ? Math.round((totalStudySeconds / connection.totalSessionSeconds) * 100)
+          : 0,
+    };
+
     return NextResponse.json({
       byUser,
       chart,
-      connection,
+      connection: connectionWithStudy,
       activeUsers,
       appliedRoleId: roleId && roleId !== 'all' ? String(roleId) : 'all',
       appliedUserId: userIdFilter || '',
