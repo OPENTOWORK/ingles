@@ -8,7 +8,6 @@ import { callExamWritingCorrection,
 } from '@/lib/ai/draloAiClient';
 import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
 import WritingFeedbackPage from '@/components/writing/v3/WritingFeedbackPage';
-import DraloThinking from '@/components/dralo/DraloThinking';
 import { trackWritingErrors } from '@/lib/errorTracker';
 import { writingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
 import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
@@ -374,13 +373,37 @@ export default function B2WritingLongFormAiPanel({
       )}
 
       {!examMode && loading ? (
-        <DraloThinking
-          lang={lang}
-          size={120}
-          label={
-            isEn ? 'Dralo is marking your writing' : 'Dralo está corrigiendo tu writing'
-          }
-        />
+        <div
+          className="levels-b2-writing-panel__marking-status"
+          role="status"
+          aria-live="polite"
+        >
+          <span className="levels-b2-writing-panel__marking-spinner" aria-hidden="true" />
+          <p className="levels-b2-writing-panel__marking-title">
+            {isEn ? 'Dralo is marking your writing…' : 'Dralo está corrigiendo tu writing…'}
+          </p>
+          <div className="levels-b2-writing-panel__marking-time">
+            <span className="levels-b2-writing-panel__marking-clock" aria-hidden="true">
+              ◷
+            </span>
+            <span>
+              {isEn ? (
+                <>
+                  This can take up to <strong>2 minutes</strong>.
+                </>
+              ) : (
+                <>
+                  Esto puede tardar hasta <strong>2 minutos</strong>.
+                </>
+              )}
+            </span>
+          </div>
+          <p className="levels-b2-writing-panel__marking-note">
+            {isEn
+              ? 'You can stay on this page while we check your answer and prepare your feedback.'
+              : 'Puedes quedarte en esta página mientras revisamos tu respuesta y preparamos el feedback.'}
+          </p>
+        </div>
       ) : null}
 
       {!examMode && lastError ? (
