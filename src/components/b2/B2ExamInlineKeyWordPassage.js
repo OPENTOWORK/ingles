@@ -1,7 +1,5 @@
 'use client';
 
-import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
-import { resolveInstantFeedbackCorrectAnswer } from '@/utils/buildOpenGapExplanationEntries';
 
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
@@ -38,8 +36,6 @@ export default function B2ExamInlineKeyWordPassage({
   scoringV2Part4 = false,
   onCheckGap,
   openAnswerMap,
-  openAnswerRows = [],
-  part4ParsedKeys = null,
   hideFeedback = false,
   aiHintsByKey = {},
   labels = {},
@@ -118,10 +114,6 @@ export default function B2ExamInlineKeyWordPassage({
                       if (isAnswerLocked) return;
                       onInputChange(questionKey, e.target.value);
                     }}
-                  />
-                  <PracticeAnswerCorrection
-                    visible={isAnswerLocked && (hasV2Grade ? grade.score < grade.maxScore : checkResult === false)}
-                    answer={resolveInstantFeedbackCorrectAnswer(questionNumber, openAnswerMap, { openAnswerRows, part4ParsedKeys })}
                   />
                   {!hideFeedback && !isAnswerLocked ? (
                     <button

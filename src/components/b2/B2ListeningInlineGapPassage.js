@@ -1,7 +1,5 @@
 'use client';
 
-import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
-import { resolveInstantFeedbackCorrectAnswer } from '@/utils/buildOpenGapExplanationEntries';
 
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 
@@ -87,10 +85,6 @@ export default function B2ListeningInlineGapPassage({
                       readOnly={isAnswerLocked}
                       aria-label={`Gap ${questionNumber}`}
                       onChange={(e) => { if (!isAnswerLocked) onInputChange?.(questionKey, e.target.value); }}
-                    />
-                    <PracticeAnswerCorrection
-                      visible={isAnswerLocked && checkResult === false}
-                      answer={resolveInstantFeedbackCorrectAnswer(questionNumber, openAnswerMap)}
                     />
                     {!hideFeedback && !hideCheck && !isAnswerLocked ? (
                       <button
