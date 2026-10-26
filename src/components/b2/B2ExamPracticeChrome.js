@@ -4,6 +4,7 @@ import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { landingFont } from '@/components/home/landing/landingFont';
 import { usePathname } from 'next/navigation';
 import SiteMascot from '@/components/SiteMascot';
+import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
@@ -695,16 +696,23 @@ export function B2ExamPracticeChrome({
           <header className="levels-b2-practice__header">
             {compactSkillHeader ? (
               <div className="levels-b2-practice__title-block">
-                <div className="levels-b2-practice__title-meta">
-                  {modeBadge ? (
-                    <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
-                      {modeBadge}
-                    </p>
-                  ) : null}
-                  {parsedTitle.level ? (
-                    <span className="levels-b2-practice__title-level">{parsedTitle.level}</span>
-                  ) : null}
-                </div>
+                {skillPracticeTheme ? (
+                  <span className="levels-b2-practice__category-icon" aria-hidden="true">
+                    <ExamSkillIcon theme={skillPracticeTheme} size="md" />
+                  </span>
+                ) : null}
+                {parsedTitle.level || (!skillPracticeTheme && modeBadge) ? (
+                  <div className="levels-b2-practice__title-meta">
+                    {!skillPracticeTheme && modeBadge ? (
+                      <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
+                        {modeBadge}
+                      </p>
+                    ) : null}
+                    {parsedTitle.level ? (
+                      <span className="levels-b2-practice__title-level">{parsedTitle.level}</span>
+                    ) : null}
+                  </div>
+                ) : null}
                 <h1 className="levels-b2-practice__title">
                   <span className="levels-b2-practice__title-headline">
                     {parsedTitle.headline || title}
