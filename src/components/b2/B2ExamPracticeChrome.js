@@ -35,7 +35,7 @@ import { resolvePartFinishNoticeFromProgress } from '@/utils/partFinishNoticeDis
 import { isAdminRole } from '@/utils/authRoles';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
-import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
+import { starsFromPartExerciseScore, formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
@@ -335,7 +335,7 @@ export function B2ExamPracticeChrome({
 
   /** Móvil: partes del skill para el paso de selección previo al ejercicio. */
   const phonePartItems = useMemo(() => {
-    if (!phoneSkillChrome || !partsData?.length) return [];
+    if (!compactPracticeToolbar || !partsData?.length) return [];
     return partsData.map((part) => {
       const n = Number(
         part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0,
@@ -350,7 +350,7 @@ export function B2ExamPracticeChrome({
       };
     });
   }, [
-    phoneSkillChrome,
+    compactPracticeToolbar,
     partsData,
     lang,
     getPartTabLabelProp,
@@ -361,14 +361,10 @@ export function B2ExamPracticeChrome({
   ]);
 
   const phoneStepView = useMemo(() => {
-    if (!phoneSkillChrome || phoneStep === 'exercise') return 'exercise';
-    if (phoneStep === 'instructions') return 'instructions';
-    if (!phonePartItems.length) {
-      if (loading) return 'parts-loading';
-      return phoneInstructions ? 'instructions' : 'exercise';
-    }
-    return phonePartItems.length > 1 ? 'parts' : 'instructions';
-  }, [phoneSkillChrome, phoneStep, phonePartItems.length, loading, phoneInstructions]);
+    if (!compactPracticeToolbar || phoneStep === 'exercise') return 'exercise';
+    if (!phonePartItems.length) return 'parts-loading';
+    return 'parts';
+  }, [compactPracticeToolbar, phoneStep, phonePartItems.length]);
 
   const phoneStepEyebrow = [parsedTitle.level, parsedTitle.headline || title]
     .filter(Boolean)
@@ -410,9 +406,7 @@ export function B2ExamPracticeChrome({
     compactSkillHeader && studyNotesPlacement === 'sidebar-top';
 
   const skillExercisePartNumber = skillExercisePartNumberEarly;
-  const currentPartTitle = getSkillPartPracticeTitle(
-    levelSlug || 'b2', skillExercisePartNumber, lang === 'es' ? 'es' : 'en',
-  );
+
 
   const skillExerciseStars = useMemo(() => {
     if (!skillExercisePartNumber || !examSlot) return 0;
@@ -694,7 +688,8 @@ export function B2ExamPracticeChrome({
 
       {!showPractice ? null : (
         <div
-          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}${compactPracticeToolbar ? ' levels-b2-practice--compact-toolbar' : ''}`}
+          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}${compactPracticeToolbar ? ' levels-b2-practice--compact-toolbar' : ''}${compactPracticeToolbar && phoneStepView !== 'exercise' ? ' levels-b2-practice--choosing-part' : ''}`}
+
 
           data-skill-theme={
             compactSkillHeader && skillPracticeTheme ? skillPracticeTheme : undefined
@@ -726,11 +721,6 @@ export function B2ExamPracticeChrome({
                     {parsedTitle.headline || title}
                   </span>
                 </h1>
-                {compactPracticeToolbar && currentPartTitle.heading ? (
-                  <p className="practice-paper-current-part">
-                    {[currentPartTitle.heading, currentPartTitle.subtitle].filter(Boolean).join(' · ')}
-                  </p>
-                ) : null}
               </div>
             ) : (
               <>
@@ -742,15 +732,13 @@ export function B2ExamPracticeChrome({
                 <h1 className="levels-b2-practice__title">{title}</h1>
               </>
             )}
-            {compactPracticeToolbar && partsData?.length > 1 ? (
+            {compactPracticeToolbar && phoneStepView === 'exercise' && partsData?.length > 1 ? (
               <div className="practice-paper-actions">
                 <span className="practice-paper-level">{String(levelSlug || parsedTitle.level || '').toUpperCase()}</span>
                 <button
                   type="button"
                   className="practice-change-part"
-                  aria-expanded={skillNavOpen}
-                  aria-controls="practice-part-menu"
-                  onClick={() => setSkillNavOpen((open) => !open)}
+                  onClick={() => setPhoneStep('parts')}
                 >
                   <ArrowLeft size={15} strokeWidth={1.5} aria-hidden="true" />
                   {lang === 'es' ? 'Cambiar parte' : 'Change part'}
@@ -799,13 +787,13 @@ export function B2ExamPracticeChrome({
 
           {phoneStepView === 'parts' ? (
             <ExamPracticePhonePartPicker
-              eyebrow={phoneStepEyebrow}
+              eyebrow={phoneViewport ? parsedTitle.headline || title : null}
               items={phonePartItems}
               selectedPartId={selectedPartId}
               lang={lang}
               onSelect={(item) => {
                 if (item.id !== selectedPartId) onSelectPart?.(item.part);
-                setPhoneStep(phoneInstructions ? 'instructions' : 'exercise');
+                setPhoneStep('exercise');
               }}
             />
           ) : null}
@@ -826,27 +814,7 @@ export function B2ExamPracticeChrome({
             </ExamPracticePhoneInstructions>
           ) : null}
 
-          {phoneSkillChrome ? null : compactPracticeToolbar ? (
-            !focusMode && skillNavOpen ? (
-              <section id="practice-part-menu" className="practice-part-menu" aria-label={lang === 'es' ? 'Elige una parte' : 'Choose a part'}>
-                <h2>{lang === 'es' ? 'Elige una parte' : 'Choose a part'}</h2>
-                <div className="practice-part-menu__grid">
-                  {partsData.map((part) => {
-                    const n = Number(part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0);
-                    const partTitle = getSkillPartPracticeTitle(levelSlug || 'b2', n, lang === 'es' ? 'es' : 'en');
-                    return (
-                      <button type="button" key={part.id} aria-pressed={selectedPartId === part.id}
-                        onClick={() => { onSelectPart?.(part); setSkillNavOpen(false); }}>
-                        <strong>{partTitle.heading}</strong>
-                        <span>{partTitle.subtitle}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-                {skillNavEl}
-              </section>
-            ) : null
-          ) : useFoldableSkillNav ? (
+          {compactPracticeToolbar ? null : phoneSkillChrome ? null : useFoldableSkillNav ? (
             <div className="exam-practice-skill-nav-disclosure">
               <button
                 type="button"
@@ -879,10 +847,17 @@ export function B2ExamPracticeChrome({
             </>
           )}
 
+          {phoneSkillChrome && phoneStepView === 'exercise' ? (
+            <button type="button" className="practice-mobile-change-part" onClick={() => setPhoneStep('parts')}>
+              <ArrowLeft size={15} aria-hidden="true" />{lang === 'es' ? 'Cambiar parte' : 'Change part'}
+            </button>
+          ) : null}
+
           <ExamPracticeToolsProvider>
             <ExamPracticeSidebarSlotsProvider
               exerciseStars={sidebarExerciseStars}
               compactToolbar={compactPracticeToolbar}
+              testLabel={examSlot ? formatSkillExerciseLabel(examSlot, lang) : null}
               menuHeaderTools={headerTools}
               menuTimerTools={compactPracticeToolbar ? (
                 <div className="practice-timer-menu-actions">

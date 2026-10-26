@@ -21364,3 +21364,75 @@ body.reading-night-mode .levels-b2-practice--compact-toolbar .levels-exam-split_
 body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .practice-compact-actions .exam-notes-popover__trigger-label {
   color: #e2e8f0;
 }
+
+/* Paper entry: the same part cards on mobile and desktop. */
+.levels-b2-practice--compact-toolbar[data-skill-theme="reading"] { --skill-accent: #38bdf8; }
+.levels-b2-practice__work-panel--phone-step > .exam-practice-tools-target { display: none !important; }
+.levels-b2-practice--choosing-part .phone-practice-step {
+  display: flex; flex-direction: column; gap: 20px; padding: 12px 0 24px;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__head { display: flex; flex-direction: column; gap: 6px; }
+.levels-b2-practice--choosing-part .phone-practice-step__title {
+  margin: 0; color: #1d1857; font: 700 24px/1.3 var(--font-landing), sans-serif; letter-spacing: -.4px;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__eyebrow {
+  margin: 0; color: var(--skill-accent); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__list {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+  margin: 0; padding: 0; list-style: none; overflow: visible;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__list > li { min-width: 0; }
+.levels-b2-practice--choosing-part .phone-practice-step__item {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 112px; height: 100%;
+  padding: 18px; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+  box-shadow: 0 1px 2px rgb(15 23 42 / .04); text-align: left; font: inherit; cursor: pointer;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__item:hover,
+.levels-b2-practice--choosing-part .phone-practice-step__item--current {
+  background: var(--skill-surface, #f0f9ff); border-color: var(--skill-accent, #38bdf8);
+}
+.levels-b2-practice--choosing-part .phone-practice-step__item:focus-visible { outline: 2px solid var(--skill-accent); outline-offset: 3px; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-body { display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: 9px; min-width: 0; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-num {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: auto; height: auto; min-height: 30px; padding: 5px 12px; border-radius: 999px;
+  background: var(--skill-surface-2, #e0f2fe); color: #1d1857; font-size: 12px; font-weight: 600; line-height: 1.5;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__item-sub { font-size: 13px; line-height: 1.5; color: #64748b; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-score { display: none; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-chevron { flex: none; color: var(--skill-accent); font-size: 18px; }
+.levels-b2-practice--compact-toolbar .practice-exercise-test-label {
+  margin: 7px 0 0; color: #64748b; font-size: 12px; line-height: 1.5; font-weight: 400;
+}
+.practice-mobile-change-part {
+  display: inline-flex; gap: 6px; align-items: center; align-self: flex-start;
+  margin: 0 0 10px; padding: 6px 0; border: 0; background: transparent; color: #475569; font: inherit; font-size: 12px;
+}
+@media (max-width: 760px) {
+  .levels-b2-practice--choosing-part .phone-practice-step__list { grid-template-columns: 1fr; gap: 8px; }
+  .levels-b2-practice--choosing-part .phone-practice-step__item { min-height: 88px; padding: 12px 14px; }
+  .levels-b2-practice--choosing-part .phone-practice-step__item-body { gap: 5px; }
+  .levels-b2-practice--choosing-part .phone-practice-step__list { overflow-y: auto; }
+  .levels-b2-practice--choosing-part .phone-practice-step { min-height: 0; padding: 5px 0 0; }
+}
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__title { color: #eeeaff; }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item { background: #192132; border-color: #394458; }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item--current { border-color: var(--skill-accent); }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item-num { background: #243b53; color: #e2e8f0; }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item-sub,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-exercise-test-label { color: #a6b4c9; }
+
+/* One soft purple page canvas throughout the light version of the site. */
+body:not(.reading-night-mode) {
+  background:
+    radial-gradient(48% 70% at 86% 18%, rgba(196, 181, 253, .42) 0%, rgba(196, 181, 253, 0) 70%),
+    radial-gradient(40% 50% at 0% 0%, rgba(237, 233, 254, .95) 0%, rgba(237, 233, 254, 0) 72%),
+    #fbfaff !important;
+  background-attachment: fixed !important;
+}
+body:not(.reading-night-mode) :is(.full-page-layout, .page-content),
+body:not(.reading-night-mode) .page-content > :is(main, .shell, .home-page, .home-landing),
+body:not(.reading-night-mode) :is(.levels-exam-practice-root, .exam-practice-level-hub, .niveles-level-page, .niveles-page--theory-hub, .exam-theory-topics-page, .exam-strategies-chapter-page, .contacto-page, .precios-page, .login-page) {
+  background: transparent !important;
+}
