@@ -94,6 +94,24 @@ export default function WritingInteractiveAnnotatedText({
 
   useEffect(() => {
     if (!popup) return undefined;
+
+    const syncPopupToAnchor = () => {
+      if (!popup.anchorEl?.isConnected) {
+        setPopup(null);
+        return;
+      }
+
+      const nextRect = popup.anchorEl.getBoundingClientRect();
+      setPopup((current) =>
+        current
+          ? {
+              ...current,
+              rect: nextRect,
+            }
+          : current,
+      );
+    };
+
     const onDocClick = (event) => {
       if (containerRef.current?.contains(event.target)) return;
       setPopup(null);
@@ -101,13 +119,19 @@ export default function WritingInteractiveAnnotatedText({
     const onEsc = (event) => {
       if (event.key === 'Escape') setPopup(null);
     };
+
     document.addEventListener('mousedown', onDocClick);
     document.addEventListener('keydown', onEsc);
+    window.addEventListener('scroll', syncPopupToAnchor, true);
+    window.addEventListener('resize', syncPopupToAnchor);
+
     return () => {
       document.removeEventListener('mousedown', onDocClick);
       document.removeEventListener('keydown', onEsc);
+      window.removeEventListener('scroll', syncPopupToAnchor, true);
+      window.removeEventListener('resize', syncPopupToAnchor);
     };
-  }, [popup]);
+  }, [popup?.anchorEl]);
 
   return (
     <div ref={containerRef} className="writing-annotated-text writing-annotated-text--interactive">
@@ -137,6 +161,7 @@ export default function WritingInteractiveAnnotatedText({
                 aria-label={getTeacherMarkChip(segment.tag, correction, segment.text)}
                 onClick={(event) => {
                   setPopup({
+                    anchorEl: event.currentTarget,
                     rect: event.currentTarget.getBoundingClientRect(),
                     tag: segment.tag,
                     phrase: segment.text,
