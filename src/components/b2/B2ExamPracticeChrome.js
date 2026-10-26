@@ -701,16 +701,18 @@ export function B2ExamPracticeChrome({
                     <ExamSkillIcon theme={skillPracticeTheme} size="md" />
                   </span>
                 ) : null}
-                <div className="levels-b2-practice__title-meta">
-                  {modeBadge ? (
-                    <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
-                      {modeBadge}
-                    </p>
-                  ) : null}
-                  {parsedTitle.level ? (
-                    <span className="levels-b2-practice__title-level">{parsedTitle.level}</span>
-                  ) : null}
-                </div>
+                {parsedTitle.level || (!skillPracticeTheme && modeBadge) ? (
+                  <div className="levels-b2-practice__title-meta">
+                    {!skillPracticeTheme && modeBadge ? (
+                      <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
+                        {modeBadge}
+                      </p>
+                    ) : null}
+                    {parsedTitle.level ? (
+                      <span className="levels-b2-practice__title-level">{parsedTitle.level}</span>
+                    ) : null}
+                  </div>
+                ) : null}
                 <h1 className="levels-b2-practice__title">
                   <span className="levels-b2-practice__title-headline">
                     {parsedTitle.headline || title}
