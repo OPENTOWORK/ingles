@@ -54,15 +54,12 @@ function WritingMarkPopup({ popup, onClose, lang, problemsText, strengthsText })
     <div className="writing-mark-popup" style={style} role="dialog" aria-label={chip}>
       <div className="writing-mark-popup__arrow" aria-hidden />
       <div className="writing-mark-popup__head">
-        <span className={`writing-mark-popup__chip writing-mark writing-mark--${tag}`}>{chip}</span>
         <button type="button" className="writing-mark-popup__close" onClick={onClose} aria-label="Close">
           ×
         </button>
       </div>
 
       <div className="writing-mark-popup__body">
-        <p className="writing-mark-popup__quote">"{phrase}"</p>
-
         {showCorrect ? (
           <p className="writing-mark-popup__arrow-fix">
             → <strong>"{correction.correct.replace(/^"|"$/g, '')}"</strong>
