@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { getWeeklyChallenge } from '@/data/weeklyTrainingChallenges';
+import { getWeeklyChallenge, getChallengeFromEmailLink } from '@/data/weeklyTrainingChallenges';
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { renderEmailTemplate, splitEmailDeliveryMeta } from '@/lib/renderEmailTemplate';
@@ -24,7 +24,7 @@ test('tuesday challenge mail uses the week item and hides the solution', () => {
   assert.equal(template.delay_minutos, 0);
   assert.equal(template.activo, true);
   assert.match(template.cuerpo, /^Preheader: /);
-  assert.match(template.cuerpo, /CTA: Comprobar mi respuesta/);
+  assert.match(template.cuerpo, /CTA: Ver reto en Dralo/);
   assert.equal(template.cuerpo.includes('solution'), false);
 
   const challenge = getWeeklyChallenge(FIRST_TUESDAY);
@@ -35,13 +35,15 @@ test('tuesday challenge mail uses the week item and hides the solution', () => {
   assert.equal('correct' in variables, false);
   assert.equal('solution' in variables, false);
   assert.equal(variables.challenge_prompt, challenge.prompt);
-  assert.match(variables.challenge_options, /^A\) speak\nB\) speaking\nC\) spoke$/);
+  assert.match(variables.challenge_options, /A\) speak/);
+  assert.match(variables.challenge_options, /B\) speaking/);
+  assert.equal((variables.challenge_options.match(/challenge_week=2026-10-20/g) || []).length, 3);
   assert.equal(variables.challenge_url, 'https://www.dralo.es/training/');
 
   const rendered = renderEmailTemplate(template.cuerpo, variables);
   const meta = splitEmailDeliveryMeta(rendered);
-  assert.equal(meta.preheader, 'Elige una opción antes de entrar. La explicación está en Dralo.');
-  assert.equal(meta.ctaLabel, 'Comprobar mi respuesta');
+  assert.equal(meta.preheader, 'Elige una respuesta y compruébala en Dralo.');
+  assert.equal(meta.ctaLabel, 'Ver reto en Dralo');
   assert.match(meta.text, /I’m not used to _____ English every day\./);
   assert.match(meta.text, /B\) speaking/);
   assert.equal(meta.text.includes(challenge.solution), false);
@@ -85,4 +87,32 @@ test('every weekly challenge is a three-option gap with one answer', () => {
     assert.equal(mail.challenge_prompt.includes(challenge.solution), false);
     assert.equal(Object.values(mail).join('\n').includes(challenge.solution), false);
   }
+});
+
+
+
+test('email answer links resolve the original challenge and reject invalid input', () => {
+  const vars = buildWeeklyChallengeEmailVariables(FIRST_TUESDAY);
+  const urls = vars.challenge_options.split('\n').filter((line) => line.startsWith('http'));
+  assert.equal(urls.length, 3);
+  for (const [index, raw] of urls.entries()) {
+    const url = new URL(raw);
+    const result = getChallengeFromEmailLink(url.searchParams.get('challenge_week'), url.searchParams.get('challenge_id'), url.searchParams.get('answer'));
+    assert.equal(result.challenge.id, 'used-to-ing');
+    assert.equal(result.answer, ['A', 'B', 'C'][index]);
+  }
+  assert.equal(getChallengeFromEmailLink('2026-10-21', 'used-to-ing', 'B'), null);
+  assert.equal(getChallengeFromEmailLink('2026-10-20', 'second-conditional', 'B'), null);
+  assert.equal(getChallengeFromEmailLink('2026-10-20', 'used-to-ing', 'D'), null);
+  assert.equal(getChallengeFromEmailLink('2026-02-30', 'used-to-ing', 'B'), null);
+});
+
+test('email choices render as links while plain text retains usable URLs', async () => {
+  const { buildBrandedEmailFromPlainText } = await import('@/lib/emailBrandedLayout');
+  const variables = buildWeeklyChallengeEmailVariables(FIRST_TUESDAY);
+  const { html, text } = buildBrandedEmailFromPlainText(variables.challenge_options);
+  assert.equal((html.match(/href="[^"]*challenge_week=2026-10-20/g) || []).length, 3);
+  assert.match(html, /answer=B/);
+  assert.match(html, /B\) speaking<\/a>/);
+  assert.match(text, /answer=B/);
 });

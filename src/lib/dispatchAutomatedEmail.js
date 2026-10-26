@@ -95,7 +95,14 @@ async function sendNow(template, to, variables, adminClient, replyTo) {
   });
 
   const subject = renderEmailTemplate(template.asunto, merged).trim();
-  const renderedBody = splitEmailDeliveryMeta(renderEmailTemplate(template.cuerpo, merged));
+  // Existing templates can be stored in the database; update the old wording at render time.
+  let templateBody = template.cuerpo;
+  if (template.trigger_event === 'weekly_tuesday_challenge') {
+    templateBody = templateBody
+      .replace('¿Cuál pondrías? Decídelo ahora, antes de abrir Dralo. Allí compruebas si era esa y ves qué reforzar.', 'Pulsa la respuesta que creas correcta para comprobarla en Dralo.')
+      .replace('CTA: Comprobar mi respuesta', 'CTA: Ver reto en Dralo');
+  }
+  const renderedBody = splitEmailDeliveryMeta(renderEmailTemplate(templateBody, merged));
   const text = renderedBody.text;
   const branding = await loadPersistedEmailBranding(adminClient);
   const { html } = buildBrandedEmailFromPlainText(text, {
@@ -268,3 +275,4 @@ export async function processAutomatedEmailQueue(adminClient, { limit = 25 } = {
 
   return { processed, total: rows?.length || 0 };
 }
+
