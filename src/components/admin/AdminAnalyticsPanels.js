@@ -29,6 +29,7 @@ import {
   Users,
 } from 'lucide-react';
 import { formatSessionDuration } from '@/lib/userActivity';
+import { classifyStudyPath } from '@/lib/studyFocus';
 import { isStudentRole } from '@/utils/authRoles';
 import { useReadingNightMode } from '@/hooks/useReadingNightMode';
 import AdminLandingPass from './AdminLandingPass';
@@ -427,6 +428,38 @@ function ActivityHeatmap({ heatmap = [], horaPico = '-', diaPico = '-' }) {
   );
 }
 
+function groupConnectionPagesBySection(pages = []) {
+  const sections = new Map();
+
+  for (const page of pages) {
+    const { area, isStudy } = classifyStudyPath(page.path);
+    if (!sections.has(area)) {
+      sections.set(area, {
+        area,
+        isStudy,
+        totalSeconds: 0,
+        pages: [],
+      });
+    }
+
+    const section = sections.get(area);
+    section.totalSeconds += Math.max(0, Number(page.durationSeconds) || 0);
+    section.pages.push(page);
+  }
+
+  return Array.from(sections.values())
+    .map((section) => ({
+      ...section,
+      totalLabel: formatSessionDuration(section.totalSeconds),
+      pages: section.pages.sort((a, b) => {
+        const ta = a.visitedAt ? new Date(a.visitedAt).getTime() : 0;
+        const tb = b.visitedAt ? new Date(b.visitedAt).getTime() : 0;
+        return tb - ta;
+      }),
+    }))
+    .sort((a, b) => b.totalSeconds - a.totalSeconds);
+}
+
 function ConnectionUsersActivityPanel({
   users = [],
   onLoadUserPages,
@@ -500,6 +533,7 @@ function ConnectionUsersActivityPanel({
         {users.map((user) => {
           const isExpanded = expandedUserId === user.userId;
           const pages = pagesByUser[user.userId];
+          const sections = groupConnectionPagesBySection(pages || []);
           const isLoading = loadingUserId === user.userId;
 
           return (
@@ -511,7 +545,7 @@ function ConnectionUsersActivityPanel({
                     <p className={styles.userMeta}>{user.email !== '—' ? user.email : user.userId}</p>
                   </div>
                   <div className={styles.userStats}>
-                    <p className={styles.userTime}>{user.totalLabel}</p>
+                    <p className={styles.userTime}>Tiempo activo: {user.totalLabel}</p>
                     <p className={styles.userSessions}>{user.sessionCount} sesión(es)</p>
                   </div>
                 </div>
@@ -538,16 +572,37 @@ function ConnectionUsersActivityPanel({
                   ) : pages?.length === 0 ? (
                     <p className={styles.pageMeta}>Sin páginas registradas en el rango.</p>
                   ) : (
-                    (pages || []).map((page) => (
-                      <div key={page.id} className={styles.pageItem}>
-                        <p className={styles.pageTitle}>{page.pageTitle}</p>
-                        <p className={styles.pagePath}>{page.path}</p>
-                        <p className={styles.pageMeta}>
-                          {page.visitedLabel}
-                          {page.durationLabel ? ` · ${page.durationLabel}` : ''}
-                        </p>
-                      </div>
-                    ))
+                    <>
+                      <p className={styles.pageMeta}>
+                        La permanencia por sección y página es estimada y no se suma al tiempo activo.
+                      </p>
+                      {sections.map((section) => (
+                        <details key={section.area} className={styles.pageItem}>
+                          <summary className={styles.pageTitle}>
+                            {section.area} · permanencia estimada {section.totalLabel}
+                          </summary>
+                          <p className={styles.pageMeta}>
+                            {section.isStudy ? 'Sección de estudio' : 'Navegación / uso de plataforma'}
+                            {' · '}
+                            {section.pages.length} visita{section.pages.length === 1 ? '' : 's'}
+                          </p>
+                          <div>
+                            {section.pages.map((page) => (
+                              <div key={page.id} className={styles.pageItem}>
+                                <p className={styles.pageTitle}>{page.pageTitle}</p>
+                                <p className={styles.pagePath}>{page.path}</p>
+                                <p className={styles.pageMeta}>
+                                  {page.visitedLabel}
+                                  {page.durationLabel
+                                    ? ` · Permanencia estimada: ${page.durationLabel}`
+                                    : ''}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </details>
+                      ))}
+                    </>
                   )}
                 </div>
               ) : null}
