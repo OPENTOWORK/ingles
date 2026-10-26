@@ -490,7 +490,7 @@ export const NIVELES_LEVEL_HUB = {
     eyebrow: 'Exam & skills training',
     title: 'Exams',
     description:
-      'Train with level-based exercises, exam practice and instant feedback to improve your English faster',
+      'Train with level-based exam exercises and instant feedback to improve your English faster.',
     practiceSectionTitle: 'Choose what to practise',
     mascotVariant: 4,
     accent: 'violet',
