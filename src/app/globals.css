@@ -3304,7 +3304,7 @@ body:not(.reading-night-mode) .precios-page .page-hero__mascot-img {
 
 /* Writing: keep the editor visually aligned with the DRALO interface. */
 .levels-b2-writing-panel__textarea {
-  font-family: inherit;
+  font-family: var(--font-landing), 'Segoe UI', system-ui, sans-serif;
   line-height: 1.65;
 }
 
