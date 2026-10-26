@@ -9,7 +9,7 @@ export default function B2ListeningStrategyPanel({ pack }) {
   if (!pack) return null;
 
   return (
-    <ExamPracticeRailDisclosure title="Strategy and tips">
+    <ExamPracticeRailDisclosure title="Strategy">
       <section>
         <h3 className="levels-listening-strategy__heading">Strategy</h3>
         <p>{pack.strategy}</p>

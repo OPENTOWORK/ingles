@@ -292,6 +292,7 @@ export function B2ExamPracticeChrome({
   const effectiveShowRefresh = showRefresh && isAdminRole(userRole);
   const parsedTitle = parsePracticeChromeTitle(title);
   const isExamSimulation = practiceMode === 'exam-simulation';
+  const compactPracticeToolbar = compactSkillHeader && !isExamSimulation;
   const phoneViewport = usePhoneViewport();
   /**
    * Práctica de skill en móvil: solo el ejercicio. Sin cabecera de skill, sin
@@ -408,6 +409,9 @@ export function B2ExamPracticeChrome({
     compactSkillHeader && studyNotesPlacement === 'sidebar-top';
 
   const skillExercisePartNumber = skillExercisePartNumberEarly;
+  const currentPartTitle = getSkillPartPracticeTitle(
+    levelSlug || 'b2', skillExercisePartNumber, lang === 'es' ? 'es' : 'en',
+  );
 
   const skillExerciseStars = useMemo(() => {
     if (!skillExercisePartNumber || !examSlot) return 0;
@@ -611,6 +615,7 @@ export function B2ExamPracticeChrome({
     showCombinedToolbar || showSidebarTopRail || showLegacyToolsRow || showSecondaryStatusRow;
   /** Si hay «Parts & navigation» plegable, esta barra va igual (cerrada por defecto). */
   const useFoldableToolbar =
+    !compactPracticeToolbar &&
     !isExamSimulation &&
     !focusMode &&
     hasFoldableToolbarContent &&
@@ -687,7 +692,8 @@ export function B2ExamPracticeChrome({
 
       {!showPractice ? null : (
         <div
-          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}`}
+          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}${compactPracticeToolbar ? ' levels-b2-practice--compact-toolbar' : ''}`}
+
           data-skill-theme={
             compactSkillHeader && skillPracticeTheme ? skillPracticeTheme : undefined
           }
@@ -718,6 +724,11 @@ export function B2ExamPracticeChrome({
                     {parsedTitle.headline || title}
                   </span>
                 </h1>
+                {compactPracticeToolbar && currentPartTitle.heading ? (
+                  <p className="practice-paper-current-part">
+                    {[currentPartTitle.heading, currentPartTitle.subtitle].filter(Boolean).join(' · ')}
+                  </p>
+                ) : null}
               </div>
             ) : (
               <>
@@ -729,6 +740,21 @@ export function B2ExamPracticeChrome({
                 <h1 className="levels-b2-practice__title">{title}</h1>
               </>
             )}
+            {compactPracticeToolbar && partsData?.length > 1 ? (
+              <div className="practice-paper-actions">
+                <span className="practice-paper-level">{String(levelSlug || parsedTitle.level || '').toUpperCase()}</span>
+                <button
+                  type="button"
+                  className="practice-change-part"
+                  aria-expanded={skillNavOpen}
+                  aria-controls="practice-part-menu"
+                  onClick={() => setSkillNavOpen((open) => !open)}
+                >
+                  {lang === 'es' ? 'Cambiar parte' : 'Change part'}
+                  <span aria-hidden>{skillNavOpen ? ' ▴' : ' ▾'}</span>
+                </button>
+              </div>
+            ) : null}
             {!hideMascot ? (
               <div className="levels-b2-practice__mascot" aria-hidden>
                 <SiteMascot variant={10} width={128} alt="" />
@@ -798,7 +824,27 @@ export function B2ExamPracticeChrome({
             </ExamPracticePhoneInstructions>
           ) : null}
 
-          {phoneSkillChrome ? null : useFoldableSkillNav ? (
+          {phoneSkillChrome ? null : compactPracticeToolbar ? (
+            !focusMode && skillNavOpen ? (
+              <section id="practice-part-menu" className="practice-part-menu" aria-label={lang === 'es' ? 'Elige una parte' : 'Choose a part'}>
+                <h2>{lang === 'es' ? 'Elige una parte' : 'Choose a part'}</h2>
+                <div className="practice-part-menu__grid">
+                  {partsData.map((part) => {
+                    const n = Number(part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0);
+                    const partTitle = getSkillPartPracticeTitle(levelSlug || 'b2', n, lang === 'es' ? 'es' : 'en');
+                    return (
+                      <button type="button" key={part.id} aria-pressed={selectedPartId === part.id}
+                        onClick={() => { onSelectPart?.(part); setSkillNavOpen(false); }}>
+                        <strong>{partTitle.heading}</strong>
+                        <span>{partTitle.subtitle}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {skillNavEl}
+              </section>
+            ) : null
+          ) : useFoldableSkillNav ? (
             <div className="exam-practice-skill-nav-disclosure">
               <button
                 type="button"
@@ -834,6 +880,10 @@ export function B2ExamPracticeChrome({
           <ExamPracticeToolsProvider>
             <ExamPracticeSidebarSlotsProvider
               exerciseStars={sidebarExerciseStars}
+              compactToolbar={compactPracticeToolbar}
+              menuHeaderTools={headerTools}
+              menuExerciseStars={exerciseStarsBadge}
+              lang={lang}
               overlayContainerRef={workPanelRef}
               sideRailMountRef={sideRailMountRef}
               portSideRailToToolbar={showSidebarTopRail}
@@ -843,6 +893,30 @@ export function B2ExamPracticeChrome({
             >
           {(() => {
             if (phoneSkillChrome) return null;
+
+            if (compactPracticeToolbar) {
+              return (
+                <div className="practice-compact-toolbar" ref={statusAreaRef} aria-label={lang === 'es' ? 'Herramientas de práctica' : 'Practice toolbar'}>
+                  {categoryTimerEl}
+                  {showSidebarTopRail ? (
+                    <ExamPracticeToolbarSubRail
+                      showToolbarFinishNotice={false}
+                      partFinishNotice={null}
+                      lang={lang}
+                    />
+                  ) : (
+                    <div className="practice-compact-toolbar__fallback">{headerTools}</div>
+                  )}
+                  {showHeaderFinishNotice ? <PracticeHeaderFinishNotice notice={resolvedPartFinishNotice} lang={lang} /> : null}
+                  {showStudyNotesInHeader ? (
+                    <ExamStudyNotesSidebar overlayContainerRef={workPanelRef}
+                      context={studyNotesContext} contextLabel={studyNotesContextLabel || title}
+                      lang={lang === 'es' ? 'es' : 'en'} />
+                  ) : null}
+                  {examModeSaveControls}
+                </div>
+              );
+            }
 
             const practiceStatusPanel = (
               <div

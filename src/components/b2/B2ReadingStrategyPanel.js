@@ -12,7 +12,7 @@ export default function B2ReadingStrategyPanel({ pack, partNumber }) {
   if (!pack && !tips) return null;
 
   return (
-    <ExamPracticeRailDisclosure title="Strategy and tips">
+    <ExamPracticeRailDisclosure title="Strategy">
       {tips ? (
         <>
           <section>

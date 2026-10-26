@@ -21072,3 +21072,159 @@ body.dark .profile-collapse--open .profile-collapse__head {
     margin-bottom: 0;
   }
 }
+
+/* Compact paper header and always-visible practice toolbar. */
+.levels-b2-practice--compact-toolbar .levels-b2-practice__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title-block {
+  flex: 1 1 20rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: center;
+}
+.levels-b2-practice--compact-toolbar .levels-b2-practice__category-icon {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title-meta { display: none; }
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title {
+  grid-column: 2;
+  margin: 0;
+}
+.practice-paper-current-part {
+  grid-column: 2;
+  margin: .35rem 0 0;
+  color: #64748b;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.practice-paper-actions { display: flex; align-items: center; gap: .75rem; }
+.practice-paper-level { font-size: .8rem; color: #64748b; font-weight: 600; }
+.practice-change-part,
+.practice-more-tools > summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  min-height: 38px;
+  padding: .5rem .8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: .8rem;
+  cursor: pointer;
+  list-style: none;
+}
+.practice-change-part:hover,
+.practice-more-tools > summary:hover { background: #f1f5f9; }
+.practice-more-tools > summary::-webkit-details-marker { display: none; }
+.practice-change-part:focus-visible,
+.practice-more-tools > summary:focus-visible,
+.practice-part-menu button:focus-visible { outline: 2px solid #6366f1; outline-offset: 3px; }
+.practice-part-menu { padding: 1.25rem; margin-bottom: .8rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; }
+.practice-part-menu h2 { margin: 0 0 1rem; color: #1d1857; font-size: 1rem; }
+.practice-part-menu__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .65rem; }
+.practice-part-menu__grid button {
+  display: flex; flex-direction: column; gap: .4rem; text-align: left;
+  padding: 1rem; border: 1px solid #e2e8f0; border-radius: 10px;
+  background: #fff; color: #334155; font: inherit; cursor: pointer;
+}
+.practice-part-menu__grid button[aria-pressed=true] { border-color: #94a3b8; background: #f0fdf4; }
+.practice-part-menu__grid button span { font-size: .8rem; color: #64748b; }
+.practice-part-menu .exam-practice-skill-nav { margin-top: 1rem; }
+.levels-b2-practice--compact-toolbar .practice-compact-toolbar {
+  display: flex; align-items: center; flex-wrap: wrap; gap: .65rem 1rem;
+  position: relative; padding: .65rem .8rem; margin: 0 0 .9rem;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 11px;
+  box-shadow: none;
+}
+.practice-compact-toolbar .levels-b2-timer.levels-b2-timer {
+  display: flex; align-items: center; gap: .65rem; flex: 0 1 auto;
+  width: auto; min-width: 0; max-width: none; padding: 0; margin: 0;
+  background: transparent; border: 0; border-radius: 0; box-shadow: none;
+}
+.practice-compact-toolbar .levels-b2-timer__main { flex: none; gap: .5rem; }
+.practice-compact-toolbar .levels-b2-timer__value { font-size: 1rem; min-width: 3rem; line-height: 1.5; }
+.practice-compact-toolbar .levels-b2-timer__session-tag,
+.practice-compact-toolbar .levels-b2-timer__label { color: #64748b; font-size: .7rem; }
+.practice-compact-toolbar .levels-b2-timer__session-context { display: none; }
+.practice-compact-toolbar .levels-b2-timer__controls { margin: 0; gap: .4rem; }
+.practice-compact-toolbar .levels-b2-timer__icon-btn { width: 30px; height: 30px; min-width: 30px; border-radius: 7px; box-shadow: none; }
+.practice-compact-toolbar .levels-b2-timer__btn--ghost { font-size: .68rem; padding: .25rem; }
+.practice-compact-toolbar .levels-b2-practice__toolbar-sub-rail,
+.practice-compact-toolbar .levels-b2-practice__toolbar-sub-rail-side {
+  display: contents; padding: 0; margin: 0; border: 0; background: transparent; box-shadow: none;
+}
+.practice-compact-actions { display: flex; align-items: center; gap: .5rem; margin-left: auto; flex-wrap: wrap; }
+.practice-compact-actions > .levels-listening-practice-side__top { display: flex; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+.practice-compact-actions .levels-listening-practice-side__top-notes { margin: 0; }
+.practice-compact-actions > .exam-practice-rail-disclosure { width: auto; margin: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.practice-compact-actions > .exam-practice-rail-disclosure > button,
+.practice-compact-actions .exam-notes-popover > button {
+  min-height: 38px; padding: .5rem .8rem; border: 1px solid #e2e8f0;
+  border-radius: 8px; background: #fff; color: #334155; font-size: .8rem;
+  font-weight: 500; box-shadow: none; text-transform: none; letter-spacing: normal;
+}
+.practice-compact-actions .exam-practice-rail-disclosure__chevron { font-size: .8rem; }
+.practice-more-tools { position: relative; }
+.practice-more-tools__menu {
+  position: absolute; right: 0; top: calc(100% + .5rem); z-index: 45;
+  width: min(280px, calc(100vw - 2rem)); padding: .75rem;
+  display: grid; gap: .5rem; border: 1px solid #e2e8f0; border-radius: 11px;
+  background: #fff; color: #334155; box-shadow: 0 8px 28px rgb(15 23 42 / .12);
+}
+.practice-more-tools:not([open]) > .practice-more-tools__menu { display: none; }
+.practice-more-tools__menu .reading-practice-header-tools { display: block; width: 100%; }
+.practice-more-tools__menu .reading-practice-header-tools__btn { width: 100%; min-height: 38px; padding: .5rem .75rem; box-shadow: none; }
+.practice-more-tools__menu .skill-exercise-stars-badge { display: flex; padding: .65rem; margin: 0; box-shadow: none; }
+.practice-more-tools__menu .exam-practice-rail-disclosure { margin: 0; box-shadow: none; }
+.practice-more-tools__menu .levels-listening-strategy__toggle { font-size: .8rem; min-height: 38px; }
+.practice-more-tools__menu .reading-dictionary { width: 100%; }
+.practice-compact-toolbar > .levels-b2-practice__header-finish { flex: 1 0 100%; margin: 0; }
+.practice-compact-toolbar > .levels-b2-practice__header-finish .levels-b2-result { box-shadow: none; padding: .5rem .75rem; }
+body.focus-mode-active .practice-compact-toolbar { position: sticky; top: 0; z-index: 30; }
+@media (max-width: 760px) {
+  .practice-paper-actions { margin-left: auto; }
+  .practice-compact-actions { width: 100%; margin-left: 0; border-top: 1px solid #e2e8f0; padding-top: .6rem; }
+  .practice-part-menu__grid { grid-template-columns: 1fr; }
+}
+body.reading-night-mode .practice-paper-current-part,
+body.reading-night-mode .practice-paper-level { color: #a6b4c9; }
+body.reading-night-mode .practice-compact-toolbar,
+body.reading-night-mode .practice-more-tools__menu,
+body.reading-night-mode .practice-part-menu,
+body.reading-night-mode .practice-part-menu__grid button,
+body.reading-night-mode .practice-change-part,
+body.reading-night-mode .practice-more-tools > summary,
+body.reading-night-mode .practice-compact-actions > .exam-practice-rail-disclosure > button,
+body.reading-night-mode .practice-compact-actions .exam-notes-popover > button {
+  background: #192132; color: #e2e8f0; border-color: #394458;
+}
+body.reading-night-mode .practice-part-menu h2 { color: #eeeaff; }
+body.reading-night-mode .practice-part-menu__grid button[aria-pressed=true] { background: #18332d; border-color: #64748b; }
+
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid var(--skill-accent);
+  border-radius: 13px;
+  background: linear-gradient(155deg, var(--skill-header-surface, #f0fdf4), #fff);
+  text-align: left;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  width: auto; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  background: linear-gradient(155deg, #18332d, #192132); border-color: #394458;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  background: none; border: 0; box-shadow: none;
+}
