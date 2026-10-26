@@ -178,7 +178,6 @@ export function WritingAnnotationLegend({ lang = 'en' }) {
             <span className={`writing-annotation-legend__swatch writing-mark ${item.className}`}>
               {isEn ? item.labelEn : item.labelEs}
             </span>
-            <span className="writing-annotation-legend__hint">{isEn ? item.hintEn : item.hintEs}</span>
           </li>
         ))}
       </ul>
