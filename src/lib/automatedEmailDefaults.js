@@ -565,10 +565,10 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
     nombre: 'Reto del martes',
     trigger_event: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
     trigger_reason:
-      'Cada martes por la mañana (cron de correos, hora de Madrid) a los alumnos con el email confirmado. El cuerpo trae el hueco de esa semana, el mismo de Training, y las tres opciones. No incluye la solución: se elige en el correo y se comprueba en /training/. Si el martes no caben todos, el resto lo recibe de miércoles a domingo.',
+      'Cada martes por la mañana (cron de correos, hora de Madrid) a los alumnos con el email confirmado. El cuerpo trae el hueco de esa semana, el mismo de Training, y las tres opciones. No incluye la solución: cada opción abre el reto en /training/ y muestra la explicación. Si el martes no caben todos, el resto lo recibe de miércoles a domingo.',
     asunto: 'El reto del martes · {{challenge_since}}',
     cuerpo: [
-      'Preheader: Elige una opción antes de entrar. La explicación está en Dralo.',
+      'Preheader: Elige una respuesta y compruébala en Dralo.',
       '',
       '¡Hola{{nombre}}!',
       '',
@@ -578,9 +578,9 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
       '',
       '{{challenge_options}}',
       '',
-      '¿Cuál pondrías? Decídelo ahora, antes de abrir Dralo. Allí compruebas si era esa y ves qué reforzar.',
+      'Pulsa la respuesta que creas correcta para comprobarla en Dralo.',
       '',
-      'CTA: Comprobar mi respuesta',
+      'CTA: Ver reto en Dralo',
       '{{challenge_url}}',
       '',
       '— El equipo de Dralo',
@@ -610,3 +610,4 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
 export function getDefaultTemplatesByTrigger(triggerEvent) {
   return DEFAULT_AUTOMATED_EMAIL_TEMPLATES.filter((t) => t.trigger_event === triggerEvent);
 }
+

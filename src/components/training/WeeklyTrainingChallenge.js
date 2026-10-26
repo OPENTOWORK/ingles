@@ -1,27 +1,39 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getWeeklyChallenge } from '@/data/weeklyTrainingChallenges';
+import { getWeeklyChallenge, getChallengeFromEmailLink } from '@/data/weeklyTrainingChallenges';
 import styles from './WeeklyTrainingChallenge.module.css';
 
 const STORAGE_KEY = 'dralo-training-weekly-challenge';
 
 export default function WeeklyTrainingChallenge({ className = '' }) {
-  const challenge = getWeeklyChallenge();
+  const [emailResult, setEmailResult] = useState(null);
+  const challenge = emailResult?.challenge || getWeeklyChallenge();
   const [choice, setChoice] = useState(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const result = getChallengeFromEmailLink(params.get('challenge_week'), params.get('challenge_id'), params.get('answer'));
+    if (result) {
+      setEmailResult(result);
+      setOpen(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (emailResult) return;
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
       setChoice(saved?.weekId === challenge.weekId ? saved.choice : null);
     } catch {
       setChoice(null);
     }
-  }, [challenge.weekId]);
+  }, [challenge.weekId, emailResult]);
 
-  const answered = Boolean(choice);
-  const correct = choice === challenge.correct;
+  const displayedChoice = emailResult?.answer || choice;
+  const answered = Boolean(displayedChoice);
+  const correct = displayedChoice === challenge.correct;
 
   const choose = (id) => {
     if (answered) return;
@@ -58,7 +70,7 @@ export default function WeeklyTrainingChallenge({ className = '' }) {
       <p className={styles.prompt} lang="en">{challenge.prompt}</p>
       <div className={styles.options} role="group" aria-label="Opciones">
         {challenge.options.map((option) => {
-          const selected = choice === option.id;
+          const selected = displayedChoice === option.id;
           const isAnswer = answered && option.id === challenge.correct;
           const isWrong = selected && !correct;
           const className = [
@@ -95,3 +107,4 @@ export default function WeeklyTrainingChallenge({ className = '' }) {
     </section>
   );
 }
+

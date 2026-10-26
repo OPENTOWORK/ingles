@@ -63,6 +63,14 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
       continue;
     }
 
+    // Challenge choices remain ordinary links for broad email-client support.
+    const lines = block.split('\n');
+    if (lines.length === 6 && [0, 2, 4].every((i) => /^[ABC]\) .+/.test(lines[i]) && /^https?:\/\/\S+$/.test(lines[i + 1]))) {
+      const choices = [0, 2, 4].map((i) => `<tr><td style="padding:0 0 8px;"><a href="${escapeHtml(lines[i + 1])}" style="display:block;padding:12px 16px;border:1px solid #c7d2fe;border-radius:10px;color:#312e81;background:#f8faff;text-decoration:none;font-weight:700;">${escapeHtml(lines[i])}</a></td></tr>`).join('');
+      bodyBlocks.push({ type: 'choices', html: `<table role="presentation" width="100%" cellspacing="0" cellpadding="0">${choices}</table>` });
+      continue;
+    }
+
     if (block.startsWith('Mensaje personal:')) {
       const quote = block.replace(/^Mensaje personal:\s*/i, '').trim();
       bodyBlocks.push({
@@ -222,3 +230,4 @@ export function buildBrandedManualMessageEmail({ message, subject, senderName })
     senderName,
   });
 }
+

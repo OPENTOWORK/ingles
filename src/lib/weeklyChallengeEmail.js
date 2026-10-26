@@ -21,7 +21,14 @@ export function buildWeeklyChallengeEmailVariables(date = new Date(), origin = '
   return {
     challenge_since: challenge.since,
     challenge_prompt: challenge.prompt,
-    challenge_options: challenge.options.map((option) => `${option.id}) ${option.label}`).join('\n'),
+    challenge_options: challenge.options.map((option) => {
+      const url = new URL(`${base}/training/`);
+      url.searchParams.set('challenge_week', challenge.weekId);
+      url.searchParams.set('challenge_id', challenge.id);
+      url.searchParams.set('answer', option.id);
+      return `${option.id}) ${option.label}\n${url.toString()}`;
+    }).join('\n'),
     challenge_url: `${base}/training/`,
   };
 }
+
