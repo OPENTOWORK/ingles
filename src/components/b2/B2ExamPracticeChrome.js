@@ -692,7 +692,8 @@ export function B2ExamPracticeChrome({
 
       {!showPractice ? null : (
         <div
-          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}`}
+          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}${compactPracticeToolbar ? ' levels-b2-practice--compact-toolbar' : ''}`}
+
           data-skill-theme={
             compactSkillHeader && skillPracticeTheme ? skillPracticeTheme : undefined
           }
@@ -723,7 +724,7 @@ export function B2ExamPracticeChrome({
                     {parsedTitle.headline || title}
                   </span>
                 </h1>
-                {currentPartTitle.heading ? (
+                {compactPracticeToolbar && currentPartTitle.heading ? (
                   <p className="practice-paper-current-part">
                     {[currentPartTitle.heading, currentPartTitle.subtitle].filter(Boolean).join(' · ')}
                   </p>

@@ -21074,26 +21074,26 @@ body.dark .profile-collapse--open .profile-collapse__head {
 }
 
 /* Compact paper header and always-visible practice toolbar. */
-.levels-b2-practice--skill-compact .levels-b2-practice__header {
+.levels-b2-practice--compact-toolbar .levels-b2-practice__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
 }
-.levels-b2-practice--skill-compact .levels-b2-practice__title-block {
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title-block {
   flex: 1 1 20rem;
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
   column-gap: 1rem;
   align-items: center;
 }
-.levels-b2-practice--skill-compact .levels-b2-practice__category-icon {
+.levels-b2-practice--compact-toolbar .levels-b2-practice__category-icon {
   grid-column: 1;
   grid-row: 1 / 3;
 }
-.levels-b2-practice--skill-compact .levels-b2-practice__title-meta { display: none; }
-.levels-b2-practice--skill-compact .levels-b2-practice__title {
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title-meta { display: none; }
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title {
   grid-column: 2;
   margin: 0;
 }
@@ -21140,7 +21140,7 @@ body.dark .profile-collapse--open .profile-collapse__head {
 .practice-part-menu__grid button[aria-pressed=true] { border-color: #94a3b8; background: #f0fdf4; }
 .practice-part-menu__grid button span { font-size: .8rem; color: #64748b; }
 .practice-part-menu .exam-practice-skill-nav { margin-top: 1rem; }
-.levels-b2-practice--skill-compact .practice-compact-toolbar {
+.levels-b2-practice--compact-toolbar .practice-compact-toolbar {
   display: flex; align-items: center; flex-wrap: wrap; gap: .65rem 1rem;
   position: relative; padding: .65rem .8rem; margin: 0 0 .9rem;
   background: #fff; border: 1px solid #e2e8f0; border-radius: 11px;
@@ -21210,3 +21210,21 @@ body.reading-night-mode .practice-compact-actions .exam-notes-popover > button {
 }
 body.reading-night-mode .practice-part-menu h2 { color: #eeeaff; }
 body.reading-night-mode .practice-part-menu__grid button[aria-pressed=true] { background: #18332d; border-color: #64748b; }
+
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid var(--skill-accent);
+  border-radius: 13px;
+  background: linear-gradient(155deg, var(--skill-header-surface, #f0fdf4), #fff);
+  text-align: left;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  width: auto; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  background: linear-gradient(155deg, #18332d, #192132); border-color: #394458;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  background: none; border: 0; box-shadow: none;
+}
