@@ -1,6 +1,5 @@
 import { getB2PartDef } from '@/lib/b2ExamCatalog';
 import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
-import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 
 /**
  * Nombre de parte tal como se muestra en la UI (levels_partes.nombre_parte suele incluir " B2").
@@ -102,46 +101,13 @@ function getActivitySubtitle(activity, lang = 'en') {
   return key.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
-function getB2SkillPartHeading(partNumber, mode, lang = 'en', examSlot = null) {
+function getB2SkillPartHeading(partNumber, mode, lang = 'en') {
   const pn = Number(partNumber);
-  const en = lang === 'en';
-  if (mode === 'use-of-english') {
-    const label = en ? 'Use of English' : 'Uso de inglés';
-    const slot = Number(examSlot);
-    if (Number.isFinite(slot) && slot > 0) {
-      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
-    }
-    return en ? `${label} - Part ${pn}` : `${label} - Parte ${pn}`;
-  }
-  if (mode === 'reading') return en ? `Reading Part ${pn}` : `Reading Parte ${pn}`;
-  if (mode === 'writing') {
-    const label = en ? 'Writing' : 'Escritura';
-    const slot = Number(examSlot);
-    if (Number.isFinite(slot) && slot > 0) {
-      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
-    }
-    const local = pn - 7;
-    return en ? `Writing Part ${local}` : `Writing Parte ${local}`;
-  }
-  if (mode === 'listening') {
-    const label = en ? 'Listening' : 'Comprensión auditiva';
-    const slot = Number(examSlot);
-    if (Number.isFinite(slot) && slot > 0) {
-      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
-    }
-    const local = pn - 9;
-    return en ? `Listening Part ${local}` : `Listening Parte ${local}`;
-  }
-  if (mode === 'speaking') {
-    const label = en ? 'Speaking' : 'Expresión oral';
-    const slot = Number(examSlot);
-    if (Number.isFinite(slot) && slot > 0) {
-      return `${label} - ${formatSkillExerciseLabel(slot, lang)}`;
-    }
-    const local = pn - 13;
-    return en ? `Speaking Part ${local}` : `Speaking Parte ${local}`;
-  }
-  return en ? `Part ${pn}` : `Parte ${pn}`;
+  // Reading and Use of English shares official parts 1–7.
+  // The remaining papers restart their numbering at Part 1.
+  const offset = { writing: 7, listening: 9, speaking: 13 }[mode] || 0;
+  const local = pn - offset;
+  return lang === 'es' ? `Parte ${local}` : `Part ${local}`;
 }
 
 function normalizePracticeHeading(heading) {
@@ -149,10 +115,10 @@ function normalizePracticeHeading(heading) {
 }
 
 /**
- * Título de práctica en dos líneas: categoría (UOE Part 1) + tipo de tarea (Multiple-choice cloze).
+ * Título de práctica en dos líneas: parte (Part 1) + tipo de tarea (Multiple-choice cloze).
  * @returns {{ heading: string, subtitle: string }}
  */
-export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en', examSlot = null) {
+export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en') {
   const pn = Number(partNumber);
   if (!Number.isFinite(pn) || pn <= 0) return { heading: '', subtitle: '' };
 
@@ -161,7 +127,7 @@ export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en', 
     const def = getB2PartDef(pn);
     if (def) {
       return {
-        heading: getB2SkillPartHeading(pn, def.mode, lang, examSlot),
+        heading: getB2SkillPartHeading(pn, def.mode, lang),
         subtitle: getActivitySubtitle(def.activity, lang),
       };
     }
@@ -178,7 +144,7 @@ export function getSkillPartPracticeTitle(slug = 'b2', partNumber, lang = 'en', 
   return { heading: normalizePracticeHeading(full), subtitle: '' };
 }
 
-/** Una sola línea "UOE Part 1 — Multiple-choice cloze" (p. ej. headings auxiliares). */
+/** Una sola línea "Part 1 — Multiple-choice cloze" (p. ej. headings auxiliares). */
 export function formatSkillPartPracticeTitle(slug, partNumber, lang = 'en') {
   const { heading, subtitle } = getSkillPartPracticeTitle(slug, partNumber, lang);
   if (!heading && !subtitle) return '';
