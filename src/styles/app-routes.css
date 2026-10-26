@@ -21355,3 +21355,12 @@ body.reading-night-mode .levels-b2-practice--compact-toolbar .levels-exam-split_
   .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-headline { font-size: 18px; }
   .levels-b2-practice--compact-toolbar .levels-exam-split-card { padding: 16px; }
 }
+.levels-b2-practice--compact-toolbar[data-skill-theme="reading"] {
+  --skill-accent: #0284c7;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .practice-compact-actions .exam-notes-popover__trigger-label {
+  color: #475569;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .practice-compact-actions .exam-notes-popover__trigger-label {
+  color: #e2e8f0;
+}
