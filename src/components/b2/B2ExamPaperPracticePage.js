@@ -801,9 +801,8 @@ function B2ExamPaperPracticePageInner({
   const readingSession = useReadingPracticeSession();
   const hideFeedbackResolved = resolvePracticeHideFeedback({
     hideFeedback,
-    showFeedback: readingSession.readingSettings.showFeedback,
     answersRevealed: readingSession.answersRevealed,
-    respectInstantFeedbackToggle: isSkillPracticeSession,
+    skillPracticeMode: isSkillPracticeSession,
   });
   const examModeParam = searchParams.get('examMode');
   /** Strict listening audio only in full exam simulation / review — not skill practice. */
@@ -817,17 +816,6 @@ function B2ExamPaperPracticePageInner({
     readingSession.resetAnswersRevealed();
   }, [examSlot, selectedPartId, readingSession.resetAnswersRevealed]);
 
-  useEffect(() => {
-    const onInstantFeedbackChanged = (event) => {
-      if (event?.detail?.showFeedback !== false) return;
-      setCheckedQuestions({});
-      setOpenChecks({});
-      setAiHintsByKey({});
-    };
-    window.addEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
-    return () =>
-      window.removeEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
-  }, []);
 
   const tabPartsData = useMemo(() => {
     if (!skillNav.active) return partsData;
@@ -2061,7 +2049,7 @@ function B2ExamPaperPracticePageInner({
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
         getQuestionKey,
         partId: selectedPart.id,
-        treatSelectedMcqAsEvaluated: hideFeedbackResolved,
+        treatSelectedMcqAsEvaluated: hideFeedbackResolved && !isSkillPracticeSession,
       });
       if (!progress.complete) return;
       void persistPartSessionTime(progress);
@@ -2089,6 +2077,7 @@ function B2ExamPaperPracticePageInner({
       examModeActive,
       reviewMode,
       hideFeedbackResolved,
+      isSkillPracticeSession,
       persistPartSessionTime,
     ],
   );
@@ -2848,6 +2837,7 @@ function B2ExamPaperPracticePageInner({
       getMcqQuestionKey: resolveBulkMcqQuestionKey,
       selectedOptions,
       checkedQuestions,
+      includeUnanswered: true,
     });
 
     setOpenChecks(nextOpenChecks);
@@ -3416,7 +3406,6 @@ function B2ExamPaperPracticePageInner({
       showCheckAnswersButton={shouldShowCheckAnswersButton({
         skillPracticeMode: isSkillPracticeSession,
         hideFeedback,
-        showFeedback: readingSession.readingSettings.showFeedback,
         answersRevealed: readingSession.answersRevealed,
       })}
       onCheckAnswers={handleCheckAllAnswers}
@@ -3983,6 +3972,7 @@ function B2ExamPaperPracticePageInner({
                           }
                           openInputs={openInputs}
                           openChecks={openChecks}
+                          openAnswerMap={openAnswerMap}
                           hideFeedback={hideFeedbackResolved}
                           hideCheck={hidePracticeChecks}
                           onInputChange={(questionKey, value) => {

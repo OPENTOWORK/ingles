@@ -8,7 +8,6 @@ export const DEFAULT_READING_SETTINGS = {
   highContrast: false,
   dyslexiaFont: false,
   theme: 'normal',
-  showFeedback: true,
 };
 
 const LINE_HEIGHT_MAP = {

@@ -1,30 +1,19 @@
-/**
- * When instant feedback is off, hide corrections until the user checks manually.
- */
+/** Practice corrections stay hidden until the student presses Check. */
 export function resolvePracticeHideFeedback({
   hideFeedback = false,
-  showFeedback = true,
   answersRevealed = false,
-  respectInstantFeedbackToggle = true,
+  skillPracticeMode = false,
 }) {
   if (hideFeedback) return true;
-  if (!respectInstantFeedbackToggle) return false;
-  if (showFeedback !== false) return false;
-  return !answersRevealed;
+  return skillPracticeMode && !answersRevealed;
 }
 
 export function shouldShowCheckAnswersButton({
   skillPracticeMode = false,
   hideFeedback = false,
-  showFeedback = true,
   answersRevealed = false,
 }) {
-  return (
-    skillPracticeMode &&
-    !hideFeedback &&
-    showFeedback === false &&
-    !answersRevealed
-  );
+  return skillPracticeMode && !hideFeedback && !answersRevealed;
 }
 
 import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';
@@ -44,6 +33,7 @@ export function buildBulkAnswerCheckUpdate({
   getMcqQuestionKey,
   selectedOptions = {},
   checkedQuestions = {},
+  includeUnanswered = false,
 }) {
   const nextOpenChecks = { ...openChecks };
   const nextOpenGrades = { ...openGrades };
@@ -53,8 +43,9 @@ export function buildBulkAnswerCheckUpdate({
   openQuestionNumbers.forEach((questionNumber) => {
     const questionKey = getOpenQuestionKey(questionNumber);
     const value = openInputs[questionKey] ?? '';
-    if (!String(value).trim()) return;
-    hasAnyAnswer = true;
+    const hasAnswer = Boolean(String(value).trim());
+    if (!hasAnswer && !includeUnanswered) return;
+    if (hasAnswer) hasAnyAnswer = true;
 
     if (usePart4V2Grading && part4ParsedKeys) {
       if (nextOpenGrades[questionKey] && typeof nextOpenGrades[questionKey].score === 'number') {
@@ -72,8 +63,9 @@ export function buildBulkAnswerCheckUpdate({
   mcqGroups.forEach((group, groupIndex) => {
     if (group?.questionNumber == null || group.questionNumber === 0) return;
     const questionKey = getMcqQuestionKey(group, groupIndex);
-    if (!selectedOptions[questionKey]) return;
-    hasAnyAnswer = true;
+    const hasAnswer = Boolean(selectedOptions[questionKey]);
+    if (!hasAnswer && !includeUnanswered) return;
+    if (hasAnswer) hasAnyAnswer = true;
     nextChecked[questionKey] = true;
   });
 

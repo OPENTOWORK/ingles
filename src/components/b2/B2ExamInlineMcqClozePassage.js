@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
@@ -163,8 +164,8 @@ export default function B2ExamInlineMcqClozePassage({
   const bodyStart = titleLine ? startIdx + 1 : startIdx;
 
   const getTriggerStateClass = (questionKey, isChecked, selectedOption, group) => {
-    if (hideFeedback || !isChecked || !selectedOption) return '';
-    if (selectedOption.correcta) return 'levels-exam-inline-mcq-gap__trigger--correct';
+    if (hideFeedback || !isChecked) return '';
+    if (selectedOption?.correcta) return 'levels-exam-inline-mcq-gap__trigger--correct';
     return 'levels-exam-inline-mcq-gap__trigger--incorrect';
   };
 
@@ -283,9 +284,11 @@ export default function B2ExamInlineMcqClozePassage({
                     aria-expanded={isOpen}
                     aria-haspopup="listbox"
                     aria-label={
-                      displayWord
-                        ? `Question ${questionNumber}: ${displayWord}. Click to change.`
-                        : `Question ${questionNumber}. Click to choose an answer.`
+                      !hideFeedback && isChecked
+                        ? `Question ${questionNumber}: ${displayWord || 'No answer'}. ${selectedOption?.correcta ? 'Correct' : 'Incorrect'}.`
+                        : displayWord
+                          ? `Question ${questionNumber}: ${displayWord}. Click to change.`
+                          : `Question ${questionNumber}. Click to choose an answer.`
                     }
                     disabled={!hideFeedback && isChecked}
                     onClick={(event) => {
@@ -304,6 +307,11 @@ export default function B2ExamInlineMcqClozePassage({
                     </span>
                   </button>
 
+                  <PracticeAnswerCorrection
+                    visible={!hideFeedback && !!isChecked && !selectedOption?.correcta}
+                    answer={getOptionWord(group.options.find((option) => option.correcta))}
+                  />
+
                   {isOpen && typeof document !== 'undefined'
                     ? createPortal(
                         <span
@@ -314,19 +322,14 @@ export default function B2ExamInlineMcqClozePassage({
                         >
                           {group.options.map((option) => {
                             const isSelected = selectedId === option.id;
-                            const isEliminated = session.isOptionEliminated(questionKey, option.id);
                             return (
                               <button
                                 key={option.id}
                                 type="button"
                                 role="option"
                                 aria-selected={isSelected}
-                                className={`levels-exam-inline-mcq-gap__option question-option${isSelected ? ' levels-exam-inline-mcq-gap__option--selected' : ''}${isEliminated ? ' eliminated' : ''}`}
+                                className={`levels-exam-inline-mcq-gap__option question-option${isSelected ? ' levels-exam-inline-mcq-gap__option--selected' : ''}`}
                                 onClick={() => {
-                                  if (session.answerEliminatorEnabled) {
-                                    session.toggleEliminatedAnswer(questionKey, option.id);
-                                    return;
-                                  }
                                   setOpenQuestionNumber(null);
                                   setOpenMenuStyle(null);
                                   onOptionSelect?.({

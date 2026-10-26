@@ -1,5 +1,8 @@
 'use client';
 
+import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
+import { resolveInstantFeedbackCorrectAnswer } from '@/utils/buildOpenGapExplanationEntries';
+
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
@@ -186,7 +189,7 @@ export default function B2ExamInlineOpenClozePassage({
               }
 
               const inputStateClass = getInputStateClass(
-                checkResult,
+                hideFeedback ? undefined : checkResult,
                 currentValue,
                 isAnswerLocked,
               );
@@ -211,6 +214,10 @@ export default function B2ExamInlineOpenClozePassage({
                         if (isAnswerLocked) return;
                         onInputChange(questionKey, e.target.value);
                       }}
+                    />
+                    <PracticeAnswerCorrection
+                      visible={isAnswerLocked && checkResult === false}
+                      answer={resolveInstantFeedbackCorrectAnswer(questionNumber, openAnswerMap)}
                     />
                     {!hideFeedback && !isAnswerLocked ? (
                       <button

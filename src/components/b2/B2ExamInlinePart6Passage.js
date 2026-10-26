@@ -1,5 +1,7 @@
 'use client';
 
+import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
+
 import { useMemo, useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { PART6_GAP_MARKER_RE } from '@/utils/b2ExamTextBlocks';
@@ -210,8 +212,8 @@ export default function B2ExamInlinePart6Passage({
                 const isFlagged = hideFeedback && !!session.flaggedQuestions[questionKey];
 
                 let stateClass = '';
-                if (!hideFeedback && isChecked && selectedOption) {
-                  stateClass = selectedOption.correcta
+                if (!hideFeedback && isChecked) {
+                  stateClass = selectedOption?.correcta
                     ? 'levels-exam-inline-part6-gap__select--correct'
                     : 'levels-exam-inline-part6-gap__select--incorrect';
                 }
@@ -252,6 +254,10 @@ export default function B2ExamInlinePart6Passage({
                         })}
                       </select>
                     </label>
+                    <PracticeAnswerCorrection
+                      visible={!hideFeedback && !!isChecked && !selectedOption?.correcta}
+                      answer={getOptionLetter(group.options.find((option) => option.correcta))}
+                    />
                   </span>
                 );
               })}
