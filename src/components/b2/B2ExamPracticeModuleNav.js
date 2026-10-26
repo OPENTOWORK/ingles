@@ -311,7 +311,7 @@ export default function B2ExamPracticeModuleNav({
           aria-hidden
         />
         <span className="levels-exam-module-nav__label">
-          {checkAnswersLabel || (isEn ? 'Check answers' : 'Corregir')}
+          {checkAnswersLabel || (isEn ? 'Check' : 'Corregir')}
         </span>
         <span
           className="levels-exam-module-nav__chevron levels-exam-module-nav__chevron--spacer"

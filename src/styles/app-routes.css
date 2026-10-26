@@ -7584,6 +7584,18 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   text-justify: inter-word;
 }
 
+.practice-answer-correction {
+  display: inline;
+  color: #047857;
+  font-family: inherit;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+body.reading-night-mode .practice-answer-correction {
+  color: #6ee7b7;
+}
+
 .levels-exam-inline-gap {
   display: inline;
   white-space: normal;

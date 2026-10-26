@@ -13,8 +13,6 @@ const ReadingPracticeSessionContext = createContext(null);
 
 export function ReadingPracticeSessionProvider({ children }) {
   const [focusMode, setFocusMode] = useState(false);
-  const [answerEliminatorEnabled, setAnswerEliminatorEnabled] = useState(false);
-  const [eliminatedAnswers, setEliminatedAnswers] = useState({});
   const [flaggedQuestions, setFlaggedQuestions] = useState({});
   const [timerHidden, setTimerHidden] = useState(false);
   const [confidenceByQuestion, setConfidenceByQuestion] = useState({});
@@ -52,28 +50,6 @@ export function ReadingPracticeSessionProvider({ children }) {
   }, []);
 
   const toggleFocusMode = useCallback(() => setFocusMode((v) => !v), []);
-
-  const toggleAnswerEliminator = useCallback(() => {
-    setAnswerEliminatorEnabled((v) => !v);
-  }, []);
-
-  const toggleEliminatedAnswer = useCallback((questionKey, optionKey) => {
-    setEliminatedAnswers((prev) => {
-      const current = prev[questionKey] || [];
-      const exists = current.includes(optionKey);
-      const nextList = exists
-        ? current.filter((k) => k !== optionKey)
-        : [...current, optionKey];
-      return { ...prev, [questionKey]: nextList };
-    });
-  }, []);
-
-  const clearEliminatedAnswers = useCallback(() => setEliminatedAnswers({}), []);
-
-  const isOptionEliminated = useCallback(
-    (questionKey, optionKey) => (eliminatedAnswers[questionKey] || []).includes(optionKey),
-    [eliminatedAnswers],
-  );
 
   const toggleFlagQuestion = useCallback((questionKey) => {
     setFlaggedQuestions((prev) => ({
@@ -113,12 +89,6 @@ export function ReadingPracticeSessionProvider({ children }) {
     () => ({
       focusMode,
       toggleFocusMode,
-      answerEliminatorEnabled,
-      toggleAnswerEliminator,
-      eliminatedAnswers,
-      toggleEliminatedAnswer,
-      clearEliminatedAnswers,
-      isOptionEliminated,
       flaggedQuestions,
       toggleFlagQuestion,
       timerHidden,
@@ -140,12 +110,6 @@ export function ReadingPracticeSessionProvider({ children }) {
     [
       focusMode,
       toggleFocusMode,
-      answerEliminatorEnabled,
-      toggleAnswerEliminator,
-      eliminatedAnswers,
-      toggleEliminatedAnswer,
-      clearEliminatedAnswers,
-      isOptionEliminated,
       flaggedQuestions,
       toggleFlagQuestion,
       timerHidden,
@@ -176,12 +140,6 @@ export function useReadingPracticeSession() {
     return {
       focusMode: false,
       toggleFocusMode: () => {},
-      answerEliminatorEnabled: false,
-      toggleAnswerEliminator: () => {},
-      eliminatedAnswers: {},
-      toggleEliminatedAnswer: () => {},
-      clearEliminatedAnswers: () => {},
-      isOptionEliminated: () => false,
       flaggedQuestions: {},
       toggleFlagQuestion: () => {},
       timerHidden: false,

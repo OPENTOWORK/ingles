@@ -1,5 +1,8 @@
 'use client';
 
+import PracticeAnswerCorrection from '@/components/exam/PracticeAnswerCorrection';
+import { resolveInstantFeedbackCorrectAnswer } from '@/utils/buildOpenGapExplanationEntries';
+
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 
 /**
@@ -11,6 +14,7 @@ export default function B2ListeningInlineGapPassage({
   getQuestionKey,
   openInputs = {},
   openChecks = {},
+  openAnswerMap = new Map(),
   hideFeedback = false,
   hideCheck = false,
   onInputChange,
@@ -69,7 +73,8 @@ export default function B2ListeningInlineGapPassage({
               const questionKey = getQuestionKey(questionNumber);
               const currentValue = openInputs[questionKey] || '';
               const checkResult = openChecks[questionKey];
-              const inputStateClass = getInputStateClass(checkResult, currentValue);
+              const isAnswerLocked = !hideFeedback && typeof checkResult === 'boolean';
+              const inputStateClass = getInputStateClass(hideFeedback ? undefined : checkResult, currentValue);
 
               return (
                 <span key={`seg-gap-${lineIdx}-${segIdx}`} className="levels-exam-inline-gap">
@@ -79,10 +84,15 @@ export default function B2ListeningInlineGapPassage({
                       type="text"
                       className={`levels-exam-inline-gap__input levels-exam-inline-gap__input--listening${inputStateClass ? ` ${inputStateClass}` : ''}`}
                       value={currentValue}
+                      readOnly={isAnswerLocked}
                       aria-label={`Gap ${questionNumber}`}
-                      onChange={(e) => onInputChange?.(questionKey, e.target.value)}
+                      onChange={(e) => { if (!isAnswerLocked) onInputChange?.(questionKey, e.target.value); }}
                     />
-                    {!hideFeedback && !hideCheck ? (
+                    <PracticeAnswerCorrection
+                      visible={isAnswerLocked && checkResult === false}
+                      answer={resolveInstantFeedbackCorrectAnswer(questionNumber, openAnswerMap)}
+                    />
+                    {!hideFeedback && !hideCheck && !isAnswerLocked ? (
                       <button
                         type="button"
                         className="levels-exam-inline-gap__check"
