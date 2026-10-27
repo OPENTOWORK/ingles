@@ -1,6 +1,6 @@
 {
   "name": "english-practice",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Plataforma completa de práctica de inglés con IA adaptativa, gamificación y modo offline",
   "private": true,
   "scripts": {
@@ -32,6 +32,7 @@
     "writing:verify-r5": "node scripts/verify-writing-engine-r5.mjs",
     "writing:e2e-v3": "node --experimental-strip-types --no-warnings --loader ./scripts/alias-loader.mjs scripts/run-writing-v3-e2e.mjs",
     "writing:screenshots": "node scripts/capture-writing-v3-screenshots.mjs",
+    "guia:b2": "node scripts/build-guia-b2.mjs",
     "type-check": "tsc --noEmit",
     "postinstall": "prisma generate && node setup.js",
     "supabase:auth-disable-email-confirm": "node scripts/supabase-patch-auth-mailer-autoconfirm.mjs",

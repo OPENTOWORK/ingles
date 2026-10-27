@@ -28,6 +28,8 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/politica-privacidad',
   '/politica-cookies',
   '/proteccion-datos',
+  /** Guías en PDF que se regalan fuera de la app (Instagram, correo). */
+  '/guias',
   /** Encuesta founding: se abre desde el correo, con token y sin iniciar sesión. */
   '/founding/encuesta',
   /**
