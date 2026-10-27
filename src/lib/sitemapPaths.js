@@ -4,7 +4,7 @@ const CEFR_LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
 
 /**
  * URLs canónicas indexables. Sin variantes noindex, sin redirecciones
- * (/contacto, /niveles, /exam-theory) y sin /dralo-ai: el middleware manda
+ * (/contact, /niveles, /exam-theory) y sin /dralo-ai: el middleware manda
  * a los rastreadores anónimos a /login. Los artículos del blog se descubren
  * desde /blog/; el sitemap no consulta la base de datos.
  */
@@ -13,11 +13,16 @@ export const SITEMAP_PATHS = [
   '/preparar-b2-cambridge',
   '/exam-practice',
   '/exam-strategies',
+  '/exam-strategies/reading-and-use-of-english',
+  '/exam-strategies/writing',
+  '/exam-strategies/listening',
+  '/exam-strategies/speaking',
   '/training',
   '/precios',
   '/registro',
   '/blog',
-  '/contact',
+  '/contacto',
+  '/contacto/faq',
   '/legal',
   '/aviso-legal',
   '/politica-privacidad',
@@ -27,6 +32,9 @@ export const SITEMAP_PATHS = [
   '/normas-comunidad',
   '/terminos-condiciones',
   ...CEFR_LEVELS.map((level) => `/exam-practice/${level}`),
+  '/exam-practice/b2/exam-reading-and-use-of-english',
+  '/exam-practice/b2/exam-writing',
+  '/exam-practice/b2/exam-listening',
 ];
 
 export function sitemapAbsoluteUrl(path) {
@@ -58,7 +66,7 @@ function priorityFor(path) {
     return 0.9;
   }
   if (path === '/precios' || path === '/training' || path === '/registro' || path === '/blog') return 0.8;
-  if (path === '/contact') return 0.6;
+  if (path === '/contacto') return 0.6;
   return 0.7;
 }
 

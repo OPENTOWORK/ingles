@@ -5,6 +5,7 @@ import {
   SECTION_CATALOG,
   getSectionBySlug,
 } from '@/data/teoriaSections';
+import { examStrategyPartMetadata } from '@/lib/siteSeo';
 
 export function generateStaticParams() {
   return [
@@ -14,10 +15,12 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }) {
+  const strategy = examStrategyPartMetadata(params.section);
+  if (strategy) return strategy;
   const section = getSectionBySlug(params.section);
-  if (!section) return { title: 'Theory | Dralo' };
+  if (!section) return { title: 'Theory' };
   return {
-    title: `${section.key} | Theory | Dralo`,
+    title: `${section.key} | Theory`,
     description: section.description,
   };
 }

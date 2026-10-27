@@ -1,5 +1,6 @@
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
+import { formatNombreVariable } from '@/lib/renderEmailTemplate';
 import { isStudentRole } from '@/lib/userRoleServer';
 import { getWeeklyChallenge } from '@/data/weeklyTrainingChallenges';
 import {
@@ -124,7 +125,7 @@ export async function runWeeklyTuesdayChallenge(adminClient, now = new Date()) {
       triggerEvent: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
       to: candidate.email,
       variables: {
-        nombre: candidate.nombre,
+        nombre: formatNombreVariable(candidate.nombre),
         email: candidate.email,
         ...challengeVariables,
       },

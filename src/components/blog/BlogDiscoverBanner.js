@@ -16,7 +16,7 @@ export default function BlogDiscoverBanner({ variant = 'practice' }) {
             Escríbenos desde la página de contacto. Nos ayuda a mejorar la plataforma y el contenido
             del blog.
           </p>
-          <Link href="/contact" className="blog-mag__discover-btn blog-mag__discover-btn--ghost">
+          <Link href="/contacto/" className="blog-mag__discover-btn blog-mag__discover-btn--ghost">
             Ir a contacto
           </Link>
         </div>

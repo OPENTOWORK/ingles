@@ -150,7 +150,7 @@ describe('escrituras sin migración', () => {
     };
 
     await assert.rejects(
-      () => saveOrgSettings(db, 'actor-1', { 'org.nombre_publico': 'Academia Dralo' }),
+      () => saveOrgSettings(db, 'actor-1', { 'org.nombre_publico': 'Dralo Academy' }),
       (error) => error.status === 503,
     );
     assert.deepEqual(calls, ['read', 'admin_audit_ready']);

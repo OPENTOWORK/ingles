@@ -119,10 +119,6 @@ const nextConfig = {
           destination: '/niveles/:path+',
         },
         {
-          source: '/contact/:path*',
-          destination: '/contacto/:path*',
-        },
-        {
           source: '/profile/:path*',
           destination: '/perfil/:path*',
         },
@@ -263,13 +259,18 @@ const nextConfig = {
       },
       ...teoriaExamSkillRedirects,
       {
-        source: '/contacto/:path*',
-        destination: '/contact/:path*',
+        source: '/contact',
+        destination: '/contacto/',
         permanent: true,
       },
       {
-        source: '/contacto',
-        destination: '/contact/',
+        source: '/contact/',
+        destination: '/contacto/',
+        permanent: true,
+      },
+      {
+        source: '/contact/:path*',
+        destination: '/contacto/:path*',
         permanent: true,
       },
       {

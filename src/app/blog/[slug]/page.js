@@ -19,7 +19,7 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   try {
     const article = await fetchPublishedBlogArticleBySlug(slug);
-    if (!article) return { title: 'Artículo no encontrado | Dralo' };
+    if (!article) return { title: { absolute: 'Artículo no encontrado | Dralo' } };
 
     const title = blogSeoTitle(article);
     const description = blogSeoDescription(article);
@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
     const canonical = `${blogPostHref(article.slug)}/`;
 
     return {
-      title: `${title} | Blog Dralo`,
+      title: { absolute: `${title} | Blog Dralo` },
       description,
       alternates: { canonical },
       openGraph: {
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }) {
       },
     };
   } catch {
-    return { title: 'Blog | Dralo' };
+    return { title: { absolute: 'Blog | Dralo' } };
   }
 }
 

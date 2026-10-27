@@ -124,7 +124,7 @@ export default function ConfigurarCorreoPage() {
       </p>
 
       <p style={{ marginTop: 16 }}>
-        <Link href="/contacto" style={{ color: '#0070f3' }}>
+        <Link href="/contacto/" style={{ color: '#0070f3' }}>
           ← Volver a Soporte
         </Link>
       </p>

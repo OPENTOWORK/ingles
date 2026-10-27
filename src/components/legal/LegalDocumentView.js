@@ -163,7 +163,7 @@ export default function LegalDocumentView({ document }) {
           <footer className={styles.footer}>
             <p>
               ¿Tienes dudas sobre este documento?{' '}
-              <Link href="/contacto">Contacta con nosotros</Link>.
+              <Link href="/contacto/">Contacta con nosotros</Link>.
             </p>
           </footer>
         </article>

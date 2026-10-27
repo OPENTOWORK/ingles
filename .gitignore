@@ -28,6 +28,9 @@ secrets/
 # Local test artifacts (writing correction runs, backups)
 scripts/generated/
 
+# Authorized human speaking recordings (local-only, never publish)
+local/speaking-b2-human/
+
 # Vercel
 .vercel
 

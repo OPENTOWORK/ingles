@@ -8,7 +8,7 @@ export const APP_ROUTES = {
   /** Destino tras el login de un estudiante, en móvil, tablet y ordenador. */
   examPracticeStudentEntry: '/exam-practice/b2/exam-reading-and-use-of-english',
   draloAi: '/dralo-ai',
-  contact: '/contact',
+  contact: '/contacto',
   profile: '/profile',
   teoria: '/teoria',
   login: '/login',

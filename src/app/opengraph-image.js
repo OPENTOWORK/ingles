@@ -1,5 +1,5 @@
 import { ImageResponse } from 'next/og';
-import { SOCIAL_SHARE } from '@/lib/siteSeo';
+import { SEO_PAGE_META, SOCIAL_SHARE } from '@/lib/siteSeo';
 
 export const alt = SOCIAL_SHARE.imageAlt;
 export const size = { width: 1200, height: 630 };
@@ -50,7 +50,7 @@ export default function Image() {
                 letterSpacing: '-0.03em',
                 marginBottom: 24,
               },
-              children: SOCIAL_SHARE.title,
+              children: 'Dralo Academy',
             },
           },
           {
@@ -63,7 +63,7 @@ export default function Image() {
                 maxWidth: 920,
                 marginBottom: 36,
               },
-              children: SOCIAL_SHARE.description,
+              children: SEO_PAGE_META.home.description,
             },
           },
           {

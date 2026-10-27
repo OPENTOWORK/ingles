@@ -22,7 +22,7 @@ export default function ContactFaqPage() {
       />
 
       <p className="contact-faq-page__back">
-        <Link href="/contacto">← Back to Contact</Link>
+        <Link href="/contacto/">← Back to Contact</Link>
       </p>
 
       <ContactFaqSection

@@ -209,7 +209,7 @@ export default function SiteAssistantWidget({ defaultOpen = false } = {}) {
           </form>
           <p className="text-center text-[10px] text-slate-400 pb-2 px-2">
             Technical issue?{' '}
-            <Link href="/contacto" className="text-indigo-600 hover:underline">
+            <Link href="/contacto/" className="text-indigo-600 hover:underline">
               Contact
             </Link>
           </p>

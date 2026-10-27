@@ -9,6 +9,7 @@ import {
   renderEmailTemplate,
   splitEmailDeliveryMeta,
 } from '@/lib/renderEmailTemplate';
+import { renderWeeklyChallengeEmail } from '@/lib/weeklyChallengeEmail';
 
 const CTA_LABEL_BY_TRIGGER = {
   friend_invited: 'Aceptar invitación',
@@ -25,7 +26,7 @@ const CTA_LABEL_BY_TRIGGER = {
   founding_member_survey_confirmed: 'Entrar en Dralo',
   founding_member_survey_revoked: 'Ver los planes',
   practice_reminder: 'Volver a practicar',
-  weekly_tuesday_challenge: 'Comprobar mi respuesta',
+  weekly_tuesday_challenge: 'Acepto el reto',
 };
 
 const TABLE = 'soporte_correos_automaticos';
@@ -96,19 +97,23 @@ async function sendNow(template, to, variables, adminClient, replyTo) {
 
   const subject = renderEmailTemplate(template.asunto, merged).trim();
   const renderedBody = splitEmailDeliveryMeta(renderEmailTemplate(template.cuerpo, merged));
-  const text = renderedBody.text;
-  const branding = await loadPersistedEmailBranding(adminClient);
-  const { html } = buildBrandedEmailFromPlainText(text, {
-    preheader: renderedBody.preheader || subject,
-    headline: subject,
-    ctaLabel:
-      renderedBody.ctaLabel ||
-      CTA_LABEL_BY_TRIGGER[template.trigger_event] ||
-      'Empezar a practicar',
-    ...(branding.brandName ? { brandName: branding.brandName } : {}),
-    ...(branding.legalName ? { legalName: branding.legalName } : {}),
-    ...(branding.supportEmail ? { supportEmail: branding.supportEmail } : {}),
-  });
+  const isWeeklyChallenge = template.slug === 'weekly_tuesday_challenge';
+  const weeklyChallenge = isWeeklyChallenge ? renderWeeklyChallengeEmail(merged) : null;
+  const text = weeklyChallenge?.text || renderedBody.text;
+  const branding = isWeeklyChallenge ? {} : await loadPersistedEmailBranding(adminClient);
+  const { html } = weeklyChallenge
+    ? weeklyChallenge
+    : buildBrandedEmailFromPlainText(text, {
+        preheader: renderedBody.preheader || subject,
+        headline: subject,
+        ctaLabel:
+          renderedBody.ctaLabel ||
+          CTA_LABEL_BY_TRIGGER[template.trigger_event] ||
+          'Empezar a practicar',
+        ...(branding.brandName ? { brandName: branding.brandName } : {}),
+        ...(branding.legalName ? { legalName: branding.legalName } : {}),
+        ...(branding.supportEmail ? { supportEmail: branding.supportEmail } : {}),
+      });
 
   const result = await deliverTransactionalEmail({ to, subject, text, html, replyTo });
 

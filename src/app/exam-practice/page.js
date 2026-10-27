@@ -1,11 +1,11 @@
 import Link from 'next/link';
-import { SEO_PAGE_META } from '@/lib/siteSeo';
+import { pageMetadata, SEO_PAGE_META } from '@/lib/siteSeo';
 
-export const metadata = {
+export const metadata = pageMetadata({
   title: SEO_PAGE_META.examPractice.title,
   description: SEO_PAGE_META.examPractice.description,
-  alternates: { canonical: '/exam-practice/' },
-};
+  path: '/exam-practice/',
+});
 
 const LEVELS = [
   { code: 'A2', name: 'Elementary', color: '#58cc02' },

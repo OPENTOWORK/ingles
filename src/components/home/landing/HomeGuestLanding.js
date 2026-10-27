@@ -244,7 +244,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <Link href="/precios" className="hl-nav__link">
               Precios
             </Link>
-            <Link href="/contacto" className="hl-nav__link hl-nav__link--wide">
+            <Link href="/contacto/" className="hl-nav__link hl-nav__link--wide">
               Contacto
             </Link>
           </nav>
@@ -494,7 +494,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <h2 id="hl-faq-title" className="hl-h2 hl-h2--sm">
               Preguntas frecuentes
             </h2>
-            <Link href="/contacto/faq" className="hl-faq__all">
+            <Link href="/contacto/faq/" className="hl-faq__all">
               Ver todas las preguntas
               <ArrowRight aria-hidden="true" />
             </Link>

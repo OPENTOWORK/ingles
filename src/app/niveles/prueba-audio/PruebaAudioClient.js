@@ -8,7 +8,7 @@ const CLIPS = [
     id: 'p01-part1',
     title: 'Part 1',
     src: '/listening-preview/p01-part1.mp3',
-    note: 'Cada extracto: narración, master, 3 segundos de silencio y otra vez el master. Al final, 10 segundos y «That\'s the end of part 1».',
+    note: 'Cada extracto: narración, 2 segundos, master, 3 segundos y otra vez el master. Entre preguntas, 1 segundo. Al final, 10 segundos y «That\'s the end of part 1».',
   },
   {
     id: 'p01-part2',

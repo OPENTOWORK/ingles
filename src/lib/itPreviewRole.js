@@ -49,7 +49,7 @@ const PRESET_ROUTES = [
   { label: 'Training', path: '/training', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Planes / Pricing', path: '/precios', roles: ['admin'] },
   { label: 'Dralo AI', path: '/dralo-ai', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
-  { label: 'Contacto', path: '/contact', roles: ['guest', 'student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
+  { label: 'Contacto', path: '/contacto', roles: ['guest', 'student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
   { label: 'Panel profesor', path: '/teacher', roles: ['teacher'] },
   { label: 'Panel profesor (admin)', path: '/admin/profesor', roles: ['admin', 'coordinator'] },
   { label: 'Panel coordinador', path: '/coordinador', roles: ['coordinator'] },

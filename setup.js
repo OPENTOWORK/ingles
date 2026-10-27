@@ -46,7 +46,7 @@ if (!fs.existsSync(envPath)) {
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 NEXT_PUBLIC_APP_NAME="English Practice"
-NEXT_PUBLIC_APP_VERSION="1.0.0"
+NEXT_PUBLIC_APP_VERSION="1.0.1"
 NODE_ENV=development
 `;
     fs.writeFileSync(envPath, envContent);

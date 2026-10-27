@@ -10,7 +10,7 @@ import '@/styles/mascot.css';
 import Script from 'next/script';
 import ClientAppProviders from './ClientAppProviders';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
-import { SEO_PAGE_META, SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
+import { SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
 import { SESSION_HINT_BOOT_SCRIPT } from '@/lib/sessionHint';
 import {
   DRALO_APP_ICON_SRC,
@@ -28,18 +28,14 @@ const ENABLE_MARKETING_TAGS = process.env.NODE_ENV === 'production';
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: SEO_PAGE_META.home.title,
-    template: `%s | ${DRALO_BRAND_NAME}`,
+    default: DRALO_BRAND_NAME,
+    template: '%s | Dralo',
   },
-  description: SEO_PAGE_META.home.description,
   applicationName: DRALO_BRAND_NAME,
   openGraph: {
     type: 'website',
     locale: SOCIAL_SHARE.locale,
-    url: SITE_URL,
     siteName: DRALO_BRAND_NAME,
-    title: SOCIAL_SHARE.title,
-    description: SOCIAL_SHARE.description,
     images: [
       {
         url: '/opengraph-image',
@@ -51,8 +47,6 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: SOCIAL_SHARE.title,
-    description: SOCIAL_SHARE.description,
     images: ['/opengraph-image'],
   },
   icons: {

@@ -86,6 +86,8 @@ import { LEVELS_SCORE_SOURCE, resolvePracticeScoreSourceFromExamModeParam } from
 import { persistLevelsPartProgress } from '@/utils/persistLevelsPartProgress';
 import { speakingProgressFromFeedbackReport } from '@/lib/speakingPartScoreFromFeedback';
 import { resolveB2ExamenId, fetchB2PreguntasByExamen } from '@/utils/b2ResolveExam';
+import SpeakingMotorV1 from '@/features/speaking-b2-motor/ui/SpeakingMotorV1';
+import { useSpeakingMotorParent } from '@/features/speaking-b2-motor/ui/useSpeakingMotorParent';
 
 const buttonStyle = {
   backgroundColor: '#c1f2cd',
@@ -280,6 +282,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
   const readingSession = useReadingPracticeSession();
   const PracticeChrome = isSkillPracticeSession ? ReadingPracticeChrome : B2ExamPracticeChrome;
+  const speakingMotor = useSpeakingMotorParent();
 
   const handleKeepPracticing = useCallback(() => {
     runKeepPracticingSkillFlow({
@@ -334,6 +337,10 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
   );
 
   const partNumber = selectedPart?.partNumber ?? 0;
+  const isPart1Motor =
+    Boolean(selectedPart) &&
+    getSkillLocalPartNumber(partNumber, B2_SPEAKING_PART_MIN) === 1 &&
+    !examModeActive;
 
   const categoryTimer = usePartPracticeTimer({
     practiceReady: !loading && !error && layoutPracticeOpen && Boolean(selectedPart?.id),
@@ -849,6 +856,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
         reportErrorContext={reportErrorContext}
         examModeSaveControls={examModeSaveControls}
         phoneInstructions={phoneSkillSteps ? speakingInstructionsEl : null}
+        onPhoneStartExercise={isPart1Motor ? speakingMotor.beginAudioCheck : undefined}
       >
       {examModeActive && examSection ? (
         <ExamModeSectionBanner
@@ -896,6 +904,14 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
               />
               <div className="levels-exam-split__body levels-exam-split__body--stacked">
                 {phoneSkillSteps ? null : speakingInstructionsEl}
+          {isPart1Motor ? (
+            <SpeakingMotorV1
+              ref={speakingMotor.motorRef}
+              embedded
+              startMode={phoneSkillSteps ? speakingMotor.startMode : 'self'}
+              onLifecycleChange={speakingMotor.onLifecycleChange}
+            />
+          ) : (
           <B2SpeakingPartSession
             key={`${selectedPart.id}-${examSlot}-${speakingDraftEpoch}`}
             part={selectedPart}
@@ -910,6 +926,7 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
             examMode={examModeActive && !reviewMode}
             hideTaskIntro={Boolean(selectedPart?.descripcion?.trim())}
           />
+          )}
               </div>
             </div>
           </div>

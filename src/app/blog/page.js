@@ -5,6 +5,7 @@ import BlogFeaturedHero from '@/components/blog/BlogFeaturedHero';
 import BlogMasthead from '@/components/blog/BlogMasthead';
 import BlogTopicNav from '@/components/blog/BlogTopicNav';
 import { fetchPublishedBlogArticles } from '@/lib/blogArticles';
+import { pageMetadata, SEO_PAGE_META } from '@/lib/siteSeo';
 import { unstable_noStore as noStore } from 'next/cache';
 import {
   BLOG_CONTENT_TYPE_META,
@@ -13,12 +14,11 @@ import {
   normalizeBlogContentType,
 } from '@/lib/blogContentTypes';
 
-export const metadata = {
-  title: 'Blog | Dralo',
-  description:
-    'Reflexiones, consejos y recursos de Dralo para aprender y practicar inglés con confianza.',
-  alternates: { canonical: '/blog/' },
-};
+export const metadata = pageMetadata({
+  title: SEO_PAGE_META.blog.title,
+  description: SEO_PAGE_META.blog.description,
+  path: '/blog/',
+});
 
 export const dynamic = 'force-dynamic';
 

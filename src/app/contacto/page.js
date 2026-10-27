@@ -341,7 +341,7 @@ export default function ContactPage() {
             opening a ticket.
           </p>
         </div>
-        <Link href="/contacto/faq" className="contact-faq-entry__btn">
+        <Link href="/contacto/faq/" className="contact-faq-entry__btn">
           View FAQ
           <span aria-hidden>→</span>
         </Link>

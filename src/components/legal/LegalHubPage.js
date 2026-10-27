@@ -9,7 +9,7 @@ const LEGAL_LINKS = [
   { href: '/aviso-legal', label: 'Aviso legal' },
   { href: '/politica-reembolsos', label: 'Política de reembolsos' },
   { href: '/normas-comunidad', label: 'Normas de comunidad' },
-  { href: '/contact', label: 'Contacta con nosotros' },
+  { href: '/contacto/', label: 'Contacta con nosotros' },
 ];
 
 const PRIVACY_LINKS = [
@@ -59,7 +59,7 @@ export default function LegalHubPage() {
       <div className="legal-hub__tagline">
         <DraloTagline className="dralo-tagline--footer" />
         <p>{SITE_FOOTER_TAGLINE}</p>
-        <p>© {new Date().getFullYear()} Dralo · Versión Alpha 1.0.0</p>
+        <p>© {new Date().getFullYear()} Dralo · Versión 1.0.1</p>
       </div>
     </div>
   );

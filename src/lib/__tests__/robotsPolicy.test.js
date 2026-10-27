@@ -171,6 +171,9 @@ test('sitemap lists only absolute indexable URLs that robots allows', () => {
   assert.equal(urls.includes('https://www.dralo.es/dralo-ai/'), false);
   assert.equal(urls.includes('https://www.dralo.es/login/'), false);
   assert.equal(urls.includes('https://www.dralo.es/campana/'), false);
+  assert.equal(urls.includes('https://www.dralo.es/contact/'), false);
+  assert.ok(urls.includes('https://www.dralo.es/contacto/'));
+  assert.ok(urls.includes('https://www.dralo.es/contacto/faq/'));
   assert.ok(urls.includes('https://www.dralo.es/'));
   assert.ok(urls.includes('https://www.dralo.es/sitemap.xml') === false);
 

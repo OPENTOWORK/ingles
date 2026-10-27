@@ -265,6 +265,8 @@ export function B2ExamPracticeChrome({
   examModeSaveControls = null,
   /** Instrucciones de la parte seleccionada para el paso previo en móvil. */
   phoneInstructions = null,
+  /** Optional start hook for the original Start exercise button. */
+  onPhoneStartExercise = null,
   children,
 }) {
   const { userRole } = useUserRole();
@@ -783,7 +785,10 @@ export function B2ExamPracticeChrome({
                 (lang === 'en' ? 'Instructions' : 'Instrucciones')
               }
               lang={lang}
-              onContinue={() => setPhoneStep('exercise')}
+              onContinue={() => {
+                setPhoneStep('exercise');
+                onPhoneStartExercise?.();
+              }}
               onBack={phonePartItems.length > 1 ? () => setPhoneStep('parts') : null}
             >
               {phoneInstructions}

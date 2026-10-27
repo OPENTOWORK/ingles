@@ -1,11 +1,11 @@
 import '@/styles/app-routes.css';
-import { SEO_PAGE_META } from '@/lib/siteSeo';
+import { pageMetadata, SEO_PAGE_META } from '@/lib/siteSeo';
 
-export const metadata = {
-  title: SEO_PAGE_META.examTheory.title,
-  description: SEO_PAGE_META.examTheory.description,
-  alternates: { canonical: '/exam-strategies/' },
-};
+export const metadata = pageMetadata({
+  title: SEO_PAGE_META.examStrategies.title,
+  description: SEO_PAGE_META.examStrategies.description,
+  path: '/exam-strategies/',
+});
 
 /** Hub overview is public; skill routes enforce plan access in TeoriaSectionGate / nested layouts. */
 export default function ExamStrategiesLayout({ children }) {

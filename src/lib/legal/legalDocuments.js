@@ -107,7 +107,7 @@ export const LEGAL_MAIN_MENUS = [
       { type: 'link', slug: 'aviso-legal' },
       { type: 'link', slug: 'politica-reembolsos' },
       { type: 'link', slug: 'normas-comunidad' },
-      { type: 'link', slug: 'contacto', href: '/contact', label: 'Contacta con nosotros' },
+      { type: 'link', slug: 'contacto', href: '/contacto/', label: 'Contacta con nosotros' },
     ],
   },
   {

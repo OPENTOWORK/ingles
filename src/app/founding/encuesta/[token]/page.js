@@ -204,7 +204,7 @@ export default function FoundingSurveyPage() {
           vuelto al cupo. Tu progreso sigue intacto y puedes seguir practicando con el Plan Free. Si
           fue un despiste, escríbenos y lo miramos.
         </p>
-        <a className={styles.link} href="/contacto">
+        <a className={styles.link} href="/contacto/">
           Escribirnos
         </a>
       </Shell>

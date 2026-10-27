@@ -1,0 +1,132 @@
+{
+  "setVersion": "human-v1.9",
+  "packId": "pilot-sp-ex001-v1.9",
+  "authorizationNote": "Fill authorization only after the speaker consents. Do not invent consent, level or transcripts.",
+  "samples": [
+    {
+      "id": "hum-v19-q01",
+      "questionId": "SP-EX001-P1-Q01",
+      "question": "What do you enjoy most about studying English?",
+      "audioFile": "originals/hum-v19-q01.m4a",
+      "humanTranscript": "",
+      "durationMs": null,
+      "language": "en",
+      "estimatedLevel": null,
+      "levelVerified": false,
+      "microphone": "",
+      "notes": "",
+      "speakerId": "",
+      "sessionId": "",
+      "captureKind": "isolated-answer",
+      "authorization": {
+        "granted": false,
+        "purpose": "",
+        "scope": "local-dev-only",
+        "identifiable": true,
+        "consentRef": "",
+        "recordedAt": null
+      },
+      "setVersion": "human-v1.9"
+    },
+    {
+      "id": "hum-v19-q02",
+      "questionId": "SP-EX001-P1-Q02",
+      "question": "How do you usually spend your weekends?",
+      "audioFile": "originals/hum-v19-q02.m4a",
+      "humanTranscript": "",
+      "durationMs": null,
+      "language": "en",
+      "estimatedLevel": null,
+      "levelVerified": false,
+      "microphone": "",
+      "notes": "",
+      "speakerId": "",
+      "sessionId": "",
+      "captureKind": "isolated-answer",
+      "authorization": {
+        "granted": false,
+        "purpose": "",
+        "scope": "local-dev-only",
+        "identifiable": true,
+        "consentRef": "",
+        "recordedAt": null
+      },
+      "setVersion": "human-v1.9"
+    },
+    {
+      "id": "hum-v19-q03",
+      "questionId": "SP-EX001-P1-Q03",
+      "question": "Do you prefer visiting new places or returning to places you know? Why?",
+      "audioFile": "originals/hum-v19-q03.m4a",
+      "humanTranscript": "",
+      "durationMs": null,
+      "language": "en",
+      "estimatedLevel": null,
+      "levelVerified": false,
+      "microphone": "",
+      "notes": "",
+      "speakerId": "",
+      "sessionId": "",
+      "captureKind": "isolated-answer",
+      "authorization": {
+        "granted": false,
+        "purpose": "",
+        "scope": "local-dev-only",
+        "identifiable": true,
+        "consentRef": "",
+        "recordedAt": null
+      },
+      "setVersion": "human-v1.9"
+    },
+    {
+      "id": "hum-v19-q04",
+      "questionId": "SP-EX001-P1-Q04",
+      "question": "How has technology changed the way you communicate with your friends?",
+      "audioFile": "originals/hum-v19-q04.m4a",
+      "humanTranscript": "",
+      "durationMs": null,
+      "language": "en",
+      "estimatedLevel": null,
+      "levelVerified": false,
+      "microphone": "",
+      "notes": "",
+      "speakerId": "",
+      "sessionId": "",
+      "captureKind": "isolated-answer",
+      "authorization": {
+        "granted": false,
+        "purpose": "",
+        "scope": "local-dev-only",
+        "identifiable": true,
+        "consentRef": "",
+        "recordedAt": null
+      },
+      "setVersion": "human-v1.9"
+    },
+    {
+      "id": "hum-v19-q05",
+      "questionId": "SP-EX001-P1-Q05",
+      "question": "Is there a new skill you would like to learn in the future?",
+      "audioFile": "originals/hum-v19-q05.m4a",
+      "humanTranscript": "",
+      "durationMs": null,
+      "language": "en",
+      "estimatedLevel": null,
+      "levelVerified": false,
+      "microphone": "",
+      "notes": "",
+      "speakerId": "",
+      "sessionId": "",
+      "captureKind": "isolated-answer",
+      "authorization": {
+        "granted": false,
+        "purpose": "",
+        "scope": "local-dev-only",
+        "identifiable": true,
+        "consentRef": "",
+        "recordedAt": null
+      },
+      "setVersion": "human-v1.9"
+    }
+  ]
+}
