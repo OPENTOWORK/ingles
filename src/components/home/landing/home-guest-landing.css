@@ -1399,7 +1399,8 @@
 }
 
 /* ——— Anchos intermedios (portátil pequeño y tablet) ——— */
-@media (max-width: 1199px) {
+/* Con los seis enlaces la cabecera no cabe en el contenedor de 1180 px; por debajo de 1600 px el botón de registro se salía de la pantalla. */
+@media (max-width: 1599px) {
   .home-landing .hl-nav__link--wide {
     display: none;
   }

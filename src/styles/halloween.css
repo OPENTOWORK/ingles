@@ -1,0 +1,163 @@
+/* Halloween 2026: todo cuelga de html.theme-halloween (src/lib/halloweenTheme.js). */
+
+html.theme-halloween {
+  --halloween-pumpkin: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M30.5 19c0-4 1-7.5 3.5-10.5' fill='none' stroke='%234d7c0f' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M34 12c5-4 11-3 13 1-5 2-9 2-13-1z' fill='%2365a30d'/%3E%3Cellipse cx='20' cy='39' rx='16' ry='18.5' fill='%23ea580c'/%3E%3Cellipse cx='44' cy='39' rx='16' ry='18.5' fill='%23ea580c'/%3E%3Cellipse cx='32' cy='39' rx='13' ry='19.5' fill='%23f97316'/%3E%3Cpath d='M16 34l6-8 6 8zM36 34l6-8 6 8zM15 41Q32 60 49 41Q32 50 15 41z' fill='%231d1857'/%3E%3Cpath d='M23.5 44h4v3h-4zM36.5 44h4v3h-4z' fill='%23f97316'/%3E%3C/svg%3E");
+  --halloween-web: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' d='M100 0L2.2 20.8M100 0L17.1 55.9M100 0L44.1 82.9M100 0L79.2 97.8M80 0Q82.9 1.8 80.4 4.2Q84.2 6.7 83.4 11.2Q87.8 12.2 88.8 16.6Q93.3 15.8 95.8 19.6Q98.2 17.1 100 20M60 0Q65.8 3.6 60.9 8.3Q68.3 13.4 66.8 22.4Q75.7 24.3 77.6 33.2Q86.6 31.7 91.7 39.1Q96.4 34.2 100 40M40 0Q48.7 5.4 41.3 12.5Q52.5 20.2 50.3 33.6Q63.5 36.5 66.4 49.7Q79.8 47.5 87.5 58.7Q94.6 51.3 100 60M20 0Q31.6 7.2 21.7 16.6Q36.7 26.9 33.7 44.7Q51.4 48.6 55.3 66.3Q73.1 63.3 83.4 78.3Q92.8 68.4 100 80'/%3E%3C/svg%3E");
+  --halloween-stripe: linear-gradient(90deg, #f97316 0%, #a855f7 50%, #f97316 100%);
+}
+
+/* ——— Calabaza en la esquina del logo; en absoluto porque la cabecera de la landing no tiene ancho de sobra ——— */
+html.theme-halloween .site-header__logo,
+html.theme-halloween .home-landing .hl-logo {
+  position: relative;
+}
+
+html.theme-halloween .site-header__logo::before,
+html.theme-halloween .home-landing .hl-logo::before {
+  content: '';
+  position: absolute;
+  top: -0.42em;
+  right: -0.82em;
+  width: 0.95em;
+  height: 0.95em;
+  background: var(--halloween-pumpkin) no-repeat center / contain;
+  transform: rotate(14deg);
+  transform-origin: 50% 90%;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-halloween .site-header__logo:hover::before,
+  html.theme-halloween .home-landing .hl-logo:hover::before {
+    animation: halloween-wobble 0.7s ease-in-out;
+  }
+}
+
+/* ——— Franja naranja y morada bajo la cabecera ——— */
+html.theme-halloween .site-header::after,
+html.theme-halloween .home-landing .hl-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  background: var(--halloween-stripe);
+  pointer-events: none;
+}
+
+/* ——— Telaraña en la esquina, solo donde sobra margen a la derecha del menú ——— */
+html.theme-halloween .site-header::before,
+html.theme-halloween .home-landing .hl-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: -1;
+  display: none;
+  width: 66px;
+  height: 66px;
+  background: rgba(100, 116, 139, 0.5);
+  -webkit-mask: var(--halloween-web) no-repeat top right / contain;
+  mask: var(--halloween-web) no-repeat top right / contain;
+  pointer-events: none;
+}
+
+html.theme-halloween.reading-night-mode .site-header::before {
+  background: rgba(203, 213, 225, 0.38);
+}
+
+@media (min-width: 1440px) {
+  html.theme-halloween .site-header::before,
+  html.theme-halloween .home-landing .hl-header::before {
+    display: block;
+  }
+}
+
+/* ——— Murciélagos (HalloweenTheme, solo en la home) ——— */
+.halloween-bats {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.halloween-bat {
+  position: absolute;
+  left: 0;
+  color: #1d1857;
+  opacity: 0;
+  animation-name: halloween-bat-fly;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+.halloween-bat svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 35%;
+  animation: halloween-bat-flap 0.18s ease-in-out infinite alternate;
+}
+
+html.reading-night-mode .halloween-bat {
+  filter: drop-shadow(0 0 6px rgba(249, 115, 22, 0.75));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halloween-bats {
+    display: none;
+  }
+}
+
+@keyframes halloween-wobble {
+  0%,
+  100% {
+    transform: rotate(14deg);
+  }
+  25% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(26deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes halloween-bat-fly {
+  0% {
+    opacity: 0;
+    transform: translate3d(-15vw, 0, 0) rotate(-8deg);
+  }
+  8% {
+    opacity: 1;
+  }
+  30% {
+    transform: translate3d(25vw, -5vh, 0) rotate(6deg);
+  }
+  55% {
+    transform: translate3d(55vw, 4vh, 0) rotate(-6deg);
+  }
+  80% {
+    transform: translate3d(85vw, -4vh, 0) rotate(5deg);
+  }
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(115vw, 2vh, 0) rotate(-4deg);
+  }
+}
+
+@keyframes halloween-bat-flap {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0.35);
+  }
+}

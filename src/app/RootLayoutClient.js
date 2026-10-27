@@ -45,6 +45,7 @@ const OrientationQuizGate = dynamic(() => import('@/components/landing/ab/Orient
 import AuthenticatedAppShell from '@/components/layout/AuthenticatedAppShell';
 import { landingFont } from '@/components/home/landing/landingFont';
 import SiteNightModeInit from '@/components/layout/SiteNightModeInit';
+import HalloweenTheme from '@/components/layout/HalloweenTheme';
 import { useLevelsStarsBackfill } from '@/hooks/useLevelsStarsBackfill';
 import { useClientMounted } from '@/hooks/useClientMounted';
 
@@ -493,6 +494,7 @@ function RootLayoutClientInner({ children }) {
   return (
     <>
       <SiteNightModeInit />
+      <HalloweenTheme />
       <ClientToaster />
       <ClientAnalyticsLoader
         clarityEnabled={clarityAnalyticsEnabled}
@@ -704,7 +706,7 @@ function RootLayoutClientInner({ children }) {
                   <span className="legal-footer-meta__sep" aria-hidden="true">
                     ·
                   </span>
-                  <span className="legal-footer-version">Versión 1.0.4</span>
+                  <span className="legal-footer-version">Versión 1.0.5</span>
                 </p>
               </div>
             </div>

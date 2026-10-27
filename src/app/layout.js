@@ -7,11 +7,13 @@ import '@/styles/admin-theme.css';
 import '@/styles/admin-night-mode.css';
 import './globals.css';
 import '@/styles/mascot.css';
+import '@/styles/halloween.css';
 import Script from 'next/script';
 import ClientAppProviders from './ClientAppProviders';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 import { SEO_PAGE_META, SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
 import { SESSION_HINT_BOOT_SCRIPT } from '@/lib/sessionHint';
+import { HALLOWEEN_BOOT_SCRIPT } from '@/lib/halloweenTheme';
 import {
   DRALO_APP_ICON_SRC,
   DRALO_APPLE_TOUCH_ICON_PATH,
@@ -82,6 +84,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script id="session-hint-boot" dangerouslySetInnerHTML={{ __html: SESSION_HINT_BOOT_SCRIPT }} />
+        <script id="halloween-boot" dangerouslySetInnerHTML={{ __html: HALLOWEEN_BOOT_SCRIPT }} />
         <link rel="preconnect" href="https://qnazrzvwvkwhkfbqsbmr.supabase.co" crossOrigin="" />
         <link rel="dns-prefetch" href="https://qnazrzvwvkwhkfbqsbmr.supabase.co" />
         <link rel="ard" href="/.well-known/ard.json" type="application/json" />
