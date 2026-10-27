@@ -133,6 +133,19 @@
   font-weight: 600;
 }
 
+.pillar-landing__guides {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.pillar-landing__guides a {
+  color: #5b4bb7;
+  font-weight: 600;
+}
+
 @media (max-width: 640px) {
   .pillar-landing__hero {
     text-align: center;

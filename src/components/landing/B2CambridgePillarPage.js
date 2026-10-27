@@ -11,6 +11,7 @@ import {
   PenLine,
   Sparkles,
 } from 'lucide-react';
+import { BLOG_CATEGORIES, blogCategoryPath } from '@/lib/blogCategories';
 import '@/styles/conversion-landing.css';
 import '@/styles/pillar-landing.css';
 
@@ -250,6 +251,31 @@ function B2CambridgePillarContent() {
               </article>
             ))}
           </div>
+        </section>
+
+        <section
+          className="conversion-landing__section pillar-landing__section"
+          aria-labelledby="guias-blog-title"
+        >
+          <h2 id="guias-blog-title" className="conversion-landing__section-title">
+            Guías del blog por parte del examen
+          </h2>
+          <p className="conversion-landing__section-lead">
+            Cada destreza tiene su propia categoría en el blog, con la guía de esa parte del B2 First.
+          </p>
+          <ul className="pillar-landing__guides">
+            {BLOG_CATEGORIES.map((category) => (
+              <li key={category.slug}>
+                <Link href={blogCategoryPath(category.slug)}>{category.name}</Link>
+                {category.guide ? (
+                  <>
+                    {': '}
+                    <Link href={`/blog/${category.guide.slug}`}>{category.guide.title}</Link>
+                  </>
+                ) : null}
+              </li>
+            ))}
+          </ul>
         </section>
 
         <section

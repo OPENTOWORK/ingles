@@ -1,3 +1,4 @@
+import { indexableBlogCategoryPaths } from '@/lib/blogCategories';
 import { SITE_URL } from '@/lib/siteSeo';
 
 const CEFR_LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
@@ -35,6 +36,7 @@ export const SITEMAP_PATHS = [
   '/exam-practice/b2/exam-reading-and-use-of-english',
   '/exam-practice/b2/exam-writing',
   '/exam-practice/b2/exam-listening',
+  ...indexableBlogCategoryPaths(),
 ];
 
 export function sitemapAbsoluteUrl(path) {

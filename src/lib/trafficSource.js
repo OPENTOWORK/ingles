@@ -188,6 +188,44 @@ export function trafficSourceLabel(key, extra = {}) {
   return SOURCE_LABELS[key] || extra.utmSource || '—';
 }
 
+function humanizeUtmValue(value) {
+  let text = String(value || '').trim();
+  if (!text) return '';
+  try {
+    text = decodeURIComponent(text.replace(/\+/g, ' '));
+  } catch {
+    text = text.replace(/\+/g, ' ');
+  }
+  return text.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/** Lee campaña y anuncio de la URL de aterrizaje. */
+export function utmFromLandingPage(landingPage) {
+  const landing = readLandingUrl(landingPage);
+  if (!landing) return { source: '', campaign: '', content: '' };
+  return {
+    source: humanizeUtmValue(landing.searchParams.get('utm_source')),
+    campaign: humanizeUtmValue(landing.searchParams.get('utm_campaign')),
+    content: humanizeUtmValue(landing.searchParams.get('utm_content')),
+  };
+}
+
+/**
+ * Canal más el anuncio. utm_content distingue creatividades de la misma campaña.
+ * @param {string} key
+ * @param {string} [landingPage]
+ */
+export function trafficSourceWithAd(key, landingPage = '') {
+  const normalized = String(key || '').trim();
+  const base = normalized ? trafficSourceLabel(normalized) || 'Directo' : 'Directo';
+  const utm = utmFromLandingPage(landingPage);
+  const detail = utm.content || utm.campaign;
+  if (!detail) return base;
+  const placement = /sitelink/i.test(utm.source) ? 'sitelink' : '';
+  const extra = [placement, detail].filter(Boolean).join(' · ');
+  return `${base} · ${extra}`;
+}
+
 /** Reconstruye la etiqueta a partir de una fila de marketing_acquisition_profiles. */
 export function labelFromAcquisitionProfile(profile) {
   if (!profile) return '—';
@@ -270,6 +308,7 @@ export function readBrowserTrafficFields() {
     utmSource: params.get('utm_source') || '',
     utmMedium: params.get('utm_medium') || '',
     utmCampaign: params.get('utm_campaign') || '',
+    utmContent: params.get('utm_content') || '',
     gclid: params.get('gclid') || '',
   };
 }

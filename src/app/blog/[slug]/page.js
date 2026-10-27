@@ -8,7 +8,13 @@ import BlogCommentsSection from '@/components/blog/BlogCommentsSection';
 import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
 import { blogOgImage, blogSeoDescription, blogSeoTitle } from '@/lib/blogContent';
 import { blogTypeMeta, normalizeBlogContentType } from '@/lib/blogContentTypes';
-import { fetchPublishedBlogArticleBySlug, formatBlogDate, blogPostHref } from '@/lib/blogArticles';
+import {
+  fetchPublishedBlogArticleBySlug,
+  fetchPublishedBlogArticles,
+  formatBlogDate,
+  blogPostHref,
+} from '@/lib/blogArticles';
+import { categoryForArticle, relatedArticlesInCategory } from '@/lib/blogCategories';
 import { unstable_noStore as noStore } from 'next/cache';
 import { SITE_URL } from '@/lib/siteSeo';
 
@@ -64,6 +70,16 @@ export default async function BlogArticlePage({ params }) {
 
   const cover = article.cover_image_url || blogOgImage(article);
   const typeMeta = blogTypeMeta(normalizeBlogContentType(article.content_type));
+  const category = categoryForArticle(article);
+  let related = [];
+  if (category) {
+    try {
+      const published = await fetchPublishedBlogArticles(100);
+      related = relatedArticlesInCategory(published, article);
+    } catch {
+      related = [];
+    }
+  }
 
   return (
     <main className="blog-article-page">
@@ -91,6 +107,12 @@ export default async function BlogArticlePage({ params }) {
         <header className="blog-article-page__header">
           <div className="blog-article-page__meta-row">
             <span className="blog-card__type">{typeMeta.label}</span>
+            {category ? (
+              <Link href={`/blog/categoria/${category.slug}`} className="blog-card__type">
+                {category.name}
+              </Link>
+            ) : null}
+            {article.etiqueta ? <span className="blog-card__type">{article.etiqueta}</span> : null}
             <span className="blog-article-page__dralo-mark">
               <BlogDraloBrand variant="inline" />
             </span>
@@ -107,6 +129,19 @@ export default async function BlogArticlePage({ params }) {
         <BlogArticleContent html={article.content} />
 
         <BlogArticleFaqSection items={article.faq_items} />
+
+        {category && related.length > 0 ? (
+          <section className="blog-related" aria-labelledby="blog-related-title">
+            <h2 id="blog-related-title">Más sobre {category.name}</h2>
+            <ul>
+              {related.map((item) => (
+                <li key={item.slug}>
+                  <Link href={blogPostHref(item.slug)}>{item.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         <BlogCommentsSection articleId={article.id} articleSlug={article.slug} />
 

@@ -1,3 +1,4 @@
+import { categoryForArticle } from '@/lib/blogCategories';
 import { SITE_URL } from '@/lib/siteSeo';
 import { blogOgImage, blogSeoDescription, blogSeoTitle } from '@/lib/blogContent';
 import { blogPostHref } from '@/lib/blogArticles';
@@ -24,6 +25,8 @@ export default function BlogArticleJsonLd({ article }) {
     },
   };
 
+  const category = categoryForArticle(article);
+  if (category) payload.articleSection = category.name;
   if (image) payload.image = [image];
 
   return (

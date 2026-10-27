@@ -12,23 +12,26 @@ import {
   toScheduleInputs,
 } from '@/lib/blogSchedule';
 import { BLOG_TYPE_ARTICLE, normalizeBlogContentType } from '@/lib/blogContentTypes';
+import { categoryForArticle, normalizeBlogCategorySlug } from '@/lib/blogCategories';
 
 const TABLE = 'blog_articles';
 
-const PUBLIC_LIST_FIELDS =
+const PUBLIC_LIST_FIELDS_BASE =
   'id, slug, title, excerpt, cover_image_url, content_type, created_at, updated_at, published_at';
+
+const PUBLIC_LIST_FIELDS = `${PUBLIC_LIST_FIELDS_BASE}, category_slug, etiqueta`;
 
 const ADMIN_FIELDS_BASE =
   'id, slug, title, excerpt, content, cover_image_url, og_image_url, seo_title, seo_description, content_type, published, author_id, created_at, updated_at, published_at';
 
-const ADMIN_FIELDS = `${ADMIN_FIELDS_BASE}, scheduled_publish_at, faq_items`;
+const ADMIN_FIELDS = `${ADMIN_FIELDS_BASE}, scheduled_publish_at, faq_items, category_slug, etiqueta`;
 
 const LEGACY_ADMIN_FIELDS = ADMIN_FIELDS_BASE;
 
 const PUBLIC_DETAIL_FIELDS_BASE =
   'id, slug, title, excerpt, content, cover_image_url, og_image_url, seo_title, seo_description, content_type, created_at, updated_at, published_at';
 
-const PUBLIC_DETAIL_FIELDS = `${PUBLIC_DETAIL_FIELDS_BASE}, faq_items`;
+const PUBLIC_DETAIL_FIELDS = `${PUBLIC_DETAIL_FIELDS_BASE}, faq_items, category_slug, etiqueta`;
 
 export function slugifyBlogTitle(title = '') {
   return String(title)
@@ -125,7 +128,9 @@ function isSchemaCacheColumnError(error) {
     error?.code === 'PGRST205' ||
     msg.includes('schema cache') ||
     msg.includes('faq_items') ||
-    msg.includes('scheduled_publish_at')
+    msg.includes('scheduled_publish_at') ||
+    msg.includes('category_slug') ||
+    msg.includes('etiqueta')
   );
 }
 
@@ -133,6 +138,8 @@ function stripOptionalBlogColumns(row) {
   const next = { ...row };
   delete next.faq_items;
   delete next.scheduled_publish_at;
+  delete next.category_slug;
+  delete next.etiqueta;
   return next;
 }
 
@@ -258,6 +265,13 @@ function buildArticleRow(payload, { isCreate = false } = {}) {
   if (isCreate) {
     row.content_type = normalizeBlogContentType(payload.contentType || BLOG_TYPE_ARTICLE);
   }
+  if (payload.categorySlug !== undefined || isCreate) {
+    const categorySlug = normalizeBlogCategorySlug(payload.categorySlug);
+    row.category_slug = categorySlug || null;
+  }
+  if (payload.etiqueta !== undefined || isCreate) {
+    row.etiqueta = String(payload.etiqueta || '').trim().slice(0, 40) || null;
+  }
 
   return row;
 }
@@ -280,13 +294,23 @@ export async function fetchPublishedBlogArticles(limit = 50) {
   await tryPublishDueScheduledArticles();
   const db = getPublicDb();
 
-  const { data, error } = await db
+  let { data, error } = await db
     .from(TABLE)
     .select(PUBLIC_LIST_FIELDS)
     .eq('published', true)
     .order('published_at', { ascending: false, nullsFirst: false })
     .order('created_at', { ascending: false })
     .limit(limit);
+
+  if (error && isSchemaCacheColumnError(error)) {
+    ({ data, error } = await db
+      .from(TABLE)
+      .select(PUBLIC_LIST_FIELDS_BASE)
+      .eq('published', true)
+      .order('published_at', { ascending: false, nullsFirst: false })
+      .order('created_at', { ascending: false })
+      .limit(limit));
+  }
 
   if (error) throw new Error(error.message);
   return data || [];
@@ -407,6 +431,8 @@ export function mapArticleToClientForm(article) {
     seoTitle: article?.seo_title || '',
     seoDescription: article?.seo_description || '',
     contentType: normalizeBlogContentType(article?.content_type),
+    categorySlug: categoryForArticle(article)?.slug || '',
+    etiqueta: String(article?.etiqueta || '').trim(),
     published: Boolean(article?.published),
     publishMode,
     scheduledPublishAt,
@@ -427,6 +453,8 @@ export function mapClientFormToPayload(form) {
     seoTitle: form.seoTitle,
     seoDescription: form.seoDescription,
     contentType: normalizeBlogContentType(form.contentType),
+    categorySlug: normalizeBlogCategorySlug(form.categorySlug),
+    etiqueta: form.etiqueta || '',
     publishMode: form.publishMode || PUBLISH_MODE_NOW,
     scheduledPublishAt: form.scheduledPublishAt || null,
     scheduleDate: form.scheduleDate || '',
