@@ -664,7 +664,7 @@ function RootLayoutClientInner({ children }) {
                     <Link href="/normas-comunidad">Normas de comunidad</Link>
                   </li>
                   <li>
-                    <Link href="/contact">Contacta con nosotros</Link>
+                    <Link href="/contacto/">Contacta con nosotros</Link>
                   </li>
                 </ul>
               </div>
@@ -704,7 +704,7 @@ function RootLayoutClientInner({ children }) {
                   <span className="legal-footer-meta__sep" aria-hidden="true">
                     ·
                   </span>
-                  <span className="legal-footer-version">Versión Alpha 1.0.0</span>
+                  <span className="legal-footer-version">Versión 1.0.3</span>
                 </p>
               </div>
             </div>

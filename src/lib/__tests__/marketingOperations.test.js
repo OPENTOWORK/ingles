@@ -57,3 +57,29 @@ test('operations summarise visits, funnel and paying subscriptions', () => {
   assert.equal(report.journeys[0].id, 'c');
   assert.equal(report.journeys[0].paying, false);
 });
+
+test('journey names the ad from the landing UTM', () => {
+  const report = summarizeMarketingOperations({
+    visits: [
+      {
+        id: 'ad-1',
+        createdAt: '2026-10-27T12:40:00Z',
+        source: 'meta_ads',
+        landing:
+          '/?utm_source=instagram&utm_campaign=lanzamiento_dralo_2026&utm_content=video_remarketing',
+        stops: [{ title: 'Home' }, { title: 'Inicio' }],
+      },
+      {
+        id: 'ad-2',
+        createdAt: '2026-10-27T11:03:00Z',
+        source: 'direct',
+        landing: '/',
+        stops: [{ title: 'Home' }],
+      },
+    ],
+  });
+
+  assert.equal(report.journeys[0].source, 'Anuncio Meta · video remarketing');
+  assert.equal(report.journeys[1].source, 'Directo');
+  assert.equal(report.acquisition.some((row) => row.source === 'Anuncio Meta · video remarketing'), true);
+});

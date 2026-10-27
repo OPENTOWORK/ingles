@@ -19,6 +19,7 @@ import {
   normalizeBlogContentType,
 } from '@/lib/blogContentTypes';
 import { normalizeBlogSlug } from '@/lib/blogArticles';
+import { BLOG_CATEGORIES } from '@/lib/blogCategories';
 import styles from './BlogArticleEditor.module.css';
 
 const EMPTY_FORM = {
@@ -32,6 +33,8 @@ const EMPTY_FORM = {
   seoTitle: '',
   seoDescription: '',
   contentType: BLOG_TYPE_ARTICLE,
+  categorySlug: '',
+  etiqueta: '',
   published: false,
   publishMode: PUBLISH_MODE_NOW,
   scheduledPublishAt: '',
@@ -253,6 +256,36 @@ export default function BlogArticleEditor({
             <span className={styles.hint}>
               Vista previa: /blog/{normalizeBlogSlug(form.slug) || '…'} (solo letras, números y guiones)
             </span>
+          </label>
+
+          <label className={styles.label}>
+            Categoría
+            <select
+              value={form.categorySlug || ''}
+              onChange={(e) => onChange({ categorySlug: e.target.value })}
+              className={styles.input}
+            >
+              <option value="">Sin categoría</option>
+              {BLOG_CATEGORIES.map((category) => (
+                <option key={category.slug} value={category.slug}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <span className={styles.hint}>Agrupa este contenido en el blog.</span>
+          </label>
+
+          <label className={styles.label}>
+            Etiqueta
+            <input
+              type="text"
+              value={form.etiqueta || ''}
+              onChange={(e) => onChange({ etiqueta: e.target.value.slice(0, 40) })}
+              className={styles.input}
+              placeholder="Ej. plan de estudio"
+              maxLength={40}
+            />
+            <span className={styles.hint}>Texto corto que aparece junto a la categoría. Opcional.</span>
           </label>
 
           <label className={styles.label}>

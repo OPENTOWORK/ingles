@@ -18991,6 +18991,7 @@ body.dark .profile-collapse--open .profile-collapse__head {
 .blog-article-page__meta-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.75rem;
   margin-bottom: 0.75rem;
@@ -21435,4 +21436,59 @@ body:not(.reading-night-mode) :is(.full-page-layout, .page-content),
 body:not(.reading-night-mode) .page-content > :is(main, .shell, .home-page, .home-landing),
 body:not(.reading-night-mode) :is(.levels-exam-practice-root, .exam-practice-level-hub, .niveles-level-page, .niveles-page--theory-hub, .exam-theory-topics-page, .exam-strategies-chapter-page, .contacto-page, .precios-page, .login-page) {
   background: transparent !important;
+}
+
+.blog-cat-page__intro {
+  max-width: 42rem;
+  margin: 0 0 0.75rem;
+  color: #3f3a4e;
+  line-height: 1.6;
+}
+
+.blog-cat-nav {
+  margin: 0 0 1.25rem;
+}
+
+.blog-cat-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-cat-nav a {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: #f3eefc;
+  color: #4c3d8f;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.blog-related {
+  margin: 2rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(76, 61, 143, 0.15);
+}
+
+.blog-related h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.blog-related ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.blog-related a {
+  color: #4c3d8f;
+  font-weight: 600;
 }

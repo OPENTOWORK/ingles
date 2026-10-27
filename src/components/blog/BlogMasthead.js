@@ -1,7 +1,7 @@
 import DraloTagline from '@/components/DraloTagline';
 import SiteMascot from '@/components/SiteMascot';
 
-export default function BlogMasthead() {
+export default function BlogMasthead({ title, lead } = {}) {
   return (
     <header className="blog-mag__masthead">
       <div className="blog-mag__masthead-scene" aria-hidden="true">
@@ -56,11 +56,11 @@ export default function BlogMasthead() {
         <div className="blog-mag__masthead-copy">
           <p className="blog-mag__masthead-eyebrow">Blog Dralo</p>
           <h1 className="blog-mag__masthead-title">
-            Reflexiones, consejos e ideas para aprender inglés
+            {title || 'Reflexiones, consejos e ideas para aprender inglés'}
           </h1>
           <p className="blog-mag__masthead-lead">
-            Novedades de la plataforma, recursos para estudiantes y contenido en profundidad del
-            equipo Dralo. Practica, mejora y mantente al día.
+            {lead ||
+              'Novedades de la plataforma, recursos para estudiantes y contenido en profundidad del equipo Dralo. Practica, mejora y mantente al día.'}
           </p>
           <DraloTagline className="blog-mag__masthead-tagline" />
         </div>

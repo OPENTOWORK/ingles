@@ -112,6 +112,7 @@ function classifyVisit(body) {
     utmSource: body?.utmSource,
     utmMedium: body?.utmMedium,
     utmCampaign: body?.utmCampaign,
+    utmContent: body?.utmContent,
     gclid: body?.gclid,
   });
 }
@@ -154,6 +155,7 @@ async function persistVisitorAcquisition(db, visitorId, body, seenAt) {
     last_utm_source: String(body?.utmSource || '').slice(0, 120) || null,
     last_utm_medium: String(body?.utmMedium || '').slice(0, 120) || null,
     last_utm_campaign: String(body?.utmCampaign || '').slice(0, 180) || null,
+    last_utm_content: String(body?.utmContent || '').slice(0, 180) || null,
     last_gclid: String(body?.gclid || '').slice(0, 256) || null,
   };
 
@@ -178,6 +180,7 @@ async function persistVisitorAcquisition(db, visitorId, body, seenAt) {
       first_utm_source: String(body?.utmSource || '').slice(0, 120) || null,
       first_utm_medium: String(body?.utmMedium || '').slice(0, 120) || null,
       first_utm_campaign: String(body?.utmCampaign || '').slice(0, 180) || null,
+      first_utm_content: String(body?.utmContent || '').slice(0, 180) || null,
       first_gclid: String(body?.gclid || '').slice(0, 256) || null,
       ...lastTouch,
     },

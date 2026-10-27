@@ -1,5 +1,5 @@
 import { journeyTrail, continuedPastLanding } from '@/lib/visitorJourney';
-import { landingLabelFromPath, trafficSourceLabel } from '@/lib/trafficSource';
+import { landingLabelFromPath, trafficSourceWithAd } from '@/lib/trafficSource';
 import { normalizeUserPlanSlug } from '@/data/financialPlanConfig';
 
 /** Precio mensual vigente. El anual es el equivalente al mes en lanzamiento. */
@@ -26,7 +26,7 @@ export function monthlyPlanRevenueEur(planId, interval) {
 function sourceLabel(visit) {
   const key = String(visit?.source || '').trim();
   if (!key) return 'Directo';
-  return trafficSourceLabel(key) || 'Directo';
+  return trafficSourceWithAd(key, visit?.landing) || 'Directo';
 }
 
 function movedOn(visit) {

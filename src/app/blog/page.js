@@ -1,4 +1,5 @@
 import BlogAdminCta from '@/components/blog/BlogAdminCta';
+import BlogCategoryLinks from '@/components/blog/BlogCategoryLinks';
 import BlogCategorySection from '@/components/blog/BlogCategorySection';
 import BlogDiscoverBanner from '@/components/blog/BlogDiscoverBanner';
 import BlogFeaturedHero from '@/components/blog/BlogFeaturedHero';
@@ -83,6 +84,7 @@ export default async function BlogPage() {
             articlesPanel={
               <>
                 {articles.length > 0 ? <BlogFeaturedHero post={pickFeaturedPost(articles)} /> : null}
+                <BlogCategoryLinks />
                 <BlogCategorySection
                   id="blog-articulos"
                   title={articleMeta.labelPlural}
