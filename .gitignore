@@ -114,6 +114,9 @@ dist
 tmp/
 temp/
 
+# Generated social media assets (scripts/build-guia-b2.mjs)
+exports/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
