@@ -6,7 +6,8 @@ import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { renderEmailTemplate, splitEmailDeliveryMeta } from '@/lib/renderEmailTemplate';
 import {
   buildWeeklyChallengeEmailVariables,
-  isWeeklyChallengeMailDay,
+  isWeeklyTuesdaySendTime,
+  renderWeeklyChallengeEmail,
 } from '@/lib/weeklyChallengeEmail';
 
 const FIRST_TUESDAY = new Date('2026-10-20T08:00:00.000Z');
@@ -15,7 +16,7 @@ const THURSDAY_SAME_WEEK = new Date('2026-10-22T08:00:00.000Z');
 const NEXT_TUESDAY = new Date('2026-10-27T08:00:00.000Z');
 const MONDAY_AFTER = new Date('2026-10-26T08:00:00.000Z');
 
-test('tuesday challenge mail uses the week item and hides the solution', () => {
+test('tuesday challenge mail uses the designed layout and puts the answer last', () => {
   const template = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.find(
     (item) => item.slug === 'weekly_tuesday_challenge',
   );
@@ -24,8 +25,7 @@ test('tuesday challenge mail uses the week item and hides the solution', () => {
   assert.equal(template.delay_minutos, 0);
   assert.equal(template.activo, true);
   assert.match(template.cuerpo, /^Preheader: /);
-  assert.match(template.cuerpo, /CTA: Comprobar mi respuesta/);
-  assert.equal(template.cuerpo.includes('solution'), false);
+  assert.match(template.cuerpo, /CTA: Acepto el reto/);
 
   const challenge = getWeeklyChallenge(FIRST_TUESDAY);
   assert.equal(challenge.id, 'used-to-ing');
@@ -33,27 +33,38 @@ test('tuesday challenge mail uses the week item and hides the solution', () => {
 
   const variables = buildWeeklyChallengeEmailVariables(FIRST_TUESDAY, 'https://www.dralo.es');
   assert.equal('correct' in variables, false);
-  assert.equal('solution' in variables, false);
   assert.equal(variables.challenge_prompt, challenge.prompt);
+  assert.equal(variables.challenge_solution, challenge.solution);
   assert.match(variables.challenge_options, /^A\) speak\nB\) speaking\nC\) spoke$/);
   assert.equal(variables.challenge_url, 'https://www.dralo.es/training/');
 
   const rendered = renderEmailTemplate(template.cuerpo, variables);
   const meta = splitEmailDeliveryMeta(rendered);
-  assert.equal(meta.preheader, 'Elige una opción antes de entrar. La explicación está en Dralo.');
-  assert.equal(meta.ctaLabel, 'Comprobar mi respuesta');
-  assert.match(meta.text, /I’m not used to _____ English every day\./);
-  assert.match(meta.text, /B\) speaking/);
-  assert.equal(meta.text.includes(challenge.solution), false);
-  assert.equal(meta.text.includes('Después de be used to'), false);
-  assert.match(meta.text, /https:\/\/www\.dralo\.es\/training\//);
+  assert.match(meta.preheader, /Sabemos que vas a mil/);
+  assert.equal(meta.ctaLabel, 'Acepto el reto');
+
+  const email = renderWeeklyChallengeEmail(variables);
+  assert.match(email.html, /Ese B2 está cada vez más cerca\./);
+  assert.match(email.html, /01 &nbsp; CALENTAMOS/);
+  assert.match(email.html, /¿Cuál pondrías tú\?/);
+  assert.match(email.html, /I’m not used to <span style="color:#5634d6;">_____<\/span> English every day\./);
+  assert.match(email.html, /mascot\/3\.png/);
+  assert.match(email.html, /Acepto el reto/);
+  assert.match(email.html, /https:\/\/www\.dralo\.es\/training\//);
+  const ctaAt = email.html.indexOf('Acepto el reto');
+  const answerAt = email.html.indexOf('LA SOLUCIÓN, SIN MISTERIO');
+  assert.ok(ctaAt > 0 && answerAt > ctaAt);
+  assert.ok(email.html.includes('Después de be used to'));
+  assert.equal(email.html.slice(0, answerAt).includes('Después de be used to'), false);
 });
 
 test('the same challenge stays all week and the next tuesday moves on', () => {
-  assert.equal(isWeeklyChallengeMailDay(FIRST_TUESDAY), true);
-  assert.equal(isWeeklyChallengeMailDay(THURSDAY_SAME_WEEK), true);
-  assert.equal(isWeeklyChallengeMailDay(MONDAY_BEFORE), false);
-  assert.equal(isWeeklyChallengeMailDay(MONDAY_AFTER), false);
+  assert.equal(isWeeklyTuesdaySendTime(FIRST_TUESDAY), true);
+  assert.equal(isWeeklyTuesdaySendTime(THURSDAY_SAME_WEEK), false);
+  assert.equal(isWeeklyTuesdaySendTime(MONDAY_BEFORE), false);
+  assert.equal(isWeeklyTuesdaySendTime(MONDAY_AFTER), false);
+  assert.equal(isWeeklyTuesdaySendTime(new Date('2026-10-27T08:00:00.000Z')), false);
+  assert.equal(isWeeklyTuesdaySendTime(new Date('2026-10-27T09:00:00.000Z')), true);
 
   const thisWeek = buildWeeklyChallengeEmailVariables(THURSDAY_SAME_WEEK);
   const opening = buildWeeklyChallengeEmailVariables(FIRST_TUESDAY);
@@ -65,6 +76,7 @@ test('the same challenge stays all week and the next tuesday moves on', () => {
   const nextMail = buildWeeklyChallengeEmailVariables(NEXT_TUESDAY);
   assert.equal(nextMail.challenge_prompt.includes(next.solution), false);
   assert.equal(nextMail.challenge_options.includes('had'), true);
+  assert.equal(nextMail.challenge_solution, next.solution);
 });
 
 test('every weekly challenge is a three-option gap with one answer', () => {
@@ -83,6 +95,7 @@ test('every weekly challenge is a three-option gap with one answer', () => {
     assert.equal(challenge.prompt.includes('_____'), true);
     const mail = buildWeeklyChallengeEmailVariables(date);
     assert.equal(mail.challenge_prompt.includes(challenge.solution), false);
-    assert.equal(Object.values(mail).join('\n').includes(challenge.solution), false);
+    assert.equal(mail.challenge_options.includes(challenge.solution), false);
+    assert.equal(mail.challenge_solution, challenge.solution);
   }
 });

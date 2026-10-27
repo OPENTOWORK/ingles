@@ -118,7 +118,7 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
     label: 'Reto del martes',
     description:
-      'Cada martes, a los alumnos con el email confirmado. Plantea el hueco de la semana sin dar la solución y lleva a Training. Si el martes no cupieron todos, sigue el resto de la semana.',
+      'Cada martes a las 10:00 (hora de Madrid), a todos los usuarios con el email confirmado. Muestra el hueco de la semana, pide que elijan antes de entrar y deja la explicación al final. El botón abre Training.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,

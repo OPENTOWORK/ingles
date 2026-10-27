@@ -1,11 +1,11 @@
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
-import { isStudentRole } from '@/lib/userRoleServer';
+import { formatNombreVariable } from '@/lib/renderEmailTemplate';
+import { syncAutomatedEmailSystemTemplates } from '@/lib/syncAutomatedEmailSystemTemplates';
 import { getWeeklyChallenge } from '@/data/weeklyTrainingChallenges';
 import {
-  WEEKLY_CHALLENGE_SEND_CAP,
   buildWeeklyChallengeEmailVariables,
-  isWeeklyChallengeMailDay,
+  isWeeklyTuesdaySendTime,
 } from '@/lib/weeklyChallengeEmail';
 
 const SLUG = 'weekly_tuesday_challenge';
@@ -41,23 +41,22 @@ async function loadConfirmedUserIds(adminClient) {
 }
 
 /**
- * Envía el reto de la semana a alumnos confirmados.
- * El martes abre la tanda; de miércoles a domingo solo salen los que faltaban.
+ * Envía el reto de la semana a todos los usuarios activos con el email confirmado.
+ * Solo el martes a las 10:00, hora de Madrid.
  * @param {import('@supabase/supabase-js').SupabaseClient} adminClient
  * @param {Date} [now]
  */
 export async function runWeeklyTuesdayChallenge(adminClient, now = new Date()) {
   if (!adminClient) return { sent: 0, skipped: true };
-  if (!isWeeklyChallengeMailDay(now)) {
-    return { sent: 0, skipped: true, reason: 'fuera de la semana del reto' };
+  if (!isWeeklyTuesdaySendTime(now)) {
+    return { sent: 0, skipped: true, reason: 'solo martes a las 10:00 (Madrid)' };
   }
 
   const challenge = getWeeklyChallenge(now);
   const weekStart = `${challenge.weekId}T00:00:00.000Z`;
 
-  const [confirmedIds, rolesRes, usersRes, logsRes, queueRes] = await Promise.all([
+  const [confirmedIds, usersRes, logsRes, queueRes] = await Promise.all([
     loadConfirmedUserIds(adminClient),
-    adminClient.from('Usuarios_y_Perfil_roles').select('id, nombre'),
     adminClient
       .from('Usuarios_y_Perfil_users')
       .select('id, email, nombre, activo, rol_id, destacado_equipo, creado_en')
@@ -91,19 +90,11 @@ export async function runWeeklyTuesdayChallenge(adminClient, now = new Date()) {
     if (email) already.add(email);
   }
 
-  const roleNameById = new Map(
-    (rolesRes.data || []).map((role) => [role.id, role.nombre || 'student']),
-  );
-
   const candidates = [];
   for (const user of usersRes.data || []) {
     const email = String(user.email || '').trim().toLowerCase();
     if (!email || isDisposableTestEmail(email) || already.has(email)) continue;
-    if (user.destacado_equipo) continue;
     if (!confirmedIds.has(user.id)) continue;
-
-    const roleName = user.rol_id ? roleNameById.get(user.rol_id) || 'student' : 'student';
-    if (!isStudentRole(roleName)) continue;
 
     candidates.push({
       email,
@@ -114,17 +105,24 @@ export async function runWeeklyTuesdayChallenge(adminClient, now = new Date()) {
 
   candidates.sort((a, b) => String(a.creadoEn).localeCompare(String(b.creadoEn)));
 
+  try {
+    await syncAutomatedEmailSystemTemplates(adminClient);
+  } catch (err) {
+    console.error('[weekly-tuesday] sync templates', err);
+  }
+
   const challengeVariables = buildWeeklyChallengeEmailVariables(now, appOrigin());
   let sent = 0;
   const errors = [];
 
-  for (const candidate of candidates.slice(0, WEEKLY_CHALLENGE_SEND_CAP)) {
+  for (const candidate of candidates) {
     const result = await dispatchAutomatedEmail({
       adminClient,
       triggerEvent: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
       to: candidate.email,
+      syncTemplates: false,
       variables: {
-        nombre: candidate.nombre,
+        nombre: formatNombreVariable(candidate.nombre),
         email: candidate.email,
         ...challengeVariables,
       },
@@ -140,7 +138,6 @@ export async function runWeeklyTuesdayChallenge(adminClient, now = new Date()) {
   return {
     sent,
     eligible: candidates.length,
-    capped: Math.max(0, candidates.length - WEEKLY_CHALLENGE_SEND_CAP),
     weekId: challenge.weekId,
     challengeId: challenge.id,
     ...(errors.length ? { errors } : {}),
