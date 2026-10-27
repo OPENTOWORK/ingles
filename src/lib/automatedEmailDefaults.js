@@ -565,7 +565,7 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
     nombre: 'Reto del martes',
     trigger_event: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
     trigger_reason:
-      'Cada martes por la mañana (cron de correos, hora de Madrid) a los alumnos con el email confirmado. El correo usa la maqueta del reto: la pregunta y las opciones primero, el botón a Training, y la explicación al final. Si el martes no caben todos, el resto lo recibe de miércoles a domingo.',
+      'Cada martes a las 10:00 (hora de Madrid) a todos los usuarios con el email confirmado. El correo usa la maqueta del reto: la pregunta y las opciones primero, el botón a Training, y la explicación al final.',
     asunto: 'El reto del martes · {{challenge_since}}',
     cuerpo: [
       'Preheader: Sabemos que vas a mil. Hoy no te pedimos una tarde libre: solo una pregunta y ganas de intentarlo.',

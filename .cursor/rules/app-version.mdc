@@ -1,0 +1,20 @@
+---
+description: Increment the app patch version on every GitHub update
+alwaysApply: true
+---
+
+# App version on GitHub updates
+
+The product version is `1.0.x`. It is **1.0.2** on branch `release/1.0.1`.
+
+On every update that is committed and pushed to GitHub, bump the patch by 1 before the commit (`1.0.1` → `1.0.2` → `1.0.3`). Do this even when the push is not to production.
+
+Update these product-version strings together:
+
+- `package.json` and the root `version` fields in `package-lock.json`
+- `setup.js`, `env.example`, and `README.md` (`NEXT_PUBLIC_APP_VERSION`)
+- Footer in `src/app/RootLayoutClient.js` and `src/components/legal/LegalHubPage.js` (`Versión 1.0.x`)
+
+Do not bump writing-engine schema versions, prompt versions, or dependency versions in the lockfile.
+
+Do not push to `main` or deploy to production unless the user explicitly asks.

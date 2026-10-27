@@ -6,7 +6,7 @@ import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { renderEmailTemplate, splitEmailDeliveryMeta } from '@/lib/renderEmailTemplate';
 import {
   buildWeeklyChallengeEmailVariables,
-  isWeeklyChallengeMailDay,
+  isWeeklyTuesdaySendTime,
   renderWeeklyChallengeEmail,
 } from '@/lib/weeklyChallengeEmail';
 
@@ -59,10 +59,12 @@ test('tuesday challenge mail uses the designed layout and puts the answer last',
 });
 
 test('the same challenge stays all week and the next tuesday moves on', () => {
-  assert.equal(isWeeklyChallengeMailDay(FIRST_TUESDAY), true);
-  assert.equal(isWeeklyChallengeMailDay(THURSDAY_SAME_WEEK), true);
-  assert.equal(isWeeklyChallengeMailDay(MONDAY_BEFORE), false);
-  assert.equal(isWeeklyChallengeMailDay(MONDAY_AFTER), false);
+  assert.equal(isWeeklyTuesdaySendTime(FIRST_TUESDAY), true);
+  assert.equal(isWeeklyTuesdaySendTime(THURSDAY_SAME_WEEK), false);
+  assert.equal(isWeeklyTuesdaySendTime(MONDAY_BEFORE), false);
+  assert.equal(isWeeklyTuesdaySendTime(MONDAY_AFTER), false);
+  assert.equal(isWeeklyTuesdaySendTime(new Date('2026-10-27T08:00:00.000Z')), false);
+  assert.equal(isWeeklyTuesdaySendTime(new Date('2026-10-27T09:00:00.000Z')), true);
 
   const thisWeek = buildWeeklyChallengeEmailVariables(THURSDAY_SAME_WEEK);
   const opening = buildWeeklyChallengeEmailVariables(FIRST_TUESDAY);

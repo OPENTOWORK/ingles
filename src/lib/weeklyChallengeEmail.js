@@ -1,13 +1,17 @@
 import { getWeeklyChallenge, madridWeekday } from '@/data/weeklyTrainingChallenges';
 
-/** De martes a domingo. El lunes ya es la víspera del reto siguiente. */
-const MAIL_DAYS = new Set(['Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']);
+function madridHour(date = new Date()) {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Madrid',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(date);
+  return Number(parts.find((part) => part.type === 'hour')?.value);
+}
 
-/** Tope por ejecución del cron, para no alargar la petición. */
-export const WEEKLY_CHALLENGE_SEND_CAP = 40;
-
-export function isWeeklyChallengeMailDay(date = new Date()) {
-  return MAIL_DAYS.has(madridWeekday(date));
+/** Martes a las 10:00 en Madrid. El cron dispara a las 08:00 y a las 09:00 UTC para cubrir verano e invierno. */
+export function isWeeklyTuesdaySendTime(date = new Date()) {
+  return madridWeekday(date) === 'Tue' && madridHour(date) === 10;
 }
 
 /**

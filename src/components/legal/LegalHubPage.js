@@ -59,7 +59,7 @@ export default function LegalHubPage() {
       <div className="legal-hub__tagline">
         <DraloTagline className="dralo-tagline--footer" />
         <p>{SITE_FOOTER_TAGLINE}</p>
-        <p>© {new Date().getFullYear()} Dralo · Versión 1.0.1</p>
+        <p>© {new Date().getFullYear()} Dralo · Versión 1.0.2</p>
       </div>
     </div>
   );

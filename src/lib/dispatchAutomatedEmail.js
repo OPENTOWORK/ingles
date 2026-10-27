@@ -150,13 +150,14 @@ export async function dispatchAutomatedEmail({
   to,
   variables = {},
   replyTo,
+  syncTemplates = true,
 }) {
   const email = String(to || '').trim().toLowerCase();
   if (!email || !triggerEvent) {
     return { sent: false, error: 'Destinatario o evento no válido.' };
   }
 
-  if (adminClient) {
+  if (adminClient && syncTemplates) {
     try {
       await syncAutomatedEmailSystemTemplates(adminClient);
     } catch (err) {
