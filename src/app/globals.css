@@ -1078,6 +1078,28 @@ body {
   min-width: 0;
 }
 
+/* AppNav mide la barra: si no cabe entera, la cabecera usa el menú desplegable, como en el móvil. */
+.app-nav--desktop.app-nav--collapsed {
+  display: none;
+}
+
+.app-nav__toggle.app-nav__toggle--collapsed {
+  display: flex;
+}
+
+/* El menú no lleva el modo noche: con la barra plegada en pantallas anchas se queda en la cabecera. */
+.app-nav__collapsed-night {
+  display: flex;
+  align-items: center;
+  margin-right: 0.65rem;
+}
+
+@media (max-width: 900px) {
+  .app-nav__collapsed-night {
+    display: none;
+  }
+}
+
 .app-nav__primary {
   display: flex;
   align-items: center;
@@ -1511,6 +1533,10 @@ body {
 .app-nav__backdrop.is-visible {
   opacity: 1;
   pointer-events: auto;
+}
+
+.app-nav__backdrop.app-nav__backdrop--collapsed {
+  display: block;
 }
 
 .app-nav__drawer {

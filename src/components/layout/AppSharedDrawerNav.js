@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
+import SiteThemePicker from '@/components/layout/SiteThemePicker';
 import {
   NAV_LINK_CONTACT,
   NAV_LINK_DRALO_AI,
@@ -59,6 +60,7 @@ export function AppSharedDrawerNav({
     showDralo,
     draloLocked,
     guest,
+    admin,
     examStrategiesLocked,
     showPricing,
     showContact,
@@ -217,6 +219,8 @@ export function AppSharedDrawerNav({
           Tutorial
         </button>
       ) : null}
+
+      {admin && !guest ? <SiteThemePicker variant="drawer" /> : null}
 
       {showLogout ? (
         <button

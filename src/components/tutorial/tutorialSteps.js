@@ -142,10 +142,17 @@ export const TUTORIAL_STEPS = [
   },
 ];
 
+/** La barra de escritorio también se pliega en pantallas anchas cuando no cabe entera (AppNav). */
+function isDesktopNavCollapsed() {
+  const desktopNav = document.querySelector('.app-nav--desktop');
+  if (!desktopNav) return window.matchMedia(NAV_COLLAPSED_MQ).matches;
+  return window.getComputedStyle(desktopNav).display === 'none';
+}
+
 /** Pasos para la pantalla actual: con el menú plegado se señala el botón del menú. */
 export function resolveTutorialSteps() {
   if (typeof window === 'undefined') return TUTORIAL_STEPS;
-  const navCollapsed = window.matchMedia(NAV_COLLAPSED_MQ).matches;
+  const navCollapsed = isDesktopNavCollapsed();
   return TUTORIAL_STEPS.filter((step) => !step.media || window.matchMedia(step.media).matches).map(
     ({ mobile, ...step }) => (navCollapsed && mobile ? { ...step, ...mobile } : step),
   );
