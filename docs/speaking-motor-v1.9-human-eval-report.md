@@ -1,6 +1,6 @@
 # Speaking Motor V1.9 — piloto de audio humano
 
-Fecha: 2026-10-24T15:44:00.659Z
+Fecha: 2026-10-27 (rechequeo V2.3; banco sigue vacío)
 
 La validación humana no se marca aprobada si el banco está vacío, el piloto está incompleto o solo hay audio sintético/técnico.
 

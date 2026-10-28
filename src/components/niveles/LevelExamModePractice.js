@@ -241,7 +241,7 @@ function LevelExamModePracticeInner({ slug }) {
     );
   }
 
-  if (!authSession) {
+  if (!authSession && String(slug || '').toLowerCase() !== 'b2') {
     return (
       <main className="shell content-hub-shell">
         <GuestRegisterTeaser

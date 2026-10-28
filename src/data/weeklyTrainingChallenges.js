@@ -311,3 +311,10 @@ export function getWeeklyChallenge(date = new Date()) {
   }).format(new Date(Date.UTC(year, month - 1, day)));
   return { ...CHALLENGES[index], weekId, since };
 }
+
+/** Opción marcada en el correo de esa semana. Otra semana o una letra rara no cuenta. */
+export function weeklyChallengeMailChoice(weekId, reto, opcion) {
+  if (!weekId || String(reto || '') !== String(weekId)) return null;
+  const choice = String(opcion || '').trim().toUpperCase();
+  return choice === 'A' || choice === 'B' || choice === 'C' ? choice : null;
+}

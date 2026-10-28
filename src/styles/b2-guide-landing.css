@@ -1,0 +1,250 @@
+.b2-guide {
+  --b2g-ink: #1e1b4b;
+  --b2g-muted: #475569;
+  --b2g-line: #e7eaf2;
+  --b2g-orange: #f97316;
+  --b2g-orange-dark: #ea580c;
+  background: #f4f7ff;
+  color: var(--b2g-ink);
+  padding: 0.75rem 0 3.5rem;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.b2-guide__shell {
+  width: min(1080px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.b2-guide h1,
+.b2-guide h2,
+.b2-guide h3 {
+  font-family: inherit;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: inherit;
+}
+
+.b2-guide h1 {
+  margin: 0.55rem auto 0.9rem;
+  max-width: 18em;
+  font-size: clamp(1.85rem, 4.8vw, 2.85rem);
+}
+
+.b2-guide h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.45rem, 3vw, 2rem);
+  text-align: center;
+}
+
+.b2-guide h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.05rem;
+  color: var(--b2g-ink);
+}
+
+.b2-guide p {
+  margin: 0;
+  color: var(--b2g-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.b2-guide__hero {
+  padding: clamp(2rem, 5vw, 3.2rem) clamp(1.15rem, 4vw, 2.4rem);
+  border-radius: 28px;
+  background: linear-gradient(155deg, #667eea 0%, #764ba2 52%, #5b4bb7 100%);
+  color: #fff;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(91, 75, 183, 0.28);
+}
+
+.b2-guide p.b2-guide__kicker {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.b2-guide p.b2-guide__lead {
+  max-width: 40rem;
+  margin: 0 auto 1.25rem;
+  color: #fff;
+  font-size: clamp(1rem, 2vw, 1.125rem);
+}
+
+.b2-guide p.b2-guide__micro {
+  margin: 0.85rem auto 0;
+  max-width: 28rem;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.92rem;
+}
+
+.b2-guide__block,
+.b2-guide__close {
+  margin-top: 2.25rem;
+}
+
+.b2-guide__grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.b2-guide__card {
+  padding: 1.15rem 1.2rem 1.25rem;
+  border: 1px solid var(--b2g-line);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(30, 27, 75, 0.04);
+}
+
+.b2-guide__card p {
+  font-size: 0.98rem;
+}
+
+.b2-guide__actions,
+.b2-guide__close {
+  text-align: center;
+}
+
+.b2-guide__actions {
+  margin: 1.35rem 0 0;
+}
+
+.b2-guide__close {
+  padding: clamp(1.5rem, 4vw, 2.25rem) clamp(1.1rem, 3vw, 2rem);
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid var(--b2g-line);
+}
+
+.b2-guide__close p {
+  max-width: 38rem;
+  margin: 0 auto 0.75rem;
+}
+
+.b2-guide__close .b2-guide__button {
+  margin-top: 0.6rem;
+}
+
+.b2-guide__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.75rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--b2g-orange);
+  color: #fff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(249, 115, 22, 0.28);
+}
+
+.b2-guide__button:hover {
+  background: var(--b2g-orange-dark);
+}
+
+.b2-guide__button:focus-visible,
+.b2-guide__input:focus-visible,
+.b2-guide a:focus-visible {
+  outline: 3px solid #1e1b4b;
+  outline-offset: 3px;
+}
+
+.b2-guide__button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.b2-guide__form {
+  max-width: 34rem;
+  margin: 2.25rem auto 0;
+  padding: clamp(1.35rem, 4vw, 2rem);
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid var(--b2g-line);
+  box-shadow: 0 16px 40px rgba(30, 27, 75, 0.06);
+  scroll-margin-top: 5.5rem;
+}
+
+.b2-guide__form h2 {
+  text-align: left;
+}
+
+.b2-guide__form > p {
+  margin-bottom: 1rem;
+}
+
+.b2-guide__label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--b2g-ink);
+}
+
+.b2-guide__input {
+  width: 100%;
+  min-height: 3rem;
+  margin-bottom: 0.85rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  color: var(--b2g-ink);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.b2-guide__form .b2-guide__button {
+  width: 100%;
+}
+
+.b2-guide__legal {
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.b2-guide__legal a {
+  color: #5b4bb7;
+  font-weight: 700;
+}
+
+.b2-guide p.b2-guide__status {
+  margin-top: 0.75rem;
+  font-weight: 600;
+}
+
+.b2-guide p.b2-guide__status--ok {
+  color: #166534;
+}
+
+.b2-guide p.b2-guide__status--error {
+  color: #b91c1c;
+}
+
+.b2-guide__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@media (min-width: 800px) {
+  .b2-guide__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .b2-guide__card:last-child {
+    grid-column: 1 / -1;
+  }
+}

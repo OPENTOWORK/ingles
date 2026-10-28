@@ -2,11 +2,14 @@ import { NextResponse } from 'next/server';
 import { isSpeakingB2FixtureRuntime } from '@/features/speaking-b2-motor/fixtures/runtime';
 import { getSpeakingB2Fixture } from '@/features/speaking-b2-motor/fixtures/catalog';
 import { materializeSpeakingB2Fixture } from '@/features/speaking-b2-motor/fixtures/materialize';
+import { speakingB2DevSurfaceGuardResponse } from '@/features/speaking-b2-motor/services/lan-access-http';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-export async function GET(_req, { params }) {
+export async function GET(req, { params }) {
+  const blocked = speakingB2DevSurfaceGuardResponse(req);
+  if (blocked) return blocked;
   if (!isSpeakingB2FixtureRuntime()) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }

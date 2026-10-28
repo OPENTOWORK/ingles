@@ -2,7 +2,7 @@ import { draloChatCompletion } from '@/lib/draloAiEngine';
 import { buildSpeakingB2IssueId } from '../../domain/error-taxonomy.js';
 import { SPEAKING_B2_SCORE_DISCLAIMER } from '../../domain/rubric-b2-part1.js';
 import { getSpeakingB2Question } from '../../domain/question-bank/sp-ex001-part1.js';
-import { pairSpeakingB2Answers } from '../../domain/issue-validator.js';
+import { attachSpeakingB2IssuesToTurns, pairSpeakingB2Answers } from '../../domain/issue-validator.js';
 
 function completionText(raw) {
   if (typeof raw === 'string') return raw;
@@ -68,22 +68,25 @@ export async function runSpeakingB2Pedagogy({ examCode, turns, rubric }) {
     if (!model) return fallback;
 
     const issues = Array.isArray(model.issues)
-      ? model.issues
-          .filter((issue) => issueSeed.some((seed) => seed.id === issue.id || seed.code === issue.code))
-          .map((issue, index) => ({
-            id: issue.id || issueSeed[index]?.id,
-            code: issue.code,
-            questionId: issue.questionId,
-            originalText: issue.originalText || '',
-            excerpt: issue.excerpt || '',
-            suggestion: issue.suggestion || '',
-            explanation: issue.explanation || '',
-            severity: issue.severity || 'medium',
-            confidence: issue.confidence ?? 0.7,
-            evidence: issue.evidence || '',
-            audioStartMs: null,
-            skillToReinforce: issue.skillToReinforce || '',
-          }))
+      ? attachSpeakingB2IssuesToTurns(
+          model.issues
+            .filter((issue) => issueSeed.some((seed) => seed.id === issue.id || seed.code === issue.code))
+            .map((issue, index) => ({
+              id: issue.id || issueSeed[index]?.id,
+              code: issue.code,
+              questionId: issue.questionId,
+              originalText: issue.originalText || '',
+              excerpt: issue.excerpt || '',
+              suggestion: issue.suggestion || '',
+              explanation: issue.explanation || '',
+              severity: issue.severity || 'medium',
+              confidence: issue.confidence ?? 0.7,
+              evidence: issue.evidence || '',
+              audioStartMs: null,
+              skillToReinforce: issue.skillToReinforce || '',
+            })),
+          candidateTurns,
+        )
       : issueSeed;
 
     return {

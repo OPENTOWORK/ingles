@@ -82,3 +82,52 @@ export async function checkSpeakingCorrectionQuota(userId, options = {}) {
 export async function chargeSpeakingCorrectionQuota(userId, options = {}) {
   return runAiPreflight(userId, AI_ACTIONS.EXAM_SPEAKING_FEEDBACK, options);
 }
+
+/**
+ * Resolves how to charge one Speaking session using the existing commercial rules.
+ * Students: speaking_correction / plan_usage_counters.
+ * Staff (non-admin): exam_speaking_feedback daily cap.
+ * Admins: no per-user cap.
+ */
+export async function resolveSpeakingB2QuotaChargeArgs(userId, options = {}) {
+  const userEmail = options.userEmail || '';
+  const applyPlanLimits = await shouldApplyPlanUsageLimits(userId, userEmail);
+  if (applyPlanLimits) {
+    const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null);
+    const planResult = await checkPlanUsage(userId, PLAN_USAGE_KEYS.SPEAKING_CORRECTION, planSlug);
+    if (!planResult.allowed) {
+      return { ok: false, status: 429, body: { code: planResult.code || 'PLAN_LIMIT_REACHED' } };
+    }
+    if (planResult.unlimited) {
+      return { ok: true, mode: 'plan_unlimited', limit: null, dailyLimit: null };
+    }
+    return {
+      ok: true,
+      mode: 'plan',
+      limit: planResult.limit,
+      periodType: planResult.periodType || 'month',
+      periodKey: planResult.periodKey,
+      dailyLimit: null,
+    };
+  }
+
+  const daily = await checkDailyAiLimit(userId, AI_ACTIONS.EXAM_SPEAKING_FEEDBACK, options);
+  if (!daily.allowed) {
+    return {
+      ok: false,
+      status: daily.code === 'AUTH_REQUIRED' ? 401 : 429,
+      body: { code: daily.code || 'DAILY_LIMIT_REACHED' },
+    };
+  }
+  if (daily.unlimited) {
+    return { ok: true, mode: 'staff_exempt', limit: null, dailyLimit: null };
+  }
+  return {
+    ok: true,
+    mode: 'staff_daily',
+    limit: null,
+    dailyAction: AI_ACTIONS.EXAM_SPEAKING_FEEDBACK,
+    dailyDate: new Date().toISOString().slice(0, 10),
+    dailyLimit: daily.limit,
+  };
+}

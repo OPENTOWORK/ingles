@@ -16,7 +16,9 @@ import {
   readSpeakingAccessToken,
 } from '@/features/speaking-b2-motor/services/session-auth';
 import {
-  getMemorySession,
+  SpeakingStoreConflictError,
+  SpeakingStoreUnavailableError,
+  loadSpeakingB2Session,
   persistSpeakingB2Turns,
   updatePersistedSession,
 } from '@/features/speaking-b2-motor/services/session-store';
@@ -26,6 +28,7 @@ import { resolveSpeakingB2AnswerAudio } from '@/features/speaking-b2-motor/servi
 import { canUseSpeakingB2FixtureAnswer } from '@/features/speaking-b2-motor/fixtures/runtime';
 import { resolveSpeakingB2FixtureAudio } from '@/features/speaking-b2-motor/fixtures/materialize';
 import { synthesizeExamTtsMp3 } from '@/lib/levelsExamTts';
+import { speakingB2LanGuardResponse } from '@/features/speaking-b2-motor/services/lan-access-http';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -56,9 +59,11 @@ async function readBody(req) {
 }
 
 export async function POST(req) {
+  const denied = speakingB2LanGuardResponse(req);
+  if (denied) return denied;
   try {
     const body = await readBody(req);
-    const session = getMemorySession(body.sessionId);
+    const session = await loadSpeakingB2Session(body.sessionId);
     const auth = await getSupabaseUserFromRequest(req);
     const access = authorizeSpeakingSession(session, {
       userId: auth?.user?.id || null,
@@ -92,6 +97,7 @@ export async function POST(req) {
         },
       ];
       const next = await updatePersistedSession(opened.session);
+      await persistSpeakingB2Turns(next);
       if (!examinerLineIsAuthorised(next.examCode, opened.examinerText)) {
         return NextResponse.json({ error: 'Unauthorised examiner line' }, { status: 500 });
       }
@@ -245,13 +251,19 @@ export async function POST(req) {
         sttSource: stt.source,
       });
     } finally {
-      const latest = getMemorySession(session.id);
+      const latest = await loadSpeakingB2Session(session.id);
       if (latest?.answerInFlight) {
         latest.answerInFlight = false;
         await updatePersistedSession(latest);
       }
     }
   } catch (error) {
+    if (error instanceof SpeakingStoreUnavailableError) {
+      return NextResponse.json({ error: 'Speaking storage is not ready.', code: 'STORE_UNAVAILABLE' }, { status: 503 });
+    }
+    if (error instanceof SpeakingStoreConflictError) {
+      return NextResponse.json({ error: 'Session was updated elsewhere.', code: 'STORE_CONFLICT' }, { status: 409 });
+    }
     console.error('[speaking-b2/turn]', error?.code || error?.message || 'Turn failed');
     return NextResponse.json(
       { error: error.message || 'Turn failed', code: error.code },

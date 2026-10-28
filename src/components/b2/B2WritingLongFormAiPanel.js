@@ -57,6 +57,7 @@ export default function B2WritingLongFormAiPanel({
   examMode = false,
   reviewExamCorrection = false,
   guestPreview = false,
+  guestExamMode = false,
   onGuestAttemptBlocked,
   lang = 'en',
 }) {
@@ -76,7 +77,7 @@ export default function B2WritingLongFormAiPanel({
   const [guestNotice, setGuestNotice] = useState(false);
 
   const finishGuestAttempt = () => {
-    if (!guestPreview) return;
+    if (!guestPreview || guestExamMode) return;
     markGuestWritingAttempt();
     setGuestNotice(true);
   };
@@ -174,7 +175,7 @@ export default function B2WritingLongFormAiPanel({
   const evaluateEssay = async () => {
     const text = essay.trim();
     if (!text) return;
-    if (guestPreview && hasGuestWritingAttempt()) {
+    if (guestPreview && !guestExamMode && hasGuestWritingAttempt()) {
       onGuestAttemptBlocked?.();
       return;
     }
@@ -196,6 +197,7 @@ export default function B2WritingLongFormAiPanel({
         wordMax,
         structuredExamContext: structuredExamContext || undefined,
         deferredExamMode: usesDeferredExamCorrection,
+        guestExamMode,
         taskContext: structuredExamContext
           ? undefined
           : {
@@ -256,7 +258,7 @@ export default function B2WritingLongFormAiPanel({
         feedbackRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     } catch (err) {
-      if (err?.code === 'GUEST_WRITING_USED') {
+      if (err?.code === 'GUEST_WRITING_USED' || err?.code === 'GUEST_EXAM_WRITING_USED') {
         markGuestWritingAttempt();
         onGuestAttemptBlocked?.();
         return;

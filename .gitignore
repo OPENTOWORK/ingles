@@ -11,6 +11,8 @@ setup-status.json
 
 # Next.js
 .next/
+.next-speaking-a/
+.next-speaking-b/
 out/
 build/
 dist/
@@ -23,6 +25,7 @@ secrets/
 .env.test.local
 .env.production.local
 .env.production.pulled
+.env.speaking-test
 .env.vercel.local
 
 # Local test artifacts (writing correction runs, backups)
@@ -30,6 +33,9 @@ scripts/generated/
 
 # Authorized human speaking recordings (local-only, never publish)
 local/speaking-b2-human/
+
+# LAN HTTPS preview for staff mobile Speaking tests
+local/speaking-b2-lan/
 
 # Vercel
 .vercel

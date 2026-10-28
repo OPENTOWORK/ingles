@@ -94,7 +94,11 @@ describe('speaking B2 taxonomy and evidence', () => {
     assert.match(sql, /drop policy if exists "speaking_b2_sessions_select_own"/);
     assert.match(sql, /No public\/authenticated storage policies/);
     assert.match(sql, /access_token_hash/);
+    assert.match(sql, /revoke select \(access_token_hash\)/);
+    assert.match(sql, /grant select \(access_token_hash\) on public.speaking_b2_sessions to service_role/);
     assert.match(sql, /Staff reads\/writes go through service-role APIs/);
+    assert.match(sql, /revoke all on public.speaking_b2_exams from public, anon, authenticated/);
+    assert.equal(sql.includes('grant select on public.speaking_b2_exams to anon'), false);
     assert.match(sql, /expires_at/);
   });
 
@@ -132,5 +136,8 @@ describe('speaking B2 taxonomy and evidence', () => {
     assert.match(tts, /openaiVoice: 'nova'/);
     assert.match(tts, /examinerLineIsAuthorised/);
     assert.match(tts, /TTS timeout/);
+    assert.match(tts, /\[speaking-b2\/tts\] fallback/);
+    assert.match(tts, /x-speaking-tts-engine/);
+    assert.match(tts, /edgeOnly: true/);
   });
 });

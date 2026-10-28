@@ -31,6 +31,11 @@ export function getPlusMaxExamSlot(subscriptionMonths, catalogMax = B2_EXAM_SLOT
  * @param {string} planSlug
  * @param {{ subscriptionMonths?: number | null }} [options]
  */
+/** En modo examen, el examen 1 está incluido para cualquier estudiante y no gasta la cuota mensual. */
+export function isComplimentaryExamModeSlot(examSlot) {
+  return Number(examSlot) === 1;
+}
+
 export function getMaxExamSlotForPlan(planSlug, { subscriptionMonths = null } = {}) {
   const slug = String(planSlug || 'free').toLowerCase();
   if (slug === 'free') return 1;

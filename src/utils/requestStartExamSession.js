@@ -5,7 +5,7 @@ import { supabase } from '@/utils/supabaseClient';
  * Valida slot + cuota mensual antes de iniciar exam-mode.
  * @returns {Promise<{ allowed: boolean, code?: string, message?: string }>}
  */
-export async function requestStartExamSession(examSlot, { resuming = false } = {}) {
+export async function requestStartExamSession(examSlot, { resuming = false, examMode = false } = {}) {
   const { data: sessionData } = await supabase.auth.getSession();
   const token = sessionData?.session?.access_token;
   if (!token) {
@@ -18,7 +18,7 @@ export async function requestStartExamSession(examSlot, { resuming = false } = {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ examSlot, resuming }),
+    body: JSON.stringify({ examSlot, resuming, examMode: examMode === true }),
   });
 
   const json = await res.json().catch(() => ({}));

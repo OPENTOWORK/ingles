@@ -1,24 +1,48 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getWeeklyChallenge } from '@/data/weeklyTrainingChallenges';
+import { useSearchParams } from 'next/navigation';
+import { getWeeklyChallenge, weeklyChallengeMailChoice } from '@/data/weeklyTrainingChallenges';
 import styles from './WeeklyTrainingChallenge.module.css';
 
 const STORAGE_KEY = 'dralo-training-weekly-challenge';
 
 export default function WeeklyTrainingChallenge({ className = '' }) {
   const challenge = getWeeklyChallenge();
+  const searchParams = useSearchParams();
+  const mailReto = searchParams.get('reto') || searchParams.get('x_reto');
+  const mailOption = searchParams.get('opcion') || searchParams.get('x_opcion');
   const [choice, setChoice] = useState(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    const fromMail = weeklyChallengeMailChoice(challenge.weekId, mailReto, mailOption);
+    const openedFromMail = mailReto === challenge.weekId;
+    if (fromMail) {
+      setChoice(fromMail);
+      setOpen(true);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ weekId: challenge.weekId, choice: fromMail }));
+      } catch {
+        /* La respuesta sigue en pantalla aunque el navegador no guarde. */
+      }
+      return;
+    }
+
+    if (openedFromMail) setOpen(true);
+
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
       setChoice(saved?.weekId === challenge.weekId ? saved.choice : null);
     } catch {
       setChoice(null);
     }
-  }, [challenge.weekId]);
+  }, [challenge.weekId, mailReto, mailOption]);
+
+  useEffect(() => {
+    if (mailReto !== challenge.weekId) return;
+    document.getElementById('reto-del-martes')?.scrollIntoView({ block: 'start' });
+  }, [mailReto, challenge.weekId]);
 
   const answered = Boolean(choice);
   const correct = choice === challenge.correct;
@@ -35,6 +59,7 @@ export default function WeeklyTrainingChallenge({ className = '' }) {
 
   return (
     <section
+      id="reto-del-martes"
       className={`${open ? styles.card : styles.cardClosed}${className ? ` ${className}` : ''}`}
       aria-labelledby="weekly-challenge-title"
     >

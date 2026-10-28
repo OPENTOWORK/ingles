@@ -12,6 +12,12 @@ export const FOUNDING_SURVEY_REMINDER_DAYS = 5;
 /** Cupos que reciben encuesta: 2–50 (el 1 es reserva manual). */
 export const FOUNDING_SURVEY_ELIGIBLE_SLOTS = MAX_FOUNDING_SLOT - FIRST_AUTO_SLOT + 1;
 
+/** Id sintético para listar esta encuesta junto al resto de formularios del admin. */
+export const FOUNDING_SURVEY_FORM_ID = 'founding-plan-plus';
+
+/** Nombre en el filtro de respuestas. */
+export const FOUNDING_SURVEY_FORM_TITLE = 'Plan Plus';
+
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
@@ -241,6 +247,26 @@ export function validateSurveyAnswers(rawAnswers) {
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
   return { ok: true, answers };
+}
+
+/**
+ * Pasa las respuestas guardadas de la encuesta al formato del listado de
+ * formularios: enunciado + texto, en el orden de las preguntas.
+ * @param {Record<string, unknown> | null | undefined} answers
+ */
+export function foundingSurveyResponseItems(answers) {
+  const input = answers && typeof answers === 'object' && !Array.isArray(answers) ? answers : {};
+  return FOUNDING_SURVEY_QUESTIONS.map((question) => {
+    const value = input[question.id];
+    const blank = value == null || String(value).trim() === '';
+    return {
+      pregunta_id: question.id,
+      pregunta: question.label,
+      tipo: question.type,
+      valor: blank ? null : value,
+      texto: blank ? '' : String(value),
+    };
+  });
 }
 
 /**

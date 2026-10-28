@@ -10,6 +10,7 @@ const isStaticExport = process.env.NEXT_STATIC_EXPORT === 'true';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   ...(isStaticExport ? { output: 'export' } : {}),
+  distDir: process.env.SPEAKING_B2_NEXT_DIST || '.next',
   experimental: {
     optimizePackageImports: [
       'lucide-react',

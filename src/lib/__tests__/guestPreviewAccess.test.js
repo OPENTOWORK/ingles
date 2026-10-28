@@ -4,6 +4,8 @@ import {
   getGuestRegisterHref,
   isGuestBrowsablePath,
   isGuestExamPracticeLockedHref,
+  guestExamWritingCount,
+  guestExamWritingRemaining,
   isGuestExamSlotAllowed,
   isGuestExamStrategiesChapterAllowed,
   isGuestTrainingLevelAllowed,
@@ -48,8 +50,13 @@ test('exam strategies preview is overall + part 1 only', () => {
   );
 });
 
-test('exam practice locks exam mode, quiz game and slots after 1', () => {
-  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/exam-mode'), true);
+test('exam practice opens B2 exam mode and locks other levels, quiz stays open, slots after 1 stay locked', () => {
+  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/exam-mode'), false);
+  assert.equal(isGuestExamPracticeLockedHref('/niveles/b2/exam-mode'), false);
+  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/exam-mode/results'), false);
+  assert.equal(isGuestExamPracticeLockedHref('/niveles/b2/exam-mode/results/'), false);
+  assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b1/exam-mode'), true);
+  assert.equal(isGuestExamPracticeLockedHref('/niveles/c1/exam-mode'), true);
   assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/quiz-game'), false);
   assert.equal(isGuestExamPracticeLockedHref('/exam-practice/b2/exam-writing'), false);
   assert.equal(isGuestExamPracticeLockedHref('/niveles/b2/exam-listening'), false);
@@ -59,6 +66,10 @@ test('exam practice locks exam mode, quiz game and slots after 1', () => {
   assert.equal(isGuestExamPracticeLockedHref('/exam-strategies/writing'), false);
   assert.equal(isGuestExamSlotAllowed(1), true);
   assert.equal(isGuestExamSlotAllowed(2), false);
+  assert.equal(guestExamWritingCount(''), 0);
+  assert.equal(guestExamWritingCount('2'), 2);
+  assert.equal(guestExamWritingRemaining('0'), 2);
+  assert.equal(guestExamWritingRemaining('2'), 0);
 });
 
 test('training preview can open any path level or review', () => {

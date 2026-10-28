@@ -15,6 +15,7 @@ import { buildWeeklyChallengeEmailVariables } from '@/lib/weeklyChallengeEmail';
 import { formatNombreVariable } from '@/lib/renderEmailTemplate';
 
 const ADMIN_EMAIL = 'direccion@opentowork.com';
+const onlyTo = String(process.argv[2] || '').trim().toLowerCase();
 
 function normalizeRole(role) {
   return String(role || '')
@@ -66,7 +67,7 @@ const staffRoleIds = [...roleNameById.entries()]
 
 const recipients = new Map();
 
-if (staffRoleIds.length) {
+if (!onlyTo && staffRoleIds.length) {
   const { data: users, error: usersError } = await adminClient
     .from('Usuarios_y_Perfil_users')
     .select('email, nombre, activo, rol_id')
@@ -89,8 +90,9 @@ if (staffRoleIds.length) {
   }
 }
 
-if (!recipients.has(ADMIN_EMAIL)) {
-  recipients.set(ADMIN_EMAIL, { email: ADMIN_EMAIL, nombre: '', rol: 'admin' });
+const testTo = onlyTo || ADMIN_EMAIL;
+if (!recipients.has(testTo)) {
+  recipients.set(testTo, { email: testTo, nombre: '', rol: 'admin' });
 }
 
 const variables = buildWeeklyChallengeEmailVariables(new Date(), 'https://www.dralo.es');

@@ -52,6 +52,7 @@ export async function callExamWritingCorrection({
   taskContext,
   structuredExamContext,
   deferredExamMode = false,
+  guestExamMode = false,
 }) {
   return callDraloAi({
     action: 'exam_writing_correction',
@@ -62,6 +63,7 @@ export async function callExamWritingCorrection({
     taskContext,
     structuredExamContext,
     deferredExamMode: deferredExamMode === true,
+    guestExamMode: guestExamMode === true,
   });
 }
 

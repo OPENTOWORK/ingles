@@ -26,9 +26,17 @@ export function buildWeeklyChallengeEmailVariables(date = new Date(), origin = '
     challenge_since: challenge.since,
     challenge_prompt: challenge.prompt,
     challenge_options: challenge.options.map((option) => `${option.id}) ${option.label}`).join('\n'),
-    challenge_solution: challenge.solution,
+    challenge_week_id: challenge.weekId,
     challenge_url: `${base}/training/`,
   };
+}
+
+function challengeCheckUrl(base, weekId, optionId) {
+  const root = String(base || 'https://www.dralo.es/training/').trim();
+  const url = new URL(root.includes('://') ? root : `https://www.dralo.es${root}`);
+  if (weekId) url.searchParams.set('reto', weekId);
+  if (optionId) url.searchParams.set('opcion', optionId);
+  return url.toString();
 }
 
 const WEEKLY_PREHEADER =
@@ -47,40 +55,51 @@ function promptHtml(prompt) {
   return `“${safe}”`;
 }
 
-function optionRows(optionsText) {
+function optionRows(optionsText, checkBase, weekId) {
   const lines = String(optionsText || '')
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
 
   return lines
-    .map((line, index) => {
+    .map((line) => {
       const match = line.match(/^([A-C])\)\s*(.*)$/);
       const letter = match ? match[1] : '';
       const label = match ? match[2] : line;
-      const border = index === lines.length - 1 ? '' : 'border-bottom:1px solid #e8e4f7;';
-      return `<tr><td style="${border}padding:14px 4px;font-size:17px;line-height:24px;"><span style="color:#6c6989;font-size:13px;font-weight:bold;">${escapeHtml(letter)} &nbsp;&nbsp;</span> ${escapeHtml(label)}</td></tr>`;
+      const href = escapeHtml(challengeCheckUrl(checkBase, weekId, letter || undefined));
+      return `<tr><td style="padding:0 0 8px;">
+        <a href="${href}" target="_blank" style="display:block;text-decoration:none;color:#1d1857;background:#fbfaff;border:1px solid #e8e4f7;border-radius:12px;padding:14px 16px;font-size:17px;line-height:24px;">
+          <span style="display:inline-block;width:16px;height:16px;border:2px solid #5634d6;border-radius:50%;vertical-align:middle;margin-right:12px;"></span><span style="color:#6c6989;font-size:13px;font-weight:bold;">${escapeHtml(letter)}</span>&nbsp;&nbsp;${escapeHtml(label)}
+        </a>
+      </td></tr>`;
     })
     .join('\n');
 }
 
-function solutionHtml(solution) {
-  const text = String(solution || '').trim();
-  const splitAt = text.indexOf('. ');
-  if (splitAt === -1) return `<strong style="color:#1d1857;">${escapeHtml(text)}</strong>`;
-  return `<strong style="color:#1d1857;">${escapeHtml(text.slice(0, splitAt + 1))}</strong> ${escapeHtml(text.slice(splitAt + 2))}`;
-}
-
 /**
- * Maqueta del reto semanal. La pregunta va primero; la explicación, debajo del botón.
+ * Maqueta del reto semanal. La opción se marca en el correo y se comprueba en la web.
+ * La solución no sale en el mensaje.
  * @param {Record<string, string>} variables
  */
 export function renderWeeklyChallengeEmail(variables = {}) {
   const prompt = String(variables.challenge_prompt || '').trim();
   const options = String(variables.challenge_options || '').trim();
-  const solution = String(variables.challenge_solution || '').trim();
+  const weekId = String(variables.challenge_week_id || '').trim();
   const url = String(variables.challenge_url || 'https://www.dralo.es/training/').trim();
+  const checkUrl = challengeCheckUrl(url, weekId);
   const safeUrl = escapeHtml(url);
+  const safeCheckUrl = escapeHtml(checkUrl);
+  const optionLines = options
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const match = line.match(/^([A-C])\)\s*(.*)$/);
+      const letter = match ? match[1] : '';
+      const label = match ? match[2] : line;
+      return `${letter}) ${label}\n${challengeCheckUrl(url, weekId, letter || undefined)}`;
+    })
+    .join('\n\n');
 
   const text = [
     'EL RETO DEL MARTES',
@@ -97,9 +116,11 @@ export function renderWeeklyChallengeEmail(variables = {}) {
     '',
     `“${prompt}”`,
     '',
-    options,
+    optionLines,
     '',
-    'Elige mentalmente tu respuesta. La solución está al final.',
+    'Marca una opción. Chequear respuesta la comprueba en Dralo.',
+    '',
+    `Chequear respuesta: ${checkUrl}`,
     '',
     '02 VAMOS A POR EL RETO',
     'Un ejercicio. Algo nuevo que aprender.',
@@ -113,9 +134,6 @@ export function renderWeeklyChallengeEmail(variables = {}) {
     'Un martes. Un reto. Un paso más.',
     'Nos vemos dentro.',
     'El equipo de Dralo',
-    '',
-    'LA SOLUCIÓN, SIN MISTERIO',
-    solution,
   ].join('\n');
 
   const html = `<!DOCTYPE html>
@@ -157,9 +175,12 @@ export function renderWeeklyChallengeEmail(variables = {}) {
             <p lang="en" style="margin:0;font-size:22px;line-height:32px;font-weight:bold;color:#1d1857;">${promptHtml(prompt)}</p>
           </td></tr></table>
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:18px;">
-            ${optionRows(options)}
+            ${optionRows(options, url, weekId)}
           </table>
-          <p style="margin:14px 0 0;font-size:12px;line-height:19px;color:#6c6989;">Elige mentalmente tu respuesta. La solución está al final.</p>
+          <p style="margin:6px 0 16px;font-size:12px;line-height:19px;color:#6c6989;">Marca una opción. Chequear respuesta la comprueba en Dralo.</p>
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" bgcolor="#5634d6" style="background-color:#5634d6;border-radius:12px;mso-padding-alt:18px 24px;">
+            <a href="${safeCheckUrl}" target="_blank" style="display:block;border:1px solid #5634d6;border-radius:12px;padding:18px 24px;font-size:17px;line-height:22px;font-weight:bold;text-align:center;text-decoration:none;color:#ffffff;">Chequear respuesta &nbsp; &rarr;</a>
+          </td></tr></table>
         </td></tr>
         <tr><td height="16" style="height:16px;font-size:1px;line-height:16px;">&nbsp;</td></tr>
         <tr><td bgcolor="#f0ebff" style="background-color:#f0ebff;border:1px solid #e8e4f7;border-radius:24px;padding:28px;">
@@ -174,10 +195,6 @@ export function renderWeeklyChallengeEmail(variables = {}) {
         <tr><td style="padding:30px 20px;text-align:center;">
           <p style="margin:0 0 8px;font-size:18px;line-height:26px;font-weight:bold;">Un martes. Un reto. Un paso más.</p>
           <p style="margin:0;color:#6c6989;font-size:14px;line-height:22px;">Nos vemos dentro.<br>El equipo de Dralo</p>
-        </td></tr>
-        <tr><td style="border-top:1px solid #e8e4f7;padding:24px 20px 8px;">
-          <p style="margin:0 0 8px;font-size:11px;font-weight:bold;letter-spacing:1.4px;color:#6c6989;">LA SOLUCIÓN, SIN MISTERIO</p>
-          <p style="margin:0;font-size:14px;line-height:23px;color:#6c6989;">${solutionHtml(solution)}</p>
         </td></tr>
       </table>
       <!--[if mso]></td></tr></table><![endif]-->

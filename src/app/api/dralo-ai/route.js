@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import { isOpenAIConfigured, getDefaultModel } from '@/lib/ai/draloAiEngine';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
-import {
-  guestWritingAlreadyUsed,
-  handleGuestWritingPreview,
-} from '@/lib/guestWritingPreviewServer';
+import { handleGuestExamWritingCorrection } from '@/lib/guestWritingPreviewServer';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
 import { getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import {
@@ -110,6 +107,10 @@ export async function POST(request) {
   const userId = auth?.user?.id ?? null;
   const userEmail = auth?.user?.email ?? '';
   const aiCtx = { userEmail, accessToken: auth?.accessToken ?? null };
+
+  if (!userId && action === AI_ACTIONS.EXAM_WRITING_CORRECTION && body.guestExamMode === true) {
+    return handleGuestExamWritingCorrection(request, body);
+  }
 
   if (requiresAuth(action) && !userId) {
     return aiErrorJson(

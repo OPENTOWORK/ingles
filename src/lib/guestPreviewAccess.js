@@ -47,6 +47,20 @@ export function isGuestExamStrategiesChapterAllowed(pathname = '') {
 export const GUEST_WRITING_COOKIE = 'dralo_guest_writing_used';
 export const GUEST_WRITING_ATTEMPT_KEY = 'dralo-guest-writing-used';
 
+/** Dos correcciones (essay y Part 2) del examen 1 en modo examen, sin cuenta. */
+export const GUEST_EXAM_WRITING_COOKIE = 'dralo_guest_exam_writing';
+export const GUEST_EXAM_WRITING_LIMIT = 2;
+
+export function guestExamWritingCount(raw) {
+  const n = Number.parseInt(String(raw ?? ''), 10);
+  if (!Number.isFinite(n) || n < 0) return 0;
+  return n;
+}
+
+export function guestExamWritingRemaining(raw) {
+  return Math.max(0, GUEST_EXAM_WRITING_LIMIT - guestExamWritingCount(raw));
+}
+
 export function hasGuestWritingAttempt() {
   if (typeof window === 'undefined') return false;
   try {
@@ -65,6 +79,15 @@ export function markGuestWritingAttempt() {
   }
 }
 
+function isGuestB2ExamModePath(path) {
+  return (
+    path === '/exam-practice/b2/exam-mode' ||
+    path === '/niveles/b2/exam-mode' ||
+    path === '/exam-practice/b2/exam-mode/results' ||
+    path === '/niveles/b2/exam-mode/results'
+  );
+}
+
 function isGuestB2SkillPracticePath(path, skill) {
   return (
     path === `/exam-practice/b2/${skill}` ||
@@ -75,7 +98,7 @@ function isGuestB2SkillPracticePath(path, skill) {
 
 export function isGuestExamPracticeLockedHref(href = '') {
   const path = normalizeGuestPath(href);
-  if (path.includes('/exam-mode')) return true;
+  if (path.includes('/exam-mode')) return !isGuestB2ExamModePath(path);
   if (
     isGuestB2SkillPracticePath(path, 'exam-listening') ||
     isGuestB2SkillPracticePath(path, 'exam-writing')

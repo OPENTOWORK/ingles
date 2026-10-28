@@ -16,7 +16,7 @@ async function synthesizeWithEdge(text, voice = EDGE_VOICE, prosody = {}) {
   });
   const result = await tts.synthesize();
   const buf = Buffer.from(await result.audio.arrayBuffer());
-  return { base64: buf.toString('base64'), mime: 'audio/mpeg' };
+  return { base64: buf.toString('base64'), mime: 'audio/mpeg', engine: 'edge', voice };
 }
 
 /**
@@ -61,7 +61,7 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
         response_format: 'mp3',
       });
       const buf = Buffer.from(await res.arrayBuffer());
-      return { base64: buf.toString('base64'), mime: 'audio/mpeg' };
+      return { base64: buf.toString('base64'), mime: 'audio/mpeg', engine: 'openai', voice: openaiVoice };
     } catch (err) {
       const code = err?.code || err?.error?.code;
       if (openaiOnly) {

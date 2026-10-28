@@ -10,6 +10,8 @@ import {
   looksLikeVerbTenseError,
 } from '../domain/issue-evidence.js';
 import {
+  attachSpeakingB2IssuesToTurns,
+  bindSpeakingB2IssueToTurn,
   ensureSpeakingB2DiscourseIssues,
   validateSpeakingB2Issue,
   validateSpeakingB2Issues,
@@ -164,5 +166,67 @@ describe('speaking B2 issue evidence and classification', () => {
       questionId: 'SP-EX001-P1-Q05',
     });
     assert.equal(discourse[0].code, 'DM-EL');
+  });
+
+  it('does not attach an unmatched issue to the first question', () => {
+    const paired = [
+      {
+        questionId: 'SP-EX001-P1-Q01',
+        question: 'How do you usually spend your weekends?',
+        transcript: 'I walk with my family in the park.',
+      },
+      {
+        questionId: 'SP-EX001-P1-Q04',
+        question: 'How has technology changed the way you communicate with your friends?',
+        transcript: 'I make messages when I cannot call my friends.',
+      },
+    ];
+    const bound = bindSpeakingB2IssueToTurn(
+      { code: 'VC-CO', excerpt: 'make messages', questionId: 'SP-EX001-P1-Q99' },
+      paired,
+    );
+    assert.equal(bound.questionId, 'SP-EX001-P1-Q04');
+    assert.equal(bound.bound, 'excerpt');
+
+    const unknown = attachSpeakingB2IssuesToTurns(
+      [{ code: 'GR-PR', excerpt: 'a phrase that appears nowhere', questionId: '' }],
+      paired,
+    );
+    assert.equal(unknown[0].code, 'review_required');
+    assert.equal(unknown[0].questionId, '');
+    assert.equal(unknown[0].evidenceCheck, 'question-unbound');
+
+    const rubricSource = readFileSync(
+      path.join(path.dirname(fileURLToPath(import.meta.url)), '../services/evaluation/rubric-engine.js'),
+      'utf8',
+    );
+    assert.equal(rubricSource.includes('|| paired[0]'), false);
+  });
+
+  it('asks for review when the same wording appears in two answers', () => {
+    const paired = [
+      {
+        questionId: 'SP-EX001-P1-Q01',
+        question: 'How do you usually spend your weekends?',
+        transcript: 'I stay in home and I wait the bus.',
+      },
+      {
+        questionId: 'SP-EX001-P1-Q02',
+        question: 'Do you prefer visiting new places or returning to places you know? Why?',
+        transcript: 'When I travel I stay in home and I wait the bus.',
+      },
+    ];
+    const bound = bindSpeakingB2IssueToTurn(
+      { code: 'GR-PR', excerpt: 'wait the bus', questionId: '' },
+      paired,
+    );
+    assert.equal(bound.bound, 'ambiguous');
+    const attached = attachSpeakingB2IssuesToTurns(
+      [{ code: 'GR-PR', excerpt: 'wait the bus', questionId: '' }],
+      paired,
+    );
+    assert.equal(attached[0].code, 'review_required');
+    assert.equal(attached[0].questionId, '');
+    assert.equal(attached[0].evidenceCheck, 'question-ambiguous');
   });
 });

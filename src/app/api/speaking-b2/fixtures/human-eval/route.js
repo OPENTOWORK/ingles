@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isSpeakingB2FixtureRuntime } from '@/features/speaking-b2-motor/fixtures/runtime';
+import { speakingB2DevSurfaceGuardResponse } from '@/features/speaking-b2-motor/services/lan-access-http';
 import { evaluateSpeakingB2HumanBank } from '@/features/speaking-b2-motor/fixtures/human/eval';
 import { evaluateScriptedSpeakingB2Interview } from '@/features/speaking-b2-motor/fixtures/interview-scenario';
 import { redactSpeakingB2AudioValue } from '@/features/speaking-b2-motor/fixtures/human/privacy';
@@ -9,6 +10,8 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 export async function POST(req) {
+  const blocked = speakingB2DevSurfaceGuardResponse(req);
+  if (blocked) return blocked;
   if (!isSpeakingB2FixtureRuntime()) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }

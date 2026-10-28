@@ -34,7 +34,7 @@ const VARIABLE_HINTS = [
   '{{challenge_since}} — fecha del martes del reto (sin la solución)',
   '{{challenge_prompt}} — frase del reto de esa semana',
   '{{challenge_options}} — opciones A, B y C, sin marcar la correcta',
-  '{{challenge_url}} — enlace a Training, donde se comprueba la respuesta',
+  '{{challenge_url}} — enlace a Training. La solución no va en el correo: se comprueba al marcar una opción',
 ];
 
 async function apiFetch(path, options = {}) {

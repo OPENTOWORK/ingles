@@ -1,7 +1,12 @@
 import { evaluateCambridgeEssay } from '@/lib/cambridgeEssayFeedback';
 import { AI_ACTIONS, checkMonthlyBudget } from '@/lib/aiUsage';
 import { aiErrorJson, aiSuccessJson } from '@/lib/aiUsageRouteHelpers';
-import { GUEST_WRITING_COOKIE } from '@/lib/guestPreviewAccess';
+import {
+  GUEST_EXAM_WRITING_COOKIE,
+  GUEST_WRITING_COOKIE,
+  guestExamWritingCount,
+  guestExamWritingRemaining,
+} from '@/lib/guestPreviewAccess';
 
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 400;
 
@@ -50,5 +55,67 @@ export async function handleGuestWritingPreview(body) {
     maxAge: COOKIE_MAX_AGE,
     secure: process.env.NODE_ENV === 'production',
   });
+  return response;
+}
+
+function writingCookieOptions() {
+  return {
+    httpOnly: true,
+    sameSite: 'lax',
+    path: '/',
+    maxAge: COOKIE_MAX_AGE,
+    secure: process.env.NODE_ENV === 'production',
+  };
+}
+
+/**
+ * Correcciones del examen 1 en modo examen, sin cuenta.
+ * Hay dos textos; la cookie cuenta los que ya se han corregido.
+ */
+export async function handleGuestExamWritingCorrection(request, body) {
+  const used = guestExamWritingCount(request.cookies.get(GUEST_EXAM_WRITING_COOKIE)?.value);
+  if (guestExamWritingRemaining(used) <= 0) {
+    return aiErrorJson(
+      'GUEST_EXAM_WRITING_USED',
+      'Create a free account to keep practising Writing.',
+      {},
+      403,
+    );
+  }
+
+  const budget = await checkMonthlyBudget();
+  if (!budget.allowed) {
+    return aiErrorJson(
+      'MONTHLY_AI_BUDGET_REACHED',
+      'AI usage is temporarily limited. Please try again later.',
+      {},
+      503,
+    );
+  }
+
+  const result = await evaluateCambridgeEssay({
+    essay: body.essay,
+    level: body.level,
+    taskContext: body.taskContext,
+    structuredExamContext: body.structuredExamContext,
+    wordMin: body.wordMin,
+    wordMax: body.wordMax,
+  });
+
+  if (!result.ok) {
+    return aiErrorJson('ESSAY_EVAL_FAILED', result.error || 'Could not check this writing.', {}, result.status || 500);
+  }
+
+  const response = aiSuccessJson({
+    action: AI_ACTIONS.EXAM_WRITING_CORRECTION,
+    result: {
+      engine: 'legacy',
+      feedback: result.feedback,
+      scores: result.scores,
+      guestPreview: true,
+      guestExamMode: true,
+    },
+  });
+  response.cookies.set(GUEST_EXAM_WRITING_COOKIE, String(used + 1), writingCookieOptions());
   return response;
 }

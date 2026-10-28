@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { getWeeklyChallenge } from '@/data/weeklyTrainingChallenges';
+import { getWeeklyChallenge, weeklyChallengeMailChoice } from '@/data/weeklyTrainingChallenges';
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { renderEmailTemplate, splitEmailDeliveryMeta } from '@/lib/renderEmailTemplate';
@@ -16,7 +16,7 @@ const THURSDAY_SAME_WEEK = new Date('2026-10-22T08:00:00.000Z');
 const NEXT_TUESDAY = new Date('2026-10-27T08:00:00.000Z');
 const MONDAY_AFTER = new Date('2026-10-26T08:00:00.000Z');
 
-test('tuesday challenge mail uses the designed layout and puts the answer last', () => {
+test('tuesday challenge mail lets you mark an option and checks it on the site', () => {
   const template = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.find(
     (item) => item.slug === 'weekly_tuesday_challenge',
   );
@@ -25,7 +25,8 @@ test('tuesday challenge mail uses the designed layout and puts the answer last',
   assert.equal(template.delay_minutos, 0);
   assert.equal(template.activo, true);
   assert.match(template.cuerpo, /^Preheader: /);
-  assert.match(template.cuerpo, /CTA: Acepto el reto/);
+  assert.match(template.cuerpo, /CTA: Chequear respuesta/);
+  assert.equal(template.cuerpo.includes('{{challenge_solution}}'), false);
 
   const challenge = getWeeklyChallenge(FIRST_TUESDAY);
   assert.equal(challenge.id, 'used-to-ing');
@@ -34,14 +35,15 @@ test('tuesday challenge mail uses the designed layout and puts the answer last',
   const variables = buildWeeklyChallengeEmailVariables(FIRST_TUESDAY, 'https://www.dralo.es');
   assert.equal('correct' in variables, false);
   assert.equal(variables.challenge_prompt, challenge.prompt);
-  assert.equal(variables.challenge_solution, challenge.solution);
+  assert.equal('challenge_solution' in variables, false);
+  assert.equal(variables.challenge_week_id, challenge.weekId);
   assert.match(variables.challenge_options, /^A\) speak\nB\) speaking\nC\) spoke$/);
   assert.equal(variables.challenge_url, 'https://www.dralo.es/training/');
 
   const rendered = renderEmailTemplate(template.cuerpo, variables);
   const meta = splitEmailDeliveryMeta(rendered);
   assert.match(meta.preheader, /Sabemos que vas a mil/);
-  assert.equal(meta.ctaLabel, 'Acepto el reto');
+  assert.equal(meta.ctaLabel, 'Chequear respuesta');
 
   const email = renderWeeklyChallengeEmail(variables);
   assert.match(email.html, /Ese B2 está cada vez más cerca\./);
@@ -49,13 +51,18 @@ test('tuesday challenge mail uses the designed layout and puts the answer last',
   assert.match(email.html, /¿Cuál pondrías tú\?/);
   assert.match(email.html, /I’m not used to <span style="color:#5634d6;">_____<\/span> English every day\./);
   assert.match(email.html, /mascot\/3\.png/);
+  assert.match(email.html, /Chequear respuesta/);
   assert.match(email.html, /Acepto el reto/);
-  assert.match(email.html, /https:\/\/www\.dralo\.es\/training\//);
-  const ctaAt = email.html.indexOf('Acepto el reto');
-  const answerAt = email.html.indexOf('LA SOLUCIÓN, SIN MISTERIO');
-  assert.ok(ctaAt > 0 && answerAt > ctaAt);
-  assert.ok(email.html.includes('Después de be used to'));
-  assert.equal(email.html.slice(0, answerAt).includes('Después de be used to'), false);
+  assert.match(
+    email.html,
+    /https:\/\/www\.dralo\.es\/training\/\?reto=2026-10-20&amp;opcion=B/,
+  );
+  assert.match(email.html, /https:\/\/www\.dralo\.es\/training\/\?reto=2026-10-20"/);
+  assert.equal(email.html.includes('LA SOLUCIÓN'), false);
+  assert.equal(email.html.includes(challenge.solution), false);
+  assert.equal(email.text.includes(challenge.solution), false);
+  assert.equal(weeklyChallengeMailChoice(challenge.weekId, challenge.weekId, 'b'), 'B');
+  assert.equal(weeklyChallengeMailChoice(challenge.weekId, '2020-01-01', 'B'), null);
 });
 
 test('the same challenge stays all week and the next tuesday moves on', () => {
@@ -76,7 +83,7 @@ test('the same challenge stays all week and the next tuesday moves on', () => {
   const nextMail = buildWeeklyChallengeEmailVariables(NEXT_TUESDAY);
   assert.equal(nextMail.challenge_prompt.includes(next.solution), false);
   assert.equal(nextMail.challenge_options.includes('had'), true);
-  assert.equal(nextMail.challenge_solution, next.solution);
+  assert.equal(renderWeeklyChallengeEmail(nextMail).html.includes(next.solution), false);
 });
 
 test('every weekly challenge is a three-option gap with one answer', () => {
@@ -96,6 +103,8 @@ test('every weekly challenge is a three-option gap with one answer', () => {
     const mail = buildWeeklyChallengeEmailVariables(date);
     assert.equal(mail.challenge_prompt.includes(challenge.solution), false);
     assert.equal(mail.challenge_options.includes(challenge.solution), false);
-    assert.equal(mail.challenge_solution, challenge.solution);
+    const rendered = renderWeeklyChallengeEmail(mail);
+    assert.equal(rendered.html.includes(challenge.solution), false);
+    assert.match(rendered.html, new RegExp(`reto=${challenge.weekId}&amp;opcion=A`));
   }
 });

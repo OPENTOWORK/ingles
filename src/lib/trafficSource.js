@@ -271,6 +271,7 @@ const LANDING_RULES = [
   { test: (path) => path.startsWith('/contacto') || path.startsWith('/contact'), label: 'Contacto' },
   { test: (path) => path.startsWith('/perfil') || path.startsWith('/profile'), label: 'Perfil' },
   { test: (path) => path.startsWith('/prueba-nivel'), label: 'Placement Test' },
+  { test: (path) => path.startsWith('/guia-b2-first'), label: 'Guía B2' },
   { test: (path) => path.startsWith('/preparar-b2') || path.startsWith('/campana'), label: 'Landing B2' },
   { test: (path) => path.startsWith('/founding'), label: 'Encuesta founding' },
   { test: (path) => path === '/' || path === '', label: 'Home' },

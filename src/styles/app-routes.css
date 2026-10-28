@@ -4332,9 +4332,9 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-practice__work-panel--a2-rw {
-  max-width: min(920px, 100%);
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .levels-b2-practice__work-body {

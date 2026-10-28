@@ -10,9 +10,9 @@ import {
 import { isKnownSpeakingB2ErrorCode } from '../../domain/error-taxonomy.js';
 import { getSpeakingB2Question } from '../../domain/question-bank/sp-ex001-part1.js';
 import {
+  attachSpeakingB2IssuesToTurns,
   ensureSpeakingB2DiscourseIssues,
   pairSpeakingB2Answers,
-  validateSpeakingB2Issues,
 } from '../../domain/issue-validator.js';
 
 const RUBRIC_SYSTEM = `You are a B2 First speaking rater for Dralo. Assess ONLY the candidate turns from a solo Part 1 interview.
@@ -112,21 +112,19 @@ export async function runSpeakingB2Rubric({ turns, hasAudio, acoustic }) {
   if (!flags.pronunciation) safeScores.pronunciation = null;
 
   const rawIssues = Array.isArray(model?.issues)
-    ? model.issues.flatMap((issue) => {
-        if (issue.code?.startsWith('PN') && !flags.pronunciation) return [];
-        const turn = paired.find((item) => item.questionId === issue.questionId) || paired[0];
-        if (turn?.uncertain) return [];
-        if (!isKnownSpeakingB2ErrorCode(issue.code) && issue.code !== 'review_required') {
-          issue = { ...issue, code: 'review_required' };
-        }
-        if (!issue.excerpt && !issue.suggestion && !['DM-RV', 'DM-EL', 'VC-RP'].includes(issue.code)) {
-          return [];
-        }
-        return validateSpeakingB2Issues([issue], {
-          answer: turn?.transcript || '',
-          question: turn?.question || '',
-        });
-      })
+    ? attachSpeakingB2IssuesToTurns(
+        model.issues.flatMap((issue) => {
+          if (issue.code?.startsWith('PN') && !flags.pronunciation) return [];
+          if (!isKnownSpeakingB2ErrorCode(issue.code) && issue.code !== 'review_required') {
+            issue = { ...issue, code: 'review_required' };
+          }
+          if (!issue.excerpt && !issue.suggestion && !['DM-RV', 'DM-EL', 'VC-RP'].includes(issue.code)) {
+            return [];
+          }
+          return [issue];
+        }),
+        paired.filter((turn) => !turn.uncertain),
+      )
     : [];
 
   const withDiscourse = paired.reduce((issues, turn) => {

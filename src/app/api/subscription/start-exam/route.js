@@ -9,12 +9,13 @@ import {
   consumePlanUsage,
   getStudentPlanContext,
 } from '@/lib/planAccess';
+import { isComplimentaryExamModeSlot } from '@/lib/plusExamUnlock';
 
 export const dynamic = 'force-dynamic';
 
 /**
  * Valida acceso al slot de examen y consume cuota mensual si es un intento nuevo.
- * Body: { examSlot: number, resuming?: boolean }
+ * Body: { examSlot: number, resuming?: boolean, examMode?: boolean }
  */
 export async function POST(req) {
   const auth = await getSupabaseUserFromRequest(req);
@@ -42,6 +43,10 @@ export async function POST(req) {
 
   if (!ctx.applyLimits) {
     return NextResponse.json({ allowed: true, bypass: true });
+  }
+
+  if (body?.examMode === true && isComplimentaryExamModeSlot(examSlot)) {
+    return NextResponse.json({ allowed: true, complimentary: true });
   }
 
   if (!canAccessExamSlot(ctx.planSlug, examSlot, { maxExamSlot: ctx.maxExamSlot })) {

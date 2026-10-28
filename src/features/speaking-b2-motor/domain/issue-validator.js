@@ -199,6 +199,72 @@ function normalizeKey(text) {
     .trim();
 }
 
+export function bindSpeakingB2IssueToTurn(issue, pairedTurns = []) {
+  const turns = Array.isArray(pairedTurns) ? pairedTurns : [];
+  const requested = String(issue?.questionId || '').trim();
+  const excerpt = String(issue?.excerpt || issue?.originalText || '').trim();
+  const byId = requested ? turns.find((turn) => turn?.questionId === requested) : null;
+
+  if (byId && (!excerpt || excerptAppearsIn(byId.transcript, excerpt) || DISCOURSE_CODES.has(issue?.code))) {
+    return { turn: byId, questionId: byId.questionId, bound: 'id' };
+  }
+
+  if (excerpt) {
+    const matches = turns.filter((turn) => excerptAppearsIn(turn?.transcript, excerpt));
+    if (matches.length === 1) {
+      return {
+        turn: matches[0],
+        questionId: matches[0].questionId || '',
+        bound: 'excerpt',
+        reviewRequired: Boolean(requested && requested !== matches[0].questionId),
+      };
+    }
+    if (matches.length > 1) {
+      return { turn: null, questionId: '', bound: 'ambiguous', reviewRequired: true };
+    }
+  }
+
+  return { turn: null, questionId: '', bound: 'unbound', reviewRequired: true };
+}
+
+export function attachSpeakingB2IssuesToTurns(issues, pairedTurns = []) {
+  const next = [];
+  const seen = new Set();
+  for (const issue of issues || []) {
+    const binding = bindSpeakingB2IssueToTurn(issue, pairedTurns);
+    if (!binding.turn) {
+      const attached = {
+        ...issue,
+        questionId: '',
+        code: 'review_required',
+        reviewRequired: true,
+        evidenceCheck: binding.bound === 'ambiguous' ? 'question-ambiguous' : 'question-unbound',
+      };
+      const key = `${attached.code}:${normalizeKey(attached.excerpt || attached.originalText || '')}:unbound`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      next.push(attached);
+      continue;
+    }
+    const validated = validateSpeakingB2Issues(
+      [{ ...issue, questionId: binding.questionId }],
+      { answer: binding.turn.transcript || '', question: binding.turn.question || '' },
+    );
+    for (const item of validated) {
+      const attached = {
+        ...item,
+        questionId: binding.questionId,
+        reviewRequired: Boolean(item.reviewRequired || binding.reviewRequired),
+      };
+      const key = `${attached.code}:${normalizeKey(attached.excerpt || attached.originalText || '')}:${attached.questionId}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      next.push(attached);
+    }
+  }
+  return next;
+}
+
 export function pairSpeakingB2Answers(turns = [], getQuestion) {
   const questions = new Map();
   for (const turn of turns) {

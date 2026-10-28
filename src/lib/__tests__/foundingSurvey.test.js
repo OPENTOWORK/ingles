@@ -10,6 +10,7 @@ import {
   isSurveyExpired,
   needsReminder,
   summarizeFoundingSurveyCampaign,
+  foundingSurveyResponseItems,
   validateSurveyAnswers,
 } from '@/lib/foundingSurvey.rules.js';
 
@@ -251,5 +252,17 @@ describe('FOUNDING_SURVEY_QUESTIONS', () => {
     for (const question of FOUNDING_SURVEY_QUESTIONS) {
       assert.equal(question.required, true, `${question.id} debería ser obligatoria`);
     }
+  });
+});
+
+describe('foundingSurveyResponseItems', () => {
+  it('keeps a zero on the recommendation scale and the written answer', () => {
+    const items = foundingSurveyResponseItems(validAnswers({ recomendacion: 0 }));
+    assert.equal(items.length, 10);
+    const score = items.find((item) => item.pregunta_id === 'recomendacion');
+    assert.equal(score.texto, '0');
+    const note = items.find((item) => item.pregunta_id === 'mejorarias');
+    assert.equal(note.texto, 'Más ejercicios de listening.');
+    assert.match(note.pregunta, /Cuéntanoslo con tus palabras/);
   });
 });

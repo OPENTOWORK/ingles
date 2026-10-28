@@ -5,6 +5,10 @@ import ardManifest from '../public/.well-known/ard.json';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { isPublicPath } from '@/utils/publicRoutes';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
+import {
+  isSpeakingB2HttpsRequest,
+  isSpeakingB2LoopbackRequest,
+} from '@/features/speaking-b2-motor/services/lan-access-edge';
 
 /**
  * Manifiestos ARD. Si esta petición pasa por el middleware, no puede ir a /login:
@@ -39,6 +43,11 @@ export async function middleware(request: NextRequest) {
 
   const manifest = discoveryManifestResponse(pathname);
   if (manifest) return manifest;
+
+  const isDevLanGate = process.env.NODE_ENV === 'development' && process.env.VERCEL !== '1';
+  if (isDevLanGate && !isSpeakingB2LoopbackRequest(request) && !isSpeakingB2HttpsRequest(request)) {
+    return new NextResponse('HTTPS is required for this test access.', { status: 403 });
+  }
 
   // Google Search Console (and similar) HTML verification files in /public.
   if (/^\/google[a-z0-9]+\.html\/?$/i.test(pathname)) {

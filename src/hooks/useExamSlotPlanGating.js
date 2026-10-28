@@ -1,12 +1,13 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import PlanUpgradeModal from '@/components/subscriptions/PlanUpgradeModal';
 import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { useUserRole } from '@/context/UserRoleContext';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
+import { isComplimentaryExamModeSlot } from '@/lib/plusExamUnlock';
 import { getGuestRegisterHref, isGuestExamSlotAllowed } from '@/lib/guestPreviewAccess';
 import { requestStartExamSession } from '@/utils/requestStartExamSession';
 
@@ -32,7 +33,11 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
   const isGuest = !session;
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const guestMaxExamSlot = 1;
+  const examModeParam = searchParams?.get('examMode');
+  const inExamMode =
+    (pathname || '').includes('/exam-mode') || examModeParam === '1' || examModeParam === 'review';
   const effectiveApplyLimits = applyLimits || isGuest;
   const effectiveMaxExamSlot = isGuest ? guestMaxExamSlot : maxExamSlot;
   const [modalState, setModalState] = useState({
@@ -85,7 +90,9 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
         return false;
       }
 
-      if (applyLimits && isExamSlotLocked(n)) {
+      const examModeFreeSlot = inExamMode && isComplimentaryExamModeSlot(n);
+
+      if (applyLimits && isExamSlotLocked(n) && !examModeFreeSlot) {
         const isPlus = isPlusTierPlanSlug(planSlug);
         const message = isPlus
           ? `Con Plus tienes desbloqueados los exámenes 1–${maxExamSlot}. Cada mes se desbloquean 10 nuevos hasta completar el catálogo. El examen ${n} estará disponible pronto.`
@@ -96,7 +103,7 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
 
       if (applyLimits) {
         const resuming = slotHasPriorProgress(progressBySlot, n);
-        const result = await requestStartExamSession(n, { resuming });
+        const result = await requestStartExamSession(n, { resuming, examMode: inExamMode });
         if (!result.allowed) {
           const variant =
             result.code === 'EXAM_SLOT_LOCKED' || result.code === 'START_EXAM_DENIED'
@@ -119,6 +126,7 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
     [
       applyLimits,
       isExamSlotLocked,
+      inExamMode,
       isGuest,
       maxExamSlot,
       onLockedSlotClick,

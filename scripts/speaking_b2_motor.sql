@@ -1,5 +1,9 @@
 -- Speaking Motor V1 (B2 First Part 1).
 -- LOCAL REVIEW ONLY. Do not apply to production without explicit authorisation.
+-- V2 concurrency / quota / turn integrity: scripts/speaking_b2_motor_v2.sql
+-- V2.1 atomic consume: scripts/speaking_b2_motor_v21.sql
+-- V2.2 staff daily + quota parity: scripts/speaking_b2_motor_v22.sql
+-- V2.3 post-audit hardening: scripts/speaking_b2_motor_v23.sql
 
 begin;
 
@@ -133,15 +137,10 @@ alter table public.speaking_b2_assessments enable row level security;
 alter table public.speaking_b2_issues enable row level security;
 alter table public.speaking_b2_recommendations enable row level security;
 
+-- Catalog is served by the application (SP-EX001 in code / service_role).
+-- Students and guests must not read exams or questions via PostgREST.
 drop policy if exists "speaking_b2_exams_read_approved" on public.speaking_b2_exams;
-create policy "speaking_b2_exams_read_approved"
-  on public.speaking_b2_exams for select to authenticated, anon
-  using (review_status = 'approved');
-
 drop policy if exists "speaking_b2_questions_read_approved" on public.speaking_b2_questions;
-create policy "speaking_b2_questions_read_approved"
-  on public.speaking_b2_questions for select to authenticated, anon
-  using (review_status = 'approved');
 
 drop policy if exists "speaking_b2_sessions_select_own" on public.speaking_b2_sessions;
 create policy "speaking_b2_sessions_select_own"
@@ -183,16 +182,36 @@ create policy "speaking_b2_recommendations_select_own"
     )
   );
 
-grant select on public.speaking_b2_exams to anon, authenticated;
-grant select on public.speaking_b2_questions to anon, authenticated;
-grant select on public.speaking_b2_sessions to authenticated;
+revoke all on public.speaking_b2_exams from public, anon, authenticated;
+revoke all on public.speaking_b2_questions from public, anon, authenticated;
 grant select on public.speaking_b2_turns to authenticated;
 grant select on public.speaking_b2_assessments to authenticated;
 grant select on public.speaking_b2_issues to authenticated;
 grant select on public.speaking_b2_recommendations to authenticated;
+grant select on public.speaking_b2_sessions to service_role;
 
 -- Staff reads/writes go through service-role APIs, not extra client policies.
 -- access_token_hash is stored server-side; APIs never return it.
+-- Column privilege (not RLS): students may read session columns except the hash.
+revoke select on public.speaking_b2_sessions from public, anon, authenticated;
+do $$
+declare
+  cols text;
+begin
+  select string_agg(quote_ident(column_name), ', ' order by ordinal_position)
+  into cols
+  from information_schema.columns
+  where table_schema = 'public'
+    and table_name = 'speaking_b2_sessions'
+    and column_name <> 'access_token_hash';
+  execute format(
+    'grant select (%s) on public.speaking_b2_sessions to authenticated',
+    cols
+  );
+end
+$$;
+revoke select (access_token_hash) on public.speaking_b2_sessions from public, anon, authenticated;
+grant select (access_token_hash) on public.speaking_b2_sessions to service_role;
 
 revoke insert, update, delete on public.speaking_b2_sessions from authenticated, anon;
 revoke insert, update, delete on public.speaking_b2_turns from authenticated, anon;

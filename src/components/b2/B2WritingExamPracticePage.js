@@ -141,6 +141,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
     hubHref,
     resultsHref,
   } = examMode;
+  const guestExamMode = guestPreview && examModeActive && Number(examSlot) === 1;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -1138,6 +1139,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                         examMode={writingExamMode}
                         reviewExamCorrection={reviewMode}
                         guestPreview={guestPreview}
+                        guestExamMode={guestExamMode}
                         onGuestAttemptBlocked={onGuestAttemptBlocked}
                         lang="en"
                       />
@@ -1169,6 +1171,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                           examMode={writingExamMode}
                           reviewExamCorrection={reviewMode}
                           guestPreview={guestPreview}
+                          guestExamMode={guestExamMode}
                           onGuestAttemptBlocked={onGuestAttemptBlocked}
                           lang="en"
                         />
@@ -1278,6 +1281,10 @@ function B2WritingGuestGate() {
 
   useEffect(() => {
     if (session) return;
+    const params = new URLSearchParams(window.location.search);
+    const guestExam =
+      params.get('examMode') === '1' && (params.get('examen') || '1') === '1';
+    if (guestExam) return;
     if (hasGuestWritingAttempt()) setGuestBlocked(true);
   }, [session]);
 

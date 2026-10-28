@@ -7,6 +7,7 @@ const PATH_LABELS = [
   { prefix: '/quiz-game', label: 'Quiz game' },
   { prefix: '/preparar-b2-cambridge/a', label: 'Guía B2 A' },
   { prefix: '/preparar-b2-cambridge/b', label: 'Guía B2 B' },
+  { prefix: '/guia-b2-first', label: 'Guía B2' },
   { prefix: '/preparar-b2', label: 'Landing B2' },
   { prefix: '/campana/a', label: 'Campaña A' },
   { prefix: '/campana/b', label: 'Campaña B' },

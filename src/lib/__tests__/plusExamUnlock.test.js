@@ -6,6 +6,7 @@ import {
   getPlusMaxExamSlot,
   getPlusUnlockProgress,
   getSubscriptionTenureMonths,
+  isComplimentaryExamModeSlot,
 } from '@/lib/plusExamUnlock.js';
 
 describe('plusExamUnlock', () => {
@@ -30,6 +31,12 @@ describe('plusExamUnlock', () => {
     assert.equal(getPlusMaxExamSlot(3), 20);
     assert.equal(getMaxExamSlotForPlan('premium', { subscriptionMonths: 1 }), 10);
     assert.equal(getMaxExamSlotForPlan('premium', { subscriptionMonths: 2 }), 20);
+  });
+
+  it('keeps exam-mode exam 1 free for every student', () => {
+    assert.equal(isComplimentaryExamModeSlot(1), true);
+    assert.equal(isComplimentaryExamModeSlot('1'), true);
+    assert.equal(isComplimentaryExamModeSlot(2), false);
   });
 
   it('keeps FREE at exam 1 and PREMIUM at full catalog', () => {

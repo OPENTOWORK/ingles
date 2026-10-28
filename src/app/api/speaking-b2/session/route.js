@@ -8,16 +8,20 @@ import {
   sanitizeSpeakingLog,
 } from '@/features/speaking-b2-motor/services/session-auth';
 import {
+  SpeakingStoreConflictError,
   SpeakingStoreUnavailableError,
   createPersistedSession,
-  getMemorySession,
+  loadSpeakingB2Session,
   updatePersistedSession,
 } from '@/features/speaking-b2-motor/services/session-store';
 import { isSpeakingB2FixtureRuntime } from '@/features/speaking-b2-motor/fixtures/runtime';
+import { speakingB2LanGuardResponse } from '@/features/speaking-b2-motor/services/lan-access-http';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
+  const denied = speakingB2LanGuardResponse(req);
+  if (denied) return denied;
   try {
     const body = await req.json().catch(() => ({}));
     const examCode = body.examCode || SPEAKING_B2_EXAM_CODE;
@@ -60,9 +64,11 @@ export async function POST(req) {
 }
 
 export async function PATCH(req) {
+  const denied = speakingB2LanGuardResponse(req);
+  if (denied) return denied;
   try {
     const body = await req.json();
-    const session = getMemorySession(body.sessionId);
+    const session = await loadSpeakingB2Session(body.sessionId);
     const auth = await getSupabaseUserFromRequest(req);
     const access = authorizeSpeakingSession(session, {
       userId: auth?.user?.id || null,
@@ -77,6 +83,15 @@ export async function PATCH(req) {
 
     return NextResponse.json({ error: 'Unknown action' }, { status: 400 });
   } catch (error) {
+    if (error instanceof SpeakingStoreUnavailableError) {
+      return NextResponse.json(
+        { error: 'Speaking storage is not ready.', code: 'STORE_UNAVAILABLE' },
+        { status: 503 },
+      );
+    }
+    if (error instanceof SpeakingStoreConflictError) {
+      return NextResponse.json({ error: 'Session was updated elsewhere.', code: 'STORE_CONFLICT' }, { status: 409 });
+    }
     console.error('[speaking-b2/session.patch]', error);
     return NextResponse.json({ error: 'Could not update session' }, { status: 500 });
   }
