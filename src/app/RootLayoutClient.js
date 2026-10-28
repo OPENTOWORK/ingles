@@ -153,7 +153,7 @@ function RootLayoutClientInner({ children }) {
   /** Usuario vigente: descarta respuestas de rol que llegan tras un cambio de usuario. */
   const currentUserIdRef = useRef(null);
 
-  const heartbeatEnabled = Boolean(session) && !allowWithoutAuth;
+  // La sesión de actividad depende de que el usuario esté autenticado, no de que la ruta\n  // también pueda abrirse sin login. Exam Practice, Training y Exam Strategies son públicas\n  // para invitados, pero deben seguir contando tiempo cuando las usa un alumno identificado.\n  const heartbeatEnabled = Boolean(session) && !isAuthFlow;
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
   const analyticsCookiesEnabled = Boolean(cookieConsent) && Boolean(cookiePreferences.analytics);
