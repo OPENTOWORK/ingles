@@ -1,0 +1,231 @@
+/* Selector de tema de la web (SiteThemePicker). Solo lo ven los administradores. */
+
+.site-theme-picker {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+/* Redondo y del tamaño justo: con el resto de enlaces de administrador la barra no tiene más hueco. */
+.site-theme-picker__trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1.5px solid #cdbfff;
+  background: #fff;
+  color: #5634d6;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.site-theme-picker__trigger:hover,
+.site-theme-picker__trigger.is-open {
+  background: #f8f5ff;
+  border-color: #6a4be8;
+}
+
+/* Por debajo de 1280 px la barra de administrador no cabe con el selector: modo noche solo con icono y enlaces de cuenta más estrechos.
+   Si aun así no cabe, AppNav pasa al menú desplegable. */
+@media (min-width: 901px) and (max-width: 1279px) {
+  .app-nav--admin .app-nav__night-mode {
+    padding: 0 0.8rem;
+  }
+
+  .app-nav--admin .app-nav__night-mode-label {
+    display: none;
+  }
+
+  .app-nav--admin .app-nav__account .app-nav__link {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.site-theme-picker__trigger:focus-visible,
+.site-theme-picker__option:focus-visible {
+  outline: 2px solid #6a4be8;
+  outline-offset: 2px;
+}
+
+.site-theme-picker__panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  width: 220px;
+  padding: 0.5rem;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+}
+
+.site-theme-picker__title {
+  margin: 0.2rem 0.6rem 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.site-theme-picker__option {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #374151;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+
+.site-theme-picker__option:hover:not(:disabled) {
+  background: rgba(102, 126, 234, 0.12);
+  color: #4f46e5;
+}
+
+.site-theme-picker__option.is-current {
+  color: #4f46e5;
+  font-weight: 700;
+}
+
+.site-theme-picker__option:disabled {
+  cursor: progress;
+  opacity: 0.6;
+}
+
+.site-theme-picker__label {
+  flex: 1;
+}
+
+.site-theme-picker__swatch {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.12);
+}
+
+.site-theme-picker__swatch--normal {
+  background: linear-gradient(135deg, #8466ff 0%, #5333d6 100%);
+}
+
+.site-theme-picker__swatch--halloween {
+  background: linear-gradient(135deg, #f97316 50%, #7c3aed 50%);
+}
+
+.site-theme-picker__swatch--navidad {
+  background: linear-gradient(135deg, #dc2626 50%, #16a34a 50%);
+}
+
+.site-theme-picker__note {
+  margin: 0.35rem 0.6rem 0.2rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: #64748b;
+}
+
+/* ——— Menú móvil y menú lateral de la home ——— */
+.site-theme-picker-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin: 0.6rem 1.25rem 0.2rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+}
+
+.site-theme-picker-field__label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #334155;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.site-theme-picker-field__select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  color: #1e293b;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.site-theme-picker-field__note {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+/* ——— Modo noche ——— */
+body.reading-night-mode .site-theme-picker__trigger {
+  border-color: rgba(255, 255, 255, 0.28);
+  background: transparent;
+  color: #fff;
+}
+
+body.reading-night-mode .site-theme-picker__trigger:hover,
+body.reading-night-mode .site-theme-picker__trigger.is-open {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+body.reading-night-mode .site-theme-picker__panel {
+  background: #1e293b;
+  border-color: #475569;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+body.reading-night-mode .site-theme-picker__option {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .site-theme-picker__option:hover:not(:disabled) {
+  background: #334155;
+  color: #f8fafc;
+}
+
+body.reading-night-mode .site-theme-picker__option.is-current {
+  color: #c4b5fd;
+}
+
+body.reading-night-mode .site-theme-picker__title,
+body.reading-night-mode .site-theme-picker__note,
+body.reading-night-mode .site-theme-picker-field__note {
+  color: #94a3b8;
+}
+
+body.reading-night-mode .site-theme-picker-field {
+  border-color: #475569;
+}
+
+body.reading-night-mode .site-theme-picker-field__label {
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .site-theme-picker-field__select {
+  border-color: #475569;
+  background: #0f172a;
+  color: #e2e8f0;
+}

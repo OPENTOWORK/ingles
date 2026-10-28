@@ -1,5 +1,6 @@
 -- Auditoría de Administración.
 -- Aplicada en ENGLISH_PROD el 2026-10-02, a petición, para poder guardar la configuración.
+-- La clave web.tema (selector de tema de la cabecera) se añadió el 2026-10-28.
 --
 -- Si hay que volver a ejecutarla en otra base, hazlo en una sola transacción:
 --   1. Si algo falla, no confirmar.
@@ -457,6 +458,13 @@ BEGIN
       IF v_value !~ '^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$'
          OR char_length(v_value) > 120 THEN
         RAISE EXCEPTION 'Correo de soporte no válido';
+      END IF;
+    ELSIF v_key = 'web.tema' THEN
+      v_tipo := 'text';
+      v_descripcion := 'Tema visual de toda la web, elegido por un administrador desde la cabecera.';
+      v_value := lower(v_value);
+      IF v_value NOT IN ('normal', 'halloween', 'navidad') THEN
+        RAISE EXCEPTION 'Tema no válido';
       END IF;
     ELSE
       RAISE EXCEPTION 'clave no permitida';
