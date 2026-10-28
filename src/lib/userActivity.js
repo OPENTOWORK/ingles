@@ -5,7 +5,10 @@ export const ONLINE_THRESHOLD_MS = 90 * 1000;
 export const SESSION_GAP_MS = 5 * 60 * 1000;
 
 /** Intervalo de heartbeat en cliente (ms). */
-export const HEARTBEAT_INTERVAL_MS = 60 * 1000;
+export const HEARTBEAT_INTERVAL_MS = 30 * 1000;
+
+/** Si pasan más de 5 min sin interacción, dejamos de sumar tiempo activo. */
+export const ACTIVITY_IDLE_TIMEOUT_MS = 5 * 60 * 1000;
 
 /** @type {Record<string, string>} */
 export const DEVICE_TYPE_LABELS = {

@@ -8,9 +8,10 @@ import { formatSessionDuration, parseDbTimestamp, withinDateRange } from '@/lib/
  * (pestaña en segundo plano o inactividad).
  */
 const STUDY_AREA_RULES = [
-  { area: 'Exam practice', prefixes: ['/niveles', '/exam-practice'] },
-  { area: 'Exam strategies', prefixes: ['/teoria', '/exam-strategies'] },
-  { area: 'Training', prefixes: ['/training'] },
+  { area: 'Exam practice', prefixes: ['/niveles', '/exam-practice', '/exam-mode'] },
+  { area: 'Exam strategies', prefixes: ['/teoria', '/exam-strategies', '/exam-theory'] },
+  { area: 'Training', prefixes: ['/training', '/quiz-game'] },
+  { area: 'Perfil y progreso', prefixes: ['/perfil', '/profile'] },
   { area: 'Speaking', prefixes: ['/speaking', '/speaking-lab'] },
   { area: 'Dralo AI', prefixes: ['/dralo-ai'] },
   { area: 'Placement test', prefixes: ['/prueba-nivel', '/placement'] },
@@ -20,8 +21,8 @@ const NON_STUDY_AREA_RULES = [
   { area: 'Paneles de staff', prefixes: ['/admin', '/teacher', '/coordinador', '/paneles'] },
   { area: 'Buzón', prefixes: ['/buzon'] },
   { area: 'Tareas', prefixes: ['/tareas'] },
-  { area: 'Perfil', prefixes: ['/perfil', '/profile'] },
-  { area: 'Marketing y blog', prefixes: ['/blog', '/precios', '/campana', '/contact', '/contacto'] },
+  { area: 'Precios', prefixes: ['/precios', '/pricing'] },
+  { area: 'Marketing y contacto', prefixes: ['/campana', '/contact', '/contacto'] },
   { area: 'Acceso', prefixes: ['/login', '/registro', '/register', '/auth'] },
 ];
 
@@ -53,7 +54,8 @@ export function classifyStudyPath(path) {
   }
 
   if (normalized === '/') return { area: 'Inicio', isStudy: false };
-  return { area: 'Otras páginas', isStudy: false };
+  if (normalized.startsWith('/blog')) return { area: 'Contenido / blog', isStudy: true };
+  return { area: 'Otras páginas', isStudy: true };
 }
 
 function ratio(part, total) {
