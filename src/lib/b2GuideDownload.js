@@ -16,6 +16,12 @@ export function b2GuidePdfUrl(siteUrl = SITE_URL) {
   return `${String(siteUrl || SITE_URL).replace(/\/+$/, '')}${B2_GUIDE_PDF_PATH}`;
 }
 
+/** Los dos primeros checks son obligatorios. El comercial es opcional. */
+export function guideConsentError(body) {
+  if (body?.acceptedTerms === true && body?.acceptedDataProtection === true) return '';
+  return 'Acepta los términos y la protección de datos para recibir la guía.';
+}
+
 /** @returns {string} email normalizado, o cadena vacía si no es válido */
 export function normalizeGuideEmail(value) {
   const email = String(value || '').trim().toLowerCase();

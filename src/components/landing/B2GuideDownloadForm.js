@@ -5,21 +5,34 @@ import Link from 'next/link';
 
 export default function B2GuideDownloadForm() {
   const [email, setEmail] = useState('');
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [acceptedDataProtection, setAcceptedDataProtection] = useState(false);
+  const [acceptedMarketing, setAcceptedMarketing] = useState(false);
   const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('');
 
   async function onSubmit(event) {
     event.preventDefault();
     if (status === 'sending') return;
+    if (!acceptedTerms || !acceptedDataProtection) {
+      setStatus('error');
+      setMessage('Acepta los términos y la protección de datos para recibir la guía.');
+      return;
+    }
     setStatus('sending');
     setMessage('');
-    const form = event.currentTarget;
-    const website = new FormData(form).get('website');
+    const website = new FormData(event.currentTarget).get('website');
     try {
       const res = await fetch('/api/guia-b2/enviar/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, website }),
+        body: JSON.stringify({
+          email,
+          website,
+          acceptedTerms,
+          acceptedDataProtection,
+          acceptedMarketing,
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.ok) {
@@ -36,9 +49,8 @@ export default function B2GuideDownloadForm() {
   }
 
   return (
-    <section className="b2-guide__form" id="descargar" aria-labelledby="b2-guide-form-title">
-      <h2 id="b2-guide-form-title">Recibe gratis la guía del B2 First</h2>
-      <p>Descárgala y consulta el plan, las estrategias y las frases útiles cuando empieces a estudiar.</p>
+    <div className="b2-guide__card-form" id="descargar">
+      <h2>Recibe gratis la guía del B2 First</h2>
       {status === 'sent' ? (
         <p className="b2-guide__status b2-guide__status--ok" role="status">
           {message}
@@ -59,11 +71,48 @@ export default function B2GuideDownloadForm() {
             inputMode="email"
             autoComplete="email"
             required
+            placeholder="nombre@ejemplo.com"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             className="b2-guide__input"
           />
-          <button className="b2-guide__button" type="submit" disabled={status === 'sending'}>
+          <div className="b2-guide__checks">
+            <label className="b2-guide__check">
+              <input
+                type="checkbox"
+                checked={acceptedTerms}
+                onChange={(event) => setAcceptedTerms(event.target.checked)}
+                required
+              />
+              <span>
+                Al solicitar la guía, acepto los{' '}
+                <Link href="/terminos-condiciones">Términos y condiciones</Link> y confirmo haber leído la{' '}
+                <Link href="/politica-privacidad">Política de privacidad</Link>.
+              </span>
+            </label>
+            <label className="b2-guide__check">
+              <input
+                type="checkbox"
+                checked={acceptedDataProtection}
+                onChange={(event) => setAcceptedDataProtection(event.target.checked)}
+                required
+              />
+              <span>
+                Acepto la <Link href="/proteccion-datos">Política de protección de datos</Link>.
+              </span>
+            </label>
+            <label className="b2-guide__check">
+              <input
+                type="checkbox"
+                checked={acceptedMarketing}
+                onChange={(event) => setAcceptedMarketing(event.target.checked)}
+              />
+              <span>
+                Quiero recibir comunicaciones comerciales, novedades, recursos y promociones de Dralo.
+              </span>
+            </label>
+          </div>
+          <button className="b2-guide__button b2-guide__button--block" type="submit" disabled={status === 'sending'}>
             {status === 'sending' ? 'Enviando…' : 'Enviadme la guía'}
           </button>
           {status === 'error' ? (
@@ -73,10 +122,9 @@ export default function B2GuideDownloadForm() {
           ) : null}
         </form>
       )}
-      <p className="b2-guide__legal">
-        Al enviar el formulario, aceptas recibir la guía por email. Consulta nuestra{' '}
-        <Link href="/politica-privacidad">Política de privacidad</Link>.
+      <p className="b2-guide__fine">
+        Al enviar el formulario, aceptas recibir la guía por email.
       </p>
-    </section>
+    </div>
   );
 }

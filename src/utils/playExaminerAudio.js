@@ -27,10 +27,36 @@ export function subscribeExaminerSpeaking(listener) {
 }
 
 export function getActiveExaminerAudio() {
-  return getSpeakingCoachAudio();
+  return blobAudio || getSpeakingCoachAudio();
+}
+
+/** @type {HTMLAudioElement | null} */
+let blobAudio = null;
+/** @type {string | null} */
+let blobObjectUrl = null;
+
+function clearExaminerBlobAudio() {
+  if (blobAudio) {
+    blobAudio.onplay = null;
+    blobAudio.onended = null;
+    blobAudio.onerror = null;
+    blobAudio.pause();
+    blobAudio.removeAttribute('src');
+    blobAudio.load();
+    blobAudio = null;
+  }
+  if (blobObjectUrl) {
+    URL.revokeObjectURL(blobObjectUrl);
+    blobObjectUrl = null;
+  }
 }
 
 export function pauseExaminerAudio() {
+  if (blobAudio && !blobAudio.paused) {
+    blobAudio.pause();
+    notifySpeaking(false);
+    return true;
+  }
   const audio = getSpeakingCoachAudio();
   if (audio && !audio.paused) {
     audio.pause();
@@ -46,6 +72,12 @@ export function pauseExaminerAudio() {
 }
 
 export function resumeExaminerAudio() {
+  if (blobAudio?.paused) {
+    void blobAudio.play().then(() => {
+      notifySpeaking(true, 'audio');
+    }).catch(() => {});
+    return true;
+  }
   const audio = getSpeakingCoachAudio();
   if (audio?.paused) {
     void audio.play().then(() => {
@@ -62,6 +94,7 @@ export function resumeExaminerAudio() {
 }
 
 export function isExaminerAudioPaused() {
+  if (blobAudio?.paused) return true;
   const audio = getSpeakingCoachAudio();
   if (audio?.paused) return true;
   if (typeof window !== 'undefined' && window.speechSynthesis?.paused) return true;
@@ -75,7 +108,38 @@ export function isExaminerSpeaking() {
 export function stopExaminerAudio() {
   playToken += 1;
   notifySpeaking(false);
+  clearExaminerBlobAudio();
   stopSpeaking();
+}
+
+/**
+ * Plays a ready examiner MP3 and drives the voice visualizer.
+ * @param {Blob} blob
+ * @returns {Promise<boolean>}
+ */
+export function playExaminerBlob(blob) {
+  if (!blob) return Promise.resolve(false);
+  stopExaminerAudio();
+  const token = playToken;
+  blobObjectUrl = URL.createObjectURL(blob);
+  const audio = new Audio(blobObjectUrl);
+  blobAudio = audio;
+
+  return new Promise((resolve, reject) => {
+    audio.onplay = () => {
+      if (token !== playToken) return;
+      notifySpeaking(true, 'audio');
+      resolve(true);
+    };
+    audio.onended = () => {
+      if (token === playToken) notifySpeaking(false);
+    };
+    audio.onerror = () => {
+      if (token === playToken) notifySpeaking(false);
+      reject(new Error('Audio playback failed'));
+    };
+    audio.play().catch(reject);
+  });
 }
 
 /**

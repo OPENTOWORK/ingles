@@ -4,6 +4,7 @@ import {
   B2_GUIDE_PDF_PATH,
   b2GuidePdfUrl,
   buildB2GuideDownloadEmail,
+  guideConsentError,
   normalizeGuideEmail,
 } from '@/lib/b2GuideDownload';
 
@@ -20,4 +21,14 @@ test('guide email only accepts a normal address and points at the PDF', () => {
   assert.match(message.text, new RegExp(pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   assert.match(message.html, /Descargar la guía en PDF/);
   assert.equal(message.html.includes('ana@dralo.es'), false);
+});
+
+test('the guide form requires terms and data protection, not the marketing check', () => {
+  assert.equal(guideConsentError({ acceptedTerms: true, acceptedDataProtection: true }), '');
+  assert.equal(
+    guideConsentError({ acceptedTerms: true, acceptedDataProtection: true, acceptedMarketing: false }),
+    '',
+  );
+  assert.match(guideConsentError({ acceptedTerms: true }), /protección de datos/);
+  assert.match(guideConsentError({}), /protección de datos/);
 });

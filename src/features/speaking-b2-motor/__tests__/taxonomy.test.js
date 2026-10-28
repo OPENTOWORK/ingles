@@ -127,17 +127,20 @@ describe('speaking B2 taxonomy and evidence', () => {
     assert.match(acoustic, /isUncertainTranscript/);
   });
 
-  it('keeps the authorised British examiner voice and OpenAI fallback', () => {
+  it('speaks only authorised lines in the session examiner voice, with British fallbacks', () => {
     const tts = readFileSync(
       path.join(path.dirname(fileURLToPath(import.meta.url)), '../../../app/api/speaking-b2/tts/route.js'),
       'utf8',
     );
-    assert.match(tts, /en-GB-SoniaNeural/);
-    assert.match(tts, /openaiVoice: 'nova'/);
     assert.match(tts, /examinerLineIsAuthorised/);
+    assert.match(tts, /getSpeakingB2Examiner\(body\?\.examinerId\)/);
+    assert.match(tts, /'gpt-4o-mini-tts'/);
+    assert.match(tts, /SPEAKING_B2_EXAMINER_VOICE_INSTRUCTIONS/);
     assert.match(tts, /TTS timeout/);
+    assert.match(tts, /edgeOnly: true/);
+    assert.match(tts, /openaiModel: 'tts-1'/);
     assert.match(tts, /\[speaking-b2\/tts\] fallback/);
     assert.match(tts, /x-speaking-tts-engine/);
-    assert.match(tts, /edgeOnly: true/);
+    assert.equal(tts.includes('Promise.any'), false);
   });
 });

@@ -5,15 +5,60 @@ import {
   SPEAKING_B2_TARGET_DURATION_SEC,
   getSpeakingB2Question,
   listApprovedSpeakingB2Questions,
+  listSpeakingB2LiveQuestionPool,
 } from '../domain/question-bank/sp-ex001-part1.js';
+import {
+  SPEAKING_B2_CLOSINGS,
+  SPEAKING_B2_LEAD_INS,
+  listSpeakingB2IntroLines,
+  normaliseSpeakingB2Line,
+} from '../domain/examiner-script.js';
 
 const MIN_WORDS_FOR_DEVELOPED_ANSWER = 8;
+const MAX_LEAD_INS = 3;
 
 function wordCount(text) {
   return String(text || '')
     .trim()
     .split(/\s+/)
     .filter(Boolean).length;
+}
+
+function planSteps(session) {
+  const steps = session?.plan?.steps;
+  return Array.isArray(steps) && steps.length ? steps : null;
+}
+
+/** Sessions without a plan keep the fixed five-question paper. */
+function questionStep(session, index) {
+  const steps = planSteps(session);
+  if (steps) {
+    const step = steps[index];
+    const question = step ? getSpeakingB2Question(step.questionId) : null;
+    if (!question) return null;
+    return { question, line: step.line || `Thank you. ${question.question}` };
+  }
+  const question = listApprovedSpeakingB2Questions(session.examCode)[index];
+  return question ? { question, line: `Thank you. ${question.question}` } : null;
+}
+
+function followUpFor(session, question) {
+  const allowed = question?.allowedFollowUps || [];
+  if (!allowed.length) return null;
+  const planned = planSteps(session)?.find((step) => step.questionId === question.id)?.followUp;
+  return planned && allowed.includes(planned) ? planned : allowed[0];
+}
+
+function closingLine(session) {
+  const planned = session?.plan?.closing;
+  return planned && SPEAKING_B2_CLOSINGS.includes(planned) ? planned : SPEAKING_B2_INTRODUCTION.closingText;
+}
+
+export function speakingB2IntroLine(session) {
+  const planned = session?.plan?.intro;
+  return planned && examinerLineIsAuthorised(session.examCode, planned)
+    ? planned
+    : SPEAKING_B2_INTRODUCTION.spokenText;
 }
 
 export function createSpeakingB2SessionState({ examCode, userId = null } = {}) {
@@ -44,7 +89,7 @@ export function beginIntroduction(session) {
   };
   return {
     session: next,
-    examinerText: SPEAKING_B2_INTRODUCTION.spokenText,
+    examinerText: speakingB2IntroLine(session),
     questionId: SPEAKING_B2_INTRODUCTION.id,
   };
 }
@@ -83,12 +128,11 @@ export function resolveSpeakingB2Turn({ session, transcript, speakingMs = 0, sil
     followUpUsed: { ...(session.followUpUsed || {}) },
   };
 
-  const questions = listApprovedSpeakingB2Questions(session.examCode);
   const answer = String(transcript || '').trim();
   const language = assessB2Part1AnswerLanguage(answer);
 
   if (working.currentQuestionId === SPEAKING_B2_INTRODUCTION.id) {
-    return advanceAfterIntro(working, questions);
+    return advanceAfterIntro(working);
   }
 
   if (!answer || silence) {
@@ -107,7 +151,7 @@ export function resolveSpeakingB2Turn({ session, transcript, speakingMs = 0, sil
         validation: 'silence-reask',
       };
     }
-    return nextPaperQuestion(working, questions, 'silence-skip');
+    return nextPaperQuestion(working, 'silence-skip');
   }
 
   if (language === 'non-english') {
@@ -127,17 +171,16 @@ export function resolveSpeakingB2Turn({ session, transcript, speakingMs = 0, sil
 
   const timeUp = working.candidateSpeakingMs >= SPEAKING_B2_TARGET_DURATION_SEC * 1000;
   const question = getSpeakingB2Question(working.currentQuestionId);
-  const followUps = question?.allowedFollowUps || [];
+  const followUp = followUpFor(working, question);
   const usedFollowUp = Boolean(working.followUpUsed[working.currentQuestionId]);
 
   if (
     !timeUp &&
     question &&
-    followUps.length > 0 &&
+    followUp &&
     !usedFollowUp &&
     wordCount(answer) < MIN_WORDS_FOR_DEVELOPED_ANSWER
   ) {
-    const followUp = followUps[0];
     return {
       session: {
         ...working,
@@ -154,40 +197,40 @@ export function resolveSpeakingB2Turn({ session, transcript, speakingMs = 0, sil
 
   if (timeUp) return finishPart(working);
 
-  return nextPaperQuestion(working, questions, 'accepted');
+  return nextPaperQuestion(working, 'accepted');
 }
 
-function advanceAfterIntro(session, questions) {
-  const first = questions[0];
+function advanceAfterIntro(session) {
+  const first = questionStep(session, 0);
   if (!first) return finishPart(session);
   return {
     session: {
       ...session,
       state: transitionSpeakingB2(session.state, 'ASKING'),
       questionIndex: 0,
-      currentQuestionId: first.id,
+      currentQuestionId: first.question.id,
       reaskCount: 0,
     },
-    examinerText: `Thank you. ${first.question}`,
-    questionId: first.id,
+    examinerText: first.line,
+    questionId: first.question.id,
     validation: 'intro-accepted',
   };
 }
 
-function nextPaperQuestion(session, questions, validation) {
+function nextPaperQuestion(session, validation) {
   const nextIndex = (session.questionIndex || 0) + 1;
-  const next = questions[nextIndex];
+  const next = questionStep(session, nextIndex);
   if (!next) return finishPart({ ...session, validation });
   return {
     session: {
       ...session,
       state: transitionSpeakingB2(session.state, 'ASKING'),
       questionIndex: nextIndex,
-      currentQuestionId: next.id,
+      currentQuestionId: next.question.id,
       reaskCount: 0,
     },
-    examinerText: `Thank you. ${next.question}`,
-    questionId: next.id,
+    examinerText: next.line,
+    questionId: next.question.id,
     validation,
   };
 }
@@ -202,11 +245,33 @@ export function finishPart(session) {
       state,
       currentQuestionId: null,
     },
-    examinerText: SPEAKING_B2_INTRODUCTION.closingText,
+    examinerText: closingLine(session),
     questionId: null,
     done: true,
     validation: 'finished',
   };
+}
+
+/**
+ * Lines the examiner may say after the current answer: the planned follow-up (if not
+ * used yet) and the next planned question or closing. Used only for audio prefetch.
+ */
+export function predictSpeakingB2UpcomingLines(session) {
+  if (!session || isTerminalSpeakingB2State(session.state)) return [];
+  if (session.currentQuestionId === SPEAKING_B2_INTRODUCTION.id) {
+    const first = questionStep(session, 0);
+    return first ? [first.line] : [];
+  }
+  const question = getSpeakingB2Question(session.currentQuestionId);
+  if (!question) return [];
+  const lines = [];
+  if (!session.followUpUsed?.[question.id]) {
+    const followUp = followUpFor(session, question);
+    if (followUp) lines.push(followUp);
+  }
+  const next = questionStep(session, (session.questionIndex || 0) + 1);
+  lines.push(next ? next.line : closingLine(session));
+  return lines;
 }
 
 export function markProcessing(session) {
@@ -234,10 +299,11 @@ export function markFailed(session) {
 }
 
 export function listAuthorisedExaminerLines(examCode) {
-  const questions = listApprovedSpeakingB2Questions(examCode);
+  const questions = listSpeakingB2LiveQuestionPool(examCode);
+  if (!questions.length) return [];
   const lines = [
-    SPEAKING_B2_INTRODUCTION.spokenText,
-    SPEAKING_B2_INTRODUCTION.closingText,
+    ...listSpeakingB2IntroLines(),
+    ...SPEAKING_B2_CLOSINGS,
     'Please answer in English.',
     'Could you say that again?',
   ];
@@ -248,9 +314,27 @@ export function listAuthorisedExaminerLines(examCode) {
   return lines;
 }
 
+const authorisedLineSets = new Map();
+
+function authorisedLineSet(examCode) {
+  if (!authorisedLineSets.has(examCode)) {
+    authorisedLineSets.set(
+      examCode,
+      new Set(listAuthorisedExaminerLines(examCode).map(normaliseSpeakingB2Line)),
+    );
+  }
+  return authorisedLineSets.get(examCode);
+}
+
+/** An approved line, optionally preceded by approved lead-ins. Nothing else is spoken. */
 export function examinerLineIsAuthorised(examCode, spokenText) {
-  const text = String(spokenText || '').trim();
-  if (!text) return false;
-  const allowed = listAuthorisedExaminerLines(examCode);
-  return allowed.some((line) => text === line || text.endsWith(line) || text.includes(line));
+  const allowed = authorisedLineSet(examCode);
+  let text = normaliseSpeakingB2Line(spokenText);
+  for (let depth = 0; text && depth <= MAX_LEAD_INS; depth += 1) {
+    if (allowed.has(text)) return true;
+    const lead = SPEAKING_B2_LEAD_INS.find((item) => text.startsWith(`${item} `));
+    if (!lead) return false;
+    text = text.slice(lead.length + 1);
+  }
+  return false;
 }

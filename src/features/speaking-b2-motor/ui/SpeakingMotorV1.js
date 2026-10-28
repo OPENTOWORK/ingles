@@ -1,39 +1,26 @@
 'use client';
 
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { SPEAKING_B2_EX001_EXAM } from '../domain/question-bank/sp-ex001-part1';
+import { useConfirmedUserRole } from '@/context/UserRoleContext';
+import { isAdminRole } from '@/utils/authRoles';
+import { SPEAKING_B2_EX001_EXAM, SPEAKING_B2_INTRODUCTION } from '../domain/question-bank/sp-ex001-part1';
 import { SPEAKING_B2_ERROR_CODES } from '../domain/error-taxonomy';
-import { speakingB2Headers, speakingB2Json } from './speakingB2Client';
+import { speakingB2AuthHeaders, speakingB2Json } from './speakingB2Client';
+import { prefetchSpeakingB2Line, playSpeakingB2Line } from './speakingTtsClient';
 import { useSpeakingMic } from './useSpeakingMic';
 import {
   createSpeakingStartLock,
   describeSpeakingMotorLifecycle,
   SPEAKING_MOTOR_START_MODE,
 } from './speakingMotorParentApi';
+import {
+  pauseExaminerAudio,
+  resumeExaminerAudio,
+  stopExaminerAudio,
+} from '@/utils/playExaminerAudio';
+import ExaminerVoiceVisualizer from '@/components/b2/ExaminerVoiceVisualizer';
+import SpeakingExerciseControls from '@/components/b2/SpeakingExerciseControls';
 import styles from './speaking-motor-v1.module.css';
-
-async function playExaminerLine(text, examCode) {
-  const res = await fetch('/api/speaking-b2/tts/', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ text, examCode }),
-  });
-  if (!res.ok) throw new Error('No se pudo reproducir la pregunta. (TTS_FAILED)');
-  const blob = await res.blob();
-  const url = URL.createObjectURL(blob);
-  await new Promise((resolve, reject) => {
-    const audio = new Audio(url);
-    audio.onended = () => {
-      URL.revokeObjectURL(url);
-      resolve();
-    };
-    audio.onerror = () => {
-      URL.revokeObjectURL(url);
-      reject(new Error('Audio playback failed'));
-    };
-    audio.play().catch(reject);
-  });
-}
 
 function formatScore(value) {
   if (value == null) return 'Evidencia insuficiente';
@@ -50,6 +37,10 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
   ref,
 ) {
   const exam = SPEAKING_B2_EX001_EXAM;
+  const { userRole, roleConfirmed } = useConfirmedUserRole();
+  const isAdmin = Boolean(roleConfirmed && isAdminRole(userRole));
+  const isAdminRef = useRef(false);
+  isAdminRef.current = isAdmin;
   const liveMic = useSpeakingMic();
   const mic = audioInput || liveMic;
   const [screen, setScreen] = useState('select');
@@ -62,6 +53,16 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
   const [error, setError] = useState('');
   const [report, setReport] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [typedMode, setTypedMode] = useState(false);
+  const [draftAnswer, setDraftAnswer] = useState('');
+  const answerLocked = turnLabel === 'Examiner' || (turnLabel === 'Checking' && !error);
+  const [ttsLoading, setTtsLoading] = useState(false);
+  const [audioReady, setAudioReady] = useState(false);
+  const [exerciseStarted, setExerciseStarted] = useState(false);
+  const [exercisePaused, setExercisePaused] = useState(false);
+  const [examiner, setExaminer] = useState(null);
+  const examinerIdRef = useRef('');
+  const introTextRef = useRef('');
   const startedAt = useRef(0);
   const turnStartedAt = useRef(0);
   const timerRef = useRef(0);
@@ -71,6 +72,8 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
   const tokenRef = useRef('');
   const sessionIdRef = useRef('');
   const screenRef = useRef('select');
+  const typedModeRef = useRef(false);
+  const pendingLineRef = useRef('');
   const startLock = useRef(createSpeakingStartLock());
   const examStartLock = useRef(createSpeakingStartLock());
 
@@ -86,6 +89,11 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
     publishLifecycle(screen, busy);
   }, [screen, busy, publishLifecycle]);
 
+  useEffect(() => {
+    if (!error || turnLabel !== 'Checking') return;
+    setTurnLabel(typedMode ? 'Your turn — type your answer' : 'Your turn — speak now');
+  }, [error, turnLabel, typedMode]);
+
   const startClock = () => {
     startedAt.current = Date.now();
     clearInterval(timerRef.current);
@@ -97,10 +105,17 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
   const createSession = async () => {
     setError('');
     const data = await speakingB2Json('/api/speaking-b2/session/', {
-      body: { examCode: exam.code, fixtureMode: Boolean(audioInput?.fixtureMode) },
+      body: {
+        examCode: exam.code,
+        fixtureMode: Boolean(audioInput?.fixtureMode),
+        localHour: new Date().getHours(),
+      },
     });
     tokenRef.current = data.accessToken || '';
     sessionIdRef.current = data.sessionId;
+    examinerIdRef.current = data.examiner?.id || '';
+    introTextRef.current = data.introText || '';
+    setExaminer(data.examiner || null);
     setAccessToken(data.accessToken || '');
     setSessionId(data.sessionId);
     setState(data.state);
@@ -131,6 +146,16 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
       setState('AUDIO_CHECK');
       setBusy(false);
       publishLifecycle('audio-check', false);
+      prefetchSpeakingB2Line(
+        introTextRef.current || SPEAKING_B2_INTRODUCTION.spokenText,
+        exam.code,
+        examinerIdRef.current,
+      ).catch(() => {});
+      if (isAdminRef.current) {
+        typedModeRef.current = true;
+        setTypedMode(true);
+        return { started: true };
+      }
       await mic.startPreview();
       return { started: true };
     } catch (err) {
@@ -148,7 +173,7 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
     if (isForm && token) payload.set('accessToken', token);
     const res = await fetch('/api/speaking-b2/turn/', {
       method: 'POST',
-      headers: speakingB2Headers(token, isForm ? {} : { 'Content-Type': 'application/json' }),
+      headers: await speakingB2AuthHeaders(token, isForm ? {} : { 'Content-Type': 'application/json' }),
       body: isForm ? payload : JSON.stringify(payload),
     });
     const data = await res.json();
@@ -158,46 +183,116 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
     return data;
   };
 
-  const askAndListen = useCallback(async (text, id) => {
+  const prepareExaminerLine = useCallback((text) => {
+    const line = String(text || '').trim();
+    pendingLineRef.current = line;
+    setExaminerText(line);
     setTurnLabel('Examiner');
-    await playExaminerLine(text, exam.code);
-    await postTurn({ sessionId: id, action: 'listen' }).catch(() => {});
-    setTurnLabel('Your turn — speak now');
+    setAudioReady(false);
+    setTtsLoading(Boolean(line));
+    if (!line) {
+      setTtsLoading(false);
+      return Promise.resolve();
+    }
+    return prefetchSpeakingB2Line(line, exam.code, examinerIdRef.current)
+      .then(() => {
+        if (pendingLineRef.current !== line) return;
+        setAudioReady(true);
+        setTtsLoading(false);
+      })
+      .catch((err) => {
+        if (pendingLineRef.current !== line) return;
+        setTtsLoading(false);
+        setError(err.message || 'No se pudo preparar el audio. (TTS_FAILED)');
+      });
+  }, [exam.code]);
+
+  const openCandidateTurn = useCallback(async (id) => {
+    const listened = await postTurn({ sessionId: id, action: 'listen' }).catch(() => null);
+    for (const line of listened?.upcoming || []) {
+      prefetchSpeakingB2Line(line, exam.code, examinerIdRef.current).catch(() => {});
+    }
     setState('LISTENING');
     turnStartedAt.current = Date.now();
     answeringRef.current = false;
-    const stream = await mic.startRecording();
-    if (!stream) return;
-    vadStop.current = mic.attachVad(() => {
-      void finishAnswer(id);
-    });
-  }, [exam.code, mic]);
+    if (typedModeRef.current) {
+      setTurnLabel('Your turn — type your answer');
+      return;
+    }
+    setTurnLabel('Your turn — speak now');
+    try {
+      const stream = await mic.startRecording();
+      if (!stream) return;
+      vadStop.current = mic.attachVad(() => {
+        void finishAnswer(id);
+      });
+    } catch (recordError) {
+      if (!isAdminRef.current) throw recordError;
+      typedModeRef.current = true;
+      setTypedMode(true);
+      setTurnLabel('Your turn — type your answer');
+    }
+  }, [mic, exam.code]);
 
-  const finishAnswer = async (id) => {
+  const playPendingLine = useCallback(async (id, { afterPlay = true } = {}) => {
+    const line = pendingLineRef.current;
+    if (!line) return;
+    setError('');
+    setTurnLabel('Examiner');
+    setExercisePaused(false);
+    setExerciseStarted(true);
+    try {
+      await playSpeakingB2Line(line, exam.code, examinerIdRef.current);
+      if (afterPlay) await openCandidateTurn(id);
+    } catch (err) {
+      setError(err.message || 'No se pudo reproducir la pregunta. (TTS_FAILED)');
+      setState('PAUSED_TECHNICAL');
+    }
+  }, [exam.code, openCandidateTurn]);
+
+  const finishAnswer = async (id, typedText) => {
     if (answeringRef.current) return;
     answeringRef.current = true;
     vadStop.current?.();
-    const blob = await mic.stopRecording();
     const speakingMs = Math.min(25000, Math.max(0, Date.now() - (turnStartedAt.current || Date.now())));
-    const form = new FormData();
-    form.set('sessionId', id);
-    form.set('action', 'answer');
-    form.set('speakingMs', String(speakingMs));
-    form.set('silence', blob && blob.size > 800 ? 'false' : 'true');
-    if (blob) form.set('audio', blob, 'answer.webm');
+    const typed = typedModeRef.current;
+    const transcript = String(typedText ?? draftAnswer).trim();
+    let payload;
+    if (typed) {
+      payload = {
+        sessionId: id,
+        action: 'answer',
+        transcript,
+        speakingMs,
+        silence: !transcript,
+      };
+    } else {
+      const blob = await mic.stopRecording();
+      const form = new FormData();
+      form.set('sessionId', id);
+      form.set('action', 'answer');
+      form.set('speakingMs', String(speakingMs));
+      form.set('silence', blob && blob.size > 800 ? 'false' : 'true');
+      if (blob) form.set('audio', blob, 'answer.webm');
+      payload = form;
+    }
     setTurnLabel('Checking');
+    setDraftAnswer('');
     let data;
     try {
-      data = await postTurn(form);
+      data = await postTurn(payload);
     } catch (err) {
       answeringRef.current = false;
       setError(err.message);
+      setDraftAnswer(transcript);
+      setTurnLabel(typed ? 'Your turn — type your answer' : 'Your turn — speak now');
       return;
     }
     if (data.done || data.state === 'FINISHING') {
       setExaminerText(data.examinerText || 'Thank you. That is the end of Part 1.');
       if (data.examinerText) {
-        await playExaminerLine(data.examinerText, exam.code).catch(() => {});
+        pendingLineRef.current = data.examinerText;
+        await playSpeakingB2Line(data.examinerText, exam.code, examinerIdRef.current).catch(() => {});
       }
       setScreen('processing');
       setState('PROCESSING');
@@ -206,28 +301,37 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
     }
     answeringRef.current = false;
     if (data.examinerText) {
-      try {
-        await askAndListen(data.examinerText, id);
-      } catch (err) {
-        setError(err.message || 'No se pudo reproducir la pregunta. (TTS_FAILED)');
-        setState('PAUSED_TECHNICAL');
-      }
+      await prepareExaminerLine(data.examinerText);
+      await playPendingLine(id);
     }
   };
 
-  const startExam = async () => {
+  const startExam = async ({ typed = false } = {}) => {
+    if (examStartLock.current.isLocked() && !busy) {
+      examStartLock.current.release();
+    }
     if (!examStartLock.current.acquire()) return;
     setBusy(true);
     setError('');
+    const id = sessionIdRef.current || sessionId;
     try {
+      if (!id) {
+        throw new Error('No hay sesión de entrevista. Pulsa Cancel y vuelve a empezar.');
+      }
+      const useTyped = Boolean(typed || isAdminRef.current);
+      typedModeRef.current = useTyped;
+      setTypedMode(useTyped);
       mic.release();
-      const data = await postTurn({ sessionId, action: 'start' });
+      const data = await postTurn({ sessionId: id, action: 'start' });
+      if (data.examinerId && !examinerIdRef.current) examinerIdRef.current = data.examinerId;
+      screenRef.current = 'exam';
       setScreen('exam');
       startClock();
-      await askAndListen(data.examinerText, sessionId);
+      setExerciseStarted(false);
+      await prepareExaminerLine(data.examinerText);
     } catch (err) {
       examStartLock.current.release();
-      setError(err.message || 'No se pudo reproducir la pregunta. (TTS_FAILED)');
+      setError(err.message || 'No se pudo empezar la entrevista.');
       setState('PAUSED_TECHNICAL');
     } finally {
       setBusy(false);
@@ -240,7 +344,7 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
     try {
       const res = await fetch('/api/speaking-b2/complete/', {
         method: 'POST',
-        headers: speakingB2Headers(tokenRef.current || accessToken, {
+        headers: await speakingB2AuthHeaders(tokenRef.current || accessToken, {
           'Content-Type': 'application/json',
         }),
         body: JSON.stringify({ sessionId: id }),
@@ -264,20 +368,32 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
 
   const resetLocal = () => {
     vadStop.current?.();
+    stopExaminerAudio();
     mic.release();
     clearInterval(timerRef.current);
     answeringRef.current = false;
     completingRef.current = false;
     tokenRef.current = '';
     sessionIdRef.current = '';
+    examinerIdRef.current = '';
+    introTextRef.current = '';
+    typedModeRef.current = false;
+    pendingLineRef.current = '';
     startLock.current.release();
     examStartLock.current.release();
     setAccessToken('');
     setSessionId('');
+    setExaminer(null);
     setReport(null);
     setExaminerText('');
     setElapsed(0);
     setError('');
+    setDraftAnswer('');
+    setTypedMode(false);
+    setTtsLoading(false);
+    setAudioReady(false);
+    setExerciseStarted(false);
+    setExercisePaused(false);
     setTurnLabel('Ready');
     setState('READY');
     screenRef.current = 'select';
@@ -349,12 +465,34 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
           <div className={styles.meter} aria-hidden>
             <span style={{ width: `${Math.round(mic.level * 100)}%` }} />
           </div>
-          {mic.error || error ? <p className={styles.error}>{mic.error || error}</p> : null}
+          {mic.error ? <p className={styles.error}>{mic.error}</p> : null}
+          {error ? <p className={styles.error}>{error}</p> : null}
+          {isAdmin ? (
+            <p className={styles.note}>
+              As admin you can continue without a microphone and type your answers.
+            </p>
+          ) : null}
           <div className={styles.actions}>
-            <button type="button" className={styles.button} onClick={startExam} disabled={busy || Boolean(mic.error)}>
-              Start the interview
-            </button>
-            <button type="button" className={styles.ghost} onClick={abortExam}>
+            {isAdmin ? (
+              <button
+                type="button"
+                className={styles.button}
+                onClick={() => void startExam({ typed: true })}
+                disabled={busy}
+              >
+                {busy ? 'Starting…' : 'Continue without microphone'}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.button}
+                onClick={() => void startExam()}
+                disabled={busy || Boolean(mic.error)}
+              >
+                Start the interview
+              </button>
+            )}
+            <button type="button" className={styles.ghost} onClick={abortExam} disabled={busy}>
               Cancel
             </button>
           </div>
@@ -368,17 +506,61 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
       <section className={shellClass}>
         {embedded ? null : <p className={styles.eyebrow}>Part 1 · Interview</p>}
         <div className={styles.status}>
-          <span>Examiner: Emma</span>
-          <span>Mic: {mic.status === 'recording' ? 'listening' : 'idle'}</span>
+          <span>Examiner: {examiner?.name || '…'}</span>
+          <span>Mic: {typedMode ? 'typed' : mic.status === 'recording' ? 'listening' : 'idle'}</span>
           <span>Turn: {turnLabel}</span>
           <span>Time: {elapsed}s</span>
         </div>
-        <p className={styles.examiner}>{examinerText || '…'}</p>
-        <p className={styles.note}>Look at the examiner. Answer in English. Do not read notes.</p>
+        <SpeakingExerciseControls
+          sessionReady={Boolean(sessionId && examinerText)}
+          exerciseStarted={exerciseStarted}
+          exercisePaused={exercisePaused}
+          loading={ttsLoading}
+          canRepeat={audioReady || exerciseStarted}
+          playDisabled={!audioReady && !ttsLoading}
+          onPlay={() => {
+            if (exercisePaused) {
+              resumeExaminerAudio();
+              setExercisePaused(false);
+              return;
+            }
+            void playPendingLine(sessionId, { afterPlay: !exerciseStarted || turnLabel === 'Examiner' });
+          }}
+          onPause={() => {
+            pauseExaminerAudio();
+            setExercisePaused(true);
+          }}
+          onRepeat={() => void playPendingLine(sessionId, { afterPlay: false })}
+          onNextStep={() => void playPendingLine(sessionId)}
+        />
+        <ExaminerVoiceVisualizer
+          isLoading={ttsLoading}
+          waitingToStart={!exerciseStarted && !ttsLoading}
+        />
+        {typedMode ? (
+          <>
+            <p className={styles.note}>Admin fallback: type your answer in English. Pronunciation cannot be scored without audio.</p>
+            <textarea
+              className={styles.typedAnswer}
+              value={draftAnswer}
+              onChange={(event) => setDraftAnswer(event.target.value)}
+              placeholder="Type your answer here…"
+              disabled={busy || answerLocked}
+              rows={5}
+            />
+          </>
+        ) : (
+          <p className={styles.note}>Look at the examiner. Answer in English. Do not read notes.</p>
+        )}
         {error ? <p className={styles.error}>{error}</p> : null}
         <div className={styles.actions}>
-          <button type="button" className={styles.ghost} onClick={() => finishAnswer(sessionId)}>
-            I’ve finished
+          <button
+            type="button"
+            className={typedMode ? styles.button : styles.ghost}
+            onClick={() => finishAnswer(sessionId, draftAnswer)}
+            disabled={busy || answerLocked || (typedMode && !draftAnswer.trim())}
+          >
+            {typedMode ? 'Send answer' : 'I’ve finished'}
           </button>
           <button type="button" className={styles.ghost} onClick={abortExam}>
             End test

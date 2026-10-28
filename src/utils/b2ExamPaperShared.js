@@ -305,6 +305,8 @@ export function omitExampleEnunciadoBlocks(blocks = []) {
   return result;
 }
 
+const SPEAKING_EXAMINER_PROMPT = /^(?:\d+[.)]\s*)?(?:tell me|tell us|describe|talk about|say something about)\b/i;
+
 /** Oculta preguntas del examinador en instrucciones Speaking (se preguntan en vivo con Play). */
 export function omitSpeakingExaminerQuestionBlocks(blocks = [], partNumber = 0) {
   if (!blocks?.length) return [];
@@ -312,7 +314,10 @@ export function omitSpeakingExaminerQuestionBlocks(blocks = [], partNumber = 0) 
   if (pn < 14 || pn > 17) return blocks;
 
   if (pn === 14 || pn === 17) {
-    return blocks.filter((block) => !/\?\s*$/.test(String(block.text || '').trim()));
+    return blocks.filter((block) => {
+      const text = String(block.text || '').trim();
+      return !/\?\s*$/.test(text) && !SPEAKING_EXAMINER_PROMPT.test(text);
+    });
   }
 
   if (pn === 15) {

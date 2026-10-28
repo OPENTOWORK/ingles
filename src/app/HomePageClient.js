@@ -69,7 +69,8 @@ export default function HomePageClient() {
   return (
     <>
       {showGuestLanding ? <HomeGuestLanding pending={authPending} prioritizeLcp /> : null}
-      <main className={`home-page ${landingFont.variable}${showAppHome ? ' home-page--student-mobile' : ''}${isGuestHome ? ' home-page--guest' : ''}${authPending ? ' home-page--pending' : ''}`}>
+      {isGuestHome ? null : (
+      <main className={`home-page ${landingFont.variable}${showAppHome ? ' home-page--student-mobile' : ''}${authPending ? ' home-page--pending' : ''}`}>
         <div className="home-page__inner">
           {isRegistered ? <InviteFriendPromoBanner /> : null}
           {isGuestHome && phone ? <FoundingMemberSlotsBanner /> : null}
@@ -134,6 +135,7 @@ export default function HomePageClient() {
           {isRegistered ? <HomeQuickNav /> : null}
         </div>
       </main>
+      )}
     </>
   );
 }

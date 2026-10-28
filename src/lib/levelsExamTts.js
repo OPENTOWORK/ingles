@@ -23,7 +23,7 @@ async function synthesizeWithEdge(text, voice = EDGE_VOICE, prosody = {}) {
  * TTS for a single utterance.
  * When `edgeVoice` is set, Edge TTS is preferred (better accent variety for listening).
  * @param {string} text
- * @param {{ edgeVoice?: string, openaiVoice?: string, preferEdge?: boolean, edgeOnly?: boolean, openaiOnly?: boolean }} [options]
+ * @param {{ edgeVoice?: string, openaiVoice?: string, openaiModel?: string, openaiInstructions?: string, preferEdge?: boolean, edgeOnly?: boolean, openaiOnly?: boolean }} [options]
  * @returns {Promise<{ base64: string, mime: string } | null>}
  */
 export async function synthesizeExamTtsMp3(text, options = {}) {
@@ -53,15 +53,20 @@ export async function synthesizeExamTtsMp3(text, options = {}) {
   if (key) {
     try {
       const client = new OpenAI({ apiKey: key });
-      const model = process.env.OPENAI_TTS_MODEL ?? 'tts-1';
-      const res = await client.audio.speech.create({
+      const model = options.openaiModel || (process.env.OPENAI_TTS_MODEL ?? 'tts-1');
+      const request = {
         model,
         voice: openaiVoice,
         input: trimmed.slice(0, 4096),
         response_format: 'mp3',
-      });
+      };
+      // tts-1 / tts-1-hd do not accept `instructions`.
+      if (options.openaiInstructions && model.startsWith('gpt-')) {
+        request.instructions = options.openaiInstructions;
+      }
+      const res = await client.audio.speech.create(request);
       const buf = Buffer.from(await res.arrayBuffer());
-      return { base64: buf.toString('base64'), mime: 'audio/mpeg', engine: 'openai', voice: openaiVoice };
+      return { base64: buf.toString('base64'), mime: 'audio/mpeg', engine: 'openai', voice: openaiVoice, model };
     } catch (err) {
       const code = err?.code || err?.error?.code;
       if (openaiOnly) {

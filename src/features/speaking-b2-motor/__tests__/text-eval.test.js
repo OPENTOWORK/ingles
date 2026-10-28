@@ -148,6 +148,7 @@ describe('speaking B2 independent text evaluation', () => {
     assert.equal(practice.includes('candidateText'), false);
     const turn = readFileSync(path.join(root, 'src/app/api/speaking-b2/turn/route.js'), 'utf8');
     assert.match(turn, /TYPED_FORBIDDEN/);
+    assert.match(turn, /canSubmitSpeakingB2TypedAnswer/);
     assert.match(turn, /canUseSpeakingB2FixtureAnswer/);
     const complete = readFileSync(
       path.join(root, 'src/features/speaking-b2-motor/services/evaluation/run-complete.js'),

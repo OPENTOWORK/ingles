@@ -11,9 +11,12 @@ import {
 import { speakingB2MustPersistStore } from '../services/test-target-guard.js';
 import {
   SpeakingStoreConflictError,
+  buildSessionWritePayload,
   hydrateSpeakingB2Session,
   incomingTurnIsSafeToWrite,
+  partitionSpeakingB2TurnWrites,
   planSpeakingB2TurnWrites,
+  serializeSpeakingB2Turn,
   sessionUpdateLost,
 } from '../services/session-persistence.js';
 
@@ -135,6 +138,48 @@ describe('speaking B2 persistence mode', () => {
       incomingTurnIsSafeToWrite({ transcript: '', audio_path: null }, existing[0]),
       false,
     );
+  });
+
+  it('inserts new turns without sending an existing row id', () => {
+    const existing = [
+      {
+        id: 't0',
+        turn_index: 0,
+        transcript: 'Good morning. My name is Emma. And what is your name?',
+        spoken_text: 'Good morning. My name is Emma. And what is your name?',
+        audio_path: null,
+      },
+    ];
+    const incoming = [
+      { role: 'examiner', questionId: 'SP-EX001-P1-INTRO', transcript: 'Good morning. My name is Emma. And what is your name?', source: 'SCRIPT' },
+      { role: 'candidate', questionId: 'SP-EX001-P1-INTRO', transcript: 'My name is Alex.', source: 'TYPED', confidence: 0.9 },
+      { role: 'examiner', questionId: 'SP-EX001-P1-Q01', transcript: 'Thank you. What do you enjoy most about studying English?', source: 'SCRIPT' },
+    ];
+    const plan = planSpeakingB2TurnWrites(existing, incoming, 'sess-1');
+    const { inserts, updates } = partitionSpeakingB2TurnWrites(plan.upserts, existing);
+    assert.equal(inserts.length, 2);
+    assert.equal(inserts[0].turn_index, 1);
+    assert.equal(inserts[0].transcript_source, 'TYPED');
+    assert.equal('id' in inserts[0], false);
+    assert.equal(updates.length, 1);
+    assert.equal('id' in updates[0], false);
+    assert.equal(serializeSpeakingB2Turn({ validation: { code: 'intro-accepted' } }, 0, 'sess-1').validation, null);
+    assert.equal(serializeSpeakingB2Turn({ validation: 'intro-accepted' }, 0, 'sess-1').validation, 'intro-accepted');
+  });
+
+  it('keeps the session plan through a metadata round trip', () => {
+    const plan = {
+      version: 1,
+      examinerId: 'sarah',
+      intro: "Good afternoon. I'm Sarah. And what's your name?",
+      steps: [{ questionId: 'SP-EX001-P1-OPEN-01', line: 'Thanks. Where are you from?', followUp: 'What is it like there?' }],
+      closing: 'Thank you. That is the end of Part 1.',
+    };
+    const { metadata } = buildSessionWritePayload({ id: 'sess-1', state: 'READY', plan }).v2;
+    assert.deepEqual(metadata.plan, plan);
+    const hydrated = hydrateSpeakingB2Session({ id: 'sess-1', state: 'READY', metadata }, []);
+    assert.deepEqual(hydrated.plan, plan);
+    assert.equal(hydrateSpeakingB2Session({ id: 'sess-2', state: 'READY', metadata: {} }, []).plan, null);
   });
 
   it('detects a lost update when the stored version moved', () => {

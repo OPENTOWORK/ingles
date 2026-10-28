@@ -9,6 +9,8 @@ import {
   markAborted,
   markFailed,
   examinerLineIsAuthorised,
+  predictSpeakingB2UpcomingLines,
+  speakingB2IntroLine,
   startAudioCheck,
 } from '@/features/speaking-b2-motor/services/coordinator';
 import {
@@ -27,11 +29,26 @@ import { transcribeCandidateAudio } from '@/features/speaking-b2-motor/services/
 import { resolveSpeakingB2AnswerAudio } from '@/features/speaking-b2-motor/services/evaluation/answer-audio';
 import { canUseSpeakingB2FixtureAnswer } from '@/features/speaking-b2-motor/fixtures/runtime';
 import { resolveSpeakingB2FixtureAudio } from '@/features/speaking-b2-motor/fixtures/materialize';
+import {
+  SPEAKING_B2_INTRODUCTION,
+  getSpeakingB2Examiner,
+} from '@/features/speaking-b2-motor/domain/question-bank/sp-ex001-part1';
+import { canSubmitSpeakingB2TypedAnswer } from '@/features/speaking-b2-motor/services/typed-answer-access';
 import { synthesizeExamTtsMp3 } from '@/lib/levelsExamTts';
 import { speakingB2LanGuardResponse } from '@/features/speaking-b2-motor/services/lan-access-http';
+import { getRoleNameByUserId, isAdminRole } from '@/utils/authRoles';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+
+async function speakingB2RequestIsAdmin(auth) {
+  if (!auth?.user) return false;
+  try {
+    return isAdminRole(await getRoleNameByUserId(auth.user.id, auth.user.email));
+  } catch {
+    return false;
+  }
+}
 
 async function readBody(req) {
   const contentType = req.headers.get('content-type') || '';
@@ -84,7 +101,21 @@ export async function POST(req) {
       return NextResponse.json({ state: next.state });
     }
 
+    const examinerId = getSpeakingB2Examiner(session.plan?.examinerId).id;
+
     if (body.action === 'start') {
+      if (['INTRODUCTION', 'ASKING', 'LISTENING'].includes(session.state)) {
+        const lastLine = [...(session.turns || [])]
+          .reverse()
+          .find((turn) => turn.role === 'examiner' && turn.transcript);
+        return NextResponse.json({
+          state: session.state,
+          examinerText: lastLine?.transcript || speakingB2IntroLine(session),
+          questionId: session.currentQuestionId || lastLine?.questionId || SPEAKING_B2_INTRODUCTION.id,
+          examinerId,
+          resumed: true,
+        });
+      }
       const ready = session.state === 'READY' ? startAudioCheck(session) : session;
       const opened = beginIntroduction(ready);
       opened.session.turns = [
@@ -105,12 +136,13 @@ export async function POST(req) {
         state: next.state,
         examinerText: opened.examinerText,
         questionId: opened.questionId,
+        examinerId,
       });
     }
 
     if (body.action === 'listen') {
       const next = await updatePersistedSession(beginListening(session));
-      return NextResponse.json({ state: next.state });
+      return NextResponse.json({ state: next.state, upcoming: predictSpeakingB2UpcomingLines(next) });
     }
 
     if (!['LISTENING', 'INTRODUCTION', 'ASKING', 'TURN_VALIDATION'].includes(session.state)) {
@@ -168,7 +200,11 @@ export async function POST(req) {
         }
         stt = resolved.stt;
       } else if (body.transcript) {
-        if (!canUseSpeakingB2FixtureAnswer(session)) {
+        const allowTyped = canSubmitSpeakingB2TypedAnswer({
+          session,
+          isAdmin: await speakingB2RequestIsAdmin(auth),
+        });
+        if (!allowTyped) {
           return NextResponse.json(
             { error: 'Typed answers are not allowed in a live exam.', code: 'TYPED_FORBIDDEN' },
             { status: 403 },
@@ -238,8 +274,8 @@ export async function POST(req) {
       }
 
       resolved.session.answerInFlight = false;
+      await persistSpeakingB2Turns(resolved.session);
       const next = await updatePersistedSession(resolved.session);
-      await persistSpeakingB2Turns(next);
       return NextResponse.json({
         state: next.state,
         examinerText: resolved.examinerText,
@@ -259,6 +295,7 @@ export async function POST(req) {
     }
   } catch (error) {
     if (error instanceof SpeakingStoreUnavailableError) {
+      console.error('[speaking-b2/turn] store', error.message);
       return NextResponse.json({ error: 'Speaking storage is not ready.', code: 'STORE_UNAVAILABLE' }, { status: 503 });
     }
     if (error instanceof SpeakingStoreConflictError) {

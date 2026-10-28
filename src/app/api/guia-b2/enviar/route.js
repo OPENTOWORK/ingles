@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import {
   buildB2GuideDownloadEmail,
+  guideConsentError,
   normalizeGuideEmail,
   tryConsumeB2GuideSend,
 } from '@/lib/b2GuideDownload';
@@ -21,6 +22,11 @@ export async function POST(req) {
   const email = normalizeGuideEmail(body?.email);
   if (!email) {
     return NextResponse.json({ ok: false, error: 'Escribe un email válido.' }, { status: 400 });
+  }
+
+  const consentError = guideConsentError(body);
+  if (consentError) {
+    return NextResponse.json({ ok: false, error: consentError }, { status: 400 });
   }
 
   if (!tryConsumeB2GuideSend(getClientIpFromRequest(req), email)) {

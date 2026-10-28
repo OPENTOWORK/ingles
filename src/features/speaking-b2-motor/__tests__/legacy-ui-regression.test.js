@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, it } from 'node:test';
 import { STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS } from '@/constants/studentFeatureAccess';
 import { NIVELES_LEVEL_HUB } from '@/data/nivelesLevelHub';
+import { omitSpeakingExaminerQuestionBlocks } from '@/utils/b2ExamPaperShared';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 
@@ -50,6 +51,20 @@ describe('previous B2 speaking UI stays in place', () => {
     assert.equal(source.includes('Start the interview'), false);
     assert.equal(source.includes('SpeakingMotorFixtureHarness'), false);
     assert.equal(source.includes('fixtureMode'), false);
+  });
+
+  it('hides every Part 1 examiner prompt from the paper instructions', () => {
+    const blocks = [
+      { type: 'text', text: 'About 2 minutes' },
+      { type: 'text', text: '1. Where are you from?' },
+      { type: 'text', text: '4. Tell me about a journey or day out that you remember well.' },
+      { type: 'text', text: 'Describe your favourite place.' },
+      { type: 'text', text: 'The examiner may ask you to explain your answers or give more details.' },
+    ];
+    assert.deepEqual(
+      omitSpeakingExaminerQuestionBlocks(blocks, 14).map((block) => block.text),
+      ['About 2 minutes', 'The examiner may ask you to explain your answers or give more details.'],
+    );
   });
 
   it('keeps the original Start exercise button and only wires Part 1 through it', () => {

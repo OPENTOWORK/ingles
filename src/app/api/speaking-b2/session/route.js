@@ -1,7 +1,11 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
-import { getSpeakingB2Exam, SPEAKING_B2_EXAM_CODE } from '@/features/speaking-b2-motor/domain/question-bank/sp-ex001-part1';
-import { startAudioCheck } from '@/features/speaking-b2-motor/services/coordinator';
+import {
+  getSpeakingB2Exam,
+  getSpeakingB2Examiner,
+  SPEAKING_B2_EXAM_CODE,
+} from '@/features/speaking-b2-motor/domain/question-bank/sp-ex001-part1';
+import { speakingB2IntroLine, startAudioCheck } from '@/features/speaking-b2-motor/services/coordinator';
 import {
   authorizeSpeakingSession,
   readSpeakingAccessToken,
@@ -31,11 +35,14 @@ export async function POST(req) {
     }
 
     const auth = await getSupabaseUserFromRequest(req);
+    const localHour = Number(body.localHour);
     const { session, accessToken } = await createPersistedSession({
       userId: auth?.user?.id || null,
       examCode,
       fixtureMode: body.fixtureMode === true && isSpeakingB2FixtureRuntime(),
+      localHour: Number.isInteger(localHour) ? localHour : null,
     });
+    const examiner = getSpeakingB2Examiner(session.plan?.examinerId);
 
     return NextResponse.json({
       sessionId: session.id,
@@ -43,6 +50,8 @@ export async function POST(req) {
       persisted: session.persisted,
       fixtureMode: Boolean(session.fixtureMode),
       state: session.state,
+      examiner: { id: examiner.id, name: examiner.name },
+      introText: speakingB2IntroLine(session),
       exam: {
         code: exam.code,
         title: exam.title,

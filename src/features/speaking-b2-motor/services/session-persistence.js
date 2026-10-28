@@ -39,6 +39,7 @@ export function buildSpeakingSessionMetadata(session = {}) {
     evaluationFailed: Boolean(session.evaluationFailed),
     rowVersion: session.rowVersion || 1,
     boundAt: session.boundAt || null,
+    plan: session.plan || null,
   };
 }
 
@@ -71,6 +72,7 @@ export function hydrateSpeakingB2Session(row, turns = [], assessment = null) {
     reaskCount: metadata.reaskCount || 0,
     answerInFlight: Boolean(metadata.answerInFlight),
     boundAt: metadata.boundAt || null,
+    plan: metadata.plan || null,
     turns: (turns || []).map(hydrateSpeakingB2Turn),
   };
 }
@@ -91,6 +93,10 @@ export function hydrateSpeakingB2Turn(row) {
   };
 }
 
+export function serializeSpeakingB2TurnValidation(value) {
+  return typeof value === 'string' && value.trim() ? value : null;
+}
+
 export function serializeSpeakingB2Turn(turn, index, sessionId) {
   return {
     session_id: sessionId,
@@ -102,8 +108,31 @@ export function serializeSpeakingB2Turn(turn, index, sessionId) {
     stt_confidence: turn.confidence ?? null,
     transcript_source: turn.source || 'STT',
     audio_path: turn.audioPath || null,
-    validation: turn.validation || null,
+    validation: serializeSpeakingB2TurnValidation(turn.validation),
   };
+}
+
+/** PostgREST upserts that include `id` plus onConflict(session_id,turn_index) can 400. */
+export function stripSpeakingB2TurnId(row) {
+  if (!row || typeof row !== 'object') return row;
+  const { id, ...rest } = row;
+  return rest;
+}
+
+export function partitionSpeakingB2TurnWrites(upserts = [], existingRows = []) {
+  const existingIndexes = new Set(
+    existingRows
+      .filter((row) => row.turn_index != null)
+      .map((row) => Number(row.turn_index)),
+  );
+  const inserts = [];
+  const updates = [];
+  for (const row of upserts) {
+    const clean = stripSpeakingB2TurnId(row);
+    if (existingIndexes.has(Number(row.turn_index))) updates.push(clean);
+    else inserts.push(clean);
+  }
+  return { inserts, updates };
 }
 
 function transcriptLength(row) {

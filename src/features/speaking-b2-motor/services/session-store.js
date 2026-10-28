@@ -17,9 +17,11 @@ import {
   hydrateSpeakingB2Session,
   isMissingRelationError,
   isUniqueViolation,
+  partitionSpeakingB2TurnWrites,
   planSpeakingB2TurnWrites,
 } from './session-persistence.js';
 import { interpretSpeakingB2ChargeRow } from './quota-finalize.js';
+import { buildSpeakingB2SessionPlan, summariseRecentSpeakingB2Plans } from './session-plan.js';
 import { speakingB2MustPersistStore } from './test-target-guard.js';
 
 const memory = new Map();
@@ -221,11 +223,36 @@ export async function loadSpeakingB2Session(sessionId) {
   }
 }
 
-export async function createPersistedSession({ userId, examCode, fixtureMode = false }) {
+/** Best effort: a failed lookup only means the plan cannot avoid repeats. */
+async function loadRecentSpeakingB2Plans(admin, userId, limit = 4) {
+  if (!admin || !userId) return summariseRecentSpeakingB2Plans([]);
+  try {
+    const { data, error } = await admin
+      .from('speaking_b2_sessions')
+      .select('metadata')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+    if (error) return summariseRecentSpeakingB2Plans([]);
+    return summariseRecentSpeakingB2Plans(data || []);
+  } catch {
+    return summariseRecentSpeakingB2Plans([]);
+  }
+}
+
+export async function createPersistedSession({ userId, examCode, fixtureMode = false, localHour = null }) {
   const id = createSpeakingB2SessionId();
   const accessToken = createSpeakingAccessToken();
   const createdAt = new Date().toISOString();
   const published = speakingB2MustPersistStore();
+  const admin = getSupabaseAdmin();
+  const plan = fixtureMode
+    ? null
+    : buildSpeakingB2SessionPlan({
+        examCode,
+        localHour,
+        recent: await loadRecentSpeakingB2Plans(admin, userId),
+      });
   const sessionDraft = {
     id,
     persisted: false,
@@ -239,11 +266,11 @@ export async function createPersistedSession({ userId, examCode, fixtureMode = f
     accessTokenHash: hashSpeakingAccessToken(accessToken),
     rowVersion: 1,
     ...createSpeakingB2SessionState({ examCode, userId }),
+    plan,
     createdAt,
     expiresAt: speakingSessionExpiresAt(createdAt),
   };
 
-  const admin = getSupabaseAdmin();
   if (admin) {
     const insertRow = {
       id,
@@ -377,23 +404,39 @@ export async function persistSpeakingB2Turns(session) {
   const { upserts } = planSpeakingB2TurnWrites(existing || [], session.turns, session.id);
   if (!upserts.length) return { persisted: true, skipped: true };
 
-  const { error } = await admin.from('speaking_b2_turns').upsert(upserts, {
-    onConflict: 'session_id,turn_index',
-  });
-  if (error) {
-    if (isMissingRelationError(error)) {
-      if (published) throw new SpeakingStoreUnavailableError(error.message || 'SCHEMA_V2_REQUIRED');
-      const inserts = upserts.filter((row) => !row.id);
-      if (!inserts.length) return { persisted: true };
-      const retry = await admin.from('speaking_b2_turns').insert(inserts);
-      if (retry.error) {
+  const { inserts, updates } = partitionSpeakingB2TurnWrites(upserts, existing || []);
+
+  if (inserts.length) {
+    const { error } = await admin.from('speaking_b2_turns').insert(inserts);
+    if (error && !isUniqueViolation(error)) {
+      console.error('[speaking-b2/turns] insert', error.code, error.message, error.details || '');
+      if (isMissingRelationError(error)) {
+        if (published) throw new SpeakingStoreUnavailableError(error.message || 'SCHEMA_V2_REQUIRED');
         return { persisted: false };
       }
-      return { persisted: true, legacy: true };
+      if (published) throw new SpeakingStoreUnavailableError(error.message);
+      return { persisted: false };
     }
-    if (published) throw new SpeakingStoreUnavailableError(error.message);
-    return { persisted: false };
   }
+
+  for (const row of updates) {
+    const { session_id: sessionId, turn_index: turnIndex, ...patch } = row;
+    const { error } = await admin
+      .from('speaking_b2_turns')
+      .update(patch)
+      .eq('session_id', sessionId)
+      .eq('turn_index', turnIndex);
+    if (error) {
+      console.error('[speaking-b2/turns] update', error.code, error.message, error.details || '');
+      if (isMissingRelationError(error)) {
+        if (published) throw new SpeakingStoreUnavailableError(error.message || 'SCHEMA_V2_REQUIRED');
+        return { persisted: false };
+      }
+      if (published) throw new SpeakingStoreUnavailableError(error.message);
+      return { persisted: false };
+    }
+  }
+
   return { persisted: true };
 }
 
