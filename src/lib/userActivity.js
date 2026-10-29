@@ -7,6 +7,18 @@ export const SESSION_GAP_MS = 5 * 60 * 1000;
 /** Intervalo de heartbeat en cliente (ms). */
 export const HEARTBEAT_INTERVAL_MS = 60 * 1000;
 
+/** Solo cuenta como estudio productivo una ruta donde el alumno puede resolver tareas. */
+export function isProductiveStudyPath(pathname) {
+  const raw = String(pathname || '').trim().toLowerCase();
+  const path = raw.length > 1 ? raw.replace(/\/+$/, '') : raw;
+
+  // Training solo cuenta dentro de un nivel/actividad, no en el hub.
+  if (/^\/training\/[^/]+(?:\/|$)/.test(path)) return true;
+
+  // Exam Practice cuenta únicamente en superficies donde se puede practicar/responder.
+  return /^\/exam-practice\/[^/]+\/(?:exam-(?:reading(?:-and-use-of-english)?|writing|listening|speaking)|quiz-game|exam-mode)(?:\/|$)/.test(path);
+}
+
 /** @type {Record<string, string>} */
 export const DEVICE_TYPE_LABELS = {
   mobile: 'Móvil',

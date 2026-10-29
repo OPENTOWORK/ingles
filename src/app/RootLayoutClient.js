@@ -19,6 +19,7 @@ const AUTH_FLOW_PATH_PREFIXES = ['/auth/callback', '/auth/confirm'];
 import Link from 'next/link';
 import DraloTagline from '@/components/DraloTagline';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
+import { isProductiveStudyPath } from '@/lib/userActivity';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
 import ClientAnalyticsLoader from '@/components/analytics/ClientAnalyticsLoader';
@@ -153,10 +154,9 @@ function RootLayoutClientInner({ children }) {
   /** Usuario vigente: descarta respuestas de rol que llegan tras un cambio de usuario. */
   const currentUserIdRef = useRef(null);
 
-  // La sesión de actividad depende de que el usuario esté autenticado, no de que la ruta
-  // también pueda abrirse sin login. Exam Practice, Training y Exam Strategies son públicas
-  // para invitados, pero deben seguir contando tiempo cuando las usa un alumno identificado.
-  const heartbeatEnabled = Boolean(session) && !isAuthFlow;
+  // El KPI de tiempo mide estudio productivo, no mera navegación autenticada.
+  // Home, login, perfil, precios, estrategias, teoría y hubs no suman minutos.
+  const heartbeatEnabled = Boolean(session) && isProductiveStudyPath(pathname);
   const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || '';
   const metaPixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID || '';
   const analyticsCookiesEnabled = Boolean(cookieConsent) && Boolean(cookiePreferences.analytics);
