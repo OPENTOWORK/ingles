@@ -1,6 +1,6 @@
 {
   "name": "english-practice",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Plataforma completa de práctica de inglés con IA adaptativa, gamificación y modo offline",
   "private": true,
   "scripts": {
