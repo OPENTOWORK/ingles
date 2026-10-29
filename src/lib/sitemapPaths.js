@@ -12,6 +12,7 @@ const CEFR_LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
 export const SITEMAP_PATHS = [
   '/',
   '/preparar-b2-cambridge',
+  '/guia-b2-first',
   '/exam-practice',
   '/exam-strategies',
   '/training',
@@ -46,6 +47,7 @@ function changeFrequencyFor(path) {
     path === '/exam-practice' ||
     path === '/exam-strategies' ||
     path === '/preparar-b2-cambridge' ||
+    path === '/guia-b2-first' ||
     path === '/blog' ||
     path === '/precios'
   ) {
@@ -56,7 +58,7 @@ function changeFrequencyFor(path) {
 
 function priorityFor(path) {
   if (path === '/') return 1;
-  if (path === '/exam-practice' || path === '/exam-strategies' || path === '/preparar-b2-cambridge') {
+  if (path === '/exam-practice' || path === '/exam-strategies' || path === '/preparar-b2-cambridge' || path === '/guia-b2-first') {
     return 0.9;
   }
   if (path === '/precios' || path === '/training' || path === '/registro' || path === '/blog') return 0.8;
