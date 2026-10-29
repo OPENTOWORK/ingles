@@ -7,13 +7,11 @@ html.theme-halloween {
 }
 
 /* ——— Calabaza en la esquina del logo; en absoluto porque la cabecera de la landing no tiene ancho de sobra ——— */
-html.theme-halloween .site-header__logo,
-html.theme-halloween .home-landing .hl-logo {
+html.theme-halloween .site-header__logo {
   position: relative;
 }
 
-html.theme-halloween .site-header__logo::before,
-html.theme-halloween .home-landing .hl-logo::before {
+html.theme-halloween .site-header__logo::before {
   content: '';
   position: absolute;
   top: -0.42em;
@@ -27,8 +25,7 @@ html.theme-halloween .home-landing .hl-logo::before {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html.theme-halloween .site-header__logo:hover::before,
-  html.theme-halloween .home-landing .hl-logo:hover::before {
+  html.theme-halloween .site-header__logo:hover::before {
     animation: halloween-wobble 0.7s ease-in-out;
   }
 }

@@ -565,7 +565,7 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
     nombre: 'Reto del martes',
     trigger_event: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
     trigger_reason:
-      'Cada martes a las 10:00 (hora de Madrid) a todos los usuarios con el email confirmado. El correo usa la maqueta del reto: la pregunta y las opciones primero, el botón a Training, y la explicación al final.',
+      'Cada martes a las 10:00 (hora de Madrid) a todos los usuarios con el email confirmado. La pregunta cambia cada semana. La opción se marca en el correo y se comprueba en Training, sin la solución en el mensaje.',
     asunto: 'El reto del martes · {{challenge_since}}',
     cuerpo: [
       'Preheader: Sabemos que vas a mil. Hoy no te pedimos una tarde libre: solo una pregunta y ganas de intentarlo.',
@@ -576,11 +576,9 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
       '',
       '{{challenge_options}}',
       '',
-      'Elige mentalmente tu respuesta. La solución está al final.',
+      'Marca una opción. Chequear respuesta la comprueba en Dralo.',
       '',
-      '{{challenge_solution}}',
-      '',
-      'CTA: Acepto el reto',
+      'CTA: Chequear respuesta',
       '{{challenge_url}}',
       '',
       '— El equipo de Dralo',

@@ -88,6 +88,7 @@ export function WritingFeedbackMock() {
 
   return (
     <div className="hl-wmock">
+      <p className="hl-wmock__example">Ejemplo</p>
       <div className="hl-wmock__tabs" role="tablist" aria-label="Ejemplo de corrección de Writing">
         {WRITING_TABS.map((tab) => (
           <button

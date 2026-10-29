@@ -6,6 +6,7 @@ import { supabase } from '@/utils/supabaseClient';
 import { getRoleNameByUserId } from '@/utils/authRoles';
 import { mayEnterStaffModule } from '@/lib/staffModuleGate';
 import AutomatedEmailsPanel from '@/components/support/AutomatedEmailsPanel';
+import GuideRequestsPanel from '@/components/marketing/GuideRequestsPanel';
 import MarketingAudiencePanel from '@/components/marketing/MarketingAudiencePanel';
 import PageHero from '@/components/PageHero';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -61,6 +62,9 @@ export default function CorreosAutomaticosPage() {
       {access.audience ? (
         <div className={access.templates ? 'mt-10' : undefined}>
           <MarketingAudiencePanel />
+          <div className="mt-4">
+            <GuideRequestsPanel />
+          </div>
         </div>
       ) : null}
     </main>

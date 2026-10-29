@@ -2,6 +2,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
+import {
+  FOUNDING_SURVEY_FORM_ID,
+  FOUNDING_SURVEY_FORM_TITLE,
+} from '@/lib/foundingSurvey.rules';
 import styles from './AdminPlanObjetivosPanel.module.css';
 
 async function getAdminFetchHeaders() {
@@ -138,6 +142,10 @@ export default function AdminFormularioRespuestas({
   }, [rows, onlyUserId, formFilter, personQuery, dataQuery, fromDate, toDate]);
 
   const columns = useMemo(() => questionColumns(filtered), [filtered]);
+  const formOptions = useMemo(() => {
+    if (forms.some((form) => form.id === FOUNDING_SURVEY_FORM_ID)) return forms;
+    return [...forms, { id: FOUNDING_SURVEY_FORM_ID, titulo: FOUNDING_SURVEY_FORM_TITLE }];
+  }, [forms]);
 
   const publishFilters = (nextForm, nextUser) => {
     onFiltersChange?.({ formularioId: nextForm, userId: nextUser });
@@ -171,7 +179,7 @@ export default function AdminFormularioRespuestas({
             }}
           >
             <option value="">Todos</option>
-            {forms.map((form) => (
+            {formOptions.map((form) => (
               <option key={form.id} value={form.id}>
                 {form.titulo}
               </option>

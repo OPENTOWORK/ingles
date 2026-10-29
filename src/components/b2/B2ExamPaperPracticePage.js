@@ -1984,10 +1984,9 @@ function B2ExamPaperPracticePageInner({
 
   const sectionMaxWidth = showLongWritingWithAi
     ? 'min(960px, 100%)'
-      : levelSlug === 'a2' &&
-          ((partNumber >= 1 && partNumber <= 5) || (partNumber >= 8 && partNumber <= 14))
-        ? 'min(920px, 100%)'
-        : '100%';
+    : levelSlug === 'a2' && partNumber >= 8 && partNumber <= 14
+      ? 'min(920px, 100%)'
+      : '100%';
 
   const a2EmbeddedReadingPart = levelSlug === 'a2' && partNumber >= 1 && partNumber <= 4;
 

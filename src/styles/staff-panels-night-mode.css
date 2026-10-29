@@ -117,6 +117,17 @@ body.reading-night-mode .auto-emails-panel__subtitle {
   color: #f8fafc;
 }
 
+body.reading-night-mode .auto-emails-panel__summary,
+body.reading-night-mode .auto-emails-panel__body {
+  background: #1e293b;
+  border-color: #334155;
+  color: #f8fafc;
+}
+
+body.reading-night-mode .auto-emails-panel__summary::after {
+  border-color: #e2e8f0;
+}
+
 body.reading-night-mode .support-panel__subtitle,
 body.reading-night-mode .auto-emails-panel__subtitle {
   color: #94a3b8;

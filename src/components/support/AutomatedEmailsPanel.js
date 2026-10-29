@@ -34,7 +34,7 @@ const VARIABLE_HINTS = [
   '{{challenge_since}} — fecha del martes del reto (sin la solución)',
   '{{challenge_prompt}} — frase del reto de esa semana',
   '{{challenge_options}} — opciones A, B y C, sin marcar la correcta',
-  '{{challenge_url}} — enlace a Training, donde se comprueba la respuesta',
+  '{{challenge_url}} — enlace a Training. La solución no va en el correo: se comprueba al marcar una opción',
 ];
 
 async function apiFetch(path, options = {}) {
@@ -206,7 +206,11 @@ export default function AutomatedEmailsPanel() {
   };
 
   return (
-    <div className="auto-emails-panel">
+    <details className="auto-emails-panel">
+      <summary className="auto-emails-panel__summary">
+        <h2 className="auto-emails-panel__title">Correos automáticos</h2>
+      </summary>
+      <div className="auto-emails-panel__body">
       {usingDefaults && setupHint ? (
         <p className="auto-emails-panel__hint" role="status">
           {setupHint}
@@ -215,7 +219,6 @@ export default function AutomatedEmailsPanel() {
 
       <header className="auto-emails-panel__header">
         <div>
-          <h2 className="auto-emails-panel__title">Correos automáticos</h2>
           <p className="auto-emails-panel__subtitle">
             Tipos de correo que la plataforma envía sola, cuándo se disparan y su contenido.
             Puedes crear plantillas nuevas, editarlas, programar el retraso y desactivarlas.
@@ -429,8 +432,43 @@ export default function AutomatedEmailsPanel() {
         </section>
         ) : null}
       </div>
-
+      </div>
       <style jsx>{`
+        .auto-emails-panel__summary {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin: 0;
+          padding: 0.9rem 1rem;
+          border: 1px solid #e5e7eb;
+          border-radius: 12px;
+          background: #fff;
+          cursor: pointer;
+          list-style: none;
+        }
+        .auto-emails-panel__summary::-webkit-details-marker {
+          display: none;
+        }
+        .auto-emails-panel__summary::after {
+          content: '';
+          flex: none;
+          width: 0.5rem;
+          height: 0.5rem;
+          margin-left: auto;
+          border-right: 2px solid #374151;
+          border-bottom: 2px solid #374151;
+          transform: translateY(-0.1rem) rotate(45deg);
+        }
+        .auto-emails-panel[open] > .auto-emails-panel__summary {
+          border-radius: 12px 12px 0 0;
+        }
+        .auto-emails-panel[open] > .auto-emails-panel__summary::after {
+          transform: translateY(0.15rem) rotate(-135deg);
+        }
+        .auto-emails-panel__summary:focus-visible {
+          outline: 3px solid #1d4ed8;
+          outline-offset: 3px;
+        }
         .auto-emails-panel__hint {
           background: #fffbeb;
           border: 1px solid #fcd34d;
@@ -440,6 +478,13 @@ export default function AutomatedEmailsPanel() {
           margin-bottom: 1rem;
           font-size: 0.9rem;
         }
+        .auto-emails-panel__body {
+          padding: 1rem;
+          border: 1px solid #e5e7eb;
+          border-top: 0;
+          border-radius: 0 0 12px 12px;
+          background: #fff;
+        }
         .auto-emails-panel__header {
           display: flex;
           align-items: flex-start;
@@ -448,8 +493,8 @@ export default function AutomatedEmailsPanel() {
           margin-bottom: 1.25rem;
         }
         .auto-emails-panel__title {
-          margin: 0 0 0.35rem;
-          font-size: 1.35rem;
+          margin: 0;
+          font-size: 1.15rem;
         }
         .auto-emails-panel__subtitle {
           margin: 0;
@@ -666,6 +711,6 @@ export default function AutomatedEmailsPanel() {
           cursor: not-allowed;
         }
       `}</style>
-    </div>
+    </details>
   );
 }

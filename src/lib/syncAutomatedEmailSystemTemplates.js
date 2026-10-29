@@ -28,7 +28,7 @@ export async function syncAutomatedEmailSystemTemplates(db) {
 
   const { data: existing, error: loadError } = await db
     .from('soporte_correos_automaticos')
-    .select('slug, asunto');
+    .select('slug, asunto, cuerpo');
 
   if (loadError) {
     throw loadError;
@@ -40,8 +40,14 @@ export async function syncAutomatedEmailSystemTemplates(db) {
   const storedWelcome = bySlug.get('welcome_registration');
   const shouldRefreshWelcome =
     welcome && storedWelcome && storedWelcome.asunto === LEGACY_WELCOME_SUBJECT;
+  const weekly = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.find((t) => t.slug === 'weekly_tuesday_challenge');
+  const storedWeekly = bySlug.get('weekly_tuesday_challenge');
+  const shouldRefreshWeekly =
+    weekly &&
+    storedWeekly &&
+    String(storedWeekly.cuerpo || '').startsWith('Preheader: Elige una opción');
 
-  if (!missing.length && !shouldRefreshWelcome) {
+  if (!missing.length && !shouldRefreshWelcome && !shouldRefreshWeekly) {
     return { inserted: [], updated: [] };
   }
 
@@ -52,6 +58,8 @@ export async function syncAutomatedEmailSystemTemplates(db) {
     if (insertError) throw insertError;
   }
 
+  const refreshed = [];
+
   if (shouldRefreshWelcome) {
     const { slug, ...fields } = templateRow(welcome);
     const { error: updateError } = await db
@@ -59,10 +67,21 @@ export async function syncAutomatedEmailSystemTemplates(db) {
       .update(fields)
       .eq('slug', slug);
     if (updateError) throw updateError;
+    refreshed.push('welcome_registration');
+  }
+
+  if (shouldRefreshWeekly) {
+    const { slug, ...fields } = templateRow(weekly);
+    const { error: updateError } = await db
+      .from('soporte_correos_automaticos')
+      .update(fields)
+      .eq('slug', slug);
+    if (updateError) throw updateError;
+    refreshed.push('weekly_tuesday_challenge');
   }
 
   return {
     inserted: missing.map((t) => t.slug),
-    updated: shouldRefreshWelcome ? ['welcome_registration'] : [],
+    updated: refreshed,
   };
 }

@@ -1,21 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
   ArrowRight,
   ChevronRight,
   ChartColumnIncreasing,
-  ChartNoAxesColumn,
   Check,
   ChevronDown,
   CircleHelp,
   Clock,
   CreditCard,
-  FileText,
   Gift,
-  Lightbulb,
+  Pause,
+  Play,
   Target,
 } from 'lucide-react';
 import { APP_ROUTES } from '@/config/appRoutes';
@@ -32,42 +31,30 @@ import { PracticePickerMock, ResultsMock, ReviewMock, WritingFeedbackMock } from
 import './home-guest-landing.css';
 
 const REGISTER_HREF = '/registro';
+const TRY_EXERCISE_HREF = '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1';
+const WRITING_PRACTICE_HREF = '/exam-practice/b2/exam-writing/';
+const CONTACT_EMAIL = 'draloenglish@gmail.com';
 const TOUR_VIDEO_SRC = sitePublicPath('/dralo-tour.mp4?v=4');
 const TOUR_POSTER_SRC = sitePublicPath('/dralo-tour-poster.webp?v=4');
 
-const QUESTIONS = [
+const PAIRS = [
   {
     icon: CircleHelp,
-    title: '¿Por qué sigues cometiendo los mismos errores?',
-    text: 'Identifica tus errores y entiende por qué ocurren.',
+    question: '¿Por qué sigues cometiendo los mismos errores?',
+    benefitTitle: 'Entiende tus errores',
+    benefit: 'revisa tus resultados y las correcciones con explicaciones claras.',
   },
   {
     icon: Target,
-    title: '¿Qué partes del examen necesitas practicar más?',
-    text: 'Descubre en qué áreas debes centrar tu esfuerzo.',
+    question: '¿Qué partes del examen necesitas practicar más?',
+    benefitTitle: 'Practica con formato de examen',
+    benefit: 'familiarízate con las preguntas y el tipo de ejercicios del B2 First.',
   },
   {
     icon: ChartColumnIncreasing,
-    title: '¿Cómo puedes saber si estás progresando?',
-    text: 'Sigue tu evolución y ve tus mejoras en los resultados.',
-  },
-];
-
-const FEATURES = [
-  {
-    icon: FileText,
-    title: 'Practica con formato de examen',
-    text: 'Familiarízate con las preguntas y el tipo de ejercicios del B2 First.',
-  },
-  {
-    icon: Lightbulb,
-    title: 'Entiende tus errores',
-    text: 'Revisa tus resultados y las correcciones con explicaciones claras.',
-  },
-  {
-    icon: ChartNoAxesColumn,
-    title: 'Sigue tu progreso',
-    text: 'Consulta tus resultados e identifica en qué aspectos necesitas centrarte.',
+    question: '¿Cómo puedes saber si estás progresando?',
+    benefitTitle: 'Sigue tu progreso',
+    benefit: 'consulta tus resultados e identifica en qué aspectos necesitas centrarte.',
   },
 ];
 
@@ -99,17 +86,76 @@ const FAQ = [
   {
     q: '¿Necesito una tarjeta?',
     a: 'No. El registro pide nombre, correo y contraseña. No hay ningún campo de tarjeta.',
+    published: true,
   },
   {
     q: '¿Cómo conservo el Plan Plus gratis?',
-    a: `Pruebas Dralo durante ${FOUNDING_SURVEY_DELAY_DAYS} días. Al cumplirse, te enviamos un formulario y tienes ${FOUNDING_SURVEY_RESPONSE_DAYS} días para completarlo. Si lo completas, conservas el Plan Plus gratis para siempre. Si no, tu cuenta pasa al plan gratuito.`,
+    a: `Pruebas Dralo durante ${FOUNDING_SURVEY_DELAY_DAYS} días. Al cumplirse, te enviamos un formulario con preguntas sobre qué te parece la web y qué se puede mejorar, y tienes ${FOUNDING_SURVEY_RESPONSE_DAYS} días para completarlo. Si lo completas, conservas el Plan Plus gratis para siempre. Si no, tu cuenta pasa al plan gratuito.`,
     offer: true,
+    published: true,
+  },
+  {
+    q: '¿Qué incluye el plan gratuito y qué el Plus?',
+    a: 'En el plan gratuito hay 1 examen de prueba, 1 corrección de Writing al mes, Training y Quiz con 3 vidas (se recupera 1 cada 10 horas) y Exam Strategies. El Plan Plus incluye 10 exámenes al mes, 10 correcciones de Writing al mes con corrección avanzada, Training y Quiz con vidas ilimitadas, seguimiento del progreso y 30 consultas a Dralo Assistant al día.',
+    published: true,
+  },
+  {
+    q: '¿Cómo se corrige mi Writing y cuánto tarda?',
+    a: 'La política de privacidad y los términos de uso describen la corrección como automática y asistida por herramientas de inteligencia artificial. En la corrección verás marcas de gramática, vocabulario y contenido. No hay un plazo de respuesta publicado.',
+    published: true,
+  },
+  {
+    q: '¿Es un producto oficial de Cambridge?',
+    a: 'No. Los términos de uso dicen que Dralo no constituye un organismo certificador oficial ni garantiza la obtención de títulos, certificados o resultados concretos en exámenes oficiales.',
+    published: true,
+  },
+  {
+    q: '¿Funciona en el móvil?',
+    a: 'Sí. Puedes practicar desde el navegador del móvil, con la misma cuenta.',
+    published: true,
+  },
+  {
+    q: '¿Qué hacéis con mis datos?',
+    a: 'El responsable es Servipacar SL (nombre comercial Dralo, CIF B82133760). Usamos los datos de la cuenta, el progreso y los ejercicios para prestar el servicio. Las correcciones pueden tratarse con herramientas de inteligencia artificial. Para ejercer tus derechos puedes escribir a draloenglish@gmail.com. El detalle está en https://www.dralo.es/politica-privacidad/.',
+    published: true,
   },
   {
     q: '¿Dralo sustituye a mi academia?',
     a: 'No. La academia o la profesora enseñan. Dralo sirve para practicar fuera de clase, ver el feedback y seguir tu progreso.',
+    published: true,
   },
 ];
+
+function publishedFaq(items, offerOpen) {
+  return items.filter((item) => item.published && (offerOpen || !item.offer));
+}
+
+function faqJsonLd(items) {
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+  }).replace(/</g, '\\u003c');
+}
+
+/** dataLayer/gtag ya usados por GA4. Solo con consentimiento de analítica. */
+function trackHomeEvent(eventName) {
+  if (typeof window === 'undefined') return;
+  try {
+    const raw = window.localStorage.getItem('dralo_cookie_consent');
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (!parsed?.preferences?.analytics) return;
+  } catch {
+    return;
+  }
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: eventName });
+  if (typeof window.gtag === 'function') window.gtag('event', eventName);
+}
 
 /** No cargar el vídeo hasta saber si la cookie de sesión va a ocultar la landing. */
 function useLandingViewport() {
@@ -138,8 +184,9 @@ function useFoundingSlots(enabled) {
         .then((response) => (response.ok ? response.json() : Promise.reject(new Error('slots'))))
         .then((data) => {
           if (cancelled) return;
-          const remaining = Number(data?.remaining);
-          if (!Number.isInteger(remaining) || remaining < 0) {
+          const rawRemaining = data?.remaining;
+          const remaining = Number(rawRemaining);
+          if (rawRemaining == null || rawRemaining === '' || !Number.isInteger(remaining) || remaining < 0) {
             setSlots({ status: 'unknown' });
             return;
           }
@@ -169,10 +216,18 @@ function useFoundingSlots(enabled) {
 }
 
 function SlotsBox({ slots }) {
-  if (slots.status === 'unknown') {
+  if (slots.status === 'unknown') return null;
+  if (slots.status === 'ready' && (slots.soldOut || slots.remaining === 0)) {
     return (
-      <p className="hl-slots hl-slots--plain" role="status">
-        Plazas limitadas
+      <p className="hl-slots hl-slots--sold-out" role="status">
+        <span className="hl-slots__kicker">
+          <span className="hl-slots__dot" aria-hidden="true" />
+          Agotado
+        </span>
+        <span className="hl-slots__count">
+          <strong className="hl-slots__num hl-slots__num--word">Agotadas</strong>
+        </span>
+        <span className="hl-slots__of">Las {MAX_FOUNDING_SLOT} plazas iniciales ya están asignadas.</span>
       </p>
     );
   }
@@ -201,6 +256,113 @@ function SlotsBox({ slots }) {
   );
 }
 
+function HeroTourVideo({ active }) {
+  const frameRef = useRef(null);
+  const videoRef = useRef(null);
+  const userPaused = useRef(false);
+  const playedOnce = useRef(false);
+  const [motion, setMotion] = useState('pending');
+  const [playing, setPlaying] = useState(false);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setMotion(query.matches ? 'reduce' : 'ok');
+    sync();
+    query.addEventListener('change', sync);
+    return () => query.removeEventListener('change', sync);
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || motion !== 'ok' || !active || userPaused.current) return undefined;
+    video.play().catch(() => {});
+    return undefined;
+  }, [motion, active]);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    const video = videoRef.current;
+    if (!frame || !video || motion === 'pending') return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) {
+          video.pause();
+          return;
+        }
+        if (motion === 'ok' && !userPaused.current) video.play().catch(() => {});
+      },
+      { threshold: 0.25 },
+    );
+    observer.observe(frame);
+    return () => observer.disconnect();
+  }, [motion, active]);
+
+  const toggle = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) {
+      userPaused.current = false;
+      video.play().catch(() => {});
+      return;
+    }
+    userPaused.current = true;
+    video.pause();
+  };
+
+  return (
+    <>
+    <div className="hl-video" ref={frameRef}>
+      <img
+        className="hl-video__poster"
+        src={TOUR_POSTER_SRC}
+        alt=""
+        width={1280}
+        height={720}
+        fetchPriority="high"
+        decoding="async"
+      />
+      {active && motion !== 'pending' ? (
+          <video
+          ref={videoRef}
+          className="hl-video__media"
+          muted
+          autoPlay={motion === 'ok'}
+          loop
+          playsInline
+          preload="metadata"
+          poster={TOUR_POSTER_SRC}
+          data-started={started ? 'true' : 'false'}
+          aria-describedby="hl-hero-caption"
+          onPlay={() => {
+            setStarted(true);
+            setPlaying(true);
+            playedOnce.current = true;
+            trackHomeEvent('hero_video_play');
+          }}
+          onPause={() => {
+            setPlaying(false);
+            if (playedOnce.current) trackHomeEvent('hero_video_pause');
+          }}
+        >
+          <source src={TOUR_VIDEO_SRC} type="video/mp4" />
+        </video>
+      ) : null}
+    </div>
+    <button
+      type="button"
+      className="hl-video__toggle"
+      aria-pressed={playing}
+      onClick={toggle}
+      disabled={!active || motion === 'pending'}
+    >
+      {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+      {playing ? 'Pausa' : 'Reproducir'}
+    </button>
+    </>
+  );
+}
+
 /**
  * Home sin sesión, en ordenador y en móvil.
  * `pending`: aún no se sabe si hay sesión; se pinta por si es un invitado.
@@ -210,7 +372,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
   const visible = ready && !(pending && sessionHint);
   const slots = useFoundingSlots(visible);
   const offerOpen = !(slots.status === 'ready' && slots.soldOut);
-  const faq = offerOpen ? FAQ : FAQ.filter((item) => !item.offer);
+  const faq = publishedFaq(FAQ, offerOpen);
 
   return (
     <div className={`home-landing ${landingFont.variable}${pending ? ' home-landing--pending' : ''}`}>
@@ -219,9 +381,12 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
       ) : null}
       <header className="hl-header">
         <div className="hl-container hl-header__bar">
-          <Link href="/" className="hl-logo">
-            Dralo Academy
-          </Link>
+          <div className="hl-brand">
+            <Link href="/" className="hl-logo">
+              Dralo Academy
+            </Link>
+            <DraloTagline className="hl-logo-tagline" />
+          </div>
           <nav className="hl-nav" aria-label="Secciones">
             <a href="#como-funciona" className="hl-nav__link">
               Cómo funciona
@@ -244,7 +409,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <Link href="/precios" className="hl-nav__link">
               Precios
             </Link>
-            <Link href="/contacto" className="hl-nav__link hl-nav__link--wide">
+            <Link href="/contacto/" className="hl-nav__link hl-nav__link--wide">
               Contacto
             </Link>
           </nav>
@@ -273,10 +438,23 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
               Practica con formato de examen y descubre qué necesitas mejorar.
             </p>
             <div className="hl-hero__actions">
-              <Link href={REGISTER_HREF} className="hl-btn hl-btn--primary hl-btn--lg">
-                Empieza gratis
-                <ArrowRight aria-hidden="true" />
-              </Link>
+              <div className="hl-hero__ctas">
+                <Link
+                  href={REGISTER_HREF}
+                  className="hl-btn hl-btn--primary hl-btn--lg"
+                  onClick={() => trackHomeEvent('cta_hero_register')}
+                >
+                  Empieza gratis
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+                <Link
+                  href={TRY_EXERCISE_HREF}
+                  className="hl-btn hl-btn--ghost hl-btn--lg"
+                  onClick={() => trackHomeEvent('cta_hero_try_exercise')}
+                >
+                  Prueba un ejercicio sin registrarte
+                </Link>
+              </div>
               <ul className="hl-hero__notes">
                 <li>
                   <CreditCard aria-hidden="true" />
@@ -291,55 +469,45 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
 
           <figure className="hl-hero__media">
             <div className="hl-hero__stage">
-              <div className="hl-video" style={{ backgroundImage: `url(${TOUR_POSTER_SRC})` }}>
-                {visible ? (
-                  <video
-                    className="hl-video__media"
-                    controls
-                    muted
-                    autoPlay
-                    loop
-                    playsInline
-                    preload="metadata"
-                    poster={TOUR_POSTER_SRC}
-                    aria-label="Práctica en Dralo: reading, writing, listening, quiz y training"
-                  >
-                    <source src={TOUR_VIDEO_SRC} type="video/mp4" />
-                  </video>
-                ) : null}
-              </div>
+              <HeroTourVideo active={visible} />
               <Image
                 src={sitePublicPath('/mascot/3.png')}
                 alt=""
                 width={220}
                 height={220}
                 sizes="220px"
-                priority={prioritizeLcp}
                 className="hl-hero__mascot"
               />
             </div>
-            <figcaption className="hl-hero__caption">Descubre cómo practicar con DRALO</figcaption>
-            <DraloTagline className="hl-hero__slogan" />
+            <figcaption id="hl-hero-caption" className="hl-hero__caption">
+              Descubre cómo practicar con DRALO
+            </figcaption>
           </figure>
         </div>
       </section>
 
-      {offerOpen ? (
-        <section id="plan-plus" className="hl-container hl-offer" aria-labelledby="hl-offer-title">
+      <section
+        id="plan-plus"
+        className={`hl-container hl-offer${offerOpen ? '' : ' hl-offer--sold-out'}`}
+        aria-labelledby="hl-offer-title"
+      >
+        {offerOpen ? (
           <span className="hl-gift" aria-hidden="true">
             <Gift />
           </span>
-          <div>
-            <h2 id="hl-offer-title" className="hl-offer__title">
-              Tu Plan Plus gratis para siempre
-            </h2>
-            <p className="hl-offer__text">
-              Para los primeros {MAX_FOUNDING_SLOT} registros que cumplan las condiciones.
-            </p>
-          </div>
-          <SlotsBox slots={slots} />
-        </section>
-      ) : null}
+        ) : null}
+        <div>
+          <h2 id="hl-offer-title" className="hl-offer__title">
+            {offerOpen ? 'Tu Plan Plus gratis para siempre' : 'Plazas agotadas'}
+          </h2>
+          <p className="hl-offer__text">
+            {offerOpen
+              ? `Para los primeros ${MAX_FOUNDING_SLOT} registros que cumplan las condiciones.`
+              : `Las ${MAX_FOUNDING_SLOT} plazas iniciales de Plan Plus ya están asignadas.`}
+          </p>
+        </div>
+        <SlotsBox slots={slots} />
+      </section>
 
       <section className="hl-section" aria-labelledby="hl-problem-title">
         <div className="hl-container hl-problem">
@@ -351,44 +519,19 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             </h2>
             <p className="hl-lead">
               Haces ejercicios, repasas gramática, estudias vocabulario... Pero cuando te preguntas
-              qué necesitas mejorar para el examen, la respuesta no siempre está clara.
+              qué necesitas mejorar para el B2 First, la respuesta no siempre está clara.
             </p>
           </div>
           <ul className="hl-qcards">
-            {QUESTIONS.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="hl-qcard">
+            {PAIRS.map(({ icon: Icon, question, benefitTitle, benefit }) => (
+              <li key={question} className="hl-qcard">
                 <span className="hl-icon-badge" aria-hidden="true">
                   <Icon />
                 </span>
-                <h3 className="hl-qcard__title">{title}</h3>
-                <p className="hl-qcard__text">{text}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="hl-section hl-section--flush" aria-labelledby="hl-clear-title">
-        <div className="hl-container hl-panel">
-          <div className="hl-center">
-            <h2 id="hl-clear-title" className="hl-h2">
-              Una forma más clara de preparar tu B2
-            </h2>
-            <p className="hl-lead">
-              DRALO reúne herramientas de práctica y seguimiento para ayudarte a prepararte de forma
-              organizada.
-            </p>
-          </div>
-          <ul className="hl-features">
-            {FEATURES.map(({ icon: Icon, title, text }) => (
-              <li key={title} className="hl-feature">
-                <span className="hl-icon-badge hl-icon-badge--lg" aria-hidden="true">
-                  <Icon />
-                </span>
-                <div>
-                  <h3 className="hl-feature__title">{title}</h3>
-                  <p className="hl-feature__text">{text}</p>
-                </div>
+                <h3 className="hl-qcard__title">{question}</h3>
+                <p className="hl-qcard__text">
+                  <strong className="hl-qcard__benefit">{benefitTitle}:</strong> {benefit}
+                </p>
               </li>
             ))}
           </ul>
@@ -414,6 +557,14 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
                 </li>
               ))}
             </ul>
+            <Link
+              href={WRITING_PRACTICE_HREF}
+              className="hl-btn hl-btn--primary hl-writing__cta"
+              onClick={() => trackHomeEvent('cta_writing_try')}
+            >
+              Prueba la corrección de Writing
+              <ArrowRight aria-hidden="true" />
+            </Link>
           </div>
           <WritingFeedbackMock />
         </div>
@@ -461,11 +612,16 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
               </h2>
               <p className="hl-cta__text">
                 Prueba DRALO durante {FOUNDING_SURVEY_DELAY_DAYS} días. Después te enviaremos un
-                formulario: complétalo en los {FOUNDING_SURVEY_RESPONSE_DAYS} días siguientes para
-                conservar el Plan Plus gratis. Si no lo completas, tu cuenta pasa al plan gratuito.
+                formulario con preguntas sobre qué te parece la web y qué se puede mejorar:
+                complétalo en los {FOUNDING_SURVEY_RESPONSE_DAYS} días siguientes para conservar el
+                Plan Plus gratis. Si no lo completas, tu cuenta pasa al plan gratuito.
               </p>
             </div>
-            <Link href={REGISTER_HREF} className="hl-btn hl-btn--primary hl-btn--lg">
+            <Link
+              href={REGISTER_HREF}
+              className="hl-btn hl-btn--primary hl-btn--lg"
+              onClick={() => trackHomeEvent('cta_plan_register')}
+            >
               Quiero empezar gratis
               <ArrowRight aria-hidden="true" />
             </Link>
@@ -487,6 +643,10 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
           </p>
         </div>
       </div>
+
+      {faq.length ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqJsonLd(faq) }} />
+      ) : null}
 
       <section id="preguntas-frecuentes" className="hl-section hl-section--flush" aria-labelledby="hl-faq-title">
         <div className="hl-container">
@@ -521,11 +681,18 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             Practica el B2 First, revisa tus errores y utiliza tus resultados para orientar tu
             preparación.
           </p>
-          <Link href={REGISTER_HREF} className="hl-btn hl-btn--light hl-btn--lg">
+          <Link
+            href={REGISTER_HREF}
+            className="hl-btn hl-btn--light hl-btn--lg"
+            onClick={() => trackHomeEvent('cta_final_register')}
+          >
             Crear mi cuenta gratis
             <ArrowRight aria-hidden="true" />
           </Link>
-          <p className="hl-final__domain">dralo.es</p>
+          <p className="hl-final__contact">
+            Contacto:{' '}
+            <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+          </p>
         </div>
       </section>
     </div>
