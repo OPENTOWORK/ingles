@@ -494,10 +494,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <h2 id="hl-faq-title" className="hl-h2 hl-h2--sm">
               Preguntas frecuentes
             </h2>
-            <Link href="/contacto/faq" className="hl-faq__all">
-              Ver todas las preguntas
-              <ArrowRight aria-hidden="true" />
-            </Link>
           </div>
           <div className="hl-faq__list">
             {faq.map(({ q, a }) => (

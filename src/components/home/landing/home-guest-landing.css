@@ -1248,31 +1248,6 @@
   gap: 1rem;
 }
 
-.home-landing .hl-faq__all,
-.home-landing .hl-faq__all:hover {
-  color: var(--hl-purple-strong);
-}
-
-.home-landing .hl-faq__all {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 0.95rem;
-  border-radius: 999px;
-  background: var(--hl-soft);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.home-landing .hl-faq__all:hover {
-  background: #e6ddff;
-}
-
-.home-landing .hl-faq__all svg {
-  width: 0.95rem;
-  height: 0.95rem;
-}
-
 .home-landing .hl-faq__list {
   display: grid;
   gap: 0.7rem;
