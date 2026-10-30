@@ -70,7 +70,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_supabase_anon_key
 
 # Configuración de la app
 NEXT_PUBLIC_APP_NAME="English Practice"
-NEXT_PUBLIC_APP_VERSION="1.0.10"
+NEXT_PUBLIC_APP_VERSION="1.0.11"
 ```
 
 ### Base de Datos (Opcional)
