@@ -55,29 +55,37 @@ function promptHtml(prompt) {
   return `“${safe}”`;
 }
 
-function optionRows(optionsText) {
-  const lines = String(optionsText || '')
+function optionLines(optionsText) {
+  return String(optionsText || '')
     .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
+}
 
-  return lines
+function parseOption(line) {
+  const match = String(line).match(/^([A-C])\)\s*(.*)$/);
+  return {
+    letter: match ? match[1] : '',
+    label: match ? match[2] : line,
+  };
+}
+
+function optionRows(optionsText, weekId, baseUrl) {
+  return optionLines(optionsText)
     .map((line) => {
-      const match = line.match(/^([A-C])\)\s*(.*)$/);
-      const letter = match ? match[1] : '';
-      const label = match ? match[2] : line;
-      return `<tr><td style="padding:0 0 8px;">
-        <label style="display:block;cursor:pointer;color:#1d1857;background:#fbfaff;border:1px solid #e8e4f7;border-radius:12px;padding:14px 16px;font-size:17px;line-height:24px;">
-          <input type="radio" name="opcion" value="${escapeHtml(letter)}" required style="width:16px;height:16px;accent-color:#5634d6;vertical-align:middle;margin:0 12px 0 0;" />
-          <span style="color:#6c6989;font-size:13px;font-weight:bold;">${escapeHtml(letter)}</span>&nbsp;&nbsp;${escapeHtml(label)}
-        </label>
+      const { letter, label } = parseOption(line);
+      const href = escapeHtml(challengeCheckUrl(baseUrl, weekId, letter));
+      return `<tr><td style="padding:0 0 10px;">
+        <a href="${href}" target="_blank" style="display:block;text-decoration:none;color:#1d1857;background:#ffffff;border:1px solid #e4dff6;border-radius:14px;padding:16px 18px;font-size:17px;line-height:28px;">
+          <span style="display:inline-block;width:28px;height:28px;border-radius:14px;background:#ede9fe;color:#5634d6;font-size:13px;font-weight:bold;line-height:28px;text-align:center;">${escapeHtml(letter)}</span><span style="padding-left:12px;">${escapeHtml(label)}</span>
+        </a>
       </td></tr>`;
     })
     .join('\n');
 }
 
 /**
- * Maqueta del reto semanal. La opción se marca en el correo y se comprueba en la web.
+ * Maqueta del reto semanal. Cada respuesta abre el reto en Dralo.
  * La solución no sale en el mensaje.
  * @param {Record<string, string>} variables
  */
@@ -86,14 +94,13 @@ export function renderWeeklyChallengeEmail(variables = {}) {
   const options = String(variables.challenge_options || '').trim();
   const weekId = String(variables.challenge_week_id || '').trim();
   const url = String(variables.challenge_url || 'https://www.dralo.es/training/').trim();
-  const checkUrl = challengeCheckUrl(url, weekId);
   const safeUrl = escapeHtml(url);
-  const optionLines = options
-    .split('\n')
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .join('\n');
-  const formAction = escapeHtml(challengeCheckUrl(url).replace(/\?.*$/, ''));
+  const optionText = optionLines(options)
+    .map((line) => {
+      const { letter, label } = parseOption(line);
+      return `${letter}) ${label}\n${challengeCheckUrl(url, weekId, letter)}`;
+    })
+    .join('\n\n');
 
   const text = [
     'EL RETO DEL MARTES',
@@ -110,11 +117,9 @@ export function renderWeeklyChallengeEmail(variables = {}) {
     '',
     `“${prompt}”`,
     '',
-    optionLines,
+    optionText,
     '',
-    'Marca una opción. Chequear respuesta abre el reto y te dice si has acertado y por qué.',
-    '',
-    `Chequear respuesta: ${checkUrl}`,
+    'Pulsa tu respuesta. Se abre el reto en Dralo y te dice si has acertado y por qué.',
     '',
     '02 VAMOS A POR EL RETO',
     'Un ejercicio. Algo nuevo que aprender.',
@@ -168,16 +173,10 @@ export function renderWeeklyChallengeEmail(variables = {}) {
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td bgcolor="#fbfaff" style="background-color:#fbfaff;border-radius:14px;padding:22px 18px;">
             <p lang="en" style="margin:0;font-size:22px;line-height:32px;font-weight:bold;color:#1d1857;">${promptHtml(prompt)}</p>
           </td></tr></table>
-          <form action="${formAction}" method="get" target="_blank" style="margin:18px 0 0;">
-            <input type="hidden" name="reto" value="${escapeHtml(weekId)}" />
-            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
-              ${optionRows(options)}
-            </table>
-            <p style="margin:6px 0 16px;font-size:12px;line-height:19px;color:#6c6989;">Marca una opción. Chequear respuesta abre el reto y te dice si has acertado y por qué.</p>
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" bgcolor="#5634d6" style="background-color:#5634d6;border-radius:12px;mso-padding-alt:18px 24px;">
-              <button type="submit" style="display:block;width:100%;border:1px solid #5634d6;border-radius:12px;padding:18px 24px;background:#5634d6;font-size:17px;line-height:22px;font-weight:bold;text-align:center;text-decoration:none;color:#ffffff;cursor:pointer;">Chequear respuesta &nbsp; &rarr;</button>
-            </td></tr></table>
-          </form>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:18px;">
+            ${optionRows(options, weekId, url)}
+          </table>
+          <p style="margin:6px 0 0;font-size:13px;line-height:20px;color:#6c6989;">Pulsa tu respuesta. Se abre el reto en Dralo y te dice si has acertado y por qué.</p>
         </td></tr>
         <tr><td height="16" style="height:16px;font-size:1px;line-height:16px;">&nbsp;</td></tr>
         <tr><td bgcolor="#f0ebff" style="background-color:#f0ebff;border:1px solid #e8e4f7;border-radius:24px;padding:28px;">

@@ -25,7 +25,7 @@ test('tuesday challenge mail lets you mark an option and checks it on the site',
   assert.equal(template.delay_minutos, 0);
   assert.equal(template.activo, true);
   assert.match(template.cuerpo, /^Preheader: /);
-  assert.match(template.cuerpo, /CTA: Chequear respuesta/);
+  assert.match(template.cuerpo, /Pulsa tu respuesta/);
   assert.equal(template.cuerpo.includes('{{challenge_solution}}'), false);
 
   const challenge = getWeeklyChallenge(FIRST_TUESDAY);
@@ -43,7 +43,7 @@ test('tuesday challenge mail lets you mark an option and checks it on the site',
   const rendered = renderEmailTemplate(template.cuerpo, variables);
   const meta = splitEmailDeliveryMeta(rendered);
   assert.match(meta.preheader, /Sabemos que vas a mil/);
-  assert.equal(meta.ctaLabel, 'Chequear respuesta');
+  assert.equal(meta.ctaLabel, '');
 
   const email = renderWeeklyChallengeEmail(variables);
   assert.match(email.html, /Ese B2 está cada vez más cerca\./);
@@ -51,12 +51,14 @@ test('tuesday challenge mail lets you mark an option and checks it on the site',
   assert.match(email.html, /¿Cuál pondrías tú\?/);
   assert.match(email.html, /I’m not used to <span style="color:#5634d6;">_____<\/span> English every day\./);
   assert.match(email.html, /mascot\/3\.png/);
-  assert.match(email.html, /Chequear respuesta/);
+  assert.match(email.html, /Pulsa tu respuesta/);
   assert.match(email.html, /Acepto el reto/);
-  assert.match(email.html, /<form action="https:\/\/www\.dralo\.es\/training\/" method="get"/);
-  assert.match(email.html, /name="reto" value="2026-10-20"/);
-  assert.match(email.html, /name="opcion" value="B"/);
-  assert.equal(/<a[^>]+opcion=/.test(email.html), false);
+  assert.equal(/<form[\s>]/.test(email.html), false);
+  assert.equal(/type="radio"/.test(email.html), false);
+  assert.match(
+    email.html,
+    /href="https:\/\/www\.dralo\.es\/training\/\?reto=2026-10-20&amp;opcion=B"/,
+  );
   assert.equal(email.html.includes('LA SOLUCIÓN'), false);
   assert.equal(email.html.includes(challenge.solution), false);
   assert.equal(email.text.includes(challenge.solution), false);
@@ -104,7 +106,9 @@ test('every weekly challenge is a three-option gap with one answer', () => {
     assert.equal(mail.challenge_options.includes(challenge.solution), false);
     const rendered = renderWeeklyChallengeEmail(mail);
     assert.equal(rendered.html.includes(challenge.solution), false);
-    assert.match(rendered.html, new RegExp(`name="reto" value="${challenge.weekId}"`));
-    assert.match(rendered.html, /name="opcion" value="A"/);
+    assert.match(
+      rendered.html,
+      new RegExp(`reto=${challenge.weekId}&amp;opcion=A`),
+    );
   }
 });
