@@ -1,0 +1,127 @@
+'use client';
+
+import Link from 'next/link';
+import dynamic from 'next/dynamic';
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import {
+  TRAINING_STARS_UPDATED_EVENT,
+  normalizeTrainingCefr,
+  normalizeTrainingDifficulty,
+  trainingHomePath,
+} from '@/utils/trainingStarsProgress';
+import { TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
+import TrainingExperienceMeter from '@/components/training/TrainingExperienceMeter';
+import WeeklyTrainingChallenge from '@/components/training/WeeklyTrainingChallenge';
+import { useUserRole } from '@/context/UserRoleContext';
+import { useTrainingLives } from '@/hooks/useTrainingLives';
+import { sitePublicPath } from '@/utils/sitePublicPath';
+import styles from './page.module.css';
+
+const ENTRY_SKILL = 'use-of-english';
+
+const TrainingLevelPathMap = dynamic(
+  () => import('@/components/training/TrainingLevelPathMap'),
+  {
+    ssr: false,
+    loading: () => (
+      <p className={styles.loading}>Loading path…</p>
+    ),
+  },
+);
+
+export default function TrainingHomeClient() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { session } = useUserRole();
+  const guestPreview = !session;
+  const trainingLives = useTrainingLives();
+  const difficulty = normalizeTrainingDifficulty(searchParams.get('difficulty'));
+  const cefrLevel = normalizeTrainingCefr(searchParams.get('cefr'));
+  const [levelStars, setLevelStars] = useState({});
+
+  const loadLevelStars = useCallback(() => {
+    try {
+      const savedStars = localStorage.getItem(
+        `stars_${cefrLevel}_${ENTRY_SKILL}_${difficulty}`,
+      );
+      setLevelStars(savedStars ? JSON.parse(savedStars) : {});
+    } catch (error) {
+      console.warn('Could not load stars:', error);
+      setLevelStars({});
+    }
+  }, [cefrLevel, difficulty]);
+
+  useEffect(() => {
+    loadLevelStars();
+  }, [loadLevelStars]);
+
+  useEffect(() => {
+    const onStarsUpdated = () => loadLevelStars();
+    window.addEventListener(TRAINING_STARS_UPDATED_EVENT, onStarsUpdated);
+    return () => window.removeEventListener(TRAINING_STARS_UPDATED_EVENT, onStarsUpdated);
+  }, [loadLevelStars]);
+
+  return (
+    <main className={styles.page}>
+      <div className={styles.top}>
+        <header className={styles.head}>
+          <h1 className={styles.title}>Training</h1>
+          {trainingLives.outOfLives ? (
+            <p className={styles.livesNote}>
+              {guestPreview ? (
+                <>You have 3 lives. One comes back every {trainingLives.regenHours || 10} hours.</>
+              ) : (
+                <>
+                  The free plan includes 3 lives. One comes back every {trainingLives.regenHours || 10} hours.{' '}
+                  <Link href="/precios">Plus and Premium are unlimited.</Link>
+                </>
+              )}
+            </p>
+          ) : null}
+        </header>
+        <aside className={styles.guide} aria-label="About Training">
+          <p className={styles.bubble}>
+            {guestPreview
+              ? 'This is Training. Follow the levels in order. Each one practises one grammar point, and one star unlocks the next. You have 3 lives, and one comes back every 10 hours.'
+              : 'This is Training. Follow the levels in order. Each one practises one grammar point, and two stars unlock the next.'}
+          </p>
+          <img
+            className={styles.mascot}
+            src={sitePublicPath('/mascot/poses/think.png')}
+            alt=""
+            width={78}
+            height={92}
+          />
+        </aside>
+        <div className={styles.tools}>
+          <WeeklyTrainingChallenge className={styles.toolChallenge} />
+          <TrainingExperienceMeter
+            className={styles.toolXp}
+            accessToken={session?.access_token}
+          />
+        </div>
+      </div>
+
+      <TrainingLevelPathMap
+        key={`${cefrLevel}-${difficulty}`}
+        baseHref="/training"
+        levelStars={levelStars}
+        cefrLevel={cefrLevel}
+        difficulty={difficulty}
+        skill={ENTRY_SKILL}
+        onCefrChange={(id) => router.replace(trainingHomePath(difficulty, id), { scroll: false })}
+        onDifficultyChange={(id) => router.replace(trainingHomePath(id, cefrLevel), { scroll: false })}
+        lives={
+          <TrainingLivesMeter
+            loading={trainingLives.loading}
+            unlimited={trainingLives.unlimited}
+            lives={trainingLives.lives}
+            max={trainingLives.max}
+            nextLifeAt={trainingLives.nextLifeAt}
+          />
+        }
+      />
+    </main>
+  );
+}

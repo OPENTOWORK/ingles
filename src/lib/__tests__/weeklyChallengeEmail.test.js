@@ -53,11 +53,10 @@ test('tuesday challenge mail lets you mark an option and checks it on the site',
   assert.match(email.html, /mascot\/3\.png/);
   assert.match(email.html, /Chequear respuesta/);
   assert.match(email.html, /Acepto el reto/);
-  assert.match(
-    email.html,
-    /https:\/\/www\.dralo\.es\/training\/\?reto=2026-10-20&amp;opcion=B/,
-  );
-  assert.match(email.html, /https:\/\/www\.dralo\.es\/training\/\?reto=2026-10-20"/);
+  assert.match(email.html, /<form action="https:\/\/www\.dralo\.es\/training\/" method="get"/);
+  assert.match(email.html, /name="reto" value="2026-10-20"/);
+  assert.match(email.html, /name="opcion" value="B"/);
+  assert.equal(/<a[^>]+opcion=/.test(email.html), false);
   assert.equal(email.html.includes('LA SOLUCIÓN'), false);
   assert.equal(email.html.includes(challenge.solution), false);
   assert.equal(email.text.includes(challenge.solution), false);
@@ -105,6 +104,7 @@ test('every weekly challenge is a three-option gap with one answer', () => {
     assert.equal(mail.challenge_options.includes(challenge.solution), false);
     const rendered = renderWeeklyChallengeEmail(mail);
     assert.equal(rendered.html.includes(challenge.solution), false);
-    assert.match(rendered.html, new RegExp(`reto=${challenge.weekId}&amp;opcion=A`));
+    assert.match(rendered.html, new RegExp(`name="reto" value="${challenge.weekId}"`));
+    assert.match(rendered.html, /name="opcion" value="A"/);
   }
 });
