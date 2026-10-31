@@ -227,18 +227,6 @@ function B2ReadingExamsPageInner() {
     readingSession.resetAnswersRevealed();
   }, [examSlot, selectedPartId, readingSession.resetAnswersRevealed]);
 
-  useEffect(() => {
-    const onInstantFeedbackChanged = (event) => {
-      if (event?.detail?.showFeedback !== false) return;
-      setCheckedQuestions({});
-      setOpenChecks({});
-      setOpenGrades({});
-      setAiHintsByKey({});
-    };
-    window.addEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
-    return () =>
-      window.removeEventListener('dralo-reading-instant-feedback-changed', onInstantFeedbackChanged);
-  }, []);
 
   const loadReadingData = useCallback(async (slotOverride) => {
     const targetSlot = slotOverride ?? examSlot;
@@ -451,9 +439,8 @@ function B2ReadingExamsPageInner() {
 
   const hideInstantFeedback = resolvePracticeHideFeedback({
     hideFeedback,
-    showFeedback: readingSession.readingSettings.showFeedback,
     answersRevealed: readingSession.answersRevealed,
-    respectInstantFeedbackToggle: isSkillPracticeSession,
+    skillPracticeMode: isSkillPracticeSession,
   });
 
   const tabPartsData = useMemo(() => {
@@ -1230,7 +1217,7 @@ function B2ReadingExamsPageInner() {
       selectedOptions,
       getQuestionKey,
       partId: selectedPart.id,
-      treatSelectedMcqAsEvaluated: hideInstantFeedback,
+      treatSelectedMcqAsEvaluated: hideInstantFeedback && !isSkillPracticeSession,
     });
     return progress.complete ? progress : null;
   }, [
@@ -1469,7 +1456,7 @@ function B2ReadingExamsPageInner() {
         selectedOptions: stateOverride.selectedOptions ?? selectedOptions,
         getQuestionKey,
         partId: selectedPart.id,
-        treatSelectedMcqAsEvaluated: hideInstantFeedback,
+        treatSelectedMcqAsEvaluated: hideInstantFeedback && !isSkillPracticeSession,
       });
       if (!progress.complete) return;
       void persistPartSessionTime(progress);
@@ -1496,6 +1483,7 @@ function B2ReadingExamsPageInner() {
       openChecks,
       openGrades,
       hideInstantFeedback,
+      isSkillPracticeSession,
       persistPartSessionTime,
     ],
   );
@@ -1741,6 +1729,7 @@ function B2ReadingExamsPageInner() {
       getMcqQuestionKey: resolveMcqQuestionKey,
       selectedOptions,
       checkedQuestions,
+      includeUnanswered: true,
     });
 
     const { nextOpenChecks, nextOpenGrades, nextChecked, hasAnyAnswer } = bulkUpdate;
@@ -2374,7 +2363,7 @@ function B2ReadingExamsPageInner() {
                 }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={directionsLabel}
-                showDirections={!phoneSkillSteps}
+                showDirections={true}
                 textLabel={isUoeExamInlinePart || isPart6GappedText ? null : 'Text'}
                 questionsLabel="Questions"
                 stripExampleFromDirections={isUoeExamInlinePart}
@@ -2448,6 +2437,8 @@ function B2ReadingExamsPageInner() {
                       scoringV2Part4={scoringV2Part4}
                       onCheckGap={handleOpenGapCheck}
                       openAnswerMap={openAnswerMap}
+                      openAnswerRows={selectedQuestion.respuestasAbiertas}
+                      part4ParsedKeys={scoringV2Part4 ? part4ParsedKeys : null}
                       hideFeedback={hideInstantFeedback}
                       aiHintsByKey={aiHintsByKey}
                       onRequestExplanation={handleOpenGapExplanationRequest}
@@ -2560,7 +2551,6 @@ function B2ReadingExamsPageInner() {
                             const isSelected = selectedOptions[questionKey] === option.id;
                             const isChecked = checkedQuestions[questionKey];
                             const isCorrect = !!option.correcta;
-                            const isEliminated = readingSession.isOptionEliminated(questionKey, option.id);
                             const showCorrect = !hideInstantFeedback && isChecked && isCorrect;
                             const showIncorrect = !hideInstantFeedback && isChecked && isSelected && !isCorrect;
 
@@ -2583,7 +2573,6 @@ function B2ReadingExamsPageInner() {
                                   'tool-button',
                                   'reading-mcq-option',
                                   optionStateClass,
-                                  isEliminated ? 'eliminated' : '',
                                   isLocked && !isSelected ? 'reading-mcq-option--dimmed' : '',
                                 ]
                                   .filter(Boolean)
@@ -2591,10 +2580,6 @@ function B2ReadingExamsPageInner() {
                                 disabled={isLocked}
                                 onClick={() => {
                                   if (isLocked) return;
-                                  if (readingSession.answerEliminatorEnabled) {
-                                    readingSession.toggleEliminatedAnswer(questionKey, option.id);
-                                    return;
-                                  }
                                   handlePart1McqOptionSelect({
                                     group,
                                     groupIndex,
@@ -2682,7 +2667,6 @@ function B2ReadingExamsPageInner() {
         showCheckAnswersButton={shouldShowCheckAnswersButton({
           skillPracticeMode: isSkillPracticeSession,
           hideFeedback,
-          showFeedback: readingSession.readingSettings.showFeedback,
           answersRevealed: readingSession.answersRevealed,
         })}
         onCheckAnswers={handleCheckAllAnswers}

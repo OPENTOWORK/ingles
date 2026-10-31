@@ -1,5 +1,6 @@
 'use client';
 
+
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
@@ -186,7 +187,7 @@ export default function B2ExamInlineOpenClozePassage({
               }
 
               const inputStateClass = getInputStateClass(
-                checkResult,
+                hideFeedback ? undefined : checkResult,
                 currentValue,
                 isAnswerLocked,
               );

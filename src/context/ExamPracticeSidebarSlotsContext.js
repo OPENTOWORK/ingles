@@ -12,6 +12,12 @@ const ExamPracticeSidebarSlotsContext = createContext({
 
 export function ExamPracticeSidebarSlotsProvider({
   exerciseStars = null,
+  compactToolbar = false,
+  testLabel = null,
+  menuHeaderTools = null,
+  menuTimerTools = null,
+  menuExerciseStars = null,
+  lang = 'en',
   overlayContainerRef = null,
   sideRailMountRef = null,
   portSideRailToToolbar = false,
@@ -21,12 +27,18 @@ export function ExamPracticeSidebarSlotsProvider({
   const value = useMemo(
     () => ({
       exerciseStars,
+      compactToolbar,
+      testLabel,
+      menuHeaderTools,
+      menuTimerTools,
+      menuExerciseStars,
+      lang,
       sideRailMountRef,
       overlayContainerRef,
       portSideRailToToolbar,
       sideRailToolbarMounted,
     }),
-    [exerciseStars, sideRailMountRef, overlayContainerRef, portSideRailToToolbar, sideRailToolbarMounted],
+    [exerciseStars, compactToolbar, testLabel, menuHeaderTools, menuTimerTools, menuExerciseStars, lang, sideRailMountRef, overlayContainerRef, portSideRailToToolbar, sideRailToolbarMounted],
   );
 
   return (

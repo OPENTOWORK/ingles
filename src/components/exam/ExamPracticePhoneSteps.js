@@ -1,8 +1,7 @@
 'use client';
 
 /**
- * Pasos previos al ejercicio en móvil: elegir parte del examen de la skill y leer
- * las instrucciones. En tablet y escritorio no se usan.
+ * Shared paper part chooser: responsive cards on desktop and mobile.
  */
 
 function StepShell({ eyebrow, title, children }) {
@@ -29,7 +28,7 @@ export function ExamPracticePhonePartPicker({
   return (
     <StepShell eyebrow={eyebrow} title={isEn ? 'Choose a part' : 'Elige una parte'}>
       <ul className="phone-practice-step__list">
-        {items.map((item, index) => (
+        {items.map((item) => (
           <li key={item.id}>
             <button
               type="button"
@@ -38,9 +37,8 @@ export function ExamPracticePhonePartPicker({
               }`}
               onClick={() => onSelect(item)}
             >
-              <span className="phone-practice-step__item-num">{index + 1}</span>
               <span className="phone-practice-step__item-body">
-                <span className="phone-practice-step__item-label">{item.label}</span>
+                <span className="phone-practice-step__item-num">{item.label}</span>
                 {item.subtitle ? (
                   <span className="phone-practice-step__item-sub">{item.subtitle}</span>
                 ) : null}

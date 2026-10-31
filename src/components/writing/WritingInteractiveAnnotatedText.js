@@ -54,15 +54,12 @@ function WritingMarkPopup({ popup, onClose, lang, problemsText, strengthsText })
     <div className="writing-mark-popup" style={style} role="dialog" aria-label={chip}>
       <div className="writing-mark-popup__arrow" aria-hidden />
       <div className="writing-mark-popup__head">
-        <span className={`writing-mark-popup__chip writing-mark writing-mark--${tag}`}>{chip}</span>
         <button type="button" className="writing-mark-popup__close" onClick={onClose} aria-label="Close">
           ×
         </button>
       </div>
 
       <div className="writing-mark-popup__body">
-        <p className="writing-mark-popup__quote">"{phrase}"</p>
-
         {showCorrect ? (
           <p className="writing-mark-popup__arrow-fix">
             → <strong>"{correction.correct.replace(/^"|"$/g, '')}"</strong>
@@ -94,6 +91,24 @@ export default function WritingInteractiveAnnotatedText({
 
   useEffect(() => {
     if (!popup) return undefined;
+
+    const syncPopupToAnchor = () => {
+      if (!popup.anchorEl?.isConnected) {
+        setPopup(null);
+        return;
+      }
+
+      const nextRect = popup.anchorEl.getBoundingClientRect();
+      setPopup((current) =>
+        current
+          ? {
+              ...current,
+              rect: nextRect,
+            }
+          : current,
+      );
+    };
+
     const onDocClick = (event) => {
       if (containerRef.current?.contains(event.target)) return;
       setPopup(null);
@@ -101,19 +116,25 @@ export default function WritingInteractiveAnnotatedText({
     const onEsc = (event) => {
       if (event.key === 'Escape') setPopup(null);
     };
+
     document.addEventListener('mousedown', onDocClick);
     document.addEventListener('keydown', onEsc);
+    window.addEventListener('scroll', syncPopupToAnchor, true);
+    window.addEventListener('resize', syncPopupToAnchor);
+
     return () => {
       document.removeEventListener('mousedown', onDocClick);
       document.removeEventListener('keydown', onEsc);
+      window.removeEventListener('scroll', syncPopupToAnchor, true);
+      window.removeEventListener('resize', syncPopupToAnchor);
     };
-  }, [popup]);
+  }, [popup?.anchorEl]);
 
   return (
     <div ref={containerRef} className="writing-annotated-text writing-annotated-text--interactive">
       <p className="writing-annotated-text__hint">
         {isEn
-          ? 'Tap a highlighted word — correction appears above it (like on paper).'
+          ? 'Tap the highlights to find explanations'
           : 'Pulsa una palabra resaltada — la corrección aparece encima (como en papel).'}
       </p>
 
@@ -137,6 +158,7 @@ export default function WritingInteractiveAnnotatedText({
                 aria-label={getTeacherMarkChip(segment.tag, correction, segment.text)}
                 onClick={(event) => {
                   setPopup({
+                    anchorEl: event.currentTarget,
                     rect: event.currentTarget.getBoundingClientRect(),
                     tag: segment.tag,
                     phrase: segment.text,
@@ -178,7 +200,6 @@ export function WritingAnnotationLegend({ lang = 'en' }) {
             <span className={`writing-annotation-legend__swatch writing-mark ${item.className}`}>
               {isEn ? item.labelEn : item.labelEs}
             </span>
-            <span className="writing-annotation-legend__hint">{isEn ? item.hintEn : item.hintEs}</span>
           </li>
         ))}
       </ul>

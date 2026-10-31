@@ -2,8 +2,10 @@
 
 import { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { landingFont } from '@/components/home/landing/landingFont';
+import { ArrowLeft, BookOpen } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import SiteMascot from '@/components/SiteMascot';
+import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
@@ -33,7 +35,7 @@ import { resolvePartFinishNoticeFromProgress } from '@/utils/partFinishNoticeDis
 import { isAdminRole } from '@/utils/authRoles';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
-import { starsFromPartExerciseScore } from '@/utils/skillPartFirstProgress';
+import { starsFromPartExerciseScore, formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
@@ -293,6 +295,7 @@ export function B2ExamPracticeChrome({
   const effectiveShowRefresh = showRefresh && isAdminRole(userRole);
   const parsedTitle = parsePracticeChromeTitle(title);
   const isExamSimulation = practiceMode === 'exam-simulation';
+  const compactPracticeToolbar = compactSkillHeader && !isExamSimulation;
   const phoneViewport = usePhoneViewport();
   /**
    * Práctica de skill en móvil: solo el ejercicio. Sin cabecera de skill, sin
@@ -334,7 +337,7 @@ export function B2ExamPracticeChrome({
 
   /** Móvil: partes del skill para el paso de selección previo al ejercicio. */
   const phonePartItems = useMemo(() => {
-    if (!phoneSkillChrome || !partsData?.length) return [];
+    if (!compactPracticeToolbar || !partsData?.length) return [];
     return partsData.map((part) => {
       const n = Number(
         part.partNumber || String(part.nombre || part.nombre_parte || '').match(/\d+/)?.[0] || 0,
@@ -349,7 +352,7 @@ export function B2ExamPracticeChrome({
       };
     });
   }, [
-    phoneSkillChrome,
+    compactPracticeToolbar,
     partsData,
     lang,
     getPartTabLabelProp,
@@ -360,14 +363,10 @@ export function B2ExamPracticeChrome({
   ]);
 
   const phoneStepView = useMemo(() => {
-    if (!phoneSkillChrome || phoneStep === 'exercise') return 'exercise';
-    if (phoneStep === 'instructions') return 'instructions';
-    if (!phonePartItems.length) {
-      if (loading) return 'parts-loading';
-      return phoneInstructions ? 'instructions' : 'exercise';
-    }
-    return phonePartItems.length > 1 ? 'parts' : 'instructions';
-  }, [phoneSkillChrome, phoneStep, phonePartItems.length, loading, phoneInstructions]);
+    if (!compactPracticeToolbar || phoneStep === 'exercise') return 'exercise';
+    if (!phonePartItems.length) return 'parts-loading';
+    return 'parts';
+  }, [compactPracticeToolbar, phoneStep, phonePartItems.length]);
 
   const phoneStepEyebrow = [parsedTitle.level, parsedTitle.headline || title]
     .filter(Boolean)
@@ -409,6 +408,7 @@ export function B2ExamPracticeChrome({
     compactSkillHeader && studyNotesPlacement === 'sidebar-top';
 
   const skillExercisePartNumber = skillExercisePartNumberEarly;
+
 
   const skillExerciseStars = useMemo(() => {
     if (!skillExercisePartNumber || !examSlot) return 0;
@@ -587,6 +587,7 @@ export function B2ExamPracticeChrome({
 
   const categoryTimerEl = showCategoryTimer ? (
     <LevelsCategoryTimer
+      compact={compactPracticeToolbar}
       categoryLabel=""
       timeLabel={timerLabel}
       variant={effectiveTimerVariant}
@@ -612,6 +613,7 @@ export function B2ExamPracticeChrome({
     showCombinedToolbar || showSidebarTopRail || showLegacyToolsRow || showSecondaryStatusRow;
   /** Si hay «Parts & navigation» plegable, esta barra va igual (cerrada por defecto). */
   const useFoldableToolbar =
+    !compactPracticeToolbar &&
     !isExamSimulation &&
     !focusMode &&
     hasFoldableToolbarContent &&
@@ -688,7 +690,9 @@ export function B2ExamPracticeChrome({
 
       {!showPractice ? null : (
         <div
-          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}`}
+          className={`levels-b2-practice${compactSkillHeader ? ' levels-b2-practice--skill-compact' : ''}${focusMode ? ' levels-b2-practice--focus-mode' : ''}${compactPracticeToolbar ? ' levels-b2-practice--compact-toolbar' : ''}${compactPracticeToolbar && phoneStepView !== 'exercise' ? ' levels-b2-practice--choosing-part' : ''}`}
+
+
           data-skill-theme={
             compactSkillHeader && skillPracticeTheme ? skillPracticeTheme : undefined
           }
@@ -697,16 +701,23 @@ export function B2ExamPracticeChrome({
           <header className="levels-b2-practice__header">
             {compactSkillHeader ? (
               <div className="levels-b2-practice__title-block">
-                <div className="levels-b2-practice__title-meta">
-                  {modeBadge ? (
-                    <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
-                      {modeBadge}
-                    </p>
-                  ) : null}
-                  {parsedTitle.level ? (
-                    <span className="levels-b2-practice__title-level">{parsedTitle.level}</span>
-                  ) : null}
-                </div>
+                {skillPracticeTheme ? (
+                  <span className="levels-b2-practice__category-icon" aria-hidden="true">
+                    {compactPracticeToolbar && skillPracticeTheme === 'reading' ? <BookOpen size={18} strokeWidth={1.5} /> : <ExamSkillIcon theme={skillPracticeTheme} size="md" />}
+                  </span>
+                ) : null}
+                {parsedTitle.level || (!skillPracticeTheme && modeBadge) ? (
+                  <div className="levels-b2-practice__title-meta">
+                    {!skillPracticeTheme && modeBadge ? (
+                      <p className={`levels-exam-mode-badge levels-exam-mode-badge--${practiceMode}`}>
+                        {modeBadge}
+                      </p>
+                    ) : null}
+                    {parsedTitle.level ? (
+                      <span className="levels-b2-practice__title-level">{parsedTitle.level}</span>
+                    ) : null}
+                  </div>
+                ) : null}
                 <h1 className="levels-b2-practice__title">
                   <span className="levels-b2-practice__title-headline">
                     {parsedTitle.headline || title}
@@ -723,6 +734,19 @@ export function B2ExamPracticeChrome({
                 <h1 className="levels-b2-practice__title">{title}</h1>
               </>
             )}
+            {compactPracticeToolbar && phoneStepView === 'exercise' && partsData?.length > 1 ? (
+              <div className="practice-paper-actions">
+                <span className="practice-paper-level">{String(levelSlug || parsedTitle.level || '').toUpperCase()}</span>
+                <button
+                  type="button"
+                  className="practice-change-part"
+                  onClick={() => setPhoneStep('parts')}
+                >
+                  <ArrowLeft size={15} strokeWidth={1.5} aria-hidden="true" />
+                  {lang === 'es' ? 'Cambiar parte' : 'Change part'}
+                </button>
+              </div>
+            ) : null}
             {!hideMascot ? (
               <div className="levels-b2-practice__mascot" aria-hidden>
                 <SiteMascot variant={10} width={128} alt="" />
@@ -765,13 +789,13 @@ export function B2ExamPracticeChrome({
 
           {phoneStepView === 'parts' ? (
             <ExamPracticePhonePartPicker
-              eyebrow={phoneStepEyebrow}
+              eyebrow={phoneViewport ? parsedTitle.headline || title : null}
               items={phonePartItems}
               selectedPartId={selectedPartId}
               lang={lang}
               onSelect={(item) => {
                 if (item.id !== selectedPartId) onSelectPart?.(item.part);
-                setPhoneStep(phoneInstructions ? 'instructions' : 'exercise');
+                setPhoneStep('exercise');
               }}
             />
           ) : null}
@@ -795,7 +819,7 @@ export function B2ExamPracticeChrome({
             </ExamPracticePhoneInstructions>
           ) : null}
 
-          {phoneSkillChrome ? null : useFoldableSkillNav ? (
+          {compactPracticeToolbar ? null : phoneSkillChrome ? null : useFoldableSkillNav ? (
             <div className="exam-practice-skill-nav-disclosure">
               <button
                 type="button"
@@ -828,9 +852,26 @@ export function B2ExamPracticeChrome({
             </>
           )}
 
+          {phoneSkillChrome && phoneStepView === 'exercise' ? (
+            <button type="button" className="practice-mobile-change-part" onClick={() => setPhoneStep('parts')}>
+              <ArrowLeft size={15} aria-hidden="true" />{lang === 'es' ? 'Cambiar parte' : 'Change part'}
+            </button>
+          ) : null}
+
           <ExamPracticeToolsProvider>
             <ExamPracticeSidebarSlotsProvider
               exerciseStars={sidebarExerciseStars}
+              compactToolbar={compactPracticeToolbar}
+              testLabel={examSlot ? formatSkillExerciseLabel(examSlot, lang) : null}
+              menuHeaderTools={headerTools}
+              menuTimerTools={compactPracticeToolbar ? (
+                <div className="practice-timer-menu-actions">
+                  {timerControls?.stop ? <button type="button" onClick={timerControls.stop}>{lang === 'es' ? 'Detener cronómetro' : 'Stop timer'}</button> : null}
+                  {showTimerHideToggle ? <button type="button" onClick={handleToggleTimerHidden}>{lang === 'es' ? (resolvedTimerHidden ? 'Mostrar cronómetro' : 'Ocultar cronómetro') : (resolvedTimerHidden ? 'Show timer' : 'Hide timer')}</button> : null}
+                </div>
+              ) : null}
+              menuExerciseStars={exerciseStarsBadge}
+              lang={lang}
               overlayContainerRef={workPanelRef}
               sideRailMountRef={sideRailMountRef}
               portSideRailToToolbar={showSidebarTopRail}
@@ -840,6 +881,30 @@ export function B2ExamPracticeChrome({
             >
           {(() => {
             if (phoneSkillChrome) return null;
+
+            if (compactPracticeToolbar) {
+              return (
+                <div className="practice-compact-toolbar" ref={statusAreaRef} aria-label={lang === 'es' ? 'Herramientas de práctica' : 'Practice toolbar'}>
+                  {categoryTimerEl}
+                  {showSidebarTopRail ? (
+                    <ExamPracticeToolbarSubRail
+                      showToolbarFinishNotice={false}
+                      partFinishNotice={null}
+                      lang={lang}
+                    />
+                  ) : (
+                    <div className="practice-compact-toolbar__fallback">{headerTools}</div>
+                  )}
+                  {showHeaderFinishNotice ? <PracticeHeaderFinishNotice notice={resolvedPartFinishNotice} lang={lang} /> : null}
+                  {showStudyNotesInHeader ? (
+                    <ExamStudyNotesSidebar overlayContainerRef={workPanelRef}
+                      context={studyNotesContext} contextLabel={studyNotesContextLabel || title}
+                      lang={lang === 'es' ? 'es' : 'en'} />
+                  ) : null}
+                  {examModeSaveControls}
+                </div>
+              );
+            }
 
             const practiceStatusPanel = (
               <div

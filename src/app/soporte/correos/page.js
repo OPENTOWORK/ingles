@@ -64,6 +64,9 @@ export default function CorreosAutomaticosPage() {
       {access.audience ? (
         <div className={access.templates ? 'mt-10' : undefined}>
           <MarketingAudiencePanel />
+          <div className="mt-4">
+            <GuideRequestsPanel />
+          </div>
         </div>
       ) : null}
       {access.audience ? (

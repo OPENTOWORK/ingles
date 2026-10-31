@@ -14,12 +14,16 @@ export function useActivityHeartbeat(session, enabled = true) {
     if (isDevLightweightMode() || !enabled || !session?.access_token) return undefined;
 
     deviceTypeRef.current = detectClientDeviceType();
+    // No arrastres tiempo de una sesión/render anterior al activar el tracker.
+    lastPingRef.current = Date.now();
 
     let intervalId = null;
     let cancelled = false;
 
-    const sendHeartbeat = async () => {
-      if (cancelled || document.visibilityState === 'hidden') return;
+    const sendHeartbeat = async ({ allowHidden = false, allowCancelled = false } = {}) => {
+      if ((!allowCancelled && cancelled) || (!allowHidden && document.visibilityState === 'hidden')) {
+        return;
+      }
 
       const now = Date.now();
       const deltaSeconds = Math.min(
@@ -63,17 +67,25 @@ export function useActivityHeartbeat(session, enabled = true) {
 
     const onVisibility = () => {
       if (document.visibilityState === 'hidden') {
-        void sendHeartbeat();
+        // Guarda el tramo visible justo antes de que la pestaña pase a segundo plano.
+        void sendHeartbeat({ allowHidden: true });
+        return;
       }
+
+      // El tiempo pasado con la pestaña oculta no es actividad de Dralo.
+      lastPingRef.current = Date.now();
     };
     document.addEventListener('visibilitychange', onVisibility);
 
     return () => {
-      cancelled = true;
       window.clearTimeout(initialTimer);
       if (intervalId) clearInterval(intervalId);
       document.removeEventListener('visibilitychange', onVisibility);
-      void sendHeartbeat();
+
+      // El cleanup puede ejecutarse al navegar/cerrar la página. Envía primero el último
+      // tramo visible y marca después el tracker como cancelado.
+      void sendHeartbeat({ allowHidden: true, allowCancelled: true });
+      cancelled = true;
     };
   }, [enabled, session?.access_token]);
 }

@@ -53,7 +53,7 @@ function ExamPracticeCard({ exam, isStudent, guestPreview = false, variant = 'sk
       }
       kind={kind}
       label={label}
-      hint={isExamMode ? 'Full timed simulation' : 'Practise'}
+      hint={isExamMode ? 'Full timed simulation' : null}
       badge={guestLocked ? GUEST_PREVIEW_REGISTER_LABEL : blockedForStudent ? 'Coming soon' : null}
       disabled={blockedForStudent && !guestLocked}
       featured={isExamMode}

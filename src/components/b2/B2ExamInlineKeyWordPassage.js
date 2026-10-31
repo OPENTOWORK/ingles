@@ -1,5 +1,6 @@
 'use client';
 
+
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
@@ -78,7 +79,7 @@ export default function B2ExamInlineKeyWordPassage({
         const isAnswerLocked =
           !hideFeedback &&
           (hasV2Grade || typeof checkResult === 'boolean');
-        const inputStateClass = getInputStateClass(checkResult, grade, currentValue, isAnswerLocked);
+        const inputStateClass = getInputStateClass(hideFeedback ? undefined : checkResult, hideFeedback ? null : grade, currentValue, isAnswerLocked);
 
         return (
           <div

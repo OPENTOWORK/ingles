@@ -10,7 +10,7 @@ export default function ReadingPracticeToolsPanel({ lang = 'en' }) {
   const session = useReadingPracticeSession();
 
   const labels = {
-    title: en ? 'Tools' : 'Herramientas',
+    title: en ? 'Text settings' : 'Ajustes de texto',
     textSettings: en ? 'Text settings' : 'Ajustes de texto',
     fontSize: en ? 'Font size' : 'Tamaño de fuente',
     lineHeight: en ? 'Line height' : 'Interlineado',

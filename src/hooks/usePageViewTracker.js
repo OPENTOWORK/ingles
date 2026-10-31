@@ -49,13 +49,9 @@ export function usePageViewTracker(session, enabled = true) {
     if (!enabled) return undefined;
 
     const now = Date.now();
-    const previousPath = pathRef.current;
 
-    if (previousPath && previousPath !== pathname) {
-      const durationSeconds = Math.round((now - enteredAtRef.current) / 1000);
-      void flushView(previousPath, durationSeconds, visitedAtRef.current);
-    }
-
+    // El cleanup del efecto anterior ya cierra la visita de la ruta previa. No la vuelvas
+    // a cerrar aquí: hacerlo desde ambos sitios genera registros duplicados y solapados.
     pathRef.current = pathname;
     enteredAtRef.current = now;
     visitedAtRef.current = new Date(now).toISOString();

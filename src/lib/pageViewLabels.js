@@ -5,6 +5,7 @@ const PATH_LABELS = [
   { prefix: '/exam-theory', label: 'Theory' },
   { prefix: '/exam-mode', label: 'Exam mode' },
   { prefix: '/quiz-game', label: 'Quiz game' },
+  { prefix: '/guia-b2-first', label: 'Guía B2' },
   { prefix: '/preparar-b2-cambridge/a', label: 'Guía B2 A' },
   { prefix: '/preparar-b2-cambridge/b', label: 'Guía B2 B' },
   { prefix: '/guia-b2-first', label: 'Guía B2' },

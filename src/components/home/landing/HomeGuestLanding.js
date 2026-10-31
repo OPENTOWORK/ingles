@@ -631,7 +631,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </div>
         <SlotsBox slots={slots} />
       </section>
-
       <ReviewCarousel />
 
       <section className="hl-section" aria-labelledby="hl-problem-title">

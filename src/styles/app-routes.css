@@ -3228,6 +3228,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 /* Skill practice colour themes (exam mode unchanged). */
 .levels-b2-practice--skill-compact[data-skill-theme='reading'] {
+  --skill-header-surface: #f0f9ff;
   --skill-accent: #38bdf8;
   --skill-accent-dark: #0ea5e9;
   --skill-surface: #f0f9ff;
@@ -3237,6 +3238,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='writing'] {
+  --skill-header-surface: #f7fdf9;
   --skill-accent: #059669;
   --skill-accent-dark: #047857;
   --skill-surface: #ecfdf5;
@@ -3246,6 +3248,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='listening'] {
+  --skill-header-surface: #fffdf8;
   --skill-accent: #d97706;
   --skill-accent-dark: #b45309;
   --skill-surface: #fffbeb;
@@ -3255,6 +3258,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme='speaking'] {
+  --skill-header-surface: #fffbfd;
   --skill-accent: #db2777;
   --skill-accent-dark: #be185d;
   --skill-surface: #fdf2f8;
@@ -3263,370 +3267,104 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   --skill-ink: #831843;
 }
 
+body:not(.reading-night-mode):has(.levels-b2-practice--skill-compact[data-skill-theme]) {
+  background: #fafbfe;
+}
+
+/* Shared with the skill hub: quiet surfaces, navy type and a small colour accent. */
 .levels-b2-practice--skill-compact[data-skill-theme] {
-  padding: 0.35rem;
-  border-radius: 20px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--skill-surface-2) 55%, #ffffff) 0%,
-    color-mix(in srgb, var(--skill-surface) 75%, #ffffff) 100%
-  );
-  box-shadow: 0 10px 36px color-mix(in srgb, var(--skill-accent) 10%, transparent);
+  --skill-border: #e2e8f0;
+  --skill-ink: #1d1857;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  font-family: var(--font-landing), 'Segoe UI', system-ui, sans-serif;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-block {
-  border-color: var(--skill-border);
-  background: linear-gradient(
-    165deg,
-    color-mix(in srgb, var(--skill-surface) 82%, #ffffff) 0%,
-    var(--skill-surface) 55%,
-    var(--skill-surface-2) 100%
-  );
-  box-shadow:
-    0 1px 2px color-mix(in srgb, var(--skill-accent) 8%, transparent),
-    0 12px 30px color-mix(in srgb, var(--skill-accent) 12%, transparent);
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.35rem 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--skill-accent) 18%, #e2e8f0);
+  border-top: 3px solid var(--skill-accent);
+  background: linear-gradient(155deg, var(--skill-header-surface, #f8fafc) 0%, #ffffff 100%);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 18px rgba(15, 23, 42, 0.05);
 }
 
+.levels-b2-practice__category-icon {
+  display: grid;
+  place-items: center;
+  grid-column: 1;
+  grid-row: 1;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--skill-accent) 22%, #e2e8f0);
+  background: color-mix(in srgb, var(--skill-accent) 8%, white);
+  color: var(--skill-accent);
+}
+
+.levels-b2-practice__title-block:has(.levels-b2-practice__title-meta) .levels-b2-practice__category-icon {
+  grid-row: 1 / 3;
+}
+
+.levels-b2-practice__category-icon .exam-skill-icon {
+  background: transparent;
+  border: 0;
+  color: inherit;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-meta {
+  grid-column: 2;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-meta .levels-exam-mode-badge,
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-level {
-  color: var(--skill-accent-dark);
-  background: var(--skill-surface-2);
-  border-color: var(--skill-border);
+  margin: 0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid var(--skill-border);
+  color: #475569;
+  background: #f8fafc;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  backdrop-filter: none;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title {
+  grid-column: 2;
+  align-items: flex-start;
+  margin: 0;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-headline {
+  font-family: inherit;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
   color: var(--skill-ink);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading'] .levels-b2-practice__title-block {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
-  border-radius: 24px;
-  border: none;
-  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 42%, #38bdf8 100%);
-  box-shadow:
-    0 4px 6px rgba(15, 23, 42, 0.06),
-    0 20px 50px rgba(56, 189, 248, 0.42);
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading'] .levels-b2-practice__title-block::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.14;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(180deg, black 0%, transparent 85%);
-  pointer-events: none;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading'] .levels-b2-practice__title-block > * {
-  position: relative;
-  z-index: 1;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading'] .levels-b2-practice__title-meta {
-  justify-content: flex-start;
-  width: 100%;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading']
-  .levels-b2-practice__title-meta
-  .levels-exam-mode-badge--part-practice {
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(8px);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading'] .levels-b2-practice__title-level {
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading'] .levels-b2-practice__title {
-  align-items: flex-start;
-  width: 100%;
-  color: #fff;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='reading'] .levels-b2-practice__title-headline {
-  font-size: clamp(1.65rem, 4vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: #fff;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
+  text-shadow: none;
   text-align: left;
-  font-family: 'Segoe UI', sans-serif;
 }
 
 .levels-b2-practice--skill-compact .levels-exam-split-card__title-row--title-mode .levels-exam-split-card__part-title {
-  font-size: clamp(1.65rem, 4vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing'] .levels-b2-practice__title-block {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
-  border-radius: 24px;
-  border: none;
-  background: linear-gradient(135deg, #047857 0%, #059669 42%, #10b981 100%);
-  box-shadow:
-    0 4px 6px rgba(15, 23, 42, 0.06),
-    0 20px 50px rgba(5, 150, 105, 0.42);
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing'] .levels-b2-practice__title-block::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.14;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(180deg, black 0%, transparent 85%);
-  pointer-events: none;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing'] .levels-b2-practice__title-block > * {
-  position: relative;
-  z-index: 1;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing'] .levels-b2-practice__title-meta {
-  justify-content: flex-start;
-  width: 100%;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing']
-  .levels-b2-practice__title-meta
-  .levels-exam-mode-badge--part-practice {
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(8px);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing'] .levels-b2-practice__title-level {
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing'] .levels-b2-practice__title {
-  align-items: flex-start;
-  width: 100%;
-  color: #fff;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='writing'] .levels-b2-practice__title-headline {
-  font-size: clamp(1.65rem, 4vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: #fff;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
-  text-align: left;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening'] .levels-b2-practice__title-block {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
-  border-radius: 24px;
-  border: none;
-  background: linear-gradient(135deg, #b45309 0%, #d97706 42%, #f59e0b 100%);
-  box-shadow:
-    0 4px 6px rgba(15, 23, 42, 0.06),
-    0 20px 50px rgba(217, 119, 6, 0.42);
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening'] .levels-b2-practice__title-block::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.14;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(180deg, black 0%, transparent 85%);
-  pointer-events: none;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening'] .levels-b2-practice__title-block > * {
-  position: relative;
-  z-index: 1;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening'] .levels-b2-practice__title-meta {
-  justify-content: flex-start;
-  width: 100%;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening']
-  .levels-b2-practice__title-meta
-  .levels-exam-mode-badge--part-practice {
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(8px);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening'] .levels-b2-practice__title-level {
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening'] .levels-b2-practice__title {
-  align-items: flex-start;
-  width: 100%;
-  color: #fff;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='listening'] .levels-b2-practice__title-headline {
-  font-size: clamp(1.65rem, 4vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: #fff;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
-  text-align: left;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .levels-b2-practice__title-block {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: clamp(28px, 4vw, 40px) clamp(24px, 4vw, 36px);
-  border-radius: 24px;
-  border: none;
-  background: linear-gradient(135deg, #be185d 0%, #db2777 42%, #ec4899 100%);
-  box-shadow:
-    0 4px 6px rgba(15, 23, 42, 0.06),
-    0 20px 50px rgba(219, 39, 119, 0.42);
-  align-items: flex-start;
-  gap: 0.75rem;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .levels-b2-practice__title-block::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.14;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: linear-gradient(180deg, black 0%, transparent 85%);
-  pointer-events: none;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .levels-b2-practice__title-block > * {
-  position: relative;
-  z-index: 1;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .levels-b2-practice__title-meta {
-  justify-content: flex-start;
-  width: 100%;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking']
-  .levels-b2-practice__title-meta
-  .levels-exam-mode-badge--part-practice {
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(8px);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .levels-b2-practice__title-level {
-  color: rgba(255, 255, 255, 0.95);
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .levels-b2-practice__title {
-  align-items: flex-start;
-  width: 100%;
-  color: #fff;
-}
-
-.levels-b2-practice--skill-compact[data-skill-theme='speaking'] .levels-b2-practice__title-headline {
-  font-size: clamp(1.65rem, 4vw, 2.35rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: #fff;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.12);
-  text-align: left;
-  font-family: 'Segoe UI', sans-serif;
+  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+  font-family: inherit;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-kind {
@@ -3638,25 +3376,24 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__work-panel {
-  border-color: var(--skill-border);
-  background: linear-gradient(180deg, var(--skill-surface) 0%, var(--skill-surface-2) 100%);
-  box-shadow: 0 8px 28px color-mix(in srgb, var(--skill-accent) 10%, transparent);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__status {
   padding: 0.55rem 0.75rem;
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--skill-border) 80%, #ffffff);
-  background: color-mix(in srgb, var(--skill-surface) 88%, #ffffff);
-  box-shadow: 0 2px 10px color-mix(in srgb, var(--skill-accent) 6%, transparent);
+  background: #f8fafc;
+  box-shadow: none;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-skill-nav {
   border-color: var(--skill-border);
-  background: linear-gradient(180deg, var(--skill-surface) 0%, var(--skill-surface-2) 100%);
-  box-shadow:
-    0 1px 2px color-mix(in srgb, var(--skill-accent) 6%, transparent),
-    0 6px 18px color-mix(in srgb, var(--skill-accent) 10%, transparent);
+  background: #ffffff;
+  box-shadow: none;
   margin-bottom: 0.35rem;
 }
 
@@ -3682,9 +3419,10 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split-card,
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split-page {
   --levels-split-accent: var(--skill-accent);
-  --levels-split-panel: var(--skill-surface);
+  --levels-split-panel: #f8fafc;
   --levels-split-border: var(--skill-border);
-  background: color-mix(in srgb, var(--skill-surface) 92%, #ffffff);
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
   border-color: color-mix(in srgb, var(--skill-border) 85%, #ffffff);
 }
 
@@ -3701,7 +3439,7 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
 
 .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-timer {
   border-color: var(--skill-border);
-  background: var(--skill-surface-2);
+  background: #f8fafc;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .reading-practice-header-tools__btn {
@@ -3735,6 +3473,37 @@ body.reading-night-mode .levels-exercise-stars--gold .starSvgWrapEmpty .starSvgP
   background: #f8fafc;
   border-color: #cbd5e1;
   color: #0f172a;
+}
+
+/* Keep instructional content and response fields in the site's typeface. */
+.levels-b2-practice--skill-compact[data-skill-theme] :is(
+  .levels-exam-split__enunciado,
+  .levels-b2-writing-panel__textarea,
+  .b2-writing-task__question,
+  .b2-writing-task__points-list li,
+  .b2-writing-part2__context,
+  .b2-writing-part2__task-body p
+) {
+  font-family: inherit;
+  text-align: left;
+}
+
+body:not(.reading-night-mode) .levels-b2-practice--skill-compact[data-skill-theme] .levels-exam-split__enunciado:not(.reading-area--high-contrast *) {
+  background: #f8fafc;
+  border: 0;
+  border-left: 3px solid var(--skill-accent);
+}
+
+body:not(.reading-night-mode) .levels-b2-practice--skill-compact[data-skill-theme] .b2-writing-task {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-skill-nav-disclosure__trigger:focus-visible {
+  outline: 2px solid var(--skill-accent-dark);
+  outline-offset: 3px;
 }
 
 .levels-exam-module-nav--skill[data-skill-theme='reading'] {
@@ -5079,8 +4848,8 @@ button.exam-practice-level-strip__pill {
   .exam-practice-toolbar-disclosure
   .exam-practice-skill-nav-disclosure__trigger {
   border-color: var(--skill-border);
-  background: linear-gradient(180deg, var(--skill-surface) 0%, var(--skill-surface-2) 100%);
-  box-shadow: 0 2px 10px color-mix(in srgb, var(--skill-accent) 6%, transparent);
+  background: #ffffff;
+  box-shadow: none;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme]
@@ -5113,8 +4882,8 @@ button.exam-practice-level-strip__pill {
 
 .levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-skill-nav-disclosure__trigger {
   border-color: var(--skill-border);
-  background: linear-gradient(180deg, var(--skill-surface) 0%, var(--skill-surface-2) 100%);
-  box-shadow: 0 2px 10px color-mix(in srgb, var(--skill-accent) 6%, transparent);
+  background: #ffffff;
+  box-shadow: none;
 }
 
 .levels-b2-practice--skill-compact[data-skill-theme] .exam-practice-skill-nav-disclosure__trigger:hover {
@@ -7813,6 +7582,18 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   text-align: justify;
   text-align-last: left;
   text-justify: inter-word;
+}
+
+.practice-answer-correction {
+  display: inline;
+  color: #047857;
+  font-family: inherit;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+body.reading-night-mode .practice-answer-correction {
+  color: #6ee7b7;
 }
 
 .levels-exam-inline-gap {
@@ -11116,6 +10897,20 @@ body.reading-night-mode .levels-b2-speaking-panel__usage,
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
 }
 
+.b2-writing-essay-instructions__task {
+  margin-top: 1.25rem;
+}
+
+.b2-writing-essay-instructions__task .b2-writing-task__question {
+  margin-bottom: 1rem;
+}
+
+.b2-writing-essay-instructions__emphasis {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.15em;
+}
+
 .b2-writing-task__title {
   margin: 0 0 0.85rem;
   font-size: 1.125rem;
@@ -14245,12 +14040,21 @@ body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] {
 }
 
 body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-block {
-  background: linear-gradient(
-    165deg,
-    #1e293b 0%,
-    color-mix(in srgb, var(--skill-accent) 12%, #1e293b) 100%
-  );
-  border-color: color-mix(in srgb, var(--skill-accent) 35%, #475569);
+  background: #1e293b;
+  border-color: #475569;
+  border-top-color: var(--skill-accent);
+}
+
+body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-meta .levels-exam-mode-badge,
+body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-level {
+  background: #0f172a;
+  border-color: #475569;
+  color: #cbd5e1;
+}
+
+body.reading-night-mode .levels-b2-practice__category-icon {
+  background: #0f172a;
+  border-color: #475569;
 }
 
 body.reading-night-mode .levels-b2-practice--skill-compact[data-skill-theme] .levels-b2-practice__title-headline {
@@ -18778,8 +18582,6 @@ body.dark .profile-collapse--open .profile-collapse__head {
     grid-template-columns: 1fr;
   }
 
-  .blog-mag__featured-visual,
-  .blog-mag__featured-visual img,
   .blog-mag__featured-visual--placeholder {
     min-height: 0;
   }
@@ -21280,6 +21082,370 @@ body.dark .profile-collapse--open .profile-collapse__head {
   margin: 0 0 0.75rem;
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   line-height: 1.15;
+}
+
+/* Compact paper header and always-visible practice toolbar. */
+.levels-b2-practice--compact-toolbar .levels-b2-practice__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title-block {
+  flex: 1 1 20rem;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: center;
+}
+.levels-b2-practice--compact-toolbar .levels-b2-practice__category-icon {
+  grid-column: 1;
+  grid-row: 1 / 3;
+}
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title-meta { display: none; }
+.levels-b2-practice--compact-toolbar .levels-b2-practice__title {
+  grid-column: 2;
+  margin: 0;
+}
+.practice-paper-current-part {
+  grid-column: 2;
+  margin: .35rem 0 0;
+  color: #64748b;
+  font-size: .82rem;
+  line-height: 1.5;
+}
+.practice-paper-actions { display: flex; align-items: center; gap: .75rem; }
+.practice-paper-level { font-size: .8rem; color: #64748b; font-weight: 600; }
+.practice-change-part,
+.practice-more-tools > summary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  min-height: 38px;
+  padding: .5rem .8rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: .8rem;
+  cursor: pointer;
+  list-style: none;
+}
+.practice-change-part:hover,
+.practice-more-tools > summary:hover { background: #f1f5f9; }
+.practice-more-tools > summary::-webkit-details-marker { display: none; }
+.practice-change-part:focus-visible,
+.practice-more-tools > summary:focus-visible,
+.practice-part-menu button:focus-visible { outline: 2px solid #6366f1; outline-offset: 3px; }
+.practice-part-menu { padding: 1.25rem; margin-bottom: .8rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; }
+.practice-part-menu h2 { margin: 0 0 1rem; color: #1d1857; font-size: 1rem; }
+.practice-part-menu__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .65rem; }
+.practice-part-menu__grid button {
+  display: flex; flex-direction: column; gap: .4rem; text-align: left;
+  padding: 1rem; border: 1px solid #e2e8f0; border-radius: 10px;
+  background: #fff; color: #334155; font: inherit; cursor: pointer;
+}
+.practice-part-menu__grid button[aria-pressed=true] { border-color: #94a3b8; background: #f0fdf4; }
+.practice-part-menu__grid button span { font-size: .8rem; color: #64748b; }
+.practice-part-menu .exam-practice-skill-nav { margin-top: 1rem; }
+.levels-b2-practice--compact-toolbar .practice-compact-toolbar {
+  display: flex; align-items: center; flex-wrap: wrap; gap: .65rem 1rem;
+  position: relative; padding: .65rem .8rem; margin: 0 0 .9rem;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 11px;
+  box-shadow: none;
+}
+.practice-compact-toolbar .levels-b2-timer.levels-b2-timer {
+  display: flex; align-items: center; gap: .65rem; flex: 0 1 auto;
+  width: auto; min-width: 0; max-width: none; padding: 0; margin: 0;
+  background: transparent; border: 0; border-radius: 0; box-shadow: none;
+}
+.practice-compact-toolbar .levels-b2-timer__main { flex: none; gap: .5rem; }
+.practice-compact-toolbar .levels-b2-timer__value { font-size: 1rem; min-width: 3rem; line-height: 1.5; }
+.practice-compact-toolbar .levels-b2-timer__session-tag,
+.practice-compact-toolbar .levels-b2-timer__label { color: #64748b; font-size: .7rem; }
+.practice-compact-toolbar .levels-b2-timer__session-context { display: none; }
+.practice-compact-toolbar .levels-b2-timer__controls { margin: 0; gap: .4rem; }
+.practice-compact-toolbar .levels-b2-timer__icon-btn { width: 30px; height: 30px; min-width: 30px; border-radius: 7px; box-shadow: none; }
+.practice-compact-toolbar .levels-b2-timer__btn--ghost { font-size: .68rem; padding: .25rem; }
+.practice-compact-toolbar .levels-b2-practice__toolbar-sub-rail,
+.practice-compact-toolbar .levels-b2-practice__toolbar-sub-rail-side {
+  display: contents; padding: 0; margin: 0; border: 0; background: transparent; box-shadow: none;
+}
+.practice-compact-actions { display: flex; align-items: center; gap: .5rem; margin-left: auto; flex-wrap: wrap; }
+.practice-compact-actions > .levels-listening-practice-side__top { display: flex; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+.practice-compact-actions .levels-listening-practice-side__top-notes { margin: 0; }
+.practice-compact-actions > .exam-practice-rail-disclosure { width: auto; margin: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.practice-compact-actions > .exam-practice-rail-disclosure > button,
+.practice-compact-actions .exam-notes-popover > button {
+  min-height: 38px; padding: .5rem .8rem; border: 1px solid #e2e8f0;
+  border-radius: 8px; background: #fff; color: #334155; font-size: .8rem;
+  font-weight: 500; box-shadow: none; text-transform: none; letter-spacing: normal;
+}
+.practice-compact-actions .exam-practice-rail-disclosure__chevron { font-size: .8rem; }
+.practice-more-tools { position: relative; }
+.practice-more-tools__menu {
+  position: absolute; right: 0; top: calc(100% + .5rem); z-index: 45;
+  width: min(280px, calc(100vw - 2rem)); padding: .75rem;
+  display: grid; gap: .5rem; border: 1px solid #e2e8f0; border-radius: 11px;
+  background: #fff; color: #334155; box-shadow: 0 8px 28px rgb(15 23 42 / .12);
+}
+.practice-more-tools:not([open]) > .practice-more-tools__menu { display: none; }
+.practice-more-tools__menu .reading-practice-header-tools { display: block; width: 100%; }
+.practice-more-tools__menu .reading-practice-header-tools__btn { width: 100%; min-height: 38px; padding: .5rem .75rem; box-shadow: none; }
+.practice-more-tools__menu .skill-exercise-stars-badge { display: flex; padding: .65rem; margin: 0; box-shadow: none; }
+.practice-more-tools__menu .exam-practice-rail-disclosure { margin: 0; box-shadow: none; }
+.practice-more-tools__menu .levels-listening-strategy__toggle { font-size: .8rem; min-height: 38px; }
+.practice-more-tools__menu .reading-dictionary { width: 100%; }
+.practice-compact-toolbar > .levels-b2-practice__header-finish { flex: 1 0 100%; margin: 0; }
+.practice-compact-toolbar > .levels-b2-practice__header-finish .levels-b2-result { box-shadow: none; padding: .5rem .75rem; }
+body.focus-mode-active .practice-compact-toolbar { position: sticky; top: 0; z-index: 30; }
+@media (max-width: 760px) {
+  .practice-paper-actions { margin-left: auto; }
+  .practice-compact-actions { width: 100%; margin-left: 0; border-top: 1px solid #e2e8f0; padding-top: .6rem; }
+  .practice-part-menu__grid { grid-template-columns: 1fr; }
+}
+body.reading-night-mode .practice-paper-current-part,
+body.reading-night-mode .practice-paper-level { color: #a6b4c9; }
+body.reading-night-mode .practice-compact-toolbar,
+body.reading-night-mode .practice-more-tools__menu,
+body.reading-night-mode .practice-part-menu,
+body.reading-night-mode .practice-part-menu__grid button,
+body.reading-night-mode .practice-change-part,
+body.reading-night-mode .practice-more-tools > summary,
+body.reading-night-mode .practice-compact-actions > .exam-practice-rail-disclosure > button,
+body.reading-night-mode .practice-compact-actions .exam-notes-popover > button {
+  background: #192132; color: #e2e8f0; border-color: #394458;
+}
+body.reading-night-mode .practice-part-menu h2 { color: #eeeaff; }
+body.reading-night-mode .practice-part-menu__grid button[aria-pressed=true] { background: #18332d; border-color: #64748b; }
+
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  padding: 1.2rem 1.4rem;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid var(--skill-accent);
+  border-radius: 13px;
+  background: linear-gradient(155deg, var(--skill-header-surface, #f0fdf4), #fff);
+  text-align: left;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  width: auto; padding: 0; border: 0; border-radius: 0; background: none; box-shadow: none;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  background: linear-gradient(155deg, #18332d, #192132); border-color: #394458;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  background: none; border: 0; box-shadow: none;
+}
+
+/* Match the approved practice preview's type scale, spacing and line icons. */
+.levels-exam-practice-root .levels-b2-practice--compact-toolbar[data-skill-theme] {
+  max-width: 1040px;
+  width: 100%;
+  margin-inline: auto;
+  font-family: var(--font-landing), 'Segoe UI', sans-serif;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header {
+  padding: 20px;
+  border-top-width: 2px;
+  gap: 14px;
+  box-shadow: none;
+  margin-bottom: 12px;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-block {
+  gap: 7px 14px;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title,
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-headline {
+  font-family: var(--font-landing), 'Segoe UI', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -.5px;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__category-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  color: var(--skill-accent);
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .practice-paper-current-part {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #64748b;
+}
+.levels-b2-practice--compact-toolbar .practice-paper-level { font-size: 12px; font-weight: 600; }
+.levels-b2-practice--compact-toolbar .practice-change-part,
+.levels-b2-practice--compact-toolbar .practice-more-tools > summary,
+.levels-b2-practice--compact-toolbar .practice-compact-actions .exam-notes-popover__trigger,
+.levels-b2-practice--compact-toolbar .practice-compact-actions > .exam-practice-rail-disclosure > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: #475569;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: normal;
+  box-shadow: none;
+}
+.levels-b2-practice--compact-toolbar .exam-notes-popover__trigger-label {
+  font-family: inherit; font-size: 12px; font-weight: 400;
+  color: #475569; text-transform: none; letter-spacing: normal;
+}
+.levels-b2-practice--compact-toolbar .practice-compact-toolbar {
+  padding: 11px 12px;
+  gap: 8px;
+  min-height: 66px;
+  margin-bottom: 24px;
+  border-radius: 11px;
+}
+.practice-simple-timer {
+  display: inline-flex; align-items: center; gap: 9px;
+  color: #475569; font-family: inherit; font-size: 12px;
+}
+.practice-simple-timer__time {
+  min-width: 43px; font-size: 15px; line-height: 1.5;
+  font-weight: 600; color: #1d1857; font-variant-numeric: tabular-nums;
+}
+.practice-simple-timer__play {
+  display: grid; place-items: center; width: 30px; height: 30px;
+  padding: 0; border: 0; border-radius: 7px;
+  background: #1d1857; color: #fff; cursor: pointer;
+}
+.practice-simple-timer__play:focus-visible { outline: 2px solid #0284c7; outline-offset: 3px; }
+.practice-timer-menu-actions { display: grid; gap: 5px; }
+.practice-timer-menu-actions > button {
+  padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 7px;
+  background: #fff; color: #475569; font: inherit; font-size: 12px; text-align: left; cursor: pointer;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split-card__title-row--title-mode .levels-exam-split-card__part-title {
+  font-family: var(--font-landing), 'Segoe UI', sans-serif;
+  font-size: 18px; line-height: 1.35; letter-spacing: -.3px; font-weight: 700;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split-card {
+  padding: 22px; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: none;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split__enunciado {
+  background: #fafbfe; border-left: 3px solid var(--skill-accent, #0284c7);
+  border-radius: 8px; padding: 16px; font-size: 13px; line-height: 1.75;
+}
+.levels-b2-practice--compact-toolbar .levels-exam-split__enunciado p { font-size: 13px; line-height: 1.75; }
+.levels-b2-practice--compact-toolbar .levels-exam-split__section-title {
+  font-size: 11px; font-weight: 600; letter-spacing: .04em;
+}
+body.reading-night-mode .practice-simple-timer,
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .practice-paper-current-part { color: #a6b4c9; }
+body.reading-night-mode .practice-simple-timer__time { color: #eeeaff; }
+body.reading-night-mode .practice-simple-timer__play { background: #c4b5fd; color: #192132; }
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__category-icon,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-change-part,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-more-tools > summary,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-compact-actions .exam-notes-popover__trigger,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-compact-actions > .exam-practice-rail-disclosure > button,
+body.reading-night-mode .practice-timer-menu-actions > button {
+  background: #192132; color: #e2e8f0; border-color: #394458;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar .exam-notes-popover__trigger-label { color: #e2e8f0; }
+body.reading-night-mode .levels-b2-practice--compact-toolbar .levels-exam-split__enunciado { background: #172132; }
+@media (max-width: 600px) {
+  .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__header { padding: 16px; }
+  .levels-b2-practice--compact-toolbar[data-skill-theme] .levels-b2-practice__title-headline { font-size: 18px; }
+  .levels-b2-practice--compact-toolbar .levels-exam-split-card { padding: 16px; }
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme="reading"] {
+  --skill-accent: #0284c7;
+}
+.levels-b2-practice--compact-toolbar[data-skill-theme] .practice-compact-actions .exam-notes-popover__trigger-label {
+  color: #475569;
+}
+body.reading-night-mode .levels-b2-practice--compact-toolbar[data-skill-theme] .practice-compact-actions .exam-notes-popover__trigger-label {
+  color: #e2e8f0;
+}
+
+/* Paper entry: the same part cards on mobile and desktop. */
+.levels-b2-practice--compact-toolbar[data-skill-theme="reading"] { --skill-accent: #38bdf8; }
+.levels-b2-practice__work-panel--phone-step > .exam-practice-tools-target { display: none !important; }
+.levels-b2-practice--choosing-part .phone-practice-step {
+  display: flex; flex-direction: column; gap: 20px; padding: 12px 0 24px;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__head { display: flex; flex-direction: column; gap: 6px; }
+.levels-b2-practice--choosing-part .phone-practice-step__title {
+  margin: 0; color: #1d1857; font: 700 24px/1.3 var(--font-landing), sans-serif; letter-spacing: -.4px;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__eyebrow {
+  margin: 0; color: var(--skill-accent); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__list {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+  margin: 0; padding: 0; list-style: none; overflow: visible;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__list > li { min-width: 0; }
+.levels-b2-practice--choosing-part .phone-practice-step__item {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 112px; height: 100%;
+  padding: 18px; background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+  box-shadow: 0 1px 2px rgb(15 23 42 / .04); text-align: left; font: inherit; cursor: pointer;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__item:hover,
+.levels-b2-practice--choosing-part .phone-practice-step__item--current {
+  background: var(--skill-surface, #f0f9ff); border-color: var(--skill-accent, #38bdf8);
+}
+.levels-b2-practice--choosing-part .phone-practice-step__item:focus-visible { outline: 2px solid var(--skill-accent); outline-offset: 3px; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-body { display: flex; flex: 1; flex-direction: column; align-items: flex-start; gap: 9px; min-width: 0; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-num {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: auto; height: auto; min-height: 30px; padding: 5px 12px; border-radius: 999px;
+  background: var(--skill-surface-2, #e0f2fe); color: #1d1857; font-size: 12px; font-weight: 600; line-height: 1.5;
+}
+.levels-b2-practice--choosing-part .phone-practice-step__item-sub { font-size: 13px; line-height: 1.5; color: #64748b; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-score { display: none; }
+.levels-b2-practice--choosing-part .phone-practice-step__item-chevron { flex: none; color: var(--skill-accent); font-size: 18px; }
+.levels-b2-practice--compact-toolbar .practice-exercise-test-label {
+  margin: 7px 0 0; color: #64748b; font-size: 12px; line-height: 1.5; font-weight: 400;
+}
+.practice-mobile-change-part {
+  display: inline-flex; gap: 6px; align-items: center; align-self: flex-start;
+  margin: 0 0 10px; padding: 6px 0; border: 0; background: transparent; color: #475569; font: inherit; font-size: 12px;
+}
+@media (max-width: 760px) {
+  .levels-b2-practice--choosing-part .phone-practice-step__list { grid-template-columns: 1fr; gap: 8px; }
+  .levels-b2-practice--choosing-part .phone-practice-step__item { min-height: 88px; padding: 12px 14px; }
+  .levels-b2-practice--choosing-part .phone-practice-step__item-body { gap: 5px; }
+  .levels-b2-practice--choosing-part .phone-practice-step__list { overflow-y: auto; }
+  .levels-b2-practice--choosing-part .phone-practice-step { min-height: 0; padding: 5px 0 0; }
+}
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__title { color: #eeeaff; }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item { background: #192132; border-color: #394458; }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item--current { border-color: var(--skill-accent); }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item-num { background: #243b53; color: #e2e8f0; }
+body.reading-night-mode .levels-b2-practice--choosing-part .phone-practice-step__item-sub,
+body.reading-night-mode .levels-b2-practice--compact-toolbar .practice-exercise-test-label { color: #a6b4c9; }
+
+/* One soft purple page canvas throughout the light version of the site. */
+body:not(.reading-night-mode) {
+  background:
+    radial-gradient(48% 70% at 86% 18%, rgba(196, 181, 253, .42) 0%, rgba(196, 181, 253, 0) 70%),
+    radial-gradient(40% 50% at 0% 0%, rgba(237, 233, 254, .95) 0%, rgba(237, 233, 254, 0) 72%),
+    #fbfaff !important;
+  background-attachment: fixed !important;
+}
+body:not(.reading-night-mode) :is(.full-page-layout, .page-content),
+body:not(.reading-night-mode) .page-content > :is(main, .shell, .home-page, .home-landing),
+body:not(.reading-night-mode) :is(.levels-exam-practice-root, .exam-practice-level-hub, .niveles-level-page, .niveles-page--theory-hub, .exam-theory-topics-page, .exam-strategies-chapter-page, .contacto-page, .precios-page, .login-page) {
+  background: transparent !important;
 }
 
 .blog-cat-page__intro {

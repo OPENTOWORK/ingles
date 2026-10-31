@@ -52,6 +52,25 @@ export async function POST(req) {
         { status: 502 },
       );
     }
+  } catch (err) {
+    console.error('[api/guia-b2/enviar]', err);
+    return NextResponse.json(
+      { ok: false, error: 'No hemos podido enviar la guía. Inténtalo de nuevo en unos minutos.' },
+      { status: 502 },
+    );
+  }
+
+  try {
+    const stored = await saveB2GuideRequest({
+      email,
+      acceptedMarketing: body?.acceptedMarketing === true,
+    });
+    if (!stored?.ok) {
+      console.error('[api/guia-b2/enviar] solicitud no guardada', stored?.error || 'store_failed');
+    }
+  } catch (err) {
+    console.error('[api/guia-b2/enviar] solicitud no guardada', err);
+  }
 
   return NextResponse.json({ ok: true });
 }

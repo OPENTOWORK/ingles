@@ -56,6 +56,7 @@ function changeFrequencyFor(path) {
     path === '/exam-practice' ||
     path === '/exam-strategies' ||
     path === '/preparar-b2-cambridge' ||
+    path === '/guia-b2-first' ||
     path === '/blog' ||
     path === '/precios'
   ) {
@@ -66,7 +67,7 @@ function changeFrequencyFor(path) {
 
 function priorityFor(path) {
   if (path === '/') return 1;
-  if (path === '/exam-practice' || path === '/exam-strategies' || path === '/preparar-b2-cambridge') {
+  if (path === '/exam-practice' || path === '/exam-strategies' || path === '/preparar-b2-cambridge' || path === '/guia-b2-first') {
     return 0.9;
   }
   if (

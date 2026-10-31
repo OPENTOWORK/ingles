@@ -55,9 +55,11 @@ export function buildB2GuideDownloadEmail(email, siteUrl = SITE_URL) {
   const url = b2GuidePdfUrl(origin);
   const tryUrl = b2GuideTryUrl(origin);
   const homeUrl = `${origin}/`;
+  const contactUrl = `${origin}/contacto/`;
   const href = escapeHtml(url);
   const tryHref = escapeHtml(tryUrl);
   const homeHref = escapeHtml(homeUrl);
+  const contactHref = escapeHtml(contactUrl);
   const subject = 'Tu guía gratuita del B2 First';
   const text = [
     'Hola:',
@@ -112,7 +114,7 @@ export function buildB2GuideDownloadEmail(email, siteUrl = SITE_URL) {
           </tr>
         </table>
         <p style="margin:18px 0 0;max-width:560px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#94a3b8;text-align:center;">DRALO · Learn. Practise. Improve.<br><a href="${homeHref}" style="color:#94a3b8;text-decoration:none;">dralo.es</a></p>
-        <p style="margin:8px 0 0;max-width:560px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#94a3b8;text-align:center;">Puedes responder a este correo o escribir a <a href="mailto:support@dralo.es" style="color:#6d28d9;text-decoration:none;font-weight:600;">support@dralo.es</a>.</p>
+        <p style="margin:8px 0 0;max-width:560px;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#94a3b8;text-align:center;">Este correo no admite respuesta. Si quieres escribirnos, usa <a href="${contactHref}" style="color:#6d28d9;text-decoration:none;font-weight:600;">Contacto</a>.</p>
       </td>
     </tr>
   </table>

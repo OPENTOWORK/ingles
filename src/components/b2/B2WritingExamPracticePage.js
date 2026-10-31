@@ -715,7 +715,16 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
   const phoneViewport = usePhoneViewport();
   const phoneSkillSteps =
     phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
-  const writingInstructionsEl = writingInstructionsBlocks.length ? (
+  const writingInstructionsEl = partNumber === 8 ? (
+    <B2WritingFirstTaskCard
+      instructions={part1Task.instructions}
+      question={part1Task.question}
+      points={part1Task.points}
+      wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
+      wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
+      hideHeader
+    />
+  ) : writingInstructionsBlocks.length ? (
     <SkillPartInstructionsPanel label="Instructions" blocks={writingInstructionsBlocks} />
   ) : null;
 
@@ -1115,19 +1124,10 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                       }
                     />
                     <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                      {phoneSkillSteps ? null : writingInstructionsEl}
+                      {writingInstructionsEl}
 
                   {partNumber === 8 ? (
                     <>
-                      <B2WritingFirstTaskCard
-                        instructions={part1Task.instructions}
-                        question={part1Task.question}
-                        points={part1Task.points}
-                        wordMin={part1Task.wordMin || B2_WRITING_WORD_MIN}
-                        wordMax={part1Task.wordMax || B2_WRITING_WORD_MAX}
-                        hideHeader
-                        hideInstructions
-                      />
                       <B2WritingLongFormAiPanel
                         key={`writing-p1-${longWritingStorageKey}-${writingDraftEpoch}`}
                         storageKey={longWritingStorageKey}

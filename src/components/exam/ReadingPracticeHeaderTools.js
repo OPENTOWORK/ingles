@@ -1,6 +1,5 @@
 'use client';
 
-import ReadingPracticeFeedbackToggle from '@/components/exam/ReadingPracticeFeedbackToggle';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 
 function HeaderToolButton({ active, onClick, ariaPressed, title, titleLabel, lang = 'en' }) {
@@ -21,19 +20,14 @@ function HeaderToolButton({ active, onClick, ariaPressed, title, titleLabel, lan
   );
 }
 
-/** Focus mode + instant feedback + answer eliminator — skill practice header toolbar. */
-export default function ReadingPracticeHeaderTools({ lang = 'en', showInstantFeedback = true }) {
+/** Focus mode in the practice header; answers are checked from the footer. */
+export default function ReadingPracticeHeaderTools({ lang = 'en' }) {
   const session = useReadingPracticeSession();
   const en = lang === 'en';
 
   const labels = {
     focus: en ? 'Focus mode' : 'Modo concentración',
-    eliminator: en ? 'Answer eliminator' : 'Eliminador de respuestas',
-    clearEliminated: en ? 'Clear eliminated' : 'Quitar eliminadas',
     focusHint: en ? 'Hide distractions and focus on the test.' : 'Oculta distracciones y céntrate en el test.',
-    eliminatorHint: en
-      ? 'Cross out answer options you think are wrong.'
-      : 'Tacha las opciones que creas incorrectas.',
   };
 
   return (
@@ -47,27 +41,7 @@ export default function ReadingPracticeHeaderTools({ lang = 'en', showInstantFee
           titleLabel={labels.focus}
           lang={lang}
         />
-        {showInstantFeedback ? (
-          <ReadingPracticeFeedbackToggle lang={lang} variant="header-tools" />
-        ) : null}
-        <HeaderToolButton
-          active={session.answerEliminatorEnabled}
-          onClick={session.toggleAnswerEliminator}
-          ariaPressed={session.answerEliminatorEnabled}
-          title={labels.eliminatorHint}
-          titleLabel={labels.eliminator}
-          lang={lang}
-        />
       </div>
-      {session.answerEliminatorEnabled ? (
-        <button
-          type="button"
-          className="reading-practice-header-tools__btn reading-practice-header-tools__btn--ghost"
-          onClick={session.clearEliminatedAnswers}
-        >
-          {labels.clearEliminated}
-        </button>
-      ) : null}
     </div>
   );
 }
