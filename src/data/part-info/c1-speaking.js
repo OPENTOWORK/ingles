@@ -8,10 +8,10 @@ const localPartInfo = {
     "commonErrors": "Giving very short answers without details, not using a wide range of vocabulary and complex grammar, not expressing sophisticated opinions clearly, or being too nervous to communicate effectively"
   },
   "2": {
-    "title": "Part 2: Individual long turn",
-    "description": "You will see two photographs and need to compare them for about one minute. Then your partner will answer a question about your photographs. This tests your ability to speak at length, compare visual information, and use sophisticated language for comparison.",
-    "tips": "Look at both photographs carefully before you start speaking. Compare them systematically: people, objects, activities, settings, and atmosphere. Use sophisticated comparative language and complex structures. Give your sophisticated opinion about the photographs. Don't worry about making small mistakes - focus on comparing effectively with advanced language.",
-    "commonErrors": "Not looking at both photographs carefully first, describing them separately instead of comparing, not using sophisticated comparative language, or stopping too early without trying to speak for the full minute"
+    "title": "Part 2: Long turn (three pictures)",
+    "description": "You will see three pictures and talk about two of them for about one minute, answering the two questions printed above the pictures. Then you answer a short question about your partner's pictures for about 30 seconds. This tests your ability to speak at length, compare, speculate, and use sophisticated language for comparison.",
+    "tips": "Choose the two pictures you have most to say about and read both questions before you start speaking. Compare them systematically: people, activities, settings, and feelings. Use sophisticated comparative language, speculate about the situations, and answer both printed questions. Give your sophisticated opinion. Don't worry about making small mistakes - focus on comparing effectively with advanced language.",
+    "commonErrors": "Describing the pictures one by one instead of comparing them, answering only one of the two printed questions, not using sophisticated comparative language, or stopping too early without trying to speak for the full minute"
   },
   "3": {
     "title": "Part 3: Collaborative task",

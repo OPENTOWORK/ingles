@@ -265,20 +265,21 @@ export function attachSpeakingB2IssuesToTurns(issues, pairedTurns = []) {
   return next;
 }
 
+/** Each answer is judged against the examiner line just before it, follow-ups included. */
 export function pairSpeakingB2Answers(turns = [], getQuestion) {
-  const questions = new Map();
-  for (const turn of turns) {
-    if (turn?.role === 'examiner' && turn.questionId) {
-      questions.set(turn.questionId, turn.transcript);
+  const paired = [];
+  let asked = null;
+  for (const turn of turns || []) {
+    if (turn?.role === 'examiner') {
+      asked = turn;
+      continue;
     }
-  }
-  return (turns || [])
-    .filter((turn) => turn?.role === 'candidate')
-    .map((turn) => ({
+    if (turn?.role !== 'candidate') continue;
+    const sameQuestion = asked && asked.questionId === turn.questionId ? asked.transcript : '';
+    paired.push({
       ...turn,
-      question:
-        questions.get(turn.questionId) ||
-        getQuestion?.(turn.questionId)?.question ||
-        '',
-    }));
+      question: sameQuestion || getQuestion?.(turn.questionId)?.question || '',
+    });
+  }
+  return paired;
 }

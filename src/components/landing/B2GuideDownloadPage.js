@@ -233,7 +233,7 @@ export default function B2GuideDownloadPage() {
 
       <section className="b2-guide__band" aria-labelledby="b2-guide-band">
         <div className="b2-guide__shell b2-guide__band-grid">
-          <div>
+          <div className="b2-guide__band-copy">
             <h2 id="b2-guide-band">
               Menos improvisación.
               <span> Más claridad para tu B2.</span>

@@ -144,7 +144,7 @@ a:hover {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-columns: auto auto minmax(220px, 1fr) auto;
   gap: 1.25rem 2rem;
   align-items: start;
   justify-content: start;
@@ -162,6 +162,22 @@ a:hover {
   display: contents;
 }
 
+.legal-footer-column--reviews {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  min-width: 0;
+  justify-self: stretch;
+  scroll-margin-top: 5rem;
+}
+
+.footer-review__links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.32rem;
+}
+
 .legal-footer-column--tagline {
   display: flex;
   flex-direction: column;
@@ -171,8 +187,8 @@ a:hover {
   min-height: 100%;
   text-align: right;
   justify-self: end;
-  width: 100%;
-  max-width: 100%;
+  width: auto;
+  max-width: 16rem;
 }
 
 @media (max-width: 900px) {
@@ -186,8 +202,13 @@ a:hover {
     gap: 1.25rem 2rem;
   }
 
+  .legal-footer-column--reviews,
   .legal-footer-column--tagline {
     grid-column: 1 / -1;
+    max-width: none;
+  }
+
+  .legal-footer-column--tagline {
     align-items: flex-start;
     text-align: left;
     padding-top: 0.25rem;
@@ -195,9 +216,40 @@ a:hover {
 }
 
 @media (max-width: 640px) {
-  .legal-footer {
+  .legal-footer-links {
+    display: block;
+  }
+
+  .legal-footer-column:not(.legal-footer-column--reviews) {
     display: none;
   }
+
+  .legal-footer-column--reviews {
+    max-width: none;
+  }
+}
+
+.footer-review__title {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.55rem;
+  color: #fff;
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.footer-review__title:hover .footer-review__label {
+  text-decoration: underline;
+}
+
+.footer-review__stars {
+  color: #facc15;
+  font-size: 1.15rem;
+  letter-spacing: 0.08em;
+  line-height: 1;
 }
 
 .legal-footer-column__title {
@@ -579,6 +631,11 @@ body {
   flex: 1 1 auto;
   min-width: 0;
   margin-left: auto;
+}
+
+/* Hay cookie de sesión: el menú de visitante no se ve. Sale entero cuando el rol ya está. */
+html.has-stored-session:not(.nav-auth-ready) .site-header__nav {
+  visibility: hidden;
 }
 
 .site-header__nav--loading {

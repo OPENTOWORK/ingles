@@ -1453,6 +1453,18 @@ body.reading-night-mode textarea::placeholder {
   color: #64748b;
 }
 
+body.reading-night-mode .site-review-page input,
+body.reading-night-mode .site-review-page textarea {
+  background: #fff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+body.reading-night-mode .site-review-page input::placeholder,
+body.reading-night-mode .site-review-page textarea::placeholder {
+  color: #64748b;
+}
+
 /* Mobile side menu on home */
 body.reading-night-mode .app-side-menu {
   background: #1e293b;

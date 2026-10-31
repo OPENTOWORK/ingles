@@ -54,7 +54,9 @@ function questionColumns(rows) {
 
 function answerText(row, key) {
   const answer = (row.respuestas || []).find((item) => (item.pregunta_id || item.pregunta) === key);
-  return answer?.texto || '—';
+  if (!answer) return '';
+  const text = String(answer.texto ?? '').trim();
+  return text || '—';
 }
 
 function dayKey(value) {

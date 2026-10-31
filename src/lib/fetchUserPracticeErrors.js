@@ -35,8 +35,8 @@ function skillFolderForPart(levelSlug, parteNumero) {
   if (!n) return 'reading-and-use-of-english';
 
   if (slug === 'b2' && n >= 1 && n <= 7) return 'reading-and-use-of-english';
-  if ((slug === 'c1' || slug === 'c2') && n >= 1 && n <= 4) return 'reading-and-use-of-english';
-  if ((slug === 'c1' || slug === 'c2') && n >= 5) return 'reading-and-use-of-english';
+  if (slug === 'c1' && n >= 1 && n <= 8) return 'reading-and-use-of-english';
+  if (slug === 'c2' && n >= 1 && n <= 7) return 'reading-and-use-of-english';
 
   const skill = skillFromPartNumber(n, slug);
   return SKILL_FOLDERS[skill] || 'reading-and-use-of-english';

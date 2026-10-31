@@ -109,7 +109,7 @@ export default function WeeklyTrainingChallenge({ className = '' }) {
       </div>
       {answered ? (
         <p className={correct ? styles.ok : styles.miss} role="status">
-          {correct ? 'Bien. ' : 'Casi. '}
+          {correct ? 'Has marcado la correcta. ' : 'No has marcado la correcta. '}
           {challenge.solution}
         </p>
       ) : (

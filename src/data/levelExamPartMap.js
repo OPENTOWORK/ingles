@@ -22,15 +22,13 @@ export const LEVEL_EXAM_SECTION_RANGES = {
     Speaking: { partMin: 14, partMax: 17 },
   },
   c1: {
-    'Use of English': { partMin: 1, partMax: 4 },
-    Reading: { partMin: 5, partMax: 8 },
+    'Reading and Use of English': { partMin: 1, partMax: 8 },
     Writing: { partMin: 9, partMax: 10 },
     Listening: { partMin: 11, partMax: 14 },
     Speaking: { partMin: 15, partMax: 18 },
   },
   c2: {
-    'Use of English': { partMin: 1, partMax: 4 },
-    Reading: { partMin: 5, partMax: 7 },
+    'Reading and Use of English': { partMin: 1, partMax: 7 },
     Writing: { partMin: 8, partMax: 9 },
     Listening: { partMin: 10, partMax: 13 },
     Speaking: { partMin: 14, partMax: 16 },
@@ -62,15 +60,17 @@ const SKILL_ROUTE_SECTION = {
     'exam-speaking': 'Speaking',
   },
   c1: {
-    'exam-useofenglish': 'Use of English',
-    'exam-reading': 'Reading',
+    'exam-reading-and-use-of-english': 'Reading and Use of English',
+    'exam-useofenglish': 'Reading and Use of English',
+    'exam-reading': 'Reading and Use of English',
     'exam-writing': 'Writing',
     'exam-listening': 'Listening',
     'exam-speaking': 'Speaking',
   },
   c2: {
-    'exam-useofenglish': 'Use of English',
-    'exam-reading': 'Reading',
+    'exam-reading-and-use-of-english': 'Reading and Use of English',
+    'exam-useofenglish': 'Reading and Use of English',
+    'exam-reading': 'Reading and Use of English',
     'exam-writing': 'Writing',
     'exam-listening': 'Listening',
     'exam-speaking': 'Speaking',
@@ -136,13 +136,13 @@ export const LEVEL_SKILL_FOLDER_SECTION = {
     listening: 'Listening',
     speaking: 'Speaking',
     writing: 'Writing',
-    'reading-and-use-of-english': null,
+    'reading-and-use-of-english': 'Reading and Use of English',
   },
   c2: {
     listening: 'Listening',
     speaking: 'Speaking',
     writing: 'Writing',
-    'reading-and-use-of-english': null,
+    'reading-and-use-of-english': 'Reading and Use of English',
   },
 };
 
@@ -153,18 +153,11 @@ const SKILL_FOLDER_PRACTICE_ROUTE = {
   'reading-and-use-of-english': 'exam-reading-and-use-of-english',
 };
 
-function resolvePartSectionAndPractice(slug, skillFolder, part) {
+function resolvePartSectionAndPractice(slug, skillFolder) {
   const key = String(slug || '').toLowerCase();
-  const n = Number(part);
 
   if (skillFolder === 'reading-and-use-of-english' && (key === 'b2' || key === 'c1' || key === 'c2')) {
-    if (key === 'b2') {
-      return { sectionTitle: 'Reading and Use of English', practiceRoute: 'exam-reading-and-use-of-english' };
-    }
-    if (n >= 1 && n <= 4) {
-      return { sectionTitle: 'Use of English', practiceRoute: 'exam-useofenglish' };
-    }
-    return { sectionTitle: 'Reading', practiceRoute: 'exam-reading' };
+    return { sectionTitle: 'Reading and Use of English', practiceRoute: 'exam-reading-and-use-of-english' };
   }
 
   const sectionTitle = LEVEL_SKILL_FOLDER_SECTION[key]?.[skillFolder] || 'Reading';
@@ -176,19 +169,23 @@ function resolvePartSectionAndPractice(slug, skillFolder, part) {
 export function getLevelPartNavLinks(slug, skillFolder, part) {
   const key = String(slug || '').toLowerCase();
   const n = Number(part);
-  const { sectionTitle, practiceRoute } = resolvePartSectionAndPractice(key, skillFolder, n);
+  const { sectionTitle, practiceRoute } = resolvePartSectionAndPractice(key, skillFolder);
   const { partMin, partMax } = getLevelExamSectionRange(key, sectionTitle);
   const basePath = `/niveles/${key}/${skillFolder}`;
   const practiceHref = `/niveles/${key}/${practiceRoute}`;
+  // Hub links may use the paper's local numbering (Listening part-1…4) instead of global part numbers.
+  const usesLocalNumbers = n < partMin;
+  const first = usesLocalNumbers ? 1 : partMin;
+  const last = usesLocalNumbers ? partMax - partMin + 1 : partMax;
 
   return {
     partMin,
     partMax,
-    backLink: n <= partMin ? practiceHref : `${basePath}/${n - 1}`,
-    nextLink: n >= partMax ? practiceHref : `${basePath}/${n + 1}`,
+    backLink: n <= first ? practiceHref : `${basePath}/${n - 1}`,
+    nextLink: n >= last ? practiceHref : `${basePath}/${n + 1}`,
     homeLink: `/niveles/${key}`,
     practiceHref,
-    showPrev: n > partMin,
-    showNext: n < partMax,
+    showPrev: n > first,
+    showNext: n < last,
   };
 }

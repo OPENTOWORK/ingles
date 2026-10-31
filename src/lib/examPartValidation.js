@@ -24,6 +24,7 @@ import { validatePart4Quality } from '@/lib/ruoePart4Quality';
 import { validateRuoeEditorialQuality } from '@/lib/ruoeEditorialQuality';
 
 const WRITING_PART2_FORMATS = new Set(['article', 'email', 'letter', 'review', 'report']);
+const B1_WRITING_PART2_FORMATS = new Set(['article', 'story']);
 
 const SUMMARY_ESSAY_MARKERS = [
   'text1title',
@@ -425,17 +426,25 @@ function validateWritingPart(slug, partDef, gen, errors, warnings) {
   }
 
   if (partDef.activity === 'part-2') {
-    // Exam-realistic format: 3 options minimum (B2 official style); 4+ allowed for practice sets.
-    if (gen.questions.length < 3) {
+    const isB1 = levelLabel === 'B1';
+    // Exam-realistic format: B1 Preliminary offers an article and a story; B2 official style has 3+ options.
+    if (isB1 && gen.questions.length < 2) {
+      errors.push('B1 Writing Part 2 must include two optional tasks (article and story).');
+    } else if (!isB1 && gen.questions.length < 3) {
       errors.push('Writing Part 2 must include at least three optional tasks.');
     }
+    const allowedFormats = isB1 ? B1_WRITING_PART2_FORMATS : WRITING_PART2_FORMATS;
     const formats = new Set();
     gen.questions.forEach((q, i) => {
       const label = `Task ${q.number ?? i + 1}`;
       if (!hasText(q.prompt)) errors.push(`${label}: missing prompt/task text.`);
       const fmt = normalizeWritingFormat(q.format);
-      if (!WRITING_PART2_FORMATS.has(fmt)) {
-        errors.push(`${label}: format must be article, email, letter, review, or report.`);
+      if (!allowedFormats.has(fmt)) {
+        errors.push(
+          isB1
+            ? `${label}: format must be article or story.`
+            : `${label}: format must be article, email, letter, review, or report.`,
+        );
       }
       formats.add(fmt);
       if (levelLabel === 'B2' && !hasText(q.context) && !hasText(q.targetReader)) {

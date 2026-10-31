@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { supabase } from '@/utils/supabaseClient';
 import { normalizeRoleName, resolveRoleByUserId, peekCachedRoleName } from '@/utils/authRoles';
@@ -11,6 +11,7 @@ import { isAbExperimentPath, isMinimalLandingPath } from '@/utils/minimalLanding
 import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 import { nextRoleConfirmation } from '@/lib/userRoleResolution';
+import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
 import { capturePwaInstallPrompt } from '@/lib/pwaInstallPrompt';
 
 if (typeof window !== 'undefined') capturePwaInstallPrompt();
@@ -18,6 +19,7 @@ if (typeof window !== 'undefined') capturePwaInstallPrompt();
 const AUTH_FLOW_PATH_PREFIXES = ['/auth/callback', '/auth/confirm'];
 import Link from 'next/link';
 import DraloTagline from '@/components/DraloTagline';
+import FooterReviews from '@/components/site/FooterReviews';
 import { useActivityHeartbeat } from '@/hooks/useActivityHeartbeat';
 import { usePageViewTracker } from '@/hooks/usePageViewTracker';
 import { useClarityPageTags } from '@/hooks/useClarityPageTags';
@@ -130,11 +132,18 @@ function RootLayoutClientInner({ children }) {
   /** Siempre true en SSR y primer render cliente; se resuelve en useEffect. */
   const [authPending, setAuthPending] = useState(true);
   const [session, setSession] = useState(null);
+  /** getSession ya respondió. Hasta entonces, si hay cookie, el menú no se enseña. */
+  const [sessionChecked, setSessionChecked] = useState(false);
   /** getSession ya confirmó que no hay sesión. Evita quedarse cargando con un token viejo. */
   const [loggedOut, setLoggedOut] = useState(false);
   const [userRole, setUserRole] = useState('student');
   /** Id del usuario cuyo rol se ha leído realmente; null mientras esté pendiente o falle. */
   const [roleConfirmedForUserId, setRoleConfirmedForUserId] = useState(null);
+  /**
+   * Id del usuario cuyo rol ya se puede pintar en la barra.
+   * Hasta entonces la cabecera no muestra enlaces: Tests y el resto salen juntos.
+   */
+  const [roleSettledForUserId, setRoleSettledForUserId] = useState(null);
   const [cookieConsent, setCookieConsent] = useState(null);
   /** Evita renderizar el banner en SSR (LinkedIn y otros crawlers leían los botones como título). */
   const [cookieConsentHydrated, setCookieConsentHydrated] = useState(false);
@@ -149,6 +158,7 @@ function RootLayoutClientInner({ children }) {
     personalization: false,
   });
   const roleFetchedForUserIdRef = useRef(null);
+  const roleSettledForUserIdRef = useRef(null);
   const lastAccessTokenRef = useRef(null);
   /** Usuario vigente: descarta respuestas de rol que llegan tras un cambio de usuario. */
   const currentUserIdRef = useRef(null);
@@ -211,12 +221,19 @@ function RootLayoutClientInner({ children }) {
       lastAccessTokenRef.current = accessToken;
       const previousUid = currentUserIdRef.current;
       currentUserIdRef.current = uid;
-      if (previousUid !== uid) setRoleConfirmedForUserId(null);
+      if (previousUid !== uid) {
+        setRoleConfirmedForUserId(null);
+        roleSettledForUserIdRef.current = null;
+        setRoleSettledForUserId(null);
+      }
       setSession(newSession);
+      setSessionChecked(true);
 
       if (!uid) {
         roleFetchedForUserIdRef.current = null;
         setUserRole('student');
+        roleSettledForUserIdRef.current = null;
+        setRoleSettledForUserId(null);
         setLoggedOut(true);
         if (!allowWithoutAuth) setAuthPending(false);
         return;
@@ -224,31 +241,49 @@ function RootLayoutClientInner({ children }) {
 
       setLoggedOut(false);
 
-      if (!allowWithoutAuth) setAuthPending(false);
-
       const cachedRole = peekCachedRoleName(uid);
       if (cachedRole) {
         setUserRole(normalizeRoleName(cachedRole));
+        roleSettledForUserIdRef.current = uid;
+        setRoleSettledForUserId(uid);
       }
 
-      if (sameSession) return;
+      if (!allowWithoutAuth && (cachedRole || sameSession)) setAuthPending(false);
 
-      void resolveRoleByUserId(uid, newSession.user.email).then(({ role, confirmed }) => {
-        if (cancelled) return;
-        const next = nextRoleConfirmation({
-          currentUserId: currentUserIdRef.current,
-          resolvedForUserId: uid,
-          confirmed,
+      if (sameSession) {
+        roleSettledForUserIdRef.current = uid;
+        setRoleSettledForUserId(uid);
+        return;
+      }
+
+      void resolveRoleByUserId(uid, newSession.user.email)
+        .then(({ role, confirmed }) => {
+          if (cancelled) return;
+          const next = nextRoleConfirmation({
+            currentUserId: currentUserIdRef.current,
+            resolvedForUserId: uid,
+            confirmed,
+          });
+          if (!next.apply) return;
+          roleFetchedForUserIdRef.current = uid;
+          setUserRole(normalizeRoleName(role));
+          setRoleConfirmedForUserId(next.confirmedForUserId);
+          roleSettledForUserIdRef.current = uid;
+          setRoleSettledForUserId(uid);
+          if (!allowWithoutAuth) setAuthPending(false);
+        })
+        .catch(() => {
+          if (cancelled || currentUserIdRef.current !== uid) return;
+          roleSettledForUserIdRef.current = uid;
+          setRoleSettledForUserId(uid);
+          if (!allowWithoutAuth) setAuthPending(false);
         });
-        if (!next.apply) return;
-        roleFetchedForUserIdRef.current = uid;
-        setUserRole(normalizeRoleName(role));
-        setRoleConfirmedForUserId(next.confirmedForUserId);
-      });
     };
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!cancelled) void hydrateAuth(session);
+    }).catch(() => {
+      if (!cancelled) setSessionChecked(true);
     });
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, newSession) => {
@@ -265,22 +300,42 @@ function RootLayoutClientInner({ children }) {
           setRoleConfirmedForUserId(null);
           setLoggedOut(false);
           setSession(newSession);
-          setAuthPending(false);
+          setSessionChecked(true);
           if (uid) {
             const cachedRole = peekCachedRoleName(uid);
-            if (cachedRole) setUserRole(normalizeRoleName(cachedRole));
-            void resolveRoleByUserId(uid, newSession.user.email).then(({ role, confirmed }) => {
-              if (cancelled) return;
-              const next = nextRoleConfirmation({
-                currentUserId: currentUserIdRef.current,
-                resolvedForUserId: uid,
-                confirmed,
+            if (cachedRole) {
+              setUserRole(normalizeRoleName(cachedRole));
+              roleSettledForUserIdRef.current = uid;
+              setRoleSettledForUserId(uid);
+              setAuthPending(false);
+            } else if (roleSettledForUserIdRef.current !== uid) {
+              roleSettledForUserIdRef.current = null;
+              setRoleSettledForUserId(null);
+            }
+            void resolveRoleByUserId(uid, newSession.user.email)
+              .then(({ role, confirmed }) => {
+                if (cancelled) return;
+                const next = nextRoleConfirmation({
+                  currentUserId: currentUserIdRef.current,
+                  resolvedForUserId: uid,
+                  confirmed,
+                });
+                if (!next.apply) return;
+                roleFetchedForUserIdRef.current = uid;
+                setUserRole(normalizeRoleName(role));
+                setRoleConfirmedForUserId(next.confirmedForUserId);
+                roleSettledForUserIdRef.current = uid;
+                setRoleSettledForUserId(uid);
+                setAuthPending(false);
+              })
+              .catch(() => {
+                if (cancelled || currentUserIdRef.current !== uid) return;
+                roleSettledForUserIdRef.current = uid;
+                setRoleSettledForUserId(uid);
+                setAuthPending(false);
               });
-              if (!next.apply) return;
-              roleFetchedForUserIdRef.current = uid;
-              setUserRole(normalizeRoleName(role));
-              setRoleConfirmedForUserId(next.confirmedForUserId);
-            });
+          } else {
+            setAuthPending(false);
           }
           return;
         }
@@ -289,8 +344,11 @@ function RootLayoutClientInner({ children }) {
           roleFetchedForUserIdRef.current = null;
           currentUserIdRef.current = null;
           setRoleConfirmedForUserId(null);
+          roleSettledForUserIdRef.current = null;
+          setRoleSettledForUserId(null);
           setLoggedOut(true);
           setSession(null);
+          setSessionChecked(true);
           setUserRole('student');
           if (!allowWithoutAuth) setAuthPending(false);
           return;
@@ -308,6 +366,22 @@ function RootLayoutClientInner({ children }) {
       sub?.subscription?.unsubscribe?.();
     };
   }, [allowWithoutAuth]);
+
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const hint = root.classList.contains(SESSION_HINT_CLASS);
+    if (!hint) {
+      root.classList.add('nav-auth-ready');
+      return;
+    }
+    if (!sessionChecked) {
+      root.classList.remove('nav-auth-ready');
+      return;
+    }
+    const uid = session?.user?.id ?? null;
+    const ready = !uid || roleSettledForUserId === uid;
+    root.classList.toggle('nav-auth-ready', ready);
+  }, [sessionChecked, session, roleSettledForUserId]);
 
   useEffect(() => {
     try {
@@ -516,6 +590,7 @@ function RootLayoutClientInner({ children }) {
           session={session}
           userRole={userRole}
           roleConfirmedForUserId={roleConfirmedForUserId}
+          roleSettledForUserId={roleSettledForUserId}
           onLogout={handleLogout}
         >
           {children}
@@ -683,9 +758,6 @@ function RootLayoutClientInner({ children }) {
                     <Link href="/proteccion-datos">Protección de datos</Link>
                   </li>
                   <li>
-                    <Link href="/blog">Blog</Link>
-                  </li>
-                  <li>
                     <button
                       type="button"
                       className="legal-footer-link-btn"
@@ -693,6 +765,17 @@ function RootLayoutClientInner({ children }) {
                     >
                       Ajustes de cookies
                     </button>
+                  </li>
+                </ul>
+              </div>
+              <div className="legal-footer-column legal-footer-column--reviews">
+                <FooterReviews />
+                <ul className="legal-footer-list footer-review__links">
+                  <li>
+                    <Link href="/blog">Blog</Link>
+                  </li>
+                  <li>
+                    <Link href="/newsletter/">Newsletter</Link>
                   </li>
                 </ul>
               </div>
@@ -706,7 +789,7 @@ function RootLayoutClientInner({ children }) {
                   <span className="legal-footer-meta__sep" aria-hidden="true">
                     ·
                   </span>
-                  <span className="legal-footer-version">Versión 1.0.8</span>
+                  <span className="legal-footer-version">Versión 1.0.16</span>
                 </p>
               </div>
             </div>

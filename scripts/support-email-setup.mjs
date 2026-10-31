@@ -1,5 +1,5 @@
 /**
- * Configura el envío de tickets a draloenglish@gmail.com vía Gmail SMTP.
+ * Configura el envío de tickets a support@dralo.es vía Gmail SMTP.
  * Uso: npm run support:email-setup
  */
 import fs from 'fs';
@@ -13,7 +13,7 @@ const ROOT = path.join(__dirname, '..');
 const SECRETS_DIR = path.join(ROOT, 'secrets');
 const PASS_FILE = path.join(SECRETS_DIR, 'support-smtp-pass.txt');
 const ENV_FILE = path.join(ROOT, '.env.local');
-const INBOX = 'draloenglish@gmail.com';
+const INBOX = 'support@dralo.es';
 
 function loadEnvLocal() {
   if (!fs.existsSync(ENV_FILE)) return {};

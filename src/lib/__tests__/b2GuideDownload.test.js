@@ -7,6 +7,7 @@ import {
   guideConsentError,
   normalizeGuideEmail,
 } from '@/lib/b2GuideDownload';
+import { buildB2GuideRequestPatch } from '@/lib/b2GuideRequests';
 
 test('guide email only accepts a normal address and points at the PDF', () => {
   assert.equal(normalizeGuideEmail('  Ana@Dralo.es '), 'ana@dralo.es');
@@ -19,7 +20,10 @@ test('guide email only accepts a normal address and points at the PDF', () => {
   assert.equal(message.subject, 'Tu guía gratuita del B2 First');
   assert.equal(pdf, `https://www.dralo.es${B2_GUIDE_PDF_PATH}`);
   assert.match(message.text, new RegExp(pdf.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-  assert.match(message.html, /Descargar la guía en PDF/);
+  assert.match(message.text, /exam-reading-and-use-of-english\/\?examen=1/);
+  assert.match(message.html, /Descargar la guía del B2 First/);
+  assert.match(message.html, /Probar un ejercicio gratis/);
+  assert.match(message.html, /href="https:\/\/www\.dralo\.es\/exam-practice\/b2\/exam-reading-and-use-of-english\/\?examen=1"/);
   assert.equal(message.html.includes('ana@dralo.es'), false);
 });
 

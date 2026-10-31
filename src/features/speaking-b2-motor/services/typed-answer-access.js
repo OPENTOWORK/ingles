@@ -1,10 +1,4 @@
-import { canUseSpeakingB2FixtureAnswer } from '../fixtures/runtime.js';
-
-export function canSubmitSpeakingB2TypedAnswer({
-  session,
-  isAdmin = false,
-  runtime,
-} = {}) {
-  if (isAdmin === true) return true;
-  return canUseSpeakingB2FixtureAnswer(session, runtime);
+/** Typed answers are available to every role when there is no microphone. */
+export function canSubmitSpeakingB2TypedAnswer() {
+  return true;
 }

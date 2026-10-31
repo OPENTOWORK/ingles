@@ -2,7 +2,7 @@
 
 import NavLink from '@/components/layout/NavLink';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
@@ -18,55 +18,12 @@ import {
   shouldShowAdminShell,
   NAV_LINKS_BEFORE_DRALO,
   NAV_LINK_CONTACT,
+  NAV_LINK_PLACEMENT,
   NAV_LINK_PRICING,
   NAV_LINK_PROFILE,
   resolveNavItemHref,
 } from '@/config/appNavMenu';
 import { APP_ROUTES } from '@/config/appRoutes';
-
-const NAV_COLLAPSED_CLASS = 'app-nav--collapsed';
-
-/**
- * La barra de escritorio solo se muestra si cabe entera; si no, la cabecera usa el menú
- * desplegable. Se mide con la barra a la vista para saber también cuándo vuelve a caber.
- */
-function useDesktopNavFits(navRef, layoutKey) {
-  const [fits, setFits] = useState(true);
-
-  useLayoutEffect(() => {
-    const nav = navRef.current;
-    const slot = nav?.parentElement;
-    if (!nav || !slot || typeof ResizeObserver === 'undefined') return undefined;
-    let active = true;
-
-    const check = () => {
-      const available = slot.clientWidth;
-      if (!active || !available) return;
-      const collapsed = nav.classList.contains(NAV_COLLAPSED_CLASS);
-      if (collapsed) nav.classList.remove(NAV_COLLAPSED_CLASS);
-      const first = nav.firstElementChild;
-      const last = nav.lastElementChild;
-      // Por debajo de 901 px la barra va oculta por CSS y manda el menú del móvil.
-      const shown = Boolean(first && last) && window.getComputedStyle(nav).display !== 'none';
-      // Los desplegables abiertos van fuera del flujo y no cuentan.
-      const needed = shown ? last.getBoundingClientRect().right - first.getBoundingClientRect().left : 0;
-      if (collapsed) nav.classList.add(NAV_COLLAPSED_CLASS);
-      if (shown) setFits(needed <= available + 1);
-    };
-
-    check();
-    const observer = new ResizeObserver(check);
-    observer.observe(slot);
-    for (const child of nav.children) observer.observe(child);
-    document.fonts?.ready.then(check);
-    return () => {
-      active = false;
-      observer.disconnect();
-    };
-  }, [navRef, layoutKey]);
-
-  return fits;
-}
 
 function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) {
   const pathname = usePathname();
@@ -84,10 +41,8 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
     };
   }, [userRole, session, examStrategiesPlanLocked]);
 
-  const desktopNavRef = useRef(null);
-  const desktopNavFits = useDesktopNavFits(desktopNavRef, navModel);
-  /** En la home el menú es el lateral, pero solo por debajo de 1100 px: si la barra no cabe por encima, hace falta este. */
-  const showMenuButton = !hideMobileToggle || !desktopNavFits;
+  /** En la home ancha no hay hamburguesa: el menú va en la barra. En el móvil lo pone el CSS. */
+  const showMenuButton = !hideMobileToggle;
 
   const bindDesktopHoverMenu = (menuId) => ({
     onMouseEnter: () => setDesktopHoverMenu(menuId),
@@ -101,10 +56,6 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
     document.body.classList.toggle('nav-open', mobileOpen);
     return () => document.body.classList.remove('nav-open');
   }, [mobileOpen]);
-
-  useEffect(() => {
-    if (desktopNavFits) setMobileOpen(false);
-  }, [desktopNavFits]);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -152,16 +103,10 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
 
   return (
     <>
-      {desktopNavFits ? null : (
-        <div className="app-nav__collapsed-night">
-          <ReadingNightModeToggle variant="desktop" />
-        </div>
-      )}
-
       {showMenuButton ? (
         <button
           type="button"
-          className={`app-nav__toggle${desktopNavFits ? '' : ' app-nav__toggle--collapsed'}`}
+          className="app-nav__toggle"
           aria-expanded={mobileOpen}
           aria-controls="app-mobile-nav"
           aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
@@ -174,10 +119,7 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
       ) : null}
 
       <nav
-        ref={desktopNavRef}
-        className={`app-nav app-nav--desktop${showSiteThemePicker ? ' app-nav--admin' : ''}${
-          desktopNavFits ? '' : ` ${NAV_COLLAPSED_CLASS}`
-        }`}
+        className={`app-nav app-nav--desktop${showSiteThemePicker ? ' app-nav--admin' : ''}`}
         aria-label="Main navigation"
       >
         <div className="app-nav__primary" role="group" aria-label="Sections">
@@ -297,6 +239,38 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
               </div>
             </div>
           ) : null}
+
+          {navModel.showPlacement ? (
+            <div
+              className={`app-nav__dropdown-wrap app-nav__dropdown-wrap--hover${desktopHoverMenuClass(NAV_LINK_PLACEMENT.menuId)}`}
+              {...bindDesktopHoverMenu(NAV_LINK_PLACEMENT.menuId)}
+              data-tour={NAV_LINK_PLACEMENT.tourId}
+            >
+              <NavLink
+                href={resolveNavItemHref(NAV_LINK_PLACEMENT.href, session)}
+                className={`${desktopLinkClass(NAV_LINK_PLACEMENT.href)} app-nav__link--has-menu app-nav__link--dropdown-trigger`}
+                onClick={closeDesktopDropdowns}
+              >
+                {NAV_LINK_PLACEMENT.label}
+                <span className="app-nav__chevron" aria-hidden>
+                  ▾
+                </span>
+              </NavLink>
+              <div className="app-nav__dropdown app-nav__dropdown--hover" role="menu">
+                {NAV_LINK_PLACEMENT.menuItems.map((sub) => (
+                  <NavLink
+                    key={sub.href}
+                    href={resolveNavItemHref(sub.href, session)}
+                    role="menuitem"
+                    className="app-nav__dropdown-item"
+                    onClick={closeDesktopDropdowns}
+                  >
+                    {sub.label}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          ) : null}
         </div>
 
         <ReadingNightModeToggle variant="desktop" />
@@ -398,9 +372,7 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
       {showMenuButton ? (
       <button
         type="button"
-        className={`app-nav__backdrop${mobileOpen ? ' is-visible' : ''}${
-          desktopNavFits ? '' : ' app-nav__backdrop--collapsed'
-        }`}
+        className={`app-nav__backdrop${mobileOpen ? ' is-visible' : ''}`}
         aria-hidden={!mobileOpen}
         tabIndex={mobileOpen ? 0 : -1}
         onClick={closeMobile}

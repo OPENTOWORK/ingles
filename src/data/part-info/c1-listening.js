@@ -3,7 +3,7 @@ import { extendPartInfoWithGlobalKeys } from '@/data/part-info/extendPartInfo';
 const localPartInfo = {
   "1": {
     "title": "Part 1: Multiple choice (short extracts)",
-    "description": "You will hear three short extracts from different situations (conversations, announcements, interviews, etc.). For each extract, you need to choose the best answer from three options. This tests your ability to understand the main points, specific information, and speakers' attitudes in sophisticated listening texts.",
+    "description": "You will hear three short extracts, each a conversation between two speakers. There are two questions for each extract, and you choose the best answer from three options (A, B or C). This tests your ability to understand the main points, specific information, and speakers' attitudes in sophisticated listening texts.",
     "tips": "Read the questions and options before listening. Listen for the main points, specific information, and speakers' sophisticated attitudes and opinions. Don't choose answers based on just one word - understand the complete meaning and sophisticated context. You will hear each extract twice.",
     "commonErrors": "Not reading the questions first, choosing answers based on individual words rather than understanding, or not using the second listening to check your answers"
   },
@@ -20,8 +20,8 @@ const localPartInfo = {
     "commonErrors": "Not reading the questions first, focusing only on facts rather than sophisticated opinions, or not paying attention to all speakers' views and complex interactions"
   },
   "4": {
-    "title": "Part 4: Multiple choice (multiple speakers)",
-    "description": "You will hear five different speakers talking about the same topic. You need to match each speaker to one of eight options (A-H). Each option is used once, and some options may not be used. This tests your ability to understand different speakers' sophisticated views and match them to specific options.",
+    "title": "Part 4: Multiple matching (two tasks)",
+    "description": "You will hear five short extracts in which different speakers talk about the same topic. There are two tasks: for each speaker, you choose one option from a list of eight (A-H) in Task One and one option from a second list of eight (A-H) in Task Two. Three options in each list are extra. You complete both tasks while you listen. This tests your ability to understand different speakers' sophisticated views and match them to specific options.",
     "tips": "Read all the options first to understand what you're looking for. Listen for each speaker's main point and sophisticated attitude. Look for sophisticated paraphrasing and different ways of expressing the same idea. Don't match too quickly based on individual words - understand the complete sophisticated meaning.",
     "commonErrors": "Not reading all the options first, matching too quickly based on word similarity, or not understanding the complete sophisticated meaning of what each speaker says"
   }

@@ -134,6 +134,12 @@ import {
   getA2WritingDemoByPart,
   buildA2WritingInstructionsText,
 } from '@/data/a2OfficialPart6Demo';
+import B1SampleExamPart from '@/components/b1/B1SampleExamPart';
+import { getB1SampleTest1Part } from '@/data/b1PreliminarySampleTest1';
+import CambridgeSampleExamPart from '@/components/cambridge-sample/CambridgeSampleExamPart';
+import { getC1SampleTest1Part } from '@/data/c1AdvancedSampleTest1';
+import { getC2SampleTest1Part } from '@/data/c2ProficiencySampleTest1';
+import { getLevelExamPartDef } from '@/lib/levelsExamCatalog';
 import { parseA2Part3Directions, parseA2Part3Passage } from '@/utils/a2Part3Parser';
 import {
   A2McqFeedback,
@@ -1772,10 +1778,10 @@ function B2ExamPaperPracticePageInner({
     listeningReadyClips,
   ]);
 
-  const writingPartMin = levelSlug === 'a2' ? 6 : 8;
-  const writingPartMax = levelSlug === 'a2' ? 7 : 9;
+  const writingPartMin = levelSlug === 'a2' ? 6 : levelSlug === 'b1' ? 7 : levelSlug === 'c1' ? 9 : 8;
+  const writingPartMax = levelSlug === 'a2' ? 7 : levelSlug === 'b1' ? 8 : levelSlug === 'c1' ? 10 : 9;
 
-  /** Writing: long-form textarea + Dralo AI (A2 parts 6–7, B2 parts 8–9). */
+  /** Writing: long-form textarea + Dralo AI (A2 parts 6–7, B1 parts 7–8, B2 parts 8–9, C1 parts 9–10). */
   const isLongFormWritingPart = Boolean(
     longFormWritingWithAi &&
       partNumber >= writingPartMin &&
@@ -1804,18 +1810,37 @@ function B2ExamPaperPracticePageInner({
   );
 
   const isA2Part7Writing = levelSlug === 'a2' && partNumber === 7;
+  const writingPartDef = isLongFormWritingPart && levelSlug !== 'a2' ? getLevelExamPartDef(levelSlug, partNumber) : null;
   const effectiveWritingWordMin =
     a2WritingDemo && Number.isFinite(a2WritingDemo.wordMin)
       ? a2WritingDemo.wordMin
       : isA2Part7Writing
         ? 35
-        : writingWordMin;
+        : Number.isFinite(writingPartDef?.wordMin)
+          ? writingPartDef.wordMin
+          : writingWordMin;
   const effectiveWritingWordMax =
     a2WritingDemo && Number.isFinite(a2WritingDemo.wordMax)
       ? a2WritingDemo.wordMax
       : isA2Part7Writing
         ? 100
-        : writingWordMax;
+        : Number.isFinite(writingPartDef?.wordMax)
+          ? writingPartDef.wordMax
+          : writingWordMax;
+
+  const b1SamplePart = useMemo(() => {
+    if (levelSlug !== 'b1' || Number(examSlot) !== 1 || !selectedPart || selectedQuestion) return null;
+    return getB1SampleTest1Part(partNumber);
+  }, [levelSlug, examSlot, selectedPart, selectedQuestion, partNumber]);
+  const showB1SampleWithoutRow = Boolean(b1SamplePart);
+
+  const cambridgeSamplePart = useMemo(() => {
+    if (Number(examSlot) !== 1 || !selectedPart || selectedQuestion) return null;
+    if (levelSlug === 'c1') return getC1SampleTest1Part(partNumber);
+    if (levelSlug === 'c2') return getC2SampleTest1Part(partNumber);
+    return null;
+  }, [levelSlug, examSlot, selectedPart, selectedQuestion, partNumber]);
+  const showCambridgeSampleWithoutRow = Boolean(cambridgeSamplePart);
 
   /** Writing: inputs abiertos; en Listening parte 11 van en el layout por ítems. */
   const useOpenInputUi = Boolean(
@@ -2013,8 +2038,8 @@ function B2ExamPaperPracticePageInner({
 
   const getPartTitle = (part) => {
     const n = Number(part?.nombre?.match(/\d+/)?.[0] || partNumber || 0);
-    if (levelSlug === 'b2' && n > 0) {
-      return formatSkillPartPracticeTitle('b2', n, lang === 'es' ? 'es' : 'en');
+    if ((levelSlug === 'b2' || levelSlug === 'b1' || levelSlug === 'c1' || levelSlug === 'c2') && n > 0) {
+      return formatSkillPartPracticeTitle(levelSlug, n, lang === 'es' ? 'es' : 'en');
     }
     if (useLocalPartLabels) {
       const localTitle = getExamSectionPartTitle(n, partMin, lang === 'es' ? 'es' : 'en');
@@ -2028,8 +2053,8 @@ function B2ExamPaperPracticePageInner({
       return { heading: '', subtitle: '' };
     }
     const n = Number(selectedPart?.nombre?.match(/\d+/)?.[0] || partNumber || 0);
-    if (levelSlug === 'b2' && n > 0) {
-      return getSkillPartPracticeTitle('b2', n, lang === 'es' ? 'es' : 'en', examSlot);
+    if ((levelSlug === 'b2' || levelSlug === 'b1' || levelSlug === 'c1' || levelSlug === 'c2') && n > 0) {
+      return getSkillPartPracticeTitle(levelSlug, n, lang === 'es' ? 'es' : 'en', examSlot);
     }
     return { heading: getPartTitle(selectedPart), subtitle: '' };
   }, [
@@ -3767,8 +3792,86 @@ function B2ExamPaperPracticePageInner({
               </div>
             ) : null}
 
+            {showB1SampleWithoutRow ? (
+              <div className="levels-exam-split-page levels-exam-b1-sample">
+                <div className="levels-exam-split-card">
+                  <SkillPartPracticeHeader
+                    title={selectedPartTitleParts.heading}
+                    subtitle={selectedPartTitleParts.subtitle}
+                    unlockHint={skillUnlockHint}
+                    exerciseLabel={
+                      isSkillPracticeSession && examSlot && !hideStandaloneExerciseLabel
+                        ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
+                        : null
+                    }
+                  />
+                  <B1SampleExamPart
+                    key={`b1-sample-${partNumber}`}
+                    part={b1SamplePart}
+                    hideFeedback={hideFeedbackResolved}
+                    examMode={examModeActive && !reviewMode}
+                    lang={lang}
+                    writing={
+                      isLongFormWritingPart
+                        ? {
+                            storageKey: longWritingStorageKey,
+                            wordMin: effectiveWritingWordMin,
+                            wordMax: effectiveWritingWordMax,
+                            heading: `Your answer — ${getPartTitle(selectedPart)}`,
+                            partLabel: selectedPart.nombre,
+                            partDescription: selectedPart.descripcion || '',
+                            onScoresReady: handleWritingScoresReady,
+                            lang,
+                          }
+                        : null
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {showCambridgeSampleWithoutRow ? (
+              <div className={`levels-exam-split-page levels-exam-${levelSlug}-sample`}>
+                <div className="levels-exam-split-card">
+                  <SkillPartPracticeHeader
+                    title={selectedPartTitleParts.heading}
+                    subtitle={selectedPartTitleParts.subtitle}
+                    unlockHint={skillUnlockHint}
+                    exerciseLabel={
+                      isSkillPracticeSession && examSlot && !hideStandaloneExerciseLabel
+                        ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
+                        : null
+                    }
+                  />
+                  <CambridgeSampleExamPart
+                    key={`${levelSlug}-sample-${partNumber}`}
+                    part={cambridgeSamplePart}
+                    hideFeedback={hideFeedbackResolved}
+                    examMode={examModeActive && !reviewMode}
+                    lang={lang}
+                    writing={
+                      isLongFormWritingPart
+                        ? {
+                            storageKey: longWritingStorageKey,
+                            wordMin: effectiveWritingWordMin,
+                            wordMax: effectiveWritingWordMax,
+                            heading: `Your answer — ${getPartTitle(selectedPart)}`,
+                            partLabel: selectedPart.nombre,
+                            partDescription: selectedPart.descripcion || '',
+                            onScoresReady: handleWritingScoresReady,
+                            lang,
+                          }
+                        : null
+                    }
+                  />
+                </div>
+              </div>
+            ) : null}
+
             {selectedPart &&
               !selectedQuestion &&
+              !showB1SampleWithoutRow &&
+              !showCambridgeSampleWithoutRow &&
               !showA2Part1WithoutSupabaseRow &&
               !showA2Part2WithoutSupabaseRow &&
               !showA2Part3WithoutSupabaseRow &&

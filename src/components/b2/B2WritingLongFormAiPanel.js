@@ -60,6 +60,7 @@ export default function B2WritingLongFormAiPanel({
   guestExamMode = false,
   onGuestAttemptBlocked,
   lang = 'en',
+  examLevelLabel = 'B2',
 }) {
   const isEn = lang === 'en';
   const [essay, setEssay] = useState('');
@@ -296,7 +297,7 @@ export default function B2WritingLongFormAiPanel({
 
       <div className="levels-b2-writing-panel__meta">
         <span>
-          {isEn ? 'B2 exam-style length' : 'Extensión estilo examen B2'}:{' '}
+          {isEn ? `${examLevelLabel} exam-style length` : `Extensión estilo examen ${examLevelLabel}`}:{' '}
           <strong>
             {wordMin}–{wordMax} {isEn ? 'words' : 'palabras'}
           </strong>

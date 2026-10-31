@@ -8,21 +8,21 @@ function isForceResendSandbox() {
   return v === 'true' || v === '1' || v === 'yes';
 }
 
-/** Visible name so inboxes show this is not a mailbox to write back to. */
-export function formatNoReplyFrom(address) {
+/** Remitente visible: Dralo <support@dralo.es>. */
+export function formatDraloFrom(address) {
   const raw = String(address || '').trim();
   if (!raw) return raw;
   const email = raw.includes('<') ? raw.replace(/^.*<([^>]+)>.*$/, '$1').trim() : raw;
-  return `Dralo · no responder <${email}>`;
+  return `Dralo <${email}>`;
 }
 
 /** @returns {Promise<string | null>} */
 export async function getResendFromAddress() {
   if (await isResendDomainReady()) {
-    return formatNoReplyFrom(process.env.RESEND_FROM_EMAIL?.trim() || 'soporte@dralo.es');
+    return formatDraloFrom(process.env.RESEND_FROM_EMAIL?.trim() || 'support@dralo.es');
   }
   if (isForceResendSandbox()) {
-    return formatNoReplyFrom('onboarding@resend.dev');
+    return formatDraloFrom('onboarding@resend.dev');
   }
   return null;
 }
@@ -32,39 +32,27 @@ export async function canUseResend() {
   return (await isResendDomainReady()) || isForceResendSandbox();
 }
 
-/**
- * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string }} params
- */
-const NO_REPLY_TEXT =
-  'Este correo no admite respuesta. Si quieres escribirnos, usa Contacto: https://www.dralo.es/contacto';
-
-function withNoReplyNotice(text, html) {
-  const body = String(text || '').trim();
-  const nextText = body.includes('Este correo no admite respuesta')
-    ? body
-    : `${body}\n\n—\n${NO_REPLY_TEXT}`;
-
-  if (!html) return { text: nextText, html };
-  if (String(html).includes('Este correo no admite respuesta')) {
-    return { text: nextText, html };
-  }
-
-  const notice = `<p style="margin:24px 0 0;font-size:12px;line-height:1.6;color:#64748b;">Este correo no admite respuesta. Si quieres escribirnos, usa <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;font-weight:600;">Contacto</a>.</p>`;
-  return { text: nextText, html: `${html}${notice}` };
+function normalizeBcc(bcc) {
+  const list = Array.isArray(bcc) ? bcc : [bcc];
+  return list.map((item) => String(item || '').trim()).filter(Boolean);
 }
 
-export async function sendEmailViaResend({ to, subject, text, html, replyTo }) {
+/**
+ * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string, bcc?: string | string[] }} params
+ */
+export async function sendEmailViaResend({ to, subject, text, html, replyTo, bcc }) {
   const apiKey = process.env.RESEND_API_KEY?.trim();
   const from = await getResendFromAddress();
   if (!apiKey || !from) {
     return { ok: false, error: 'resend_unavailable' };
   }
 
-  const sandbox = from === 'onboarding@resend.dev';
+  const sandbox = /onboarding@resend\.dev/i.test(from);
   let actualTo = to;
   let actualSubject = subject;
   let actualText = text;
   let actualHtml = html;
+  let actualBcc = normalizeBcc(bcc);
 
   if (sandbox) {
     const fallback = process.env.RESEND_DEV_FALLBACK_TO?.trim();
@@ -77,6 +65,7 @@ export async function sendEmailViaResend({ to, subject, text, html, replyTo }) {
     }
     if (to.toLowerCase() !== fallback.toLowerCase()) {
       actualTo = fallback;
+      actualBcc = [];
       actualSubject = `[Para: ${to}] ${subject}`;
       actualText = `Destinatario previsto: ${to}\n\n${text}`;
       if (actualHtml) {
@@ -96,6 +85,7 @@ export async function sendEmailViaResend({ to, subject, text, html, replyTo }) {
   };
   if (actualHtml) payload.html = actualHtml;
   if (replyTo) payload.replyTo = replyTo;
+  if (actualBcc.length) payload.bcc = actualBcc;
 
   const { error } = await resend.emails.send(payload);
   if (error) {
@@ -135,15 +125,11 @@ function buildConfigError() {
  * Resend (dominio verificado) → SMTP Gmail (respaldo).
  * Resend mejora la entregabilidad; Gmail SMTP puede provocar rebotes "Message blocked"
  * en dominios corporativos aunque la app reporte envío correcto.
- * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string }} params
+ * @param {{ to: string, subject: string, text: string, html?: string, replyTo?: string, bcc?: string | string[] }} params
  */
-export async function deliverTransactionalEmail({ to, subject, text, html, replyTo }) {
-  const noticed = withNoReplyNotice(text, html);
-  text = noticed.text;
-  html = noticed.html;
-
+export async function deliverTransactionalEmail({ to, subject, text, html, replyTo, bcc }) {
   if (await canUseResend()) {
-    const resend = await sendEmailViaResend({ to, subject, text, html, replyTo });
+    const resend = await sendEmailViaResend({ to, subject, text, html, replyTo, bcc });
     if (resend.ok) return resend;
     if (!isSupportSmtpReady()) {
       return { ok: false, error: resend.error || 'Error Resend' };
@@ -151,7 +137,7 @@ export async function deliverTransactionalEmail({ to, subject, text, html, reply
   }
 
   if (isSupportSmtpReady()) {
-    const smtp = await sendSupportTicketViaSmtp({ to, subject, text, html, replyTo });
+    const smtp = await sendSupportTicketViaSmtp({ to, subject, text, html, replyTo, bcc });
     if (smtp.sent) return { ok: true, channel: 'smtp' };
     if (!smtp.skipped) {
       return { ok: false, error: smtp.error || 'Error SMTP' };

@@ -10,22 +10,28 @@ const B2_WRITING_LABELS = {
   9: 'Writing Part 2 — Choose one task',
 };
 
-const B1_WRITING_LABELS = {
-  7: 'Writing Part 1 — Email',
-  8: 'Writing Part 2 — Choose one task',
-};
-
 /** Human-readable admin label for a global exam part number. */
 export function getExamPartDisplayLabel(slug, partNumber) {
   const s = String(slug || 'b2').toLowerCase();
   const pn = Number(partNumber);
 
   if (s === 'b2' && B2_WRITING_LABELS[pn]) return B2_WRITING_LABELS[pn];
-  if (s === 'b1' && B1_WRITING_LABELS[pn]) return B1_WRITING_LABELS[pn];
 
   const def =
     s === 'a2' ? getA2PartDef(pn) : getLevelExamPartDef(s, pn);
   if (!def) return `Part ${pn}`;
+
+  if (s === 'b1' && def.title) {
+    const taskLabel = String(def.title).replace(/^Part\s*\d+:\s*/i, '').trim();
+    return `${def.section} Part ${getLocalPartIndex(s, pn, def)} — ${taskLabel}`;
+  }
+
+  if ((s === 'c1' || s === 'c2') && def.title) {
+    const taskLabel = String(def.title).replace(/^Part\s*\d+:\s*/i, '').trim();
+    const paper =
+      def.mode === 'use-of-english' ? 'Use of English' : def.mode === 'reading' ? 'Reading' : def.section;
+    return `${paper} Part ${getLocalPartIndex(s, pn, def)} — ${taskLabel}`;
+  }
 
   const section = def.section || def.title || '';
   const activity = String(def.activity || '').replace(/-/g, ' ');
@@ -70,6 +76,24 @@ function getLocalPartIndex(slug, partNumber, def) {
       if (pn <= 4) return pn;
       if (pn <= 7) return pn - 4;
     }
+  }
+
+  if (s === 'b1') {
+    if (mode === 'writing') return pn - 6;
+    if (mode === 'listening') return pn - 8;
+    if (mode === 'speaking') return pn - 12;
+  }
+
+  if (s === 'c1') {
+    if (mode === 'writing') return pn - 8;
+    if (mode === 'listening') return pn - 10;
+    if (mode === 'speaking') return pn - 14;
+  }
+
+  if (s === 'c2') {
+    if (mode === 'writing') return pn - 7;
+    if (mode === 'listening') return pn - 9;
+    if (mode === 'speaking') return pn - 13;
   }
 
   return pn;

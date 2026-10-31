@@ -49,8 +49,14 @@ export default function LevelHubPage({ config }) {
     return <NivelesComingSoonNotice level={config.cefr} />;
   }
 
-  const pageClass = `niveles-level-page niveles-level-page--${config.slug}`;
-  const isB2Hub = config.slug === 'b2';
+  const usesPracticeQuadrant = Boolean(config.practiceSectionTitle);
+  const pageClass = [
+    'niveles-level-page',
+    `niveles-level-page--${config.slug}`,
+    usesPracticeQuadrant && config.slug !== 'b2' ? 'niveles-level-page--b2' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   const hubBody = (
     <>
@@ -63,18 +69,20 @@ export default function LevelHubPage({ config }) {
           mascotVariant={config.mascotVariant}
           mascotWidth={146}
           accent={config.accent}
-          stats={config.heroStats ?? (isB2Hub ? [] : [{ value: 'Exam or skills', label: '' }])}
+          stats={
+            config.heroStats ?? (usesPracticeQuadrant ? [] : [{ value: 'Exam or skills', label: '' }])
+          }
         />
       </div>
 
-      {isB2Hub ? (
+      {usesPracticeQuadrant ? (
           <ExamPracticeHubSection
           examLinks={config.examLinks}
           isStudent={isStudent}
           guestPreview={!session}
           skillsQuadrant
           sectionTitle={config.practiceSectionTitle}
-          quadrantFooter={showStarsWayHub ? <StarsWayHubTabs embedded /> : null}
+          quadrantFooter={showStarsWayHub && config.slug === 'b2' ? <StarsWayHubTabs embedded /> : null}
           quizGame={
             showQuizGame
               ? {
@@ -97,7 +105,7 @@ export default function LevelHubPage({ config }) {
 
   return (
     <main className={`shell content-hub-shell exam-practice-level-hub ${pageClass} ${landingFont.variable}`}>
-      {isB2Hub ? <div className="levels-b2-page-content">{hubBody}</div> : hubBody}
+      {usesPracticeQuadrant ? <div className="levels-b2-page-content">{hubBody}</div> : hubBody}
 
       <LevelHubStyles />
     </main>

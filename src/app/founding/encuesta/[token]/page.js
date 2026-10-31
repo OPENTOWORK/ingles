@@ -125,6 +125,20 @@ export default function FoundingSurveyPage() {
     event.preventDefault();
     if (isPreview || submitting) return;
 
+    const errors = {};
+    for (const question of questions) {
+      if (question.required === false) continue;
+      const value = answers[question.id];
+      if (value == null || String(value).trim() === '') {
+        errors[question.id] = 'Esta pregunta es obligatoria.';
+      }
+    }
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setSubmitError('Responde todas las preguntas para conservar el Plan Plus.');
+      return;
+    }
+
     setSubmitting(true);
     setSubmitError('');
     setFieldErrors({});
@@ -240,7 +254,14 @@ export default function FoundingSurveyPage() {
           <div key={question.id} className={styles.question}>
             <p className={styles.label}>
               {question.label}
-              {!question.required && <span className={styles.optional}>opcional</span>}
+              {question.required === false ? (
+                <span className={styles.optional}>opcional</span>
+              ) : (
+                <span className={styles.required} aria-hidden="true">
+                  {' '}
+                  *
+                </span>
+              )}
             </p>
 
             {question.type === 'scale' && (

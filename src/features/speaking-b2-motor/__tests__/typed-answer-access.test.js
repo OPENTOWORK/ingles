@@ -8,28 +8,24 @@ import { canSubmitSpeakingB2TypedAnswer } from '../services/typed-answer-access.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../../..');
 
 describe('speaking B2 typed answers', () => {
-  it('allows admin typed answers and keeps students on the live-exam lock', () => {
+  it('allows typed answers for every role', () => {
     assert.equal(canSubmitSpeakingB2TypedAnswer({ session: { fixtureMode: false }, isAdmin: true }), true);
-    assert.equal(canSubmitSpeakingB2TypedAnswer({ session: { fixtureMode: false }, isAdmin: false }), false);
-    assert.equal(
-      canSubmitSpeakingB2TypedAnswer({ session: { fixtureMode: true }, isAdmin: false, runtime: true }),
-      true,
-    );
-    assert.equal(
-      canSubmitSpeakingB2TypedAnswer({ session: { fixtureMode: true }, isAdmin: false, runtime: false }),
-      false,
-    );
+    assert.equal(canSubmitSpeakingB2TypedAnswer({ session: { fixtureMode: false }, isAdmin: false }), true);
+    assert.equal(canSubmitSpeakingB2TypedAnswer({ session: { fixtureMode: true }, isAdmin: false }), true);
   });
 
-  it('keeps the student mic gate and only opens the typed fallback for admin', () => {
+  it('opens the typed fallback for every role', () => {
     const motor = readFileSync(
       path.join(root, 'src/features/speaking-b2-motor/ui/SpeakingMotorV1.js'),
       'utf8',
     );
-    assert.match(motor, /isAdminRole/);
-    assert.match(motor, /As admin you can continue without a microphone/);
+    assert.match(motor, /canStartSpeakingB2Interview/);
+    assert.equal(motor.includes('isAdminRole'), false);
+    assert.equal(motor.includes('As admin you can continue without a microphone'), false);
     assert.match(motor, /Continue without microphone/);
     assert.match(motor, /startExam\(\{ typed: true \}\)/);
+    assert.match(motor, /Start the interview/);
+    assert.equal(motor.includes('typed || isAdminRef.current'), false);
     assert.match(motor, /typedModeRef/);
     assert.match(motor, /ExaminerVoiceVisualizer/);
     assert.match(motor, /SpeakingExerciseControls/);

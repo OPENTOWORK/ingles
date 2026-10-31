@@ -5,6 +5,7 @@ import {
   normalizeGuideEmail,
   tryConsumeB2GuideSend,
 } from '@/lib/b2GuideDownload';
+import { saveB2GuideRequest } from '@/lib/b2GuideRequests';
 import { deliverTransactionalEmail } from '@/lib/emailDelivery';
 import { getClientIpFromRequest } from '@/lib/marketing/crm/rateLimit';
 
@@ -51,13 +52,6 @@ export async function POST(req) {
         { status: 502 },
       );
     }
-  } catch (err) {
-    console.error('[api/guia-b2/enviar]', err);
-    return NextResponse.json(
-      { ok: false, error: 'No hemos podido enviar la guía. Inténtalo de nuevo en unos minutos.' },
-      { status: 502 },
-    );
-  }
 
   return NextResponse.json({ ok: true });
 }

@@ -60,12 +60,12 @@ describe('configuración general', () => {
     assert.equal(identity.titular, 'DRALO ACADEMY SL');
     assert.equal(identity.cif, '');
     assert.equal(
-      applyLegalIdentityDescription('Titular:', 'Servipacar SL', identity),
+      applyLegalIdentityDescription('Titular:', 'Dralo Academy SL', identity),
       'DRALO ACADEMY SL',
     );
     assert.equal(
-      applyLegalIdentityDescription('CIF:', 'B82133760', identity),
-      'B82133760',
+      applyLegalIdentityDescription('CIF:', 'B05655444', identity),
+      'B05655444',
     );
   });
 
@@ -330,12 +330,12 @@ describe('accesos de webs', () => {
 });
 
 describe('correos con la configuración', () => {
-  it('sin valores guardados conserva Dralo y no inventa la línea legal ni el mailto', () => {
+  it('sin valores guardados conserva Dralo y usa el correo oficial', () => {
     const { html } = buildBrandedEmailFromPlainText('Hola', {});
     assert.match(html, />Dralo</);
     assert.match(html, />Academy</);
+    assert.match(html, /mailto:support@dralo\.es/);
     assert.doesNotMatch(html, /Dralo English/);
-    assert.doesNotMatch(html, /mailto:/);
     assert.doesNotMatch(html, /ETT OPEN TO WORK/);
   });
 

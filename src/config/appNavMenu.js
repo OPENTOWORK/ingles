@@ -32,10 +32,17 @@ import {
 export const HOME_THEORY_LINK = { href: '/teoria', label: 'Theory', tourId: 'nav-theory' };
 
 /** Enlaces inferiores de la home (placement solo admin). */
+export const PLACEMENT_MENU_ITEMS = [
+  { href: '/prueba-nivel/placement', label: 'Placement Test' },
+  { href: '/prueba-nivel/quick', label: 'Quick Test' },
+];
+
 export const NAV_LINK_PLACEMENT = {
   href: '/prueba-nivel',
-  label: 'Placement Test',
+  label: 'Tests',
   tourId: 'nav-placement',
+  menuId: 'placement',
+  menuItems: PLACEMENT_MENU_ITEMS,
 };
 
 export const NAV_LINK_TRAINING = {
@@ -63,11 +70,9 @@ export function canViewPlacementAndTraining(userRole) {
   return isAdminRole(userRole);
 }
 
-/** Enlaces de home: placement solo admin. Planes va en el menú de arriba. Training vive en Practice. */
-export function getHomeQuickLinksForRole(userRole) {
-  const links = [];
-  if (canViewPlacementAndTraining(userRole)) links.push(NAV_LINK_PLACEMENT);
-  return links;
+/** La home ya no repite Placement Test: va en la cabecera, solo para admin. */
+export function getHomeQuickLinksForRole() {
+  return [];
 }
 
 /** Enlaces en la barra superior (escritorio) y base del menú móvil. */
@@ -106,9 +111,7 @@ export function resolveNavItemHref(href, session) {
 /** Extras de home visibles solo para admin en drawer / menú lateral (no barra desktop). */
 export function getAdminDrawerExtraLinks(userRole) {
   if (!isAdminRole(userRole)) return [];
-  const links = [HOME_THEORY_LINK];
-  if (canViewPlacementAndTraining(userRole)) links.push(NAV_LINK_PLACEMENT);
-  return links;
+  return [HOME_THEORY_LINK];
 }
 
 /**
@@ -157,6 +160,8 @@ export function buildAppNavModel(userRole, session) {
     showPrimaryNav: shouldShowLoggedInPrimaryNav(session),
     showDralo: shouldShowDraloNav(session),
     draloLocked: isDraloAiLockedForRole(userRole),
+    /** Cabecera, entre Dralo AI y Night. Solo admin: los estudiantes no lo ven. */
+    showPlacement: !guest && canViewPlacementAndTraining(userRole),
     /** Sobrescribir con useExamStrategiesAccess() cuando haya sesión (plan real). */
     examStrategiesLocked: false,
     showPricing,

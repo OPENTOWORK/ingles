@@ -23,7 +23,7 @@ export function buildDefaultEmailVariables(extra = {}) {
     login_url: loginUrl ? `Acceso: ${loginUrl}` : '',
     app_url: loginUrl,
     action_url: '',
-    support_email: 'draloenglish@gmail.com',
+    support_email: 'support@dralo.es',
     agent_name: 'Equipo Dralo',
     nombre: '',
     email: '',

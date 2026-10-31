@@ -325,7 +325,7 @@ Do NOT include modelAnswers.
 ${meta}`;
   }
   if (partDef.activity === 'picture-description') {
-    return `Create ${examName} Speaking Part 3 (individual long turn, one picture).
+    return `Create ${examName} Speaking Part 2 (individual long turn, one photograph per candidate).
 Return ONLY JSON: directions, theme, picturePrompt (describe the picture), photoDescription (detailed scene for one image), followUpQuestion.
 Do NOT include modelAnswers.
 ${meta}`;
@@ -377,6 +377,7 @@ ${meta}`;
     varietySeed: options.varietySeed,
     partNumber: partDef.partNumber,
     questionCount: partDef.questionCount,
+    directions: partDef.directions,
   });
 }
 
@@ -396,6 +397,7 @@ export function buildLevelExamPartUserPrompt(levelLabel, partDef, options = {}) 
     varietySeed: options.varietySeed,
     partNumber: partDef.partNumber,
     questionCount: partDef.questionCount,
+    directions: partDef.directions,
   });
 }
 
@@ -503,7 +505,7 @@ ${lengthHint}`;
 
     validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
     generated = validation.normalized;
-    if (validation.ok && isPartComplete(generated, partDef)) {
+    if (validation.ok && isPartComplete(generated, partDef, slug)) {
       return { generated, validation };
     }
   }
@@ -532,11 +534,11 @@ async function generatePartJson(levelLabel, partDef, options) {
   return parsed;
 }
 
-function isPartComplete(gen, partDef) {
+function isPartComplete(gen, partDef, slug = 'b2') {
   const q = gen.questions || [];
   const ma = gen.modelAnswers || [];
   if (partDef.mode === 'speaking') {
-    if (partDef.partNumber >= 14 && partDef.partNumber <= 17) {
+    if (slug === 'b2' && partDef.partNumber >= 14 && partDef.partNumber <= 17) {
       return isB2SpeakingPartComplete(gen, partDef);
     }
     return (
@@ -553,7 +555,7 @@ function isPartComplete(gen, partDef) {
       return Boolean(gen.question && gen.bulletPoints?.length >= 3);
     }
     if (partDef.activity === 'part-2') {
-      return (gen.questions?.length || 0) >= 4;
+      return (gen.questions?.length || 0) >= (slug === 'b1' ? 2 : 4);
     }
     return Boolean(gen.instructions || gen.bulletPoints?.length || gen.taskTitle);
   }

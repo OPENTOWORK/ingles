@@ -70,21 +70,24 @@ export default function MarketingAudiencePanel() {
 
   const acceptedCount = users.filter((user) => user.marketingAccepted).length;
 
-  if (loading) {
-    return <RouteLoadingMascot label="Cargando correos…" variant={5} />;
-  }
-
   return (
-    <section className={styles.card} aria-labelledby="marketing-audience-heading">
-      <h2 id="marketing-audience-heading" className={styles.heading}>
-        Correos
-      </h2>
+    <details className={styles.card}>
+      <summary className={styles.toggle}>
+        <h2 id="marketing-audience-heading" className={styles.heading}>
+          Correos
+        </h2>
+      </summary>
+      <div className={styles.body}>
       <p className={styles.lead}>
         Correo, plan y aceptación de envíos comerciales de cada usuario.
       </p>
 
-      {error ? <p className={styles.error}>{error}</p> : null}
+      {loading ? <RouteLoadingMascot label="Cargando correos…" variant={5} /> : null}
 
+      {!loading && error ? <p className={styles.error}>{error}</p> : null}
+
+      {!loading ? (
+      <>
       <div className={styles.toolbar}>
         <input
           className={styles.search}
@@ -146,6 +149,9 @@ export default function MarketingAudiencePanel() {
           {error ? 'No hay correos para mostrar.' : 'Ningún usuario coincide con la búsqueda.'}
         </p>
       )}
-    </section>
+      </>
+      ) : null}
+      </div>
+    </details>
   );
 }

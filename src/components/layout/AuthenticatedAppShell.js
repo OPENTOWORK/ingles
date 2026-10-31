@@ -35,6 +35,7 @@ export default function AuthenticatedAppShell({
   session,
   userRole,
   roleConfirmedForUserId = null,
+  roleSettledForUserId = null,
   onLogout,
   children,
 }) {
@@ -44,6 +45,9 @@ export default function AuthenticatedAppShell({
   useItPreviewAdminBuzonLayout();
   const showAdminShell = shouldShowAdminShell(pathname, preview.userRole);
   const showStudyBar = Boolean(preview.session?.access_token) && !showAdminShell;
+  const sessionUserId = preview.session?.user?.id ?? null;
+  /** Sin rol aún, la barra no pinta un menú a medias: Tests saldría después. */
+  const navReady = !sessionUserId || roleSettledForUserId === sessionUserId;
 
   return (
     <>
@@ -52,12 +56,14 @@ export default function AuthenticatedAppShell({
       <SiteHeaderBrand
         homeSideMenu={homeSideMenu}
         nav={
-          <AppNav
-            session={preview.session}
-            userRole={preview.userRole}
-            onLogout={onLogout}
-            hideMobileToggle={homeSideMenu}
-          />
+          navReady ? (
+            <AppNav
+              session={preview.session}
+              userRole={preview.userRole}
+              onLogout={onLogout}
+              hideMobileToggle={homeSideMenu}
+            />
+          ) : null
         }
       />
       <ProfileStudyTimerPill />
@@ -79,7 +85,7 @@ export default function AuthenticatedAppShell({
                 )}
               </ExamNavigationGuard>
             </main>
-            {homeSideMenu ? <DeferredAppSideMenu defaultOpen={false} /> : null}
+            {homeSideMenu && navReady ? <DeferredAppSideMenu defaultOpen={false} /> : null}
             {showStudyBar ? (
               <StudySessionBarGate session={preview.session} userRole={preview.userRole} />
             ) : null}

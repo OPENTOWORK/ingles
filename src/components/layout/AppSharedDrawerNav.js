@@ -10,6 +10,7 @@ import SiteThemePicker from '@/components/layout/SiteThemePicker';
 import {
   NAV_LINK_CONTACT,
   NAV_LINK_DRALO_AI,
+  NAV_LINK_PLACEMENT,
   NAV_LINK_PRICING,
   NAV_LINK_PROFILE,
   isStaffPanelsNavActive,
@@ -59,6 +60,7 @@ export function AppSharedDrawerNav({
     sectionLinks,
     showDralo,
     draloLocked,
+    showPlacement,
     guest,
     admin,
     examStrategiesLocked,
@@ -147,6 +149,26 @@ export function AppSharedDrawerNav({
             {NAV_LINK_DRALO_AI.label}
           </NavLink>
         )
+      ) : null}
+
+      {showPlacement ? (
+        <DrawerMenuGroup
+          label={NAV_LINK_PLACEMENT.label}
+          tourId={NAV_LINK_PLACEMENT.tourId}
+          linkClass={`${linkClass} app-nav__group-toggle--link`}
+          panelClass={draloVariant === 'side' ? 'app-side-menu__sub' : 'app-nav__sub'}
+        >
+          {NAV_LINK_PLACEMENT.menuItems.map((sub) => (
+            <NavLink
+              key={sub.href}
+              href={sub.href}
+              className={linkClass}
+              onClick={onNavigate}
+            >
+              {sub.label}
+            </NavLink>
+          ))}
+        </DrawerMenuGroup>
       ) : null}
 
       {showPricing ? (

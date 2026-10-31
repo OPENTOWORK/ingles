@@ -47,5 +47,5 @@ for (const r of info.records || []) {
 }
 
 console.log(
-  'Cuando todos estén "verified", en .env.local usa RESEND_FROM_EMAIL=soporte@dralo.es y quita RESEND_FORCE_SANDBOX_FROM.',
+  'Cuando todos estén "verified", en .env.local usa RESEND_FROM_EMAIL=support@dralo.es y quita RESEND_FORCE_SANDBOX_FROM.',
 );

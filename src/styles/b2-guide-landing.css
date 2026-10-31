@@ -104,16 +104,15 @@ body:has(.b2-guide) .legal-footer {
 .b2-guide__lead,
 .b2-guide__sub,
 .b2-guide__plans > div > p,
-.b2-guide__practice p,
-.b2-guide__band p {
+.b2-guide__practice p {
   color: var(--b2g-muted);
   font-size: 1.05rem;
   line-height: 1.55;
 }
 
-.b2-guide__lead {
+.b2-guide p.b2-guide__lead {
   max-width: 34rem;
-  margin: 1rem 0 1.35rem;
+  margin-top: 1.5rem;
 }
 
 .b2-guide__micro {
@@ -370,17 +369,17 @@ body:has(.b2-guide) .legal-footer {
   align-items: center;
 }
 
-.b2-guide__band h2 {
+.b2-guide__band-copy h2 {
   max-width: 10em;
   color: #fff;
   font-size: clamp(2rem, 4vw, 3rem);
 }
 
-.b2-guide__band h2 span {
+.b2-guide__band-copy h2 span {
   color: #ddd6fe;
 }
 
-.b2-guide__band p {
+.b2-guide__band-copy p {
   max-width: 28rem;
   margin-top: 0.9rem;
   color: rgba(255, 255, 255, 0.88);
@@ -396,7 +395,9 @@ body:has(.b2-guide) .legal-footer {
 }
 
 .b2-guide__card-form h2 {
+  max-width: none;
   margin-bottom: 0.85rem;
+  color: var(--b2g-ink);
   font-size: 1.25rem;
 }
 
@@ -457,22 +458,24 @@ body:has(.b2-guide) .legal-footer {
   width: 100%;
 }
 
-.b2-guide__fine,
-.b2-guide__status {
+.b2-guide__card-form p.b2-guide__fine,
+.b2-guide__card-form p.b2-guide__status {
+  max-width: none;
   margin-top: 0.7rem;
-  color: #8b86a8;
+  color: #5c567c;
   font-size: 0.78rem;
   line-height: 1.45;
 }
 
-.b2-guide__status--ok {
+.b2-guide__card-form p.b2-guide__status--ok {
   color: #166534;
   font-size: 0.95rem;
   font-weight: 700;
 }
 
-.b2-guide__status--error {
+.b2-guide__card-form p.b2-guide__status--error {
   color: #b91c1c;
+  font-size: 0.92rem;
   font-weight: 700;
 }
 

@@ -22,10 +22,13 @@ export default function B2GuideDownloadForm() {
     setStatus('sending');
     setMessage('');
     const website = new FormData(event.currentTarget).get('website');
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), 20000);
     try {
       const res = await fetch('/api/guia-b2/enviar/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
         body: JSON.stringify({
           email,
           website,
@@ -42,9 +45,15 @@ export default function B2GuideDownloadForm() {
       }
       setStatus('sent');
       setMessage('Listo. Te hemos enviado la guía. Si no la ves en unos minutos, mira en spam.');
-    } catch {
+    } catch (err) {
       setStatus('error');
-      setMessage('No hemos podido enviar la guía. Inténtalo de nuevo.');
+      setMessage(
+        err?.name === 'AbortError'
+          ? 'El envío está tardando demasiado. Inténtalo de nuevo en unos minutos.'
+          : 'No hemos podido enviar la guía. Inténtalo de nuevo.',
+      );
+    } finally {
+      window.clearTimeout(timer);
     }
   }
 

@@ -188,7 +188,7 @@ export async function resolveEffectiveExamPartGenerationPrompt(adminDb, options)
   const partDef =
     slug === 'a2' ? getA2PartDef(partNumber) : getLevelExamPartDef(slug, partNumber);
   const directions = partDef
-    ? getExamDirections(partDef.mode, partDef.activity)
+    ? partDef.directions || getExamDirections(partDef.mode, partDef.activity)
     : '';
   const expanded = expandExamPartPromptTemplate(userPlain, {
     topic: options?.topic ?? defaults.meta.topic,

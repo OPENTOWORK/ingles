@@ -1,0 +1,964 @@
+.paper {
+  width: 100%;
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, Helvetica, sans-serif;
+  color: #1a202c;
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.demoNote {
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #bee3f8;
+  background: #ebf8ff;
+  color: #2c5282;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.rubric {
+  padding-bottom: 0.85rem;
+  border-bottom: 2px solid #1a202c;
+}
+
+.rubricRange {
+  margin: 0 0 0.2rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.rubricText {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #2d3748;
+}
+
+.intro {
+  margin: 0;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.card {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1a365d;
+}
+
+.cardSubtitle {
+  margin: -0.5rem 0 0;
+  font-style: italic;
+  color: #475569;
+}
+
+.cardLead {
+  margin: 0;
+  font-weight: 600;
+  color: #334155;
+}
+
+.paragraph {
+  margin: 0;
+}
+
+.questionList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.question {
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.questionNumber {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #1e3a8a;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.questionBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.stem {
+  margin: 0;
+  font-weight: 600;
+}
+
+.context {
+  margin: 0;
+  color: #475569;
+  font-size: 0.93rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.option input {
+  margin-top: 0.3rem;
+}
+
+.optionSelected,
+.clozeOption.optionSelected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.optionLetter {
+  font-weight: 800;
+  min-width: 1.1rem;
+}
+
+.optionCorrect,
+.clozeOption.optionCorrect {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.optionWrong,
+.clozeOption.optionWrong {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.feedback {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.feedbackOk {
+  color: #15803d;
+}
+
+.feedbackPartial {
+  color: #b45309;
+}
+
+.feedbackKo {
+  color: #b91c1c;
+}
+
+/* Gaps inside texts */
+.gap {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0.15rem;
+  vertical-align: baseline;
+}
+
+.gapNumber {
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.gapBlank {
+  display: inline-block;
+  min-width: 5.5rem;
+  border-bottom: 2px solid #1e3a8a;
+  text-align: center;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.gapExample .gapBlank {
+  border-bottom-style: dashed;
+  font-style: italic;
+}
+
+.gapInput {
+  width: 8.5rem;
+  max-width: 100%;
+  padding: 0.15rem 0.35rem;
+  border: none;
+  border-bottom: 2px solid #1e3a8a;
+  background: #f8fafc;
+  font: inherit;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.gapInput:focus,
+.letterSelect:focus {
+  outline: 2px solid #93c5fd;
+  outline-offset: 1px;
+}
+
+.gapCorrect .gapInput,
+.gapCorrect .gapBlank,
+.gapCorrect .letterSelect {
+  border-color: #16a34a;
+  color: #15803d;
+}
+
+.gapPartial .gapInput,
+.gapPartial .letterSelect {
+  border-color: #d97706;
+  color: #b45309;
+}
+
+.gapWrong .gapInput,
+.gapWrong .gapBlank,
+.gapWrong .letterSelect {
+  border-color: #dc2626;
+  color: #b91c1c;
+}
+
+.gapKey {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.stemBadge {
+  display: inline-block;
+  padding: 0.05rem 0.45rem;
+  border-radius: 6px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.letterSelect {
+  min-width: 4.2rem;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* Part 1 — option grid under the text */
+.clozeGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.clozeRow {
+  display: grid;
+  grid-template-columns: 2.1rem repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.clozeRowExample {
+  opacity: 0.8;
+}
+
+.clozeOption {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.clozeRowExample .clozeOption {
+  cursor: default;
+}
+
+.clozeOption input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .clozeRow {
+    grid-template-columns: 2.1rem repeat(2, minmax(0, 1fr));
+  }
+
+  .clozeRow > .clozeOption:nth-child(4) {
+    grid-column: 2;
+  }
+}
+
+/* Part 4 — key word transformations */
+.keyWordExample {
+  padding: 0.75rem 0.85rem;
+  border: 1px dashed #94a3b8;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.keyWordBox {
+  align-self: flex-start;
+  padding: 0.15rem 0.7rem;
+  border: 2px solid #1a202c;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.keyWordSentence {
+  margin: 0;
+  line-height: 2;
+}
+
+.keyWordAnswer {
+  padding: 0 0.35rem;
+  border-bottom: 2px dashed #1e3a8a;
+  font-weight: 700;
+  font-style: italic;
+  color: #1e3a8a;
+}
+
+.keyWordInput {
+  width: 17rem;
+}
+
+/* Parts 6–8 — lettered texts and matching */
+.letteredList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lettered {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.letterBadge {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #1e3a8a;
+}
+
+.letteredTitle {
+  margin: 0 0 0.2rem;
+  font-weight: 800;
+}
+
+.letteredText {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.textsTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1a365d;
+}
+
+.matchingBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.matchingList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.matchingRow {
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.matchingStem {
+  margin: 0;
+}
+
+/* Part 7 — removed paragraphs */
+.paragraphGap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.6rem 0.75rem;
+  border: 2px dashed #93c5fd;
+  border-radius: 10px;
+  background: #f8fafc;
+}
+
+.paragraphGapHead {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.paragraphGapPreview {
+  margin: 0;
+  color: #475569;
+  font-size: 0.93rem;
+  font-style: italic;
+}
+
+/* Writing */
+.taskLabel {
+  margin: 0;
+  font-weight: 800;
+  color: #1a365d;
+}
+
+.notesBox {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border: 2px solid #1e3a8a;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+@media (max-width: 720px) {
+  .notesBox {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.notesHeading {
+  margin: 0 0 0.4rem;
+  font-weight: 800;
+}
+
+.opinions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.opinion {
+  margin: 0;
+  font-style: italic;
+  color: #334155;
+}
+
+.taskChoice {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+@media (max-width: 960px) {
+  .taskChoice {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.taskCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.taskCardSelected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.taskButton {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+.announcement {
+  padding: 0.75rem 0.9rem;
+  border: 2px solid #1e3a8a;
+  border-radius: 10px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.announcementHeading {
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #1e3a8a;
+}
+
+.letterBox {
+  padding: 0.75rem 0.9rem;
+  border-left: 4px solid #64748b;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-style: italic;
+}
+
+.wordNote {
+  margin: 0;
+  font-weight: 700;
+  color: #334155;
+}
+
+.sourceTexts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.sourceText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.9rem 1rem;
+  border: 2px solid #1e3a8a;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.sourceTextTitle {
+  margin: 0;
+  font-weight: 800;
+  color: #1a365d;
+}
+
+/* Listening */
+.notesList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.dualTasks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+@media (max-width: 860px) {
+  .dualTasks {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.dualOptions {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.93rem;
+}
+
+.speakerList {
+  margin: 0;
+  padding: 0.6rem 0 0;
+  list-style: none;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.speakerRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 2.1rem auto;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.speakerLabel {
+  font-weight: 700;
+}
+
+/* Speaking */
+.script {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 4px solid #64748b;
+  background: #f8fafc;
+  color: #334155;
+  font-style: italic;
+}
+
+.scriptLine {
+  margin: 0 0 0.25rem;
+}
+
+.scriptLine:last-child {
+  margin-bottom: 0;
+}
+
+.bulletList {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.candidateQuestions {
+  margin: 0;
+  padding: 0.65rem 0.9rem 0.65rem 2rem;
+  border-radius: 10px;
+  background: #eff6ff;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.photoStrip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .photoStrip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.photo {
+  margin: 0;
+}
+
+.photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+}
+
+.credits {
+  margin: 0;
+  font-size: 0.78rem;
+  color: #64748b;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .photoGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.photoLabelled {
+  position: relative;
+}
+
+.photoLabelled img {
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: #f1f5f9;
+}
+
+.photoLetter {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  background: #1e3a8a;
+  color: #fff;
+  font-weight: 800;
+}
+
+.promptCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.9rem 1rem;
+  border: 2px solid #1e3a8a;
+  border-radius: 12px;
+  background: #eff6ff;
+}
+
+.promptQuestion {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.followUp {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.mindMap {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    'p1 . p2'
+    'p3 q p4'
+    '. p5 .';
+  gap: 0.85rem;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.mindMapCentre,
+.mindMapPrompt {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.mindMapCentre {
+  grid-area: q;
+  border: 2px solid #1e3a8a;
+  background: #eff6ff;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.mindMapPrompt {
+  border: 1px solid #94a3b8;
+  background: #f8fafc;
+  font-weight: 600;
+}
+
+.mindMapPrompt1 {
+  grid-area: p1;
+}
+
+.mindMapPrompt2 {
+  grid-area: p2;
+}
+
+.mindMapPrompt3 {
+  grid-area: p3;
+}
+
+.mindMapPrompt4 {
+  grid-area: p4;
+}
+
+.mindMapPrompt5 {
+  grid-area: p5;
+}
+
+@media (max-width: 640px) {
+  .mindMap {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'q' 'p1' 'p2' 'p3' 'p4' 'p5';
+  }
+}
+
+/* Check bar */
+.checkBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.button {
+  appearance: none;
+  border: 1px solid #1e3a8a;
+  border-radius: 999px;
+  padding: 0.5rem 1.15rem;
+  background: #1e3a8a;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.buttonGhost {
+  background: #fff;
+  color: #1e3a8a;
+}
+
+.score {
+  margin: 0;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+:global(body.reading-night-mode) .paper {
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .card,
+:global(body.reading-night-mode) .lettered,
+:global(body.reading-night-mode) .matchingRow,
+:global(body.reading-night-mode) .taskCard,
+:global(body.reading-night-mode) .option,
+:global(body.reading-night-mode) .clozeOption,
+:global(body.reading-night-mode) .announcement,
+:global(body.reading-night-mode) .notesBox,
+:global(body.reading-night-mode) .paragraphGap,
+:global(body.reading-night-mode) .keyWordExample,
+:global(body.reading-night-mode) .sourceText,
+:global(body.reading-night-mode) .mindMap,
+:global(body.reading-night-mode) .mindMapPrompt {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .rubric {
+  border-bottom-color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .rubricText,
+:global(body.reading-night-mode) .intro,
+:global(body.reading-night-mode) .context,
+:global(body.reading-night-mode) .cardSubtitle,
+:global(body.reading-night-mode) .cardLead,
+:global(body.reading-night-mode) .script,
+:global(body.reading-night-mode) .wordNote,
+:global(body.reading-night-mode) .opinion,
+:global(body.reading-night-mode) .paragraphGapPreview,
+:global(body.reading-night-mode) .credits {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .cardTitle,
+:global(body.reading-night-mode) .textsTitle,
+:global(body.reading-night-mode) .taskLabel,
+:global(body.reading-night-mode) .letterBadge,
+:global(body.reading-night-mode) .gapNumber,
+:global(body.reading-night-mode) .announcementHeading,
+:global(body.reading-night-mode) .keyWordAnswer,
+:global(body.reading-night-mode) .sourceTextTitle,
+:global(body.reading-night-mode) .score {
+  color: #93c5fd;
+}
+
+:global(body.reading-night-mode) .followUp {
+  border-top-color: #475569;
+}
+
+:global(body.reading-night-mode) .promptQuestion {
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .photoLabelled img {
+  background: #0f172a;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .keyWordBox {
+  border-color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .script,
+:global(body.reading-night-mode) .letterBox,
+:global(body.reading-night-mode) .gapInput,
+:global(body.reading-night-mode) .letterSelect {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .candidateQuestions,
+:global(body.reading-night-mode) .mindMapCentre,
+:global(body.reading-night-mode) .promptCard,
+:global(body.reading-night-mode) .optionSelected {
+  background: #1e3a8a;
+  border-color: #60a5fa;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .optionCorrect {
+  background: #14532d;
+  border-color: #4ade80;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .optionWrong {
+  background: #7f1d1d;
+  border-color: #f87171;
+  color: #e2e8f0;
+}

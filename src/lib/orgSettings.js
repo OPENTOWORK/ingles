@@ -9,7 +9,7 @@ export const ORG_SETTING_FIELDS = [
     label: 'Titular',
     type: 'text',
     maxLength: 120,
-    fallback: 'Servipacar SL',
+    fallback: 'Dralo Academy SL',
     scope: 'Primera línea del cuadro de identificación de los términos y condiciones.',
   },
   {
@@ -18,7 +18,7 @@ export const ORG_SETTING_FIELDS = [
     label: 'CIF',
     type: 'text',
     maxLength: 20,
-    fallback: 'B82133760',
+    fallback: 'B05655444',
     scope: 'CIF del cuadro de identificación de los términos y condiciones.',
   },
   {
@@ -37,7 +37,7 @@ export const ORG_SETTING_FIELDS = [
     label: 'Email de contacto',
     type: 'email',
     maxLength: 120,
-    fallback: 'draloenglish@gmail.com',
+    fallback: 'support@dralo.es',
     scope: 'Correo del cuadro de identificación de los términos y condiciones.',
   },
   {
@@ -65,7 +65,7 @@ export const ORG_SETTING_FIELDS = [
     label: 'Correo de soporte',
     type: 'email',
     maxLength: 120,
-    fallback: 'draloenglish@gmail.com',
+    fallback: 'support@dralo.es',
     scope:
       'Dirección que se muestra en el pie de los correos automáticos. No cambia la cuenta desde la que se envían.',
   },

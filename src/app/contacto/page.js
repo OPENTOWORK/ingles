@@ -126,7 +126,7 @@ export default function ContactPage() {
       toast.error(
         (t) => (
           <span>
-            {data.emailWarning || 'Email was not sent to draloenglish@gmail.com.'}{' '}
+            {data.emailWarning || 'Email was not sent to support@dralo.es.'}{' '}
             <a href="/contacto/configurar-correo" style={{ color: '#fff', textDecoration: 'underline' }}>
               Configure email
             </a>

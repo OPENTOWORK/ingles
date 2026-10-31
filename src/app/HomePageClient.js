@@ -11,12 +11,13 @@ import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner
 import FoundingMemberSlotsBanner from '@/components/home/FoundingMemberSlotsBanner';
 import HomeGuestLanding from '@/components/home/landing/HomeGuestLanding';
 import { landingFont } from '@/components/home/landing/landingFont';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { useTutorial } from '@/context/TutorialContext';
 import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { supabase } from '@/utils/supabaseClient';
+import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
 
 const HomeInstallAppButton = dynamic(() => import('@/components/home/HomeInstallAppButton'), {
   ssr: false,
@@ -45,6 +46,18 @@ export default function HomePageClient() {
   /** En ordenador el invitado ve la landing; mientras se lee la sesión, también. */
   const showGuestLanding = isGuestHome || authPending;
   const phone = usePhoneViewport();
+  /** El bloque en inglés solo existe mientras se confirma una sesión ya guardada. */
+  const [omitHiddenEnglish, setOmitHiddenEnglish] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!document.documentElement.classList.contains(SESSION_HINT_CLASS)) {
+      setOmitHiddenEnglish(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (session?.user) setOmitHiddenEnglish(false);
+  }, [session?.user]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -69,7 +82,7 @@ export default function HomePageClient() {
   return (
     <>
       {showGuestLanding ? <HomeGuestLanding pending={authPending} prioritizeLcp /> : null}
-      {isGuestHome ? null : (
+      {isGuestHome || (omitHiddenEnglish && !session?.user) ? null : (
       <main className={`home-page ${landingFont.variable}${showAppHome ? ' home-page--student-mobile' : ''}${authPending ? ' home-page--pending' : ''}`}>
         <div className="home-page__inner">
           {isRegistered ? <InviteFriendPromoBanner /> : null}

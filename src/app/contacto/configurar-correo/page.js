@@ -38,7 +38,7 @@ export default function ConfigurarCorreoPage() {
     <main style={mainStyle}>
       <h1 style={{ marginBottom: 8 }}>Configurar avisos de soporte</h1>
       <p style={{ color: '#555', lineHeight: 1.5, marginBottom: 16 }}>
-        Los tickets avisan a <strong>draloenglish@gmail.com</strong>. Necesitas una{' '}
+        Los tickets llegan a <strong>support@dralo.es</strong>. Si el envío usa Gmail, necesitas una{' '}
         <strong>contraseña de aplicación</strong> de Google (no la contraseña normal).
       </p>
 
@@ -120,7 +120,7 @@ export default function ConfigurarCorreoPage() {
         <a href="https://web3forms.com" target="_blank" rel="noreferrer">
           web3forms.com
         </a>{' '}
-        (gratis, destino draloenglish@gmail.com).
+        (gratis, destino support@dralo.es).
       </p>
 
       <p style={{ marginTop: 16 }}>

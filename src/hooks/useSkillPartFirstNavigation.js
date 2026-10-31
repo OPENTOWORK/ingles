@@ -35,6 +35,7 @@ function buildPartTopicsFromHub(slug, partMin, partMax, partTopics = [], section
 
   if (sectionTitle && hub.sections[sectionTitle]?.length) {
     return hub.sections[sectionTitle]
+      .filter((t) => !String(t.text || '').toLowerCase().includes('speaking lab'))
       .map((t, i) => {
         const partNumber = partMin + i;
         if (partNumber > partMax) return null;

@@ -128,19 +128,19 @@ describe('speaking B2 taxonomy and evidence', () => {
   });
 
   it('speaks only authorised lines in the session examiner voice, with British fallbacks', () => {
-    const tts = readFileSync(
-      path.join(path.dirname(fileURLToPath(import.meta.url)), '../../../app/api/speaking-b2/tts/route.js'),
-      'utf8',
-    );
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    const tts = readFileSync(path.join(here, '../../../app/api/speaking-b2/tts/route.js'), 'utf8');
+    const voice = readFileSync(path.join(here, '../services/examiner-voice.js'), 'utf8');
     assert.match(tts, /examinerLineIsAuthorised/);
     assert.match(tts, /getSpeakingB2Examiner\(body\?\.examinerId\)/);
-    assert.match(tts, /'gpt-4o-mini-tts'/);
-    assert.match(tts, /SPEAKING_B2_EXAMINER_VOICE_INSTRUCTIONS/);
-    assert.match(tts, /TTS timeout/);
-    assert.match(tts, /edgeOnly: true/);
-    assert.match(tts, /openaiModel: 'tts-1'/);
-    assert.match(tts, /\[speaking-b2\/tts\] fallback/);
+    assert.match(tts, /voiceSpeakingB2ExaminerLine/);
+    assert.match(voice, /'gpt-4o-mini-tts'/);
+    assert.match(voice, /SPEAKING_B2_EXAMINER_VOICE_INSTRUCTIONS/);
+    assert.match(voice, /TTS timeout/);
+    assert.match(voice, /edgeOnly: true/);
+    assert.match(voice, /openaiModel: 'tts-1'/);
+    assert.match(voice, /\[speaking-b2\/tts\] fallback/);
     assert.match(tts, /x-speaking-tts-engine/);
-    assert.equal(tts.includes('Promise.any'), false);
+    assert.equal(tts.includes('Promise.any') || voice.includes('Promise.any'), false);
   });
 });

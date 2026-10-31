@@ -16,7 +16,7 @@ function pickMimeType() {
   return '';
 }
 
-export function attachEnergyVad(stream, { onSilence, silenceMs = 1800, minSpeechMs = 1200, rmsThreshold = 0.04 }) {
+export function attachEnergyVad(stream, { onSilence, onSpeech, silenceMs = 1800, minSpeechMs = 1200, rmsThreshold = 0.04 }) {
   const AudioCtx = window.AudioContext || window.webkitAudioContext;
   const ctx = new AudioCtx();
   const source = ctx.createMediaStreamSource(stream);
@@ -42,6 +42,7 @@ export function attachEnergyVad(stream, { onSilence, silenceMs = 1800, minSpeech
       minSpeechMs,
       silenceMs,
     });
+    if (!speechAt && next.speechAt) onSpeech?.();
     speechAt = next.speechAt;
     silentAt = next.silentAt;
     if (next.ended) {
@@ -174,9 +175,9 @@ export function useSpeakingMic() {
     startRecording,
     stopRecording,
     release,
-    attachVad: (onSilence) => {
+    attachVad: (onSilence, onSpeech) => {
       if (!streamRef.current) return () => {};
-      return attachEnergyVad(streamRef.current, { onSilence });
+      return attachEnergyVad(streamRef.current, { onSilence, onSpeech, silenceMs: 6000 });
     },
   };
 }

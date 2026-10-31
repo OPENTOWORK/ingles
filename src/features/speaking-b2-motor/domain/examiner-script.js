@@ -44,6 +44,13 @@ export const SPEAKING_B2_CLOSINGS = [
 
 export const SPEAKING_B2_REASK_LEADS = ['Could you say that again?', 'Please answer in English.'];
 
+/** One soft prompt before the same question. A second silence moves on. */
+export const SPEAKING_B2_SILENCE_NUDGES = [
+  'Take your time.',
+  "Sorry, I didn't catch that.",
+  'Let me ask you again.',
+];
+
 /** Longest first so a longer lead-in is never cut short by a shorter one. */
 export const SPEAKING_B2_LEAD_INS = [
   ...new Set([
@@ -51,6 +58,7 @@ export const SPEAKING_B2_LEAD_INS = [
     ...SPEAKING_B2_ACKNOWLEDGEMENTS,
     ...SPEAKING_B2_TOPIC_TRANSITIONS,
     ...SPEAKING_B2_REASK_LEADS,
+    ...SPEAKING_B2_SILENCE_NUDGES,
   ]),
 ].sort((a, b) => b.length - a.length);
 

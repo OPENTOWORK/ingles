@@ -23,6 +23,7 @@ export const SITEMAP_PATHS = [
   '/precios',
   '/registro',
   '/blog',
+  '/newsletter',
   '/contacto',
   '/contacto/faq',
   '/legal',
@@ -77,7 +78,7 @@ function priorityFor(path) {
   ) {
     return 0.8;
   }
-  if (path === '/contacto') return 0.6;
+  if (path === '/contacto' || path === '/newsletter') return 0.6;
   return 0.7;
 }
 

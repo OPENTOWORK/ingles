@@ -10,6 +10,10 @@ import {
   splitEmailDeliveryMeta,
 } from '@/lib/renderEmailTemplate';
 import { renderWeeklyChallengeEmail } from '@/lib/weeklyChallengeEmail';
+import {
+  appendTrustpilotStructuredData,
+  trustpilotBccForTemplate,
+} from '@/lib/trustpilotAfs';
 
 const CTA_LABEL_BY_TRIGGER = {
   friend_invited: 'Aceptar invitación',

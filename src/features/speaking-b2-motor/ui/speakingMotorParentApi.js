@@ -3,11 +3,11 @@ export const SPEAKING_MOTOR_START_MODE = {
   parent: 'parent',
 };
 
-export function describeSpeakingMotorLifecycle({ screen = 'select', busy = false } = {}) {
+export function describeSpeakingMotorLifecycle({ screen = 'select', busy = false, allowed = true } = {}) {
   return {
     screen,
     busy,
-    canStart: screen === 'select' && !busy,
+    canStart: allowed && screen === 'select' && !busy,
     interviewStarted: screen !== 'select',
   };
 }

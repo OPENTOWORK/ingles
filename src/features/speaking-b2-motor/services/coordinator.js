@@ -10,12 +10,20 @@ import {
 import {
   SPEAKING_B2_CLOSINGS,
   SPEAKING_B2_LEAD_INS,
+  SPEAKING_B2_SILENCE_NUDGES,
   listSpeakingB2IntroLines,
   normaliseSpeakingB2Line,
 } from '../domain/examiner-script.js';
+import { speakingB2LineQuestion } from '../domain/contextual-follow-up.js';
 
 const MIN_WORDS_FOR_DEVELOPED_ANSWER = 8;
 const MAX_LEAD_INS = 3;
+const FOLLOW_UP_HISTORY_TURNS = 8;
+/** One recovery per question: a nudge, or one reminder to answer in English. */
+const NO_RESPONSE_RECOVERY = 1;
+/** Two follow-ups keep Part 1 near two minutes. The planned questions stay in place. */
+export const SPEAKING_B2_MAX_FOLLOW_UPS = 2;
+const MAX_COUNTED_TURN_MS = 45000;
 
 function wordCount(text) {
   return String(text || '')
@@ -70,9 +78,84 @@ export function createSpeakingB2SessionState({ examCode, userId = null } = {}) {
     questionIndex: 0,
     currentQuestionId: null,
     followUpUsed: {},
+    followUpPrompt: null,
+    followUpGenerated: false,
     reaskCount: 0,
+    silenceNudges: 0,
     candidateSpeakingMs: 0,
     turns: [],
+  };
+}
+
+const CLEARED_FOLLOW_UP = { followUpPrompt: null, followUpGenerated: false };
+
+function followUpsAsked(session) {
+  return Object.values(session.followUpUsed || {}).filter(Boolean).length;
+}
+
+/**
+ * Time credited to the candidate. A wait, a silence or a stuck timer adds nothing.
+ * A reported duration cannot exceed what the length of the answer makes plausible,
+ * so an open turn left idle cannot close the part.
+ */
+export function countedSpeakingB2TurnMs({ speakingMs = 0, transcript = '', silence = false } = {}) {
+  const answer = String(transcript || '').trim();
+  if (silence || !answer) return 0;
+  const plausible = Math.min(MAX_COUNTED_TURN_MS, 4000 + wordCount(answer) * 3500);
+  return Math.min(plausible, Math.max(0, Number(speakingMs) || 0));
+}
+
+/** Milliseconds from the first word or keystroke. Time before that is not an answer. */
+export function speakingB2MeasuredAnswerMs(speechStartedAt, now = Date.now()) {
+  if (!speechStartedAt) return 0;
+  return Math.max(0, now - Number(speechStartedAt));
+}
+
+function speakingMsAfter(session, extraMs) {
+  return (session.candidateSpeakingMs || 0) + Math.max(0, extraMs);
+}
+
+/** The question the candidate is answering now: the follow-up if one was asked. */
+function currentPrompt(session) {
+  const question = getSpeakingB2Question(session.currentQuestionId);
+  return {
+    text: session.followUpPrompt || question?.question || '',
+    generated: Boolean(session.followUpPrompt && session.followUpGenerated),
+  };
+}
+
+/**
+ * What the examiner model needs to follow up this answer, or null when the script picks
+ * the next line: no plan, the name, silence, Spanish, an unclear transcript, time up or
+ * a follow-up already asked for this question.
+ */
+export function speakingB2FollowUpContext(
+  session,
+  { transcript, speakingMs = 0, silence = false, uncertain = false } = {},
+) {
+  if (!session || isTerminalSpeakingB2State(session.state) || !planSteps(session)) return null;
+  if (session.currentQuestionId === SPEAKING_B2_INTRODUCTION.id) return null;
+  const answer = String(transcript || '').trim();
+  if (!answer || silence || uncertain) return null;
+  if (assessB2Part1AnswerLanguage(answer) === 'non-english') return null;
+  const credited = countedSpeakingB2TurnMs({ speakingMs, transcript: answer, silence });
+  if (speakingMsAfter(session, credited) >= SPEAKING_B2_TARGET_DURATION_SEC * 1000) return null;
+  const question = getSpeakingB2Question(session.currentQuestionId);
+  if (!question || session.followUpUsed?.[question.id]) return null;
+  if (followUpsAsked(session) >= SPEAKING_B2_MAX_FOLLOW_UPS) return null;
+  const next = questionStep(session, (session.questionIndex || 0) + 1);
+  const spoken = (session.turns || []).filter(
+    (turn) => turn?.transcript && (turn.role === 'examiner' || turn.role === 'candidate'),
+  );
+  return {
+    examinerId: session.plan?.examinerId || null,
+    question: question.question,
+    answer,
+    nextQuestion: next?.question.question || '',
+    history: spoken
+      .slice(-FOLLOW_UP_HISTORY_TURNS)
+      .map((turn) => ({ role: turn.role, text: turn.transcript })),
+    askedLines: spoken.filter((turn) => turn.role === 'examiner').map((turn) => turn.transcript),
   };
 }
 
@@ -107,7 +190,17 @@ export function beginListening(session) {
   return { ...session, state: transitionSpeakingB2(session.state, 'LISTENING') };
 }
 
-export function resolveSpeakingB2Turn({ session, transcript, speakingMs = 0, silence = false }) {
+/**
+ * `examinerMove` is the examiner model's suggestion for this answer
+ * (composeSpeakingB2ExaminerMove). Without it the interview follows the script alone.
+ */
+export function resolveSpeakingB2Turn({
+  session,
+  transcript,
+  speakingMs = 0,
+  silence = false,
+  examinerMove = null,
+}) {
   if (isTerminalSpeakingB2State(session.state)) {
     return { session, examinerText: null, done: true };
   }
@@ -123,8 +216,12 @@ export function resolveSpeakingB2Turn({ session, transcript, speakingMs = 0, sil
   const working = {
     ...session,
     state: fromState,
-    candidateSpeakingMs: (session.candidateSpeakingMs || 0) + Math.max(0, speakingMs),
+    candidateSpeakingMs: speakingMsAfter(
+      session,
+      countedSpeakingB2TurnMs({ speakingMs, transcript, silence }),
+    ),
     reaskCount: session.reaskCount || 0,
+    silenceNudges: session.silenceNudges || 0,
     followUpUsed: { ...(session.followUpUsed || {}) },
   };
 
@@ -136,68 +233,87 @@ export function resolveSpeakingB2Turn({ session, transcript, speakingMs = 0, sil
   }
 
   if (!answer || silence) {
-    if (working.reaskCount < 1 && working.currentQuestionId) {
-      const question = getSpeakingB2Question(working.currentQuestionId);
+    if (working.reaskCount < NO_RESPONSE_RECOVERY && working.currentQuestionId) {
+      const prompt = currentPrompt(working);
+      const lead = SPEAKING_B2_SILENCE_NUDGES[working.silenceNudges % SPEAKING_B2_SILENCE_NUDGES.length];
       return {
         session: {
           ...working,
           state: transitionSpeakingB2(working.state, 'ASKING'),
           reaskCount: working.reaskCount + 1,
+          silenceNudges: working.silenceNudges + 1,
         },
-        examinerText: question
-          ? `Could you say that again? ${question.question}`
-          : SPEAKING_B2_INTRODUCTION.spokenText,
+        examinerText: prompt.text ? `${lead} ${prompt.text}` : speakingB2IntroLine(working),
         questionId: working.currentQuestionId,
-        validation: 'silence-reask',
+        validation: 'silence-nudge',
+        generated: prompt.generated,
       };
     }
     return nextPaperQuestion(working, 'silence-skip');
   }
 
   if (language === 'non-english') {
-    const question = getSpeakingB2Question(working.currentQuestionId);
-    const same = question?.question || 'Please answer in English.';
+    if (working.reaskCount >= NO_RESPONSE_RECOVERY) {
+      return nextPaperQuestion(working, 'non-english-skip');
+    }
+    const prompt = currentPrompt(working);
     return {
       session: {
         ...working,
         state: transitionSpeakingB2(working.state, 'ASKING'),
         reaskCount: working.reaskCount + 1,
       },
-      examinerText: `Please answer in English. ${same}`,
+      examinerText: `Please answer in English. ${prompt.text || 'Please answer in English.'}`,
       questionId: working.currentQuestionId,
       validation: 'non-english',
+      generated: prompt.generated,
     };
   }
 
   const timeUp = working.candidateSpeakingMs >= SPEAKING_B2_TARGET_DURATION_SEC * 1000;
   const question = getSpeakingB2Question(working.currentQuestionId);
-  const followUp = followUpFor(working, question);
   const usedFollowUp = Boolean(working.followUpUsed[working.currentQuestionId]);
+  const canFollowUp = !timeUp
+    && question
+    && !usedFollowUp
+    && followUpsAsked(working) < SPEAKING_B2_MAX_FOLLOW_UPS;
+  const contextualLine = examinerMove?.action === 'follow_up' ? String(examinerMove.line || '').trim() : '';
 
+  if (canFollowUp && contextualLine) {
+    return askFollowUp(working, contextualLine, { generated: true, validation: 'contextual-follow-up' });
+  }
+
+  const followUp = followUpFor(working, question);
   if (
-    !timeUp &&
-    question &&
+    canFollowUp &&
     followUp &&
-    !usedFollowUp &&
+    examinerMove?.action !== 'move_on' &&
     wordCount(answer) < MIN_WORDS_FOR_DEVELOPED_ANSWER
   ) {
-    return {
-      session: {
-        ...working,
-        state: transitionSpeakingB2(working.state, 'ASKING'),
-        followUpUsed: { ...working.followUpUsed, [working.currentQuestionId]: true },
-        reaskCount: 0,
-      },
-      examinerText: followUp,
-      questionId: working.currentQuestionId,
-      validation: 'authorised-follow-up',
-      followUp,
-    };
+    return askFollowUp(working, followUp, { generated: false, validation: 'authorised-follow-up' });
   }
 
   if (timeUp) return finishPart(working);
 
   return nextPaperQuestion(working, 'accepted');
+}
+
+function askFollowUp(session, line, { generated, validation }) {
+  return {
+    session: {
+      ...session,
+      state: transitionSpeakingB2(session.state, 'ASKING'),
+      followUpUsed: { ...session.followUpUsed, [session.currentQuestionId]: true },
+      followUpPrompt: speakingB2LineQuestion(line),
+      followUpGenerated: generated,
+      reaskCount: 0,
+    },
+    examinerText: line,
+    questionId: session.currentQuestionId,
+    validation,
+    followUp: line,
+    generated,
+  };
 }
 
 function advanceAfterIntro(session) {
@@ -206,6 +322,7 @@ function advanceAfterIntro(session) {
   return {
     session: {
       ...session,
+      ...CLEARED_FOLLOW_UP,
       state: transitionSpeakingB2(session.state, 'ASKING'),
       questionIndex: 0,
       currentQuestionId: first.question.id,
@@ -224,6 +341,7 @@ function nextPaperQuestion(session, validation) {
   return {
     session: {
       ...session,
+      ...CLEARED_FOLLOW_UP,
       state: transitionSpeakingB2(session.state, 'ASKING'),
       questionIndex: nextIndex,
       currentQuestionId: next.question.id,
@@ -242,6 +360,7 @@ export function finishPart(session) {
   return {
     session: {
       ...session,
+      ...CLEARED_FOLLOW_UP,
       state,
       currentQuestionId: null,
     },

@@ -45,7 +45,9 @@ const PRESET_ROUTES = [
   { label: 'B2 — Writing', path: '/exam-practice/b2/exam-writing', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Listening', path: '/exam-practice/b2/exam-listening', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Speaking', path: '/exam-practice/b2/exam-speaking', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
-  { label: 'Placement Test', path: '/prueba-nivel', roles: ['admin'] },
+  { label: 'Tests', path: '/prueba-nivel', roles: ['admin'] },
+  { label: 'Placement Test', path: '/prueba-nivel/placement', roles: ['admin'] },
+  { label: 'Quick Test', path: '/prueba-nivel/quick', roles: ['admin'] },
   { label: 'Training', path: '/training', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Planes / Pricing', path: '/precios', roles: ['admin'] },
   { label: 'Dralo AI', path: '/dralo-ai', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
@@ -137,7 +139,7 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
   if (pathname === '/soporte' && !canAccessSupportPanel(roleId)) return false;
   if (pathname === '/informatico' && !canAccessItPanel(roleId)) return false;
   if (pathname === '/precios' && !canViewPricing(roleId)) return false;
-  if (pathname === '/prueba-nivel' && !canViewPlacementAndTraining(roleId)) {
+  if (pathname.startsWith('/prueba-nivel') && !canViewPlacementAndTraining(roleId)) {
     return false;
   }
   return true;
@@ -175,6 +177,11 @@ export function getItPreviewNavSummary(roleId = 'student') {
   if (model.showDralo) {
     items.push('Dralo AI');
     if (model.draloLocked) items.push('(Coming soon)');
+  }
+  if (model.showPlacement) {
+    items.push('Tests');
+    items.push('Placement Test');
+    items.push('Quick Test');
   }
 
   if (model.showPricing) items.push('Pricing');

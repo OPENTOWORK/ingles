@@ -33,7 +33,7 @@ import './home-guest-landing.css';
 const REGISTER_HREF = '/registro';
 const TRY_EXERCISE_HREF = '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1';
 const WRITING_PRACTICE_HREF = '/exam-practice/b2/exam-writing/';
-const CONTACT_EMAIL = 'draloenglish@gmail.com';
+const CONTACT_EMAIL = 'support@dralo.es';
 const TOUR_VIDEO_SRC = sitePublicPath('/dralo-tour.mp4?v=4');
 const TOUR_POSTER_SRC = sitePublicPath('/dralo-tour-poster.webp?v=4');
 
@@ -57,6 +57,129 @@ const PAIRS = [
     benefit: 'consulta tus resultados e identifica en qué aspectos necesitas centrarte.',
   },
 ];
+
+/** Texto provisional. Sustituir por reseñas reales cuando las haya. No son opiniones de Google. */
+const PLACEHOLDER_REVIEWS = [
+  ['Lucía', 'L', 'La corrección del Writing me enseña el error y por qué está mal. Antes repetía lo mismo sin darme cuenta.', 'Alumna de B2'],
+  ['Marcos', 'M', 'Practico Reading a mi ritmo y, al terminar, veo en qué parte del B2 First flojeo.', 'Alumno de B2'],
+  ['Elena', 'E', 'Los comentarios de vocabulario y gramática son claros. No es solo una nota.', 'Alumna de B2'],
+  ['Hugo', 'H', 'Por fin entiendo si mejoro: miro los resultados y elijo la siguiente sesión.', 'Alumno de B2'],
+  ['Carla', 'C', 'Me ayuda a preparar el B2 First fuera de clase, con ejercicios del mismo formato.', 'Alumna de B2'],
+  ['Diego', 'D', 'Lo uso desde el móvil entre clases. Encaja con lo que vemos en la academia.', 'Alumno de B2'],
+  ['Nuria', 'N', 'Antes hacía ejercicios sueltos. Aquí veo qué partes tengo que repetir.', 'Alumna de B2'],
+  ['Pablo', 'P', 'La explicación de cada corrección me sirve más que ver el ejercicio en rojo.', 'Alumno de B2'],
+];
+
+function placeholderReview([name, initial, text, meta]) {
+  return { key: name, name, initial, text, meta, stars: 5 };
+}
+
+const reviewDateFormat = new Intl.DateTimeFormat('es-ES', {
+  dateStyle: 'medium',
+  timeZone: 'Europe/Madrid',
+});
+
+function reviewFromApi(row) {
+  const created = row.createdAt ? new Date(row.createdAt) : null;
+  const when = created && !Number.isNaN(created.getTime()) ? reviewDateFormat.format(created) : '';
+  return {
+    key: row.id,
+    name: row.name,
+    initial: row.initial,
+    text: row.text,
+    meta: when ? `Reseña en Dralo · ${when}` : 'Reseña en Dralo',
+    stars: Number(row.stars) || 5,
+  };
+}
+
+function ReviewCard({ review, hidden }) {
+  const score = Math.max(1, Math.min(5, Number(review.stars) || 5));
+  return (
+    <article className="hl-review" aria-hidden={hidden || undefined}>
+      <div className="hl-review__head">
+        <span className="hl-review__avatar" aria-hidden="true">{review.initial}</span>
+        <h3>{review.name}</h3>
+      </div>
+      <span className="hl-review__stars" aria-label={`${score} de 5 estrellas`}>
+        {'★'.repeat(score)}
+        <span className="hl-review__stars-empty">{'☆'.repeat(5 - score)}</span>
+      </span>
+      <p>“{review.text}”</p>
+      <span className="hl-review__meta">{review.meta}</span>
+    </article>
+  );
+}
+
+function ReviewCarousel() {
+  const [paused, setPaused] = useState(false);
+  const [reviews, setReviews] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/resenas/')
+      .then((res) => res.json())
+      .then((json) => {
+        if (cancelled || !Array.isArray(json.reviews) || !json.reviews.length) return;
+        setReviews(json.reviews.map(reviewFromApi));
+      })
+      .catch(() => {});
+
+    function onPublished(event) {
+      const row = event.detail;
+      if (row?.removedId) {
+        setReviews((current) => (current ? current.filter((item) => item.key !== row.removedId) : current));
+        return;
+      }
+      if (!row?.id) return;
+      setReviews((current) => {
+        const next = [reviewFromApi(row), ...(current || [])];
+        const seen = new Set();
+        return next.filter((item) => {
+          if (seen.has(item.key)) return false;
+          seen.add(item.key);
+          return true;
+        });
+      });
+    }
+    window.addEventListener('dralo-site-review', onPublished);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('dralo-site-review', onPublished);
+    };
+  }, []);
+
+  const cards = reviews?.length ? reviews : PLACEHOLDER_REVIEWS.map(placeholderReview);
+
+  return (
+    <section className={`hl-reviews${paused ? ' hl-reviews--paused' : ''}`} aria-labelledby="hl-reviews-title">
+      <div className="hl-reviews__head">
+        <span className="hl-reviews__badge">Opiniones</span>
+        <div className="hl-reviews__title-row">
+          <h2 id="hl-reviews-title" className="hl-h2 hl-h2--sm">Quienes practican con Dralo cuentan esto</h2>
+          <button
+            type="button"
+            className="hl-reviews__toggle"
+            aria-pressed={paused}
+            onClick={() => setPaused((value) => !value)}
+          >
+            {paused ? <Play aria-hidden="true" /> : <Pause aria-hidden="true" />}
+            {paused ? 'Reproducir' : 'Pausa'}
+          </button>
+        </div>
+      </div>
+      <div className="hl-reviews__rotator">
+        <div className="hl-reviews__track">
+          {cards.map((review) => (
+            <ReviewCard key={review.key} review={review} />
+          ))}
+          {cards.map((review) => (
+            <ReviewCard key={`${review.key}-copy`} review={review} hidden />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 const WRITING_CHECKS = [
   'Corrección de gramática, vocabulario y coherencia.',
@@ -101,13 +224,13 @@ const FAQ = [
   },
   {
     q: '¿Cómo se corrige mi Writing y cuánto tarda?',
-    a: 'La política de privacidad describe la corrección como automática y asistida por herramientas de inteligencia artificial. La pantalla de Writing muestra comentarios de gramática, vocabulario y coherencia. No hay un plazo de respuesta publicado.',
-    published: false,
+    a: 'La política de privacidad y los términos de uso describen la corrección como automática y asistida por herramientas de inteligencia artificial. En la corrección verás marcas de gramática, vocabulario y contenido. No hay un plazo de respuesta publicado.',
+    published: true,
   },
   {
     q: '¿Es un producto oficial de Cambridge?',
-    a: '',
-    published: false,
+    a: 'No. Los términos de uso dicen que Dralo no constituye un organismo certificador oficial ni garantiza la obtención de títulos, certificados o resultados concretos en exámenes oficiales.',
+    published: true,
   },
   {
     q: '¿Funciona en el móvil?',
@@ -116,7 +239,7 @@ const FAQ = [
   },
   {
     q: '¿Qué hacéis con mis datos?',
-    a: 'El responsable es Servipacar SL (nombre comercial Dralo, CIF B82133760). Usamos los datos de la cuenta, el progreso y los ejercicios para prestar el servicio. Las correcciones pueden tratarse con herramientas de inteligencia artificial. Para ejercer tus derechos puedes escribir a draloenglish@gmail.com. El detalle está en https://www.dralo.es/politica-privacidad/.',
+    a: 'El responsable es Dralo Academy SL (nombre comercial Dralo, CIF B05655444). Usamos los datos de la cuenta, el progreso y los ejercicios para prestar el servicio. Las correcciones pueden tratarse con herramientas de inteligencia artificial. Para ejercer tus derechos puedes escribir a support@dralo.es. El detalle está en https://www.dralo.es/politica-privacidad/.',
     published: true,
   },
   {
@@ -184,8 +307,9 @@ function useFoundingSlots(enabled) {
         .then((response) => (response.ok ? response.json() : Promise.reject(new Error('slots'))))
         .then((data) => {
           if (cancelled) return;
-          const remaining = Number(data?.remaining);
-          if (!Number.isInteger(remaining) || remaining < 0) {
+          const rawRemaining = data?.remaining;
+          const remaining = Number(rawRemaining);
+          if (rawRemaining == null || rawRemaining === '' || !Number.isInteger(remaining) || remaining < 0) {
             setSlots({ status: 'unknown' });
             return;
           }
@@ -216,7 +340,20 @@ function useFoundingSlots(enabled) {
 
 function SlotsBox({ slots }) {
   if (slots.status === 'unknown') return null;
-  if (slots.status === 'ready' && (slots.soldOut || slots.remaining === 0)) return null;
+  if (slots.status === 'ready' && (slots.soldOut || slots.remaining === 0)) {
+    return (
+      <p className="hl-slots hl-slots--sold-out" role="status">
+        <span className="hl-slots__kicker">
+          <span className="hl-slots__dot" aria-hidden="true" />
+          Agotado
+        </span>
+        <span className="hl-slots__count">
+          <strong className="hl-slots__num hl-slots__num--word">Agotadas</strong>
+        </span>
+        <span className="hl-slots__of">Las {MAX_FOUNDING_SLOT} plazas iniciales ya están asignadas.</span>
+      </p>
+    );
+  }
 
   const loading = slots.status === 'loading';
   const one = slots.remaining === 1;
@@ -249,6 +386,7 @@ function HeroTourVideo({ active }) {
   const playedOnce = useRef(false);
   const [motion, setMotion] = useState('pending');
   const [playing, setPlaying] = useState(false);
+  const [started, setStarted] = useState(false);
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -308,16 +446,19 @@ function HeroTourVideo({ active }) {
         decoding="async"
       />
       {active && motion !== 'pending' ? (
-        <video
+          <video
           ref={videoRef}
           className="hl-video__media"
           muted
+          autoPlay={motion === 'ok'}
           loop
           playsInline
           preload="metadata"
           poster={TOUR_POSTER_SRC}
+          data-started={started ? 'true' : 'false'}
           aria-describedby="hl-hero-caption"
           onPlay={() => {
+            setStarted(true);
             setPlaying(true);
             playedOnce.current = true;
             trackHomeEvent('hero_video_play');
@@ -491,6 +632,8 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         <SlotsBox slots={slots} />
       </section>
 
+      <ReviewCarousel />
+
       <section className="hl-section" aria-labelledby="hl-problem-title">
         <div className="hl-container hl-problem">
           <div>
@@ -636,10 +779,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <h2 id="hl-faq-title" className="hl-h2 hl-h2--sm">
               Preguntas frecuentes
             </h2>
-            <Link href="/contacto/faq/" className="hl-faq__all">
-              Ver todas las preguntas
-              <ArrowRight aria-hidden="true" />
-            </Link>
           </div>
           <div className="hl-faq__list">
             {faq.map(({ q, a }) => (

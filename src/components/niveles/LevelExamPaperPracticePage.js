@@ -69,8 +69,12 @@ export default function LevelExamPaperPracticePage({ slug, skillRoute }) {
       preferOpenInputs={isA2Rw}
       showAudioFromEnunciado={isListening}
       longFormWritingWithAi={isWriting || isA2Rw}
-      writingWordMin={levelSlug === 'a2' ? 25 : 140}
-      writingWordMax={levelSlug === 'a2' ? 80 : 190}
+      writingWordMin={
+        levelSlug === 'a2' ? 25 : levelSlug === 'b1' ? 100 : levelSlug === 'c1' ? 220 : levelSlug === 'c2' ? 240 : 140
+      }
+      writingWordMax={
+        levelSlug === 'a2' ? 80 : levelSlug === 'b1' ? 120 : levelSlug === 'c1' ? 260 : levelSlug === 'c2' ? 280 : 190
+      }
       lang="en"
     />
   );

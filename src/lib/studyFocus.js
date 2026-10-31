@@ -21,7 +21,7 @@ const NON_STUDY_AREA_RULES = [
   { area: 'Buzón', prefixes: ['/buzon'] },
   { area: 'Tareas', prefixes: ['/tareas'] },
   { area: 'Perfil', prefixes: ['/perfil', '/profile'] },
-  { area: 'Marketing y blog', prefixes: ['/blog', '/precios', '/campana', '/contact', '/contacto'] },
+  { area: 'Marketing y blog', prefixes: ['/blog', '/newsletter', '/precios', '/campana', '/contact', '/contacto'] },
   { area: 'Acceso', prefixes: ['/login', '/registro', '/register', '/auth'] },
 ];
 

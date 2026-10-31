@@ -107,6 +107,11 @@ export const SEO_PAGE_META = {
     description:
       'Guías y consejos para preparar el B2 First: Reading, Writing, Listening y Speaking.',
   },
+  newsletter: {
+    title: 'Newsletter de Dralo',
+    description:
+      'Apúntate a la newsletter de Dralo: un correo corto con un consejo, un ejercicio nuevo o una novedad, solo cuando hay algo que te sirva.',
+  },
   contact: {
     title: 'Contacto',
     description: '¿Dudas sobre Dralo o la preparación del B2 First? Escríbenos y te ayudamos.',

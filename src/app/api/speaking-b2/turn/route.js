@@ -10,9 +10,19 @@ import {
   markFailed,
   examinerLineIsAuthorised,
   predictSpeakingB2UpcomingLines,
+  speakingB2FollowUpContext,
   speakingB2IntroLine,
   startAudioCheck,
 } from '@/features/speaking-b2-motor/services/coordinator';
+import { composeSpeakingB2ExaminerMove } from '@/features/speaking-b2-motor/services/contextual-follow-up';
+import {
+  voiceSpeakingB2ExaminerLine,
+  withSpeakingB2Timeout,
+} from '@/features/speaking-b2-motor/services/examiner-voice';
+import {
+  SPEAKING_B2_FOLLOW_UP_VALIDATION,
+  speakingB2GeneratedLineIsSafe,
+} from '@/features/speaking-b2-motor/domain/contextual-follow-up';
 import {
   authorizeSpeakingSession,
   readSpeakingAccessToken,
@@ -40,6 +50,8 @@ import { getRoleNameByUserId, isAdminRole } from '@/utils/authRoles';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+
+const INLINE_VOICE_WAIT_MS = 6000;
 
 async function speakingB2RequestIsAdmin(auth) {
   if (!auth?.user) return false;
@@ -227,12 +239,23 @@ export async function POST(req) {
         };
       }
 
-      const stored = await persistSpeakingB2Audio({
-        userId: session.userId,
-        sessionId: session.id,
-        buffer: answerBuffer,
-        mimeType: answerMime,
-      });
+      const silence = body.silence || !stt.text;
+      const [stored, examinerMove] = await Promise.all([
+        persistSpeakingB2Audio({
+          userId: session.userId,
+          sessionId: session.id,
+          buffer: answerBuffer,
+          mimeType: answerMime,
+        }),
+        composeSpeakingB2ExaminerMove(
+          speakingB2FollowUpContext(session, {
+            transcript: stt.text,
+            speakingMs: Number(body.speakingMs || 0),
+            silence,
+            uncertain: stt.uncertain,
+          }),
+        ),
+      ]);
 
       session.turns = [
         ...(session.turns || []),
@@ -254,11 +277,15 @@ export async function POST(req) {
         session,
         transcript: stt.text,
         speakingMs: Number(body.speakingMs || 0),
-        silence: body.silence || !stt.text,
+        silence,
+        examinerMove,
       });
 
       if (resolved.examinerText) {
-        if (!examinerLineIsAuthorised(session.examCode, resolved.examinerText)) {
+        const allowed = resolved.generated
+          ? speakingB2GeneratedLineIsSafe(resolved.examinerText)
+          : examinerLineIsAuthorised(session.examCode, resolved.examinerText);
+        if (!allowed) {
           return NextResponse.json({ error: 'Unauthorised examiner line' }, { status: 500 });
         }
         resolved.session.turns.push({
@@ -266,6 +293,7 @@ export async function POST(req) {
           questionId: resolved.questionId,
           transcript: resolved.examinerText,
           source: 'SCRIPT',
+          ...(resolved.generated ? { validation: SPEAKING_B2_FOLLOW_UP_VALIDATION } : {}),
         });
       }
 
@@ -273,9 +301,16 @@ export async function POST(req) {
         resolved.session = beginAsking(resolved.session, resolved.examinerText, resolved.questionId);
       }
 
+      // Scripted lines are prefetched by the client; a generated one is voiced while the turn is saved.
+      const voicing = resolved.generated
+        ? voiceSpeakingB2ExaminerLine(resolved.examinerText, getSpeakingB2Examiner(session.plan?.examinerId))
+        : null;
       resolved.session.answerInFlight = false;
       await persistSpeakingB2Turns(resolved.session);
       const next = await updatePersistedSession(resolved.session);
+      const voiced = voicing
+        ? await withSpeakingB2Timeout(voicing, INLINE_VOICE_WAIT_MS).catch(() => null)
+        : null;
       return NextResponse.json({
         state: next.state,
         examinerText: resolved.examinerText,
@@ -285,6 +320,9 @@ export async function POST(req) {
         transcript: stt.text,
         uncertain: stt.uncertain,
         sttSource: stt.source,
+        examinerAudio: voiced?.audio?.length
+          ? { base64: voiced.audio.toString('base64'), mime: voiced.mime }
+          : undefined,
       });
     } finally {
       const latest = await loadSpeakingB2Session(session.id);

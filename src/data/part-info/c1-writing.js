@@ -8,8 +8,8 @@ const localPartInfo = {
     "commonErrors": "Not planning your essay first, not using a clear structure, not including sophisticated arguments, not giving your own detailed opinion, or making grammar and spelling mistakes"
   },
   "2": {
-    "title": "Part 2: Article, email, letter, or report",
-    "description": "You will choose to write one of four different types of texts (220-260 words) based on a given situation. This tests your ability to write different types of texts with appropriate sophisticated language, structure, and register for different purposes and audiences.",
+    "title": "Part 2: Email or letter, proposal, report or review",
+    "description": "You will choose one of three tasks and write 220-260 words. The task can be an email or letter, a proposal, a report or a review, based on a given situation. This tests your ability to write different types of texts with appropriate sophisticated language, structure, and register for different purposes and audiences.",
     "tips": "Choose the option you feel most confident about. Read the task carefully to understand the purpose, audience, and required information. Use appropriate sophisticated language and register for the type of text. Include all the required information. Use appropriate greetings, closings, and structure. Check your grammar, spelling, and punctuation.",
     "commonErrors": "Not reading the task carefully, not using appropriate sophisticated language and register, not including all required information, not using appropriate structure, or making grammar and spelling mistakes"
   }

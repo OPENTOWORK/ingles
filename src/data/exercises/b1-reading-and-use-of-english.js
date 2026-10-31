@@ -7,9 +7,7 @@ export const exercisesConfig = {
   "part-3": 12,
   "part-4": 12,
   "part-5": 12,
-  "part-6": 24,
-  "part-7": 12,
-  "part-8": 12,
+  "part-6": 12,
 };
 
 // Generador de ejercicios placeholder

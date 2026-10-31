@@ -84,15 +84,13 @@ const LEVEL_SKILL_ZONES = {
     buildSkillChartZone(12, 13, 'Speaking', 'speaking'),
   ],
   c1: [
-    buildSkillChartZone(1, 4, 'Use of English', 'reading'),
-    buildSkillChartZone(5, 8, 'Reading', 'reading'),
+    buildSkillChartZone(1, 8, 'Reading & UoE', 'reading'),
     buildSkillChartZone(9, 10, 'Writing', 'writing'),
     buildSkillChartZone(11, 14, 'Listening', 'listening'),
     buildSkillChartZone(15, 18, 'Speaking', 'speaking'),
   ],
   c2: [
-    buildSkillChartZone(1, 4, 'Use of English', 'reading'),
-    buildSkillChartZone(5, 7, 'Reading', 'reading'),
+    buildSkillChartZone(1, 7, 'Reading & UoE', 'reading'),
     buildSkillChartZone(8, 9, 'Writing', 'writing'),
     buildSkillChartZone(10, 13, 'Listening', 'listening'),
     buildSkillChartZone(14, 16, 'Speaking', 'speaking'),

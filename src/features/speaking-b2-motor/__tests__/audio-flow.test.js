@@ -83,6 +83,53 @@ describe('speaking B2 audio diagnostics and reference flow', () => {
     assert.equal(state.ended, true);
   });
 
+  it('does not close a spoken answer on a thinking pause', () => {
+    const silence = 0.001;
+    let state = shouldEndTurnOnSilence({
+      rms: 0.2,
+      now: 1000,
+      speechAt: 0,
+      silentAt: 0,
+      silenceMs: 6000,
+      minSpeechMs: 1200,
+    });
+    state = shouldEndTurnOnSilence({
+      rms: silence,
+      now: 5000,
+      speechAt: state.speechAt,
+      silentAt: 0,
+      silenceMs: 6000,
+      minSpeechMs: 1200,
+    });
+    assert.equal(state.ended, false, 'four seconds of silence is still the same answer');
+    state = shouldEndTurnOnSilence({
+      rms: 0.2,
+      now: 5500,
+      speechAt: state.speechAt,
+      silentAt: state.silentAt,
+      silenceMs: 6000,
+      minSpeechMs: 1200,
+    });
+    assert.equal(state.silentAt, 0);
+    state = shouldEndTurnOnSilence({
+      rms: silence,
+      now: 7000,
+      speechAt: state.speechAt,
+      silentAt: 0,
+      silenceMs: 6000,
+      minSpeechMs: 1200,
+    });
+    const closed = shouldEndTurnOnSilence({
+      rms: silence,
+      now: 13000,
+      speechAt: state.speechAt,
+      silentAt: state.silentAt,
+      silenceMs: 6000,
+      minSpeechMs: 1200,
+    });
+    assert.equal(closed.ended, true);
+  });
+
   it('walks the interview with reference answers until FINISHING', () => {
     let session = startAudioCheck(createSpeakingB2SessionState({ examCode: SPEAKING_B2_EXAM_CODE }));
     const opened = beginIntroduction(session);

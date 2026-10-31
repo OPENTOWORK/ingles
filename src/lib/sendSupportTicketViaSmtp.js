@@ -5,9 +5,9 @@ import {
 } from '@/lib/supportSmtpCredentials';
 
 /**
- * Envío SMTP directo a la bandeja (draloenglish@gmail.com).
+ * Envío SMTP de respaldo. El destinatario público es support@dralo.es.
  */
-export async function sendSupportTicketViaSmtp({ to, subject, text, html, replyTo }) {
+export async function sendSupportTicketViaSmtp({ to, subject, text, html, replyTo, bcc }) {
   const user = getSupportSmtpUser();
   const pass = getSupportSmtpPass();
 
@@ -24,8 +24,9 @@ export async function sendSupportTicketViaSmtp({ to, subject, text, html, replyT
     });
 
     await transporter.sendMail({
-      from: `Dralo · no responder <${user}>`,
+      from: `Dralo <${user}>`,
       to,
+      bcc: bcc || undefined,
       replyTo: replyTo || undefined,
       subject,
       text,

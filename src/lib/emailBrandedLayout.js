@@ -113,7 +113,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
   const preheader = escapeHtml(options.preheader || options.headline || blocks[0]?.slice(0, 120) || 'Dralo Academy');
   const brandName = String(options.brandName || '').trim();
   const legalName = String(options.legalName || '').trim();
-  const supportEmail = String(options.supportEmail || '').trim();
+  const supportEmail = String(options.supportEmail || 'support@dralo.es').trim();
   const logoName = brandName || 'Dralo Academy';
   const logoParts = logoName.split(/\s+/).filter(Boolean);
   const logoWord = escapeHtml(logoParts[0] || 'Dralo');
@@ -189,8 +189,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
           <tr>
             <td style="padding:22px 10px 0;text-align:center;font-size:12px;line-height:1.7;color:#64748b;">
               <p style="margin:0 0 10px;color:#475569;">
-                Este correo no admite respuesta. Si quieres escribirnos, usa
-                <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;font-weight:600;">Contacto</a>${supportLine}.
+                Puedes responder a este correo${supportLine}.
               </p>
               <p style="margin:0 0 8px;">
                 <a href="https://www.dralo.es" style="color:#4f46e5;text-decoration:none;font-weight:600;">dralo.es</a>

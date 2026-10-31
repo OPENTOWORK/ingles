@@ -123,7 +123,7 @@ export function buildExamGeneratePrompt(mode, activity, level, options = {}) {
   let n = options.questionCount ?? getExamQuestionCount(mode, activity, L);
   if (L === 'B2' && mode === 'listening' && partNumber === 13 && activity === 'conversation') n = 7;
   if (L === 'B2' && mode === 'listening' && partNumber === 12 && activity === 'multiple-matching') n = 5;
-  const directions = getExamDirections(mode, activity);
+  const directions = options.directions || getExamDirections(mode, activity);
   const variety = varietyBlock(options);
   const discourse = passageDiscourseBlock(options);
 
@@ -1016,8 +1016,25 @@ ${baseExamSchema(directions, `,"title":"...","setting":"one line context","scrip
   }
 
   if (mode === 'writing') {
-    const wordMin = L === 'A2' ? 80 : L === 'B1' ? 120 : 140;
-    const wordMax = L === 'A2' ? 100 : L === 'B1' ? 150 : 190;
+    const wordMin = L === 'A2' ? 80 : L === 'B1' ? 100 : 140;
+    const wordMax = L === 'A2' ? 100 : L === 'B1' ? 120 : 190;
+
+    if (activity === 'part-2' && L === 'B1') {
+      return `Create ONE complete Cambridge B1 Preliminary Writing Part 2 task set with TWO optional tasks: Question 2 is an article, Question 3 is a story.
+${variety}
+${SHARED_JSON_RULES}
+Use these official directions (copy into "directions" field):
+${directions}
+Question 2 (article): an announcement from a magazine or website asking readers to write an article, with two or three questions the article must answer.
+Question 3 (story): the story must begin with a given first sentence.
+Word count for every task: about 100 words (${wordMin}–${wordMax}).
+Return ONLY JSON with fields: directions, instructions, wordMin (${wordMin}), wordMax (${wordMax}), questions (array of exactly 2 objects):
+- number (2 or 3)
+- format: article | story
+- context: brief scenario (one or two sentences)
+- targetReader: who will read the finished text
+- prompt: full writing task with clear instructions (for the story, include the opening sentence)`;
+    }
 
     if (activity === 'essay') {
       return `Create ONE complete Cambridge ${L} Writing Part 1 compulsory ESSAY task (NOT a summary of two texts).

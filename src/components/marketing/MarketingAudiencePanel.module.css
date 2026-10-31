@@ -2,12 +2,54 @@
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 1rem;
-  padding: 1.1rem 1.25rem 1.25rem;
+  padding: 0;
   box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.9rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.toggle::-webkit-details-marker,
+.toggle::marker {
+  display: none;
+  content: '';
+}
+
+.toggle::after {
+  content: '';
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-left: auto;
+  border-right: 2px solid #374151;
+  border-bottom: 2px solid #374151;
+  transform: translateY(-0.1rem) rotate(45deg);
+}
+
+.card[open] > .toggle::after {
+  transform: translateY(0.15rem) rotate(-135deg);
+}
+
+.toggle:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 3px;
+  border-radius: 1rem;
+}
+
+.body {
+  padding: 0 1.25rem 1.25rem;
+}
+
 .heading {
-  margin: 0 0 0.25rem;
+  margin: 0;
+  flex: 1;
   font-size: 1.15rem;
   font-weight: 650;
   color: #0f172a;
@@ -141,6 +183,61 @@
   color: #64748b;
 }
 
+.sheet {
+  padding: 1.25rem;
+}
+
+.subheading {
+  margin: 1.25rem 0 0.65rem;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: #0f172a;
+}
+
+.inviteActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.inviteActions .summary {
+  margin: 0;
+}
+
+.primary {
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: #4f46e5;
+  color: #fff;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.reviewList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.reviewList p {
+  margin: 0 0 0.25rem;
+  color: #0f172a;
+  font-size: 0.925rem;
+}
+
 .error {
   margin: 0;
   color: #b91c1c;
@@ -173,6 +270,11 @@
   color: #e2e8f0;
 }
 
+:global(body.reading-night-mode) .toggle::after {
+  border-right-color: #e2e8f0;
+  border-bottom-color: #e2e8f0;
+}
+
 :global(body.reading-night-mode) .lead,
 :global(body.reading-night-mode) .summary,
 :global(body.reading-night-mode) .empty,
@@ -187,4 +289,9 @@
 
 :global(body.reading-night-mode) .table th {
   border-bottom-color: #475569;
+}
+
+:global(body.reading-night-mode) .subheading,
+:global(body.reading-night-mode) .reviewList p {
+  color: #e2e8f0;
 }

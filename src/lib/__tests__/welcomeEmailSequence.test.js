@@ -3,6 +3,11 @@ import test from 'node:test';
 import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { renderEmailTemplate, splitEmailDeliveryMeta } from '@/lib/renderEmailTemplate';
+import {
+  TRUSTPILOT_AFS_BCC,
+  appendTrustpilotStructuredData,
+  trustpilotBccForTemplate,
+} from '@/lib/trustpilotAfs';
 
 const DAY = 24 * 60;
 

@@ -20,6 +20,8 @@ import {
 } from '@/features/speaking-b2-motor/services/session-store';
 import { isSpeakingB2FixtureRuntime } from '@/features/speaking-b2-motor/fixtures/runtime';
 import { speakingB2LanGuardResponse } from '@/features/speaking-b2-motor/services/lan-access-http';
+import { canStartSpeakingB2Interview } from '@/features/speaking-b2-motor/services/interview-access';
+import { getRoleNameByUserId } from '@/utils/authRoles';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,6 +37,20 @@ export async function POST(req) {
     }
 
     const auth = await getSupabaseUserFromRequest(req);
+    let roleName = '';
+    if (auth?.user?.id) {
+      try {
+        roleName = await getRoleNameByUserId(auth.user.id, auth.user.email || '');
+      } catch {
+        roleName = '';
+      }
+    }
+    if (!canStartSpeakingB2Interview(roleName)) {
+      return NextResponse.json(
+        { error: 'La entrevista todavía no está disponible.', code: 'SPEAKING_CLOSED' },
+        { status: 403 },
+      );
+    }
     const localHour = Number(body.localHour);
     const { session, accessToken } = await createPersistedSession({
       userId: auth?.user?.id || null,

@@ -1,0 +1,697 @@
+.paper {
+  width: 100%;
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, Helvetica, sans-serif;
+  color: #1a202c;
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.demoNote {
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #bee3f8;
+  background: #ebf8ff;
+  color: #2c5282;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+.rubric {
+  padding-bottom: 0.85rem;
+  border-bottom: 2px solid #1a202c;
+}
+
+.rubricRange {
+  margin: 0 0 0.2rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+.rubricText {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #2d3748;
+}
+
+.intro {
+  margin: 0;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.card {
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+  padding: 1rem 1.1rem;
+}
+
+.cardTitle {
+  margin: 0 0 0.15rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #1a365d;
+}
+
+.cardSubtitle {
+  margin: 0 0 0.75rem;
+  font-style: italic;
+  color: #475569;
+}
+
+.paragraph {
+  margin: 0 0 0.75rem;
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.questionList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.question {
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr);
+  gap: 0.6rem;
+  align-items: start;
+}
+
+.questionNumber {
+  display: inline-grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: #1e3a8a;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.questionBody {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.stem {
+  margin: 0;
+  font-weight: 600;
+}
+
+.context {
+  margin: 0;
+  color: #475569;
+  font-size: 0.93rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.option input {
+  margin-top: 0.3rem;
+}
+
+.optionSelected {
+  border-color: #3b82f6;
+  background: #eff6ff;
+}
+
+.optionLetter {
+  font-weight: 800;
+  min-width: 1.1rem;
+}
+
+.optionCorrect {
+  border-color: #16a34a;
+  background: #f0fdf4;
+}
+
+.optionWrong {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.feedback {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.feedbackOk {
+  color: #15803d;
+}
+
+.feedbackKo {
+  color: #b91c1c;
+}
+
+/* Reading Part 1 — short real-world texts */
+.textBox {
+  border: 2px solid #334155;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  background: #fff;
+  max-width: 34rem;
+}
+
+.textBox--sign {
+  text-align: center;
+  border-width: 3px;
+  background: #fffbeb;
+}
+
+.textBox--notice {
+  text-align: center;
+  background: #f8fafc;
+}
+
+.textBox--note {
+  background: #fefce8;
+  border-style: dashed;
+}
+
+.textBox--email,
+.textBox--message {
+  background: #fff;
+}
+
+.textBoxHeading {
+  margin: 0 0 0.35rem;
+  font-weight: 800;
+  font-size: 1.02rem;
+}
+
+.textBoxMeta {
+  margin: 0 0 0.35rem;
+  font-size: 0.88rem;
+  color: #475569;
+}
+
+.textBoxBody {
+  margin: 0;
+}
+
+/* Reading Part 2 — matching */
+.peopleGrid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.person {
+  display: grid;
+  grid-template-columns: 2.1rem minmax(0, 1fr) auto;
+  gap: 0.6rem;
+  align-items: start;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.personName {
+  margin: 0 0 0.2rem;
+  font-weight: 800;
+}
+
+.personText {
+  margin: 0;
+}
+
+.letterSelect {
+  min-width: 4.2rem;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  background: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.textsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+@media (max-width: 720px) {
+  .textsGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.textsTitle {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1a365d;
+}
+
+.lettered {
+  display: grid;
+  grid-template-columns: 1.6rem minmax(0, 1fr);
+  gap: 0.5rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.letterBadge {
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: #1e3a8a;
+}
+
+.letteredTitle {
+  margin: 0 0 0.2rem;
+  font-weight: 800;
+}
+
+.letteredText {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+/* Gapped texts (Parts 4, 5, 6 and Listening Part 3) */
+.gap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0 0.15rem;
+  vertical-align: baseline;
+}
+
+.gapNumber {
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+.gapBlank {
+  display: inline-block;
+  min-width: 5.5rem;
+  border-bottom: 2px solid #1e3a8a;
+  text-align: center;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.gapInput {
+  width: 8.5rem;
+  max-width: 100%;
+  padding: 0.15rem 0.35rem;
+  border: none;
+  border-bottom: 2px solid #1e3a8a;
+  background: #f8fafc;
+  font: inherit;
+  font-weight: 700;
+  color: #1e3a8a;
+}
+
+.gapInput:focus,
+.letterSelect:focus {
+  outline: 2px solid #93c5fd;
+  outline-offset: 1px;
+}
+
+.gapCorrect .gapInput,
+.gapCorrect .gapBlank,
+.gapCorrect .letterSelect {
+  border-color: #16a34a;
+  color: #15803d;
+}
+
+.gapWrong .gapInput,
+.gapWrong .gapBlank,
+.gapWrong .letterSelect {
+  border-color: #dc2626;
+  color: #b91c1c;
+}
+
+.gapKey {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #15803d;
+}
+
+.clozeRow {
+  display: grid;
+  grid-template-columns: 2.1rem repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+  align-items: center;
+}
+
+@media (max-width: 720px) {
+  .clozeRow {
+    grid-template-columns: 2.1rem repeat(2, minmax(0, 1fr));
+  }
+}
+
+.notesList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+/* Listening Part 1 — pictures */
+.pictures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+@media (max-width: 560px) {
+  .pictures {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.pictureOption {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.pictureOption img {
+  width: 100%;
+  height: auto;
+  max-width: 220px;
+  border-radius: 6px;
+}
+
+.pictureOption input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pictureLetter {
+  font-weight: 800;
+}
+
+/* Writing */
+.email {
+  border: 1px solid #94a3b8;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.emailHeader {
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid #cbd5e1;
+  background: #f1f5f9;
+  font-size: 0.93rem;
+}
+
+.emailBody {
+  padding: 0.85rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.emailLine {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 9rem;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+@media (max-width: 560px) {
+  .emailLine {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.emailNote {
+  justify-self: start;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: #fef9c3;
+  border: 1px solid #facc15;
+  font-family: 'Segoe Print', 'Comic Sans MS', cursive;
+  font-weight: 700;
+  color: #854d0e;
+}
+
+.taskChoice {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+@media (max-width: 720px) {
+  .taskChoice {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.taskCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.taskCardSelected {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.taskLabel {
+  margin: 0;
+  font-weight: 800;
+  color: #1a365d;
+}
+
+.announcement {
+  padding: 0.75rem 0.9rem;
+  border: 2px solid #1e3a8a;
+  border-radius: 10px;
+  text-align: center;
+  background: #f8fafc;
+}
+
+.announcementKicker {
+  margin: 0;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.announcementHeading {
+  margin: 0.2rem 0 0.45rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  color: #1e3a8a;
+}
+
+.openingSentence {
+  margin: 0;
+  padding: 0.6rem 0.8rem;
+  border-left: 4px solid #2563eb;
+  background: #eff6ff;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.wordNote {
+  margin: 0;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Speaking */
+.script {
+  margin: 0;
+  padding: 0.7rem 0.9rem;
+  border-left: 4px solid #64748b;
+  background: #f8fafc;
+  color: #334155;
+  font-style: italic;
+}
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+@media (max-width: 720px) {
+  .photoGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.photo {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.photo img,
+.taskImage {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+}
+
+.photoCaption {
+  font-weight: 800;
+}
+
+.bulletList {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.backUp {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.timing {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #475569;
+}
+
+/* Check bar */
+.checkBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding-top: 0.25rem;
+}
+
+.button {
+  appearance: none;
+  border: 1px solid #1e3a8a;
+  border-radius: 999px;
+  padding: 0.5rem 1.15rem;
+  background: #1e3a8a;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.buttonGhost {
+  background: #fff;
+  color: #1e3a8a;
+}
+
+.score {
+  margin: 0;
+  font-weight: 800;
+  color: #1e3a8a;
+}
+
+:global(body.reading-night-mode) .paper {
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .card,
+:global(body.reading-night-mode) .person,
+:global(body.reading-night-mode) .lettered,
+:global(body.reading-night-mode) .textBox,
+:global(body.reading-night-mode) .pictureOption,
+:global(body.reading-night-mode) .email,
+:global(body.reading-night-mode) .taskCard,
+:global(body.reading-night-mode) .option,
+:global(body.reading-night-mode) .announcement {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .rubric {
+  border-bottom-color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .rubricText,
+:global(body.reading-night-mode) .intro,
+:global(body.reading-night-mode) .context,
+:global(body.reading-night-mode) .cardSubtitle,
+:global(body.reading-night-mode) .script,
+:global(body.reading-night-mode) .wordNote,
+:global(body.reading-night-mode) .timing {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .cardTitle,
+:global(body.reading-night-mode) .textsTitle,
+:global(body.reading-night-mode) .taskLabel,
+:global(body.reading-night-mode) .letterBadge,
+:global(body.reading-night-mode) .gapNumber,
+:global(body.reading-night-mode) .announcementHeading,
+:global(body.reading-night-mode) .score {
+  color: #93c5fd;
+}
+
+:global(body.reading-night-mode) .emailHeader,
+:global(body.reading-night-mode) .script,
+:global(body.reading-night-mode) .gapInput,
+:global(body.reading-night-mode) .letterSelect {
+  background: #0f172a;
+  color: #e2e8f0;
+}
+
+:global(body.reading-night-mode) .optionSelected {
+  background: #1e3a8a;
+  border-color: #60a5fa;
+}

@@ -1,6 +1,6 @@
 import { SUPPORT_TICKET_INBOX_EMAIL } from '@/config/support';
 
-/** Envío sin Gmail SMTP (clave gratuita en https://web3forms.com → draloenglish@gmail.com). */
+/** Envío sin Gmail SMTP (clave gratuita en https://web3forms.com → support@dralo.es). */
 export async function sendSupportTicketViaWeb3forms(ticket, text, subject) {
   const accessKey = process.env.WEB3FORMS_ACCESS_KEY?.trim();
   if (!accessKey) return { sent: false, skipped: true };
