@@ -36,6 +36,7 @@ import { supabase } from '@/utils/supabaseClient';
 import {
   extractTextoBloque,
   extractListeningMatchingOptionPool,
+  extractListeningPracticeDirections,
   isA2ListeningItemLayoutPart,
   isB2ListeningItemLayoutPart,
   splitListeningItemContext,
@@ -1198,10 +1199,14 @@ function B2ExamPaperPracticePageInner({
     if (partNumber === 10) {
       texto = trimListeningPart10DuplicateCycles(texto);
     }
+    const listeningDirections =
+      levelSlug === 'b2' && partNumber >= 10 && partNumber <= 13
+        ? extractListeningPracticeDirections(rawPregunta)
+        : '';
     const enunciado =
       levelSlug === 'b2' && partNumber === 1 && useSkillUoeExampleLayout
         ? composeMcqClozeDirections(desc, rawPregunta) || fallback.enunciado
-        : desc || fallback.enunciado;
+        : listeningDirections || desc || fallback.enunciado;
     return {
       enunciado,
       texto,
@@ -4067,7 +4072,14 @@ function B2ExamPaperPracticePageInner({
                     {isListeningGapPart && listeningGapPassageLines.length > 0 ? (
                       <div style={{ marginTop: '1rem' }}>
                         <B2ListeningInlineGapPassage
-                          lines={listeningGapPassageLines}
+                          lines={
+                            hideListeningDirectionsDup
+                              ? listeningGapPassageLines
+                              : listeningGapPassageLines.filter((line, index) => {
+                                  if (index !== 0) return true;
+                                  return line.trim() !== String(selectedPartContent.enunciado || '').trim();
+                                })
+                          }
                           questionNumbers={listeningQuestionNumbersOrdered}
                           getQuestionKey={(questionNumber) =>
                             getQuestionKey(selectedPart.id, questionNumber, 'open')

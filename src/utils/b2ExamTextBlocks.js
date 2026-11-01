@@ -3,6 +3,22 @@
  * del ejercicio almacenado en levels_preguntas.enunciado.
  */
 
+/**
+ * Opening task line of a listening paper (parts 10–13). Each exam stores its own
+ * wording on the question; the shared part description is not exam-specific.
+ * @param {string} raw
+ * @returns {string}
+ */
+export function extractListeningPracticeDirections(raw = '') {
+  const first = String(raw || '')
+    .replace(/\r\n/g, '\n')
+    .trim()
+    .split(/\n\s*\n/)[0]
+    ?.trim();
+  if (!first || !/^(you will hear|you hear)\b/i.test(first)) return '';
+  return first;
+}
+
 function stripAnswerKeyBlock(text) {
   const m = /\r?\n\s*Answer Key\s*\r?\n/i.exec(text);
   return m ? text.slice(0, m.index).trim() : text.trim();
