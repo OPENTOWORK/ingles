@@ -17,7 +17,7 @@ export const STUDENT_TRAINING_COMING_SOON = false;
 export const STUDENT_NIVELES_COMING_SOON_LEVELS = new Set(['A2', 'B1', 'C1', 'C2']);
 
 /** Exam-mode sections unavailable for students (skill practice uses hub `enabledForStudents`). */
-export const STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS = new Set(['speaking']);
+export const STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS = new Set();
 
 export function isStudentRole(userRole = '') {
   const role = normalizeRoleName(userRole);
@@ -72,7 +72,7 @@ export function isNivelesLevelComingSoonForUser(userRole = '', level = '', email
   return STUDENT_NIVELES_COMING_SOON_LEVELS.has(normalized);
 }
 
-/** Speaking stays blocked in full exam mode for students; listening follows hub flags like writing/RUOE. */
+/** Listening and speaking follow the hub flags, the same as writing and reading. */
 export function isExamModeSectionKeyBlockedForStudent(userRole = '', sectionKey = '') {
   if (!usesStudentContentRestrictions(userRole)) return false;
   const key = String(sectionKey || '').toLowerCase();

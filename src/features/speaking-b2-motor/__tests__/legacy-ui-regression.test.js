@@ -26,13 +26,13 @@ describe('previous B2 speaking UI stays in place', () => {
     );
   });
 
-  it('keeps the hub Speaking card locked for students', () => {
+  it('opens the hub Speaking card for students', () => {
     const speaking = NIVELES_LEVEL_HUB.b2.examLinks.find((link) => link.href.includes('exam-speaking'));
-    assert.equal(speaking.enabledForStudents, false);
+    assert.equal(speaking.enabledForStudents, true);
   });
 
-  it('keeps exam-mode Speaking blocked', () => {
-    assert.equal(STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS.has('speaking'), true);
+  it('opens exam-mode Speaking for students', () => {
+    assert.equal(STUDENT_EXAM_MODE_BLOCKED_SECTION_KEYS.has('speaking'), false);
   });
 
   it('embeds SP-EX001 in Part 1 and keeps the old session for Parts 2–4', () => {

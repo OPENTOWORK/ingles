@@ -16,7 +16,7 @@ export async function GET(req) {
 
     const { data, error } = await auth.db
       .from('newsletter_suscriptores')
-      .select('id, email, status, created_at, confirmed_at, unsubscribed_at, updated_at')
+      .select('id, email, zona, status, created_at, confirmed_at, unsubscribed_at, updated_at')
       .order('updated_at', { ascending: false });
 
     if (error) {
@@ -34,6 +34,7 @@ export async function GET(req) {
       .map((row) => ({
         id: row.id,
         email: String(row.email || '').trim(),
+        zone: String(row.zona || '').trim(),
         status: STATUS_LABEL[row.status] ? row.status : 'pending',
         statusLabel: STATUS_LABEL[row.status] || 'Pendiente',
         createdAt: row.created_at,

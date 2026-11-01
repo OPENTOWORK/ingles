@@ -110,7 +110,7 @@ export const SEO_PAGE_META = {
   newsletter: {
     title: 'Newsletter de Dralo',
     description:
-      'Apúntate a la newsletter de Dralo: un correo corto con un consejo, un ejercicio nuevo o una novedad, solo cuando hay algo que te sirva.',
+      'Recibe la newsletter de Dralo para preparar el B2 First: fechas de examen, orientación y recursos en un mismo correo.',
   },
   contact: {
     title: 'Contacto',

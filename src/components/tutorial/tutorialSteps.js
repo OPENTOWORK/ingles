@@ -142,7 +142,7 @@ export const TUTORIAL_STEPS = [
   },
 ];
 
-/** La barra de escritorio también se pliega en pantallas anchas cuando no cabe entera (AppNav). */
+/** Por debajo de 900 px la barra de escritorio está oculta y manda el menú del móvil. */
 function isDesktopNavCollapsed() {
   const desktopNav = document.querySelector('.app-nav--desktop');
   if (!desktopNav) return window.matchMedia(NAV_COLLAPSED_MQ).matches;

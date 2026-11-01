@@ -265,6 +265,16 @@ export function AppSharedDrawerNav({
 
       {showMobileLegal ? (
         <div className="app-nav__legal-foot">
+          <NavLink href="/resena/" className={`${linkClass} app-nav__legal-foot-link`} onClick={onNavigate}>
+            <span>Tu reseña</span>
+            <span className="app-nav__legal-foot-stars" aria-hidden="true">★★★★★</span>
+          </NavLink>
+          <NavLink href="/blog" className={`${linkClass} app-nav__legal-foot-link`} onClick={onNavigate}>
+            Blog
+          </NavLink>
+          <NavLink href="/newsletter/" className={`${linkClass} app-nav__legal-foot-link`} onClick={onNavigate}>
+            Newsletter
+          </NavLink>
           <NavLink href="/legal" className={`${linkClass} app-nav__legal-foot-link`} onClick={onNavigate}>
             Legal y privacidad
           </NavLink>

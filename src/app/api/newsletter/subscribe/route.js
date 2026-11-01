@@ -6,6 +6,7 @@ import {
   newsletterConsentError,
   newsletterUnsubscribeUrl,
   normalizeNewsletterEmail,
+  normalizeNewsletterZone,
   tryConsumeNewsletterSignup,
 } from '@/lib/newsletter';
 import { saveNewsletterSignup } from '@/lib/newsletterStore';
@@ -47,7 +48,7 @@ export async function POST(req) {
     );
   }
 
-  const saved = await saveNewsletterSignup(email);
+  const saved = await saveNewsletterSignup(email, normalizeNewsletterZone(body?.zone));
   if (!saved.ok) {
     return NextResponse.json(
       { ok: false, error: SAVE_ERRORS[saved.error] || SAVE_ERRORS.write_failed },

@@ -4,6 +4,7 @@
 create table if not exists public.newsletter_suscriptores (
   id uuid primary key default gen_random_uuid(),
   email text not null,
+  zona text,
   status text not null default 'pending',
   confirm_token text not null,
   unsubscribe_token text not null,
@@ -21,6 +22,9 @@ create table if not exists public.newsletter_suscriptores (
     and position('@' in email) > 1
   )
 );
+
+alter table public.newsletter_suscriptores
+  add column if not exists zona text;
 
 create index if not exists newsletter_suscriptores_updated_idx
   on public.newsletter_suscriptores (updated_at desc);

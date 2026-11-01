@@ -131,6 +131,7 @@ export default function NewsletterSubscribersPanel() {
                   <thead>
                     <tr>
                       <th scope="col">Correo</th>
+                      <th scope="col">Zona</th>
                       <th scope="col">Estado</th>
                       <th scope="col">Fecha</th>
                     </tr>
@@ -141,6 +142,7 @@ export default function NewsletterSubscribersPanel() {
                       return (
                         <tr key={row.id || row.email}>
                           <td className={styles.email}>{row.email}</td>
+                          <td>{row.zone || '—'}</td>
                           <td>{row.statusLabel}</td>
                           <td>{when ? <time dateTime={when}>{formatWhen(when)}</time> : ''}</td>
                         </tr>

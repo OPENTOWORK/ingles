@@ -11,16 +11,21 @@ export async function completeSpeakingB2Session({
   persist,
   claim = claimEvaluationInMemory,
 }) {
-  if (!userId) {
+  const guestAttempt = !userId && !session?.userId;
+  if (!userId && !guestAttempt) {
     return {
       status: 401,
       body: { error: true, code: 'AUTH_REQUIRED', message: 'Inicia sesión para ver el informe.' },
     };
   }
 
-  const bind = bindGuestSessionToUser(session, userId);
-  if (!bind.ok) {
-    return { status: bind.status, body: { error: bind.error, code: bind.code } };
+  if (!guestAttempt) {
+    const bind = bindGuestSessionToUser(session, userId);
+    if (!bind.ok) {
+      return { status: bind.status, body: { error: bind.error, code: bind.code } };
+    }
+  } else if (!session.evaluationCharged) {
+    session.evaluationCharged = true;
   }
   if (session.report && (session.state === 'COMPLETED' || session.state === 'PROCESSING')) {
     return { status: 200, body: { state: session.state, report: session.report, reused: true } };
@@ -44,6 +49,7 @@ export async function completeSpeakingB2Session({
     };
   }
   session = claimed.session || session;
+  if (guestAttempt) session.evaluationCharged = true;
 
   if (session.pendingReport && session.evaluationCharged) {
     return persistRecoveredReport(session, persist);

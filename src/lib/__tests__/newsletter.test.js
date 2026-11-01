@@ -6,6 +6,7 @@ import {
   newsletterConfirmUrl,
   newsletterConsentError,
   newsletterUnsubscribeUrl,
+  normalizeNewsletterZone,
   normalizeNewsletterEmail,
   normalizeNewsletterToken,
   planNewsletterConfirm,
@@ -25,17 +26,12 @@ test('newsletter email only accepts a normal address', () => {
   assert.equal(normalizeNewsletterToken(`${'a'.repeat(43)}`), 'a'.repeat(43));
 });
 
-test('signup requires terms, data protection and the newsletter', () => {
-  assert.equal(
-    newsletterConsentError({
-      acceptedTerms: true,
-      acceptedDataProtection: true,
-      acceptedNewsletter: true,
-    }),
-    '',
-  );
-  assert.match(newsletterConsentError({ acceptedTerms: true, acceptedDataProtection: true }), /newsletter/);
-  assert.match(newsletterConsentError({}), /términos/);
+test('signup requires the newsletter and privacy consent', () => {
+  assert.equal(newsletterConsentError({ acceptedNewsletter: true }), '');
+  assert.match(newsletterConsentError({}), /privacidad/);
+  assert.equal(normalizeNewsletterZone(' Madrid '), 'Madrid');
+  assert.equal(normalizeNewsletterZone(''), '');
+  assert.equal(normalizeNewsletterZone('Atlantis'), '');
 });
 
 test('a new address is pending and an active one is left alone', () => {

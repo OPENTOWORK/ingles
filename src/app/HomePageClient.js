@@ -14,7 +14,6 @@ import { landingFont } from '@/components/home/landing/landingFont';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { useTutorial } from '@/context/TutorialContext';
 import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
-import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { supabase } from '@/utils/supabaseClient';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
@@ -31,18 +30,13 @@ const FEATURES = [
 
 export default function HomePageClient() {
   const { session } = useUserRole();
-  const { roleConfirmed, userRole: confirmedRole } = useConfirmedUserRole();
+  const { roleConfirmed } = useConfirmedUserRole();
   const { openTutorial } = useTutorial();
   const isRegistered = Boolean(session?.user);
-  /** Home de alumno en móvil: exige rol resuelto para esta misma sesión, no el valor por defecto. */
-  const showStudentBoard = roleConfirmed && usesStudentContentRestrictions(confirmedRole);
   /** null hasta leer la sesión; false = invitado, true = hay usuario. */
   const [hasStoredUser, setHasStoredUser] = useState(null);
   const isGuestHome = hasStoredUser === false && !session?.user;
   const authPending = hasStoredUser === null && !session?.user;
-  const rolePending = Boolean(session?.user) && !roleConfirmed;
-  /** Misma Home de app en móvil: no pintar el welcome de invitado ni un frame. */
-  const showAppHome = showStudentBoard || isGuestHome || authPending || rolePending;
   /** En ordenador el invitado ve la landing; mientras se lee la sesión, también. */
   const showGuestLanding = isGuestHome || authPending;
   const phone = usePhoneViewport();
@@ -83,7 +77,7 @@ export default function HomePageClient() {
     <>
       {showGuestLanding ? <HomeGuestLanding pending={authPending} prioritizeLcp /> : null}
       {isGuestHome || (omitHiddenEnglish && !session?.user) ? null : (
-      <main className={`home-page ${landingFont.variable}${showAppHome ? ' home-page--student-mobile' : ''}${authPending ? ' home-page--pending' : ''}`}>
+      <main className={`home-page ${landingFont.variable} home-page--student-mobile${authPending ? ' home-page--pending' : ''}`}>
         <div className="home-page__inner">
           {isRegistered ? <InviteFriendPromoBanner /> : null}
           {isGuestHome && phone ? <FoundingMemberSlotsBanner /> : null}
@@ -122,7 +116,7 @@ export default function HomePageClient() {
             </div>
           </section>
 
-          {showAppHome ? <HomeStudentMobileBoard guest={isGuestHome || authPending} /> : null}
+          <HomeStudentMobileBoard guest={isGuestHome || authPending} />
 
           <blockquote className="home-quote">
             {isGuestHome && phone ? (

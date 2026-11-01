@@ -26,7 +26,7 @@ function missingTable(error) {
  * Guarda el alta. Si ya está activa, no cambia nada.
  * @returns {Promise<{ ok: true, outcome: 'pending'|'active', confirmToken?: string, unsubscribeToken?: string } | { ok: false, error: string }>}
  */
-export async function saveNewsletterSignup(email, now = new Date()) {
+export async function saveNewsletterSignup(email, zone = '', now = new Date()) {
   const normalized = normalizeNewsletterEmail(email);
   if (!normalized) return { ok: false, error: 'invalid_email' };
 
@@ -47,9 +47,12 @@ export async function saveNewsletterSignup(email, now = new Date()) {
   const plan = planNewsletterSignup(existing, createNewsletterTokenPair(), now.toISOString());
   if (plan.action === 'none') return { ok: true, outcome: 'active' };
 
+  const zona = String(zone || '').trim() || null;
+
   if (plan.action === 'insert') {
     const { error } = await db.from('newsletter_suscriptores').insert({
       email: normalized,
+      zona,
       ...plan.row,
     });
     if (error) {
@@ -66,7 +69,7 @@ export async function saveNewsletterSignup(email, now = new Date()) {
 
   const { error } = await db
     .from('newsletter_suscriptores')
-    .update(plan.row)
+    .update(zona ? { ...plan.row, zona } : plan.row)
     .eq('id', existing.id);
   if (error) {
     console.error('[newsletter] actualizar suscriptor', error);

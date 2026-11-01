@@ -10,19 +10,20 @@ const closed = { SPEAKING_B2_OPEN_TO_STUDENTS: '' };
 const open = { SPEAKING_B2_OPEN_TO_STUDENTS: '1' };
 
 describe('speaking B2 interview access', () => {
-  it('lets only the teaching team start while the interview is closed to students', () => {
-    for (const role of ['admin', 'administrador', 'profesor', 'teacher', 'coordinador', 'coordinator', 'informatico', 'it']) {
+  it('lets students and visitors start test 1, and the teaching team always', () => {
+    for (const role of ['', 'alumno', 'student', 'admin', 'administrador', 'profesor', 'teacher', 'coordinador', 'coordinator', 'informatico', 'it']) {
       assert.equal(canStartSpeakingB2Interview(role, closed), true, role);
     }
-    for (const role of ['', 'alumno', 'student', 'marketing', 'soporte', 'support']) {
+    for (const role of ['marketing', 'soporte', 'support']) {
       assert.equal(canStartSpeakingB2Interview(role, closed), false, role);
     }
   });
 
-  it('admits a signed-in student only when the interview is opened', () => {
+  it('admits the remaining signed-in roles when the interview flag is opened', () => {
     assert.equal(canStartSpeakingB2Interview('alumno', open), true);
     assert.equal(canStartSpeakingB2Interview('teacher', open), true);
-    assert.equal(canStartSpeakingB2Interview('', open), false);
+    assert.equal(canStartSpeakingB2Interview('', open), true);
+    assert.equal(canStartSpeakingB2Interview('marketing', open), true);
   });
 
   it('enforces the gate when a session is created and does not time the whole open turn', () => {

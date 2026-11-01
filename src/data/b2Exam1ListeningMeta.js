@@ -3,52 +3,52 @@
 export const B2_EXAM1_LISTENING_EXAM_SLOT = 1;
 
 export const B2_EXAM1_PART10_SITUATIONS = {
-  1: 'You hear two friends discussing a weekend walking trip.',
-  2: 'You hear an announcement at a ferry terminal.',
-  3: 'You hear a woman telephoning a dental surgery.',
-  4: 'You hear two flatmates talking about their washing machine.',
-  5: 'You hear a recorded message from a gym.',
-  6: 'You hear a conversation in a bookshop.',
-  7: 'You hear two colleagues talking about a charity run.',
-  8: 'You hear a tenant speaking to a letting agent on the phone.',
+  1: 'You hear two friends talking after visiting a recently renovated community centre.',
+  2: 'You hear two friends discussing their plans for the evening.',
+  3: 'You hear a nutritionist giving advice about food labels.',
+  4: 'You hear two colleagues talking about a new role at work.',
+  5: 'You hear two friends discussing a television drama they have just finished watching.',
+  6: 'You hear a man talking about a weekend trip he took without using a car.',
+  7: 'You hear a voicemail message about a music rehearsal.',
+  8: 'You hear part of an interview with a scientist who studies migrating butterflies.',
 };
 
 export const B2_EXAM1_PART12_MATCHING_POOL = [
-  { letter: 'A', text: 'feeling disappointed because the job offered fewer learning opportunities than expected' },
-  { letter: 'B', text: 'being given more responsibility than they had anticipated' },
-  { letter: 'C', text: 'learning to stay patient when dealing with rude or unreasonable people' },
-  { letter: 'D', text: 'discovering that getting on with colleagues mattered more than working quickly' },
-  { letter: 'E', text: 'finding that repetitive tasks became oddly satisfying after a while' },
-  { letter: 'F', text: 'wishing they had asked for advice before accepting the position' },
-  { letter: 'G', text: 'recognising that the experience changed their ideas about future study or careers' },
-  { letter: 'H', text: 'feeling physically exhausted by work they had not taken seriously before' },
+  { letter: 'A', text: 'being able to take fresh produce home' },
+  { letter: 'B', text: 'getting to know people in the local area' },
+  { letter: 'C', text: 'having a way to switch off mentally after work' },
+  { letter: 'D', text: 'improving a neglected part of the neighbourhood' },
+  { letter: 'E', text: 'helping children understand how food and nature work' },
+  { letter: 'F', text: 'becoming more confident and skilful at gardening' },
+  { letter: 'G', text: 'getting more physical exercise' },
+  { letter: 'H', text: 'receiving advice from a highly experienced gardener' },
 ];
 
 const PART_UX = {
   10: {
     whatYouWillHear:
-      'Eight short extracts — everyday situations such as a ferry announcement, a phone call to a surgery, flatmates discussing repairs, and other realistic contexts (~9½–11 minutes in one recording).',
+      'Eight short extracts — a renovated community centre, plans for an outdoor film, food labels, a new job, a television drama, a car-free trip, a rehearsal message, and butterfly research (~9½ minutes, heard twice).',
     whatYouNeedToDo:
       'For questions 1–8, choose the best answer (A, B or C). You will hear each extract twice.',
     practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
   11: {
     whatYouWillHear:
-      'A radio interview about a coastal seabird monitoring programme (~5½–7 minutes in one recording, heard twice).',
+      'A talk by Hannah Cole, who runs a small sourdough bakery (~8 minutes, heard twice).',
     whatYouNeedToDo:
       'For questions 9–18, complete the sentences with a word or short phrase from the recording. You will hear the recording twice.',
     practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
   12: {
     whatYouWillHear:
-      'Five people talking about their first experiences of paid work (~8–10 minutes in one recording, heard twice).',
+      'Five people talking about taking part in a community garden (~7 minutes, heard twice).',
     whatYouNeedToDo:
-      'For questions 19–23, choose from the list (A–H) the opinion each speaker expresses. Use the letters only once. There are three extra letters which you do not need to use. You will hear the recording twice.',
+      'For questions 19–23, choose from the list (A–H) what each speaker values most. Use the letters only once. There are three extra letters which you do not need to use. You will hear the recording twice.',
     practiceNote: 'Practice mode: you can replay the audio before checking your answers.',
   },
   13: {
     whatYouWillHear:
-      'An interview with landscape architect Tom Fletcher about converting a disused industrial canal basin into a community wetland park (~7–8 minutes in one recording, heard twice).',
+      'An interview with architect Laura Bennett about turning an old department store into a public library (~8½ minutes, heard twice).',
     whatYouNeedToDo:
       'For questions 24–30, choose the best answer (A, B or C). You will hear the recording twice.',
     practiceNote: 'Practice mode: you can replay the audio before checking your answers.',

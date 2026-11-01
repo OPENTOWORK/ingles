@@ -39,6 +39,21 @@ function recordingQuota({ checkOk = true, chargeOk = true, checkStatus = 429, ch
 }
 
 describe('speaking B2 complete quota flow', () => {
+  it('returns the report for test 1 without an account and does not charge a plan', async () => {
+    const session = finishingSession();
+    const { quota, calls } = recordingQuota();
+    const result = await completeSpeakingB2Session({
+      session,
+      userId: null,
+      quota,
+      evaluate: async () => ({ scores: { grammarVocabulary: 3 } }),
+      persist: async (current) => current,
+    });
+    assert.equal(result.status, 200);
+    assert.equal(result.body.report.scores.grammarVocabulary, 3);
+    assert.deepEqual(calls, []);
+  });
+
   it('charges once after a successful evaluation', async () => {
     const session = finishingSession();
     const { quota, calls } = recordingQuota();

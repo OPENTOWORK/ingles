@@ -1,6 +1,8 @@
 import { randomBytes } from 'node:crypto';
 import { SITE_URL } from '@/lib/siteSeo';
 
+export { NEWSLETTER_ZONES, normalizeNewsletterZone } from '@/lib/newsletterZones';
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const TOKEN_RE = /^[A-Za-z0-9_-]{32,128}$/;
 const WINDOW_MS = 15 * 60 * 1000;
@@ -46,16 +48,10 @@ export function normalizeNewsletterEmail(value) {
   return email;
 }
 
-/** Términos, protección de datos y la propia newsletter son obligatorios. */
+/** La casilla cubre la newsletter y la política de privacidad. */
 export function newsletterConsentError(body) {
-  if (
-    body?.acceptedTerms === true &&
-    body?.acceptedDataProtection === true &&
-    body?.acceptedNewsletter === true
-  ) {
-    return '';
-  }
-  return 'Acepta los términos, la protección de datos y la newsletter para apuntarte.';
+  if (body?.acceptedNewsletter === true) return '';
+  return 'Acepta recibir la newsletter y la política de privacidad para apuntarte.';
 }
 
 /** @returns {string} token opaco, o cadena vacía */
@@ -172,7 +168,7 @@ export function buildNewsletterConfirmEmail({ confirmUrl, unsubscribeUrl, siteUr
     '',
     'En la página tendrás que pulsar el botón. Hasta que no lo hagas, no estás en la lista.',
     '',
-    'La newsletter es un correo corto: un consejo para el examen, un ejercicio nuevo o una novedad de Dralo, solo cuando hay algo que merezca la pena. El blog sigue ahí para leer una guía cuando quieras.',
+    'La newsletter te ayuda a preparar el B2 First: fechas de examen, orientación para organizar el estudio y recursos que puedes aplicar al practicar. Puedes darte de baja cuando quieras.',
     '',
     'Si no has sido tú, ignora este mensaje o date de baja:',
     unsubscribeUrl,
@@ -187,7 +183,7 @@ export function buildNewsletterConfirmEmail({ confirmUrl, unsubscribeUrl, siteUr
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:22px;overflow:hidden;">
           <tr>
             <td style="padding:28px 32px 8px;font-family:Arial,Helvetica,sans-serif;">
-              <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6d28d9;">Newsletter</p>
+              <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6d28d9;">Newsletter B2 First</p>
               <p style="margin:10px 0 0;font-size:26px;line-height:1.2;font-weight:800;color:#241b4a;">Confirma tu correo</p>
             </td>
           </tr>
@@ -197,7 +193,7 @@ export function buildNewsletterConfirmEmail({ confirmUrl, unsubscribeUrl, siteUr
               <p style="margin:22px 0 0;">
                 <a href="${confirmHref}" style="display:inline-block;padding:14px 22px;border-radius:999px;background:#6a4be8;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Confirmar suscripción</a>
               </p>
-              <p style="margin:22px 0 0;">Es un correo corto: un consejo para el examen, un ejercicio nuevo o una novedad de Dralo, solo cuando hay algo que merezca la pena. El blog sigue ahí para leer una guía cuando quieras.</p>
+              <p style="margin:22px 0 0;">Te ayuda a preparar el B2 First: fechas de examen, orientación para organizar el estudio y recursos que puedes aplicar al practicar. Puedes darte de baja cuando quieras.</p>
               <p style="margin:22px 0 0;font-size:14px;color:#64748b;">Si no has sido tú, ignora este mensaje o <a href="${unsubscribeHref}" style="color:#6d28d9;">date de baja</a>.</p>
               <p style="margin:26px 0 0;font-weight:800;color:#1e1b4b;">El equipo de Dralo</p>
               <p style="margin:4px 0 0;"><a href="${homeHref}" style="color:#6d28d9;text-decoration:underline;">dralo.es</a></p>
