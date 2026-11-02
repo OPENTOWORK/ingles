@@ -1,6 +1,19 @@
-export const LEVEL_XP_STEP = 200;
+/** XP to leave level 0. Each later level costs 7% more, rounded. */
+export const FIRST_LEVEL_XP = 30;
+export const LEVEL_XP_GROWTH = 1.07;
 export const MAX_LEVEL = 99;
-export const MAX_XP = 19_999;
+
+/** XP required to reach each level. Index 0 is 0; index 99 is the cap. */
+export const LEVEL_XP_THRESHOLDS: readonly number[] = buildLevelXpThresholds();
+export const MAX_XP = LEVEL_XP_THRESHOLDS[MAX_LEVEL];
+
+function buildLevelXpThresholds(): number[] {
+  const thresholds = [0];
+  for (let level = 0; level < MAX_LEVEL; level += 1) {
+    thresholds.push(thresholds[level] + xpCostForLevel(level));
+  }
+  return thresholds;
+}
 
 /** 100 level names (0–99). */
 export const DRALO_LEVEL_NAMES: readonly string[] = [
@@ -115,9 +128,17 @@ export type DraloLevelInfo = {
   nextLevelXp: number | null;
   xpInsideCurrentLevel: number;
   xpNeededForNextLevel: number | null;
+  /** XP this level asks for. The bar is `xpInsideCurrentLevel / levelXpSpan`. */
+  levelXpSpan: number;
   progressPercent: number;
   isMaxLevel: boolean;
 };
+
+/** XP required to leave `level` (0–98). Level 99 has no next step. */
+export function xpCostForLevel(level: number): number {
+  const idx = Math.max(0, Math.min(MAX_LEVEL - 1, Math.floor(level)));
+  return Math.round(FIRST_LEVEL_XP * LEVEL_XP_GROWTH ** idx);
+}
 
 /** Clamp XP to the supported range [0, MAX_XP]. */
 export function normalizeDraloXp(totalXp: number): number {
@@ -128,7 +149,14 @@ export function normalizeDraloXp(totalXp: number): number {
 /** Level 0–99 from total XP. */
 export function getUserLevel(totalXp: number): number {
   const xp = normalizeDraloXp(totalXp);
-  return Math.min(Math.floor(xp / LEVEL_XP_STEP), MAX_LEVEL);
+  let lo = 0;
+  let hi = MAX_LEVEL;
+  while (lo < hi) {
+    const mid = Math.ceil((lo + hi) / 2);
+    if (LEVEL_XP_THRESHOLDS[mid] <= xp) lo = mid;
+    else hi = mid - 1;
+  }
+  return lo;
 }
 
 export function getLevelName(level: number): string {
@@ -141,14 +169,17 @@ export function getLevelInfo(totalXp: number): DraloLevelInfo {
   const currentXp = normalizeDraloXp(totalXp);
   const level = getUserLevel(currentXp);
   const isMaxLevel = level >= MAX_LEVEL;
-  const currentLevelMinXp = level * LEVEL_XP_STEP;
-  const currentLevelMaxXp = isMaxLevel ? MAX_XP : currentLevelMinXp + LEVEL_XP_STEP - 1;
-  const xpInsideCurrentLevel = currentXp - currentLevelMinXp;
-  const xpNeededForNextLevel = isMaxLevel ? null : LEVEL_XP_STEP - xpInsideCurrentLevel;
-  const nextLevelXp = isMaxLevel ? null : currentLevelMinXp + LEVEL_XP_STEP;
+  const currentLevelMinXp = LEVEL_XP_THRESHOLDS[level];
+  const levelXpSpan = isMaxLevel
+    ? LEVEL_XP_THRESHOLDS[MAX_LEVEL] - LEVEL_XP_THRESHOLDS[MAX_LEVEL - 1]
+    : LEVEL_XP_THRESHOLDS[level + 1] - currentLevelMinXp;
+  const nextLevelXp = isMaxLevel ? null : LEVEL_XP_THRESHOLDS[level + 1];
+  const currentLevelMaxXp = nextLevelXp == null ? MAX_XP : nextLevelXp - 1;
+  const xpInsideCurrentLevel = isMaxLevel ? levelXpSpan : currentXp - currentLevelMinXp;
+  const xpNeededForNextLevel = isMaxLevel ? null : nextLevelXp - currentXp;
   const progressPercent = isMaxLevel
     ? 100
-    : Math.min(100, Math.round((xpInsideCurrentLevel / LEVEL_XP_STEP) * 100));
+    : Math.min(100, Math.round((xpInsideCurrentLevel / levelXpSpan) * 100));
 
   return {
     level,
@@ -159,6 +190,7 @@ export function getLevelInfo(totalXp: number): DraloLevelInfo {
     nextLevelXp,
     xpInsideCurrentLevel,
     xpNeededForNextLevel,
+    levelXpSpan,
     progressPercent,
     isMaxLevel,
   };

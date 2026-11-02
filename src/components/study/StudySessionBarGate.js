@@ -1,28 +1,21 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
-import { hasStudySessionPlanAccess } from '@/data/financialPlanConfig';
 import { isExamStrategiesPath } from '@/config/appRoutes';
-import { isStudentRole } from '@/utils/authRoles';
 import StudySessionBar from '@/components/study/StudySessionBar';
 
 /**
- * Muestra el botón de estudio solo a alumnos logueados con plan PLUS o PREMIUM.
+ * Botón de estudio para cualquier usuario con sesión.
+ * Sigue oculto en Exam Strategies, donde el seguimiento no aplica.
  */
-export default function StudySessionBarGate({ session, userRole }) {
+export default function StudySessionBarGate({ session }) {
   const pathname = usePathname() || '';
-  const { planSlug, loading } = usePlanEntitlements();
 
   if (isExamStrategiesPath(pathname)) {
     return null;
   }
 
-  if (!session?.access_token || !isStudentRole(userRole) || loading) {
-    return null;
-  }
-
-  if (!hasStudySessionPlanAccess(planSlug)) {
+  if (!session?.access_token) {
     return null;
   }
 

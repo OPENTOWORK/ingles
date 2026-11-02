@@ -238,10 +238,11 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Dictionary', href: '/dralo-ai/dictionary' },
 ];
 
-/** Dralo AI desbloqueado para staff pedagógico y Resp.marketing (bloqueado solo para alumnos). */
+/** Dralo AI abierto para alumnos y staff. Otros roles sin identificar siguen bloqueados. */
 export function isDraloAiLockedForRole(userRole) {
   const role = normalizeRoleName(userRole);
   if (
+    isStudentRole(role) ||
     isAdminRole(role) ||
     isTeacherRole(role) ||
     isCoordinatorRole(role) ||

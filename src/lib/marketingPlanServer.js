@@ -316,7 +316,7 @@ export async function fetchMarketingPlanDashboard(db) {
         {
           id: 'launch-pricing',
           nombre: LAUNCH_PRICE_LABEL,
-          descripcion: 'Precios promocionales visibles en la página de precios y checkout.',
+          descripcion: 'Precio fundador visible en la página de precios hasta el 31/12/2026.',
           estado: promotions.some((plan) => plan.tipo === 'lanzamiento') ? 'activa' : 'inactiva',
           enlace: '/precios',
         },

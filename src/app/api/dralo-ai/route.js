@@ -3,7 +3,7 @@ import { isOpenAIConfigured, getDefaultModel } from '@/lib/ai/draloAiEngine';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { handleGuestExamWritingCorrection } from '@/lib/guestWritingPreviewServer';
 import { authenticateAdminRequest } from '@/lib/adminAccess';
-import { getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
+import { draloAiDeniedResponse, getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import {
   AI_ACTIONS,
   AI_ACTION_VALUES,
@@ -123,14 +123,7 @@ export async function POST(request) {
 
   if (isDraloAiHiddenAction(action)) {
     const access = await getDraloAiAccessFromRequest(request);
-    if (!access.allowed) {
-      return aiErrorJson(
-        'FEATURE_NOT_AVAILABLE',
-        'This feature is not available yet.',
-        {},
-        403,
-      );
-    }
+    if (!access.allowed) return draloAiDeniedResponse(access);
   }
 
   if (action === AI_ACTIONS.ADMIN_GENERATE_EXAM) {
@@ -274,6 +267,9 @@ async function handleLegacyFlow(request, body) {
       503,
     );
   }
+
+  const studioAccess = await getDraloAiAccessFromRequest(request);
+  if (!studioAccess.allowed) return draloAiDeniedResponse(studioAccess);
 
   const auth = await getSupabaseUserFromRequest(request);
   const userId = auth?.user?.id ?? null;

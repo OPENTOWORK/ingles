@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PageHero from '@/components/PageHero';
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
@@ -12,6 +12,27 @@ import {
   getDictionaryLanguageLabel,
 } from '@/data/dictionaryLanguages';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import { useDraloAiPreview, useDraloAiPremiumGate } from '@/components/dralo-ai/DraloAiPreviewContext';
+
+const PREVIEW_DICTIONARY_ENTRY = {
+  word: 'pelican',
+  phonetic: '/ˈpelɪkən/',
+  audioUrl: null,
+  meanings: [
+    {
+      partOfSpeech: 'noun',
+      definition: 'A large water bird with a long beak and a throat pouch.',
+      example: 'A pelican landed on the harbour wall.',
+      synonyms: ['waterbird'],
+    },
+  ],
+  ai: {
+    wordInTargetLanguage: 'pelícano',
+    cefrLevel: 'B2',
+    collocations: ['a flock of pelicans'],
+    definitionInTargetLanguage: 'Ave acuática grande, con un pico largo y una bolsa en la garganta.',
+  },
+};
 
 const DICTIONARY_FETCH_MS = 90_000;
 
@@ -51,12 +72,23 @@ function detectInputMode(text) {
   return tokens.length > 1 ? 'phrase' : 'word';
 }
 
+function pronunciationUrl(text, slow) {
+  const q = encodeURIComponent(String(text || '').trim());
+  const speed = slow ? '0.6' : '1';
+  return `https://translate.googleapis.com/translate_tts?ie=UTF-8&q=${q}&tl=en-GB&client=gtx&ttsspeed=${speed}`;
+}
+
 function speakWithBrowser(text, rate = 0.92, lang = 'en-GB') {
   if (typeof window === 'undefined' || !window.speechSynthesis) return false;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = lang;
   utterance.rate = rate;
+  const voices = window.speechSynthesis.getVoices();
+  const voice =
+    voices.find((item) => item.lang === lang) ||
+    voices.find((item) => String(item.lang || '').toLowerCase().startsWith('en'));
+  if (voice) utterance.voice = voice;
   window.speechSynthesis.speak(utterance);
   return true;
 }
@@ -100,6 +132,8 @@ function LanguageSelect({ value, onChange, id }) {
 }
 
 export default function DraloDictionary() {
+  const preview = useDraloAiPreview();
+  const requirePremium = useDraloAiPremiumGate();
   const { session } = useUserRole();
   const [activeTab, setActiveTab] = useState('search');
   const [targetLanguage, setTargetLanguage] = useState(DEFAULT_DICTIONARY_LANGUAGE);
@@ -126,65 +160,66 @@ export default function DraloDictionary() {
     removeWord,
   } = useDictionarySavedWords(session);
 
+  useEffect(() => {
+    if (!preview) return;
+    setResultMode('word');
+    setEntry(PREVIEW_DICTIONARY_ENTRY);
+  }, [preview]);
+
   const langLabel = getDictionaryLanguageLabel(targetLanguage);
   const currentWordSaved = entry?.word ? isWordSaved(entry.word) : false;
 
-  const playPronunciation = useCallback(async (text, audioUrl, speedMode = 'normal') => {
+  const playPronunciation = useCallback((text, _audioUrl, speedMode = 'normal') => {
+    if (requirePremium()) return;
     const w = String(text || '').trim();
     if (!w) return;
 
     const isSlow = speedMode === 'slow';
-    const ttsSpeed = isSlow ? 0.82 : 1.05;
     const browserRate = isSlow ? 0.72 : 0.95;
 
-    setAudioLoading(true);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    if (typeof window !== 'undefined') window.speechSynthesis?.cancel();
     setError('');
 
-    try {
+    // Long phrases stay on the browser voice. The clip URL is for a word or a short line,
+    // and play() has to start inside this click.
+    if (w.length > 180) {
+      setAudioLoading(false);
+      if (!speakWithBrowser(w, browserRate)) {
+        setError('Could not play pronunciation.');
+      }
+      return;
+    }
+
+    let fellBack = false;
+    const fallback = () => {
+      if (fellBack) return;
+      fellBack = true;
+      setAudioLoading(false);
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
       }
-
-      if (audioUrl && !isSlow) {
-        const audio = new Audio(audioUrl);
-        audio.playbackRate = 1;
-        audioRef.current = audio;
-        await audio.play();
-        return;
-      }
-
-      try {
-        const res = await fetch(buildClientApiUrl('/api/coach-tts/'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text: w, speed: ttsSpeed }),
-        });
-        if (res.ok) {
-          const blob = await res.blob();
-          const url = URL.createObjectURL(blob);
-          const audio = new Audio(url);
-          audioRef.current = audio;
-          audio.onended = () => URL.revokeObjectURL(url);
-          await audio.play();
-          return;
-        }
-      } catch {
-        /* fallback */
-      }
-
       if (!speakWithBrowser(w, browserRate)) {
-        throw new Error('Your browser cannot play audio.');
+        setError('Could not play pronunciation.');
       }
-    } catch (e) {
-      setError(e.message || 'Could not play pronunciation.');
-    } finally {
-      setAudioLoading(false);
-    }
-  }, []);
+    };
+
+    const audio = new Audio(pronunciationUrl(w, isSlow));
+    audio.preload = 'auto';
+    audioRef.current = audio;
+    setAudioLoading(true);
+    audio.onended = () => setAudioLoading(false);
+    audio.onerror = fallback;
+    audio.play().catch(fallback);
+  }, [requirePremium]);
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
+    if (requirePremium()) return;
     const q = queryInput.trim();
     if (!q) return;
 
@@ -225,6 +260,7 @@ export default function DraloDictionary() {
   };
 
   const handleToggleSave = async () => {
+    if (requirePremium()) return;
     if (!entry?.word) return;
     if (!session) {
       setError('Sign in to save words to your list.');
@@ -240,6 +276,7 @@ export default function DraloDictionary() {
 
   const submitAskDralo = async (e) => {
     e?.preventDefault();
+    if (requirePremium()) return;
     if (!askQuestion.trim()) return;
 
     const wordContext =

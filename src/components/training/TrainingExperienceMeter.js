@@ -1,6 +1,5 @@
 'use client';
 
-import { LEVEL_XP_STEP } from '@/lib/dralo-levels';
 import { useTrainingExperience } from '@/hooks/useTrainingExperience';
 import styles from './TrainingExperienceMeter.module.css';
 
@@ -8,7 +7,7 @@ export default function TrainingExperienceMeter({ accessToken, className = '' })
   const { totalXp, levelInfo, loading, error, isEmpty } = useTrainingExperience(accessToken);
   const info = levelInfo;
   const progress = isEmpty || loading ? 0 : info.progressPercent;
-  const remaining = isEmpty ? LEVEL_XP_STEP : info.xpNeededForNextLevel;
+  const remaining = isEmpty ? info.levelXpSpan : info.xpNeededForNextLevel;
 
   return (
     <section

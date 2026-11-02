@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { draloAiDeniedResponse, getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import { generateLongTurnPhotoSet } from '@/lib/draloAiLongTurnPhotos';
 import { isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 
@@ -27,6 +28,9 @@ function tryConsumeRate(ip) {
 }
 
 export async function POST(req) {
+  const access = await getDraloAiAccessFromRequest(req);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   if (!isDraloOpenAIConfigured()) {
     return NextResponse.json(
       { error: 'OPENAI_API_KEY is not configured on the server.' },

@@ -17,7 +17,9 @@ import {
   getPlanListPrice,
   getPlanTierRank,
   isCurrentPlanSlug,
-  LAUNCH_PRICE_LABEL,
+  FOUNDER_PRICE_DETAIL,
+  FOUNDER_PRICE_LABEL,
+  isFounderPriceActive,
   planHasLaunchPricing,
   PLAN_COMPARISON_ROWS,
 } from '@/data/financialPlanConfig';
@@ -84,9 +86,7 @@ function CellValue({ value, type }) {
           </span>
         ) : null}
         <span className={styles.cellPriceCurrent}>{value.current}</span>
-        {value.launch ? (
-          <span className={styles.cellPriceLaunch}>{LAUNCH_PRICE_LABEL}</span>
-        ) : null}
+        {value.launch && isFounderPriceActive() ? <FounderPriceNote className={styles.cellPriceLaunch} /> : null}
         {value.discount ? (
           <span className={styles.cellPriceDiscount}>-{value.discount}%</span>
         ) : null}
@@ -94,6 +94,26 @@ function CellValue({ value, type }) {
     );
   }
   return <span className={styles.cellText}>{value}</span>;
+}
+
+function annualBillingHint() {
+  const hasLaunchPrice = DRALO_SUBSCRIPTION_PLANS.some((plan) => planHasLaunchPricing(plan));
+  if (hasLaunchPrice && isFounderPriceActive()) {
+    return 'Precio fundador al pagar el año completo de una vez.';
+  }
+  if (hasLaunchPrice) {
+    return 'Precio de lanzamiento al pagar el año completo de una vez.';
+  }
+  return `Ahorra un ${ANNUAL_BILLING_DISCOUNT_PERCENT}% pagando el año completo de una vez.`;
+}
+
+function FounderPriceNote({ className }) {
+  return (
+    <span className={className}>
+      <span className={styles.founderPriceTitle}>{FOUNDER_PRICE_LABEL}</span>
+      <span className={styles.founderPriceUntil}>{FOUNDER_PRICE_DETAIL}</span>
+    </span>
+  );
 }
 
 function resolvePlanCardCta(plan, { currentPlanSlug, enableCheckout, interactive, isSelected }) {
@@ -247,9 +267,7 @@ export default function SubscriptionPlansSection({
         </div>
         {isAnnual ? (
           <p className={styles.billingToggleHint}>
-            {DRALO_SUBSCRIPTION_PLANS.some((plan) => planHasLaunchPricing(plan))
-              ? 'Precio de lanzamiento al pagar el año completo de una vez.'
-              : `Ahorra un ${ANNUAL_BILLING_DISCOUNT_PERCENT}% pagando el año completo de una vez.`}
+            {annualBillingHint()}
           </p>
         ) : null}
       </div>
@@ -320,8 +338,8 @@ export default function SubscriptionPlansSection({
                         <span className={styles.cardPriceDiscount}>-{listDiscount}%</span>
                       ) : null}
                     </span>
-                    {showLaunchLabel ? (
-                      <span className={styles.cardPriceLaunch}>{LAUNCH_PRICE_LABEL}</span>
+                    {showLaunchLabel && isFounderPriceActive() ? (
+                      <FounderPriceNote className={styles.cardPriceLaunch} />
                     ) : null}
                     {isAnnual ? (
                       <span className={styles.cardPriceAnnual}>

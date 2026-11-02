@@ -2,11 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { getDraloOpenAI } from '@/lib/draloAiEngine';
-import { getStudentPlanContext } from '@/lib/planAccess';
-import { hasStudySessionPlanAccess } from '@/data/financialPlanConfig';
 import { buildFactualSummary, buildStudySummaryPrompt } from '@/lib/studySession';
-import { isStudentRole } from '@/constants/studentFeatureAccess';
-import { getUserRoleNameServer } from '@/lib/userRoleServer';
 
 export const SEGUIMIENTO_SESIONES_TABLE = 'seguimiento_sesiones';
 export const SEGUIMIENTO_CONSENTIMIENTOS_TABLE = 'seguimiento_consentimientos';
@@ -36,22 +32,9 @@ export async function authenticateStudentRequest(req) {
   return { user: auth.user, db };
 }
 
-const STUDY_SESSION_PLAN_ERROR =
-  'El seguimiento de estudio está disponible en los planes PLUS y PREMIUM.';
-
-/** Solo alumnos con plan PLUS o PREMIUM pueden iniciar sesiones monitorizadas. */
-export async function assertStudySessionAccess(user, db) {
-  const role = await getUserRoleNameServer(user.id, db);
-  if (!isStudentRole(role)) {
-    return { error: 'El seguimiento de estudio es solo para alumnos.', status: 403 };
-  }
-
-  const ctx = await getStudentPlanContext(user.id, user.email, user.user_metadata);
-  if (!hasStudySessionPlanAccess(ctx.planSlug)) {
-    return { error: STUDY_SESSION_PLAN_ERROR, status: 403 };
-  }
-
-  return { ctx };
+/** Cualquier usuario con sesión puede iniciar el seguimiento. El rol y el plan no lo bloquean. */
+export async function assertStudySessionAccess() {
+  return {};
 }
 
 export async function getActiveStudySession(db, userId) {

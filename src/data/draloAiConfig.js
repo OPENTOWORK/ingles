@@ -4,8 +4,6 @@ export const DRALO_AI_CEFR_LEVELS = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
 export const DRALO_AI_HUB = {
   title: 'Dralo AI',
-  description:
-    'Practise every exam skill with exercises generated on demand and instant AI feedback.',
   items: [
     {
       id: 'writing',
@@ -216,6 +214,70 @@ export const DRALO_AI_MODES = {
         hint: 'Questions, negatives, adverbs and sentence structure.',
         starterQuestion:
           'What is the standard word order in English questions and negative sentences?',
+      },
+      {
+        id: 'gerunds-infinitives',
+        label: 'Gerunds & infinitives',
+        icon: '🎯',
+        hint: 'Verb + -ing or to + infinitive, and verbs that take both.',
+        starterQuestion:
+          'When do I use a gerund and when an infinitive? Give common verbs for each at my level.',
+      },
+      {
+        id: 'relative-clauses',
+        label: 'Relative clauses',
+        icon: '🔗',
+        hint: 'Who, which, that, whose, where and defining vs non-defining.',
+        starterQuestion:
+          'What is the difference between defining and non-defining relative clauses? Give one example of each.',
+      },
+      {
+        id: 'comparatives',
+        label: 'Comparatives',
+        icon: '⚖️',
+        hint: 'Comparatives, superlatives, as…as, too, enough, so and such.',
+        starterQuestion:
+          'How do I form comparatives and superlatives, and when do I use so vs such?',
+      },
+      {
+        id: 'linking-words',
+        label: 'Linking words',
+        icon: '🧭',
+        hint: 'Although, however, despite, so that, in order to and similar connectors.',
+        starterQuestion:
+          'What is the difference between although, however and despite? Give a short example of each.',
+      },
+      {
+        id: 'prepositions',
+        label: 'Prepositions',
+        icon: '📍',
+        hint: 'Dependent prepositions, time, place and common exam pairs.',
+        starterQuestion:
+          'Which prepositions follow interested, good, depend and afraid? Explain with examples.',
+      },
+      {
+        id: 'wish-if-only',
+        label: 'Wish & if only',
+        icon: '💭',
+        hint: 'Wish, if only, would rather and it is time for regrets and preferences.',
+        starterQuestion:
+          'How do I use wish and if only for the present and the past? Give one example of each.',
+      },
+      {
+        id: 'used-to',
+        label: 'Used to & would',
+        icon: '🕰️',
+        hint: 'Used to, would, be used to and get used to.',
+        starterQuestion:
+          'What is the difference between used to, be used to and get used to?',
+      },
+      {
+        id: 'question-tags',
+        label: 'Question tags',
+        icon: '❓',
+        hint: 'Tag questions, indirect questions and typical exam word order.',
+        starterQuestion:
+          'How do I form question tags? Include a negative sentence and a sentence with never.',
       },
     ],
   },

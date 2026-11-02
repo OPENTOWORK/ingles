@@ -13,9 +13,14 @@ import {
   rememberExerciseFingerprint,
 } from '@/lib/draloAiExerciseVariety';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import { useDraloAiPreview, useDraloAiPremiumGate, buildDraloAiPreviewExercise } from '@/components/dralo-ai/DraloAiPreviewContext';
 import DraloThinking from '@/components/dralo/DraloThinking';
 import LevelsWritingCorrectionPanel from '@/components/niveles/LevelsWritingCorrectionPanel';
-import { DRALO_AI_SITUATIONAL_EYEBROW } from '@/data/draloAiSituationalConfig';
+import {
+  DRALO_AI_RANDOM_SCENARIO_ID,
+  DRALO_AI_SITUATIONAL_EYEBROW,
+  pickRandomSituationalScenario,
+} from '@/data/draloAiSituationalConfig';
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
 
 const ACCENT_SOLID = {
@@ -62,6 +67,8 @@ export default function DraloAiStudio({
   defaultActivityId,
   writingCorrectionActivityId = 'writing-correction',
 }) {
+  const preview = useDraloAiPreview();
+  const requirePremium = useDraloAiPremiumGate();
   const activities = activitiesProp || config.activities;
   const [level, setLevel] = useState(config.defaultLevel || 'B2');
   const initialActivityId =
@@ -79,6 +86,8 @@ export default function DraloAiStudio({
   const [essay, setEssay] = useState('');
   const [essayFeedback, setEssayFeedback] = useState('');
   const [audioLoading, setAudioLoading] = useState(false);
+  const [drawnScenario, setDrawnScenario] = useState(null);
+  const [randomSpin, setRandomSpin] = useState(0);
 
   const activity = useMemo(
     () => activities.find((a) => a.id === activityId) || activities[0],
@@ -98,6 +107,7 @@ export default function DraloAiStudio({
   const wordCount = countWords(essay);
 
   const generateRequestRef = useRef(0);
+  const lastDrawnIdRef = useRef('');
 
   const clearExerciseState = useCallback(() => {
     setExercise(null);
@@ -111,6 +121,8 @@ export default function DraloAiStudio({
   }, []);
 
   const generateExercise = useCallback(async () => {
+    if (requirePremium()) return;
+    void randomSpin;
     if (!activityId || isWritingCorrection) return;
 
     const requestId = ++generateRequestRef.current;
@@ -118,15 +130,23 @@ export default function DraloAiStudio({
     setError('');
     clearExerciseState();
 
+    const drawn =
+      isSituational && activityId === DRALO_AI_RANDOM_SCENARIO_ID
+        ? pickRandomSituationalScenario(config.id, lastDrawnIdRef.current)
+        : null;
+    if (drawn?.id) lastDrawnIdRef.current = drawn.id;
+    setDrawnScenario(drawn);
+    const activityForRequest = drawn?.id || activityId;
+
     try {
       const varietySeed = Date.now() + Math.floor(Math.random() * 1e6);
       const recentFingerprints = !isSituational
-        ? getRecentFingerprints(config.id, activityId, level)
+        ? getRecentFingerprints(config.id, activityForRequest, level)
         : [];
       const data = await callDraloAi({
         action: 'generate',
         mode: config.id,
-        activity: activityId,
+        activity: activityForRequest,
         level,
         track: isSituational ? 'situational' : undefined,
         varietySeed,
@@ -159,9 +179,20 @@ export default function DraloAiStudio({
     isUoe,
     isWritingCorrection,
     clearExerciseState,
+    randomSpin,
+    requirePremium,
   ]);
 
   useEffect(() => {
+    if (preview) {
+      generateRequestRef.current += 1;
+      setLoading(false);
+      setError('');
+      if (!isWritingCorrection) {
+        setExercise(buildDraloAiPreviewExercise(config.id, activity));
+      }
+      return;
+    }
     if (isWritingCorrection) {
       generateRequestRef.current += 1;
       clearExerciseState();
@@ -169,9 +200,10 @@ export default function DraloAiStudio({
       return;
     }
     void generateExercise();
-  }, [generateExercise, isWritingCorrection, clearExerciseState]);
+  }, [generateExercise, isWritingCorrection, clearExerciseState, preview, config.id, activity]);
 
   const checkUoe = async (questionId, userAnswer) => {
+    if (requirePremium()) return;
     if (!exercise || !String(userAnswer || '').trim()) return;
     setLoading(true);
     setError('');
@@ -199,6 +231,7 @@ export default function DraloAiStudio({
   };
 
   const checkQuestion = async (q, userAnswerOverride) => {
+    if (requirePremium()) return;
     const ans = userAnswerOverride ?? answers[q.id];
     if (!String(ans || '').trim() || !exercise) return;
     setLoading(true);
@@ -226,6 +259,7 @@ export default function DraloAiStudio({
   };
 
   const submitEssay = async () => {
+    if (requirePremium()) return;
     if (!essay.trim() || !exercise) return;
     setLoading(true);
     setError('');
@@ -271,6 +305,7 @@ export default function DraloAiStudio({
   }, [audioLoading, activityId]);
 
   const playListeningScript = async () => {
+    if (requirePremium()) return;
     if (!exercise?.script) return;
     setAudioLoading(true);
     setError('');
@@ -281,7 +316,7 @@ export default function DraloAiStudio({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           script: exercise.script.slice(0, 4000),
-          activity: activityId,
+          activity: drawnScenario?.id || activityId,
         }),
       });
       if (!res.ok) {
@@ -735,7 +770,13 @@ export default function DraloAiStudio({
               role="tab"
               aria-selected={activityId === a.id}
               className={`dralo-ai-activity${activityId === a.id ? ' is-active' : ''}`}
-              onClick={() => setActivityId(a.id)}
+              onClick={() => {
+                if (a.id === DRALO_AI_RANDOM_SCENARIO_ID && activityId === a.id) {
+                  setRandomSpin((spin) => spin + 1);
+                  return;
+                }
+                setActivityId(a.id);
+              }}
             >
               <span aria-hidden>{a.icon}</span> {a.label}
             </button>
@@ -745,7 +786,13 @@ export default function DraloAiStudio({
         <div className="dralo-ai-panel">
           <div className="dralo-ai-panel__head">
             <h2>{activity?.icon} {activity?.label}</h2>
-            <p>{activity?.hint}</p>
+            {activityId === DRALO_AI_RANDOM_SCENARIO_ID && drawnScenario ? (
+              <p>
+                {drawnScenario.icon} This time: {drawnScenario.label}
+              </p>
+            ) : activity?.hint && activity.hint !== activity.label ? (
+              <p>{activity.hint}</p>
+            ) : null}
           </div>
           <div className="dralo-ai-panel__body">
             {error ? (
@@ -829,7 +876,7 @@ export default function DraloAiStudio({
                     type="button"
                     className="dralo-ai-btn dralo-ai-btn--primary"
                     onClick={submitEssay}
-                    disabled={loading || !essay.trim()}
+                    disabled={!preview && (loading || !essay.trim())}
                   >
                     Send to Dralo for feedback
                   </button>

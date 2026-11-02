@@ -253,13 +253,14 @@
 }
 
 .cardPriceLaunch {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
   margin-top: 6px;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
+  line-height: 1.25;
+  text-align: center;
   color: #6d28d9;
-  text-transform: uppercase;
 }
 
 .cardPriceAnnual {
@@ -494,14 +495,34 @@
 }
 
 .cellPriceLaunch {
-  font-size: 0.62rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  color: #6d28d9;
-  text-align: center;
-  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
   max-width: 11rem;
+  margin: 2px auto 0;
+  line-height: 1.25;
+  text-align: center;
+  color: #6d28d9;
+}
+
+.founderPriceTitle {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.founderPriceUntil {
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.cellPriceLaunch .founderPriceTitle {
+  font-size: 0.68rem;
+}
+
+.cellPriceLaunch .founderPriceUntil {
+  font-size: 0.62rem;
 }
 
 .cellSoon {

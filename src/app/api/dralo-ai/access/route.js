@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 
-/** Check if Dralo AI is accessible for the current user (staff roles only). */
+/** Check if Dralo AI is accessible for the current user. */
 export async function GET(req) {
   const access = await getDraloAiAccessFromRequest(req);
 

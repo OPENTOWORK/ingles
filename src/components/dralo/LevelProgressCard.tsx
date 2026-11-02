@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import type { DraloLevelInfo } from '@/lib/dralo-levels';
-import { getLevelInfo, LEVEL_XP_STEP } from '@/lib/dralo-levels';
+import { getLevelInfo, getLevelName } from '@/lib/dralo-levels';
 import styles from './LevelProgressCard.module.css';
 
 export type LevelProgressCardProps = {
@@ -27,7 +27,7 @@ const COPY = {
     xpLabel: (n: number) => `${n.toLocaleString()} XP`,
     levelLine: (name: string) => name,
     nextLevel: 'Next level',
-    xpStep: 'XP per level',
+    xpStep: 'This level',
     totalXp: 'Total XP',
     cta: 'Go to Training →',
     ctaHref: '/training/',
@@ -43,7 +43,7 @@ const COPY = {
     xpLabel: (n: number) => `${n.toLocaleString()} XP`,
     levelLine: (name: string) => name,
     nextLevel: 'Siguiente nivel',
-    xpStep: 'XP por nivel',
+    xpStep: 'Este nivel',
     totalXp: 'XP total',
     cta: 'Ir a Training →',
     ctaHref: '/training/',
@@ -60,11 +60,10 @@ function ProgressBody({
   t: (typeof COPY)[keyof typeof COPY];
 }) {
   const progressPercent = isEmpty ? 0 : info.progressPercent;
+  const levelSpan = info.levelXpSpan;
   const xpInside = isEmpty ? 0 : info.xpInsideCurrentLevel;
-  const xpNeeded = isEmpty ? LEVEL_XP_STEP : info.xpNeededForNextLevel ?? 0;
-  const nextLevelName = info.isMaxLevel
-    ? info.levelName
-    : getLevelInfo((info.level + 1) * LEVEL_XP_STEP).levelName;
+  const xpNeeded = isEmpty ? levelSpan : info.xpNeededForNextLevel ?? 0;
+  const nextLevelName = info.isMaxLevel ? info.levelName : getLevelName(info.level + 1);
 
   return (
     <>
@@ -74,7 +73,7 @@ function ProgressBody({
         </span>
         {!info.isMaxLevel ? (
           <span className={styles.progressRemaining}>
-            {isEmpty ? t.xpToNext(LEVEL_XP_STEP) : t.xpToNext(xpNeeded)}
+            {t.xpToNext(xpNeeded)}
           </span>
         ) : null}
       </div>
@@ -100,7 +99,7 @@ function ProgressBody({
         </div>
         <div className={styles.stat}>
           <span className={styles.statValue}>
-            {xpInside}/{LEVEL_XP_STEP}
+            {xpInside}/{levelSpan}
           </span>
           <span className={styles.statLabel}>{t.xpStep}</span>
         </div>

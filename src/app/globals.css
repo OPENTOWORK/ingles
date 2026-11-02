@@ -1903,7 +1903,9 @@ body.nav-open {
   /* La clase va en el HTML de la home, así el botón antiguo no aparece
      antes de que el menú lateral se monte. */
   .site-header--home-side .app-nav__toggle,
-  body.has-home-side-menu .app-nav__toggle {
+  body.has-home-side-menu .app-nav__toggle,
+  .site-header--home-side .app-nav--desktop,
+  body.has-home-side-menu .app-nav--desktop {
     display: none !important;
   }
 
@@ -1959,8 +1961,8 @@ body.nav-open {
     background: #f8fafc;
   }
 
-  /* En el móvil la pestaña es pequeña, a la altura de la mascota y pegada al borde. */
-  @media (max-width: 639px) {
+  /* En móvil y tablet la pestaña es pequeña, a la altura de la mascota y pegada al borde. */
+  @media (max-width: 1099px) {
     .app-side-menu {
       top: 11rem;
       right: 8px;
@@ -2800,7 +2802,7 @@ html:not(.has-stored-session) body:has(.home-landing--pending) .app-side-menu {
   }
 }
 
-@media (max-width: 639px) {
+@media (max-width: 1099px) {
   .it-preview-role-banner {
     display: none;
   }
@@ -3217,7 +3219,7 @@ html:not(.has-stored-session) body:has(.home-landing--pending) .app-side-menu {
   }
 }
 
-@media (max-width: 639px) and (max-height: 780px) {
+@media (max-width: 1099px) and (max-height: 780px) {
   .home-page--student-mobile.home-page--guest .home-page__inner {
     gap: 0.7rem;
   }

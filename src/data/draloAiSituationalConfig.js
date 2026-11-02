@@ -19,6 +19,9 @@ export const DRALO_AI_SITUATIONAL_TRACK = {
 export const DRALO_AI_SITUATIONAL_EYEBROW = 'Dralo AI · Real-world situations';
 export const DRALO_AI_EXAM_EYEBROW = 'Dralo AI · Exam preparation';
 
+/** Chip that draws a different real scenario on every generation. */
+export const DRALO_AI_RANDOM_SCENARIO_ID = 'random';
+
 export const DRALO_AI_SITUATIONAL = {
   speaking: {
     title: 'Speaking · Role play',
@@ -120,13 +123,27 @@ export const DRALO_AI_SITUATIONAL = {
   },
   listening: {
     title: 'Listening · Real-world situations',
-    description: 'Authentic audio: announcements, podcasts, phone calls and short news.',
+    description:
+      'Authentic audio: announcements, calls, podcasts, tours, news and short talks.',
     scenarios: [
       { id: 'airport-announcement', label: 'Airport announcements', icon: '📢' },
+      {
+        id: 'random',
+        label: 'Random',
+        icon: '🎲',
+        hint: 'A different situation every time.',
+      },
+      { id: 'train-announcement', label: 'Train announcements', icon: '🚆' },
       { id: 'podcast-snippet', label: 'Podcast clip', icon: '🎙️' },
       { id: 'customer-service', label: 'Customer service call', icon: '☎️' },
+      { id: 'voicemail', label: 'Voicemail message', icon: '📩' },
       { id: 'news-bulletin', label: 'Short news bulletin', icon: '📻' },
+      { id: 'weather-forecast', label: 'Weather forecast', icon: '⛅' },
       { id: 'work-meeting', label: 'Work meeting (extract)', icon: '👥' },
+      { id: 'radio-interview', label: 'Radio interview', icon: '🎧' },
+      { id: 'museum-tour', label: 'Museum audio guide', icon: '🏛️' },
+      { id: 'clinic-call', label: 'Clinic phone call', icon: '🩺' },
+      { id: 'lecture-extract', label: 'Lecture extract', icon: '🎓' },
     ],
   },
   reading: {
@@ -155,4 +172,15 @@ export const DRALO_AI_SITUATIONAL = {
 
 export function getSkillConfig(modeId) {
   return DRALO_AI_SITUATIONAL[modeId] || null;
+}
+
+/** Picks a real scenario. `avoidId` is skipped when another option exists. */
+export function pickRandomSituationalScenario(skillId, avoidId) {
+  const pool = (DRALO_AI_SITUATIONAL[skillId]?.scenarios || []).filter(
+    (scenario) => scenario.id !== DRALO_AI_RANDOM_SCENARIO_ID,
+  );
+  if (!pool.length) return null;
+  const varied = avoidId ? pool.filter((scenario) => scenario.id !== avoidId) : pool;
+  const choices = varied.length ? varied : pool;
+  return choices[Math.floor(Math.random() * choices.length)];
 }

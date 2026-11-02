@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import { useDraloAiPreview, useDraloAiPremiumGate } from '@/components/dralo-ai/DraloAiPreviewContext';
 import DraloThinking from '@/components/dralo/DraloThinking';
 
 const ACCENT_SOLID = {
@@ -11,7 +12,7 @@ const ACCENT_SOLID = {
 };
 
 function welcomeMessage(level) {
-  return `Hi! I'm your Grammar Coach at ${level} level. Ask about tenses, conditionals, passive voice, word order, or paste a sentence you want explained. I'll answer in clear English with examples.`;
+  return `Hi! I'm your Grammar Coach at ${level} level. Pick a topic above, or paste a sentence you want explained. I'll answer in clear English with examples.`;
 }
 
 function formatMessageContent(content) {
@@ -26,6 +27,8 @@ function formatMessageContent(content) {
 }
 
 export default function DraloAiGrammarCoach({ config }) {
+  const preview = useDraloAiPreview();
+  const requirePremium = useDraloAiPremiumGate();
   const [level, setLevel] = useState(config.defaultLevel || 'B2');
   const [topicId, setTopicId] = useState(config.activities[0]?.id || '');
   const [messages, setMessages] = useState(() => [
@@ -71,6 +74,7 @@ export default function DraloAiGrammarCoach({ config }) {
   const sendMessage = async (text) => {
     const trimmed = String(text || '').trim();
     if (!trimmed || loading) return;
+    if (requirePremium()) return;
 
     setError('');
     const userMsg = { role: 'user', content: trimmed };
@@ -144,11 +148,13 @@ export default function DraloAiGrammarCoach({ config }) {
 
   const handleTopicClick = (a) => {
     setTopicId(a.id);
+    if (preview) return;
     if (a.starterQuestion) sendMessage(a.starterQuestion);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (requirePremium()) return;
     sendMessage(input);
   };
 
@@ -264,7 +270,7 @@ export default function DraloAiGrammarCoach({ config }) {
                 <button
                   type="submit"
                   className="dralo-ai-btn dralo-ai-btn--primary"
-                  disabled={loading || !input.trim()}
+                  disabled={!preview && (loading || !input.trim())}
                 >
                   Ask Dralo
                 </button>

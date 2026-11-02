@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { draloAiDeniedResponse, getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import { buildExamGeneratePrompt } from '@/lib/draloAiExamPrompts';
 import { realLifeChatCompletion, isDraloOpenAIConfigured } from '@/lib/draloAiEngine';
 import { buildSituationalGeneratePrompt } from '@/lib/draloAiSituationalPrompts';
@@ -132,6 +133,9 @@ function parseJsonFromModel(text) {
 }
 
 export async function POST(req) {
+  const access = await getDraloAiAccessFromRequest(req);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   if (!isDraloOpenAIConfigured()) {
     return NextResponse.json(
       {

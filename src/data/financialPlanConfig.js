@@ -241,7 +241,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 30,
     descripcionCorta: 'La experiencia más completa para preparar exámenes al máximo nivel.',
     descripcion:
-      'Todo lo de Plus, con Training y Quiz ilimitados, exámenes, Writing Correction, Speaking Correction y consultas Dralo Assistant sin límite, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h). Speaking Coach próximamente.',
+      'Todo lo de Plus, con Training y Quiz ilimitados, exámenes, Writing Correction, Speaking Correction, Dralo AI y consultas Dralo Assistant sin límite, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h).',
     badge: '🚀 MEJOR VALOR',
     badgeVariant: 'value',
     recommended: false,
@@ -257,7 +257,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       'Writing Correction',
       'Speaking Correction',
       'Corrección Writing avanzada',
-      'Speaking Coach: próximamente',
+      'Dralo AI',
       'Consultas Dralo Assistant',
       'Acceso prioritario a nuevas funciones',
       'Seguimiento de progreso',
@@ -374,8 +374,24 @@ export const COMING_SOON = 'coming-soon';
 /** Descuento al facturar anualmente (mostrado en /precios y vista previa admin). */
 export const ANNUAL_BILLING_DISCOUNT_PERCENT = 25;
 
-/** Etiqueta de marketing para precios promocionales de lanzamiento. */
-export const LAUNCH_PRICE_LABEL = 'Precio exclusivo de lanzamiento';
+/** Etiqueta de marketing del precio fundador, visible hasta el final de este día (Madrid). */
+export const FOUNDER_PRICE_UNTIL = '2026-12-31';
+export const FOUNDER_PRICE_LABEL = 'Precio fundador';
+export const FOUNDER_PRICE_DETAIL = 'Para siempre hasta el 31/12/2026';
+export const LAUNCH_PRICE_LABEL = FOUNDER_PRICE_LABEL;
+
+/** True through 31/12/2026 in Europe/Madrid. The prices stay; only the label uses this. */
+export function isFounderPriceActive(now = new Date()) {
+  const date = now instanceof Date ? now : new Date(now);
+  if (Number.isNaN(date.getTime())) return false;
+  const ymd = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+  return ymd <= FOUNDER_PRICE_UNTIL;
+}
 
 export function planHasLaunchPricing(plan) {
   return Number(plan?.precioRegular) > 0;
@@ -555,7 +571,7 @@ export const PLAN_COMPARISON_ROWS = [
     id: 'speaking',
     label: 'Dralo AI',
     type: 'text',
-    values: { free: false, premium: false, pro: COMING_SOON },
+    values: { free: false, premium: false, pro: true },
   },
   {
     id: 'exam-strategies',

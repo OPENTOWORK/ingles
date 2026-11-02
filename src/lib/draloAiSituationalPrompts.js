@@ -9,6 +9,9 @@ export function buildSituationalGeneratePrompt(mode, scenarioId, level, options 
     ? `Student situation request: "${custom}". Build a role-play brief they will practise with a voice coach.`
     : '';
 
+  const listeningJson = `Return ONLY JSON:
+{"title":"...","setting":"short place or situation","script":"spoken script; use A:/B: lines only when there is more than one speaker","questions":[{"id":"q1","prompt":"...","type":"mcq","options":["A) ...","B) ...","C) ...","D) ..."]},{"id":"q2","prompt":"...","type":"mcq","options":["A) ...","B) ...","C) ...","D) ..."]}],"modelAnswers":[{"id":"q1","answer":"A) ..."},{"id":"q2","answer":"A) ..."}]}`;
+
   const prompts = {
     speaking: `Create a ${L} role-play BRIEF (not the dialogue itself) for scenario "${scenarioId}".
 ${speakingCustom}
@@ -33,17 +36,30 @@ Return ONLY JSON:
     },
     listening: {
       'airport-announcement': `Create ONE ${L} listening task: airport/public announcement (monologue). Script 80-120 words + 2 comprehension questions.
-Return ONLY JSON:
-{"title":"...","setting":"airport","script":"single speaker announcement (no A/B labels)","questions":[{"id":"q1","prompt":"...","type":"mcq","options":["A) ...","B) ...","C) ...","D) ..."]},{"id":"q2","prompt":"...","type":"mcq","options":["A) ...","B) ...","C) ...","D) ..."]}],"modelAnswers":[{"id":"q1","answer":"..."},{"id":"q2","answer":"..."}]}`,
+${listeningJson}`,
+      'train-announcement': `Create ONE ${L} listening task: train or metro station announcement (monologue). Delays, platform changes or connections. Script 80-120 words + 2 MCQ.
+${listeningJson}`,
       'podcast-snippet': `Create ONE ${L} listening: casual podcast excerpt, two speakers optional, 90-130 words script + 2 MCQ.
 Format script as A:/B: lines if dialogue, else monologue.
-Return ONLY JSON with title, setting, script, questions, modelAnswers.`,
+${listeningJson}`,
       'customer-service': `Create ONE ${L} listening: customer service phone call, script with A: customer B: agent, 90-130 words + 2 questions.
-Return ONLY JSON.`,
+${listeningJson}`,
+      voicemail: `Create ONE ${L} listening: a single voicemail left on a phone (monologue). Work, study or travel context. Script 70-110 words + 2 MCQ.
+${listeningJson}`,
       'news-bulletin': `Create ONE ${L} listening: short news bulletin monologue 80-110 words + 2 questions.
-Return ONLY JSON.`,
-      'work-meeting': `Create ONE ${L} listening: excerpt from a work meeting, 2-3 speakers as A:/B: lines, 100-140 words + 2 questions.
-Return ONLY JSON.`,
+${listeningJson}`,
+      'weather-forecast': `Create ONE ${L} listening: radio or app weather forecast (monologue) for a city or region. Script 70-110 words + 2 MCQ about conditions, timing or advice.
+${listeningJson}`,
+      'work-meeting': `Create ONE ${L} listening: excerpt from a work meeting, 2-3 speakers as A:/B:/C: lines, 100-140 words + 2 questions.
+${listeningJson}`,
+      'radio-interview': `Create ONE ${L} listening: short radio interview, host and guest as A:/B: lines, 100-140 words + 2 MCQ.
+${listeningJson}`,
+      'museum-tour': `Create ONE ${L} listening: museum or city audio-guide extract (monologue). Script 90-130 words + 2 MCQ.
+${listeningJson}`,
+      'clinic-call': `Create ONE ${L} listening: phone call to book or change a clinic appointment. A: patient B: receptionist, 90-130 words + 2 MCQ.
+${listeningJson}`,
+      'lecture-extract': `Create ONE ${L} listening: short university lecture extract (monologue) on an everyday academic topic. Script 100-140 words + 2 MCQ.
+${listeningJson}`,
     },
     reading: {
       'travel-blog': `Create ONE ${L} reading: travel blog post 150-200 words + 2 comprehension MCQ (authentic web style, not exam gapped text).

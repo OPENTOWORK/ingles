@@ -11,6 +11,7 @@ import DraloThinking from '@/components/dralo/DraloThinking';
 import { FeedbackCards } from '@/features/speaking/ui/components/FeedbackCards';
 import { playExaminerAudio, stopExaminerAudio } from '@/utils/playExaminerAudio';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import { useDraloAiPreview, useDraloAiPremiumGate } from '@/components/dralo-ai/DraloAiPreviewContext';
 
 function b2GlobalPartNumber(localPart) {
   const n = Number(localPart);
@@ -22,6 +23,8 @@ function b2GlobalPartNumber(localPart) {
  * Práctica de una parte Speaking (Dralo AI) — audio real del examinador, sin scripts visibles.
  */
 export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) {
+  const preview = useDraloAiPreview();
+  const requirePremium = useDraloAiPremiumGate();
   const blueprint = useMemo(() => getExamBlueprint(level), [level]);
   const partDef = useMemo(
     () => blueprint.parts[activity?.blueprintIndex ?? 0] ?? blueprint.parts[0],
@@ -40,6 +43,10 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
   const photoUrls = photoSet?.urls ?? [];
 
   useEffect(() => {
+    if (preview) {
+      setPhotosLoading(false);
+      return undefined;
+    }
     if (uiMode !== 'long_turn') {
       setPhotoSet(null);
       setPhotosError('');
@@ -82,13 +89,13 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
     return () => {
       cancelled = true;
     };
-  }, [uiMode, photoSetKey, level]);
+  }, [preview, uiMode, photoSetKey, level]);
 
   const [sessionId, setSessionId] = useState(null);
   const [history, setHistory] = useState([]);
   const [userLines, setUserLines] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [phase, setPhase] = useState('intro');
+  const [loading, setLoading] = useState(!preview);
+  const [phase, setPhase] = useState(preview ? 'dialogue' : 'intro');
   const [longTurnLeft, setLongTurnLeft] = useState(b2Cfg?.longTurnSeconds ?? 60);
   const [typed, setTyped] = useState('');
   const [error, setError] = useState('');
@@ -181,6 +188,11 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
   );
 
   useEffect(() => {
+    if (preview) {
+      setLoading(false);
+      setError('');
+      return undefined;
+    }
     aliveRef.current = true;
     const ac = new AbortController();
     abortRef.current = ac;
@@ -240,6 +252,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
     photosLoading,
     callTurn,
     applyAssistantTurn,
+    preview,
   ]);
 
   useEffect(() => {
@@ -250,6 +263,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
 
   const submitCandidateTurn = useCallback(
     async (audioOrText) => {
+      if (requirePremium()) return;
       if (!sessionId || !isAlive()) return;
       let data;
       if (audioOrText instanceof Blob) {
@@ -275,7 +289,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
       }
       if (data.assistantText) await applyAssistantTurn(data);
     },
-    [sessionId, history, callTurn, applyAssistantTurn, isAlive],
+    [sessionId, history, callTurn, applyAssistantTurn, isAlive, requirePremium],
   );
 
   useEffect(() => {
@@ -288,6 +302,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
   }, [phase, longTurnLeft, media.isRecording, submitCandidateTurn]);
 
   const onMicClick = async () => {
+    if (requirePremium()) return;
     if (loading || !sessionId || finished) return;
     if (uiMode === 'long_turn' && phase === 'await_long_turn') return;
     if (media.isRecording) {
@@ -299,6 +314,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
   };
 
   const finalizePart = async () => {
+    if (requirePremium()) return;
     if (!sessionId || userLines.length === 0) return;
     stopExaminerAudio();
     setLoading(true);
@@ -395,7 +411,10 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
           <button
             type="button"
             className="dralo-ai-btn dralo-ai-btn--ghost"
-            onClick={() => void playExaminerAudio(lastAudio)}
+            onClick={() => {
+              if (requirePremium()) return;
+              void playExaminerAudio(lastAudio);
+            }}
             disabled={loading}
           >
             🔊 Replay examiner
@@ -478,7 +497,7 @@ export default function DraloAiSpeakingExamPractice({ level = 'B2', activity }) 
             type="button"
             className={`dralo-ai-speaking-practice__mic${media.isRecording ? ' is-recording' : ''}`}
             onClick={onMicClick}
-            disabled={loading || !sessionId || finished}
+            disabled={!preview && (loading || !sessionId || finished)}
           >
             <span aria-hidden>{media.isRecording ? '⏹' : '🎤'}</span>
             {media.isRecording ? 'Stop & send' : 'Speak'}

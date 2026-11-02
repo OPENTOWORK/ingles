@@ -5,15 +5,10 @@ import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import SiteMascot from '@/components/SiteMascot';
 import DraloAiLevelFilter from '@/components/dralo-ai/DraloAiLevelFilter';
+import { useDraloAiPremiumGate } from '@/components/dralo-ai/DraloAiPreviewContext';
 import DraloThinking from '@/components/dralo/DraloThinking';
 import { callDraloAi } from '@/lib/ai/draloAiClient';
 import { SPEAKING_MISSIONS, getMissionBackground } from '@/data/speakingMissions';
-import {
-  getOverallSpeakingXp,
-  loadSpeakingProgressForLevel,
-  recordSpeakingMissionComplete,
-  speakingCoachLevel,
-} from '@/lib/speakingCoachProgress';
 import { useSpeechRecognition } from '../../../dralo-speaking/lib/useSpeechRecognition';
 
 const LEVELS = ['A2', 'B1', 'B2', 'C1', 'C2'];
@@ -31,6 +26,11 @@ const STUDENT_ROLES = [
 ];
 
 const CONVERSATION_TYPES = ['Informal', 'Formal', 'Neutral'];
+const RANDOM_SETUP = 'random';
+
+function pickOne(list) {
+  return list[Math.floor(Math.random() * list.length)];
+}
 
 const EMPTY_SCORES = { grammar: 0, vocabulary: 0, fluency: 0, confidence: 0 };
 
@@ -67,54 +67,12 @@ function mergeObjectives(prev, incoming) {
   return Array.from(set).sort((a, b) => a - b);
 }
 
-function SpeakingExperienceBar({ missions, progress, level, sessionXp }) {
-  const overall = getOverallSpeakingXp(missions, progress);
-  const coach = speakingCoachLevel(overall.earned);
-
-  return (
-    <section className="dralo-ai-speaking-progress" aria-label="Speaking Coach experience">
-      <div className="dralo-ai-speaking-progress__head">
-        <div>
-          <h2 className="dralo-ai-speaking-progress__head-title">Your experience</h2>
-          <p className="dralo-ai-speaking-progress__head-meta">
-            Level {level} · {overall.earned} / {overall.cap} XP across topics
-            {sessionXp > 0 ? ` · +${sessionXp} XP this session` : ''}
-          </p>
-        </div>
-        <div className="dralo-ai-speaking-progress__level">
-          <div className="dralo-ai-speaking-progress__level-row">
-            <span className="dralo-ai-speaking-progress__level-label">
-              Coach level {coach.level}
-            </span>
-            <span className="dralo-ai-speaking-progress__level-xp">
-              {coach.inLevel} / 200 XP
-              {coach.nextAt < 200 ? ` · ${coach.nextAt} to next` : ''}
-            </span>
-          </div>
-          <div
-            className="dralo-ai-speaking-progress__bar"
-            role="progressbar"
-            aria-valuenow={coach.pct}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Coach level progress"
-          >
-            <span
-              className="dralo-ai-speaking-progress__bar-fill"
-              style={{ width: `${coach.pct}%` }}
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /**
  * Dralo AI Speaking Coach — real-life roleplay missions in the Dralo AI studio
  * layout (hero + toolbar + mission setup + single chat panel), like Grammar Coach.
  */
 export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
+  const requirePremium = useDraloAiPremiumGate();
   const initialLevel = LEVELS.includes(String(defaultLevel || '').toUpperCase())
     ? String(defaultLevel).toUpperCase()
     : 'B2';
@@ -145,15 +103,15 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
 
   const [avatarState, setAvatarState] = useState('idle');
   const [xpToast, setXpToast] = useState(null);
-  const [missionProgress, setMissionProgress] = useState({});
 
   const chatRef = useRef(null);
   const sendAnswerRef = useRef(null);
   const happyTimerRef = useRef(null);
   const xpTimerRef = useRef(null);
 
+  const isRandomSetup = missionId === RANDOM_SETUP;
   const selectedMission = useMemo(
-    () => SPEAKING_MISSIONS.find((m) => m.id === missionId) || SPEAKING_MISSIONS[0],
+    () => SPEAKING_MISSIONS.find((m) => m.id === missionId) || null,
     [missionId],
   );
 
@@ -178,14 +136,6 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
     },
     [],
   );
-
-  useEffect(() => {
-    setMissionProgress(loadSpeakingProgressForLevel(level));
-  }, [level]);
-
-  const refreshMissionProgress = useCallback(() => {
-    setMissionProgress(loadSpeakingProgressForLevel(level));
-  }, [level]);
 
   const flashHappy = useCallback(() => {
     setAvatarState('happy');
@@ -283,14 +233,19 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
   }
 
   function handleStart() {
-    if (!selectedMission) return;
+    if (requirePremium()) return;
+    const missionPick = isRandomSetup ? pickOne(SPEAKING_MISSIONS) : selectedMission;
+    const rolePick = isRandomSetup ? pickOne(STUDENT_ROLES) : studentRole;
+    const typePick = isRandomSetup ? pickOne(CONVERSATION_TYPES) : conversationType;
+    if (!missionPick) return;
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
-    startMission({ ...selectedMission, studentRole, conversationType });
+    startMission({ ...missionPick, studentRole: rolePick, conversationType: typePick });
   }
 
   async function handleSendAnswer(textOverride) {
+    if (requirePremium()) return;
     if (!started || !mission) {
       setNotice('Start a mission before sending your answer.');
       return;
@@ -382,6 +337,7 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
   }, [sttError]);
 
   async function handleFinish() {
+    if (requirePremium()) return;
     if (!mission) return;
     if (!hasConversation) {
       setNotice('Have a short conversation first, then finish the mission.');
@@ -415,11 +371,6 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
       const finalXp = xp + bonus;
       if (bonus > 0) setXp(finalXp);
       setReport({ ...result, totalXp: finalXp });
-      recordSpeakingMissionComplete(level, mission.id, {
-        xpEarned: finalXp,
-        stars: result.stars,
-      });
-      refreshMissionProgress();
       setView('complete');
       setAvatarState('happy');
     } catch (err) {
@@ -451,6 +402,7 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
   }
 
   async function startRecording() {
+    if (requirePremium()) return;
     if (!started) {
       setNotice('Start a mission before using the microphone.');
       return;
@@ -488,7 +440,15 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
     return avatarState;
   }, [loading, isListening, started, input, avatarState]);
 
-  const headMission = mission && running ? mission : selectedMission;
+  const headMission =
+    mission && running
+      ? mission
+      : selectedMission || {
+          title: 'Random',
+          icon: '🎲',
+          scenario: 'Dralo picks the scenario, your role and the register when you start.',
+          backgroundStyle: '',
+        };
 
   return (
     <main
@@ -535,6 +495,7 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
                 onChange={(e) => setMissionId(e.target.value)}
                 aria-describedby="speaking-scenario-hint"
               >
+                <option value={RANDOM_SETUP}>🎲 Random</option>
                 {SPEAKING_MISSIONS.map((m) => (
                   <option key={m.id} value={m.id}>
                     {m.icon} {m.title}
@@ -542,7 +503,9 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
                 ))}
               </select>
               <span id="speaking-scenario-hint" className="dralo-ai-speaking-controls__hint">
-                {selectedMission?.description}
+                {isRandomSetup
+                  ? 'Dralo picks the scenario, your role and the register.'
+                  : selectedMission?.description}
               </span>
             </label>
 
@@ -551,9 +514,11 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
                 <span className="dralo-ai-speaking-controls__label">Your role</span>
                 <select
                   className="dralo-ai-speaking-controls__select"
-                  value={studentRole}
+                  value={isRandomSetup ? RANDOM_SETUP : studentRole}
                   onChange={(e) => setStudentRole(e.target.value)}
+                  disabled={isRandomSetup}
                 >
+                  {isRandomSetup ? <option value={RANDOM_SETUP}>🎲 Random</option> : null}
                   {STUDENT_ROLES.map((r) => (
                     <option key={r} value={r}>{r}</option>
                   ))}
@@ -563,9 +528,11 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
                 <span className="dralo-ai-speaking-controls__label">Conversation type</span>
                 <select
                   className="dralo-ai-speaking-controls__select"
-                  value={conversationType}
+                  value={isRandomSetup ? RANDOM_SETUP : conversationType}
                   onChange={(e) => setConversationType(e.target.value)}
+                  disabled={isRandomSetup}
                 >
+                  {isRandomSetup ? <option value={RANDOM_SETUP}>🎲 Random</option> : null}
                   {CONVERSATION_TYPES.map((c) => (
                     <option key={c} value={c}>{c}</option>
                   ))}
@@ -589,13 +556,6 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
           </div>
         </section>
 
-        <SpeakingExperienceBar
-          missions={SPEAKING_MISSIONS}
-          progress={missionProgress}
-          level={level}
-          sessionXp={running && started ? xp : 0}
-        />
-
         <div className="dralo-ai-panel">
           <div
             className="dralo-ai-panel__head dralo-ai-speaking-head"
@@ -606,8 +566,9 @@ export default function LevelsSpeakingAiPanel({ defaultLevel = 'B2' }) {
               <h2>{headMission?.title}</h2>
               <p>
                 {headMission?.scenario}
-                {running ? ` 
- · with ${headMission?.character}` : ''}
+                {running
+                  ? ` · ${headMission?.studentRole} · ${headMission?.conversationType} · with ${headMission?.character}`
+                  : ''}
               </p>
             </div>
           </div>

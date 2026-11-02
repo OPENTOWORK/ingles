@@ -110,7 +110,7 @@ export const CONTACT_FAQ_ITEMS = [
     topic: 'Dralo AI',
     question: 'Is Dralo AI available for all users?',
     answer:
-      'Dralo AI tools (Writing, Listening, Speaking Coach, and more) are being rolled out gradually. Students currently see the menu with a “Coming soon” label; staff roles may have early access. Open a ticket under “Dralo AI” if you need clarification for your account.',
+      'Dralo AI is included in the Premium plan. Free and Plus students can open the section and look through each tool; using them requires Premium. Staff can use it with any plan. Open a ticket under “Dralo AI” if a Premium account cannot get in.',
     quickLink: { href: '/dralo-ai', label: 'Dralo AI hub' },
   },
   {

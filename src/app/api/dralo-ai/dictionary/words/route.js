@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { draloAiDeniedResponse, getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import { createClient } from '@supabase/supabase-js';
 import { getServiceDb, isSchemaNotReadyError } from '@/lib/teacherAccess';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
@@ -51,6 +52,9 @@ function schemaNotReadyResponse() {
 }
 
 export async function GET(request) {
+  const access = await getDraloAiAccessFromRequest(request);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   try {
     const auth = await getAuthedContext(request);
     if (auth.error) {
@@ -86,6 +90,9 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  const access = await getDraloAiAccessFromRequest(request);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   try {
     const auth = await getAuthedContext(request);
     if (auth.error) {
@@ -133,6 +140,9 @@ export async function POST(request) {
 }
 
 export async function DELETE(request) {
+  const access = await getDraloAiAccessFromRequest(request);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   try {
     const auth = await getAuthedContext(request);
     if (auth.error) {

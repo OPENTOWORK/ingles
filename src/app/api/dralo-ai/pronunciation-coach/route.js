@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { draloAiDeniedResponse, getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import { buildPronunciationCoachSystemPrompt } from '@/lib/pronunciationCoachPrompt';
 import {
   realLifeChatCompletionStream,
@@ -45,6 +46,9 @@ function sanitizeMessages(raw) {
 }
 
 export async function POST(req) {
+  const access = await getDraloAiAccessFromRequest(req);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   if (!isDraloOpenAIConfigured()) {
     return NextResponse.json(
       {

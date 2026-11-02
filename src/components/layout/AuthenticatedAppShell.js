@@ -87,7 +87,7 @@ export default function AuthenticatedAppShell({
             </main>
             {homeSideMenu && navReady ? <DeferredAppSideMenu defaultOpen={false} /> : null}
             {showStudyBar ? (
-              <StudySessionBarGate session={preview.session} userRole={preview.userRole} />
+              <StudySessionBarGate session={preview.session} />
             ) : null}
           </PlacementAccessProvider>
         </TutorialProvider>

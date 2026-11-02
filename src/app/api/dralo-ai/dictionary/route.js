@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { draloAiDeniedResponse, getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import {
   realLifeChatCompletion,
   isDraloOpenAIConfigured,
@@ -6,8 +7,10 @@ import {
 } from '@/lib/draloAiEngine';
 import {
   buildAskDraloPrompt,
+  buildFallbackLookupPrompt,
   buildTranslatePrompt,
   buildWordEnrichPrompt,
+  entryFromFallbackLookup,
   languageNameForPrompt,
   parseJsonFromModel,
 } from '@/lib/dictionaryAiHelpers';
@@ -135,24 +138,64 @@ async function fetchBaseEntry(word) {
   const w = normalizeWord(word);
   if (!w) return { error: 'Enter an English word.' };
 
-  const res = await fetch(
-    `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w)}`,
-    { cache: 'no-store' },
-  );
+  let lastStatus = 0;
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    try {
+      const res = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(w)}`,
+        {
+          cache: 'no-store',
+          headers: { Accept: 'application/json' },
+          signal: AbortSignal.timeout(8000),
+        },
+      );
 
-  if (res.status === 404) {
-    return { error: `We couldn't find "${w}" in the dictionary.` };
-  }
-  if (!res.ok) {
-    return { error: 'The dictionary is unavailable right now. Please try again shortly.' };
+      if (res.status === 404) {
+        return { error: `We couldn't find "${w}" in the dictionary.`, code: 'not_found' };
+      }
+      if (res.ok) {
+        const data = await res.json();
+        const parsed = parseDictionaryEntries(data);
+        if (!parsed?.meanings?.length) {
+          return { error: `No definitions found for "${w}".`, code: 'empty' };
+        }
+        return { entry: parsed };
+      }
+      lastStatus = res.status;
+    } catch (e) {
+      lastStatus = 0;
+      console.error('[dictionary api]', e?.message || e);
+    }
+    if (attempt === 0) {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    }
   }
 
-  const data = await res.json();
-  const parsed = parseDictionaryEntries(data);
-  if (!parsed?.meanings?.length) {
-    return { error: `No definitions found for "${w}".` };
-  }
-  return { entry: parsed };
+  console.error('[dictionary api] unavailable', lastStatus || 'network');
+  return {
+    error: 'The dictionary is unavailable right now. Please try again shortly.',
+    code: 'unavailable',
+  };
+}
+
+async function lookupWordFromModel(word, targetLang) {
+  const { text } = await realLifeChatCompletion({
+    system:
+      'For this lookup only: act as a Cambridge English lexicographer. Return only JSON. Be accurate about CEFR, false friends for Spanish speakers, and grammar labels.',
+    messages: [{ role: 'user', content: buildFallbackLookupPrompt(word, targetLang) }],
+    temperature: 0.2,
+    response_format: { type: 'json_object' },
+    model: getDraloFastModel(),
+    rawSystem: true,
+  });
+  const parsed = parseJsonFromModel(text || '{}');
+  const built = entryFromFallbackLookup(word, parsed);
+  if (!built) return null;
+  return {
+    ...built,
+    targetLanguage: targetLang,
+    aiUnavailable: false,
+  };
 }
 
 async function enrichWordWithAi(word, baseEntry, targetLang) {
@@ -182,7 +225,20 @@ async function lookupWord(word, targetLang) {
   if (cached) return { entry: cached };
 
   const base = await fetchBaseEntry(word);
-  if (base.error) return base;
+  if (base.error) {
+    if (base.code === 'unavailable' && isDraloOpenAIConfigured()) {
+      try {
+        const entry = await lookupWordFromModel(normalizeWord(word), targetLang);
+        if (entry) {
+          setCachedLookup(cacheKey, entry);
+          return { entry };
+        }
+      } catch (e) {
+        console.error('[dictionary fallback]', e?.message || e);
+      }
+    }
+    return { error: base.error };
+  }
 
   if (!isDraloOpenAIConfigured()) {
     return {
@@ -277,6 +333,9 @@ async function askDralo(word, question, enrichment) {
 }
 
 export async function POST(req) {
+  const access = await getDraloAiAccessFromRequest(req);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   const ip = clientIp(req);
   if (!tryConsumeRate(ip)) {
     return NextResponse.json({ error: 'Too many requests. Please wait a moment.' }, { status: 429 });

@@ -1529,6 +1529,22 @@ body.reading-night-mode .precios-page {
   color: #e2e8f0;
 }
 
+body.reading-night-mode .dralo-ai-hub__card {
+  background:
+    radial-gradient(120px 90px at 100% 0%, color-mix(in srgb, var(--dralo-accent-solid, #6366f1) 28%, transparent), transparent 70%),
+    linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  border-color: #334155;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+body.reading-night-mode .dralo-ai-hub__label {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .dralo-ai-hub__tagline {
+  color: #94a3b8;
+}
+
 body.reading-night-mode .precios-page .page-hero-wrap__breadcrumb .breadcrumb {
   color: #94a3b8;
 }

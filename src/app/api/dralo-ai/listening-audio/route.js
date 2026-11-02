@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { draloAiDeniedResponse, getDraloAiAccessFromRequest } from '@/lib/draloAiAccess';
 import OpenAI from 'openai';
 import {
   isDialogueScript,
@@ -25,6 +26,9 @@ const MODEL = process.env.OPENAI_TTS_MODEL_HD || 'tts-1-hd';
  * Dialogues: woman + man voices stitched into one MP3.
  */
 export async function POST(req) {
+  const access = await getDraloAiAccessFromRequest(req);
+  if (!access.allowed) return draloAiDeniedResponse(access);
+
   try {
     const key = process.env.OPENAI_API_KEY;
     if (!key) {

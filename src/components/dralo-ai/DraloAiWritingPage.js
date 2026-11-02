@@ -14,7 +14,6 @@ const WRITING_CORRECTION_ACTIVITY = {
   id: DRALO_AI_WRITING_CORRECTION_ACTIVITY_ID,
   label: 'Writing Correction',
   icon: '✨',
-  hint: 'Paste your text and get structured Exam Coach feedback (level, scores, corrections, improved version).',
 };
 
 /** Dralo AI · Writing — Exam Coach correction + real-world formats. */

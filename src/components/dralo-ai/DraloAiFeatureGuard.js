@@ -5,6 +5,23 @@ import { useEffect, useState } from 'react';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isDraloAiLockedForRole } from '@/config/appNavMenu';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import { DraloAiPreviewProvider } from '@/components/dralo-ai/DraloAiPreviewContext';
+
+function DraloAiPreview({ children }) {
+  return (
+    <div className="dralo-ai-preview">
+      <div className="dralo-ai-preview__notice">
+        <div className="dralo-ai-preview__notice-inner">
+          <p className="dralo-ai-preview__kicker">Incluido en Premium</p>
+          <Link href="/precios" className="dralo-ai-preview__cta">
+            Ver Premium
+          </Link>
+        </div>
+      </div>
+      <div className="dralo-ai-preview__stage">{children}</div>
+    </div>
+  );
+}
 
 function DraloAiBlockedScreen() {
   return (
@@ -27,7 +44,8 @@ function DraloAiBlockedScreen() {
 }
 
 /**
- * Blocks all /dralo-ai routes for students and other locked roles.
+ * Premium students and staff use the tools. Free and Plus students can browse the same
+ * screens; actions stay disabled and the APIs still reject them.
  */
 export default function DraloAiFeatureGuard({ children }) {
   const { userRole, session } = useUserRole();
@@ -47,7 +65,9 @@ export default function DraloAiFeatureGuard({ children }) {
           credentials: 'include',
         });
         const data = await res.json().catch(() => ({}));
-        setApiState(data.allowed ? 'allowed' : 'blocked');
+        if (data.allowed) setApiState('allowed');
+        else if (data.reason === 'premium_required') setApiState('premium');
+        else setApiState('blocked');
       } catch {
         setApiState('blocked');
       }
@@ -59,6 +79,14 @@ export default function DraloAiFeatureGuard({ children }) {
       <main className="dralo-ai-page">
         <p style={{ padding: 24 }}>Loading…</p>
       </main>
+    );
+  }
+
+  if (apiState === 'premium') {
+    return (
+      <DraloAiPreviewProvider>
+        <DraloAiPreview>{children}</DraloAiPreview>
+      </DraloAiPreviewProvider>
     );
   }
 

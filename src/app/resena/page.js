@@ -167,7 +167,6 @@ export default function ResenaPage() {
       <PageHero
         eyebrow="Opiniones"
         title="Tu reseña"
-        description="Se publica en la web. Cada cuenta puede dejar una, y después puedes editarla o eliminarla."
         showMascot
         mascotVariant={8}
         mascotWidth={132}
