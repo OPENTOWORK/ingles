@@ -176,7 +176,7 @@ export function getLevelInfo(totalXp: number): DraloLevelInfo {
   const nextLevelXp = isMaxLevel ? null : LEVEL_XP_THRESHOLDS[level + 1];
   const currentLevelMaxXp = nextLevelXp == null ? MAX_XP : nextLevelXp - 1;
   const xpInsideCurrentLevel = isMaxLevel ? levelXpSpan : currentXp - currentLevelMinXp;
-  const xpNeededForNextLevel = isMaxLevel ? null : nextLevelXp - currentXp;
+  const xpNeededForNextLevel = nextLevelXp == null ? null : nextLevelXp - currentXp;
   const progressPercent = isMaxLevel
     ? 100
     : Math.min(100, Math.round((xpInsideCurrentLevel / levelXpSpan) * 100));
