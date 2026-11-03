@@ -8,10 +8,7 @@ import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/training
 import { getGuestRegisterHref } from '@/lib/guestPreviewAccess';
 import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
-import {
-  QUIZ_GAME_CATEGORIES,
-  QUIZ_GAME_QUESTIONS,
-} from '@/data/quizGameQuestions';
+import { getQuizGameBank } from '@/data/quizGameLevels';
 import {
   QUIZ_GAME_LIVES,
   QUIZ_GAME_QUESTION_COUNT,
@@ -23,12 +20,7 @@ import {
 } from '@/lib/quizGame';
 import styles from './QuizGamePage.module.css';
 
-const HUB_HREF = '/exam-practice/b2/';
 const FEEDBACK_MS = 1600;
-
-function categoryLabel(id) {
-  return QUIZ_GAME_CATEGORIES.find((item) => item.id === id)?.label || 'Mixed';
-}
 
 function LivesRow({ lives, max = QUIZ_GAME_LIVES, unlimited = false }) {
   if (unlimited) {
@@ -51,11 +43,14 @@ function LivesRow({ lives, max = QUIZ_GAME_LIVES, unlimited = false }) {
   );
 }
 
-export default function QuizGamePage() {
-  return <QuizGameBoard />;
+export default function QuizGamePage({ level = 'b2' }) {
+  return <QuizGameBoard level={level} />;
 }
 
-function QuizGameBoard() {
+function QuizGameBoard({ level = 'b2' }) {
+  const bank = useMemo(() => getQuizGameBank(level), [level]);
+  const hubHref = `/exam-practice/${bank.level}/`;
+  const quizHref = `/exam-practice/${bank.level}/quiz-game`;
   const { session, userRole } = useUserRole();
   const guest = !session;
   const accountLives = useTrainingLives({ path: '/api/quiz/lives' });
@@ -83,13 +78,13 @@ function QuizGameBoard() {
   const locked = pickedId != null || timedOut;
 
   useEffect(() => {
-    setBestScore(readQuizBestScore());
-  }, []);
+    setBestScore(readQuizBestScore(bank.level));
+  }, [bank.level]);
 
   const startRound = useCallback((nextCategory = category) => {
     if (accountLives.loading || accountLives.error) return;
     if (livesLimited && accountLives.lives <= 0) return;
-    const nextRound = buildQuizRound(QUIZ_GAME_QUESTIONS, {
+    const nextRound = buildQuizRound(bank.questions, {
       category: nextCategory,
       count: QUIZ_GAME_QUESTION_COUNT,
     });
@@ -109,14 +104,14 @@ function QuizGameBoard() {
     setTimedOut(false);
     setAnswers([]);
     setPhase('play');
-  }, [category, accountLives.loading, accountLives.error, accountLives.lives, livesLimited]);
+  }, [category, accountLives.loading, accountLives.error, accountLives.lives, livesLimited, bank.questions]);
 
   const finishRound = useCallback((finalScore) => {
-    const stored = writeQuizBestScore(finalScore);
+    const stored = writeQuizBestScore(finalScore, bank.level);
     setBestScore(stored);
     playTrainingFinishSound(finalScore >= stored * 0.7 || finalScore >= 700 ? 3 : 1);
     setPhase('results');
-  }, []);
+  }, [bank.level]);
 
   const resolveAnswer = useCallback(
     (optionId, fromTimeout = false) => {
@@ -231,15 +226,15 @@ function QuizGameBoard() {
   const correctCount = answers.filter((item) => item.correct).length;
   const timerPct = Math.max(0, (secondsLeft / QUIZ_GAME_SECONDS) * 100);
   const selectedCategory = useMemo(
-    () => QUIZ_GAME_CATEGORIES.find((item) => item.id === category) || QUIZ_GAME_CATEGORIES[0],
-    [category],
+    () => bank.categories.find((item) => item.id === category) || bank.categories[0],
+    [bank.categories, category],
   );
 
   return (
     <main className={styles.page}>
       <div className={styles.shell}>
         <header className={styles.top}>
-          <Link href={HUB_HREF} className={styles.back}>
+          <Link href={hubHref} className={styles.back}>
             ← Practice
           </Link>
           {showAdminPill ? <span className={styles.adminPill}>Admin preview</span> : null}
@@ -249,7 +244,7 @@ function QuizGameBoard() {
           <section className={styles.panel} aria-labelledby="quiz-game-title">
             <div className={styles.lobbyHead}>
               <div>
-                <p className={styles.eyebrow}>Quiz game</p>
+                <p className={styles.eyebrow}>Quiz game · {bank.level.toUpperCase()}</p>
                 <h1 id="quiz-game-title" className={styles.title}>
                   Beat the clock
                 </h1>
@@ -279,7 +274,7 @@ function QuizGameBoard() {
             ) : null}
 
             <div className={styles.categories} role="list">
-              {QUIZ_GAME_CATEGORIES.map((item) => (
+              {bank.categories.map((item) => (
                 <button
                   key={item.id}
                   type="button"
@@ -301,11 +296,11 @@ function QuizGameBoard() {
             {accountLives.outOfLives ? (
               <TrainingLivesEmpty
                 feature="Quiz"
-                backHref={HUB_HREF}
+                backHref={hubHref}
                 nextLifeAt={accountLives.nextLifeAt}
                 regenHours={accountLives.regenHours}
                 guest={guest}
-                registerHref={getGuestRegisterHref('/exam-practice/b2/quiz-game')}
+                registerHref={getGuestRegisterHref(quizHref)}
               />
             ) : (
               <button
@@ -437,11 +432,11 @@ function QuizGameBoard() {
               {accountLives.outOfLives ? (
                 <TrainingLivesEmpty
                   feature="Quiz"
-                  backHref={HUB_HREF}
+                  backHref={hubHref}
                   nextLifeAt={accountLives.nextLifeAt}
                   regenHours={accountLives.regenHours}
                   guest={guest}
-                  registerHref={getGuestRegisterHref('/exam-practice/b2/quiz-game')}
+                  registerHref={getGuestRegisterHref(quizHref)}
                 />
               ) : (
                 <button
@@ -456,7 +451,7 @@ function QuizGameBoard() {
               <button type="button" className={styles.secondary} onClick={() => setPhase('lobby')}>
                 Change category
               </button>
-              <Link href={HUB_HREF} className={styles.linkBtn}>
+              <Link href={hubHref} className={styles.linkBtn}>
                 Back to Practice
               </Link>
             </div>

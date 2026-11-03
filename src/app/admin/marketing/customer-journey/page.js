@@ -5,7 +5,7 @@ import MarketingOperationsPanel from '@/components/marketing/MarketingOperations
 
 export default function AdminMarketingCustomerJourneyPage() {
   return (
-    <MarketingShell title="Customer Journey" subtitle="Recorrido reciente de cada visita.">
+    <MarketingShell title="Customer Journey" subtitle="Recorrido de cada visita. Elige el mes para ver el histórico.">
       <MarketingOperationsPanel section="journey" />
     </MarketingShell>
   );

@@ -84,7 +84,7 @@ export const DRALO_AI_SITUATIONAL = {
     ],
   },
   writing: {
-    title: 'Writing · Real formats',
+    title: 'Writing Workshop',
     description:
       'Practise WhatsApp, work emails, articles and other formats with feedback from Dralo.',
     scenarios: [
@@ -122,7 +122,7 @@ export const DRALO_AI_SITUATIONAL = {
     ],
   },
   listening: {
-    title: 'Listening · Real-world situations',
+    title: 'Listening Lab',
     description:
       'Authentic audio: announcements, calls, podcasts, tours, news and short talks.',
     scenarios: [

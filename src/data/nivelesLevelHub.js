@@ -340,6 +340,7 @@ export const NIVELES_LEVEL_HUB = {
     title: 'Exams',
     description:
       'A basic level qualification that shows you can use English to communicate in simple everyday situations.',
+    practiceSectionTitle: 'Choose your practice',
     mascotVariant: 1,
     accent: 'emerald',
     sections: {

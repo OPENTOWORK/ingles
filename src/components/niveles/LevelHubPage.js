@@ -22,7 +22,7 @@ export default function LevelHubPage({ config }) {
   const { planSlug, loading: planLoading, applyLimits } = usePlanEntitlements();
   const isStudent = usesStudentContentRestrictions(roleName);
   const showStarsWayHub = isAdminRole(roleName);
-  const showQuizGame = config.slug === 'b2';
+  const quizLevel = ['a2', 'b1', 'b2', 'c1', 'c2'].includes(config.slug) ? config.slug : '';
 
   const levelOutsideFreePlan = !isLevelIncludedInPlan(config.cefr, 'free');
   if (session && isStudent && levelOutsideFreePlan && planLoading) {
@@ -82,13 +82,14 @@ export default function LevelHubPage({ config }) {
           guestPreview={!session}
           skillsQuadrant
           sectionTitle={config.practiceSectionTitle}
+          levelSlug={config.slug}
           quadrantFooter={showStarsWayHub && config.slug === 'b2' ? <StarsWayHubTabs embedded /> : null}
           quizGame={
-            showQuizGame
+            quizLevel
               ? {
-                  href: '/exam-practice/b2/quiz-game',
+                  href: `/exam-practice/${quizLevel}/quiz-game`,
                   label: 'Quiz game',
-                  hint: 'Timed English quiz',
+                  hint: `Timed ${config.cefr} quiz`,
                 }
               : null
           }

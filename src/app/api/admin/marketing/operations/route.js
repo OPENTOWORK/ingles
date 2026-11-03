@@ -1,8 +1,17 @@
 import { NextResponse } from 'next/server';
 import { authenticateMarketingPlanAdminRequest } from '@/lib/adminAccess';
 import { isSchemaNotReadyError } from '@/lib/teacherAccess';
-import { monthlyPlanRevenueEur, stopsForVisit, summarizeMarketingOperations } from '@/lib/marketingOperations';
+import { readAllMarketingRows, readMarketingRowsByIds } from '@/lib/marketingMetrics';
+import {
+  listVisitMonths,
+  monthlyPlanRevenueEur,
+  signupVisitIds,
+  stopsForVisit,
+  summarizeMarketingOperations,
+  visitMonthKey,
+} from '@/lib/marketingOperations';
 import { subscriptionGrantsAccess } from '@/lib/stripe/server';
+import { isStudentRole } from '@/utils/authRoles';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,6 +45,37 @@ async function loadPages(db, visitorIds) {
   return rows;
 }
 
+async function loadAccountContext(db, userIds) {
+  const createdAtByUser = new Map();
+  const staffIds = new Set();
+  if (!userIds.length) return { createdAtByUser, staffIds };
+  let profiles = [];
+  try {
+    profiles = await readMarketingRowsByIds(userIds, (ids) => db
+      .from('Usuarios_y_Perfil_users')
+      .select('id, rol_id, creado_en')
+      .in('id', ids)
+      .order('id'));
+  } catch {
+    return { createdAtByUser, staffIds };
+  }
+  const roleIds = [...new Set(profiles.map((row) => row.rol_id).filter(Boolean))];
+  const roleNameById = new Map();
+  if (roleIds.length) {
+    const { data: roles } = await db
+      .from('Usuarios_y_Perfil_roles')
+      .select('id, nombre')
+      .in('id', roleIds);
+    for (const role of roles || []) roleNameById.set(String(role.id), role.nombre || '');
+  }
+  for (const profile of profiles) {
+    if (profile.creado_en) createdAtByUser.set(profile.id, profile.creado_en);
+    const roleName = roleNameById.get(String(profile.rol_id)) || '';
+    if (roleName && !isStudentRole(roleName)) staffIds.add(profile.id);
+  }
+  return { createdAtByUser, staffIds };
+}
+
 export async function GET(req) {
   try {
     const auth = await authenticateMarketingPlanAdminRequest(req);
@@ -44,18 +84,25 @@ export async function GET(req) {
     }
 
     const db = auth.db;
-    const { data: visitors, error: visitorsError } = await db
+    const requestedMonth = new URL(req.url).searchParams.get('month') || 'all';
+    const visitors = await readAllMarketingRows(() => db
       .from('marketing_visitors')
       .select('visitor_id, user_id, created_at, last_ip, first_source, first_landing_page')
       .order('created_at', { ascending: false })
-      .limit(500);
-    if (visitorsError) throw visitorsError;
+      .order('visitor_id'));
 
-    const visible = (visitors || []).filter((row) => row.visitor_id && !isLocalAdminIp(row.last_ip));
-    const visitorIds = visible.map((row) => row.visitor_id);
-    const [pages, subscriptionsResult] = await Promise.all([
+    const visible = visitors.filter((row) => row.visitor_id && !isLocalAdminIp(row.last_ip));
+    const months = listVisitMonths(visible.map((row) => ({ createdAt: row.created_at })));
+    const month = requestedMonth === 'latest' ? (months[0] || 'all') : requestedMonth;
+    const inPeriod = month === 'all'
+      ? visible
+      : visible.filter((row) => visitMonthKey(row.created_at) === month);
+    const visitorIds = inPeriod.map((row) => row.visitor_id);
+    const userIds = [...new Set(inPeriod.map((row) => row.user_id).filter(Boolean))];
+    const [pages, subscriptionsResult, accountContext] = await Promise.all([
       loadPages(db, visitorIds),
       db.from('suscripciones').select('user_id, plan_id, status, interval'),
+      loadAccountContext(db, userIds),
     ]);
 
     const pagesByVisitor = new Map();
@@ -65,14 +112,17 @@ export async function GET(req) {
       pagesByVisitor.set(page.visitor_id, list);
     }
 
-    const visits = visible.map((row) => ({
+    const visits = inPeriod.map((row) => ({
       id: row.visitor_id,
       userId: row.user_id || null,
       createdAt: row.created_at || null,
       source: row.first_source || '',
       landing: row.first_landing_page || '',
+      staff: accountContext.staffIds.has(row.user_id),
       stops: stopsForVisit(pagesByVisitor.get(row.visitor_id) || [], row.first_landing_page || ''),
     }));
+    const signups = signupVisitIds(visits, accountContext.createdAtByUser);
+    for (const visit of visits) visit.signedUp = signups.has(visit.id);
 
     const subscriptions = subscriptionsResult.error
       ? []
@@ -84,7 +134,11 @@ export async function GET(req) {
           monthlyEur: monthlyPlanRevenueEur(row.plan_id, row.interval),
         }));
 
-    return NextResponse.json(summarizeMarketingOperations({ visits, subscriptions }));
+    return NextResponse.json({
+      ...summarizeMarketingOperations({ visits, subscriptions }),
+      month,
+      months,
+    });
   } catch (err) {
     console.error('[api/admin/marketing/operations] GET', err);
     return NextResponse.json(

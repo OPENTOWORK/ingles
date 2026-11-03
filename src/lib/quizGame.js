@@ -31,21 +31,30 @@ export function scoreQuizAnswer({ correct, secondsLeft, streakAfter }) {
   return points;
 }
 
-export function readQuizBestScore() {
+export function quizBestStorageKey(level = 'b2') {
+  const slug = String(level || 'b2').trim().toLowerCase();
+  return slug === 'b2' ? QUIZ_GAME_BEST_KEY : `${QUIZ_GAME_BEST_KEY}-${slug}`;
+}
+
+function readStoredBest(key) {
+  const raw = window.localStorage.getItem(key);
+  const value = Number.parseInt(raw, 10);
+  return Number.isFinite(value) && value > 0 ? value : 0;
+}
+
+export function readQuizBestScore(level = 'b2') {
   try {
-    const raw = window.localStorage.getItem(QUIZ_GAME_BEST_KEY);
-    const value = Number.parseInt(raw, 10);
-    return Number.isFinite(value) && value > 0 ? value : 0;
+    return readStoredBest(quizBestStorageKey(level));
   } catch {
     return 0;
   }
 }
 
-export function writeQuizBestScore(score) {
+export function writeQuizBestScore(score, level = 'b2') {
   try {
-    const previous = readQuizBestScore();
+    const previous = readQuizBestScore(level);
     const next = Math.max(previous, Number(score) || 0);
-    window.localStorage.setItem(QUIZ_GAME_BEST_KEY, String(next));
+    window.localStorage.setItem(quizBestStorageKey(level), String(next));
     return next;
   } catch {
     return Number(score) || 0;

@@ -89,7 +89,7 @@ export default function NewsletterSignup() {
         <div className={styles.grid}>
           <section className={styles.copy}>
             <p className={styles.kicker}>Newsletter B2 First</p>
-            <h1>Prepara tu B2 First con orientación en tu correo.</h1>
+            <h1>Prepárate para el B2 First.</h1>
             <p className={styles.lead}>
               Consejos para organizar tu estudio, recursos útiles y próximas fechas de examen. Todo en un mismo correo.
             </p>

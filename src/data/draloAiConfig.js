@@ -8,7 +8,7 @@ export const DRALO_AI_HUB = {
     {
       id: 'writing',
       href: '/dralo-ai/writing',
-      label: 'Writing',
+      label: 'Writing Workshop',
       icon: '📝',
       tagline: 'Exam Coach correction and real-world writing practice',
       accent: 'amber',
@@ -16,7 +16,7 @@ export const DRALO_AI_HUB = {
     {
       id: 'listening',
       href: '/dralo-ai/listening',
-      label: 'Listening',
+      label: 'Listening Lab',
       icon: '🎧',
       tagline: 'Dialogues and audio comprehension',
       accent: 'emerald',
@@ -59,7 +59,7 @@ export const DRALO_AI_HUB = {
 export const DRALO_AI_MODES = {
   writing: {
     id: 'writing',
-    title: 'Writing',
+    title: 'Writing Workshop',
     eyebrow: 'Dralo AI · Production',
     description:
       'Pick a task type, write your text, and receive exam-style feedback from Dralo with strengths, weaknesses and practical tips.',
@@ -84,7 +84,7 @@ export const DRALO_AI_MODES = {
   },
   listening: {
     id: 'listening',
-    title: 'Listening',
+    title: 'Listening Lab',
     eyebrow: 'Dralo AI · Audio comprehension',
     description:
       'Listen to the recording (male and female voices in dialogues), answer the questions, and review explanations after each check.',

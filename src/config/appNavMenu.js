@@ -230,8 +230,8 @@ export const NAV_LINK_PROFILE = {
 };
 
 export const DRALO_MENU_ITEMS = [
-  { label: 'Writing', href: '/dralo-ai/writing' },
-  { label: 'Listening', href: '/dralo-ai/listening' },
+  { label: 'Writing Workshop', href: '/dralo-ai/writing' },
+  { label: 'Listening Lab', href: '/dralo-ai/listening' },
   { label: 'Speaking Coach', href: '/dralo-ai/speaking' },
   { label: 'Grammar coach', href: '/dralo-ai/grammar-coach' },
   { label: 'Pronunciation coach', href: '/dralo-ai/pronunciation-coach' },

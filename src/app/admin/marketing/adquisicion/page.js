@@ -5,7 +5,7 @@ import MarketingOperationsPanel from '@/components/marketing/MarketingOperations
 
 export default function AdminMarketingAdquisicionPage() {
   return (
-    <MarketingShell title="Adquisición" subtitle="Fuentes de las últimas visitas y cuántas acaban en cuenta o en pago.">
+    <MarketingShell title="Adquisición" subtitle="De qué canal llegan y cuántos registros deja cada uno.">
       <MarketingOperationsPanel section="acquisition" />
     </MarketingShell>
   );

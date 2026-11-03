@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import ExamSkillHubCard, { getExamSkillKindFromSlug } from '@/components/exam/ExamSkillHubCard';
 import ExamSkillHubCardStyles from '@/components/exam/ExamSkillHubCardStyles';
 import { TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
@@ -63,6 +64,30 @@ function ExamPracticeCard({ exam, isStudent, guestPreview = false, variant = 'sk
   );
 }
 
+const EXAM_LEVELS = ['A2', 'B1', 'B2', 'C1', 'C2'];
+
+export function ExamLevelSwitch({ levelSlug }) {
+  const current = String(levelSlug || '').toLowerCase();
+  return (
+    <nav className="exam-practice-hub__levels" aria-label="Level">
+      {EXAM_LEVELS.map((code) => {
+        const slug = code.toLowerCase();
+        const active = slug === current;
+        return (
+          <Link
+            key={code}
+            href={`/exam-practice/${slug}/`}
+            className={`exam-practice-hub__level${active ? ' is-active' : ''}`}
+            aria-current={active ? 'page' : undefined}
+          >
+            {code}
+          </Link>
+        );
+      })}
+    </nav>
+  );
+}
+
 function QuizGameCard({ quizGame, guestPreview = false }) {
   const quizLives = useTrainingLives({ path: '/api/quiz/lives' });
   if (!quizGame?.href) return null;
@@ -98,6 +123,7 @@ export default function ExamPracticeHubSection({
   sectionTitle = null,
   quadrantFooter = null,
   quizGame = null,
+  levelSlug = '',
 }) {
   if (!examLinks.length) return null;
 
@@ -132,9 +158,14 @@ export default function ExamPracticeHubSection({
       <section className={hubClass} data-tour="level-exam-practice">
         <div className="exam-practice-hub__skills-quadrant">
           <div className="exam-practice-hub__quadrant-inner">
-            {sectionTitle ? (
+            {sectionTitle || levelSlug ? (
               <div className="exam-practice-hub__section-head">
-                <span className="page-hero__eyebrow exam-practice-hub__section-eyebrow">{sectionTitle}</span>
+                {sectionTitle ? (
+                  <span className="page-hero__eyebrow exam-practice-hub__section-eyebrow">{sectionTitle}</span>
+                ) : (
+                  <span />
+                )}
+                {levelSlug ? <ExamLevelSwitch levelSlug={levelSlug} /> : null}
               </div>
             ) : null}
             <div className="exam-practice-hub__body">
@@ -252,6 +283,10 @@ function ExamPracticeHubLayoutStyles() {
         box-sizing: border-box;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
         padding: 18px 20px 16px;
         border-bottom: 1px solid rgba(226, 232, 240, 0.9);
       }
@@ -260,6 +295,36 @@ function ExamPracticeHubLayoutStyles() {
         color: #4338ca;
         background: rgba(99, 102, 241, 0.12);
         border: 1px solid rgba(99, 102, 241, 0.22);
+      }
+      .exam-practice-hub__levels {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 6px;
+        margin-left: auto;
+      }
+      .exam-practice-hub__level {
+        margin: 0;
+        padding: 6px 12px;
+        border-radius: 999px;
+        border: 1px solid #e0d6ff;
+        background: #fff;
+        color: #4338ca;
+        font-size: 0.82rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        line-height: 1;
+        text-decoration: none;
+      }
+      .exam-practice-hub__level:hover {
+        text-decoration: none;
+        background: #f4f0ff;
+        border-color: #c4b5fd;
+      }
+      .exam-practice-hub__level.is-active {
+        background: #4f46e5;
+        border-color: #4f46e5;
+        color: #fff;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__body {
         padding: 18px;
@@ -345,6 +410,19 @@ function ExamPracticeHubLayoutStyles() {
       body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
         border-bottom-color: #475569;
       }
+      body.reading-night-mode .exam-practice-hub__level {
+        background: #1e293b;
+        border-color: #475569;
+        color: #c7d2fe;
+      }
+      body.reading-night-mode .exam-practice-hub__level:hover {
+        background: #334155;
+      }
+      body.reading-night-mode .exam-practice-hub__level.is-active {
+        background: #6366f1;
+        border-color: #6366f1;
+        color: #fff;
+      }
       @media (max-width: 639px) {
         .niveles-level-page .exam-practice-hub,
         .niveles-level-page .exam-practice-hub--split,
@@ -366,7 +444,16 @@ function ExamPracticeHubLayoutStyles() {
           flex-direction: column;
         }
         .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
+          display: flex;
+          flex-wrap: wrap;
+          padding: 12px 12px 10px;
+        }
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-eyebrow {
           display: none;
+        }
+        .niveles-level-page .exam-practice-hub__levels {
+          width: 100%;
+          justify-content: flex-start;
         }
         .niveles-level-page .exam-practice-hub--split .exam-practice-hub__body,
         .niveles-level-page .exam-practice-hub__body {

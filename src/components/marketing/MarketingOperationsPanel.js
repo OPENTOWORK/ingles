@@ -26,6 +26,44 @@ function whenLabel(value) {
   });
 }
 
+function monthName(key) {
+  if (!key || key === 'all') return 'Todo el histórico';
+  const [year, month] = String(key).split('-').map(Number);
+  if (!year || !month) return key;
+  const label = new Date(Date.UTC(year, month - 1, 15)).toLocaleDateString('es-ES', {
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+function periodText(report) {
+  const count = report?.sampleSize ?? 0;
+  if (!report?.month || report.month === 'all') {
+    return `Sobre todo el histórico (${count} visitas), sin contar accesos locales.`;
+  }
+  return `Sobre ${monthName(report.month).toLowerCase()} (${count} visitas), sin contar accesos locales.`;
+}
+
+function MonthControl({ month, months, onChange }) {
+  return (
+    <label className={styles.monthLabel}>
+      Mes
+      <select
+        className={styles.monthSelect}
+        value={month || 'all'}
+        onChange={(event) => onChange(event.target.value)}
+      >
+        <option value="all">Todo el histórico</option>
+        {(months || []).map((key) => (
+          <option key={key} value={key}>{monthName(key)}</option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function Stat({ label, value, hint }) {
   return (
     <article className={styles.stat}>
@@ -84,6 +122,9 @@ function AcquisitionTable({ rows }) {
 }
 
 export default function MarketingOperationsPanel({ section }) {
+  const monthEnabled = section !== 'roi';
+  const [month, setMonth] = useState(section === 'journey' ? 'latest' : 'all');
+  const [journeyLimit, setJourneyLimit] = useState(80);
   const [report, setReport] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -94,7 +135,8 @@ export default function MarketingOperationsPanel({ section }) {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData?.session?.access_token;
-        const res = await fetch(buildClientApiUrl('/api/admin/marketing/operations'), {
+        const params = monthEnabled ? `?month=${encodeURIComponent(month)}` : '';
+        const res = await fetch(buildClientApiUrl(`/api/admin/marketing/operations${params}`), {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           credentials: 'include',
         });
@@ -114,19 +156,31 @@ export default function MarketingOperationsPanel({ section }) {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [month, monthEnabled]);
+
+  const selectedMonth = month === 'latest' ? (report?.month || 'all') : month;
+  const changeMonth = (next) => {
+    setJourneyLimit(80);
+    setMonth(next);
+  };
 
   if (loading) return <RouteLoadingMascot label="Cargando métricas…" variant={5} />;
   if (error) return <p className={styles.error}>{error}</p>;
   if (!report) return null;
 
-  const sample = `Sobre las últimas ${report.sampleSize} visitas, sin contar accesos locales.`;
+  const sample = periodText(report);
+  const monthControl = monthEnabled ? (
+    <MonthControl month={selectedMonth} months={report.months || []} onChange={changeMonth} />
+  ) : null;
 
   if (section === 'acquisition') {
     return (
       <section className={styles.card}>
-        <p className={styles.lead}>De dónde llegan y cuántos acaban con cuenta o con un plan de pago.</p>
-        <p className={styles.meta}>{sample}</p>
+        <div className={styles.toolbar}>
+          <p className={styles.lead}>De dónde llegan y cuántos registros deja cada canal.</p>
+          {monthControl}
+        </div>
+        <p className={styles.meta}>{sample} Cada cuenta cuenta una vez, en el canal con el que se registró.</p>
         <AcquisitionTable rows={report.acquisition || []} />
       </section>
     );
@@ -134,13 +188,17 @@ export default function MarketingOperationsPanel({ section }) {
 
   if (section === 'journey') {
     const rows = report.journeys || [];
+    const visibleRows = rows.slice(0, journeyLimit);
     return (
       <section className={styles.card}>
-        <p className={styles.lead}>Recorrido reciente de cada visita, de la primera página a la última.</p>
-        <p className={styles.meta}>{sample}</p>
-        {rows.length ? (
+        <div className={styles.toolbar}>
+          <p className={styles.lead}>Recorrido de cada visita, de la primera página a la última.</p>
+          {monthControl}
+        </div>
+        <p className={styles.meta}>{sample} Las que crearon cuenta llevan la marca «Cuenta».</p>
+        {visibleRows.length ? (
           <ul className={styles.journeyList}>
-            {rows.map((row) => (
+            {visibleRows.map((row) => (
               <li key={row.id} className={styles.journeyItem}>
                 <div className={styles.journeyHead}>
                   <strong>{row.source}</strong>
@@ -152,8 +210,13 @@ export default function MarketingOperationsPanel({ section }) {
             ))}
           </ul>
         ) : (
-          <p className={styles.meta}>Todavía no hay recorridos.</p>
+          <p className={styles.meta}>Todavía no hay recorridos en este periodo.</p>
         )}
+        {rows.length > visibleRows.length ? (
+          <button type="button" className={styles.moreButton} onClick={() => setJourneyLimit((current) => current + 80)}>
+            Ver más ({rows.length - visibleRows.length} restantes)
+          </button>
+        ) : null}
       </section>
     );
   }
@@ -161,8 +224,11 @@ export default function MarketingOperationsPanel({ section }) {
   if (section === 'conversions') {
     return (
       <section className={styles.card}>
-        <p className={styles.lead}>Embudo desde la visita hasta la suscripción de pago.</p>
-        <p className={styles.meta}>{sample} El porcentaje es sobre el total de visitas.</p>
+        <div className={styles.toolbar}>
+          <p className={styles.lead}>Embudo desde la visita hasta la suscripción de pago.</p>
+          {monthControl}
+        </div>
+        <p className={styles.meta}>{sample} El porcentaje es sobre el total de visitas del periodo.</p>
         <Funnel steps={report.funnel || []} />
       </section>
     );
@@ -192,6 +258,7 @@ export default function MarketingOperationsPanel({ section }) {
   const dash = report.dashboard || {};
   return (
     <section className={styles.stack}>
+      <div className={styles.toolbar}>{monthControl}</div>
       <div className={styles.stats}>
         <Stat label="Visitas" value={dash.visits ?? 0} hint={sample} />
         <Stat label="Cuentas" value={dash.accounts ?? 0} hint={`${dash.visitToAccount ?? 0}% de las visitas`} />

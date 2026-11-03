@@ -6,6 +6,7 @@ import BlogAdminEditLink from '@/components/blog/BlogAdminEditLink';
 import BlogArticleFaqSection from '@/components/blog/BlogArticleFaqSection';
 import BlogCommentsSection from '@/components/blog/BlogCommentsSection';
 import BlogDraloBrand from '@/components/blog/BlogDraloBrand';
+import BlogNewsletterAside from '@/components/blog/BlogNewsletterAside';
 import { blogOgImage, blogSeoDescription, blogSeoTitle } from '@/lib/blogContent';
 import { blogTypeMeta, normalizeBlogContentType } from '@/lib/blogContentTypes';
 import {
@@ -129,6 +130,8 @@ export default async function BlogArticlePage({ params }) {
         <BlogArticleContent html={article.content} />
 
         <BlogArticleFaqSection items={article.faq_items} />
+
+        <BlogNewsletterAside />
 
         {category && related.length > 0 ? (
           <section className="blog-related" aria-labelledby="blog-related-title">

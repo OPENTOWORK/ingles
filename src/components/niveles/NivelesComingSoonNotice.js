@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { ExamLevelSwitch } from '@/components/niveles/ExamPracticeHubSection';
 
-export default function NivelesComingSoonNotice({ level, skillLabel = null, backHref = '/niveles' }) {
+export default function NivelesComingSoonNotice({ level, skillLabel = null, backHref = '/exam-practice/b2/' }) {
   const message = skillLabel
     ? `${skillLabel} practice for level ${level} is not available yet. Reading, Writing and Exam mode are open on B2.`
     : `Level ${level} is not available yet. B2 is open for student practice — check back later for more levels.`;
@@ -14,6 +15,7 @@ export default function NivelesComingSoonNotice({ level, skillLabel = null, back
           🕐
         </span>
         <h1>COMING SOON</h1>
+        <ExamLevelSwitch levelSlug={level} />
         <p>{message}</p>
         <Link href={backHref} className="niveles-coming-soon-link">
           {skillLabel ? 'Back to exams' : 'Back to levels'}
@@ -45,6 +47,30 @@ export default function NivelesComingSoonNotice({ level, skillLabel = null, back
           font-size: 1.5rem;
           letter-spacing: 0.08em;
           color: #334155;
+        }
+        :global(.exam-practice-hub__levels) {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 6px;
+          margin: 0 0 1rem;
+        }
+        :global(.exam-practice-hub__level) {
+          margin: 0;
+          padding: 6px 12px;
+          border-radius: 999px;
+          border: 1px solid #e0d6ff;
+          background: #fff;
+          color: #4338ca;
+          font-size: 0.82rem;
+          font-weight: 800;
+          line-height: 1;
+          text-decoration: none;
+        }
+        :global(.exam-practice-hub__level.is-active) {
+          background: #4f46e5;
+          border-color: #4f46e5;
+          color: #fff;
         }
         p {
           margin: 0 0 1.25rem;

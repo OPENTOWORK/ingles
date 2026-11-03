@@ -3,5 +3,5 @@
 import QuizGamePage from '@/components/quiz-game/QuizGamePage';
 
 export default function B2QuizGameRoute() {
-  return <QuizGamePage />;
+  return <QuizGamePage level="b2" />;
 }

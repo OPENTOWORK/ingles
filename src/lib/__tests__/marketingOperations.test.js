@@ -1,6 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { monthlyPlanRevenueEur, summarizeMarketingOperations } from '../marketingOperations.js';
+import {
+  monthlyPlanRevenueEur,
+  signupVisitIds,
+  summarizeMarketingOperations,
+  visitMonthKey,
+} from '../marketingOperations.js';
 
 test('monthly revenue uses the public plan price', () => {
   assert.equal(monthlyPlanRevenueEur('premium', 'month'), 3.99);
@@ -17,7 +22,8 @@ test('operations summarise visits, funnel and paying subscriptions', () => {
         createdAt: '2026-10-01T10:00:00Z',
         source: 'google',
         landing: '/preparar-b2',
-        stops: [{ title: 'Landing B2' }, { title: 'Registro' }],
+        signedUp: true,
+        stops: [{ title: 'Landing B2', path: '/preparar-b2' }, { title: 'Registro', path: '/register' }],
       },
       {
         id: 'b',
@@ -33,6 +39,7 @@ test('operations summarise visits, funnel and paying subscriptions', () => {
         createdAt: '2026-10-03T10:00:00Z',
         source: 'google',
         landing: '/',
+        signedUp: true,
         stops: [{ title: 'Inicio' }, { title: 'Precios' }],
       },
     ],
@@ -56,6 +63,74 @@ test('operations summarise visits, funnel and paying subscriptions', () => {
   assert.equal(report.funnel[3].count, 1);
   assert.equal(report.journeys[0].id, 'c');
   assert.equal(report.journeys[0].paying, false);
+  assert.equal(report.acquisition.find((row) => row.source === 'Google').accounts, 2);
+  assert.equal(report.acquisition.find((row) => row.source === 'Directo').accounts, 0);
+});
+
+test('a registration counts once, on the channel of that visit', () => {
+  const report = summarizeMarketingOperations({
+    visits: [
+      {
+        id: 'ad',
+        userId: null,
+        createdAt: '2026-10-01T10:00:00Z',
+        source: 'meta_ads',
+        landing: '/?utm_content=remarketing_imagen',
+        stops: [{ title: 'Home' }, { title: 'Inicio' }],
+      },
+      {
+        id: 'signup',
+        userId: 'user-9',
+        signedUp: true,
+        createdAt: '2026-10-02T10:00:00Z',
+        source: 'direct',
+        landing: '/',
+        stops: [{ title: 'Home' }, { title: 'Registro', path: '/register' }],
+      },
+      {
+        id: 'return',
+        userId: 'user-9',
+        createdAt: '2026-10-20T10:00:00Z',
+        source: 'meta_ads',
+        landing: '/?utm_content=remarketing_imagen',
+        stops: [{ title: 'Inicio' }, { title: 'Perfil' }],
+      },
+      {
+        id: 'form-only',
+        userId: null,
+        createdAt: '2026-09-02T10:00:00Z',
+        source: 'google_ads',
+        landing: '/',
+        stops: [{ title: 'Home' }, { title: 'Registro', path: '/register' }],
+      },
+    ],
+    subscriptions: [
+      { userId: 'user-9', planId: 'premium', status: 'active', interval: 'month', grantsAccess: true },
+    ],
+  });
+
+  const direct = report.acquisition.find((row) => row.source === 'Directo');
+  const remarketing = report.acquisition.find((row) => row.source === 'Anuncio Meta · remarketing imagen');
+  const google = report.acquisition.find((row) => row.source === 'Anuncio Google');
+  assert.equal(direct.accounts, 1);
+  assert.equal(direct.paying, 1);
+  assert.equal(remarketing.accounts, 0);
+  assert.equal(google.accounts, 1);
+  assert.equal(report.dashboard.accounts, 2);
+  assert.equal(report.journeys.length, 4);
+  assert.equal(report.journeys.find((row) => row.id === 'signup').account, true);
+  assert.equal(report.journeys.find((row) => row.id === 'return').account, false);
+});
+
+test('signup visit is the one where the account was created', () => {
+  const createdAt = new Map([['user-9', '2026-10-02T10:05:00Z']]);
+  const visits = [
+    { id: 'old', userId: 'user-9', createdAt: '2026-09-01T10:00:00Z' },
+    { id: 'signup', userId: 'user-9', createdAt: '2026-10-02T10:00:00Z' },
+    { id: 'later', userId: 'user-9', createdAt: '2026-10-20T10:00:00Z' },
+  ];
+  assert.deepEqual([...signupVisitIds(visits, createdAt)], ['signup']);
+  assert.equal(visitMonthKey('2026-11-02T14:13:00Z'), '2026-11');
 });
 
 test('journey names the ad from the landing UTM', () => {

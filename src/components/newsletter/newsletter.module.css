@@ -63,7 +63,7 @@
 }
 
 .copy h1 {
-  max-width: 8.15em;
+  max-width: 9.6em;
   margin-top: 0.85rem;
   font-size: clamp(2.35rem, 4.2vw, 3.45rem);
   font-weight: 800;
