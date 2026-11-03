@@ -8,12 +8,22 @@ import {
 } from '@/utils/practiceCheckAnswers';
 
 describe('manual checking in paper practice', () => {
-  it('ignores an old instant-feedback preference until Check is pressed', () => {
-    const legacySettings = { skillPracticeMode: true, showFeedback: true };
-    assert.equal(resolvePracticeHideFeedback(legacySettings), true);
-    assert.equal(shouldShowCheckAnswersButton(legacySettings), true);
-    assert.equal(resolvePracticeHideFeedback({ ...legacySettings, answersRevealed: true }), false);
-    assert.equal(shouldShowCheckAnswersButton({ ...legacySettings, answersRevealed: true }), false);
+  it('shows corrections immediately when instant feedback is on', () => {
+    assert.equal(resolvePracticeHideFeedback({ skillPracticeMode: true, instantFeedback: true }), false);
+    assert.equal(shouldShowCheckAnswersButton({ skillPracticeMode: true, instantFeedback: true }), false);
+  });
+
+  it('waits for Check when instant feedback is off', () => {
+    assert.equal(resolvePracticeHideFeedback({ skillPracticeMode: true, instantFeedback: false }), true);
+    assert.equal(shouldShowCheckAnswersButton({ skillPracticeMode: true, instantFeedback: false }), true);
+    assert.equal(
+      resolvePracticeHideFeedback({ skillPracticeMode: true, instantFeedback: false, answersRevealed: true }),
+      false,
+    );
+    assert.equal(
+      shouldShowCheckAnswersButton({ skillPracticeMode: true, instantFeedback: false, answersRevealed: true }),
+      false,
+    );
   });
 
   it('keeps corrections hidden in a timed exam even if answersRevealed is true', () => {

@@ -441,6 +441,7 @@ function B2ReadingExamsPageInner() {
     hideFeedback,
     answersRevealed: readingSession.answersRevealed,
     skillPracticeMode: isSkillPracticeSession,
+    instantFeedback: readingSession.instantFeedback,
   });
 
   const tabPartsData = useMemo(() => {
@@ -2668,6 +2669,7 @@ function B2ReadingExamsPageInner() {
           skillPracticeMode: isSkillPracticeSession,
           hideFeedback,
           answersRevealed: readingSession.answersRevealed,
+          instantFeedback: readingSession.instantFeedback,
         })}
         onCheckAnswers={handleCheckAllAnswers}
         checkAnswersDisabled={!hasCheckableAnswers}

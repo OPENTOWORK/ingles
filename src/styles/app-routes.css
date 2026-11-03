@@ -21323,6 +21323,22 @@ body.dark .profile-collapse--open .profile-collapse__head {
   display: contents; padding: 0; margin: 0; border: 0; background: transparent; box-shadow: none;
 }
 .practice-compact-actions { display: flex; align-items: center; gap: .5rem; margin-left: auto; flex-wrap: wrap; }
+.practice-instant-feedback {
+  display: inline-flex; align-items: center; gap: .45rem;
+  min-height: 38px; padding: .5rem .8rem; border: 1px solid #e2e8f0;
+  border-radius: 8px; background: #fff; color: #334155;
+  font: inherit; font-size: .8rem; font-weight: 500; cursor: pointer;
+  box-shadow: none; white-space: nowrap;
+}
+.practice-instant-feedback strong {
+  font-size: .68rem; font-weight: 800; letter-spacing: .04em;
+  text-transform: uppercase; color: #64748b;
+}
+.practice-instant-feedback.is-on {
+  border-color: #c7d2fe; background: #eef2ff; color: #312e81;
+}
+.practice-instant-feedback.is-on strong { color: #4338ca; }
+.practice-instant-feedback:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }
 .practice-compact-actions > .levels-listening-practice-side__top { display: flex; margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
 .practice-compact-actions .levels-listening-practice-side__top-notes { margin: 0; }
 .practice-compact-actions > .exam-practice-rail-disclosure { width: auto; margin: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
@@ -21364,9 +21380,15 @@ body.reading-night-mode .practice-part-menu__grid button,
 body.reading-night-mode .practice-change-part,
 body.reading-night-mode .practice-more-tools > summary,
 body.reading-night-mode .practice-compact-actions > .exam-practice-rail-disclosure > button,
-body.reading-night-mode .practice-compact-actions .exam-notes-popover > button {
+body.reading-night-mode .practice-compact-actions .exam-notes-popover > button,
+body.reading-night-mode .practice-instant-feedback {
   background: #192132; color: #e2e8f0; border-color: #394458;
 }
+body.reading-night-mode .practice-instant-feedback strong { color: #94a3b8; }
+body.reading-night-mode .practice-instant-feedback.is-on {
+  background: #312e81; color: #e0e7ff; border-color: #6366f1;
+}
+body.reading-night-mode .practice-instant-feedback.is-on strong { color: #c4b5fd; }
 body.reading-night-mode .practice-part-menu h2 { color: #eeeaff; }
 body.reading-night-mode .practice-part-menu__grid button[aria-pressed=true] { background: #18332d; border-color: #64748b; }
 

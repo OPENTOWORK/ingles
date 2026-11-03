@@ -8,6 +8,7 @@ import ExamPracticeSideColumnAnchor from '@/components/exam/ExamPracticeSideColu
  * Columna lateral: top (stats + notes) + Strategy + Progress + Tools.
  */
 export default function ExamPracticeSideRail({
+  leading = null,
   topRail = null,
   strategy = null,
   progress = null,
@@ -17,12 +18,13 @@ export default function ExamPracticeSideRail({
 }) {
   const { compactToolbar, portSideRailToToolbar, menuHeaderTools, menuTimerTools, menuExerciseStars, lang } = useExamPracticeSidebarSlots();
 
-  if (!topRail && !strategy && !progress && !tools && !dictionary && !finishNotice) return null;
+  if (!leading && !topRail && !strategy && !progress && !tools && !dictionary && !finishNotice) return null;
 
   if (compactToolbar && portSideRailToToolbar) {
     return (
       <ExamPracticeSideColumnAnchor>
         <div className="practice-compact-actions">
+          {leading}
           {topRail}
           {strategy}
           <details className="practice-more-tools">
@@ -44,6 +46,7 @@ export default function ExamPracticeSideRail({
 
   const rail = (
     <div className="levels-listening-practice-side">
+      {leading}
       {topRail}
       {strategy || progress || tools || dictionary || finishNotice ? (
         <div className="levels-listening-practice-side__panels">

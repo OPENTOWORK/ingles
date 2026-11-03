@@ -1,10 +1,15 @@
-/** Practice corrections stay hidden until the student presses Check. */
+/**
+ * Exam mode always hides corrections. In skill practice, Instant feedback on
+ * shows them as the student answers; off waits for Check.
+ */
 export function resolvePracticeHideFeedback({
   hideFeedback = false,
   answersRevealed = false,
   skillPracticeMode = false,
+  instantFeedback = false,
 }) {
   if (hideFeedback) return true;
+  if (skillPracticeMode && instantFeedback) return false;
   return skillPracticeMode && !answersRevealed;
 }
 
@@ -12,8 +17,9 @@ export function shouldShowCheckAnswersButton({
   skillPracticeMode = false,
   hideFeedback = false,
   answersRevealed = false,
+  instantFeedback = false,
 }) {
-  return skillPracticeMode && !hideFeedback && !answersRevealed;
+  return skillPracticeMode && !hideFeedback && !instantFeedback && !answersRevealed;
 }
 
 import { gradeB2Part4Gap } from '@/lib/b2Part4Grading';

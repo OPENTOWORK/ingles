@@ -18,6 +18,7 @@ export function ReadingPracticeSessionProvider({ children }) {
   const [confidenceByQuestion, setConfidenceByQuestion] = useState({});
   const [checkAttempts, setCheckAttempts] = useState(0);
   const [answersRevealed, setAnswersRevealed] = useState(false);
+  const [instantFeedback, setInstantFeedback] = useState(true);
   const [readingSettings, setReadingSettingsState] = useState(DEFAULT_READING_SETTINGS);
 
   useEffect(() => {
@@ -74,6 +75,10 @@ export function ReadingPracticeSessionProvider({ children }) {
     setAnswersRevealed(false);
   }, []);
 
+  const toggleInstantFeedback = useCallback(() => {
+    setInstantFeedback((on) => !on);
+  }, []);
+
   const adjustFontSize = useCallback((delta) => {
     setReadingSettingsState((prev) => {
       const next = {
@@ -100,6 +105,8 @@ export function ReadingPracticeSessionProvider({ children }) {
       answersRevealed,
       revealAnswers,
       resetAnswersRevealed,
+      instantFeedback,
+      toggleInstantFeedback,
       readingSettings,
       updateReadingSettings,
       resetReadingSettings,
@@ -120,6 +127,8 @@ export function ReadingPracticeSessionProvider({ children }) {
       answersRevealed,
       revealAnswers,
       resetAnswersRevealed,
+      instantFeedback,
+      toggleInstantFeedback,
       readingSettings,
       updateReadingSettings,
       resetReadingSettings,
@@ -151,6 +160,8 @@ export function useReadingPracticeSession() {
       answersRevealed: false,
       revealAnswers: () => {},
       resetAnswersRevealed: () => {},
+      instantFeedback: true,
+      toggleInstantFeedback: () => {},
       readingSettings: DEFAULT_READING_SETTINGS,
       updateReadingSettings: () => {},
       resetReadingSettings: () => {},
