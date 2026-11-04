@@ -233,8 +233,8 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Writing Workshop', href: '/dralo-ai/writing' },
   { label: 'Listening Lab', href: '/dralo-ai/listening' },
   { label: 'Speaking Coach', href: '/dralo-ai/speaking' },
-  { label: 'Grammar coach', href: '/dralo-ai/grammar-coach' },
-  { label: 'Pronunciation coach', href: '/dralo-ai/pronunciation-coach' },
+  { label: 'Grammar Coach', href: '/dralo-ai/grammar-coach' },
+  { label: 'Pronunciation Coach', href: '/dralo-ai/pronunciation-coach' },
   { label: 'Dictionary', href: '/dralo-ai/dictionary' },
 ];
 

@@ -32,7 +32,7 @@ export const DRALO_AI_HUB = {
     {
       id: 'grammar-coach',
       href: '/dralo-ai/grammar-coach',
-      label: 'Grammar coach',
+      label: 'Grammar Coach',
       icon: '💡',
       tagline: 'Clear grammar explanations with examples for your level',
       accent: 'lime',
@@ -40,7 +40,7 @@ export const DRALO_AI_HUB = {
     {
       id: 'pronunciation-coach',
       href: '/dralo-ai/pronunciation-coach',
-      label: 'Pronunciation coach',
+      label: 'Pronunciation Coach',
       icon: '🔊',
       tagline: 'Sounds, stress, rhythm and intonation for your level',
       accent: 'ocean',
@@ -158,8 +158,8 @@ export const DRALO_AI_MODES = {
   },
   'grammar-coach': {
     id: 'grammar-coach',
-    title: 'Grammar coach',
-    eyebrow: 'Dralo AI · Grammar coach',
+    title: 'Grammar Coach',
+    eyebrow: 'Dralo AI · Grammar Coach',
     description:
       'Ask Dralo anything about English grammar — tenses, conditionals, passive voice, word order and more. Explanations in clear English, tailored to your CEFR level.',
     accent: 'lime',
@@ -283,7 +283,7 @@ export const DRALO_AI_MODES = {
   },
   'pronunciation-coach': {
     id: 'pronunciation-coach',
-    title: 'Pronunciation coach',
+    title: 'Pronunciation Coach',
     eyebrow: 'Dralo AI · Pronunciation',
     description:
       'Ask Dralo about English sounds, word stress, sentence rhythm and intonation. Paste a word or sentence and get clear guidance for your CEFR level.',

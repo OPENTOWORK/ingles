@@ -56,6 +56,10 @@
   padding-top: 0;
 }
 
+.home-landing .hl-section--steps {
+  padding-bottom: 0.75rem;
+}
+
 .home-landing .hl-center {
   text-align: center;
 }
@@ -1597,7 +1601,7 @@
 }
 
 .home-landing .hl-reviews {
-  padding: clamp(2rem, 4vw, 3rem) 0 0.5rem;
+  padding: clamp(1.25rem, 2.5vw, 2rem) 0 clamp(2rem, 4vw, 3rem);
 }
 
 .home-landing .hl-reviews__head {

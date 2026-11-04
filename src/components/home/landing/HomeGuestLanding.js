@@ -631,7 +631,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </div>
         <SlotsBox slots={slots} />
       </section>
-      <ReviewCarousel />
 
       <section className="hl-section" aria-labelledby="hl-problem-title">
         <div className="hl-container hl-problem">
@@ -694,7 +693,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </div>
       </section>
 
-      <section id="como-funciona" className="hl-section hl-section--flush" aria-labelledby="hl-steps-title">
+      <section id="como-funciona" className="hl-section hl-section--flush hl-section--steps" aria-labelledby="hl-steps-title">
         <div className="hl-container">
           <div className="hl-center">
             <h2 id="hl-steps-title" className="hl-h2">
@@ -723,6 +722,8 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
           </ol>
         </div>
       </section>
+
+      <ReviewCarousel />
 
       <div className="hl-section hl-bands">
         {offerOpen ? (
