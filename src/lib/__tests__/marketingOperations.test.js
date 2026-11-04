@@ -115,8 +115,8 @@ test('a registration counts once, on the channel of that visit', () => {
   assert.equal(direct.accounts, 1);
   assert.equal(direct.paying, 1);
   assert.equal(remarketing.accounts, 0);
-  assert.equal(google.accounts, 1);
-  assert.equal(report.dashboard.accounts, 2);
+  assert.equal(google.accounts, 0);
+  assert.equal(report.dashboard.accounts, 1);
   assert.equal(report.journeys.length, 4);
   assert.equal(report.journeys.find((row) => row.id === 'signup').account, true);
   assert.equal(report.journeys.find((row) => row.id === 'return').account, false);

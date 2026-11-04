@@ -37,14 +37,6 @@ function movedOn(visit) {
   return stops.length > 1;
 }
 
-function reachedRegister(visit) {
-  return (visit?.stops || []).some((stop) => {
-    const title = String(stop?.title || '').trim().toLowerCase();
-    const path = String(stop?.path || '').toLowerCase();
-    return title === 'registro' || path.startsWith('/register') || path.startsWith('/registro');
-  });
-}
-
 /** Mes civil en España, para no mezclar el histórico de un mes con el siguiente. */
 export function visitMonthKey(createdAt, timeZone = 'Europe/Madrid') {
   const date = new Date(createdAt || '');
@@ -140,9 +132,7 @@ export function summarizeMarketingOperations({ visits = [], subscriptions = [] }
   for (const visit of chronological) {
     if (visit.staff) continue;
     const signupId = visit.userId ? signupByUser.get(visit.userId) : '';
-    const qualifies = signupId
-      ? visit.id === signupId
-      : Boolean(visit.signedUp) || reachedRegister(visit);
+    const qualifies = signupId ? visit.id === signupId : Boolean(visit.signedUp);
     if (!qualifies) continue;
     const accountKey = visit.userId ? `user:${visit.userId}` : `visit:${visit.id}`;
     if (countedAccounts.has(accountKey)) continue;
