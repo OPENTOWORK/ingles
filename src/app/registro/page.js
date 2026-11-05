@@ -17,7 +17,7 @@ import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 import { detectClientDeviceType } from '@/lib/clientDeviceType';
 import { readAttributionFromSearch, FOUNDING_OFFER } from '@/lib/abExperiment';
 import { trackRegistrationComplete, trackRegistrationStart } from '@/lib/abExperimentTrack';
-import { completeSignIn } from '@/utils/completeSignIn';
+import { readStoredVisitorId } from '@/lib/visitorPresence';
 import { reportLoginAttempt } from '@/utils/reportLoginAttempt';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
 import { clearLogoutPending } from '@/utils/logout';
@@ -178,6 +178,7 @@ export default function RegistroPage() {
             acceptedMarketing,
             referralToken: storedRef || undefined,
             deviceType: registrationDevice,
+            visitorId: readStoredVisitorId() || undefined,
           }),
         });
       } catch {

@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   monthlyPlanRevenueEur,
+  attachUnlinkedSignups,
   monthBoundsIso,
   monthsSpanning,
   signupVisitIds,
@@ -168,4 +169,22 @@ test('journey names the ad from the landing UTM', () => {
   assert.equal(report.journeys[0].source, 'Anuncio Meta · video remarketing');
   assert.equal(report.journeys[1].source, 'Directo');
   assert.equal(report.acquisition.some((row) => row.source === 'Anuncio Meta · video remarketing'), true);
+});
+
+test('an unconfirmed signup counts on the visit that opened register', () => {
+  const visits = [{
+    id: 'ad',
+    userId: null,
+    createdAt: '2026-11-04T21:48:49.000Z',
+    source: 'meta_ads',
+    landing: '/?utm_source=ig&utm_content=link_in_bio',
+    stops: [{ title: 'Registro', path: '/registro', visitedAt: '2026-11-04T21:49:03.700Z' }],
+  }];
+  attachUnlinkedSignups(visits, [{
+    userId: 'new-user',
+    createdAt: '2026-11-04 21:50:21.974276',
+  }]);
+  const ids = signupVisitIds(visits, new Map([['new-user', '2026-11-04 21:50:21.974276']]));
+  assert.equal(visits[0].userId, 'new-user');
+  assert.equal(ids.has('ad'), true);
 });

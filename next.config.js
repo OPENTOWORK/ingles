@@ -64,6 +64,18 @@ const nextConfig = {
             },
           ]),
       {
+        source: '/api/admin/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0, must-revalidate' },
+        ],
+      },
+      {
+        source: '/admin/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'private, no-store, max-age=0, must-revalidate' },
+        ],
+      },
+      {
         source: '/sw.js',
         headers: [
           {

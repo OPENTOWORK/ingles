@@ -7,7 +7,7 @@ import { notifyAdminsOfRegistration } from '@/lib/notifyAdminsOfRegistration';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
 import { markReferralRegistered } from '@/lib/referrals';
-import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
+import { isValidVisitorId } from '@/lib/marketing/crm/constants';
 import {
   inferDeviceTypeFromUserAgent,
   normalizeRegistrationDeviceType,
@@ -266,6 +266,18 @@ export async function POST(req) {
     }
 
     const userId = signup.user.id;
+    const visitorId = String(body?.visitorId || '').trim();
+    if (isValidVisitorId(visitorId)) {
+      const { error: linkError } = await adminClient
+        .from('marketing_visitors')
+        .update({
+          user_id: userId,
+          identified_at: new Date().toISOString(),
+        })
+        .eq('visitor_id', visitorId)
+        .is('user_id', null);
+      if (linkError) console.error('api/auth/register visitor link:', linkError);
+    }
 
     // A partir de aquí la cuenta ya existe: ningún fallo posterior puede
     // devolver error, o el usuario quedaría sin poder registrarse ni entrar.

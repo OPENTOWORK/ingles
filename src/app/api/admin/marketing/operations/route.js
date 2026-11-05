@@ -3,6 +3,7 @@ import { authenticateMarketingPlanAdminRequest } from '@/lib/adminAccess';
 import { isSchemaNotReadyError } from '@/lib/teacherAccess';
 import { readAllMarketingRows, readMarketingRowsByIds } from '@/lib/marketingMetrics';
 import {
+  attachUnlinkedSignups,
   monthBoundsIso,
   monthlyPlanRevenueEur,
   monthsSpanning,
@@ -83,6 +84,25 @@ async function loadAccountContext(db, userIds) {
   return { createdAtByUser, staffIds };
 }
 
+function plainUtc(iso) {
+  return String(iso || '').replace('T', ' ').replace(/\.\d+Z$/, '').replace(/Z$/, '');
+}
+
+async function loadUnlinkedAccounts(db, bounds, linkedUserIds) {
+  const rows = await readAllMarketingRows(() => {
+    let query = db
+      .from('Usuarios_y_Perfil_users')
+      .select('id, rol_id, creado_en')
+      .order('creado_en', { ascending: false })
+      .order('id');
+    if (bounds) query = query.gte('creado_en', plainUtc(bounds.start)).lt('creado_en', plainUtc(bounds.end));
+    return query;
+  });
+  return rows
+    .filter((row) => row.id && row.creado_en && !linkedUserIds.has(row.id))
+    .map((row) => ({ userId: row.id, createdAt: row.creado_en }));
+}
+
 export async function GET(req) {
   try {
     const auth = await authenticateMarketingPlanAdminRequest(req);
@@ -142,6 +162,19 @@ export async function GET(req) {
       staff: accountContext.staffIds.has(row.user_id),
       stops: stopsForVisit(pagesByVisitor.get(row.visitor_id) || [], row.first_landing_page || ''),
     }));
+    const unlinkedAccounts = await loadUnlinkedAccounts(db, bounds, new Set(visits.map((visit) => visit.userId).filter(Boolean)));
+    const extraContext = await loadAccountContext(db, unlinkedAccounts.map((account) => account.userId));
+    for (const [userId, createdAt] of extraContext.createdAtByUser) {
+      accountContext.createdAtByUser.set(userId, createdAt);
+    }
+    for (const userId of extraContext.staffIds) accountContext.staffIds.add(userId);
+    attachUnlinkedSignups(
+      visits,
+      unlinkedAccounts.map((account) => ({
+        ...account,
+        staff: extraContext.staffIds.has(account.userId),
+      })),
+    );
     const signups = signupVisitIds(visits, accountContext.createdAtByUser);
     for (const visit of visits) visit.signedUp = signups.has(visit.id);
 

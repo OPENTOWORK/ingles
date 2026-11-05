@@ -106,6 +106,51 @@ export function monthsSpanning(oldestAt, newestAt) {
   return months.sort((a, b) => b.localeCompare(a));
 }
 
+function parseStoredUtc(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return NaN;
+  if (/[zZ]|[+-]\d{2}:?\d{2}$/.test(raw)) return Date.parse(raw);
+  return Date.parse(`${raw.replace(' ', 'T')}Z`);
+}
+
+function isRegisterStop(stop) {
+  const title = String(stop?.title || '').trim().toLowerCase();
+  const path = String(stop?.path || '').toLowerCase();
+  return title === 'registro' || path.startsWith('/register') || path.startsWith('/registro');
+}
+
+/**
+ * Quien se registra sin confirmar el correo no llega a iniciar sesión, así que
+ * la visita sigue anónima. Si abrió Registro justo antes del alta, esa visita
+ * es la del registro.
+ */
+export function attachUnlinkedSignups(visits = [], accounts = []) {
+  const linked = new Set(visits.map((visit) => visit.userId).filter(Boolean));
+  for (const account of accounts) {
+    if (!account?.userId || account.staff || linked.has(account.userId)) continue;
+    const created = parseStoredUtc(account.createdAt);
+    if (!Number.isFinite(created)) continue;
+    let best = null;
+    let bestDelta = Infinity;
+    for (const visit of visits) {
+      if (visit.userId) continue;
+      const registerStop = (visit.stops || []).find((stop) => isRegisterStop(stop));
+      if (!registerStop) continue;
+      const seen = parseStoredUtc(registerStop.visitedAt || visit.createdAt);
+      if (!Number.isFinite(seen)) continue;
+      const delta = created - seen;
+      if (delta < -2 * 60 * 1000 || delta > 30 * 60 * 1000) continue;
+      if (Math.abs(delta) >= bestDelta) continue;
+      best = visit;
+      bestDelta = Math.abs(delta);
+    }
+    if (!best) continue;
+    best.userId = account.userId;
+    linked.add(account.userId);
+  }
+  return visits;
+}
+
 /**
  * Visita en la que se creó la cuenta: la más cercana al alta, no una visita
  * posterior. Si no hay fecha de alta, se usa la visita más antigua ya enlazada.
@@ -115,12 +160,12 @@ export function signupVisitIds(visits = [], createdAtByUser = new Map()) {
   const matched = new Map();
   for (const visit of visits) {
     if (!visit?.userId || visit.staff) continue;
-    const seen = Date.parse(visit.createdAt || '');
+    const seen = parseStoredUtc(visit.createdAt || '');
     if (!Number.isFinite(seen)) continue;
     const prevEarly = earliest.get(visit.userId);
     if (!prevEarly || seen < prevEarly.seen) earliest.set(visit.userId, { id: visit.id, seen });
     if (!createdAtByUser.has(visit.userId)) continue;
-    const created = Date.parse(createdAtByUser.get(visit.userId) || '');
+    const created = parseStoredUtc(createdAtByUser.get(visit.userId) || '');
     if (!Number.isFinite(created) || seen > created + 2 * 60 * 1000) continue;
     const prev = matched.get(visit.userId);
     if (!prev || seen > prev.seen) matched.set(visit.userId, { id: visit.id, seen });
