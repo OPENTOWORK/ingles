@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/utils/supabaseClient';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
@@ -40,10 +40,11 @@ function monthName(key) {
 
 function periodText(report) {
   const count = report?.sampleSize ?? 0;
+  const latest = report?.journeys?.[0]?.when ? ` La más reciente es del ${whenLabel(report.journeys[0].when)}.` : '';
   if (!report?.month || report.month === 'all') {
-    return `Sobre todo el histórico (${count} visitas), sin contar accesos locales.`;
+    return `Sobre todo el histórico (${count} visitas), sin contar accesos locales.${latest}`;
   }
-  return `Sobre ${monthName(report.month).toLowerCase()} (${count} visitas), sin contar accesos locales.`;
+  return `Sobre ${monthName(report.month).toLowerCase()} (${count} visitas), sin contar accesos locales.${latest}`;
 }
 
 function MonthControl({ month, months, onChange }) {
@@ -128,10 +129,12 @@ export default function MarketingOperationsPanel({ section }) {
   const [report, setReport] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const hasReport = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+
+    async function load() {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         const token = sessionData?.session?.access_token;
@@ -139,24 +142,42 @@ export default function MarketingOperationsPanel({ section }) {
         const res = await fetch(buildClientApiUrl(`/api/admin/marketing/operations${params}`), {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           credentials: 'include',
+          cache: 'no-store',
         });
         const json = await res.json().catch(() => ({}));
         if (cancelled) return;
         if (!res.ok) {
-          setError(json.error || 'No se pudieron cargar las métricas.');
+          if (!hasReport.current) setError(json.error || 'No se pudieron cargar las métricas.');
           return;
         }
+        hasReport.current = true;
+        setError('');
         setReport(json);
       } catch {
-        if (!cancelled) setError('No se pudieron cargar las métricas.');
+        if (!cancelled && !hasReport.current) setError('No se pudieron cargar las métricas.');
       } finally {
         if (!cancelled) setLoading(false);
       }
-    })();
+    }
+
+    hasReport.current = false;
+    setLoading(true);
+    load();
+    const refreshMs = section === 'journey' ? 60_000 : 0;
+    const timer = refreshMs ? setInterval(() => {
+      if (document.visibilityState === 'visible') load();
+    }, refreshMs) : null;
+    const onFocus = () => {
+      if (section === 'journey') load();
+    };
+    if (section === 'journey') window.addEventListener('focus', onFocus);
+
     return () => {
       cancelled = true;
+      if (timer) clearInterval(timer);
+      window.removeEventListener('focus', onFocus);
     };
-  }, [month, monthEnabled]);
+  }, [month, monthEnabled, section]);
 
   const selectedMonth = month === 'latest' ? (report?.month || 'all') : month;
   const changeMonth = (next) => {

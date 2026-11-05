@@ -3,8 +3,9 @@ import { authenticateMarketingPlanAdminRequest } from '@/lib/adminAccess';
 import { isSchemaNotReadyError } from '@/lib/teacherAccess';
 import { readAllMarketingRows, readMarketingRowsByIds } from '@/lib/marketingMetrics';
 import {
-  listVisitMonths,
+  monthBoundsIso,
   monthlyPlanRevenueEur,
+  monthsSpanning,
   signupVisitIds,
   stopsForVisit,
   summarizeMarketingOperations,
@@ -14,6 +15,12 @@ import { subscriptionGrantsAccess } from '@/lib/stripe/server';
 import { isStudentRole } from '@/utils/authRoles';
 
 export const dynamic = 'force-dynamic';
+
+const NO_STORE = {
+  'Cache-Control': 'private, no-store, max-age=0, must-revalidate',
+  'CDN-Cache-Control': 'no-store',
+  'Vercel-CDN-Cache-Control': 'no-store',
+};
 
 function isLocalAdminIp(ip) {
   const value = String(ip || '').trim().toLowerCase().replace(/^::ffff:/, '');
@@ -85,15 +92,29 @@ export async function GET(req) {
 
     const db = auth.db;
     const requestedMonth = new URL(req.url).searchParams.get('month') || 'all';
-    const visitors = await readAllMarketingRows(() => db
-      .from('marketing_visitors')
-      .select('visitor_id, user_id, created_at, last_ip, first_source, first_landing_page')
-      .order('created_at', { ascending: false })
-      .order('visitor_id'));
+    const [oldestResult, newestResult] = await Promise.all([
+      db.from('marketing_visitors').select('created_at').order('created_at', { ascending: true }).limit(1),
+      db.from('marketing_visitors').select('created_at').order('created_at', { ascending: false }).limit(1),
+    ]);
+    if (oldestResult.error) throw oldestResult.error;
+    if (newestResult.error) throw newestResult.error;
+    const months = monthsSpanning(
+      oldestResult.data?.[0]?.created_at,
+      newestResult.data?.[0]?.created_at,
+    );
+    const month = requestedMonth === 'latest' ? (months[0] || 'all') : requestedMonth;
+    const bounds = month === 'all' ? null : monthBoundsIso(month);
+    const visitors = await readAllMarketingRows(() => {
+      let query = db
+        .from('marketing_visitors')
+        .select('visitor_id, user_id, created_at, last_ip, first_source, first_landing_page')
+        .order('created_at', { ascending: false })
+        .order('visitor_id');
+      if (bounds) query = query.gte('created_at', bounds.start).lt('created_at', bounds.end);
+      return query;
+    });
 
     const visible = visitors.filter((row) => row.visitor_id && !isLocalAdminIp(row.last_ip));
-    const months = listVisitMonths(visible.map((row) => ({ createdAt: row.created_at })));
-    const month = requestedMonth === 'latest' ? (months[0] || 'all') : requestedMonth;
     const inPeriod = month === 'all'
       ? visible
       : visible.filter((row) => visitMonthKey(row.created_at) === month);
@@ -138,12 +159,12 @@ export async function GET(req) {
       ...summarizeMarketingOperations({ visits, subscriptions }),
       month,
       months,
-    });
+    }, { headers: NO_STORE });
   } catch (err) {
     console.error('[api/admin/marketing/operations] GET', err);
     return NextResponse.json(
       { error: err?.message || 'No se pudieron cargar las métricas de marketing.' },
-      { status: 500 },
+      { status: 500, headers: NO_STORE },
     );
   }
 }

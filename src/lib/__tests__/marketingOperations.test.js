@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   monthlyPlanRevenueEur,
+  monthBoundsIso,
+  monthsSpanning,
   signupVisitIds,
   summarizeMarketingOperations,
   visitMonthKey,
@@ -153,6 +155,15 @@ test('journey names the ad from the landing UTM', () => {
       },
     ],
   });
+
+  assert.equal(monthBoundsIso('2026-11').start, '2026-10-31T23:00:00.000Z');
+  assert.equal(monthBoundsIso('2026-11').end, '2026-11-30T23:00:00.000Z');
+  assert.equal(visitMonthKey('2026-11-05T09:51:26.985Z'), '2026-11');
+  assert.deepEqual(monthsSpanning('2026-09-26T06:03:40.600Z', '2026-11-05T09:51:26.985Z'), [
+    '2026-11',
+    '2026-10',
+    '2026-09',
+  ]);
 
   assert.equal(report.journeys[0].source, 'Anuncio Meta · video remarketing');
   assert.equal(report.journeys[1].source, 'Directo');

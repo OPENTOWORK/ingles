@@ -57,6 +57,55 @@ export function listVisitMonths(visits = []) {
   return [...months].sort((a, b) => b.localeCompare(a));
 }
 
+function zonedMonthStart(year, month, timeZone) {
+  const guess = new Date(Date.UTC(year, month - 1, 1, 0, 0, 0));
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).formatToParts(guess);
+  const read = (type) => Number(parts.find((part) => part.type === type)?.value);
+  const asUtc = Date.UTC(read('year'), read('month') - 1, read('day'), read('hour'), read('minute'), read('second'));
+  return new Date(guess.getTime() - (asUtc - guess.getTime()));
+}
+
+/** Inicio inclusive y fin exclusivo del mes civil en España, en UTC. */
+export function monthBoundsIso(monthKey, timeZone = 'Europe/Madrid') {
+  const match = /^(\d{4})-(\d{2})$/.exec(String(monthKey || ''));
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  if (month < 1 || month > 12) return null;
+  const nextYear = month === 12 ? year + 1 : year;
+  const nextMonth = month === 12 ? 1 : month + 1;
+  return {
+    start: zonedMonthStart(year, month, timeZone).toISOString(),
+    end: zonedMonthStart(nextYear, nextMonth, timeZone).toISOString(),
+  };
+}
+
+/** Meses entre dos fechas, del más nuevo al más antiguo. Incluye los extremos. */
+export function monthsSpanning(oldestAt, newestAt) {
+  const start = visitMonthKey(oldestAt);
+  const end = visitMonthKey(newestAt);
+  if (!start || !end || start > end) return [];
+  const months = [];
+  let cursor = start;
+  while (cursor <= end && months.length < 48) {
+    months.push(cursor);
+    const [year, month] = cursor.split('-').map(Number);
+    const nextMonth = month === 12 ? 1 : month + 1;
+    const nextYear = month === 12 ? year + 1 : year;
+    cursor = `${nextYear}-${String(nextMonth).padStart(2, '0')}`;
+  }
+  return months.sort((a, b) => b.localeCompare(a));
+}
+
 /**
  * Visita en la que se creó la cuenta: la más cercana al alta, no una visita
  * posterior. Si no hay fecha de alta, se usa la visita más antigua ya enlazada.
