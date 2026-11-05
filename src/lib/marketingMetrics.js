@@ -4,12 +4,19 @@
  */
 export async function readAllMarketingRows(queryFactory, pageSize = 500) {
   const rows = [];
-  for (;;) {
+  let previousFirst = '';
+  for (let page = 0; page < 80; page += 1) {
     const { data, error } = await queryFactory().range(rows.length, rows.length + pageSize - 1);
     if (error) throw error;
     if (!data?.length) return rows;
+    const first = JSON.stringify(data[0]);
+    if (data.length === pageSize && first && first === previousFirst) {
+      throw new Error('La lectura de visitas se repitió y se ha detenido.');
+    }
+    previousFirst = first;
     rows.push(...data);
   }
+  throw new Error('Hay demasiadas visitas para leerlas de una vez.');
 }
 
 export async function readMarketingRowsByIds(ids, queryFactory) {

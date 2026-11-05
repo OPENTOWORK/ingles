@@ -137,6 +137,11 @@ export async function authenticateBlogAdminRequest(req) {
   return { user: auth.user, token, db, isAdmin, isCoordinator, isMarketing };
 }
 
+/** Next guarda el fetch de Supabase entre despliegues. Estas métricas tienen que salir siempre de la base. */
+function noStoreFetch(input, init) {
+  return fetch(input, { ...(init || {}), cache: 'no-store' });
+}
+
 /** Admin o responsable de marketing (plan de marketing). */
 export async function authenticateMarketingPlanAdminRequest(req) {
   const auth = await getSupabaseUserFromRequest(req);
@@ -155,9 +160,13 @@ export async function authenticateMarketingPlanAdminRequest(req) {
   const db = serviceKey
     ? createClient(supabaseUrl, serviceKey, {
         auth: { autoRefreshToken: false, persistSession: false },
+        global: { fetch: noStoreFetch },
       })
     : createClient(supabaseUrl, supabaseAnonKey, {
-        global: token ? { headers: { Authorization: `Bearer ${token}` } } : {},
+        global: {
+          fetch: noStoreFetch,
+          ...(token ? { headers: { Authorization: `Bearer ${token}` } } : {}),
+        },
         auth: { autoRefreshToken: false, persistSession: false },
       });
 

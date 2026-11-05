@@ -792,7 +792,7 @@ function RootLayoutClientInner({ children }) {
                   <span className="legal-footer-meta__sep" aria-hidden="true">
                     ·
                   </span>
-                  <span className="legal-footer-version">Versión 1.0.26</span>
+                  <span className="legal-footer-version">Versión 1.0.27</span>
                 </p>
               </div>
             </div>

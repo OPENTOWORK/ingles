@@ -107,7 +107,7 @@ export async function GET(req) {
   try {
     const auth = await authenticateMarketingPlanAdminRequest(req);
     if (auth.error) {
-      return NextResponse.json({ error: auth.error }, { status: auth.status });
+      return NextResponse.json({ error: auth.error }, { status: auth.status, headers: NO_STORE });
     }
 
     const db = auth.db;
@@ -192,6 +192,7 @@ export async function GET(req) {
       ...summarizeMarketingOperations({ visits, subscriptions }),
       month,
       months,
+      generatedAt: new Date().toISOString(),
     }, { headers: NO_STORE });
   } catch (err) {
     console.error('[api/admin/marketing/operations] GET', err);
