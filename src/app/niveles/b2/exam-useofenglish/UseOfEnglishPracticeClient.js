@@ -5,6 +5,7 @@ import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPick
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
+import ReadingPracticeDictionary from '@/components/exam/ReadingPracticeDictionary';
 import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
 import { useSearchParams } from 'next/navigation';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
@@ -1287,6 +1288,8 @@ function UseOfEnglishExamsPageInner() {
   }, [partsData, selectedPartId]);
 
   return (
+    <>
+    <ReadingPracticeDictionary alwaysOn lang="en" />
     <main
       className={`levels-exam-practice-root ${landingFont.variable}`}
       style={{
@@ -1675,6 +1678,7 @@ function UseOfEnglishExamsPageInner() {
       )}
       {planGating.planUpgradeModal}
     </main>
+    </>
   );
 }
 

@@ -2,7 +2,9 @@ export function normalizeDictionaryWord(raw) {
   return String(raw || '')
     .trim()
     .toLowerCase()
-    .replace(/[^a-z'-]/gi, '');
+    .replace(/[^a-z' -]/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export function buildSavedWordPayload(entry, targetLanguage) {

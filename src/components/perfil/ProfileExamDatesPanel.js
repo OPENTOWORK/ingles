@@ -6,7 +6,7 @@ import {
   CAMBRIDGE_EXAM_OFFICIAL_LINKS,
   CAMBRIDGE_EXAM_REGIONS,
 } from '@/data/cambridgeExamDatesByCity';
-import { getExamReadinessRecommendation } from '@/utils/examReadinessRecommendation';
+import { buildExamPreparationReport, getExamReadinessRecommendation } from '@/utils/examReadinessRecommendation';
 import ProfileCollapsibleSection from '@/components/perfil/ProfileCollapsibleSection';
 import styles from './ProfileExamDatesPanel.module.css';
 
@@ -88,6 +88,17 @@ export default function ProfileExamDatesPanel({
   const recommendation = useMemo(
     () =>
       getExamReadinessRecommendation({
+        levelEstimate,
+        completedExams,
+        studyStreak,
+        totalStudyMinutes,
+      }),
+    [levelEstimate, completedExams, studyStreak, totalStudyMinutes],
+  );
+
+  const preparationReport = useMemo(
+    () =>
+      buildExamPreparationReport({
         levelEstimate,
         completedExams,
         studyStreak,
@@ -286,6 +297,33 @@ export default function ProfileExamDatesPanel({
             </a>
           ))}
         </div>
+      </ProfileCollapsibleSection>
+
+      <ProfileCollapsibleSection title={preparationReport.title}>
+        <p className={styles.reportSummary}>{preparationReport.summary}</p>
+        <dl className={styles.reportFacts}>
+          {preparationReport.facts.map((fact) => (
+            <div key={fact.label}>
+              <dt>{fact.label}</dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+        <h3 className={styles.reportHeading}>What to practise</h3>
+        <ul className={styles.reportSkills}>
+          {preparationReport.skills.map((item) => (
+            <li key={item.skill}>
+              <strong>{item.skill}</strong>
+              <span>{item.text}</span>
+            </li>
+          ))}
+        </ul>
+        <h3 className={styles.reportHeading}>Next steps</h3>
+        <ol className={styles.reportSteps}>
+          {preparationReport.nextSteps.map((step) => (
+            <li key={step}>{step}</li>
+          ))}
+        </ol>
       </ProfileCollapsibleSection>
     </div>
   );

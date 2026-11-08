@@ -13,6 +13,8 @@ import {
   Clock,
   CreditCard,
   Gift,
+  Maximize2,
+  Minimize2,
   Pause,
   Play,
   Target,
@@ -36,6 +38,40 @@ const WRITING_PRACTICE_HREF = '/exam-practice/b2/exam-writing/';
 const CONTACT_EMAIL = 'support@dralo.es';
 const TOUR_VIDEO_SRC = sitePublicPath('/dralo-tour.mp4?v=4');
 const TOUR_POSTER_SRC = sitePublicPath('/dralo-tour-poster.webp?v=4');
+const TOUR_SHOTS = [
+  {
+    src: '/home/feedback-reading.jpg',
+    alt: 'Reading: la respuesta incorrecta queda en rojo y Dralo explica por qué otra opción es la correcta.',
+  },
+  {
+    src: '/home/feedback-listening.jpg',
+    alt: 'Listening: la opción elegida en rojo, la correcta en verde y la explicación debajo.',
+  },
+  {
+    src: '/home/feedback-speaking.jpg',
+    alt: 'Speaking: las dos fotos del long turn, el audio del examinador y el botón para empezar a hablar.',
+  },
+  {
+    src: '/home/feedback-writing.jpg',
+    alt: 'Writing: el enunciado del essay y el texto escrito, listo para corregir con Dralo.',
+  },
+  {
+    src: '/home/feedback-quiz.jpg',
+    alt: 'Quiz de gramática: la respuesta fallida, la correcta en verde y la explicación.',
+  },
+  {
+    src: '/home/feedback-quiz-vocab.jpg',
+    alt: 'Quiz de vocabulario: la opción correcta marcada y la explicación del significado.',
+  },
+  {
+    src: '/home/feedback-training.jpg',
+    alt: 'Training: respuesta incorrecta, con la solución y el motivo al momento.',
+  },
+  {
+    src: '/home/feedback-training-gap.jpg',
+    alt: 'Training: el hueco correcto en verde y la explicación de la gramática.',
+  },
+];
 
 const PAIRS = [
   {
@@ -387,6 +423,7 @@ function HeroTourVideo({ active }) {
   const [motion, setMotion] = useState('pending');
   const [playing, setPlaying] = useState(false);
   const [started, setStarted] = useState(false);
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -421,6 +458,12 @@ function HeroTourVideo({ active }) {
     return () => observer.disconnect();
   }, [motion, active]);
 
+  useEffect(() => {
+    const sync = () => setFullscreen(document.fullscreenElement === frameRef.current);
+    document.addEventListener('fullscreenchange', sync);
+    return () => document.removeEventListener('fullscreenchange', sync);
+  }, []);
+
   const toggle = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -431,6 +474,16 @@ function HeroTourVideo({ active }) {
     }
     userPaused.current = true;
     video.pause();
+  };
+
+  const toggleFullscreen = () => {
+    const frame = frameRef.current;
+    if (!frame) return;
+    if (document.fullscreenElement === frame) {
+      document.exitFullscreen?.().catch(() => {});
+      return;
+    }
+    frame.requestFullscreen?.().catch(() => {});
   };
 
   return (
@@ -471,18 +524,91 @@ function HeroTourVideo({ active }) {
           <source src={TOUR_VIDEO_SRC} type="video/mp4" />
         </video>
       ) : null}
+      <div className="hl-video__bar">
+        <button
+          type="button"
+          className="hl-video__toggle"
+          aria-pressed={playing}
+          onClick={toggle}
+          disabled={!active || motion === 'pending'}
+        >
+          {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
+          {playing ? 'Pausa' : 'Reproducir'}
+        </button>
+        <button
+          type="button"
+          className="hl-video__fullscreen"
+          aria-pressed={fullscreen}
+          aria-label={fullscreen ? 'Salir de pantalla completa' : 'Maximizar'}
+          onClick={toggleFullscreen}
+        >
+          {fullscreen ? <Minimize2 aria-hidden="true" /> : <Maximize2 aria-hidden="true" />}
+        </button>
+      </div>
     </div>
-    <button
-      type="button"
-      className="hl-video__toggle"
-      aria-pressed={playing}
-      onClick={toggle}
-      disabled={!active || motion === 'pending'}
-    >
-      {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
-      {playing ? 'Pausa' : 'Reproducir'}
-    </button>
     </>
+  );
+}
+
+function HeroShotCarousel() {
+  const count = TOUR_SHOTS.length;
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const id = window.setInterval(() => setIndex((current) => (current + 1) % count), 4500);
+    return () => window.clearInterval(id);
+  }, [paused, count]);
+
+  const show = (next) => setIndex(((next % count) + count) % count);
+  const shot = TOUR_SHOTS[index];
+
+  return (
+    <div
+      className="hl-shots"
+      role="region"
+      aria-roledescription="carrusel"
+      aria-label="Así se ve la web"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setPaused(false);
+      }}
+    >
+      <div className="hl-shots__frame">
+        <img src={sitePublicPath(shot.src)} alt={shot.alt} width={960} height={540} />
+      </div>
+      <button
+        type="button"
+        className="hl-shots__nav hl-shots__nav--prev"
+        aria-label="Foto anterior"
+        onClick={() => show(index - 1)}
+      >
+        <ChevronRight aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        className="hl-shots__nav hl-shots__nav--next"
+        aria-label="Foto siguiente"
+        onClick={() => show(index + 1)}
+      >
+        <ChevronRight aria-hidden="true" />
+      </button>
+      <div className="hl-shots__dots">
+        {TOUR_SHOTS.map((item, itemIndex) => (
+          <button
+            key={item.src}
+            type="button"
+            className={itemIndex === index ? 'is-active' : ''}
+            aria-label={`Foto ${itemIndex + 1} de ${count}`}
+            aria-current={itemIndex === index ? 'true' : undefined}
+            onClick={() => show(itemIndex)}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -550,7 +676,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
 
       <section className="hl-hero" aria-labelledby="hl-hero-title">
         <div className="hl-container hl-hero__grid">
-          <div className="hl-hero__copy">
+          <div className="hl-hero__intro">
             <p className="hl-kicker">Prepara tu B2 First</p>
             <h1 id="hl-hero-title" className="hl-hero__title">
               <span>Practica.</span>
@@ -563,49 +689,41 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
                 <Link
-                  href={REGISTER_HREF}
-                  className="hl-btn hl-btn--primary hl-btn--lg"
-                  onClick={() => trackHomeEvent('cta_hero_register')}
-                >
-                  Empieza gratis
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-                <Link
                   href={TRY_EXERCISE_HREF}
-                  className="hl-btn hl-btn--ghost hl-btn--lg"
+                  className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
                   onClick={() => trackHomeEvent('cta_hero_try_exercise')}
                 >
-                  Prueba un ejercicio sin registrarte
+                  <span className="hl-hero__cta-copy">
+                    Empieza gratis y prueba los ejercicios sin registrarte
+                  </span>
+                  <span className="hl-hero__cta-arrows" aria-hidden="true">
+                    <ChevronRight />
+                    <ChevronRight />
+                    <ChevronRight />
+                  </span>
                 </Link>
               </div>
-              <ul className="hl-hero__notes">
-                <li>
-                  <CreditCard aria-hidden="true" />
-                  Sin tarjeta
-                </li>
-                <li>
-                  <Clock aria-hidden="true" />A tu ritmo
-                </li>
-              </ul>
+              <div className="hl-hero__meta">
+                <ul className="hl-hero__notes">
+                  <li>
+                    <CreditCard aria-hidden="true" />
+                    Sin tarjeta
+                  </li>
+                  <li>
+                    <Clock aria-hidden="true" />A tu ritmo
+                  </li>
+                </ul>
+                <Link
+                  href={REGISTER_HREF}
+                  className="hl-btn hl-btn--ghost hl-hero__register"
+                  onClick={() => trackHomeEvent('cta_hero_register')}
+                >
+                  Regístrate sin tarjetas
+                </Link>
+              </div>
             </div>
           </div>
-
-          <figure className="hl-hero__media">
-            <div className="hl-hero__stage">
-              <HeroTourVideo active={visible} />
-              <Image
-                src={sitePublicPath('/mascot/3.png')}
-                alt=""
-                width={220}
-                height={220}
-                sizes="220px"
-                className="hl-hero__mascot"
-              />
-            </div>
-            <figcaption id="hl-hero-caption" className="hl-hero__caption">
-              Descubre cómo practicar con DRALO
-            </figcaption>
-          </figure>
+          <HeroShotCarousel />
         </div>
       </section>
 
@@ -630,6 +748,25 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
           </p>
         </div>
         <SlotsBox slots={slots} />
+      </section>
+
+      <section className="hl-tour" aria-labelledby="hl-hero-caption">
+        <figure className="hl-container hl-tour__figure">
+          <div className="hl-tour__stage">
+            <HeroTourVideo active={visible} />
+            <Image
+              src={sitePublicPath('/mascot/3.png')}
+              alt=""
+              width={220}
+              height={220}
+              sizes="220px"
+              className="hl-tour__mascot"
+            />
+          </div>
+          <figcaption id="hl-hero-caption" className="hl-hero__caption">
+            Descubre cómo practicar con DRALO
+          </figcaption>
+        </figure>
       </section>
 
       <section className="hl-section" aria-labelledby="hl-problem-title">

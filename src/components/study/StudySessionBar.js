@@ -190,9 +190,9 @@ export default function StudySessionBar({ session }) {
         type="button"
         className={`${styles.launcher} study-session-launcher`}
         onClick={() => setAskingConsent(true)}
-        aria-label="Iniciar estudio"
+        aria-label="Start studying"
       >
-        <span className={styles.launcherLabel}>Iniciar estudio</span>
+        <span className={styles.launcherLabel}>Start studying</span>
       </button>
       {askingConsent ? (
         <ConsentDialog

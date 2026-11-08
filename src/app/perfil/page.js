@@ -29,6 +29,7 @@ import ProfileSubscriptionCard from '@/components/perfil/ProfileSubscriptionCard
 import ProfileStudyNotesPanel from '@/components/perfil/ProfileStudyNotesPanel';
 import ProfileFavouriteExercisesPanel from '@/components/perfil/ProfileFavouriteExercisesPanel';
 import ProfileStudyPlannerPanel from '@/components/perfil/ProfileStudyPlannerPanel';
+import ProfileVocabularyPanel from '@/components/perfil/ProfileVocabularyPanel';
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
 import { PROFILE_TABS, PROFILE_TAB_LABELS, isStudentHiddenProfileTab, getVisibleProfileTabs } from '@/components/perfil/profileTabsConfig';
@@ -1976,6 +1977,8 @@ export default function ProfilePage() {
       )}
 
       {activeTab === 'track-record' && <ProfileTrackRecordPanel />}
+
+      {activeTab === 'vocabulary' && <ProfileVocabularyPanel />}
 
       {/* Tab: Comunidad */}
       {activeTab === 'community' && (

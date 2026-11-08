@@ -13,11 +13,18 @@ const QUALITY_CLASS = {
   dispersa: styles.qualityDispersa,
 };
 
+const QUALITY_LABEL = {
+  excelente: 'Excellent focus',
+  buena: 'Good focus',
+  irregular: 'Uneven focus',
+  dispersa: 'Very distracted',
+};
+
 function formatSessionDate(value) {
-  if (!value) return 'Sesión';
+  if (!value) return 'Session';
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return 'Sesión';
-  return date.toLocaleString('es-ES', {
+  if (Number.isNaN(date.getTime())) return 'Session';
+  return date.toLocaleString('en-GB', {
     weekday: 'long',
     day: '2-digit',
     month: 'long',
@@ -45,13 +52,13 @@ export default function ProfileTrackRecordPanel() {
       const payload = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        setError(payload.error || 'No se pudo cargar tu historial.');
+        setError(payload.error || 'Could not load your history.');
         setRecord(null);
         return;
       }
       setRecord(payload);
     } catch {
-      setError('No se pudo conectar con el servidor.');
+      setError('Could not reach the server.');
       setRecord(null);
     } finally {
       setLoading(false);
@@ -76,30 +83,30 @@ export default function ProfileTrackRecordPanel() {
   return (
     <div className="profile-tab-panels">
       <ProfileCollapsibleSection
-        title="Tu track record"
+        title="Your track record"
         defaultOpen
-        description="El historial de tus sesiones de estudio monitorizadas, con el resumen que te generamos al terminar cada una."
+        description="Your monitored study sessions, with the summary we write when you finish each one."
       >
         <div className={styles.content}>
-      {loading ? <p className={styles.empty}>Cargando tu historial…</p> : null}
+      {loading ? <p className={styles.empty}>Loading your history…</p> : null}
       {error ? <p className={styles.empty}>{error}</p> : null}
 
       {!loading && !error && totals ? (
         <dl className={styles.totals}>
           <div className={styles.totalCard}>
-            <dt>Sesiones</dt>
+            <dt>Sessions</dt>
             <dd>{totals.sessionCount}</dd>
           </div>
           <div className={styles.totalCard}>
-            <dt>Tiempo concentrado</dt>
+            <dt>Focused time</dt>
             <dd>{totals.focusLabel}</dd>
           </div>
           <div className={styles.totalCard}>
-            <dt>Foco medio</dt>
+            <dt>Average focus</dt>
             <dd>{totals.avgFocusRatio}%</dd>
           </div>
           <div className={styles.totalCard}>
-            <dt>Racha</dt>
+            <dt>Streak</dt>
             <dd>{totals.streakDays} d</dd>
           </div>
         </dl>
@@ -107,8 +114,8 @@ export default function ProfileTrackRecordPanel() {
 
       {!loading && !error && entries.length === 0 ? (
         <p className={styles.empty}>
-          Todavía no has cerrado ninguna sesión de estudio. Pulsa <strong>Iniciar estudio</strong>{' '}
-          cuando te pongas y al terminar guardaremos aquí tu resumen.
+          You have not finished a study session yet. Press <strong>Start studying</strong> when
+          you begin, and we will save the summary here when you finish.
         </p>
       ) : null}
 
@@ -120,19 +127,19 @@ export default function ProfileTrackRecordPanel() {
               <span
                 className={`${styles.entryQuality} ${QUALITY_CLASS[entry.quality.key] || ''}`}
               >
-                {entry.quality.label}
+                {QUALITY_LABEL[entry.quality.key] || entry.quality.label}
               </span>
             </div>
 
             <div className={styles.entryMeta}>
               <span>
-                Concentrado <strong>{entry.focusLabel}</strong>
+                Focused <strong>{entry.focusLabel}</strong>
               </span>
               <span>
-                Foco <strong>{entry.focusRatio}%</strong>
+                Focus <strong>{entry.focusRatio}%</strong>
               </span>
               <span>
-                Salidas <strong>{entry.awayCount}</strong>
+                Away <strong>{entry.awayCount}</strong>
               </span>
               <span>
                 Total <strong>{entry.totalLabel}</strong>

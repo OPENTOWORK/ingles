@@ -113,6 +113,7 @@ const SECTION_ICONS = {
   'motivation': Flame,
   'group-chat': MessageCircle,
   'visual-themes': Palette,
+  'exam-preparation-report': ClipboardList,
   'when-should-you-take-the-exam': GraduationCap,
   'dates-by-city': MapPin,
   'official-resources': ExternalLink,
@@ -127,6 +128,7 @@ const SECTION_ICONS = {
   'in-person-lessons': MapPin,
   'how-it-works': HelpCircle,
   'my-study-notes': NotebookPen,
+  vocabulary: BookOpen,
   'mis-notas-de-estudio': NotebookPen,
 };
 

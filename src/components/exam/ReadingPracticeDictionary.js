@@ -3,20 +3,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import { supabase } from '@/utils/supabaseClient';
+import { lookupVocabularySound } from '@/lib/vocabularyStore';
 
 const HIGHLIGHT_KEY = 'reading-dictionary';
-const VISIBLE_MS = 4500;
+const VISIBLE_MS = 12000;
 const MAX_CHARS = 160;
 
 function cleanSelection(raw) {
   return String(raw || '').replace(/\s+/g, ' ').trim();
 }
 
+const PASSAGE_SELECTOR = [
+  '.levels-b2-practice__work-body',
+  '.levels-exam-inline-passage',
+  '.levels-exam-split__text',
+  '.levels-exam-passage',
+].join(', ');
+
 function selectionInsidePassage(range) {
   const node = range.commonAncestorContainer;
   const el = node.nodeType === 1 ? node : node.parentElement;
   if (!el?.closest) return false;
-  if (!el.closest('.levels-b2-practice__work-body')) return false;
+  if (!el.closest(PASSAGE_SELECTOR)) return false;
   if (el.closest('button, a, input, textarea, select, [role="button"], .reading-dictionary-pop')) {
     return false;
   }
@@ -63,9 +72,9 @@ function popupPosition(rect) {
   return { top, left, width };
 }
 
-export default function ReadingPracticeDictionary({ lang = 'en' }) {
+export default function ReadingPracticeDictionary({ lang = 'en', alwaysOn = false }) {
   const en = lang === 'en';
-  const [active, setActive] = useState(false);
+  const [active, setActive] = useState(alwaysOn);
   const [popup, setPopup] = useState(null);
   const hideTimer = useRef(0);
   const requestId = useRef(0);
@@ -161,6 +170,57 @@ export default function ReadingPracticeDictionary({ lang = 'en' }) {
       });
   }, [en, scheduleHide]);
 
+  const saveSelection = useCallback(async () => {
+    if (!popup?.source || popup.loading || popup.saving || popup.saved) return;
+    window.clearTimeout(hideTimer.current);
+    setPopup((current) => (current ? { ...current, saving: true, error: '' } : current));
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data?.session?.access_token;
+      if (!token) {
+        setPopup((current) =>
+          current
+            ? {
+                ...current,
+                saving: false,
+                error: en ? 'Sign in to save words.' : 'Inicia sesión para guardar palabras.',
+              }
+            : current,
+        );
+        return;
+      }
+      const sound = await lookupVocabularySound(popup.source);
+      const res = await fetch(buildClientApiUrl('/api/profile/vocabulary/'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          word: popup.source,
+          translation: popup.translation || '',
+          meaning: sound?.meaning || '',
+          pronunciation: sound?.pronunciation || '',
+          audioUrl: sound?.audioUrl || '',
+        }),
+      });
+      const payload = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(payload.error || 'save');
+      setPopup((current) => (current ? { ...current, saving: false, saved: true, error: '' } : current));
+      scheduleHide();
+    } catch {
+      setPopup((current) =>
+        current
+          ? {
+              ...current,
+              saving: false,
+              error: en ? 'Could not save that word.' : 'No se ha podido guardar.',
+            }
+          : current,
+      );
+    }
+  }, [en, popup, scheduleHide]);
+
   useEffect(() => {
     if (!active) {
       dismiss();
@@ -197,8 +257,52 @@ export default function ReadingPracticeDictionary({ lang = 'en' }) {
 
   const label = en ? 'Dictionary' : 'Diccionario';
   const hint = en
-    ? 'Turn on, then select a word or phrase. It is translated into Spanish for a moment.'
-    : 'Actívalo y subraya una palabra o frase. Se traduce al español un momento.';
+    ? 'Turn on, then select a word. Save it and it appears in Profile → Vocabulary.'
+    : 'Actívalo y subraya una palabra. Si la guardas, aparece en Perfil → Vocabulary.';
+
+  const popupView =
+    popup && typeof document !== 'undefined'
+      ? createPortal(
+          <div
+            className="reading-dictionary-pop"
+            role="status"
+            style={{ top: popup.top, left: popup.left, width: popup.width }}
+          >
+            <p className="reading-dictionary-pop__source">{popup.source}</p>
+            <p className="reading-dictionary-pop__translation">
+              {popup.loading
+                ? en
+                  ? 'Translating…'
+                  : 'Traduciendo…'
+                : popup.translation || popup.error}
+            </p>
+            {popup.error && popup.translation ? (
+              <p className="reading-dictionary-pop__translation">{popup.error}</p>
+            ) : null}
+            <button
+              type="button"
+              className="reading-dictionary-pop__save"
+              onClick={saveSelection}
+              disabled={popup.loading || popup.saving || popup.saved}
+            >
+              {popup.saved
+                ? en
+                  ? 'Saved'
+                  : 'Guardada'
+                : popup.saving
+                  ? en
+                    ? 'Saving…'
+                    : 'Guardando…'
+                  : en
+                    ? 'Save word'
+                    : 'Guardar palabra'}
+            </button>
+          </div>,
+          document.body,
+        )
+      : null;
+
+  if (alwaysOn) return popupView;
 
   return (
     <aside
@@ -223,25 +327,7 @@ export default function ReadingPracticeDictionary({ lang = 'en' }) {
         </span>
         <span>{label}</span>
       </button>
-      {popup && typeof document !== 'undefined'
-        ? createPortal(
-            <div
-              className="reading-dictionary-pop"
-              role="status"
-              style={{ top: popup.top, left: popup.left, width: popup.width }}
-            >
-              <p className="reading-dictionary-pop__source">{popup.source}</p>
-              <p className="reading-dictionary-pop__translation">
-                {popup.loading
-                  ? en
-                    ? 'Translating…'
-                    : 'Traduciendo…'
-                  : popup.error || popup.translation}
-              </p>
-            </div>,
-            document.body,
-          )
-        : null}
+      {popupView}
     </aside>
   );
 }

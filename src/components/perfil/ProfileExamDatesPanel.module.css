@@ -354,6 +354,95 @@
   color: #6a4be8;
 }
 
+.reportSummary {
+  margin: 12px 0 0;
+  color: #334155;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.reportFacts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0 0;
+}
+
+.reportFacts div {
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.reportFacts dt {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.reportFacts dd {
+  margin: 4px 0 0;
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.reportHeading {
+  margin: 18px 0 0;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.reportSkills,
+.reportSteps {
+  margin: 10px 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.reportSkills li,
+.reportSteps li {
+  margin: 0 0 8px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  color: #334155;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.reportSkills strong {
+  display: block;
+  margin-bottom: 2px;
+  color: #0f172a;
+}
+
+.reportSteps {
+  counter-reset: prep-step;
+}
+
+.reportSteps li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.reportSteps li::before {
+  counter-increment: prep-step;
+  content: counter(prep-step);
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 13px;
+  font-weight: 800;
+}
+
 .cityNote {
   margin: 14px 0 0;
   padding: 12px 14px;
@@ -386,5 +475,9 @@
 
   .officialGrid {
     grid-template-columns: 1fr;
+  }
+
+  .reportFacts {
+    grid-template-columns: 1fr 1fr;
   }
 }
