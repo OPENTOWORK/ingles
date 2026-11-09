@@ -393,11 +393,14 @@
 
 .home-landing .hl-hero__register {
   min-height: 2.35rem;
-  padding: 0 1rem;
+  padding: 0.45rem 1rem;
   background: #fff;
   border: 1.5px solid #e6e0f7;
   box-shadow: 0 6px 16px rgba(60, 40, 150, 0.08);
   font-size: 0.9rem;
+  line-height: 1.25;
+  white-space: normal;
+  text-align: center;
 }
 
 .home-landing .hl-hero__register:hover {
@@ -728,6 +731,26 @@
   margin: 0.35rem 0 0;
   color: var(--hl-text);
   font-size: 0.98rem;
+}
+
+.home-landing .hl-offer__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 0.9rem;
+}
+
+.home-landing .hl-offer__conditions {
+  color: #734a91;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.home-landing .hl-offer__conditions:hover {
+  color: #5d3a78;
 }
 
 .home-landing .hl-slots {
@@ -1758,6 +1781,16 @@
     justify-self: start;
   }
 
+  .home-landing .hl-offer__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .home-landing .hl-offer__actions .hl-btn {
+    justify-content: center;
+    width: 100%;
+  }
+
   .home-landing .hl-features {
     grid-template-columns: minmax(0, 1fr);
     max-width: 30rem;
@@ -1794,8 +1827,14 @@
 
   .home-landing .hl-hero__cta,
   .home-landing .hl-hero__cta-copy,
-  .home-landing .hl-hero__ctas .hl-btn {
+  .home-landing .hl-hero__ctas .hl-btn,
+  .home-landing .hl-hero__register {
     white-space: normal;
+  }
+
+  .home-landing .hl-hero__register {
+    width: 100%;
+    justify-content: center;
   }
 
   .home-landing .hl-header__bar {

@@ -27,12 +27,12 @@ import {
   FOUNDING_SURVEY_RESPONSE_DAYS,
 } from '@/lib/foundingSurvey.rules';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
+import { buildSignupHref } from '@/lib/signupTracking';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 import { landingFont } from './landingFont';
 import { PracticePickerMock, ResultsMock, ReviewMock, WritingFeedbackMock } from './LandingMocks';
 import './home-guest-landing.css';
 
-const REGISTER_HREF = '/registro';
 const TRY_EXERCISE_HREF = '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1';
 const WRITING_PRACTICE_HREF = '/exam-practice/b2/exam-writing/';
 const CONTACT_EMAIL = 'support@dralo.es';
@@ -374,7 +374,21 @@ function useFoundingSlots(enabled) {
   return slots;
 }
 
-function SlotsBox({ slots }) {
+function useSignupHrefs() {
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    setSearch(window.location.search);
+  }, []);
+
+  return {
+    hero: buildSignupHref(search, 'hero'),
+    plan: buildSignupHref(search, 'plan_plus'),
+    other: buildSignupHref(search, 'otros'),
+  };
+}
+
+function SlotsBox({ slots, href }) {
   if (slots.status === 'unknown') return null;
   if (slots.status === 'ready' && (slots.soldOut || slots.remaining === 0)) {
     return (
@@ -394,7 +408,7 @@ function SlotsBox({ slots }) {
   const loading = slots.status === 'loading';
   const one = slots.remaining === 1;
   return (
-    <Link href={REGISTER_HREF} className="hl-slots" role="status" aria-busy={loading}>
+    <Link href={href} className="hl-slots" role="status" aria-busy={loading}>
       <span className="hl-slots__kicker">
         <span className="hl-slots__dot" aria-hidden="true" />
         {one ? 'Solo queda' : 'Solo quedan'}
@@ -621,6 +635,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
   const visible = ready && !(pending && sessionHint);
   const slots = useFoundingSlots(visible);
   const offerOpen = !(slots.status === 'ready' && slots.soldOut);
+  const signupHref = useSignupHrefs();
   const faq = publishedFaq(FAQ, offerOpen);
 
   return (
@@ -666,7 +681,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <Link href={APP_ROUTES.login} className="hl-btn hl-btn--ghost">
               Iniciar sesión
             </Link>
-            <Link href={REGISTER_HREF} className="hl-btn hl-btn--primary">
+            <Link href={signupHref.other} className="hl-btn hl-btn--primary">
               Crear mi cuenta gratis
               <ArrowRight aria-hidden="true" />
             </Link>
@@ -689,13 +704,11 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
                 <Link
-                  href={TRY_EXERCISE_HREF}
+                  href={signupHref.hero}
                   className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
-                  onClick={() => trackHomeEvent('cta_hero_try_exercise')}
+                  onClick={() => trackHomeEvent('cta_hero_register')}
                 >
-                  <span className="hl-hero__cta-copy">
-                    Empieza gratis y prueba los ejercicios sin registrarte
-                  </span>
+                  <span className="hl-hero__cta-copy">Crear mi cuenta gratis</span>
                   <span className="hl-hero__cta-arrows" aria-hidden="true">
                     <ChevronRight />
                     <ChevronRight />
@@ -714,11 +727,11 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
                   </li>
                 </ul>
                 <Link
-                  href={REGISTER_HREF}
+                  href={TRY_EXERCISE_HREF}
                   className="hl-btn hl-btn--ghost hl-hero__register"
-                  onClick={() => trackHomeEvent('cta_hero_register')}
+                  onClick={() => trackHomeEvent('cta_hero_try_exercise')}
                 >
-                  Regístrate sin tarjetas
+                  Prueba un ejercicio sin registrarte
                 </Link>
               </div>
             </div>
@@ -743,11 +756,22 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
           </h2>
           <p className="hl-offer__text">
             {offerOpen
-              ? `Para los primeros ${MAX_FOUNDING_SLOT} registros que cumplan las condiciones.`
+              ? `Para los primeros ${MAX_FOUNDING_SLOT} registros. Úsalo ${FOUNDING_SURVEY_DELAY_DAYS} días y, después, cuéntanos tu experiencia en un formulario breve. Sin tarjeta.`
               : `Las ${MAX_FOUNDING_SLOT} plazas iniciales de Plan Plus ya están asignadas.`}
           </p>
+          {offerOpen ? (
+            <div className="hl-offer__actions">
+              <Link href={signupHref.plan} className="hl-btn hl-btn--primary">
+                Reservar mi plaza
+                <ArrowRight aria-hidden="true" />
+              </Link>
+              <a href="#condiciones-plan-plus" className="hl-offer__conditions">
+                Ver condiciones
+              </a>
+            </div>
+          ) : null}
         </div>
-        <SlotsBox slots={slots} />
+        <SlotsBox slots={slots} href={signupHref.plan} />
       </section>
 
       <section className="hl-tour" aria-labelledby="hl-hero-caption">
@@ -864,7 +888,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
 
       <div className="hl-section hl-bands">
         {offerOpen ? (
-          <section className="hl-container hl-cta" aria-labelledby="hl-cta-title">
+          <section id="condiciones-plan-plus" className="hl-container hl-cta" aria-labelledby="hl-cta-title">
             <span className="hl-gift hl-gift--lg" aria-hidden="true">
               <Gift />
             </span>
@@ -880,7 +904,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
               </p>
             </div>
             <Link
-              href={REGISTER_HREF}
+              href={signupHref.plan}
               className="hl-btn hl-btn--primary hl-btn--lg"
               onClick={() => trackHomeEvent('cta_plan_register')}
             >
@@ -944,7 +968,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             preparación.
           </p>
           <Link
-            href={REGISTER_HREF}
+            href={signupHref.other}
             className="hl-btn hl-btn--light hl-btn--lg"
             onClick={() => trackHomeEvent('cta_final_register')}
           >

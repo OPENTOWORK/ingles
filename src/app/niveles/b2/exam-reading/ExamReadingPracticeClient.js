@@ -89,6 +89,7 @@ import ReadingPracticeSideRail from '@/components/exam/ReadingPracticeSideRail';
 import ExamPracticeSideRailTop from '@/components/exam/ExamPracticeSideRailTop';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import { buildPartFinishNoticeDisplay } from '@/utils/partFinishNoticeDisplay';
+import GuestPracticeSignupPrompt from '@/components/exam/GuestPracticeSignupPrompt';
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
@@ -2720,6 +2721,12 @@ function B2ReadingExamsPageInner() {
       </div>
       </ReadingPracticeChrome>
       {skillNav.planUpgradeModal}
+      <GuestPracticeSignupPrompt
+        open={
+          Number(examSlot) === 1 &&
+          (readingSession.answersRevealed || Boolean(livePartProgressForNav))
+        }
+      />
     </B2ExamPracticeLayout>
   );
 }

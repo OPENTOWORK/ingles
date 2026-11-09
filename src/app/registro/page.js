@@ -17,6 +17,7 @@ import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 import { detectClientDeviceType } from '@/lib/clientDeviceType';
 import { readAttributionFromSearch, FOUNDING_OFFER } from '@/lib/abExperiment';
 import { trackRegistrationComplete, trackRegistrationStart } from '@/lib/abExperimentTrack';
+import { trackSignUp } from '@/lib/signupTracking';
 import { readStoredVisitorId } from '@/lib/visitorPresence';
 import { reportLoginAttempt } from '@/utils/reportLoginAttempt';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
@@ -248,6 +249,7 @@ export default function RegistroPage() {
           : '¡Registro exitoso! Ya puedes iniciar sesión.',
       );
       trackRegistrationComplete();
+      trackSignUp({ method: 'email', userId: data?.user?.id });
       router.push('/login');
       return true;
     };
@@ -261,6 +263,7 @@ export default function RegistroPage() {
             'Cuenta creada. Confirma tu email desde el correo que te hemos enviado para poder entrar.',
         );
         trackRegistrationComplete();
+        trackSignUp({ method: 'email', userId: server.data?.userId });
         router.push('/login');
         return;
       }
@@ -313,6 +316,7 @@ export default function RegistroPage() {
     const createdMs = Date.parse(user?.created_at || '');
     if (Number.isFinite(createdMs) && Date.now() - createdMs < 3 * 60 * 1000) {
       trackRegistrationComplete();
+      trackSignUp({ method: 'google', userId: user?.id });
     }
     await persistMarketingConsent(user?.id, user?.email, acceptedMarketing);
     router.replace(path);
