@@ -38,19 +38,19 @@ export default function SkillPartExplanationsPanel({
 
   if (!sorted.length) return null;
 
+  const requestExplanation = (entry) => {
+    const hint = aiHintsByKey[entry.questionKey];
+    if (!onRequestExplanation || hint?.text || hint?.loading) return;
+    onRequestExplanation({
+      questionKey: entry.questionKey,
+      questionNumber: entry.questionNumber,
+      ...(entry.group != null ? { group: entry.group } : {}),
+    });
+  };
+
   const toggleExplanation = (entry) => {
-    const isOpen = !!openExplanations[entry.questionKey];
-    if (!isOpen && onRequestExplanation) {
-      const hint = aiHintsByKey[entry.questionKey];
-      if (!hint?.text && !hint?.loading) {
-        onRequestExplanation({
-          questionKey: entry.questionKey,
-          questionNumber: entry.questionNumber,
-          ...(entry.group != null ? { group: entry.group } : {}),
-        });
-      }
-    }
-    setOpenExplanations((prev) => ({ ...prev, [entry.questionKey]: !isOpen }));
+    if (!openExplanations[entry.questionKey]) requestExplanation(entry);
+    setOpenExplanations((prev) => ({ ...prev, [entry.questionKey]: !prev[entry.questionKey] }));
   };
 
   return (
@@ -111,16 +111,12 @@ export default function SkillPartExplanationsPanel({
                 </div>
               )}
               {onRequestExplanation && (
-                <button
-                  type="button"
-                  className={reviewStyles.toggle}
-                  aria-expanded={isOpen}
-                  onClick={() => toggleExplanation(entry)}
-                >
-                  {isOpen ? 'Hide explanation' : 'Why it’s correct'}
-                </button>
+                <LevelsAnswerJustification
+                  hint={aiHintsByKey[entry.questionKey]}
+                  ruoeReview
+                  onOpenReview={() => requestExplanation(entry)}
+                />
               )}
-              {isOpen && <LevelsAnswerJustification hint={aiHintsByKey[entry.questionKey]} ruoeReview />}
               {(!isCorrect || entry.scoreLabel) && (
                 <p className={reviewStyles.meta}>
                   {verdict}{entry.scoreLabel && ` · ${entry.scoreLabel}`}
