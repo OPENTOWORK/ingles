@@ -9,7 +9,7 @@ import { buildClientApiUrl } from '@/utils/clientApiUrl';
 /**
  * @param {{ hint?: { loading?: boolean, error?: string | null, text?: string | null } }} props
  */
-export default function LevelsAnswerJustification({ hint, ruoeReview = false }) {
+export default function LevelsAnswerJustification({ hint, ruoeReview = false, onOpenReview }) {
   const [spanish, setSpanish] = useState('');
   const [showSpanish, setShowSpanish] = useState(false);
   const [translating, setTranslating] = useState(false);
@@ -22,9 +22,9 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false }) 
     setTranslateError('');
   }, [hint?.text]);
 
-  if (!hint || (!hint.loading && !hint.error && !hint.text)) return null;
+  if (!ruoeReview && (!hint || (!hint.loading && !hint.error && !hint.text))) return null;
 
-  if (hint.loading) {
+  if (!ruoeReview && hint?.loading) {
     return (
       <DraloThinking
         variant="inline"
@@ -35,7 +35,7 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false }) 
     );
   }
 
-  if (hint.error) {
+  if (!ruoeReview && hint?.error) {
     return (
       <p className="levels-answer-justification__error">
         {hint.error === true || !hint.error
@@ -72,23 +72,27 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false }) 
     }
   };
 
-  const review = ruoeReview ? splitRuoeExplanation(hint.text) : null;
+  const review = ruoeReview ? splitRuoeExplanation(hint?.text) : null;
+  const onReviewToggle = (event) => {
+    if (event.currentTarget.open) onOpenReview?.();
+  };
+  const reviewSections = review && [
+    { title: 'What it tests', text: review.focus, empty: 'A skill label is unavailable for this question.' },
+    { title: 'Why it’s correct', text: review.reason, empty: 'Explanation temporarily unavailable.' },
+  ];
   return (
-    <div className="levels-answer-justification">
-      {review ? (
-        <>
-          {review.focus && (
-            <section className={reviewStyles.feedbackSection}>
-              <h4>What this tests</h4>
-              <p>{review.focus}</p>
-            </section>
-          )}
-          <section className={reviewStyles.feedbackSection}>
-            <h4>Why it’s correct</h4>
-            <p>{review.reason}</p>
-          </section>
-        </>
-      ) : <p className="levels-answer-justification__text">💡 {hint.text}</p>}
+    <div className={ruoeReview ? reviewStyles.feedback : 'levels-answer-justification'}>
+      {reviewSections ? reviewSections.map(({ title, text, empty }) => (
+        <details className={reviewStyles.feedbackSection} key={title} onToggle={onReviewToggle}>
+          <summary className={reviewStyles.toggle}>{title}</summary>
+          <p className={reviewStyles.feedbackBody}>
+            {hint?.loading || (!hint?.text && !hint?.error)
+              ? <span role="status">Loading…</span>
+              : hint?.error ? 'Explanation temporarily unavailable.' : text || empty}
+          </p>
+        </details>
+      )) : <p className="levels-answer-justification__text">💡 {hint.text}</p>}
+      {hint?.text && (
       <button
         type="button"
         className="levels-answer-justification__translate"
@@ -101,6 +105,7 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false }) 
             ? 'Ocultar traducción'
             : 'Traducir al español'}
       </button>
+      )}
       {translateError ? (
         <p className="levels-answer-justification__error">{translateError}</p>
       ) : null}
