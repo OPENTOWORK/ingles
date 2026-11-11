@@ -1170,6 +1170,7 @@ function UseOfEnglishExamsPageInner() {
       if (!entries.length) return null;
       return (
         <SkillPartExplanationsPanel
+          ruoeReview={{ part: partNumberUoe, passage: selectedPartContent.texto }}
           entries={entries}
           aiHintsByKey={aiHintsByKey}
           onRequestExplanation={handlePart1ExplanationRequest}
@@ -1193,6 +1194,7 @@ function UseOfEnglishExamsPageInner() {
       if (!entries.length) return null;
       return (
         <SkillPartExplanationsPanel
+          ruoeReview={{ part: partNumberUoe, passage: selectedPartContent.texto }}
           entries={entries}
           aiHintsByKey={aiHintsByKey}
           onRequestExplanation={handleOpenGapExplanationRequest}
@@ -1213,6 +1215,7 @@ function UseOfEnglishExamsPageInner() {
       if (!entries.length) return null;
       return (
         <SkillPartExplanationsPanel
+          ruoeReview={{ part: partNumberUoe, passage: selectedPartContent.texto }}
           entries={entries}
           aiHintsByKey={aiHintsByKey}
           onRequestExplanation={handleOpenGapExplanationRequest}
@@ -1232,6 +1235,8 @@ function UseOfEnglishExamsPageInner() {
 
     return null;
   }, [
+    partNumberUoe,
+    selectedPartContent.texto,
     isPart1McqCloze,
     isKeyWordPart,
     isInlinePassagePart,

@@ -71,7 +71,7 @@ export function buildOpenClozeExplanationEntries({
         questionKey,
         isCorrect: checkResult,
         userAnswer: String(openInputs[questionKey] || '').trim(),
-        correctAnswer: checkResult ? undefined : correctAnswer,
+        correctAnswer,
       };
     })
     .filter(Boolean);
@@ -110,7 +110,7 @@ export function buildKeyWordExplanationEntries({
           scoreLabel: v2Copy.scoreLabel,
           detail: v2Copy.detail || undefined,
           userAnswer,
-          correctAnswer: grade.score === 2 ? undefined : correctAnswer,
+          correctAnswer,
         };
       }
 
@@ -121,7 +121,7 @@ export function buildKeyWordExplanationEntries({
         questionKey,
         isCorrect: checkResult,
         userAnswer,
-        correctAnswer: checkResult ? undefined : correctAnswer,
+        correctAnswer,
       };
     })
     .filter(Boolean);

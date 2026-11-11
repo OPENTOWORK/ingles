@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import DraloThinking from '@/components/dralo/DraloThinking';
+import { splitRuoeExplanation } from '@/utils/ruoeAnswerReview';
+import reviewStyles from '@/components/exam/RuoeAnswerReview.module.css';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 
 /**
  * @param {{ hint?: { loading?: boolean, error?: string | null, text?: string | null } }} props
  */
-export default function LevelsAnswerJustification({ hint }) {
+export default function LevelsAnswerJustification({ hint, ruoeReview = false }) {
   const [spanish, setSpanish] = useState('');
   const [showSpanish, setShowSpanish] = useState(false);
   const [translating, setTranslating] = useState(false);
@@ -70,9 +72,23 @@ export default function LevelsAnswerJustification({ hint }) {
     }
   };
 
+  const review = ruoeReview ? splitRuoeExplanation(hint.text) : null;
   return (
     <div className="levels-answer-justification">
-      <p className="levels-answer-justification__text">💡 {hint.text}</p>
+      {review ? (
+        <>
+          {review.focus && (
+            <section className={reviewStyles.feedbackSection}>
+              <h4>What this tests</h4>
+              <p>{review.focus}</p>
+            </section>
+          )}
+          <section className={reviewStyles.feedbackSection}>
+            <h4>Why it’s correct</h4>
+            <p>{review.reason}</p>
+          </section>
+        </>
+      ) : <p className="levels-answer-justification__text">💡 {hint.text}</p>}
       <button
         type="button"
         className="levels-answer-justification__translate"
