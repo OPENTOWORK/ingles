@@ -1,0 +1,30 @@
+.exercise,
+.directions:global(.levels-exam-split__enunciado) {
+  font-family: var(--font-landing), 'Segoe UI', system-ui, sans-serif;
+}
+
+.exercise:global(.levels-exam-split-card) :is(
+  :global(.levels-exam-split__text),
+  :global(.levels-exam-split__passage-panel),
+  :global(.levels-exam-split__section-title),
+  :global(.levels-exam-kwt-item) p,
+  :global(.levels-exam-kwt-item__sentence1),
+  :global(.levels-exam-inline-gap__check)
+),
+.directions:global(.levels-exam-split__enunciado) p,
+.directions:global(.levels-exam-split__enunciado) > :global(.levels-exam-split__section-title) {
+  font-family: inherit;
+}
+
+:global(body:not(.reading-night-mode)) .directions:global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) {
+  --exam-example-answer-background: #d5ecff;
+  background: #edf8ff;
+  border: 1px solid #c9e7fc;
+  border-radius: 1rem;
+  padding: clamp(.75rem, 2vw, 1rem);
+}
+
+:global(body:not(.reading-night-mode)) .directions:global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) > :global(.levels-exam-split__section-title) {
+  color: #174c78;
+  letter-spacing: .02em;
+}

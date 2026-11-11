@@ -94,6 +94,8 @@ import GuestPracticeSignupPrompt from '@/components/exam/GuestPracticeSignupProm
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import { landingFont } from '@/components/home/landing/landingFont';
+import part4Styles from './Part4Practice.module.css';
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import {
   runKeepPracticingSkillFlow,
@@ -2174,6 +2176,7 @@ function B2ReadingExamsPageInner() {
     phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
   const directionsLabel = isUoeExamInlinePart || isUoePart1 ? 'Instructions' : 'Directions';
 
+  const part4DirectionsClass = isKeyWordPart ? `${part4Styles.directions} ${landingFont.variable}` : '';
   const phoneInstructionsEl = useMemo(() => {
     if (!phoneSkillSteps) return null;
     const blocks = buildPracticeDirectionsBlocks({
@@ -2184,9 +2187,12 @@ function B2ReadingExamsPageInner() {
       stripExample: isUoeExamInlinePart,
     });
     if (!blocks.length) return null;
-    return <SkillPartInstructionsPanel label={directionsLabel} blocks={blocks} />;
+    return (
+      <SkillPartInstructionsPanel label={directionsLabel} blocks={blocks} className={part4DirectionsClass} />
+    );
   }, [
     phoneSkillSteps,
+    part4DirectionsClass,
     selectedPartContent.enunciado,
     selectedPartTitleParts.heading,
     selectedPartTitleParts.subtitle,
@@ -2382,6 +2388,7 @@ function B2ReadingExamsPageInner() {
                 }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={directionsLabel}
+                directionsClassName={part4DirectionsClass}
                 showDirections={true}
                 textLabel={isUoeExamInlinePart || isPart6GappedText ? null : 'Text'}
                 questionsLabel="Questions"
@@ -2487,17 +2494,19 @@ function B2ReadingExamsPageInner() {
                 }
                 split={isInlinePassagePart || isPart1McqCloze || isPart6GappedText ? true : 'auto'}
                 contentClassName={
-                  isUoeExamInlinePart
-                    ? 'levels-exam-uoe-inline'
-                    : isPart6GappedText
-                      ? 'levels-exam-part6-inline'
-                      : isPart1McqCloze
-                        ? 'levels-exam-mcq-cloze-inline'
-                        : isInlinePassagePart
-                          ? 'levels-exam-open-cloze-inline'
-                          : partNumberReading === 6 && part6SentencePoolBlock
-                            ? 'levels-exam-part6-split'
-                            : ''
+                  isKeyWordPart
+                    ? `${part4Styles.exercise} ${landingFont.variable}`
+                    : isUoeExamInlinePart
+                      ? 'levels-exam-uoe-inline'
+                      : isPart6GappedText
+                        ? 'levels-exam-part6-inline'
+                        : isPart1McqCloze
+                          ? 'levels-exam-mcq-cloze-inline'
+                          : isInlinePassagePart
+                            ? 'levels-exam-open-cloze-inline'
+                            : partNumberReading === 6 && part6SentencePoolBlock
+                              ? 'levels-exam-part6-split'
+                              : ''
                 }
                 showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze && !isPart6GappedText}
                 footer={practiceExplanationFooter}
