@@ -74,6 +74,7 @@ import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassa
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import B2ExamInlinePart6Passage from '@/components/b2/B2ExamInlinePart6Passage';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
+import { resolveCorrectAnswerRowIds } from '@/utils/levelsJustifyPayload';
 import {
   buildMcqGroupExplanationEntries,
   buildOpenClozeExplanationEntries,
@@ -863,6 +864,7 @@ function B2ReadingExamsPageInner() {
         try {
           const text = await postLevelsAnswerJustification({
             ...payload,
+            preguntaId: selectedQuestion?.preguntaId,
             contextSnippet: contextSnippetForAi,
           });
           setAiHintsByKey((prev) => ({
@@ -878,7 +880,7 @@ function B2ReadingExamsPageInner() {
         }
       })();
     },
-    [contextSnippetForAi],
+    [contextSnippetForAi, selectedQuestion?.preguntaId],
   );
 
   const getQuestionKey = (partId, questionNumber, fallbackKey = 'extra') =>
@@ -1559,6 +1561,8 @@ function B2ReadingExamsPageInner() {
         .join('\n');
       requestAiJustification(questionKey, {
         style: 'cloze',
+        questionNumber: group.questionNumber,
+        respuestaId: correctOpt?.id,
         partLabel: selectedPart?.nombre || '',
         questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
         userChoiceText: option.formattedText || option.respuesta || '',
@@ -1832,6 +1836,12 @@ function B2ReadingExamsPageInner() {
             : 'open-cloze';
       requestAiJustification(questionKey, {
         style,
+        questionNumber,
+        ...resolveCorrectAnswerRowIds(
+          selectedQuestion?.respuestasAbiertas,
+          selectedQuestion?.respuestas,
+          questionNumber,
+        ),
         partLabel: selectedPart?.nombre || '',
         questionLabel: `Question ${questionNumber}`,
         userChoiceText: openInputs[questionKey] || '',
@@ -1850,6 +1860,8 @@ function B2ReadingExamsPageInner() {
       requestAiJustification,
       selectedPart?.nombre,
       partNumberReading,
+      selectedQuestion?.respuestasAbiertas,
+      selectedQuestion?.respuestas,
     ],
   );
 
