@@ -1917,6 +1917,7 @@ function B2ReadingExamsPageInner() {
       if (!entries.length) return null;
       return (
         <SkillPartExplanationsPanel
+          ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
           entries={entries}
           aiHintsByKey={aiHintsByKey}
           onRequestExplanation={handlePart1ExplanationRequest}
@@ -1940,6 +1941,7 @@ function B2ReadingExamsPageInner() {
       if (!entries.length) return null;
       return (
         <SkillPartExplanationsPanel
+          ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
           entries={entries}
           aiHintsByKey={aiHintsByKey}
           onRequestExplanation={handleOpenGapExplanationRequest}
@@ -1960,6 +1962,7 @@ function B2ReadingExamsPageInner() {
       if (!entries.length) return null;
       return (
         <SkillPartExplanationsPanel
+          ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
           entries={entries}
           aiHintsByKey={aiHintsByKey}
           onRequestExplanation={handleOpenGapExplanationRequest}
@@ -1969,6 +1972,8 @@ function B2ReadingExamsPageInner() {
 
     return null;
   }, [
+    partNumberReading,
+    selectedPartContent.texto,
     hideInstantFeedback,
     isPart1McqCloze,
     isKeyWordPart,

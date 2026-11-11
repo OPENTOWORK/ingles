@@ -1,0 +1,110 @@
+.card {
+  background: var(--levels-surface, #fff);
+  border: 1px solid #c9e7fc;
+  border-radius: 1rem;
+  color: var(--levels-text, #142339);
+  font-family: var(--font-landing), sans-serif;
+  margin-block: .75rem;
+  padding: clamp(.875rem, 3vw, 1.25rem);
+  overflow-wrap: anywhere;
+}
+.heading {
+  font-size: 1rem;
+  font-weight: 750;
+  margin: 0 0 .625rem;
+}
+.answerLabel {
+  align-items: center;
+  color: #07579e;
+  display: inline-flex;
+  font-weight: 750;
+  gap: .5rem;
+  margin: 0 0 .625rem;
+}
+.tick {
+  align-items: center;
+  background: #0b63ad;
+  border-radius: 50%;
+  color: #fff;
+  display: inline-flex;
+  height: 1.35rem;
+  justify-content: center;
+  width: 1.35rem;
+}
+.context, .feedbackSection {
+  background: #edf8ff;
+  border-radius: .75rem;
+  color: #142339;
+  line-height: 1.55;
+  margin: 0 0 .625rem;
+  padding: .65rem .85rem;
+}
+.context p, .feedbackSection p {
+  margin: 0;
+}
+.context p + p {
+  margin-top: .35rem;
+}
+.keyword {
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.correct {
+  background: #d5ecff;
+  border-radius: .3rem;
+  color: #07579e;
+  padding: .05em .25em;
+}
+.feedbackSection h4 {
+  font-size: .875rem;
+  font-weight: 750;
+  margin: 0 0 .2rem;
+}
+.toggle {
+  background: transparent;
+  border: 0;
+  color: #07579e;
+  cursor: pointer;
+  font: inherit;
+  font-size: .875rem;
+  font-weight: 700;
+  min-height: 44px;
+  padding: 0;
+  text-align: left;
+}
+.toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.meta {
+  font-size: .875rem;
+  margin: .25rem 0;
+}
+.options {
+  display: grid;
+  gap: .5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 0 0 .625rem;
+  padding: 0;
+}
+.options li {
+  border-radius: .65rem;
+  padding: .55rem .75rem;
+}
+.distractor {
+  background: #edf8ff;
+  color: #142339;
+}
+.options .correct {
+  font-weight: 750;
+}
+@media (max-width: 640px) {
+  .options {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .options .distractor {
+    display: none;
+  }
+}
