@@ -16,9 +16,10 @@ export function parseFoundingSlotNumber(value) {
   return Number.isInteger(n) && n > 0 ? n : null;
 }
 
+/** A partir de la plaza 2, el alta recibe Plan Plus. La 1 sigue reservada. */
 export function shouldGrantFoundingPlus(slotNumber) {
   const slot = parseFoundingSlotNumber(slotNumber);
-  return Boolean(slot && slot >= FIRST_AUTO_SLOT && slot <= MAX_FOUNDING_SLOT);
+  return Boolean(slot && slot >= FIRST_AUTO_SLOT);
 }
 
 export function shouldAttemptFoundingPlus(createdAt) {

@@ -6,7 +6,7 @@ import { subscriptionGrantsAccess } from '@/lib/stripe/server';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { formatNombreVariable } from '@/lib/renderEmailTemplate';
-import { FIRST_AUTO_SLOT, MAX_FOUNDING_SLOT, PLUS_PLAN_SLUG } from '@/lib/foundingMemberPlus.rules';
+import { FIRST_AUTO_SLOT, PLUS_PLAN_SLUG } from '@/lib/foundingMemberPlus.rules';
 import { buildFoundingSurveyUrl, formatFoundingDeadline } from '@/lib/foundingSurveyLinks';
 import {
   FOUNDING_SURVEY_RESPONSE_DAYS,
@@ -111,7 +111,6 @@ async function sendDueSurveys(adminClient, { limit = 50 } = {}) {
     .from(GRANTS_TABLE)
     .select('user_id, slot_number, email, granted_at')
     .gte('slot_number', FIRST_AUTO_SLOT)
-    .lte('slot_number', MAX_FOUNDING_SLOT)
     .order('slot_number', { ascending: true });
 
   if (error) {

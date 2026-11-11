@@ -1,11 +1,12 @@
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
-import { ADMIN_EMAIL, isAdminRole, normalizeEmail } from '@/utils/authRoles';
+import { loadRegistrationSources } from '@/lib/marketingRegistrationAttribution';
+import { listAdminAndMarketingEmails } from '@/lib/staffNoticeRecipients';
+import { normalizeEmail } from '@/utils/authRoles';
 
 const LOG_TABLE = 'soporte_correos_log';
 const NOTICE_SLUG = 'admin_registration_notice';
 const USERS_TABLE = 'Usuarios_y_Perfil_users';
-const ROLES_TABLE = 'Usuarios_y_Perfil_roles';
 /** Ventana para avisar un alta de Google que no pasó por /api/auth/register. */
 const RECENT_SIGNUP_MS = 6 * 60 * 60 * 1000;
 
@@ -26,6 +27,12 @@ export function isRecentSignup(createdAt, now = Date.now()) {
   return age >= 0 && age <= RECENT_SIGNUP_MS;
 }
 
+function appOrigin() {
+  return String(
+    process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://www.dralo.es',
+  ).replace(/\/$/, '');
+}
+
 async function noticeAlreadySent(adminClient, registrantEmail) {
   try {
     const { data, error } = await adminClient
@@ -33,6 +40,7 @@ async function noticeAlreadySent(adminClient, registrantEmail) {
       .select('id')
       .eq('slug', NOTICE_SLUG)
       .eq('destinatario', registrantEmail)
+      .eq('canal', 'marker')
       .eq('ok', true)
       .limit(1)
       .maybeSingle();
@@ -49,40 +57,118 @@ async function noticeAlreadySent(adminClient, registrantEmail) {
   }
 }
 
-async function listAdminEmails(adminClient) {
-  const emails = new Set([normalizeEmail(ADMIN_EMAIL)].filter(Boolean));
-
+async function claimNotice(adminClient, registrantEmail) {
   try {
-    const { data: roles } = await adminClient.from(ROLES_TABLE).select('id, nombre');
-    const adminRoleIds = (roles || [])
-      .filter((role) => isAdminRole(role?.nombre))
-      .map((role) => role.id)
-      .filter(Boolean);
-
-    if (adminRoleIds.length) {
-      const { data: users } = await adminClient
-        .from(USERS_TABLE)
-        .select('email, activo')
-        .in('rol_id', adminRoleIds);
-
-      for (const user of users || []) {
-        if (user?.activo === false) continue;
-        const email = normalizeEmail(user?.email || '');
-        if (email) emails.add(email);
-      }
+    const { data, error } = await adminClient
+      .from(LOG_TABLE)
+      .insert({
+        slug: NOTICE_SLUG,
+        destinatario: registrantEmail,
+        trigger_event: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,
+        canal: 'marker',
+        ok: true,
+        error_msg: null,
+      })
+      .select('id')
+      .single();
+    if (error || !data?.id) {
+      console.error('[notifyAdminsOfRegistration] marker:', error);
+      return null;
     }
+    return data.id;
   } catch (err) {
-    console.error('[notifyAdminsOfRegistration] admin recipients:', err);
+    console.error('[notifyAdminsOfRegistration] marker:', err);
+    return null;
+  }
+}
+
+async function ownsNoticeClaim(adminClient, registrantEmail, claimId) {
+  try {
+    const { data, error } = await adminClient
+      .from(LOG_TABLE)
+      .select('id')
+      .eq('slug', NOTICE_SLUG)
+      .eq('destinatario', registrantEmail)
+      .eq('canal', 'marker')
+      .eq('ok', true)
+      .order('enviado_en', { ascending: true })
+      .limit(1)
+      .maybeSingle();
+    if (error || !data?.id) return true;
+    return data.id === claimId;
+  } catch {
+    return true;
+  }
+}
+
+async function registrationNoticeVariables(adminClient, { userId, email, nombre, createdAt }) {
+  let confirmed = false;
+  let signedUpAt = createdAt || null;
+  let id = userId || null;
+
+  if (!id) {
+    const { data: profile } = await adminClient
+      .from(USERS_TABLE)
+      .select('id, creado_en')
+      .eq('email', email)
+      .maybeSingle();
+    id = profile?.id || null;
+    signedUpAt = signedUpAt || profile?.creado_en || null;
   }
 
-  return [...emails];
+  if (id) {
+    try {
+      const { data } = await adminClient.auth.admin.getUserById(id);
+      confirmed = Boolean(data?.user?.email_confirmed_at);
+      signedUpAt = signedUpAt || data?.user?.created_at || null;
+    } catch (err) {
+      console.error('[notifyAdminsOfRegistration] auth user:', err);
+    }
+  }
+
+  let answered = false;
+  if (id) {
+    const { data: survey, error } = await adminClient
+      .from('founding_member_encuestas')
+      .select('respondida_en')
+      .eq('user_id', id)
+      .maybeSingle();
+    if (error && !isMissingTableError(error)) {
+      console.error('[notifyAdminsOfRegistration] survey:', error);
+    }
+    answered = Boolean(survey?.respondida_en);
+  }
+
+  let origen = 'No indicado';
+  if (id) {
+    try {
+      const sources = await loadRegistrationSources(adminClient, [{ id, createdAt: signedUpAt }]);
+      origen = sources.get(id) || 'No indicado';
+    } catch (err) {
+      console.error('[notifyAdminsOfRegistration] source:', err);
+    }
+  }
+
+  const fichaUrl = id ? `${appOrigin()}/admin/usuarios/${id}/` : appOrigin();
+
+  return {
+    nombre: String(nombre || '').trim() || 'No indicado',
+    email,
+    correo_confirmado: confirmed ? 'Sí' : 'No',
+    formulario: answered ? 'Respondido' : 'Todavía no',
+    origen,
+    action_url: fichaUrl,
+  };
 }
 
 /**
- * Avisa a los administradores una sola vez por cada cuenta nueva.
+ * Avisa a administración y a marketing una sola vez por cada cuenta nueva.
  * No lanza: un fallo de correo no debe impedir el registro.
  */
-export async function notifyAdminsOfRegistration(adminClient, { email, nombre, createdAt } = {}) {
+export async function notifyAdminsOfRegistration(
+  adminClient,
+  { userId, email, nombre, createdAt } = {},
+) {
   const registrantEmail = normalizeEmail(email || '');
   if (!adminClient || !registrantEmail) {
     return { sent: false, skipped: true, reason: 'missing_params' };
@@ -96,45 +182,41 @@ export async function notifyAdminsOfRegistration(adminClient, { email, nombre, c
     return { sent: false, skipped: true, reason: 'already_sent' };
   }
 
-  const displayName = String(nombre || '').trim() || 'No indicado';
-  const recipients = (await listAdminEmails(adminClient)).filter(
-    (adminEmail) => adminEmail !== registrantEmail,
+  const claimId = await claimNotice(adminClient, registrantEmail);
+  if (!claimId) {
+    return { sent: false, skipped: true, reason: 'marker_failed' };
+  }
+  if (!(await ownsNoticeClaim(adminClient, registrantEmail, claimId))) {
+    return { sent: false, skipped: true, reason: 'already_sent' };
+  }
+
+  const variables = await registrationNoticeVariables(adminClient, {
+    userId,
+    email: registrantEmail,
+    nombre,
+    createdAt,
+  });
+  const recipients = (await listAdminAndMarketingEmails(adminClient)).filter(
+    (staffEmail) => staffEmail !== registrantEmail,
   );
 
   if (!recipients.length) {
-    return { sent: false, skipped: true, reason: 'no_admins' };
+    return { sent: false, skipped: true, reason: 'no_recipients' };
   }
 
   let anySent = false;
-  for (const adminEmail of recipients) {
+  for (const [index, staffEmail] of recipients.entries()) {
     try {
       const mail = await dispatchAutomatedEmail({
         adminClient,
         triggerEvent: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,
-        to: adminEmail,
-        variables: {
-          email: registrantEmail,
-          nombre: displayName,
-        },
+        to: staffEmail,
+        syncTemplates: index === 0,
+        variables,
       });
       if (mail?.sent || mail?.queued) anySent = true;
     } catch (err) {
-      console.error('[notifyAdminsOfRegistration] send:', adminEmail, err);
-    }
-  }
-
-  if (anySent) {
-    try {
-      await adminClient.from(LOG_TABLE).insert({
-        slug: NOTICE_SLUG,
-        destinatario: registrantEmail,
-        trigger_event: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,
-        canal: 'marker',
-        ok: true,
-        error_msg: null,
-      });
-    } catch (err) {
-      console.error('[notifyAdminsOfRegistration] marker:', err);
+      console.error('[notifyAdminsOfRegistration] send:', staffEmail, err);
     }
   }
 

@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { normalizeAdminAssignablePlanSlug } from '@/data/financialPlanConfig';
-import { FIRST_AUTO_SLOT, MAX_FOUNDING_SLOT } from '@/lib/foundingMemberPlus.rules';
+import { FIRST_AUTO_SLOT } from '@/lib/foundingMemberPlus.rules';
 import { subscriptionGrantsAccess } from '@/lib/stripe/server';
 import {
   findSubscriptionByUserId,
@@ -39,7 +39,7 @@ async function releaseFoundingPlusLock(db, userId) {
   }
 
   const slot = Number(grant?.slot_number);
-  if (!Number.isInteger(slot) || slot < FIRST_AUTO_SLOT || slot > MAX_FOUNDING_SLOT) {
+  if (!Number.isInteger(slot) || slot < FIRST_AUTO_SLOT) {
     return;
   }
 

@@ -18,8 +18,8 @@ describe('founding member plus slots', () => {
     expect(shouldGrantFoundingPlus('2')).toBe(true);
   });
 
-  it('stops after slot 50', () => {
-    expect(shouldGrantFoundingPlus(51)).toBe(false);
+  it('keeps granting Plan Plus after the first 50 seats', () => {
+    expect(shouldGrantFoundingPlus(51)).toBe(true);
     expect(shouldGrantFoundingPlus(null)).toBe(false);
   });
 

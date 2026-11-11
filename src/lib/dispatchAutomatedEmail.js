@@ -31,6 +31,8 @@ const CTA_LABEL_BY_TRIGGER = {
   founding_member_survey_revoked: 'Ver los planes',
   practice_reminder: 'Volver a practicar',
   weekly_tuesday_challenge: 'Acepto el reto',
+  admin_review_notice: 'Ver reseñas',
+  admin_registration_notice: 'Ver ficha',
 };
 
 const TABLE = 'soporte_correos_automaticos';

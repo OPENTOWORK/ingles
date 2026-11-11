@@ -121,6 +121,7 @@ export async function POST(req) {
       const welcomeMail = await maybeSendWelcomeRegistrationEmail(adminClient, user);
       try {
         await notifyAdminsOfRegistration(adminClient, {
+          userId: user.id,
           email: user.email,
           nombre:
             user.user_metadata?.name ||
@@ -168,14 +169,15 @@ export async function POST(req) {
     if (user.email) {
       await maybeSendWelcomeRegistrationEmail(adminClient, user);
       try {
-        await notifyAdminsOfRegistration(adminClient, {
-          email: user.email,
-          nombre:
-            user.user_metadata?.name ||
-            user.user_metadata?.full_name ||
-            user.user_metadata?.nombre ||
-            '',
-        });
+      await notifyAdminsOfRegistration(adminClient, {
+        userId: user.id,
+        email: user.email,
+        nombre:
+          user.user_metadata?.name ||
+          user.user_metadata?.full_name ||
+          user.user_metadata?.nombre ||
+          '',
+      });
       } catch (err) {
         console.error('api/auth/ensure-profile admin notice:', err);
       }

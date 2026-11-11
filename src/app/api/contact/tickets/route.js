@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { SUPPORT_TICKET_INBOX_EMAIL } from '@/config/support';
+import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
+import { notifyAdminsAndMarketing } from '@/lib/notifyAdminsAndMarketing';
 import { sendSupportTicketEmail } from '@/lib/sendSupportTicketEmail';
 import { sendSupportTicketAckEmail } from '@/lib/sendSupportTicketAckEmail';
 import { getUserRoleNameServer, isStudentRole } from '@/lib/userRoleServer';
@@ -145,6 +147,22 @@ export async function POST(req) {
         ackEmailWarning = ack.error || 'Could not send the confirmation email.';
         console.error('[contact/tickets] student ack email failed', ack.error);
       }
+    }
+
+    try {
+      await notifyAdminsAndMarketing({
+        adminClient: supabaseServiceRoleKey?.trim() ? dbClient : null,
+        triggerEvent: AUTOMATED_EMAIL_TRIGGERS.ADMIN_SUPPORT_TICKET_NOTICE,
+        replyTo: email,
+        variables: {
+          nombre: name,
+          email,
+          ticket_subject: subject,
+          message,
+        },
+      });
+    } catch (noticeError) {
+      console.error('[contact/tickets] staff notice failed', noticeError);
     }
 
     return NextResponse.json({

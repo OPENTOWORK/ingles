@@ -46,8 +46,16 @@ export async function syncAutomatedEmailSystemTemplates(db) {
     weekly &&
     storedWeekly &&
     String(storedWeekly.cuerpo || '').startsWith('Preheader: Elige una opción');
+  const registration = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.find(
+    (t) => t.slug === 'admin_registration_notice',
+  );
+  const storedRegistration = bySlug.get('admin_registration_notice');
+  const shouldRefreshRegistration =
+    registration &&
+    storedRegistration &&
+    !String(storedRegistration.cuerpo || '').includes('{{origen}}');
 
-  if (!missing.length && !shouldRefreshWelcome && !shouldRefreshWeekly) {
+  if (!missing.length && !shouldRefreshWelcome && !shouldRefreshWeekly && !shouldRefreshRegistration) {
     return { inserted: [], updated: [] };
   }
 
@@ -78,6 +86,16 @@ export async function syncAutomatedEmailSystemTemplates(db) {
       .eq('slug', slug);
     if (updateError) throw updateError;
     refreshed.push('weekly_tuesday_challenge');
+  }
+
+  if (shouldRefreshRegistration) {
+    const { slug, ...fields } = templateRow(registration);
+    const { error: updateError } = await db
+      .from('soporte_correos_automaticos')
+      .update(fields)
+      .eq('slug', slug);
+    if (updateError) throw updateError;
+    refreshed.push('admin_registration_notice');
   }
 
   return {

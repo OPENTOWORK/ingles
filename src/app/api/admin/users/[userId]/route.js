@@ -242,7 +242,7 @@ export async function DELETE(req, { params }) {
 
 export async function GET(req, { params }) {
   try {
-    const auth = await authenticateAdminRequest(req, ['admin']);
+    const auth = await authenticateAdminRequest(req, ['admin', 'planMarketing']);
     if (auth.error) {
       return NextResponse.json({ error: auth.error }, { status: auth.status });
     }

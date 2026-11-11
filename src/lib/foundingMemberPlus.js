@@ -28,7 +28,7 @@ function isMissingTableError(error) {
 }
 
 /**
- * Reclama cupo de founding member (2–50) y, si aplica, asigna Plan Plus + correo.
+ * Reclama el siguiente cupo y, si es el 2 o posterior, asigna Plan Plus y el correo.
  * El cupo 1 está reservado manualmente (Belén).
  * Con `sendEmail: false` reserva cupo y plan; el aviso sale en la siguiente
  * llamada que no lo desactive.
@@ -227,7 +227,6 @@ async function claimFoundingMemberSlot(adminClient, userId, email) {
   if (maxError && !isMissingTableError(maxError)) throw maxError;
 
   const nextSlot = (parseFoundingSlotNumber(maxRow?.slot_number) || 0) + 1;
-  if (nextSlot > MAX_FOUNDING_SLOT) return null;
 
   const { data: inserted, error: insertError } = await adminClient
     .from(FOUNDING_MEMBER_TABLE)

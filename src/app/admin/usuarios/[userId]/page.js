@@ -29,6 +29,7 @@ export default function AdminStudentProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [data, setData] = useState(null);
+  const [homeHref, setHomeHref] = useState('/admin');
 
   const loadStudent = useCallback(async () => {
     if (!userId) return;
@@ -40,10 +41,15 @@ export default function AdminStudentProfilePage() {
         return;
       }
       const role = await getRoleNameByUserId(user.id, user.email);
-      if (!(await mayEnterStaffModule(role, ['admin', 'administracion']))) {
+      const [canAdmin, canMarketing] = await Promise.all([
+        mayEnterStaffModule(role, ['admin', 'administracion']),
+        mayEnterStaffModule(role, 'planMarketing'),
+      ]);
+      if (!canAdmin && !canMarketing) {
         router.push('/perfil');
         return;
       }
+      setHomeHref(canAdmin ? '/admin' : '/admin/marketing');
 
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData?.session?.access_token;
@@ -82,8 +88,8 @@ export default function AdminStudentProfilePage() {
     return (
       <div className="max-w-4xl mx-auto px-4 py-10">
         <p className="text-red-600 mb-4">{error || 'Usuario no encontrado.'}</p>
-        <Link href="/admin" className="text-indigo-700 hover:underline">
-          ← Volver al panel de administración
+        <Link href={homeHref} className="text-indigo-700 hover:underline">
+          ← {homeHref === '/admin' ? 'Volver al panel de administración' : 'Volver a marketing'}
         </Link>
       </div>
     );
@@ -96,10 +102,10 @@ export default function AdminStudentProfilePage() {
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
       <div className="flex flex-wrap items-center gap-4">
         <Link
-          href="/admin"
+          href={homeHref}
           className="text-sm text-indigo-700 hover:text-indigo-900 hover:underline"
         >
-          ← Panel de administración
+          ← {homeHref === '/admin' ? 'Panel de administración' : 'Marketing'}
         </Link>
       </div>
 

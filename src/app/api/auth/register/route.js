@@ -370,7 +370,7 @@ export async function POST(req) {
           SIGNUP_EMAIL_TIMEOUT_MS,
         ),
         withTimeout(
-          notifyAdminsOfRegistration(adminClient, { email, nombre }).catch((err) => {
+          notifyAdminsOfRegistration(adminClient, { userId, email, nombre }).catch((err) => {
             console.error('api/auth/register admin notice:', err);
             return null;
           }),

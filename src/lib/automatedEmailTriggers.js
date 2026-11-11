@@ -19,6 +19,8 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   PRACTICE_REMINDER: 'practice_reminder',
   WEEKLY_TUESDAY_CHALLENGE: 'weekly_tuesday_challenge',
   ADMIN_REGISTRATION_NOTICE: 'admin_registration_notice',
+  ADMIN_REVIEW_NOTICE: 'admin_review_notice',
+  ADMIN_SUPPORT_TICKET_NOTICE: 'admin_support_ticket_notice',
 };
 
 export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
@@ -122,8 +124,19 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,
-    label: 'Aviso a administración: nuevo registro',
-    description: 'Se envía a los administradores cada vez que alguien crea una cuenta.',
+    label: 'Aviso a admin y marketing: nuevo registro',
+    description:
+      'Se envía a administración y a marketing cada vez que alguien crea una cuenta. Incluye si confirmó el correo, si respondió el formulario, de dónde llegó y el enlace a su ficha.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REVIEW_NOTICE,
+    label: 'Aviso a admin y marketing: nueva reseña',
+    description: 'Se envía a administración y a marketing cuando un usuario publica una reseña.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_SUPPORT_TICKET_NOTICE,
+    label: 'Aviso a admin y marketing: ticket de soporte',
+    description: 'Se envía a administración y a marketing cuando un usuario abre un ticket.',
   },
 ];
 

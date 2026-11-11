@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
+import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
+import { notifyAdminsAndMarketing } from '@/lib/notifyAdminsAndMarketing';
 import {
   checkSiteReview,
   createSiteReview,
   deleteOwnSiteReview,
   listPublishedSiteReviews,
+  publicSiteOrigin,
   updateOwnSiteReview,
 } from '@/lib/siteReviews';
 
@@ -44,6 +47,23 @@ export async function POST(req) {
   if (!result.ok) {
     return NextResponse.json({ error: result.error }, { status: result.status || 500 });
   }
+
+  try {
+    await notifyAdminsAndMarketing({
+      triggerEvent: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REVIEW_NOTICE,
+      replyTo: user.email,
+      variables: {
+        nombre: result.review.name,
+        email: user.email || '',
+        estrellas: `${result.review.stars} de 5`,
+        resena: result.review.text,
+        action_url: `${publicSiteOrigin()}/soporte/correos/`,
+      },
+    });
+  } catch (err) {
+    console.error('[resenas] aviso a staff', err);
+  }
+
   return NextResponse.json({ ok: true, review: result.review });
 }
 
