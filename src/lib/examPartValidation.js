@@ -1599,19 +1599,19 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
   const requireNumberRange = (start, end) => {
     const expectedCount = end - start + 1;
     if (questions.length !== expectedCount) {
-      errors.push(\`B1 Reading Part \${part} must have exactly \${expectedCount} questions (got \${questions.length}).\`);
+      errors.push(`B1 Reading Part ${part} must have exactly ${expectedCount} questions (got ${questions.length}).`);
     }
     const seen = new Set();
     questions.forEach((q, i) => {
       const n = Number(q?.number);
       if (!Number.isInteger(n) || n < start || n > end) {
-        errors.push(\`B1 Reading Part \${part} question \${q?.number ?? i + 1}: number must be \${start}–\${end}.\`);
+        errors.push(`B1 Reading Part ${part} question ${q?.number ?? i + 1}: number must be ${start}–${end}.`);
       } else if (seen.has(n)) {
-        errors.push(\`B1 Reading Part \${part}: duplicate question number \${n}.\`);
+        errors.push(`B1 Reading Part ${part}: duplicate question number ${n}.`);
       } else seen.add(n);
     });
     for (let n = start; n <= end; n += 1) {
-      if (!seen.has(n)) errors.push(\`B1 Reading Part \${part} is missing question \${n}.\`);
+      if (!seen.has(n)) errors.push(`B1 Reading Part ${part} is missing question ${n}.`);
     }
   };
 
@@ -1620,17 +1620,17 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
       const n = Number(q?.number ?? i + 1);
       const opts = asArray(q?.options).map((o) => String(o ?? '').trim());
       if (opts.length !== expectedOptions) {
-        errors.push(\`B1 Reading Part \${part} question \${n}: needs exactly \${expectedOptions} options (got \${opts.length}).\`);
+        errors.push(`B1 Reading Part ${part} question ${n}: needs exactly ${expectedOptions} options (got ${opts.length}).`);
       }
       opts.forEach((opt, oi) => {
         const expected = letters[oi];
-        if (expected && !new RegExp(\`^\${expected}\\\\)\\\\s*.+\`, 'i').test(opt)) {
-          errors.push(\`B1 Reading Part \${part} question \${n}: option \${oi + 1} must be labelled \${expected}) and contain text.\`);
+        if (expected && !new RegExp(`^${expected}\\)\\s*.+`, 'i').test(opt)) {
+          errors.push(`B1 Reading Part ${part} question ${n}: option ${oi + 1} must be labelled ${expected}) and contain text.`);
         }
       });
       const a = getAnswer(q, i);
-      if (!new RegExp(\`^[\${letters.join('')}]$\`).test(a)) {
-        errors.push(\`B1 Reading Part \${part} question \${n}: answer must be one of \${letters.join('/')}. \`);
+      if (!new RegExp(`^[${letters.join('')}]$`).test(a)) {
+        errors.push(`B1 Reading Part ${part} question ${n}: answer must be one of ${letters.join('/')}. `);
       }
     });
   };
@@ -1640,10 +1640,10 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     validateMcq(['A','B','C'], 3);
     questions.forEach((q, i) => {
       if (!hasText(q?.text) && !hasText(q?.message) && !hasText(q?.notice)) {
-        errors.push(\`B1 Reading Part 1 question \${q?.number ?? i + 1}: missing short real-world text.\`);
+        errors.push(`B1 Reading Part 1 question ${q?.number ?? i + 1}: missing short real-world text.`);
       }
       if (!hasText(q?.prompt) && !hasText(q?.question)) {
-        errors.push(\`B1 Reading Part 1 question \${q?.number ?? i + 1}: missing question/prompt.\`);
+        errors.push(`B1 Reading Part 1 question ${q?.number ?? i + 1}: missing question/prompt.`);
       }
     });
     return;
@@ -1652,19 +1652,19 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
   if (part === 2) {
     requireNumberRange(6, 10);
     const sections = asArray(gen.sections);
-    if (sections.length !== 8) errors.push(\`B1 Reading Part 2 needs exactly 8 texts A–H (got \${sections.length}).\`);
+    if (sections.length !== 8) errors.push(`B1 Reading Part 2 needs exactly 8 texts A–H (got ${sections.length}).`);
     const expected = ['A','B','C','D','E','F','G','H'];
     sections.forEach((sec, i) => {
       const letter = String(sec?.letter ?? '').trim().toUpperCase();
-      if (letter !== expected[i]) errors.push(\`B1 Reading Part 2 text \${i + 1} must be labelled \${expected[i]}.\`);
-      if (!hasText(sec?.text)) errors.push(\`B1 Reading Part 2 text \${expected[i]} is empty.\`);
+      if (letter !== expected[i]) errors.push(`B1 Reading Part 2 text ${i + 1} must be labelled ${expected[i]}.`);
+      if (!hasText(sec?.text)) errors.push(`B1 Reading Part 2 text ${expected[i]} is empty.`);
     });
     questions.forEach((q, i) => {
       if (!hasText(q?.prompt) && !hasText(q?.description)) {
-        errors.push(\`B1 Reading Part 2 question \${q?.number ?? i + 6}: missing person description.\`);
+        errors.push(`B1 Reading Part 2 question ${q?.number ?? i + 6}: missing person description.`);
       }
       const a = getAnswer(q, i);
-      if (!/^[A-H]$/.test(a)) errors.push(\`B1 Reading Part 2 question \${q?.number ?? i + 6}: answer must be A–H.\`);
+      if (!/^[A-H]$/.test(a)) errors.push(`B1 Reading Part 2 question ${q?.number ?? i + 6}: answer must be A–H.`);
     });
     if (new Set(questions.map((q,i)=>getAnswer(q,i)).filter((a)=>/^[A-H]$/.test(a))).size !== questions.length) {
       warnings.push('B1 Reading Part 2 normally uses a different text for each person; check duplicate answer letters carefully.');
@@ -1686,18 +1686,18 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     if (!hasText(gen.passage)) errors.push('B1 Reading Part 4 must include a gapped passage.');
     const gapNumbers = [...String(gen.passage || '').matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
     for (let n = 16; n <= 20; n += 1) {
-      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(\`B1 Reading Part 4 passage must contain gap (\${n}) exactly once.\`);
+      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 4 passage must contain gap (${n}) exactly once.`);
     }
     const pool = asArray(gen.sentencePool);
-    if (pool.length !== 8) errors.push(\`B1 Reading Part 4 needs exactly 8 candidate sentences A–H (got \${pool.length}).\`);
+    if (pool.length !== 8) errors.push(`B1 Reading Part 4 needs exactly 8 candidate sentences A–H (got ${pool.length}).`);
     const poolLetters = pool.map((x) => String(x ?? '').trim().match(/^([A-H])\)/i)?.[1]?.toUpperCase());
     ['A','B','C','D','E','F','G','H'].forEach((letter, i) => {
-      if (poolLetters[i] !== letter) errors.push(\`B1 Reading Part 4 sentencePool item \${i + 1} must be labelled \${letter}).\`);
+      if (poolLetters[i] !== letter) errors.push(`B1 Reading Part 4 sentencePool item ${i + 1} must be labelled ${letter}).`);
     });
     const used = [];
     questions.forEach((q, i) => {
       const a = getAnswer(q, i);
-      if (!/^[A-H]$/.test(a)) errors.push(\`B1 Reading Part 4 question \${q?.number ?? i + 16}: answer must be A–H.\`);
+      if (!/^[A-H]$/.test(a)) errors.push(`B1 Reading Part 4 question ${q?.number ?? i + 16}: answer must be A–H.`);
       else used.push(a);
     });
     if (new Set(used).size !== used.length) errors.push('B1 Reading Part 4 must use five different answer letters.');
@@ -1713,7 +1713,7 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     validateMcq(['A','B','C','D'], 4);
     const gapNumbers = [...String(gen.passage || '').matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
     for (let n = 21; n <= 26; n += 1) {
-      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(\`B1 Reading Part 5 passage must contain gap (\${n}) exactly once.\`);
+      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 5 passage must contain gap (${n}) exactly once.`);
     }
     if (gapNumbers.includes(0)) errors.push('B1 Reading Part 5 has no example gap (0).');
     return;
@@ -1724,20 +1724,20 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     if (!hasText(gen.passage)) errors.push('B1 Reading Part 6 must include a short open-cloze passage.');
     const gapNumbers = [...String(gen.passage || '').matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
     for (let n = 27; n <= 32; n += 1) {
-      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(\`B1 Reading Part 6 passage must contain gap (\${n}) exactly once.\`);
+      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 6 passage must contain gap (${n}) exactly once.`);
     }
     if (gapNumbers.includes(0)) errors.push('B1 Reading Part 6 has no example gap (0).');
     questions.forEach((q, i) => {
-      if (asArray(q?.options).length) errors.push(\`B1 Reading Part 6 question \${q?.number ?? i + 27}: open cloze must not have options.\`);
+      if (asArray(q?.options).length) errors.push(`B1 Reading Part 6 question ${q?.number ?? i + 27}: open cloze must not have options.`);
       const raw = String(
         answerById.get(String(q?.id ?? ''))?.answer ??
         answerByNumber.get(Number(q?.number))?.answer ??
         answers[i]?.answer ??
         '',
       ).trim();
-      if (!raw) errors.push(\`B1 Reading Part 6 question \${q?.number ?? i + 27}: missing answer.\`);
+      if (!raw) errors.push(`B1 Reading Part 6 question ${q?.number ?? i + 27}: missing answer.`);
       else if (/\s/.test(raw) || !/^[A-Za-z'’-]+$/.test(raw)) {
-        errors.push(\`B1 Reading Part 6 question \${q?.number ?? i + 27}: answer must be exactly one word.\`);
+        errors.push(`B1 Reading Part 6 question ${q?.number ?? i + 27}: answer must be exactly one word.`);
       }
     });
   }
