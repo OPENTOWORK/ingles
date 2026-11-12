@@ -447,7 +447,16 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
   // RUOE B2 (partes 1–7) falla a menudo por límites de palabras / gaps: más reintentos + repair.
   const isB2Ruoe = slug === 'b2' && partDef.partNumber >= 1 && partDef.partNumber <= 7;
   const isB1Reading = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
-  const maxAttempts = partDef.mode === 'listening' ? 5 : isB2Ruoe ? 8 : isB1Reading ? 5 : 3;
+  const maxAttempts =
+    partDef.mode === 'listening'
+      ? 5
+      : isB2Ruoe
+        ? 8
+        : isB1Reading && [4, 5, 6].includes(partDef.partNumber)
+          ? 8
+          : isB1Reading
+            ? 5
+            : 3;
 
   const baseUserPrompt =
     options.userPrompt ||
@@ -559,10 +568,13 @@ async function generatePartJson(levelLabel, partDef, options) {
   const readingHeavy =
     partDef.mode === 'reading' ||
     (partDef.partNumber >= 5 && partDef.partNumber <= 7);
+  const b1PrecisionPart =
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    [4, 5, 6].includes(Number(partDef.partNumber));
   const { text } = await cambridgeExamGenerationCompletion({
     system,
     messages: [{ role: 'user', content: prompt }],
-    temperature: 0.9,
+    temperature: b1PrecisionPart ? 0.5 : 0.9,
     max_tokens: readingHeavy ? 12288 : 8192,
     response_format: { type: 'json_object' },
   });
