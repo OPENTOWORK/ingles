@@ -770,6 +770,10 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   }
 
   const slug = String(levelSlug || '').toLowerCase();
+  // Never bypass structural validation for B1/B2 reading exam parts.
+  if (persistDespiteValidation && (slug === 'b1' || slug === 'b2') && partNumber >= 1 && partNumber <= (slug === 'b1' ? 6 : 7)) {
+    throw new Error('Validation bypass is disabled for B1/B2 Reading and Use of English.');
+  }
   const levelLabel = getLevelExamLabel(slug);
   const partDef = getLevelExamPartDef(slug, partNumber);
   if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
@@ -865,7 +869,7 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     examNumber: examSlot,
     partNumber: partDef.partNumber,
     durationMs: Date.now() - t0,
-    validationOk: true,
+    validationOk: validation.ok,
     saved: true,
   });
 
