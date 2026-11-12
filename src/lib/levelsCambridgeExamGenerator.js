@@ -792,7 +792,12 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     };
   }
 
-  const theme = topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  const isB1Reading = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
+  const varietyApi = isB1Reading ? await import('@/lib/b1ReadingVarietyHistory') : null;
+  const chosenVariety = isB1Reading
+    ? await varietyApi.chooseB1ReadingVariety(adminDb, { examSlot, partNumber: partDef.partNumber, themes: EXAM_THEMES })
+    : null;
+  const theme = chosenVariety?.topic || topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
   const parts = getLevelExamParts(slug) || [];
   const seedBase = varietySeed ?? Date.now() + examSlot * 1000;
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
@@ -863,6 +868,12 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     partDef,
     skipAudio,
   });
+
+  if (chosenVariety) {
+    await varietyApi.recordB1ReadingVariety(adminDb, {
+      examSlot, partNumber: partDef.partNumber, chosen: chosenVariety,
+    });
+  }
 
   logExamGeneration('part_saved', {
     level: slug,
