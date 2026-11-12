@@ -53,6 +53,9 @@ function poolView(generated) {
 
 const NON_BRITISH_B1_PATTERNS = [
   { re: /\bcustomiz(e|es|ed|ing|ation|ations)\b/i, label: 'customise/customisation' },
+  { re: /\bapologiz(e|es|ed|ing)\b/i, label: 'apologise' },
+  { re: /\b(loyalty|training|education|school|study) program\b/i, label: 'programme' },
+  { re: /\b(?:to|can|could|should|would|will|may|might|must) practice\b/i, label: 'practise (verb)' },
   { re: /\bcolors?\b/i, label: 'colour' },
   { re: /\bbehaviors?\b/i, label: 'behaviour' },
   { re: /\bcenters?\b/i, label: 'centre' },
@@ -170,8 +173,9 @@ async function reviewPart5(generated) {
 Solve all six multiple-choice cloze gaps. This task tests mainly vocabulary, with some grammar/complementation allowed.
 Flag ambiguity if two options are natural and defensible in context. Flag distractors only when they are obviously unusable rather than plausibly tempting. Flag a gap that is really a Part 6-style pure grammar gap if that pattern dominates the task.
 CRITICAL NATURALNESS CHECK: mentally insert the selected answer into the complete sentence and judge the resulting British English collocation/verb pattern. If the keyed/best completion is unidiomatic, semantically wrong, or not a normal B1 collocation (for example an impossible verb+noun combination), report it in unnaturalItems. Do not pass an item merely because all four options are bad.
+For EVERY gap, substitute all four options into the full sentence. If any non-key option also creates natural, grammatical British English with a defensible meaning in context, report it in alternativeFits. Do not rely only on your first-choice answer.
 Return ONLY JSON:
-{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"unnaturalItems":[{"number":22,"completion":"...","reason":"unidiomatic collocation"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.`,
+{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"alternativeFits":[{"number":22,"letters":["A","B"],"reason":"both produce natural completions"}],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"unnaturalItems":[{"number":22,"completion":"...","reason":"unidiomatic collocation"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nOPTIONS:\n${questionsView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
 }
@@ -182,8 +186,9 @@ async function reviewPart6(generated) {
 Each of gaps 27-32 must take exactly ONE word. Solve every gap independently.
 For each gap actively search for alternative ordinary B1 words that would also make the completed text grammatical, natural and equivalent in meaning. Record all fully defensible alternatives.
 The task should primarily test grammatical structures, with some phrasal verbs/common fixed phrases. Do not treat a merely possible but meaning-changing word as an acceptable alternative.
+After choosing the words, reconstruct the COMPLETE text with all six answers inserted and read it sentence by sentence. Report any completed sentence that is ungrammatical, semantically contradictory or unnatural British English in completedTextIssues.
 Return ONLY JSON:
-{"answers":[{"number":27,"word":"each","alternatives":[]}],"ambiguousItems":[{"number":28,"words":["which","that"],"reason":"both are standard defining relatives here"}],"vocabularyStyleItems":[{"number":30,"reason":"requires guessing a content noun"}],"issues":[],"verdict":"pass|revise"}.`,
+{"answers":[{"number":27,"word":"each","alternatives":[]}],"ambiguousItems":[{"number":28,"words":["which","that"],"reason":"both are standard defining relatives here"}],"vocabularyStyleItems":[{"number":30,"reason":"requires guessing a content noun"}],"completedTextIssues":[{"number":30,"completedSnippet":"...","reason":"ungrammatical after insertion"}],"issues":[],"verdict":"pass|revise"}.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
 }
@@ -219,6 +224,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   }
 
   if (part === 4) {
+    for (const issue of asArray(rubric?.issues)) {
+      if (issue) errors.push(`B1 Part 4 whole-text issue: ${typeof issue === 'string' ? issue : issue?.reason || JSON.stringify(issue)}`);
+    }
     pushMismatchErrors(
       errors,
       asArray(rubric?.assignments).map((a) => ({ number: a?.gap, letter: a?.letter })),
@@ -238,6 +246,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   }
 
   if (part === 5) {
+    for (const item of asArray(rubric?.alternativeFits)) {
+      errors.push(`B1 Part 5 ambiguity Q${item?.number ?? '?'}: alternatives ${asArray(item?.letters).join(' / ')} are defensible. ${item?.reason || ''}`);
+    }
     for (const item of asArray(rubric?.unnaturalItems)) {
       errors.push(`B1 Part 5 unnatural completion Q${item?.number ?? '?'}: ${item?.reason || item?.completion || 'the completed sentence is not natural British English'}`);
     }
@@ -250,6 +261,12 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   }
 
   if (part === 6) {
+    for (const issue of asArray(rubric?.completedTextIssues)) {
+      errors.push(`B1 Part 6 completed-text issue Q${issue?.number ?? '?'}: ${issue?.reason || issue?.completedSnippet || 'unnatural or ungrammatical completion'}`);
+    }
+    for (const issue of asArray(rubric?.issues)) {
+      if (issue) errors.push(`B1 Part 6 quality issue: ${typeof issue === 'string' ? issue : issue?.reason || JSON.stringify(issue)}`);
+    }
     const expected = asArray(generated?.modelAnswers);
     const solved = asArray(rubric?.answers);
     const solverMap = new Map(solved.map((a) => [Number(a?.number), a]));
