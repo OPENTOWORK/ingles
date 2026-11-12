@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
 import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
@@ -63,7 +63,7 @@ export function B2ExamFormattedEnunciado({ blocks, keyPrefix = 'enunciado' }) {
 /**
  * @param {{ text?: string, showTitle?: boolean }} props
  */
-export function B2ExamPassageText({ text = '', showTitle = true }) {
+export function B2ExamPassageText({ text = '', showTitle = true, renderAfterLine }) {
   const lines = text
     .split('\n')
     .map((line) => line.trim())
@@ -104,9 +104,10 @@ export function B2ExamPassageText({ text = '', showTitle = true }) {
           );
         }
         return (
-          <p key={`passage-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
-            {line}
-          </p>
+          <Fragment key={`passage-${idx}`}>
+            <p style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>{line}</p>
+            {renderAfterLine?.(line)}
+          </Fragment>
         );
       })}
     </>
