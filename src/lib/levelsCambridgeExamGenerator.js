@@ -933,6 +933,7 @@ export async function generateAndPersistB1ReadingExam(adminDb, {
       useCodePrompts: true,
     });
     results.push({
+      examenId: row.examenId,
       partNumber: row.partNumber,
       preguntaId: row.preguntaId,
       skipped: row.skipped,
@@ -940,8 +941,8 @@ export async function generateAndPersistB1ReadingExam(adminDb, {
   }
 
   return {
-    examenId: results.find((r) => r.preguntaId)?.examenId || null,
-    parts: results,
+    examenId: results[0]?.examenId || null,
+    parts: results.map(({ examenId, ...part }) => part),
     created: results.filter((r) => r.preguntaId).length,
     skipped: results.filter((r) => r.skipped).length,
   };
