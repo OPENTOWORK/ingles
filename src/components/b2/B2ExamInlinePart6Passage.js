@@ -1,6 +1,7 @@
 'use client';
 
 
+import ReadingPassageWorkspace from './ReadingPassageWorkspace';
 import { useMemo, useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { PART6_GAP_MARKER_RE } from '@/utils/b2ExamTextBlocks';
@@ -61,6 +62,7 @@ export default function B2ExamInlinePart6Passage({
   aiHintsByKey = {},
   onRequestExplanation,
   answerReview,
+  passageFirst = false,
 }) {
   const session = useReadingPracticeSession();
 
@@ -133,144 +135,162 @@ export default function B2ExamInlinePart6Passage({
   const bodyStart = titleLine ? startIdx + 1 : startIdx;
   const bodyLines = lines.slice(bodyStart);
 
-  return (
-    <div className="levels-exam-inline-part6">
-      {poolEntries.length > 0 ? (
-        <div className="levels-exam-part6-pool-sticky levels-exam-part6-pool--inline-passage">
-          <p className="levels-exam-part6-pool__title">Sentences A–G</p>
-          <div className="levels-exam-part6-pool__list">
-            {poolEntries.map(({ letter, text: sentenceText }) => (
-              <p key={letter} className="levels-exam-part6-pool__item">
-                <span className="levels-exam-part6-pool__letter">{letter}</span>
-                <span>{sentenceText}</span>
-              </p>
-            ))}
-          </div>
-        </div>
-      ) : null}
+  const sentenceBank = (
+    <div className="levels-exam-part6-pool__list">
+      {poolEntries.map(({ letter, text: sentenceText }) => (
+        <p key={letter} className="levels-exam-part6-pool__item">
+          <span className="levels-exam-part6-pool__letter">{letter}</span>
+          <span>{sentenceText}</span>
+        </p>
+      ))}
+    </div>
+  );
+  const passageContent = (
+    <div className="levels-exam-inline-passage levels-exam-inline-part6__passage">
+      {titleLine ? <h3 className="levels-exam-passage-title">{titleLine}</h3> : null}
+      {bodyLines.map((line, lineIdx) => {
+        const img = line.match(/^IMAGE:\s*(\S+)/i);
+        if (img) {
+          return (
+            <img
+              key={`part6-passage-img-${lineIdx}`}
+              src={img[1]}
+              alt=""
+              style={{
+                maxWidth: '100%',
+                height: 'auto',
+                margin: '0.5rem 0',
+                borderRadius: '8px',
+                border: '1px solid #e2e8f0',
+              }}
+            />
+          );
+        }
 
-      <div className="levels-exam-inline-passage levels-exam-inline-part6__passage">
-        {titleLine ? <h3 className="levels-exam-passage-title">{titleLine}</h3> : null}
-        {bodyLines.map((line, lineIdx) => {
-          const img = line.match(/^IMAGE:\s*(\S+)/i);
-          if (img) {
-            return (
-              <img
-                key={`part6-passage-img-${lineIdx}`}
-                src={img[1]}
-                alt=""
-                style={{
-                  maxWidth: '100%',
-                  height: 'auto',
-                  margin: '0.5rem 0',
-                  borderRadius: '8px',
-                  border: '1px solid #e2e8f0',
-                }}
-              />
-            );
-          }
+        const segments = parseLineWithPart6Gaps(line, activeQuestionNumbers);
+        const hasGap = segments.some((s) => s.type === 'gap');
 
-          const segments = parseLineWithPart6Gaps(line, activeQuestionNumbers);
-          const hasGap = segments.some((s) => s.type === 'gap');
-
-          if (!hasGap) {
-            return (
-              <p key={`part6-passage-line-${lineIdx}`} className="levels-exam-inline-passage__line">
-                {line}
-              </p>
-            );
-          }
-
+        if (!hasGap) {
           return (
             <p key={`part6-passage-line-${lineIdx}`} className="levels-exam-inline-passage__line">
-              {segments.map((segment, segIdx) => {
-                if (segment.type === 'text') {
-                  return <span key={`part6-seg-text-${lineIdx}-${segIdx}`}>{segment.text}</span>;
-                }
-
-                const questionNumber = segment.questionNumber;
-                const entry = groupByNumber.get(questionNumber);
-                const isActiveGap = activeSet.has(questionNumber);
-                const group = entry?.group;
-                const groupIndex = entry?.groupIndex ?? 0;
-
-                if (!isActiveGap || !group) {
-                  return (
-                    <span
-                      key={`part6-seg-static-${lineIdx}-${segIdx}`}
-                      className="levels-exam-inline-part6-gap levels-exam-inline-part6-gap--static"
-                    >
-                      <span className="levels-exam-inline-part6-gap__marker">({questionNumber})</span>
-                      <span className="levels-exam-inline-part6-gap__placeholder">________</span>
-                    </span>
-                  );
-                }
-
-                const questionKey = getQuestionKey(questionNumber);
-                const selectedId = selectedOptions[questionKey] || '';
-                const selectedOption = group.options?.find((o) => o.id === selectedId);
-                const isChecked = checkedQuestions[questionKey];
-                const isFlagged = hideFeedback && !!session.flaggedQuestions[questionKey];
-
-                let stateClass = '';
-                if (!hideFeedback && isChecked) {
-                  stateClass = selectedOption?.correcta
-                    ? 'levels-exam-inline-part6-gap__select--correct'
-                    : 'levels-exam-inline-part6-gap__select--incorrect';
-                }
-
-                return (
-                  <span
-                    key={`part6-seg-gap-${lineIdx}-${segIdx}`}
-                    id={`question-${questionNumber}`}
-                    data-question-number={questionNumber}
-                    className={`levels-exam-inline-part6-gap${isFlagged ? ' question-flagged' : ''}`}
-                  >
-                    <span className="levels-exam-inline-part6-gap__label">
-                      <span className="levels-exam-inline-part6-gap__marker">({questionNumber})</span>
-                      {answerReview && !hideFeedback && isChecked ? (
-                        <button
-                          type="button"
-                          className={`levels-exam-inline-part6-gap__select ${stateClass}`}
-                          aria-label={`Gap ${questionNumber}: ${getOptionLetter(selectedOption) || 'No answer'}. Review answer.`}
-                          {...getRuoeReviewTrigger(answerReview, questionKey)}
-                        >
-                          {getOptionLetter(selectedOption) || '—'}
-                        </button>
-                      ) : <select
-                        className={`levels-exam-inline-part6-gap__select${stateClass ? ` ${stateClass}` : ''}${selectedId ? '' : ' levels-exam-inline-part6-gap__select--empty'}`}
-                        value={selectedId}
-                        disabled={!hideFeedback && isChecked}
-                        aria-label={`Choose sentence for gap ${questionNumber}`}
-                        onChange={(event) => {
-                          const option = group.options.find((o) => o.id === event.target.value);
-                          if (!option) return;
-                          onOptionSelect?.({
-                            group,
-                            groupIndex,
-                            option,
-                            questionKey,
-                          });
-                        }}
-                      >
-                        <option value="">—</option>
-                        {group.options.map((option) => {
-                          const letter = getOptionLetter(option);
-                          return (
-                            <option key={option.id} value={option.id}>
-                              {letter}
-                            </option>
-                          );
-                        })}
-                      </select>}
-                    </span>
-                  </span>
-                );
-              })}
+              {line}
             </p>
           );
-        })}
-      </div>
+        }
+
+        return (
+          <p key={`part6-passage-line-${lineIdx}`} className="levels-exam-inline-passage__line">
+            {segments.map((segment, segIdx) => {
+              if (segment.type === 'text') {
+                return <span key={`part6-seg-text-${lineIdx}-${segIdx}`}>{segment.text}</span>;
+              }
+
+              const questionNumber = segment.questionNumber;
+              const entry = groupByNumber.get(questionNumber);
+              const isActiveGap = activeSet.has(questionNumber);
+              const group = entry?.group;
+              const groupIndex = entry?.groupIndex ?? 0;
+
+              if (!isActiveGap || !group) {
+                return (
+                  <span
+                    key={`part6-seg-static-${lineIdx}-${segIdx}`}
+                    className="levels-exam-inline-part6-gap levels-exam-inline-part6-gap--static"
+                  >
+                    <span className="levels-exam-inline-part6-gap__marker">({questionNumber})</span>
+                    <span className="levels-exam-inline-part6-gap__placeholder">________</span>
+                  </span>
+                );
+              }
+
+              const questionKey = getQuestionKey(questionNumber);
+              const selectedId = selectedOptions[questionKey] || '';
+              const selectedOption = group.options?.find((o) => o.id === selectedId);
+              const isChecked = checkedQuestions[questionKey];
+              const isFlagged = hideFeedback && !!session.flaggedQuestions[questionKey];
+
+              let stateClass = '';
+              if (!hideFeedback && isChecked) {
+                stateClass = selectedOption?.correcta
+                  ? 'levels-exam-inline-part6-gap__select--correct'
+                  : 'levels-exam-inline-part6-gap__select--incorrect';
+              }
+
+              return (
+                <span
+                  key={`part6-seg-gap-${lineIdx}-${segIdx}`}
+                  id={`question-${questionNumber}`}
+                  data-question-number={questionNumber}
+                  className={`levels-exam-inline-part6-gap${isFlagged ? ' question-flagged' : ''}`}
+                >
+                  <span className="levels-exam-inline-part6-gap__label">
+                    <span className="levels-exam-inline-part6-gap__marker">({questionNumber})</span>
+                    {answerReview && !hideFeedback && isChecked ? (
+                      <button
+                        type="button"
+                        className={`levels-exam-inline-part6-gap__select ${stateClass}`}
+                        aria-label={`Gap ${questionNumber}: ${getOptionLetter(selectedOption) || 'No answer'}. Review answer.`}
+                        {...getRuoeReviewTrigger(answerReview, questionKey)}
+                      >
+                        {getOptionLetter(selectedOption) || '—'}
+                      </button>
+                    ) : <select
+                      className={`levels-exam-inline-part6-gap__select${stateClass ? ` ${stateClass}` : ''}${selectedId ? '' : ' levels-exam-inline-part6-gap__select--empty'}`}
+                      value={selectedId}
+                      disabled={!hideFeedback && isChecked}
+                      aria-label={`Choose sentence for gap ${questionNumber}`}
+                      onChange={(event) => {
+                        const option = group.options.find((o) => o.id === event.target.value);
+                        if (!option) return;
+                        onOptionSelect?.({
+                          group,
+                          groupIndex,
+                          option,
+                          questionKey,
+                        });
+                      }}
+                    >
+                      <option value="">—</option>
+                      {group.options.map((option) => {
+                        const letter = getOptionLetter(option);
+                        return (
+                          <option key={option.id} value={option.id}>
+                            {letter}
+                          </option>
+                        );
+                      })}
+                    </select>}
+                  </span>
+                </span>
+              );
+            })}
+          </p>
+        );
+      })}
+    </div>
+  );
+
+  return (
+    <div className="levels-exam-inline-part6">
+      {passageFirst && poolEntries.length > 0 ? (
+        <ReadingPassageWorkspace
+          passage={passageContent}
+          panel={sentenceBank}
+          panelTitle="Sentences A–G"
+          openLabel="Show sentences A–G"
+          sentenceBank
+        />
+      ) : (
+        <>
+          {poolEntries.length > 0 && (
+            <div className="levels-exam-part6-pool-sticky levels-exam-part6-pool--inline-passage">
+              <p className="levels-exam-part6-pool__title">Sentences A–G</p>
+              {sentenceBank}
+            </div>
+          )}
+          {passageContent}
+        </>
+      )}
 
       {!hideFeedback && !answerReview ? (
         <Part6Explanations

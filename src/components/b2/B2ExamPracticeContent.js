@@ -1,6 +1,7 @@
 'use client';
 
 import { Fragment, useState } from 'react';
+import ReadingPassageWorkspace from './ReadingPassageWorkspace';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
 import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
@@ -200,6 +201,7 @@ export function B2ExamPracticeContent({
   passage = null,
   beforeQuestions = null,
   questions = null,
+  readingQuestions = null,
   split = 'auto',
   showDirections = true,
   showPassagePanel = true,
@@ -249,7 +251,17 @@ export function B2ExamPracticeContent({
 
           {beforeQuestions}
 
-          {useSplit ? (
+          {readingQuestions && hasPassage && questions ? (
+            <ReadingPassageWorkspace
+              key={readingQuestions.exerciseKey}
+              passage={passage || <B2ExamPassageText text={passageText} />}
+              panel={<>{questions}{readingQuestions.footer}</>}
+              panelTitle="Questions"
+              openLabel="Open questions"
+              questionNumbers={readingQuestions.numbers}
+              onPanelClose={readingQuestions.onClose}
+            />
+          ) : useSplit ? (
             <div className="levels-exam-split">
               {hasPassage ? (
                 <div className="levels-exam-split__panel levels-exam-split__text">
