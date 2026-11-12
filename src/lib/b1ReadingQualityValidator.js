@@ -51,6 +51,28 @@ function poolView(generated) {
     .join('\n');
 }
 
+const NON_BRITISH_B1_PATTERNS = [
+  { re: /\bcustomiz(e|es|ed|ing|ation|ations)\b/i, label: 'customise/customisation' },
+  { re: /\bcolors?\b/i, label: 'colour' },
+  { re: /\bbehaviors?\b/i, label: 'behaviour' },
+  { re: /\bcenters?\b/i, label: 'centre' },
+  { re: /\banalyz(e|es|ed|ing)\b/i, label: 'analyse' },
+  { re: /\b(favor|favorite|favorites|honor|labor|neighbor|humor|rumor|flavor|harbor)\b/i, label: 'British -our spelling' },
+  { re: /\btravel(ed|ing|er|ers)\b/i, label: 'travelled/travelling/traveller' },
+  { re: /\bcancel(ed|ing)\b/i, label: 'cancelled/cancelling' },
+  { re: /\b(defense|offense|jewelry)\b/i, label: 'British spelling' },
+];
+
+function britishEnglishErrors(generated) {
+  const text = JSON.stringify(generated || {});
+  const errors = [];
+  for (const item of NON_BRITISH_B1_PATTERNS) {
+    const match = text.match(item.re);
+    if (match) errors.push(`B1 British English violation: "${match[0]}" should use ${item.label}.`);
+  }
+  return [...new Set(errors)];
+}
+
 async function callReview(system, user) {
   const { text } = await cambridgeChatCompletion({
     model: getValidatorModel(),
@@ -135,6 +157,7 @@ async function reviewPart4(generated) {
 There are five gaps (16-20) and eight candidate sentences A-H, so exactly three are unused.
 Solve the complete assignment. Then test EVERY candidate sentence against EVERY gap. "multifit" means a sentence genuinely produces coherent, grammatical text in more than one gap, considering both the sentence before and after and the wider narrative/argument.
 Flag weak cohesion when the intended sentence has no strong backward/forward link. Do not flag merely topical similarity.
+After solving, RECONSTRUCT the whole text with all five chosen sentences and read it continuously. Check paragraph-level topic, chronology and reference, not just grammar at the gap. A sentence must be rejected if it anticipates a topic before the text introduces it, returns to an earlier stage without a clear signal, changes the subject unexpectedly, or creates a semantic contradiction even if the neighbouring sentences are grammatical.
 Return ONLY JSON:
 {"assignments":[{"gap":16,"letter":"G"}],"multifit":[{"letter":"B","gaps":[17,19],"reason":"..."}],"weakCohesion":[{"gap":18,"reason":"..."}],"unusedLetters":["A","C","H"],"issues":[],"verdict":"pass|revise"}.`,
     `GAPPED PASSAGE:\n${generated?.passage || ''}\n\nCANDIDATE SENTENCES:\n${poolView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
@@ -180,7 +203,7 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   else if (part === 6) rubric = await reviewPart6(generated);
   else return { ok: true, errors: [], warnings: [], rubric: null };
 
-  const errors = [];
+  const errors = britishEnglishErrors(generated);
   const warnings = [];
 
   if ([1,2,3,5].includes(part)) {
