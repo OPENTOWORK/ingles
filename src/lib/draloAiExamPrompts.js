@@ -680,6 +680,15 @@ OFFICIAL TASK SHAPE:
 - Use five different answer letters; leave exactly three unused.
 - Natural British English at B1; do not copy supplied sample-test wording.
 
+BUILD METHOD — FOLLOW THIS ORDER:
+1. First write a complete coherent ungapped text.
+2. Identify five complete sentences whose removal creates genuine cohesion decisions.
+3. Remove those exact five sentences and insert gaps 16–20 in their original positions.
+4. Use the removed sentences as five of A–H, then write three extra sentences that are topically plausible but cannot fit any gap.
+5. Before returning JSON, test EVERY sentence A–H in EVERY gap. If any sentence fits more than one gap naturally, rewrite the sentence or the surrounding text.
+6. Check each intended answer has a strong backward link AND a strong forward link. Avoid generic sentences such as "It was a great experience" that could sit in several places.
+7. Reconstruct the full text with the five intended answers and read it as continuous British English. It must be coherent, natural and unambiguous.
+
 Return ONLY JSON with: partTitle, directions, title, passage with markers (16) ___ to (20) ___,
 sentencePool:["A) ...","B) ...","C) ...","D) ...","E) ...","F) ...","G) ...","H) ..."],
 questions[{id:"q1"–"q5",number:16–20}],
