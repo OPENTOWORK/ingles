@@ -137,15 +137,16 @@ async function reviewPart2(generated) {
     `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 2 WITHOUT trusting the supplied key.
 There are five people and eight texts A-H on one topic. Match each person independently using ALL of their requirements.
 Flag ambiguity when two texts satisfy a person's requirements equally well. Flag a weak profile/text set if the correct match is obvious from a copied word rather than detailed comprehension.
+For each person, check that EVERY material requirement in the profile is positively supported by the keyed text. If the profile says the person lacks equipment, needs supervision, requires a particular time, wants a regular activity, has children of a stated age, etc., the chosen text must genuinely support that requirement. Put unsupported or contradicted requirements in unsupportedRequirements.
 Return ONLY JSON:
-{"answers":[{"number":6,"letter":"F"}],"ambiguousItems":[{"number":7,"letters":["B","G"],"reason":"both satisfy all requirements"}],"literalSolveItems":[{"number":8,"reason":"same rare phrase appears in profile and text"}],"weakDistractors":[],"issues":[],"verdict":"pass|revise"}.
+{"answers":[{"number":6,"letter":"F"}],"ambiguousItems":[{"number":7,"letters":["B","G"],"reason":"both satisfy all requirements"}],"unsupportedRequirements":[{"number":8,"letter":"B","requirement":"does not own gardening tools","reason":"the text provides seeds but does not say tools are provided"}],"literalSolveItems":[{"number":8,"reason":"same rare phrase appears in profile and text"}],"weakDistractors":[],"issues":[],"verdict":"pass|revise"}.
 Do not report partial matches as ambiguity: an alternative must satisfy the important requirements equally well.`,
     `PEOPLE:\n${questionsView(generated)}\n\nTEXTS:\n${sectionsView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
 }
 
 async function reviewPart3(generated) {
-  return callReview(
+  const primary = await callReview(
     `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 3 WITHOUT trusting the supplied key.
 Solve the five four-option questions from the passage. Check detailed comprehension, gist/global meaning, inference and writer attitude/opinion.
 Flag an item if two answers are defensible. Flag distractors that are unrelated to passage ideas or trivially impossible. Flag items solvable mainly by copied wording.
@@ -154,10 +155,50 @@ Return ONLY JSON:
 {"answers":[{"number":11,"letter":"C"}],"ambiguousItems":[],"weakDistractors":[],"literalSolveItems":[],"levelIssues":[{"text":"unparalleled","reason":"unnecessarily above B1 and central to the answer"}],"coverage":{"detail":true,"inference":true,"attitudeOrOpinion":true,"globalOrGist":true},"issues":[],"verdict":"pass|revise"}.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nQUESTIONS:\n${questionsView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
+
+  const levelAudit = await callReview(
+    `You are a Cambridge B1 Preliminary lexical-level editor. Review ONLY the language level of this Reading Part 3 passage.
+B1 texts may contain an occasional unfamiliar word if the meaning is transparent, but the overall text must not read like B2/C1 academic or specialist prose.
+Flag terms or constructions that a normal B1 candidate should not be expected to process and that are not clearly explained by context. Be especially alert to specialist labels, abstract academic nouns, dense nominalisations, uncommon idioms and unnecessarily formal phrasing.
+Do not flag ordinary B1 words merely because a simpler synonym exists.
+Return ONLY JSON:
+{"levelIssues":[{"text":"polyglot","reason":"specialist label not explained in simple B1 language"}],"overall":"b1|too_high","issues":[]}.`,
+    `PASSAGE:\n${generated?.passage || ''}`,
+  );
+
+  return {
+    ...primary,
+    levelIssues: [
+      ...asArray(primary?.levelIssues),
+      ...asArray(levelAudit?.levelIssues),
+    ],
+    issues: [...asArray(primary?.issues), ...asArray(levelAudit?.issues)],
+    levelOverall: levelAudit?.overall || null,
+  };
+}
+
+function reconstructPart4(generated) {
+  const key = new Map(
+    asArray(generated?.modelAnswers)
+      .map((x) => [Number(x?.number), String(x?.answer || '').trim().toUpperCase()]),
+  );
+  const pool = new Map(
+    asArray(generated?.sentencePool).map((entry) => {
+      if (typeof entry === 'string') {
+        const m = entry.match(/^\s*([A-H])\)\s*(.*)$/s);
+        return m ? [m[1].toUpperCase(), m[2].trim()] : [null, entry];
+      }
+      return [String(entry?.letter || '').trim().toUpperCase(), String(entry?.text || entry?.sentence || '').trim()];
+    }).filter(([letter]) => letter),
+  );
+  return String(generated?.passage || '').replace(/\((1[6-9]|20)\)\s*___/g, (full, raw) => {
+    const letter = key.get(Number(raw));
+    return pool.get(letter) || full;
+  });
 }
 
 async function reviewPart4(generated) {
-  return callReview(
+  const primary = await callReview(
     `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 4 WITHOUT trusting the supplied key.
 There are five gaps (16-20) and eight candidate sentences A-H, so exactly three are unused.
 Solve the complete assignment. Then test EVERY candidate sentence against EVERY gap. "multifit" means a sentence genuinely produces coherent, grammatical text in more than one gap, considering both the sentence before and after and the wider narrative/argument.
@@ -167,6 +208,23 @@ Return ONLY JSON:
 {"assignments":[{"gap":16,"letter":"G"}],"multifit":[{"letter":"B","gaps":[17,19],"reason":"..."}],"weakCohesion":[{"gap":18,"reason":"..."}],"unusedLetters":["A","C","H"],"issues":[],"verdict":"pass|revise"}.`,
     `GAPPED PASSAGE:\n${generated?.passage || ''}\n\nCANDIDATE SENTENCES:\n${poolView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
+
+  const sequenceAudit = await callReview(
+    `You are a second Cambridge B1 Preliminary Part 4 editor. The five keyed sentences have already been inserted below.
+Read the completed text as a continuous article/story. Ignore the original answer letters.
+Flag sequenceIssues if chronology, reference, topic development or cause/effect is awkward or impossible; if an event is mentioned before it is introduced; if a sentence repeats the following sentence instead of linking naturally; or if the text changes subject without a clear bridge.
+A completed text should read as if it was originally written with no gaps.
+Return ONLY JSON:
+{"sequenceIssues":[{"location":"around gap 18","reason":"the people get to know each other before they are put into groups"}],"overall":"coherent|revise","issues":[]}.`,
+    `COMPLETED TEXT:\n${reconstructPart4(generated)}`,
+  );
+
+  return {
+    ...primary,
+    sequenceIssues: asArray(sequenceAudit?.sequenceIssues),
+    issues: [...asArray(primary?.issues), ...asArray(sequenceAudit?.issues)],
+    sequenceOverall: sequenceAudit?.overall || null,
+  };
 }
 
 async function reviewPart5(generated) {
@@ -231,6 +289,35 @@ Return ONLY JSON:
   );
 }
 
+
+const B1_PART5_RISKY_PAIRS = [
+  ['explore', 'discover'],
+  ['think', 'believe'],
+  ['rent', 'hire'],
+  ['damaged', 'broken'],
+  ['help', 'allow'],
+  ['start', 'begin'],
+  ['finish', 'end'],
+  ['choose', 'select'],
+  ['buy', 'purchase'],
+  ['like', 'love'],
+];
+
+function part5RiskyOptionPairs(generated) {
+  const findings = [];
+  for (const q of asArray(generated?.questions)) {
+    const words = asArray(q?.options)
+      .map((x) => String(x || '').replace(/^\s*[A-D]\)\s*/i, '').trim().toLowerCase())
+      .filter(Boolean);
+    for (const [a, b] of B1_PART5_RISKY_PAIRS) {
+      if (words.includes(a) && words.includes(b)) {
+        findings.push({ number: q?.number, pair: [a, b] });
+      }
+    }
+  }
+  return findings;
+}
+
 /**
  * Semantic/adversarial quality gate for B1 Preliminary Reading Parts 1-6.
  * Hard errors block generation/persistence; warnings are retained for review.
@@ -252,6 +339,12 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   if ([1,2,3,5].includes(part)) {
     pushMismatchErrors(errors, rubric?.answers, generated?.modelAnswers);
     findings(rubric, errors, warnings);
+  }
+
+  if (part === 2) {
+    for (const item of asArray(rubric?.unsupportedRequirements)) {
+      errors.push(`B1 Part 2 unsupported requirement Q${item?.number ?? '?'} → ${item?.letter || '?'}: ${item?.requirement || ''}. ${item?.reason || ''}`);
+    }
   }
 
   if (part === 3) {
@@ -280,6 +373,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
     for (const w of asArray(rubric?.weakCohesion)) {
       errors.push(`B1 Part 4 weak cohesion at gap ${w?.gap ?? '?'}: ${w?.reason || ''}`);
     }
+    for (const issue of asArray(rubric?.sequenceIssues)) {
+      errors.push(`B1 Part 4 completed-text sequence issue: ${issue?.reason || issue?.location || 'whole-text flow is not coherent'}`);
+    }
     const unused = asArray(rubric?.unusedLetters).map((x) => String(x).toUpperCase()).filter(Boolean);
     if (unused.length && unused.length !== 3) {
       errors.push(`B1 Part 4 independent solve leaves ${unused.length} unused sentences; official task requires exactly 3.`);
@@ -287,6 +383,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   }
 
   if (part === 5) {
+    for (const risky of part5RiskyOptionPairs(generated)) {
+      errors.push(`B1 Part 5 risky near-synonym option set Q${risky.number ?? '?'}: ${risky.pair.join(' / ')}. Rewrite the item so only one ordinary B1 word can fit.`);
+    }
     for (const item of asArray(rubric?.alternativeFits)) {
       errors.push(`B1 Part 5 ambiguity Q${item?.number ?? '?'}: alternatives ${asArray(item?.letters).join(' / ')} are defensible. ${item?.reason || ''}`);
     }
