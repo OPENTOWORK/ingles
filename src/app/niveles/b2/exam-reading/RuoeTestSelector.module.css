@@ -1,5 +1,7 @@
 .trigger {
   display: inline-flex;
+  align-self: flex-start;
+  width: fit-content;
   min-height: 32px;
   align-items: center;
   gap: .5rem;
