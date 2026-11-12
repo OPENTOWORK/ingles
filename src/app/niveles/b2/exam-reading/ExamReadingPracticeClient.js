@@ -139,6 +139,8 @@ import {
 } from '@/lib/examPracticeMode';
 import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
 
+const directionsClassName = `${part4Styles.directions} ${landingFont.variable}`;
+
 function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
   if (!normalized) return { enunciado: '', texto: '' };
@@ -2236,7 +2238,6 @@ function B2ReadingExamsPageInner() {
     phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
   const directionsLabel = isUoeExamInlinePart || isUoePart1 ? 'Instructions' : 'Directions';
 
-  const part4DirectionsClass = isKeyWordPart ? `${part4Styles.directions} ${landingFont.variable}` : '';
   const phoneInstructionsEl = useMemo(() => {
     if (!phoneSkillSteps) return null;
     const blocks = buildPracticeDirectionsBlocks({
@@ -2248,11 +2249,10 @@ function B2ReadingExamsPageInner() {
     });
     if (!blocks.length) return null;
     return (
-      <SkillPartInstructionsPanel label={directionsLabel} blocks={blocks} className={part4DirectionsClass} />
+      <SkillPartInstructionsPanel label={directionsLabel} blocks={blocks} className={directionsClassName} />
     );
   }, [
     phoneSkillSteps,
-    part4DirectionsClass,
     selectedPartContent.enunciado,
     selectedPartTitleParts.heading,
     selectedPartTitleParts.subtitle,
@@ -2448,7 +2448,7 @@ function B2ReadingExamsPageInner() {
                 }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={directionsLabel}
-                directionsClassName={part4DirectionsClass}
+                directionsClassName={directionsClassName}
                 showDirections={true}
                 textLabel={isUoeExamInlinePart || isPart6GappedText ? null : 'Text'}
                 questionsLabel="Questions"
