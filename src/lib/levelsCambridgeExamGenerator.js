@@ -454,7 +454,7 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
         ? 8
         : isB1Reading && partDef.partNumber === 4
           ? 10
-          : isB1Reading && [5, 6].includes(partDef.partNumber)
+          : isB1Reading && [3, 5, 6].includes(partDef.partNumber)
             ? 8
           : isB1Reading
             ? 5
@@ -831,7 +831,7 @@ async function generatePartJson(levelLabel, partDef, options) {
   const b1Temperature =
     isB1 && b1PartNumber === 4
       ? 0.25
-      : isB1 && [5, 6].includes(b1PartNumber)
+      : isB1 && [3, 5, 6].includes(b1PartNumber)
         ? 0.45
         : 0.9;
   const { text } = await cambridgeExamGenerationCompletion({
