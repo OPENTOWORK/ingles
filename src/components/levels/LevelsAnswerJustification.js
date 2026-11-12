@@ -77,14 +77,14 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, re
     if (event.currentTarget.open) onOpenReview?.();
   };
   const explanation = String(hint?.text || '');
+  const reviewedEvidence = readingReview && explanation.startsWith('Evidence in the text · ')
+    ? explanation.slice('Evidence in the text · '.length)
+    : '';
   const quote = readingReview ? explanation.match(/[“"]([^”"]+)[”"]/)?.[1] : '';
   const normalise = (value) => value.replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
   const evidence = quote && normalise(readingPassage).includes(normalise(quote)) ? quote : '';
-  const reason = explanation.replace(/^The correct answer is [A-G]\.\s*/i, '')
-    .replace(/^The text says:\s*[“"][^”"]+[”"][.!]?\s*/i, '');
   const reviewSections = readingReview ? [
-    { title: 'Evidence in the text', text: evidence, empty: 'No exact quotation is available for this answer.' },
-    { title: 'Why it’s correct', text: reason, empty: 'Explanation temporarily unavailable.' },
+    { title: 'Evidence in the text', text: reviewedEvidence || evidence, empty: 'No exact quotation is available for this answer.' },
   ] : review && [
     { title: 'What it tests', text: review.focus, empty: 'A skill label is unavailable for this question.' },
     { title: 'Why it’s correct', text: review.reason, empty: 'Explanation temporarily unavailable.' },
@@ -97,7 +97,12 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, re
           <p className={reviewStyles.feedbackBody}>
             {hint?.loading || (!hint?.text && !hint?.error)
               ? <span role="status">Loading…</span>
-              : hint?.error ? 'Explanation temporarily unavailable.' : text || empty}
+              : hint?.error ? 'Explanation temporarily unavailable.' : reviewedEvidence
+                ? text.split(/(<br>|\*\*[^*]+\*\*)/).map((chunk, index) =>
+                    chunk === '<br>' ? <br key={index} /> :
+                      chunk.startsWith('**') ? <u key={index}>{chunk.slice(2, -2)}</u> : chunk
+                  )
+                : text || empty}
           </p>
         </details>
       )) : <p className="levels-answer-justification__text">💡 {hint.text}</p>}
