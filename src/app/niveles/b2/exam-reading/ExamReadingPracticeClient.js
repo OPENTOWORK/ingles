@@ -64,6 +64,7 @@ import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import {
   B2ExamPracticeContent,
+  B2ExamPassageText,
   B2ExamQuestionItem,
   SkillPartInstructionsPanel,
   buildPracticeDirectionsBlocks,
@@ -73,6 +74,7 @@ import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozeP
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import B2ExamInlinePart6Passage from '@/components/b2/B2ExamInlinePart6Passage';
+import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import RuoeAnchoredReview, { getRuoeReviewTrigger } from '@/components/exam/RuoeAnchoredReview';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
 import { resolveCorrectAnswerRowIds } from '@/utils/levelsJustifyPayload';
@@ -2043,6 +2045,22 @@ function B2ReadingExamsPageInner() {
     handleOpenGapExplanationRequest,
   ]);
 
+  const activeMatchingEvidence = useMemo(() => {
+    if (partNumberReading !== 7 || !useAnchoredAnswerReview || hideInstantFeedback || !answerReviewSelection) return null;
+    const group = mcqGroupsForCheck.find((item, index) =>
+      resolveMcqQuestionKey(item, index) === answerReviewSelection.key);
+    const option = group?.options.find((item) => item.correcta);
+    const letter = String(option?.formattedText || option?.respuesta || '').match(/^(?:\d+\s+)?([A-D])\b/i)?.[1]?.toUpperCase();
+    const profiles = parsePart7PeopleProfiles(extractPart7ProfilesBlock(selectedQuestion?.enunciado));
+    const profile = profiles[letter];
+    const line = profile?.body.split('\n').map((text) => text.trim()).find(Boolean);
+    if (!line || !selectedPartContent.texto.split('\n').some((text) => text.trim() === line)) return null;
+    return { group, profile, line, id: `reading-evidence-${group.questionNumber}` };
+  }, [
+    partNumberReading, useAnchoredAnswerReview, hideInstantFeedback, answerReviewSelection,
+    mcqGroupsForCheck, resolveMcqQuestionKey, selectedQuestion?.enunciado, selectedPartContent.texto,
+  ]);
+
   const practiceExplanationFooter = useMemo(() => {
     if (uoeInlineExplanationFooter) return uoeInlineExplanationFooter;
     if (hideInstantFeedback) return null;
@@ -2064,7 +2082,7 @@ function B2ReadingExamsPageInner() {
       return (
         <RuoeAnchoredReview selection={answerReviewSelection} onClose={closeAnswerReview}>
           <SkillPartExplanationsPanel
-            ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
+            ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto, passageEvidenceId: activeMatchingEvidence?.id }}
             entries={entries}
             aiHintsByKey={aiHintsByKey}
             onRequestExplanation={handleReadingMcqExplanationRequest}
@@ -2082,6 +2100,7 @@ function B2ReadingExamsPageInner() {
     );
   }, [
     uoeInlineExplanationFooter,
+    activeMatchingEvidence,
     useAnchoredAnswerReview,
     isReadingPart,
     mcqGroupsForCheck,
@@ -2562,6 +2581,25 @@ function B2ReadingExamsPageInner() {
                       onRequestExplanation={handleOpenGapExplanationRequest}
                       showInlineExample={useSkillUoeExampleLayout}
                       exampleGap0Word={exampleGap0Word}
+                    />
+                  ) : activeMatchingEvidence ? (
+                    <B2ExamPassageText
+                      text={selectedPartContent.texto}
+                      renderAfterLine={(line) => line === activeMatchingEvidence.line && (
+                        <div id={activeMatchingEvidence.id}>
+                          <LevelsAnswerJustification
+                            hint={aiHintsByKey[answerReviewSelection.key]}
+                            ruoeReview
+                            readingReview
+                            evidenceOnly
+                            readingPassage={activeMatchingEvidence.profile.body}
+                            onOpenReview={() => handleReadingMcqExplanationRequest({
+                              questionKey: answerReviewSelection.key,
+                              group: activeMatchingEvidence.group,
+                            })}
+                          />
+                        </div>
+                      )}
                     />
                   ) : null
                 }

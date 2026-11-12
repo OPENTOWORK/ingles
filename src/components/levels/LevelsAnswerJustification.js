@@ -9,7 +9,7 @@ import { buildClientApiUrl } from '@/utils/clientApiUrl';
 /**
  * @param {{ hint?: { loading?: boolean, error?: string | null, text?: string | null } }} props
  */
-export default function LevelsAnswerJustification({ hint, ruoeReview = false, readingReview = false, readingPassage = '', readingGap, onOpenReview }) {
+export default function LevelsAnswerJustification({ hint, ruoeReview = false, readingReview = false, readingPassage = '', readingGap, hideEvidence = false, evidenceOnly = false, onOpenReview }) {
   const [spanish, setSpanish] = useState('');
   const [showSpanish, setShowSpanish] = useState(false);
   const [translating, setTranslating] = useState(false);
@@ -88,8 +88,8 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, re
   const reason = explanation.replace(/^The correct answer is [A-G]\.\s*/i, '')
     .replace(/^The text says:\s*[“"][^”"]+[”"][.!]?\s*/i, '');
   const reviewSections = readingReview ? [
-    { title: 'Evidence in the text', text: evidence, empty: 'No exact quotation is available for this answer.' },
-    { title: 'Why it’s correct', text: reason, empty: 'Explanation temporarily unavailable.' },
+    ...(!hideEvidence ? [{ title: 'Evidence in the text', text: evidence, empty: 'No exact quotation is available for this answer.' }] : []),
+    ...(!evidenceOnly ? [{ title: 'Why it’s correct', text: reason, empty: 'Explanation temporarily unavailable.' }] : []),
   ] : review && [
     { title: 'What it tests', text: review.focus, empty: 'A skill label is unavailable for this question.' },
     { title: 'Why it’s correct', text: review.reason, empty: 'Explanation temporarily unavailable.' },
@@ -106,7 +106,7 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, re
           </p>
         </details>
       )) : <p className="levels-answer-justification__text">💡 {hint.text}</p>}
-      {hint?.text && (
+      {hint?.text && !evidenceOnly && (
       <button
         type="button"
         className="levels-answer-justification__translate"

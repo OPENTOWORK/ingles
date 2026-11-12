@@ -75,7 +75,7 @@ export default function SkillPartExplanationsPanel({
             : 'levels-exam-mcq-explanations__verdict levels-exam-mcq-explanations__verdict--incorrect';
 
         if (ruoeReview) {
-          const { part, passage } = ruoeReview;
+          const { part, passage, passageEvidenceId } = ruoeReview;
           const context = getRuoeAnswerContext(part, passage, entry.questionNumber);
           const answers = formatEnglishAnswerForDisplay(entry.correctAnswer).split(' · ');
           const answer = answers[0];
@@ -110,12 +110,14 @@ export default function SkillPartExplanationsPanel({
                   {answers.length > 1 && <p className={reviewStyles.meta}>Also accepted: {answers.slice(1).join(' · ')}</p>}
                 </div>
               )}
+              {passageEvidenceId && <a href={`#${passageEvidenceId}`}>View evidence in the passage</a>}
               {onRequestExplanation && (
                 <LevelsAnswerJustification
                   hint={aiHintsByKey[entry.questionKey]}
                   ruoeReview
                   readingReview={part >= 5 && part <= 7}
                   readingPassage={passage}
+                  hideEvidence={Boolean(passageEvidenceId)}
                   readingGap={part === 6 ? entry.questionNumber : undefined}
                   onOpenReview={() => requestExplanation(entry)}
                 />
