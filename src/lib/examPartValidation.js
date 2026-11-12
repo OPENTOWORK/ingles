@@ -1750,6 +1750,7 @@ function validateReadingUseOfEnglish(partDef, gen, errors, warnings) {
 
   const needsPassage =
     partDef.activity !== 'key-word' &&
+    partDef.activity !== 'notice-mcq' &&
     !(partDef.activity === 'multiple-matching' && partDef.mode === 'reading' && gen.sections?.length);
 
   if (needsPassage && partDef.mode !== 'speaking' && partDef.mode !== 'writing') {
