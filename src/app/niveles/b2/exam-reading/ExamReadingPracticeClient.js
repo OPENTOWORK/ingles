@@ -1924,6 +1924,7 @@ function B2ReadingExamsPageInner() {
       requestAiJustification(questionKey, {
         style,
         partLabel: selectedPart?.nombre || '',
+        questionNumber: group.questionNumber,
         questionLabel: [`Question ${group.questionNumber}`, group.questionStem].filter(Boolean).join(' · '),
         userChoiceText: option?.formattedText || option?.respuesta || 'No answer submitted',
         correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
@@ -2847,12 +2848,11 @@ function B2ReadingExamsPageInner() {
 }
 
 export default function ExamReadingPracticeClient() {
-  const pathname = usePathname();
   return (
     <Suspense
       fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>Loading practice…</main>}
     >
-      <ReadingPracticeSessionProvider defaultInstantFeedback={!pathname?.includes('/exam-reading-and-use-of-english')}>
+      <ReadingPracticeSessionProvider defaultInstantFeedback={false}>
         <B2ReadingExamsPageInner />
       </ReadingPracticeSessionProvider>
     </Suspense>
