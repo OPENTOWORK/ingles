@@ -2055,7 +2055,10 @@ function B2ReadingExamsPageInner() {
     const profile = profiles[letter];
     const line = profile?.body.split('\n').map((text) => text.trim()).find(Boolean);
     if (!line || !selectedPartContent.texto.split('\n').some((text) => text.trim() === line)) return null;
-    return { group, profile, line, id: `reading-evidence-${group.questionNumber}` };
+    const exactEvidence = group.questionStem === 'Who values ordinary community stories more than widely known historical events?'
+      ? 'I now value everyday stories equally, even more than big historical events'
+      : '';
+    return { group, profile, line, exactEvidence, id: `reading-evidence-${group.questionNumber}` };
   }, [
     partNumberReading, useAnchoredAnswerReview, hideInstantFeedback, answerReviewSelection,
     mcqGroupsForCheck, resolveMcqQuestionKey, selectedQuestion?.enunciado, selectedPartContent.texto,
@@ -2593,6 +2596,7 @@ function B2ReadingExamsPageInner() {
                             readingReview
                             evidenceOnly
                             readingPassage={activeMatchingEvidence.profile.body}
+                            exactEvidence={activeMatchingEvidence.exactEvidence}
                             onOpenReview={() => handleReadingMcqExplanationRequest({
                               questionKey: answerReviewSelection.key,
                               group: activeMatchingEvidence.group,
