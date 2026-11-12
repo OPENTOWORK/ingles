@@ -908,6 +908,45 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   };
 }
 
+export async function generateAndPersistB1ReadingExam(adminDb, {
+  levelId,
+  examSlot,
+  preserveExistingParts = true,
+  replacePartContent = false,
+  onProgress,
+}) {
+  const results = [];
+  const readingParts = [1, 2, 3, 4, 5, 6];
+
+  for (let i = 0; i < readingParts.length; i += 1) {
+    const partNumber = readingParts[i];
+    onProgress?.({ step: i + 1, total: readingParts.length, part: partNumber });
+    const row = await generateAndPersistLevelExamPart(adminDb, {
+      levelSlug: 'b1',
+      levelId,
+      examSlot,
+      partNumber,
+      skipAudio: true,
+      preserveExistingParts,
+      replacePartContent,
+      persistDespiteValidation: false,
+      useCodePrompts: true,
+    });
+    results.push({
+      partNumber: row.partNumber,
+      preguntaId: row.preguntaId,
+      skipped: row.skipped,
+    });
+  }
+
+  return {
+    examenId: results.find((r) => r.preguntaId)?.examenId || null,
+    parts: results,
+    created: results.filter((r) => r.preguntaId).length,
+    skipped: results.filter((r) => r.skipped).length,
+  };
+}
+
 export async function generateAndPersistLevelExam(adminDb, {
   levelSlug,
   levelId,
