@@ -148,8 +148,9 @@ async function reviewPart3(generated) {
     `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 3 WITHOUT trusting the supplied key.
 Solve the five four-option questions from the passage. Check detailed comprehension, gist/global meaning, inference and writer attitude/opinion.
 Flag an item if two answers are defensible. Flag distractors that are unrelated to passage ideas or trivially impossible. Flag items solvable mainly by copied wording.
+Also flag levelIssues for words/phrases or sentence structures that are clearly above normal B1 Preliminary reading level and are not made transparent by context. Do not penalise an occasional challenging but inferable word.
 Return ONLY JSON:
-{"answers":[{"number":11,"letter":"C"}],"ambiguousItems":[],"weakDistractors":[],"literalSolveItems":[],"coverage":{"detail":true,"inference":true,"attitudeOrOpinion":true,"globalOrGist":true},"issues":[],"verdict":"pass|revise"}.`,
+{"answers":[{"number":11,"letter":"C"}],"ambiguousItems":[],"weakDistractors":[],"literalSolveItems":[],"levelIssues":[{"text":"unparalleled","reason":"unnecessarily above B1 and central to the answer"}],"coverage":{"detail":true,"inference":true,"attitudeOrOpinion":true,"globalOrGist":true},"issues":[],"verdict":"pass|revise"}.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nQUESTIONS:\n${questionsView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
 }
@@ -168,16 +169,44 @@ Return ONLY JSON:
 }
 
 async function reviewPart5(generated) {
-  return callReview(
+  const primary = await callReview(
     `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 5 WITHOUT trusting the supplied key.
 Solve all six multiple-choice cloze gaps. This task tests mainly vocabulary, with some grammar/complementation allowed.
 Flag ambiguity if two options are natural and defensible in context. Flag distractors only when they are obviously unusable rather than plausibly tempting. Flag a gap that is really a Part 6-style pure grammar gap if that pattern dominates the task.
-CRITICAL NATURALNESS CHECK: mentally insert the selected answer into the complete sentence and judge the resulting British English collocation/verb pattern. If the keyed/best completion is unidiomatic, semantically wrong, or not a normal B1 collocation (for example an impossible verb+noun combination), report it in unnaturalItems. Do not pass an item merely because all four options are bad.
+CRITICAL NATURALNESS CHECK: mentally insert the selected answer into the complete sentence and judge the resulting British English collocation/verb pattern. If the keyed/best completion is unidiomatic, semantically wrong, or not a normal B1 collocation, report it in unnaturalItems. Do not pass an item merely because all four options are bad.
 For EVERY gap, substitute all four options into the full sentence. If any non-key option also creates natural, grammatical British English with a defensible meaning in context, report it in alternativeFits. Do not rely only on your first-choice answer.
 Return ONLY JSON:
-{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"alternativeFits":[{"number":22,"letters":["A","B"],"reason":"both produce natural completions"}],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"unnaturalItems":[{"number":22,"completion":"...","reason":"unidiomatic collocation"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.`,
+{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"alternativeFits":[{"number":22,"letters":["A","B"],"reason":"both produce natural completions"}],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"unnaturalItems":[{"number":22,"completion":"...","reason":"unidiomatic collocation"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.
+Do not invent faults to fill arrays.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nOPTIONS:\n${questionsView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
+
+  const crossFit = await callReview(
+    `You are a second independent Cambridge B1 Preliminary Part 5 examiner. Ignore the supplied answer key.
+For each gap 21-26, test A, B, C and D one by one in the exact sentence. Return every option that produces a grammatical, idiomatic, contextually defensible completion in natural British English.
+A distractor counts as defensible if a competent B1 candidate could reasonably choose it without violating grammar or meaning. Be especially alert to near-synonyms such as damaged/broken, think/believe, arrive/stop and rent/hire.
+Return ONLY JSON:
+{"fits":[{"number":21,"letters":["C"]},{"number":22,"letters":["A","B"]}],"issues":[]}.
+Do not force one answer per gap.`,
+    `PASSAGE:\n${generated?.passage || ''}\n\nOPTIONS:\n${questionsView(generated)}`,
+  );
+
+  const alternativeFits = asArray(primary?.alternativeFits);
+  for (const row of asArray(crossFit?.fits)) {
+    const letters = [...new Set(asArray(row?.letters).map((x) => String(x).trim().toUpperCase()).filter(Boolean))];
+    if (letters.length > 1) {
+      alternativeFits.push({
+        number: row?.number,
+        letters,
+        reason: 'Independent option-by-option substitution found more than one defensible completion.',
+      });
+    }
+  }
+  return {
+    ...primary,
+    alternativeFits,
+    issues: [...asArray(primary?.issues), ...asArray(crossFit?.issues)],
+  };
 }
 
 async function reviewPart6(generated) {
@@ -217,6 +246,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   }
 
   if (part === 3) {
+    for (const item of asArray(rubric?.levelIssues)) {
+      errors.push(`B1 Part 3 level issue: "${item?.text || '?'}" — ${item?.reason || 'above normal B1 reading level'}`);
+    }
     const c = rubric?.coverage || {};
     if (c.inference === false) warnings.push('B1 Part 3 lacks a clear inference item.');
     if (c.attitudeOrOpinion === false) warnings.push('B1 Part 3 lacks writer attitude/opinion coverage.');
@@ -288,6 +320,17 @@ export async function validateB1ReadingQuality(partNumber, generated) {
     for (const a of asArray(rubric?.ambiguousItems)) {
       errors.push(`B1 Part 6 ambiguity Q${a?.number ?? '?'}: ${asArray(a?.words).join(' / ')}. ${a?.reason || ''}`);
     }
+    const answerWords = expected.map((x) => String(x?.answer || '').trim().toLowerCase()).filter(Boolean);
+    const counts = new Map();
+    for (const word of answerWords) counts.set(word, (counts.get(word) || 0) + 1);
+    const repeated = [...counts.entries()].filter(([, count]) => count > 2);
+    if (repeated.length) {
+      errors.push(`B1 Part 6 repeats the same answer too often: ${repeated.map(([word,count]) => `"${word}" ×${count}`).join(', ')}. Vary the grammar targets across the six gaps.`);
+    }
+    if (new Set(answerWords).size < 4) {
+      errors.push(`B1 Part 6 has only ${new Set(answerWords).size} distinct answers across six gaps; use a broader range of grammar/fixed-language targets.`);
+    }
+
     const vocab = asArray(rubric?.vocabularyStyleItems);
     for (const item of vocab) {
       errors.push(`B1 Part 6 Q${item?.number ?? '?'} tests content vocabulary rather than grammar/fixed language: ${item?.reason || 'replace this gap'}`);
