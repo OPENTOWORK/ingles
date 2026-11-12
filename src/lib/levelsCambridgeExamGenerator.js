@@ -464,9 +464,20 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
     let repairSuffix = '';
     if (attempt > 0 && Array.isArray(validation.errors) && validation.errors.length) {
       const pn = partDef.partNumber;
-      let lengthHint =
-        'CRITICAL length: for cloze Parts 1–3, passage must be 150–180 words (prefer ~160–170). If too long, cut clauses; if too short, add natural detail. Keep all required gaps.';
-      if (pn === 5) {
+      let lengthHint = isB1Reading
+        ? 'CRITICAL B1 Preliminary repair: preserve the official B1 task shape and numbering. Fix the semantic/structural defects listed above rather than copying a B2 format.'
+        : 'CRITICAL length: for cloze Parts 1–3, passage must be 150–180 words (prefer ~160–170). If too long, cut clauses; if too short, add natural detail. Keep all required gaps.';
+      if (isB1Reading) {
+        const b1Hints = {
+          1: 'B1 Part 1: exactly five independent short real-world texts, three options A-C each; one clear main-message answer.',
+          2: 'B1 Part 2: five people Q6-10, eight texts A-H, three unused; match all requirements, not copied words.',
+          3: 'B1 Part 3: one longer text, five questions Q11-15, four options A-D; include detail, inference, attitude/opinion and global/gist coverage.',
+          4: 'B1 Part 4: five gaps Q16-20 and eight sentences A-H, exactly three unused; remove multifit and strengthen backward/forward cohesion.',
+          5: 'B1 Part 5: six vocabulary-led multiple-choice cloze gaps Q21-26, four options A-D; exactly one natural answer per gap.',
+          6: 'B1 Part 6: six one-word gaps Q27-32; make every gap accept exactly one ordinary B1 answer and primarily test grammar/fixed language.',
+        };
+        lengthHint = b1Hints[pn] || lengthHint;
+      } else if (pn === 5) {
         lengthHint =
           'CRITICAL length: Part 5 passage MUST be 550–650 words (never under 500). Expand with detail, examples and contrast — do not return a short summary.';
       } else if (pn === 6) {
