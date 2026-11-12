@@ -452,8 +452,10 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
       ? 5
       : isB2Ruoe
         ? 8
-        : isB1Reading && [4, 5, 6].includes(partDef.partNumber)
-          ? 8
+        : isB1Reading && partDef.partNumber === 4
+          ? 10
+          : isB1Reading && [5, 6].includes(partDef.partNumber)
+            ? 8
           : isB1Reading
             ? 5
             : 3;
@@ -568,13 +570,18 @@ async function generatePartJson(levelLabel, partDef, options) {
   const readingHeavy =
     partDef.mode === 'reading' ||
     (partDef.partNumber >= 5 && partDef.partNumber <= 7);
-  const b1PrecisionPart =
-    String(levelLabel || '').toUpperCase() === 'B1' &&
-    [4, 5, 6].includes(Number(partDef.partNumber));
+  const isB1 = String(levelLabel || '').toUpperCase() === 'B1';
+  const b1PartNumber = Number(partDef.partNumber);
+  const b1Temperature =
+    isB1 && b1PartNumber === 4
+      ? 0.25
+      : isB1 && [5, 6].includes(b1PartNumber)
+        ? 0.45
+        : 0.9;
   const { text } = await cambridgeExamGenerationCompletion({
     system,
     messages: [{ role: 'user', content: prompt }],
-    temperature: b1PrecisionPart ? 0.5 : 0.9,
+    temperature: b1Temperature,
     max_tokens: readingHeavy ? 12288 : 8192,
     response_format: { type: 'json_object' },
   });
