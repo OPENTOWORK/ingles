@@ -31,6 +31,7 @@ export async function chooseB1ReadingVariety(adminDb, { examSlot, partNumber, to
       topic: topicOverride || planned?.topic || existing.topic_id,
       contextId: existing.context_id || planned?.contextId || null,
       context: planned?.context || null,
+      grammarFocus: planned?.grammarFocus || null,
       genreId: existing.genre_id || null,
       titlePatternFamily: existing.title_pattern_family || null,
     };
@@ -45,6 +46,7 @@ export async function chooseB1ReadingVariety(adminDb, { examSlot, partNumber, to
     topic: topicOverride || planned?.topic,
     contextId: planned?.contextId || null,
     context: planned?.context || null,
+    grammarFocus: planned?.grammarFocus || null,
   };
 
   const relevant = (data || []).filter(
