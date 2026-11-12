@@ -689,6 +689,10 @@ OFFICIAL TASK SHAPE:
 - The three extras must be topic-plausible but fail cohesion or meaning at every gap.
 - Use five different answer letters; leave exactly three unused.
 - Natural British English at B1; do not copy supplied sample-test wording.
+- Keep the lexical level genuinely B1 throughout. Prefer common everyday words and straightforward sentence structures.
+- Avoid specialist labels, academic phrasing and unnecessarily abstract vocabulary. Do not use words/phrases such as "predominantly", "cognitive abilities", "adept", "nuance", "polyglot", "immersion", "unparalleled" or similar higher-level wording when a simple B1 expression would work.
+- An occasional unfamiliar word is acceptable only if its meaning is made clear by the surrounding sentence and it is not needed to answer a question.
+- Before returning JSON, reread the passage as a B1 learner: simplify any sentence that sounds like an academic article rather than a B1 exam text.
 
 BUILD METHOD — FOLLOW THIS ORDER:
 1. First write a complete coherent ungapped text.
