@@ -208,7 +208,8 @@ Rules:
 
 Rules:
 - Start with "The correct answer is X." (letter A–G).
-- Explain how the sentence links to the idea BEFORE and/or AFTER the gap; quote a short phrase if possible using double quotation marks.
+- Quote one short phrase verbatim from the passage adjacent to the gap: The text says: "..."
+- Then explain how the inserted sentence links to that phrase.
 - Max 340 characters. No long paragraphs.`;
 
   const gappedTextSystem = `${GAPPED_TEXT_SHARED}\nUse the passage context around the gap.`;

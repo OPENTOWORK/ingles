@@ -298,9 +298,14 @@ export async function fetchUserPracticeErrors(db, userId) {
   });
 
   const partNames = {};
+  const partNumberById = {};
   (partesRes.data || []).forEach((p) => {
     const match = String(p.nombre_parte || '').match(/(\d+)/);
-    if (match) partNames[Number(match[1])] = formatLevelsPartDisplayName(p.nombre_parte);
+    if (match) {
+      const partNumber = Number(match[1]);
+      partNumberById[p.id] = partNumber;
+      partNames[partNumber] = formatLevelsPartDisplayName(p.nombre_parte);
+    }
   });
 
   const teoriaPreguntaMeta = {};
@@ -325,14 +330,15 @@ export async function fetchUserPracticeErrors(db, userId) {
       normalizeLevelSlug(examNames[row.examen_id]) ||
       pq?.levelSlug ||
       'b2';
-    normalized.push(
-      normalizeExamRow(row, {
-        levelSlug,
-        examNames,
-        partNames,
-        preguntaById,
-      }),
-    );
+    const item = normalizeExamRow(row, {
+      levelSlug,
+      examNames,
+      partNames,
+      preguntaById,
+    });
+    const partNumber = item.parteNumero || partNumberById[pq?.parte_id];
+    if (levelSlug === 'b2' && partNumber >= 5 && partNumber <= 7) continue;
+    normalized.push(item);
   }
 
   for (const row of theoryRows) {

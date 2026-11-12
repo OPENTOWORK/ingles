@@ -6,6 +6,7 @@ import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustifica
 import { PART6_GAP_MARKER_RE } from '@/utils/b2ExamTextBlocks';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
+import { getRuoeReviewTrigger } from '@/components/exam/RuoeAnchoredReview';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 
 function getOptionLetter(option) {
@@ -59,6 +60,7 @@ export default function B2ExamInlinePart6Passage({
   hideFeedback = false,
   aiHintsByKey = {},
   onRequestExplanation,
+  answerReview,
 }) {
   const session = useReadingPracticeSession();
 
@@ -224,9 +226,18 @@ export default function B2ExamInlinePart6Passage({
                     data-question-number={questionNumber}
                     className={`levels-exam-inline-part6-gap${isFlagged ? ' question-flagged' : ''}`}
                   >
-                    <label className="levels-exam-inline-part6-gap__label">
+                    <span className="levels-exam-inline-part6-gap__label">
                       <span className="levels-exam-inline-part6-gap__marker">({questionNumber})</span>
-                      <select
+                      {answerReview && !hideFeedback && isChecked ? (
+                        <button
+                          type="button"
+                          className={`levels-exam-inline-part6-gap__select ${stateClass}`}
+                          aria-label={`Gap ${questionNumber}: ${getOptionLetter(selectedOption) || 'No answer'}. Review answer.`}
+                          {...getRuoeReviewTrigger(answerReview, questionKey)}
+                        >
+                          {getOptionLetter(selectedOption) || '—'}
+                        </button>
+                      ) : <select
                         className={`levels-exam-inline-part6-gap__select${stateClass ? ` ${stateClass}` : ''}${selectedId ? '' : ' levels-exam-inline-part6-gap__select--empty'}`}
                         value={selectedId}
                         disabled={!hideFeedback && isChecked}
@@ -251,8 +262,8 @@ export default function B2ExamInlinePart6Passage({
                             </option>
                           );
                         })}
-                      </select>
-                    </label>
+                      </select>}
+                    </span>
                   </span>
                 );
               })}
@@ -261,7 +272,7 @@ export default function B2ExamInlinePart6Passage({
         })}
       </div>
 
-      {!hideFeedback ? (
+      {!hideFeedback && !answerReview ? (
         <Part6Explanations
           mcqGroups={mcqGroups}
           getQuestionKey={getQuestionKey}
