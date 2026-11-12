@@ -844,7 +844,11 @@ export async function generateAndPersistLevelExamPart(adminDb, {
       })
     : null;
   const b1PlannedTheme = chosenVariety
-    ? [chosenVariety.topic, chosenVariety.context ? `context/genre: ${chosenVariety.context}` : null]
+    ? [
+        chosenVariety.topic,
+        chosenVariety.context ? `context/genre: ${chosenVariety.context}` : null,
+        chosenVariety.grammarFocus ? `grammar focus: ${chosenVariety.grammarFocus}` : null,
+      ]
         .filter(Boolean)
         .join('; ')
     : null;
