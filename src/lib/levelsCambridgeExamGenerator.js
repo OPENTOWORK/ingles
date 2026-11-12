@@ -24,6 +24,7 @@ import {
 import { validateGeneratedExamPart } from '@/lib/examPartValidation';
 import { logExamGeneration } from '@/lib/examGenerationLog';
 import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
+import { buildB1ReadingEnunciadoFromGenerated, buildB1ReadingAnswerRowsFromGenerated } from '@/lib/formatB1ReadingEnunciado';
 import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 
 /**
@@ -649,7 +650,10 @@ export async function persistCambridgeGeneratedPart(db, {
   skipAudio = false,
 }) {
   const levelLabel = getLevelExamLabel(levelSlug);
-  const enunciado = buildB2EnunciadoFromGenerated(generated, partNumber);
+  const isB1Reading = String(levelSlug || '').toLowerCase() === 'b1' && Number(partNumber) >= 1 && Number(partNumber) <= 6;
+  const enunciado = isB1Reading
+    ? buildB1ReadingEnunciadoFromGenerated(generated, partNumber)
+    : buildB2EnunciadoFromGenerated(generated, partNumber);
 
   const { data: pregunta, error: pqErr } = await db
     .from('levels_preguntas')
@@ -663,7 +667,9 @@ export async function persistCambridgeGeneratedPart(db, {
     .single();
   if (pqErr) throw new Error(`levels_preguntas: ${pqErr.message}`);
 
-  const { mcq, open } = buildAnswerRowsFromGenerated(generated);
+  const { mcq, open } = isB1Reading
+    ? buildB1ReadingAnswerRowsFromGenerated(generated, partNumber)
+    : buildAnswerRowsFromGenerated(generated);
 
   if (mcq.length) {
     const letterOnlyMcq =
@@ -816,7 +822,7 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     resolveEffectiveExamPartGenerationPrompt,
     resolveDefaultExamPartGenerationPrompt,
   } = await import('@/lib/examPartGenerationPrompt');
-  const generationPrompt = useCodePrompts
+  const generationPrompt = (useCodePrompts || isB1Reading)
     ? resolveDefaultExamPartGenerationPrompt({
         levelSlug: slug,
         partNumber: partDef.partNumber,
@@ -928,7 +934,7 @@ export async function generateAndPersistLevelExam(adminDb, {
   }
 
   const varietySeed = Date.now();
-  const topic = EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  const topic = slug === 'b1' ? null : EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
   const results = [];
 
   for (let i = 0; i < parts.length; i += 1) {
