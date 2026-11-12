@@ -49,9 +49,10 @@ export function buildB1TwentyExamAllocation() {
     const examNumber = examIndex + 1;
     const parts = Array.from({ length: 6 }, (_, partIndex) => {
       const partNumber = partIndex + 1;
-      // 7-step stride is coprime with 23, spreading topics across exams/parts
-      // while guaranteeing six distinct topics within each exam.
-      const topicIndex = (examIndex * 7 + partIndex * 4) % B1_TOPIC_CATEGORIES.length;
+      // Walk the 120 part slots through all 23 topics using a coprime stride.
+      // This gives six distinct topics per exam and an overall 5–6 uses per topic.
+      const flatSlot = examIndex * 6 + partIndex;
+      const topicIndex = (flatSlot * 5) % B1_TOPIC_CATEGORIES.length;
       const contexts = B1_PART_CONTEXT_FAMILIES[partNumber];
       const contextIndex = (examIndex + partIndex * 2) % contexts.length;
       const grammarIndex = (examIndex * 3 + partIndex * 5) % B1_GRAMMAR_AREAS.length;
