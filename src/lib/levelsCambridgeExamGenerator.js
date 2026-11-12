@@ -711,12 +711,13 @@ HARD RULES:
 - The passage must read as a natural short B1 Preliminary text once the marked answers are inserted.
 - Use British spelling, vocabulary and collocations throughout.
 - Part 5 tests mainly vocabulary. Use a varied lexical mix; do not make the set mainly grammar.
-- Design the six items from six reasonably different lexical relationships.
+- Use this exact target mix: Q21 fixed collocation; Q22 phrasal/prepositional verb; Q23 dependent preposition/complementation; Q24 verb-noun collocation; Q25 fixed phrase; Q26 precise lexical choice.
+- Do not reuse the same targetType for several items.
 - Each answer must be a normal B1 word or common B1 chunk.
 - Each item has exactly three one-word distractors.
 - Wrong options should be plausible to a learner but MUST fail in this exact sentence because of collocation, complementation, fixed phrase, phrasal-verb pattern, register or precise contextual meaning.
 - Do not create broad free-choice synonym slots. Avoid sets where two ordinary words can both make good English.
-- Especially avoid ambiguous families such as help/allow when both structures work; damaged/broken without a forcing collocation; think/believe when either proposition verb works; rent/hire where regional/contextual wording does not force one.
+- Especially avoid ambiguous families such as explore/discover; help/allow when both structures work; damaged/broken without a forcing collocation; think/believe; rent/hire; start/begin; finish/end; choose/select; buy/purchase; like/love when the surrounding wording does not force one.
 - Mentally substitute the answer and all three distractors into the complete sentence. If two produce natural, contextually correct British English, rewrite the sentence or options before returning JSON.
 - The answer must not depend on obscure C1/C2 vocabulary.
 - Do not copy sample-test wording.
@@ -734,6 +735,19 @@ ${repair}`;
   if (items.length !== 6) throw new Error(`B1 Part 5 planner returned ${items.length} items; expected 6.`);
 
   const byNumber = new Map(items.map((item) => [Number(item?.number), item]));
+  const expectedTypes = new Map([
+    [21, 'fixed collocation'],
+    [22, 'phrasal/prepositional verb'],
+    [23, 'dependent preposition/complementation'],
+    [24, 'verb-noun collocation'],
+    [25, 'fixed phrase'],
+    [26, 'precise lexical choice'],
+  ]);
+  const riskyPairs = [
+    ['explore','discover'], ['help','allow'], ['damaged','broken'], ['think','believe'],
+    ['rent','hire'], ['start','begin'], ['finish','end'], ['choose','select'],
+    ['buy','purchase'], ['like','love'],
+  ];
   for (let number = 21; number <= 26; number += 1) {
     const item = byNumber.get(number);
     if (!item) throw new Error(`B1 Part 5 planner missing item ${number}.`);
@@ -741,6 +755,16 @@ ${repair}`;
     const distractors = Array.isArray(item?.distractors)
       ? item.distractors.map((x) => String(x || '').trim()).filter(Boolean)
       : [];
+    const targetType = String(item?.targetType || '').trim().toLowerCase();
+    if (targetType !== expectedTypes.get(number)) {
+      throw new Error(`B1 Part 5 planner item ${number} must use targetType "${expectedTypes.get(number)}"; got "${targetType || 'missing'}".`);
+    }
+    const rejectionReasons = Array.isArray(item?.rejectionReasons)
+      ? item.rejectionReasons.map((x) => String(x || '').trim()).filter(Boolean)
+      : [];
+    if (rejectionReasons.length !== 3) {
+      throw new Error(`B1 Part 5 planner item ${number} must explain why all three distractors fail.`);
+    }
     if (!/^[A-Za-zÀ-ÿ'-]+$/.test(answer)) {
       throw new Error(`B1 Part 5 planner answer ${number} must be one word.`);
     }
@@ -750,6 +774,11 @@ ${repair}`;
     const normalised = [answer, ...distractors].map((x) => x.toLowerCase());
     if (new Set(normalised).size !== 4) {
       throw new Error(`B1 Part 5 planner item ${number} has duplicate options.`);
+    }
+    for (const [a, b] of riskyPairs) {
+      if (normalised.includes(a) && normalised.includes(b)) {
+        throw new Error(`B1 Part 5 planner item ${number} contains risky near-synonyms "${a}/${b}". Use a more strongly constrained option set.`);
+      }
     }
   }
 
