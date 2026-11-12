@@ -2556,7 +2556,9 @@ function B2ReadingExamsPageInner() {
                     />
                   ) : null
                 }
-                split={isInlinePassagePart || isPart1McqCloze || isPart6GappedText ? true : 'auto'}
+                split={
+                  isKeyWordPart ? false : isInlinePassagePart || isPart1McqCloze || isPart6GappedText ? true : 'auto'
+                }
                 contentClassName={
                   isKeyWordPart
                     ? `${part4Styles.exercise} ${landingFont.variable}`
