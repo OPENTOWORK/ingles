@@ -146,8 +146,9 @@ async function reviewPart5(generated) {
     `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 5 WITHOUT trusting the supplied key.
 Solve all six multiple-choice cloze gaps. This task tests mainly vocabulary, with some grammar/complementation allowed.
 Flag ambiguity if two options are natural and defensible in context. Flag distractors only when they are obviously unusable rather than plausibly tempting. Flag a gap that is really a Part 6-style pure grammar gap if that pattern dominates the task.
+CRITICAL NATURALNESS CHECK: mentally insert the selected answer into the complete sentence and judge the resulting British English collocation/verb pattern. If the keyed/best completion is unidiomatic, semantically wrong, or not a normal B1 collocation (for example an impossible verb+noun combination), report it in unnaturalItems. Do not pass an item merely because all four options are bad.
 Return ONLY JSON:
-{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.`,
+{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"unnaturalItems":[{"number":22,"completion":"...","reason":"unidiomatic collocation"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nOPTIONS:\n${questionsView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
 }
@@ -214,6 +215,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   }
 
   if (part === 5) {
+    for (const item of asArray(rubric?.unnaturalItems)) {
+      errors.push(`B1 Part 5 unnatural completion Q${item?.number ?? '?'}: ${item?.reason || item?.completion || 'the completed sentence is not natural British English'}`);
+    }
     const grammarOnly = asArray(rubric?.grammarOnlyItems);
     if (grammarOnly.length >= 4) {
       errors.push('B1 Part 5 is dominated by pure grammar gaps; it should test mainly vocabulary.');
@@ -245,10 +249,8 @@ export async function validateB1ReadingQuality(partNumber, generated) {
       errors.push(`B1 Part 6 ambiguity Q${a?.number ?? '?'}: ${asArray(a?.words).join(' / ')}. ${a?.reason || ''}`);
     }
     const vocab = asArray(rubric?.vocabularyStyleItems);
-    if (vocab.length >= 2) {
-      errors.push(`B1 Part 6 contains ${vocab.length} content-vocabulary gaps; it should primarily test grammar/fixed language.`);
-    } else if (vocab.length === 1) {
-      warnings.push(`B1 Part 6 Q${vocab[0]?.number ?? '?'} may test content vocabulary rather than grammar/fixed language.`);
+    for (const item of vocab) {
+      errors.push(`B1 Part 6 Q${item?.number ?? '?'} tests content vocabulary rather than grammar/fixed language: ${item?.reason || 'replace this gap'}`);
     }
   }
 
