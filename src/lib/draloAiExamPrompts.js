@@ -305,6 +305,16 @@ OFFICIAL TASK SHAPE:
 - Do not make the set mainly grammar gaps; that is Part 6.
 - Do not copy or closely imitate any supplied sample-test text.
 
+ITEM-BUILD METHOD — CRITICAL:
+1. Choose the intended lexical relationship BEFORE writing the options.
+2. Write the full sentence with the intended word inserted and make sure it is a natural, standard B1 British English collocation or phrase.
+3. Remove that word to create the gap.
+4. Create three distractors that are tempting because of meaning or word class, but that fail in THIS exact sentence because of collocation, complementation, register or meaning.
+5. Substitute A, B, C and D back into the complete sentence one by one. If two options are both natural and defensible, rewrite the sentence or the options.
+6. Avoid broad adjective/noun slots where several ordinary synonyms could work equally well (for example flexible/spacious/comfortable, damaged/broken, think/believe) unless the surrounding wording clearly forces one choice.
+7. Prefer established lexical chunks such as traffic jam, book a ticket, take part, make a decision, rather than vague free combinations.
+8. Before returning JSON, perform a second option-by-option cross-fit check for all six gaps. Exactly one option per gap must survive.
+
 Return ONLY JSON with: partTitle, directions, title, passage containing gaps (21) ___ to (26) ___,
 questions[{id:"q1"–"q6",number:21–26,type:"mcq",options:["A) ...","B) ...","C) ...","D) ..."]}],
 modelAnswers[{id,number:21–26,answer:"A"|"B"|"C"|"D"}].`;
