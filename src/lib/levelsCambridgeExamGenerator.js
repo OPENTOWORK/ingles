@@ -1084,7 +1084,11 @@ export async function previewLevelExamPartGeneration({
       .find((exam) => exam.examNumber === examSlot)?.parts
       ?.find((part) => part.partNumber === partDef.partNumber);
     if (!planned) throw new Error(`No approved B1 Reading allocation for Exam ${examSlot}, Part ${partDef.partNumber}.`);
-    theme = [planned.topic, planned.context ? `context/genre: ${planned.context}` : null]
+    theme = [
+      planned.topic,
+      planned.context ? `context/genre: ${planned.context}` : null,
+      planned.grammarFocus ? `grammar focus: ${planned.grammarFocus}` : null,
+    ]
       .filter(Boolean)
       .join('; ');
   }
