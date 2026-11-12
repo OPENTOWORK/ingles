@@ -1,5 +1,6 @@
 'use client';
 
+import { getRuoeReviewTrigger } from '@/components/exam/RuoeAnchoredReview';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
@@ -25,6 +26,7 @@ export default function B2ExamInlineMcqClozePassage({
   getQuestionKey,
   selectedOptions = {},
   checkedQuestions = {},
+  answerReview,
   onOptionSelect,
   hideFeedback = false,
   aiHintsByKey = {},
@@ -268,6 +270,7 @@ export default function B2ExamInlineMcqClozePassage({
                 selectedOption,
                 group,
               );
+              const canReview = !hideFeedback && isChecked && answerReview;
               const isFlagged = hideFeedback && !!session.flaggedQuestions[questionKey];
 
               return (
@@ -281,7 +284,7 @@ export default function B2ExamInlineMcqClozePassage({
                     type="button"
                     className={`levels-exam-inline-mcq-gap__trigger${displayWord ? '' : ' levels-exam-inline-mcq-gap__trigger--empty'}${stateClass ? ` ${stateClass}` : ''}`}
                     aria-expanded={isOpen}
-                    aria-haspopup="listbox"
+                    aria-haspopup={canReview ? undefined : "listbox"}
                     aria-label={
                       !hideFeedback && isChecked
                         ? `Question ${questionNumber}: ${displayWord || 'No answer'}. ${selectedOption?.correcta ? 'Correct' : 'Incorrect'}.`
@@ -289,7 +292,7 @@ export default function B2ExamInlineMcqClozePassage({
                           ? `Question ${questionNumber}: ${displayWord}. Click to change.`
                           : `Question ${questionNumber}. Click to choose an answer.`
                     }
-                    disabled={!hideFeedback && isChecked}
+                    disabled={!hideFeedback && isChecked && !canReview}
                     onClick={(event) => {
                       if (!hideFeedback && isChecked) return;
                       if (openQuestionNumber === questionNumber) {
@@ -299,6 +302,7 @@ export default function B2ExamInlineMcqClozePassage({
                       }
                       openGapMenu(questionNumber, event.currentTarget, group.options?.length || 4);
                     }}
+                    {...(canReview ? getRuoeReviewTrigger(answerReview, questionKey) : {})}
                   >
                     <span className="levels-exam-inline-mcq-gap__marker">({questionNumber})</span>
                     <span className="levels-exam-inline-mcq-gap__value">

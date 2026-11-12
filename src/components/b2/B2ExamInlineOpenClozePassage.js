@@ -1,6 +1,7 @@
 'use client';
 
 
+import { RuoeReviewableInput } from '@/components/exam/RuoeAnchoredReview';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
@@ -71,6 +72,7 @@ export default function B2ExamInlineOpenClozePassage({
   aiHintsByKey = {},
   labels = {},
   onRequestExplanation,
+  answerReview,
   showInlineExample = false,
   exampleGap0Word = '',
 }) {
@@ -201,7 +203,9 @@ export default function B2ExamInlineOpenClozePassage({
                 >
                   <span className="levels-exam-inline-gap__group">
                     <span className="levels-exam-inline-gap__marker">({questionNumber})</span>
-                    <input
+                    <RuoeReviewableInput
+                      review={answerReview}
+                      questionKey={questionKey}
                       type="text"
                       className={`levels-exam-inline-gap__input${inputStateClass ? ` ${inputStateClass}` : ''}`}
                       value={currentValue}

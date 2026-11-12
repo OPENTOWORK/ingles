@@ -11,14 +11,14 @@ import {
 
 const ReadingPracticeSessionContext = createContext(null);
 
-export function ReadingPracticeSessionProvider({ children }) {
+export function ReadingPracticeSessionProvider({ children, defaultInstantFeedback = true }) {
   const [focusMode, setFocusMode] = useState(false);
   const [flaggedQuestions, setFlaggedQuestions] = useState({});
   const [timerHidden, setTimerHidden] = useState(false);
   const [confidenceByQuestion, setConfidenceByQuestion] = useState({});
   const [checkAttempts, setCheckAttempts] = useState(0);
   const [answersRevealed, setAnswersRevealed] = useState(false);
-  const [instantFeedback, setInstantFeedback] = useState(true);
+  const [instantFeedback, setInstantFeedback] = useState(defaultInstantFeedback);
   const [readingSettings, setReadingSettingsState] = useState(DEFAULT_READING_SETTINGS);
 
   useEffect(() => {
