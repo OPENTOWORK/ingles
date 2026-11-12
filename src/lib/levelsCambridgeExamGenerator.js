@@ -561,11 +561,136 @@ ${lengthHint}`;
   return { generated: validation.normalized || generated, validation };
 }
 
+async function generateB1Part5PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 5 lexical plan in natural British English.
+Topic/context: ${topic}.
+
+This is a precision-first planning stage. Build the completed text FIRST, then create the options.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "markedPassage":"a coherent B1 text containing exactly [[21:ANSWER]] ... [[26:ANSWER]] in reading order",
+  "items":[
+    {
+      "number":21,
+      "answer":"one word",
+      "targetType":"fixed collocation|phrasal/prepositional verb|verb-noun collocation|dependent preposition/complementation|fixed phrase|precise lexical choice",
+      "distractors":["one word","one word","one word"],
+      "rejectionReasons":["why distractor 1 fails in this exact sentence","why distractor 2 fails","why distractor 3 fails"]
+    }
+  ]
+}
+
+HARD RULES:
+- Exactly six marked answers, numbered 21-26, each answer ONE word.
+- The passage must read as a natural short B1 Preliminary text once the marked answers are inserted.
+- Use British spelling, vocabulary and collocations throughout.
+- Part 5 tests mainly vocabulary. Use a varied lexical mix; do not make the set mainly grammar.
+- Design the six items from six reasonably different lexical relationships.
+- Each answer must be a normal B1 word or common B1 chunk.
+- Each item has exactly three one-word distractors.
+- Wrong options should be plausible to a learner but MUST fail in this exact sentence because of collocation, complementation, fixed phrase, phrasal-verb pattern, register or precise contextual meaning.
+- Do not create broad free-choice synonym slots. Avoid sets where two ordinary words can both make good English.
+- Especially avoid ambiguous families such as help/allow when both structures work; damaged/broken without a forcing collocation; think/believe when either proposition verb works; rent/hire where regional/contextual wording does not force one.
+- Mentally substitute the answer and all three distractors into the complete sentence. If two produce natural, contextually correct British English, rewrite the sentence or options before returning JSON.
+- The answer must not depend on obscure C1/C2 vocabulary.
+- Do not copy sample-test wording.
+`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.25,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const items = Array.isArray(plan?.items) ? plan.items : [];
+  if (items.length !== 6) throw new Error(`B1 Part 5 planner returned ${items.length} items; expected 6.`);
+
+  const byNumber = new Map(items.map((item) => [Number(item?.number), item]));
+  for (let number = 21; number <= 26; number += 1) {
+    const item = byNumber.get(number);
+    if (!item) throw new Error(`B1 Part 5 planner missing item ${number}.`);
+    const answer = String(item?.answer || '').trim();
+    const distractors = Array.isArray(item?.distractors)
+      ? item.distractors.map((x) => String(x || '').trim()).filter(Boolean)
+      : [];
+    if (!/^[A-Za-zÀ-ÿ'-]+$/.test(answer)) {
+      throw new Error(`B1 Part 5 planner answer ${number} must be one word.`);
+    }
+    if (distractors.length !== 3 || distractors.some((x) => !/^[A-Za-zÀ-ÿ'-]+$/.test(x))) {
+      throw new Error(`B1 Part 5 planner item ${number} needs exactly three one-word distractors.`);
+    }
+    const normalised = [answer, ...distractors].map((x) => x.toLowerCase());
+    if (new Set(normalised).size !== 4) {
+      throw new Error(`B1 Part 5 planner item ${number} has duplicate options.`);
+    }
+  }
+
+  let passage = String(plan?.markedPassage || '');
+  for (let number = 21; number <= 26; number += 1) {
+    const marker = new RegExp(`\\[\\[${number}:[^\\]]+\\]\\]`, 'i');
+    if (!marker.test(passage)) {
+      throw new Error(`B1 Part 5 planner passage missing marker ${number}.`);
+    }
+    passage = passage.replace(marker, `(${number}) ___`);
+  }
+  if (/\[\[2[1-6]:/i.test(passage)) {
+    throw new Error('B1 Part 5 planner left unresolved marked answers in passage.');
+  }
+
+  // Rotate the correct answer position deterministically so the key is not patterned.
+  const correctIndexes = [1, 3, 0, 2, 1, 3]; // B, D, A, C, B, D
+  const questions = [];
+  const modelAnswers = [];
+  for (let number = 21; number <= 26; number += 1) {
+    const item = byNumber.get(number);
+    const answer = String(item.answer).trim();
+    const distractors = item.distractors.map((x) => String(x).trim());
+    const correctIndex = correctIndexes[number - 21];
+    const values = [...distractors];
+    values.splice(correctIndex, 0, answer);
+    const letters = ['A', 'B', 'C', 'D'];
+    questions.push({
+      id: `q${number - 20}`,
+      number,
+      type: 'mcq',
+      options: values.map((value, i) => `${letters[i]}) ${value}`),
+      targetType: item?.targetType || null,
+    });
+    modelAnswers.push({
+      id: `q${number - 20}`,
+      number,
+      answer: letters[correctIndex],
+    });
+  }
+
+  return {
+    partTitle: 'B1 Preliminary Reading Part 5',
+    directions: 'Read the text below and choose the correct word for each space. For each question, choose A, B, C or D.',
+    title: String(plan?.title || '').trim(),
+    passage,
+    questions,
+    modelAnswers,
+  };
+}
+
 async function generatePartJson(levelLabel, partDef, options) {
   const prompt =
     options.userPrompt ||
     buildLevelExamPartUserPrompt(levelLabel, partDef, options);
   const system = options.systemPrompt || getLevelExamPartSystemPrompt(levelLabel);
+
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'multiple-choice-cloze' &&
+    Number(partDef?.partNumber) === 5
+  ) {
+    return generateB1Part5PlannedJson(system, options);
+  }
 
   const readingHeavy =
     partDef.mode === 'reading' ||
