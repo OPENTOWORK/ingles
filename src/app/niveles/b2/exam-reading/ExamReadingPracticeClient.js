@@ -2346,6 +2346,30 @@ function B2ReadingExamsPageInner() {
     selectedQuestion?.enunciado,
   ]);
 
+  const manualCheckButton = useAnchoredAnswerReview && shouldShowCheckAnswersButton({
+    skillPracticeMode: isSkillPracticeSession,
+    hideFeedback,
+    answersRevealed: readingSession.answersRevealed,
+    instantFeedback: readingSession.instantFeedback,
+  }) && (
+    <button
+      type="button"
+      className="levels-exam-module-nav__btn levels-exam-module-nav__btn--check"
+      onClick={handleCheckAllAnswers}
+      disabled={!hasCheckableAnswers}
+    >
+      Check
+    </button>
+  );
+  const readingQuestions = useAnchoredAnswerReview && isReadingPart && partNumberReading !== 6 && selectedPartContent.texto && mcqGroupsForCheck.length > 0
+    ? {
+        exerciseKey: `${examSlot}-${selectedQuestion?.preguntaId}`,
+        numbers: [...new Set(mcqGroupsForCheck.map((group) => group.questionNumber).filter(Boolean))],
+        footer: manualCheckButton,
+        onClose: () => setAnswerReviewSelection(null),
+      }
+    : null;
+
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
       {adminFlow.canRegenerateExams ? (
@@ -2453,6 +2477,7 @@ function B2ReadingExamsPageInner() {
           <>
             {selectedPart && selectedQuestion && (
               <B2ExamPracticeContent
+                readingQuestions={readingQuestions}
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
                 testSelector={
@@ -2511,6 +2536,7 @@ function B2ReadingExamsPageInner() {
                 passage={
                   isPart6GappedText ? (
                     <B2ExamInlinePart6Passage
+                      passageFirst={useAnchoredAnswerReview}
                       answerReview={answerReview}
                       key={`part6-${examSlot}-${selectedQuestion.preguntaId}`}
                       text={selectedPartContent.texto}
@@ -2647,21 +2673,7 @@ function B2ReadingExamsPageInner() {
                 showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze && !isPart6GappedText}
                 footer={
                   <>
-                    {useAnchoredAnswerReview && shouldShowCheckAnswersButton({
-                      skillPracticeMode: isSkillPracticeSession,
-                      hideFeedback,
-                      answersRevealed: readingSession.answersRevealed,
-                      instantFeedback: readingSession.instantFeedback,
-                    }) && (
-                      <button
-                        type="button"
-                        className="levels-exam-module-nav__btn levels-exam-module-nav__btn--check"
-                        onClick={handleCheckAllAnswers}
-                        disabled={!hasCheckableAnswers}
-                      >
-                        Check
-                      </button>
-                    )}
+                    {!readingQuestions && manualCheckButton}
                     {practiceExplanationFooter}
                   </>
                 }
