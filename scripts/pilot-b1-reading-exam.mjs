@@ -74,6 +74,8 @@ for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
 
   if (!result?.validation?.ok) {
     console.error(`Part ${partNumber} failed after retries:`, result?.validation?.errors || []);
+    console.error('LAST GENERATED PART FOR DIAGNOSTIC REVIEW:');
+    console.error(JSON.stringify(result?.generated || null, null, 2));
     process.exit(1);
   }
 
