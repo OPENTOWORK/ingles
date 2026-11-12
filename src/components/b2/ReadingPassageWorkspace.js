@@ -16,18 +16,26 @@ export default function ReadingPassageWorkspace({
   const panelId = useId();
   const trigger = useRef(null);
   const panelRef = useRef(null);
+  const readingPosition = useRef(null);
 
   function closePanel() {
     setOpen(false);
     onPanelClose?.();
-    trigger.current?.focus();
+    trigger.current?.focus({ preventScroll: true });
+    const position = readingPosition.current;
+    readingPosition.current = null;
+    if (position !== null) {
+      requestAnimationFrame(() => window.scrollTo({ top: position, behavior: 'instant' }));
+    }
   }
 
   function openPanel() {
+    const shouldScrollToQuestions = !sentenceBank && window.matchMedia('(max-width: 899px)').matches;
+    readingPosition.current = shouldScrollToQuestions ? window.scrollY : null;
     setOpen(true);
     requestAnimationFrame(() => {
       panelRef.current?.focus({ preventScroll: true });
-      if (!sentenceBank && window.matchMedia('(max-width: 899px)').matches) {
+      if (shouldScrollToQuestions) {
         panelRef.current?.scrollIntoView({ block: 'start' });
       }
     });
