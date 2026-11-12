@@ -18,7 +18,7 @@ const admin = createClient(url, key, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
-const MOTOR_VERSION = 'b1-reading-pilot-v6';
+const MOTOR_VERSION = 'b1-reading-pilot-v7';
 const examSlot = 1;
 
 const { data: existing, error: existingError } = await admin
@@ -64,6 +64,32 @@ for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
     chosen.grammarFocus ? `grammar focus: ${chosen.grammarFocus}` : null,
   ].filter(Boolean).join('; ');
 
+  const { data: cachedPart, error: cacheReadError } = await admin
+    .from('b1_motor_dev_generated_parts')
+    .select('payload,validation,created_at')
+    .eq('exam_slot', examSlot)
+    .eq('motor_version', MOTOR_VERSION)
+    .eq('part_number', partNumber)
+    .maybeSingle();
+
+  if (cacheReadError) {
+    console.error(`Could not read isolated B1 part cache for Part ${partNumber}:`, cacheReadError.message);
+    process.exit(1);
+  }
+
+  if (cachedPart?.payload && cachedPart?.validation?.ok === true) {
+    console.log(`Reusing validated cached B1 Exam 1 Part ${partNumber}: ${topic}`);
+    parts.push(cachedPart.payload);
+    summaries.push({
+      partNumber,
+      topic: chosen.topic,
+      context: chosen.context,
+      grammarFocus: chosen.grammarFocus || null,
+      warnings: cachedPart.validation.warnings || [],
+    });
+    continue;
+  }
+
   console.log(`Generating B1 Exam 1 Part ${partNumber}: ${topic}`);
 
   const result = await generatePartJsonWithRetries('b1', levelLabel, partDef, {
@@ -79,7 +105,7 @@ for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
     process.exit(1);
   }
 
-  parts.push({
+  const partPayload = {
     partNumber,
     allocation: chosen,
     generated: result.generated,
@@ -89,7 +115,24 @@ for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
       warnings: result.validation.warnings || [],
       semanticQuality: result.validation.semanticQuality || null,
     },
-  });
+  };
+
+  const { error: cacheWriteError } = await admin
+    .from('b1_motor_dev_generated_parts')
+    .upsert({
+      exam_slot: examSlot,
+      motor_version: MOTOR_VERSION,
+      part_number: partNumber,
+      payload: partPayload,
+      validation: partPayload.validation,
+    }, { onConflict: 'exam_slot,motor_version,part_number' });
+
+  if (cacheWriteError) {
+    console.error(`Could not save isolated B1 part cache for Part ${partNumber}:`, cacheWriteError.message);
+    process.exit(1);
+  }
+
+  parts.push(partPayload);
 
   summaries.push({
     partNumber,
