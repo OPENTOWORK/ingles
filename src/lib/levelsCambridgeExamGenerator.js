@@ -516,6 +516,7 @@ ${lengthHint}`;
         ...options,
         userPrompt: `${baseUserPrompt}${repairSuffix}`,
         varietySeed: seedBase + Math.max(partIndex, 0) + attempt * 3000,
+        repairErrors: attempt > 0 ? (validation.errors || []) : [],
       });
     } catch (e) {
       validation = {
@@ -561,8 +562,130 @@ ${lengthHint}`;
   return { generated: validation.normalized || generated, validation };
 }
 
+async function generateB1Part4PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above in a genuinely new plan.`
+    : '';
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 4 plan in natural British English.
+Topic/context: ${topic}.
+
+This is a precision-first construction stage. Write the coherent completed text first, then split it into six chunks by removing exactly five complete sentences.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "chunks":[
+    "text before gap 16",
+    "text between gaps 16 and 17",
+    "text between gaps 17 and 18",
+    "text between gaps 18 and 19",
+    "text between gaps 19 and 20",
+    "text after gap 20"
+  ],
+  "removedSentences":[
+    {"number":16,"sentence":"complete sentence","anchorReason":"why this sentence is forced here and fails the other four gaps"},
+    {"number":17,"sentence":"complete sentence","anchorReason":"..."},
+    {"number":18,"sentence":"complete sentence","anchorReason":"..."},
+    {"number":19,"sentence":"complete sentence","anchorReason":"..."},
+    {"number":20,"sentence":"complete sentence","anchorReason":"..."}
+  ],
+  "extras":[
+    {"sentence":"topic-plausible extra sentence","rejectionReason":"why it fits none of the five gaps"},
+    {"sentence":"topic-plausible extra sentence","rejectionReason":"..."},
+    {"sentence":"topic-plausible extra sentence","rejectionReason":"..."}
+  ]
+}
+
+HARD RULES:
+- The completed text made by chunk0 + removed16 + chunk1 + removed17 + ... + removed20 + chunk5 must read like a naturally written B1 article/story.
+- Exactly six chunks, five removed sentences numbered 16-20, and three extras.
+- Each removed sentence must have a UNIQUE local cohesion anchor to its own gap: a clear referent, time sequence, cause/result link, contrast, or lexical chain.
+- Make the five gap environments structurally different. Do not make several gaps generic moments about feelings, participants, an instructor, or "the experience".
+- Avoid generic removed sentences such as "It was a great experience", "Everyone was friendly", "This made me feel better", or anything that could move around the text.
+- For each removed sentence, mentally insert it into all five gap positions. It must be natural in exactly ONE.
+- For each extra sentence, mentally insert it into all five gaps. It must fail all five because of reference, chronology, logic or meaning, not because it is absurd or off-topic.
+- Check whole-text chronology. Do not mention people, objects, decisions or outcomes before they are introduced.
+- Avoid redundant sequencing such as "The class began with an introduction" immediately followed by "The instructor introduced herself".
+- Use British spelling and normal B1 vocabulary. Avoid specialist or academic prose.
+- Do not copy sample-test wording.
+${repair}`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.2,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const chunks = Array.isArray(plan?.chunks) ? plan.chunks.map((x) => String(x || '').trim()) : [];
+  const removed = Array.isArray(plan?.removedSentences) ? plan.removedSentences : [];
+  const extras = Array.isArray(plan?.extras) ? plan.extras : [];
+  if (chunks.length !== 6) throw new Error(`B1 Part 4 planner returned ${chunks.length} chunks; expected 6.`);
+  if (removed.length !== 5) throw new Error(`B1 Part 4 planner returned ${removed.length} removed sentences; expected 5.`);
+  if (extras.length !== 3) throw new Error(`B1 Part 4 planner returned ${extras.length} extras; expected 3.`);
+
+  const byNumber = new Map(removed.map((x) => [Number(x?.number), String(x?.sentence || '').trim()]));
+  for (let number = 16; number <= 20; number += 1) {
+    if (!byNumber.get(number)) throw new Error(`B1 Part 4 planner missing removed sentence ${number}.`);
+  }
+
+  let passage = chunks[0];
+  for (let number = 16; number <= 20; number += 1) {
+    passage += ` (${number}) ___ ${chunks[number - 15]}`;
+  }
+  passage = passage.replace(/\s+/g, ' ').trim();
+
+  const answerSentences = Array.from({ length: 5 }, (_, i) => byNumber.get(16 + i));
+  const extraSentences = extras.map((x) => String(x?.sentence || '').trim()).filter(Boolean);
+  if (extraSentences.length !== 3) throw new Error('B1 Part 4 planner extras must contain three complete sentences.');
+  const all = [...answerSentences, ...extraSentences];
+  if (new Set(all.map((x) => x.toLowerCase())).size !== 8) {
+    throw new Error('B1 Part 4 planner produced duplicate candidate sentences.');
+  }
+
+  const patterns = [
+    ['B','F','A','H','D'],
+    ['G','C','H','A','E'],
+    ['D','A','F','C','H'],
+    ['H','D','B','G','A'],
+  ];
+  const pattern = patterns[Math.abs(Number(options?.varietySeed || 0)) % patterns.length];
+  const letters = ['A','B','C','D','E','F','G','H'];
+  const used = new Set(pattern);
+  const extraLetters = letters.filter((x) => !used.has(x));
+  const sentenceByLetter = new Map();
+  pattern.forEach((letter, i) => sentenceByLetter.set(letter, answerSentences[i]));
+  extraLetters.forEach((letter, i) => sentenceByLetter.set(letter, extraSentences[i]));
+
+  const sentencePool = letters.map((letter) => `${letter}) ${sentenceByLetter.get(letter)}`);
+  const questions = Array.from({ length: 5 }, (_, i) => ({
+    id: `q${i + 1}`,
+    number: 16 + i,
+  }));
+  const modelAnswers = pattern.map((letter, i) => ({
+    id: `q${i + 1}`,
+    number: 16 + i,
+    answer: letter,
+  }));
+
+  return {
+    partTitle: 'B1 Preliminary Reading Part 4',
+    directions: 'Five sentences have been removed from the text below. Choose from sentences A–H the one which fits each gap. There are three extra sentences which you do not need to use.',
+    title: String(plan?.title || '').trim(),
+    passage,
+    sentencePool,
+    questions,
+    modelAnswers,
+  };
+}
+
 async function generateB1Part5PlannedJson(system, options) {
   const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above in a genuinely new lexical plan.`
+    : '';
   const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 5 lexical plan in natural British English.
 Topic/context: ${topic}.
 
@@ -597,7 +720,7 @@ HARD RULES:
 - Mentally substitute the answer and all three distractors into the complete sentence. If two produce natural, contextually correct British English, rewrite the sentence or options before returning JSON.
 - The answer must not depend on obscure C1/C2 vocabulary.
 - Do not copy sample-test wording.
-`;
+${repair}`;
 
   const { text } = await cambridgeExamGenerationCompletion({
     system,
@@ -683,6 +806,14 @@ async function generatePartJson(levelLabel, partDef, options) {
     options.userPrompt ||
     buildLevelExamPartUserPrompt(levelLabel, partDef, options);
   const system = options.systemPrompt || getLevelExamPartSystemPrompt(levelLabel);
+
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'gapped-text' &&
+    Number(partDef?.partNumber) === 4
+  ) {
+    return generateB1Part4PlannedJson(system, options);
+  }
 
   if (
     String(levelLabel || '').toUpperCase() === 'B1' &&
