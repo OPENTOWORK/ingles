@@ -84,7 +84,10 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, re
   const adjacentText = gapContext.length === 2
     ? gapContext[0].trim().split(/\s+/).slice(-16).join(' ')
     : '';
-  const evidence = quote && normalise(readingPassage).includes(normalise(quote)) ? quote : adjacentText;
+  const passageText = normalise(readingPassage);
+  const verifiedQuote = quote && [quote, quote.replace(/[.!?]+$/, '')]
+    .find((candidate) => normalise(candidate) && passageText.includes(normalise(candidate)));
+  const evidence = verifiedQuote || adjacentText;
   const reason = explanation.replace(/^The correct answer is [A-G]\.\s*/i, '')
     .replace(/^The text says:\s*[“"][^”"]+[”"][.!]?\s*/i, '');
   const reviewSections = readingReview ? [
