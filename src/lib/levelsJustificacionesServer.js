@@ -147,6 +147,15 @@ export async function saveLevelsJustificacion(row) {
   return data;
 }
 
+export function isB2ReadingEvidenceRequest(body) {
+  const styles = { 5: 'reading-mcq', 6: 'gapped-text', 7: 'reading-matching' };
+  return body.level === 'b2' && Boolean(styles[body.partNumber]) && styles[body.partNumber] === body.style;
+}
+
+export function hasReadingEvidence(explanation) {
+  return /^The text says:\s*"[\s\S]+?"[.!]?\s+\S/i.test(explanation || '');
+}
+
 function buildUserPrompt(body) {
   const lines = [];
   if (body.level) lines.push(`Level: ${body.level}`);
@@ -154,7 +163,7 @@ function buildUserPrompt(body) {
   if (body.partNumber != null) lines.push(`Part number: ${body.partNumber}`);
   if (body.exerciseType) lines.push(`Exercise type: ${body.exerciseType}`);
   if (body.questionLabel) lines.push(`Item: ${body.questionLabel}`);
-  if (body.questionText) lines.push(`Question / passage context:\n${clip(body.questionText, 2800)}`);
+  if (body.questionText) lines.push(`Question / passage context:\n${clip(body.questionText, isB2ReadingEvidenceRequest(body) ? 5500 : 2800)}`);
   if (body.contextSnippet && body.contextSnippet !== body.questionText) {
     lines.push(`Additional context:\n${clip(body.contextSnippet, 1800)}`);
   }
@@ -165,7 +174,9 @@ function buildUserPrompt(body) {
     lines.push(`Correct answer: ${clip(body.correctChoiceText, 400)}`);
   }
   lines.push(
-    'Write the explanation now. Focus only on why the correct answer is correct. Maximum two sentences.',
+    isB2ReadingEvidenceRequest(body)
+      ? 'Quote the exact passage words supporting the official key, then explain the connection in one sentence.'
+      : 'Write the explanation now. Focus only on why the correct answer is correct. Maximum two sentences.',
   );
   return lines.join('\n\n');
 }
@@ -176,14 +187,17 @@ function buildUserPrompt(body) {
  */
 export async function generateLevelsJustificacionWithOpenAI(body) {
   const userPrompt = buildUserPrompt(body);
+  const readingEvidence = isB2ReadingEvidenceRequest(body);
+  const evidencePrompt = 'You are a British English teacher explaining a B2 First Reading answer. Use exactly this format: The text says: "verbatim quote". This shows that [one concise reason]. Quote a short, contiguous passage excerpt. For Part 6, quote words adjacent to the gap and explain how the keyed sentence connects. For Part 7, quote from the keyed profile. Use only the supplied passage and official answer. Do not restate the answer letter or use any headings.';
+
   const raw = await draloChatCompletion({
-    systemPrompt: SYSTEM_PROMPT,
+    systemPrompt: readingEvidence ? evidencePrompt : SYSTEM_PROMPT,
     userMessage: userPrompt,
     model: getFastModel(),
     temperature: 0.25,
     max_tokens: 180,
   });
-  const explanation = normalizeExplanation(raw);
+  const explanation = readingEvidence ? String(raw || '').replace(/\s+/g, ' ').trim() : normalizeExplanation(raw);
   if (isWeakExplanation(explanation)) {
     throw new Error('Generated explanation was too weak or empty.');
   }
