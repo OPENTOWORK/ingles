@@ -519,9 +519,16 @@ ${lengthHint}`;
         repairErrors: attempt > 0 ? (validation.errors || []) : [],
       });
     } catch (e) {
+      const message = String(e?.message || e || '');
+      const billingBlocked =
+        Number(e?.status) === 429 &&
+        /no credits remaining|billing|quota|insufficient/i.test(message);
+      if (billingBlocked) {
+        throw new Error(`B1 generation stopped: OpenAI API billing/credits are unavailable. ${message}`);
+      }
       validation = {
         ok: false,
-        errors: [`Generation/parse error: ${e?.message || e}`],
+        errors: [`Generation/parse error: ${message}`],
         warnings: [],
         normalized: generated,
       };
