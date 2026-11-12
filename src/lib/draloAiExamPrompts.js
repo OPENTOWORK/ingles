@@ -696,8 +696,11 @@ BUILD METHOD — FOLLOW THIS ORDER:
 3. Remove those exact five sentences and insert gaps 16–20 in their original positions.
 4. Use the removed sentences as five of A–H, then write three extra sentences that are topically plausible but cannot fit any gap.
 5. Before returning JSON, test EVERY sentence A–H in EVERY gap. If any sentence fits more than one gap naturally, rewrite the sentence or the surrounding text.
-6. Check each intended answer has a strong backward link AND a strong forward link. Avoid generic sentences such as "It was a great experience" that could sit in several places.
-7. Reconstruct the full text with the five intended answers and read it as continuous British English. It must be coherent, natural and unambiguous.
+6. Check each intended answer has a strong backward link AND a strong forward link. Avoid generic sentences such as "It was a great experience", "The other participants were friendly", "This was interesting", or any sentence about people/feelings that could sit in several places.
+7. Give EACH correct sentence at least one UNIQUE local cohesion anchor that ties it to its own gap and not to the other four. Good anchors include a specific pronoun/referent, a cause/result phrase whose cause is immediately before, a time-sequence phrase tied to a unique event, or a lexical chain continued immediately after. The anchor must be understandable from the surrounding text and must not depend on hidden knowledge.
+8. Make the five gaps structurally different from one another: do not create several gaps that all sit between generic event-description sentences or several gaps that all concern interactions with other participants.
+9. For every correct sentence, write a mental rejection reason for the other four gaps. If you cannot explain why it fails each of them, rewrite it.
+10. Reconstruct the full text with the five intended answers and read it as continuous British English. It must be coherent, natural and unambiguous at whole-text level, not merely grammatical sentence by sentence.
 
 Return ONLY JSON with: partTitle, directions, title, passage with markers (16) ___ to (20) ___,
 sentencePool:["A) ...","B) ...","C) ...","D) ...","E) ...","F) ...","G) ...","H) ..."],
