@@ -64,7 +64,7 @@ export const B1_EXAM_PARTS = [
     questionCount: 5,
     questionStart: 16,
     directions:
-      'Five sentences have been removed from the text below. For each question, choose the correct answer. There are three extra sentences which you do not need to use.',
+      'Five sentences have been removed from the text below. For each question, choose the correct answer. There is one extra sentence which you do not need to use.',
   },
   {
     partNumber: 5,
