@@ -795,9 +795,18 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   const isB1Reading = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
   const varietyApi = isB1Reading ? await import('@/lib/b1ReadingVarietyHistory') : null;
   const chosenVariety = isB1Reading
-    ? await varietyApi.chooseB1ReadingVariety(adminDb, { examSlot, partNumber: partDef.partNumber, themes: EXAM_THEMES })
+    ? await varietyApi.chooseB1ReadingVariety(adminDb, {
+        examSlot,
+        partNumber: partDef.partNumber,
+        topicOverride: topic || null,
+      })
     : null;
-  const theme = chosenVariety?.topic || topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  const b1PlannedTheme = chosenVariety
+    ? [chosenVariety.topic, chosenVariety.context ? `context/genre: ${chosenVariety.context}` : null]
+        .filter(Boolean)
+        .join('; ')
+    : null;
+  const theme = b1PlannedTheme || topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
   const parts = getLevelExamParts(slug) || [];
   const seedBase = varietySeed ?? Date.now() + examSlot * 1000;
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
