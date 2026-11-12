@@ -1,4 +1,5 @@
 import { cambridgeChatCompletion } from '@/lib/draloAiEngine';
+import { collectPart5Disputes, confirmedPart5DoubleKeys } from '@/lib/b1Part5DoubleKey';
 
 function asArray(value) {
   if (Array.isArray(value)) return value;
@@ -172,40 +173,48 @@ async function reviewPart5(generated) {
   const primary = await callReview(
     `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 5 WITHOUT trusting the supplied key.
 Solve all six multiple-choice cloze gaps. This task tests mainly vocabulary, with some grammar/complementation allowed.
-Flag ambiguity if two options are natural and defensible in context. Flag distractors only when they are obviously unusable rather than plausibly tempting. Flag a gap that is really a Part 6-style pure grammar gap if that pattern dominates the task.
+A tempting distractor is correct item writing. Report alternativeFits ONLY when a second option is an equally acceptable official key: fully grammatical, idiomatic British English, and the same meaning as the best option. A near-synonym that breaks the collocation or changes the meaning is not an alternative key.
+Flag distractors in weakDistractors only when they are obviously unusable. Flag a gap that is really a Part 6-style pure grammar gap if that pattern dominates the task.
 CRITICAL NATURALNESS CHECK: mentally insert the selected answer into the complete sentence and judge the resulting British English collocation/verb pattern. If the keyed/best completion is unidiomatic, semantically wrong, or not a normal B1 collocation, report it in unnaturalItems. Do not pass an item merely because all four options are bad.
-For EVERY gap, substitute all four options into the full sentence. If any non-key option also creates natural, grammatical British English with a defensible meaning in context, report it in alternativeFits. Do not rely only on your first-choice answer.
 Return ONLY JSON:
-{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"alternativeFits":[{"number":22,"letters":["A","B"],"reason":"both produce natural completions"}],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"unnaturalItems":[{"number":22,"completion":"...","reason":"unidiomatic collocation"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.
+{"answers":[{"number":21,"letter":"C"}],"ambiguousItems":[],"alternativeFits":[{"number":22,"letters":["A","B"],"reason":"both would be printed as alternative keys"}],"weakDistractors":[],"grammarOnlyItems":[{"number":24,"reason":"pure article choice"}],"unnaturalItems":[{"number":22,"completion":"...","reason":"unidiomatic collocation"}],"literalSolveItems":[],"issues":[],"verdict":"pass|revise"}.
 Do not invent faults to fill arrays.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nOPTIONS:\n${questionsView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
 
   const crossFit = await callReview(
     `You are a second independent Cambridge B1 Preliminary Part 5 examiner. Ignore the supplied answer key.
-For each gap 21-26, test A, B, C and D one by one in the exact sentence. Return every option that produces a grammatical, idiomatic, contextually defensible completion in natural British English.
-A distractor counts as defensible if a competent B1 candidate could reasonably choose it without violating grammar or meaning. Be especially alert to near-synonyms such as damaged/broken, think/believe, arrive/stop and rent/hire.
+For each gap 21-26, test A, B, C and D one by one in the exact sentence.
+Return a letter only when that completion would be printed as an official alternative answer: fully grammatical, idiomatic British English, and faithful to the writer's meaning.
+Do NOT return a letter just because a competent candidate might choose it. Near-synonyms such as damaged/broken, think/believe, arrive/stop and rent/hire are distractors when the collocation or the context rules them out.
 Return ONLY JSON:
 {"fits":[{"number":21,"letters":["C"]},{"number":22,"letters":["A","B"]}],"issues":[]}.
-Do not force one answer per gap.`,
+One letter per gap is the normal result.`,
     `PASSAGE:\n${generated?.passage || ''}\n\nOPTIONS:\n${questionsView(generated)}`,
   );
 
-  const alternativeFits = asArray(primary?.alternativeFits);
-  for (const row of asArray(crossFit?.fits)) {
-    const letters = [...new Set(asArray(row?.letters).map((x) => String(x).trim().toUpperCase()).filter(Boolean))];
-    if (letters.length > 1) {
-      alternativeFits.push({
-        number: row?.number,
-        letters,
-        reason: 'Independent option-by-option substitution found more than one defensible completion.',
-      });
-    }
+  const disputes = collectPart5Disputes(primary?.alternativeFits, crossFit?.fits);
+  let alternativeFits = [];
+  let adjudicationIssues = [];
+  if (disputes.length) {
+    const verdict = await callReview(
+      `You are the chief Cambridge B1 Preliminary item writer. Another examiner listed more than one option for some Part 5 gaps. Decide the official key.
+Keep a second letter ONLY when Cambridge would have to accept it as an alternative answer: the completed sentence is fully grammatical, idiomatic British English, and it preserves the writer's meaning as well as the best option.
+Reject a second letter when it is only tempting. A near-synonym, a slightly wrong collocation, or a small change of meaning is a distractor, not a second key.
+Example: "The heavy rain ___ the match." A cancelled, B damaged, C broke, D stopped. Only A is the key. Return {"number":21,"letters":["A"]}.
+Return ONLY JSON:
+{"confirmed":[{"number":21,"letters":["C"],"rejected":[{"letter":"A","reason":"the collocation is wrong"}]}],"issues":[]}.
+letters must contain only options you would print on the key.`,
+      `PASSAGE:\n${generated?.passage || ''}\n\nOPTIONS:\n${questionsView(generated)}\n\nDISPUTED GAPS:\n${JSON.stringify(disputes)}`,
+    );
+    alternativeFits = confirmedPart5DoubleKeys(disputes, verdict?.confirmed);
+    adjudicationIssues = asArray(verdict?.issues);
   }
+
   return {
     ...primary,
     alternativeFits,
-    issues: [...asArray(primary?.issues), ...asArray(crossFit?.issues)],
+    issues: [...asArray(primary?.issues), ...asArray(crossFit?.issues), ...adjudicationIssues],
   };
 }
 

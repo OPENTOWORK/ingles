@@ -484,7 +484,7 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
           2: 'B1 Part 2: five people Q6-10, eight texts A-H, three unused; match all requirements, not copied words.',
           3: 'B1 Part 3: one longer text, five questions Q11-15, four options A-D; include detail, inference, attitude/opinion and global/gist coverage.',
           4: 'B1 Part 4: five gaps Q16-20 and eight sentences A-H, exactly three unused; remove multifit and strengthen backward/forward cohesion.',
-          5: 'B1 Part 5: six vocabulary-led multiple-choice cloze gaps Q21-26, four options A-D; exactly one natural answer per gap.',
+          5: 'B1 Part 5: six vocabulary-led multiple-choice cloze gaps Q21-26, four options A-D. Where two options would both be accepted as the key, rewrite the extra option so the collocation or the meaning rules it out. A tempting but incorrect distractor is required.',
           6: 'B1 Part 6: six one-word gaps Q27-32; make every gap accept exactly one ordinary B1 answer and primarily test grammar/fixed language.',
         };
         lengthHint = b1Hints[pn] || lengthHint;
