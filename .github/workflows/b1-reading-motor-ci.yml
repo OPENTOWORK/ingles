@@ -1,22 +1,43 @@
 name: B1 Reading Motor CI
 
 on:
-  push:
-    branches:
-      - audit/ruoe-b1-safeguards-20261112
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   b1-reading-motor:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: npm
-      - run: npm ci
-      - run: npm run test:b1-reading-motor
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run focused B1 Reading motor tests
+        run: npm run test:b1-reading-motor
+
+      - name: Verify required pilot secrets exist
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          test -n "$NEXT_PUBLIC_SUPABASE_URL" || (echo "Missing NEXT_PUBLIC_SUPABASE_URL secret" && exit 1)
+          test -n "$SUPABASE_SERVICE_ROLE_KEY" || (echo "Missing SUPABASE_SERVICE_ROLE_KEY secret" && exit 1)
+          test -n "$OPENAI_API_KEY" || (echo "Missing OPENAI_API_KEY secret" && exit 1)
+
+      - name: Generate isolated B1 Reading Exam 1 pilot
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DRALO_OPENAI_MODEL_VALIDATOR: ${{ secrets.DRALO_OPENAI_MODEL_VALIDATOR }}
+        run: node --loader ./scripts/alias-loader.mjs scripts/pilot-b1-reading-exam.mjs
