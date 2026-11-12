@@ -172,6 +172,7 @@ export function buildPracticeDirectionsBlocks({
  *   footer?: import('react').ReactNode,
  *   titleActions?: import('react').ReactNode,
  *   exerciseLabel?: string | null,
+ *   testSelector?: import('react').ReactNode,
  *   showExerciseFavorite?: boolean,
  *   favoritePreguntaId?: string | null,
  *   favoriteMeta?: import('@/lib/exerciseFavoriteMeta').ExerciseFavoriteMeta | null,
@@ -184,6 +185,7 @@ export function B2ExamPracticeContent({
   titleSubtitle = null,
   titleActions = null,
   exerciseLabel = null,
+  testSelector = null,
   showExerciseFavorite = false,
   favoritePreguntaId = null,
   favoriteMeta = null,
@@ -223,6 +225,7 @@ export function B2ExamPracticeContent({
           title={title}
           subtitle={titleSubtitle}
           exerciseLabel={exerciseLabel}
+          testSelector={testSelector}
           unlockHint={unlockHint}
           titleActions={
             titleActions || showExerciseFavorite ? (

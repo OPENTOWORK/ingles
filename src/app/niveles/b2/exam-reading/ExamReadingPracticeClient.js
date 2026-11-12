@@ -99,6 +99,8 @@ import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSession
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { landingFont } from '@/components/home/landing/landingFont';
 import part4Styles from './Part4Practice.module.css';
+import RuoeTestSelector from './RuoeTestSelector';
+import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import {
   runKeepPracticingSkillFlow,
@@ -2453,6 +2455,23 @@ function B2ReadingExamsPageInner() {
               <B2ExamPracticeContent
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
+                testSelector={
+                  isCombinedPaper && showExerciseFavorite && examSlotPickerProps.availableSlots.length > 1 ? (
+                    <RuoeTestSelector
+                      currentSlot={Number(examSlot)}
+                      slots={examSlotPickerProps.availableSlots}
+                      planLockedSlots={skillNav.planLockedSlots}
+                      isSlotUnlocked={(slot) => isExerciseSlotUnlocked(
+                        skillProgressForNav,
+                        partNumberReading,
+                        slot,
+                        examSlotPickerProps.availableSlots,
+                        skillNav.slotUnlockOptions,
+                      )}
+                      onSelect={(slot) => skillNav.guardExamSlotSelect(slot, handleSelectExamSlot)}
+                    />
+                  ) : null
+                }
                 skillUnlock={
                   isSkillPracticeSession
                     ? {

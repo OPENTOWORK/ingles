@@ -277,6 +277,8 @@ export function useSkillPartFirstNavigation({
     maxExamSlot,
     slotUnlockOptions,
     lang,
+    guardExamSlotSelect: planGating.guardExamSlotSelect,
+    planLockedSlots: planGating.lockedSlots,
     planUpgradeModal: planGating.planUpgradeModal,
   };
 }
