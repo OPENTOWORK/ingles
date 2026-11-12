@@ -1925,10 +1925,13 @@ function B2ReadingExamsPageInner() {
               : '';
       requestAiJustification(questionKey, {
         style,
+        questionNumber: group.questionNumber,
+        partNumber: partNumberReading,
+        level: 'b2',
         partLabel: selectedPart?.nombre || '',
         questionLabel: [`Question ${group.questionNumber}`, group.questionStem].filter(Boolean).join(' · '),
         userChoiceText: option?.formattedText || option?.respuesta || 'No answer submitted',
-        correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
+        correctChoiceText: [correctOpt?.formattedText || correctOpt?.respuesta, partNumberReading === 6 && correctOpt?.optionText].filter(Boolean).join(' '),
         isCorrect: !!option?.correcta,
         answersFromDatabase: answersFromDatabase || undefined,
       });
@@ -2050,6 +2053,12 @@ function B2ReadingExamsPageInner() {
         selectedOptions,
         checkedQuestions,
         includeUnanswered: true,
+        getOptionLabel: (option) => {
+          const label = option?.formattedText || option?.respuesta || '';
+          return partNumberReading === 6 && option?.optionText && !label.includes(option.optionText)
+            ? `${label} ${option.optionText}`
+            : label;
+        },
       }).filter((entry) => entry.questionKey === answerReviewSelection?.key);
       if (!entries.length) return null;
       return (

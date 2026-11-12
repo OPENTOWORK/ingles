@@ -9,7 +9,7 @@ import { buildClientApiUrl } from '@/utils/clientApiUrl';
 /**
  * @param {{ hint?: { loading?: boolean, error?: string | null, text?: string | null } }} props
  */
-export default function LevelsAnswerJustification({ hint, ruoeReview = false, readingReview = false, readingPassage = '', onOpenReview }) {
+export default function LevelsAnswerJustification({ hint, ruoeReview = false, readingReview = false, readingPassage = '', readingGap, onOpenReview }) {
   const [spanish, setSpanish] = useState('');
   const [showSpanish, setShowSpanish] = useState(false);
   const [translating, setTranslating] = useState(false);
@@ -79,7 +79,12 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, re
   const explanation = String(hint?.text || '');
   const quote = readingReview ? explanation.match(/[“"]([^”"]+)[”"]/)?.[1] : '';
   const normalise = (value) => value.replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
-  const evidence = quote && normalise(readingPassage).includes(normalise(quote)) ? quote : '';
+  const gapMarker = readingGap ? new RegExp('\\(' + Number(readingGap) + '\\)\\s*(?:_+|\\.{2,}|…{2,})?') : null;
+  const gapContext = gapMarker ? readingPassage.split(gapMarker) : [];
+  const adjacentText = gapContext.length === 2
+    ? gapContext[0].trim().split(/\s+/).slice(-16).join(' ')
+    : '';
+  const evidence = quote && normalise(readingPassage).includes(normalise(quote)) ? quote : adjacentText;
   const reason = explanation.replace(/^The correct answer is [A-G]\.\s*/i, '')
     .replace(/^The text says:\s*[“"][^”"]+[”"][.!]?\s*/i, '');
   const reviewSections = readingReview ? [

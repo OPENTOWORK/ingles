@@ -116,6 +116,7 @@ export default function SkillPartExplanationsPanel({
                   ruoeReview
                   readingReview={part >= 5 && part <= 7}
                   readingPassage={passage}
+                  readingGap={part === 6 ? entry.questionNumber : undefined}
                   onOpenReview={() => requestExplanation(entry)}
                 />
               )}
