@@ -1,3 +1,4 @@
+import readingEvidence from '@/data/b2ReadingReviewEvidence.json';
 import { NextResponse } from 'next/server';
 import { isOpenAIConfigured, getDefaultModel } from '@/lib/ai/draloAiEngine';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
@@ -157,6 +158,18 @@ export async function POST(request) {
         : body.itemNum != null
           ? Number(body.itemNum)
           : null;
+
+    const reviewed = readingEvidence[preguntaId]?.[itemNum];
+    if (reviewed) {
+      const displayedKey = String(body.correctChoiceText || '').trim().match(/^(?:\d+\s+)?([A-G])(?:[.)\s]|$)/i)?.[1];
+      const matches = displayedKey?.toUpperCase() === reviewed.key;
+      return aiSuccessJson({
+        action,
+        result: matches
+          ? { found: true, explanation: `Evidence in the text · ${reviewed.text}`, cached: true }
+          : { found: false, message: 'Reviewed evidence is temporarily unavailable.' },
+      });
+    }
 
     try {
       const cached = await findLevelsJustificacion({
