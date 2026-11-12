@@ -446,7 +446,8 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
 
   // RUOE B2 (partes 1–7) falla a menudo por límites de palabras / gaps: más reintentos + repair.
   const isB2Ruoe = slug === 'b2' && partDef.partNumber >= 1 && partDef.partNumber <= 7;
-  const maxAttempts = partDef.mode === 'listening' ? 5 : isB2Ruoe ? 8 : 3;
+  const isB1Reading = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
+  const maxAttempts = partDef.mode === 'listening' ? 5 : isB2Ruoe ? 8 : isB1Reading ? 5 : 3;
 
   const baseUserPrompt =
     options.userPrompt ||
@@ -506,6 +507,30 @@ ${lengthHint}`;
 
     validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
     generated = validation.normalized;
+
+    if (validation.ok && isB1Reading) {
+      try {
+        const { validateB1ReadingQuality } = await import('@/lib/b1ReadingQualityValidator');
+        const semantic = await validateB1ReadingQuality(partDef.partNumber, generated);
+        validation = {
+          ...validation,
+          ok: validation.ok && semantic.ok,
+          errors: [...(validation.errors || []), ...(semantic.errors || [])],
+          warnings: [...(validation.warnings || []), ...(semantic.warnings || [])],
+          semanticQuality: semantic,
+        };
+      } catch (e) {
+        validation = {
+          ...validation,
+          ok: false,
+          errors: [
+            ...(validation.errors || []),
+            `B1 semantic quality validator failed to run: ${e?.message || e}`,
+          ],
+        };
+      }
+    }
+
     if (validation.ok && isPartComplete(generated, partDef, slug)) {
       return { generated, validation };
     }
