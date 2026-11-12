@@ -16,7 +16,10 @@
   font-family: inherit;
 }
 
-:global(body:not(.reading-night-mode)) .directions:global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) {
+:global(body:not(.reading-night-mode)) :is(
+  .directions,
+  :global(.levels-b2-practice--skill-compact[data-skill-theme]) .directions
+):global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) {
   --exam-example-answer-background: #d5ecff;
   background: #edf8ff;
   border: 1px solid #c9e7fc;
@@ -24,7 +27,10 @@
   padding: clamp(.75rem, 2vw, 1rem);
 }
 
-:global(body:not(.reading-night-mode)) .directions:global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) > :global(.levels-exam-split__section-title) {
+:global(body:not(.reading-night-mode)) :is(
+  .directions,
+  :global(.levels-b2-practice--skill-compact[data-skill-theme]) .directions
+):global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) > :global(.levels-exam-split__section-title) {
   color: #174c78;
   letter-spacing: .02em;
 }
