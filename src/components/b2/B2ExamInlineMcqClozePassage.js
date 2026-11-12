@@ -4,8 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { parseLineWithOpenGaps } from '@/components/b2/B2ExamInlineOpenClozePassage';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
-import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
-import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 
 function getOptionWord(option) {
   const text = option?.formattedText || option?.respuesta || '';
@@ -352,28 +350,6 @@ export default function B2ExamInlineMcqClozePassage({
 
         return passageLine;
       })}
-
-      {hideFeedback &&
-      mcqGroups.some((g) => {
-        if (g?.questionNumber == null || g.questionNumber === 0) return false;
-        return Boolean(selectedOptions[getQuestionKey(g.questionNumber)]);
-      }) ? (
-        <div className="reading-question-meta-list">
-          {mcqGroups
-            .filter((g) => g?.questionNumber != null && g.questionNumber !== 0)
-            .map((group) => {
-              const questionKey = getQuestionKey(group.questionNumber);
-              if (!selectedOptions[questionKey]) return null;
-              return (
-                <div key={`meta-${group.questionNumber}`} className="reading-question-meta">
-                  <span className="reading-question-meta__label">Q{group.questionNumber}</span>
-                  <ReadingQuestionFlagButton questionKey={questionKey} questionNumber={group.questionNumber} />
-                  <ReadingConfidenceSelector questionKey={questionKey} />
-                </div>
-              );
-            })}
-        </div>
-      ) : null}
     </div>
   );
 }

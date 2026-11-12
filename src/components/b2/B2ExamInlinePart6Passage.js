@@ -4,8 +4,6 @@
 import { useMemo, useState } from 'react';
 import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
 import { PART6_GAP_MARKER_RE } from '@/utils/b2ExamTextBlocks';
-import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
-import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 
 function getOptionLetter(option) {
@@ -270,24 +268,6 @@ export default function B2ExamInlinePart6Passage({
           aiHintsByKey={aiHintsByKey}
           onRequestExplanation={onRequestExplanation}
         />
-      ) : null}
-
-      {hideFeedback ? (
-        <div className="reading-question-meta-list">
-          {mcqGroups
-            .filter((g) => g?.questionNumber != null)
-            .map((group) => {
-              const questionKey = getQuestionKey(group.questionNumber);
-              if (!selectedOptions[questionKey]) return null;
-              return (
-                <div key={`part6-meta-${group.questionNumber}`} className="reading-question-meta">
-                  <span className="reading-question-meta__label">Q{group.questionNumber}</span>
-                  <ReadingQuestionFlagButton questionKey={questionKey} questionNumber={group.questionNumber} />
-                  <ReadingConfidenceSelector questionKey={questionKey} />
-                </div>
-              );
-            })}
-        </div>
       ) : null}
     </div>
   );
