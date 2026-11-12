@@ -12,7 +12,7 @@ const blockStyles = {
   answer: {
     margin: '0.45rem 0',
     padding: '0.45rem 0.6rem',
-    background: '#ebf8ff',
+    background: 'var(--exam-example-answer-background, #ebf8ff)',
     borderRadius: '8px',
     fontWeight: 600,
   },
@@ -121,12 +121,12 @@ export function B2ExamQuestionItem({ children, className = '' }) {
 }
 
 /**
- * @param {{ label?: string, blocks?: Array<{ type: string, text: string }> }} props
+ * @param {{ label?: string, blocks?: Array<{ type: string, text: string }>, className?: string }} props
  */
-export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = [] }) {
+export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = [], className = '' }) {
   if (!blocks?.length) return null;
   return (
-    <div className="levels-exam-split__enunciado">
+    <div className={`levels-exam-split__enunciado${className ? ` ${className}` : ''}`}>
       <p className="levels-exam-split__section-title">{label}</p>
       <B2ExamFormattedEnunciado blocks={blocks} />
     </div>
@@ -155,6 +155,7 @@ export function buildPracticeDirectionsBlocks({
  *   titleSubtitle?: string | null,
  *   directionsText?: string,
  *   directionsLabel?: string,
+ *   directionsClassName?: string,
  *   textLabel?: string,
  *   questionsLabel?: string,
  *   passageText?: string,
@@ -189,6 +190,7 @@ export function B2ExamPracticeContent({
   skillUnlock = null,
   directionsText = '',
   directionsLabel = 'Directions',
+  directionsClassName = '',
   textLabel = 'Text',
   questionsLabel = 'Questions',
   passageText = '',
@@ -238,7 +240,7 @@ export function B2ExamPracticeContent({
 
         <div className={useSplit ? 'levels-exam-split__body' : 'levels-exam-split__body levels-exam-split__body--stacked'}>
           {showDirections && directionBlocks.length > 0 ? (
-            <SkillPartInstructionsPanel label={directionsLabel} blocks={directionBlocks} />
+            <SkillPartInstructionsPanel label={directionsLabel} blocks={directionBlocks} className={directionsClassName} />
           ) : null}
 
           {beforeQuestions}
