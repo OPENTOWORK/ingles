@@ -18,7 +18,7 @@ const admin = createClient(url, key, {
   auth: { autoRefreshToken: false, persistSession: false },
 });
 
-const MOTOR_VERSION = 'b1-reading-pilot-v1';
+const MOTOR_VERSION = 'b1-reading-pilot-v2';
 const examSlot = 1;
 
 const { data: existing, error: existingError } = await admin
