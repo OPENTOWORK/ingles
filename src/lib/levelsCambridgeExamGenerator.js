@@ -996,19 +996,41 @@ export async function previewLevelExamPartGeneration({
   const partDef = getLevelExamPartDef(slug, partNumber);
   if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
 
-  const theme = topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  const isB1ReadingPreview = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
+  let theme = topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  if (isB1ReadingPreview && !topic) {
+    const { buildB1TwentyExamAllocation } = await import('@/lib/b1PreliminaryReadingSpec');
+    const planned = buildB1TwentyExamAllocation()
+      .find((exam) => exam.examNumber === examSlot)?.parts
+      ?.find((part) => part.partNumber === partDef.partNumber);
+    if (!planned) throw new Error(`No approved B1 Reading allocation for Exam ${examSlot}, Part ${partDef.partNumber}.`);
+    theme = [planned.topic, planned.context ? `context/genre: ${planned.context}` : null]
+      .filter(Boolean)
+      .join('; ');
+  }
   const parts = getLevelExamParts(slug) || [];
   const seedBase = varietySeed ?? Date.now() + examSlot * 1000;
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
 
-  const { resolveEffectiveExamPartGenerationPrompt } = await import('@/lib/examPartGenerationPrompt');
-  const generationPrompt = await resolveEffectiveExamPartGenerationPrompt(adminDb, {
-    levelSlug: slug,
-    partNumber,
-    examSlot,
-    topic: theme,
-    varietySeed: seedBase + partIndex,
-  });
+  const {
+    resolveEffectiveExamPartGenerationPrompt,
+    resolveDefaultExamPartGenerationPrompt,
+  } = await import('@/lib/examPartGenerationPrompt');
+  const generationPrompt = isB1ReadingPreview
+    ? resolveDefaultExamPartGenerationPrompt({
+        levelSlug: slug,
+        partNumber,
+        examSlot,
+        topic: theme,
+        varietySeed: seedBase + partIndex,
+      })
+    : await resolveEffectiveExamPartGenerationPrompt(adminDb, {
+        levelSlug: slug,
+        partNumber,
+        examSlot,
+        topic: theme,
+        varietySeed: seedBase + partIndex,
+      });
 
   const t0 = Date.now();
   const { generated, validation } = await generatePartJsonWithRetries(slug, levelLabel, partDef, {
@@ -1019,7 +1041,9 @@ export async function previewLevelExamPartGeneration({
     systemPrompt: generationPrompt.system,
   });
 
-  const enunciadoPreview = buildB2EnunciadoFromGenerated(generated, partDef.partNumber);
+  const enunciadoPreview = isB1ReadingPreview
+    ? buildB1ReadingEnunciadoFromGenerated(generated, partDef.partNumber)
+    : buildB2EnunciadoFromGenerated(generated, partDef.partNumber);
   const partTitle = getExamPartDisplayLabel(slug, partDef.partNumber);
 
   // Validación de calidad IA (B2 Parts 1–2): blind solve + rúbrica. Sus errores bloquean igual que los mecánicos.
