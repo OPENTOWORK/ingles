@@ -1,0 +1,35 @@
+import { allocateExamVariety } from '@/lib/examVarietyAllocation';
+
+/**
+ * B1 development-only topic allocation. Reads actual persisted selections and
+ * refuses to generate if history is inaccessible (no silent random fallback).
+ * A full multi-dimensional Content Brief bank will replace these initial themes.
+ */
+export async function chooseB1ReadingVariety(adminDb, { examSlot, partNumber, themes }) {
+  const { data, error } = await adminDb
+    .from('exam_generation_variety_history')
+    .select('topic_id,context_id,genre_id,title_pattern_family,created_at')
+    .eq('level_slug', 'b1')
+    .eq('part_number', partNumber)
+    .order('created_at', { ascending: true });
+  if (error) throw new Error('B1 variety history unavailable: ' + error.message);
+  const history = (data || []).map((row) => ({
+    topicId: row.topic_id, contextId: row.context_id,
+    genreId: row.genre_id, titlePatternFamily: row.title_pattern_family,
+  }));
+  const candidates = themes.map((theme, index) => ({
+    topicId: 'theme-' + index, topic: theme,
+  }));
+  const chosen = allocateExamVariety(candidates, history);
+  return chosen;
+}
+
+export async function recordB1ReadingVariety(adminDb, { examSlot, partNumber, chosen }) {
+  const { error } = await adminDb.from('exam_generation_variety_history').upsert({
+    level_slug: 'b1', exam_slot: examSlot, part_number: partNumber,
+    topic_id: chosen.topicId, context_id: chosen.contextId || null,
+    genre_id: chosen.genreId || null,
+    title_pattern_family: chosen.titlePatternFamily || null,
+  }, { onConflict: 'level_slug,exam_slot,part_number' });
+  if (error) throw new Error('B1 variety history could not be saved: ' + error.message);
+}
