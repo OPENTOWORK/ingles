@@ -9,7 +9,7 @@ import { buildClientApiUrl } from '@/utils/clientApiUrl';
 /**
  * @param {{ hint?: { loading?: boolean, error?: string | null, text?: string | null } }} props
  */
-export default function LevelsAnswerJustification({ hint, ruoeReview = false, onOpenReview }) {
+export default function LevelsAnswerJustification({ hint, ruoeReview = false, readingReview = false, readingPassage = '', onOpenReview }) {
   const [spanish, setSpanish] = useState('');
   const [showSpanish, setShowSpanish] = useState(false);
   const [translating, setTranslating] = useState(false);
@@ -76,7 +76,16 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, on
   const onReviewToggle = (event) => {
     if (event.currentTarget.open) onOpenReview?.();
   };
-  const reviewSections = review && [
+  const explanation = String(hint?.text || '');
+  const quote = readingReview ? explanation.match(/[“"]([^”"]+)[”"]/)?.[1] : '';
+  const normalise = (value) => value.replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
+  const evidence = quote && normalise(readingPassage).includes(normalise(quote)) ? quote : '';
+  const reason = explanation.replace(/^The correct answer is [A-G]\.\s*/i, '')
+    .replace(/^The text says:\s*[“"][^”"]+[”"][.!]?\s*/i, '');
+  const reviewSections = readingReview ? [
+    { title: 'Evidence in the text', text: evidence, empty: 'No exact quotation is available for this answer.' },
+    { title: 'Why it’s correct', text: reason, empty: 'Explanation temporarily unavailable.' },
+  ] : review && [
     { title: 'What it tests', text: review.focus, empty: 'A skill label is unavailable for this question.' },
     { title: 'Why it’s correct', text: review.reason, empty: 'Explanation temporarily unavailable.' },
   ];

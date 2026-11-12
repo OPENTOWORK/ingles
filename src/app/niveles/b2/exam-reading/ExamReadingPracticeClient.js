@@ -73,7 +73,7 @@ import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozeP
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import B2ExamInlinePart6Passage from '@/components/b2/B2ExamInlinePart6Passage';
-import RuoeAnchoredReview from '@/components/exam/RuoeAnchoredReview';
+import RuoeAnchoredReview, { getRuoeReviewTrigger } from '@/components/exam/RuoeAnchoredReview';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
 import { resolveCorrectAnswerRowIds } from '@/utils/levelsJustifyPayload';
 import {
@@ -762,7 +762,8 @@ function B2ReadingExamsPageInner() {
   ]);
 
   const isUoePart = isCombinedPaper && partNumberReading >= 1 && partNumberReading <= 4;
-  const useAnchoredAnswerReview = isUoePart && isSkillPracticeSession;
+  const isReadingPart = partNumberReading >= 5 && partNumberReading <= 7;
+  const useAnchoredAnswerReview = (isUoePart || isReadingPart) && isSkillPracticeSession;
   const answerReview = useAnchoredAnswerReview
     ? { selectedKey: answerReviewSelection?.key, toggle: toggleAnswerReview }
     : undefined;
@@ -1690,8 +1691,8 @@ function B2ReadingExamsPageInner() {
 
   const mcqGroupsForCheck = useMemo(() => {
     if (isPart1McqCloze) return part1McqGroups;
-    return readingSyntheticMcqGroups || groupedAnswersForUiAndScore || [];
-  }, [isPart1McqCloze, part1McqGroups, readingSyntheticMcqGroups, groupedAnswersForUiAndScore]);
+    return groupedAnswersForUiAndScore || [];
+  }, [isPart1McqCloze, part1McqGroups, groupedAnswersForUiAndScore]);
 
   const resolveMcqQuestionKey = useCallback(
     (group, groupIndex) => {
@@ -1906,7 +1907,7 @@ function B2ReadingExamsPageInner() {
       if (!checkedQuestions[questionKey]) return;
       const selectedId = selectedOptions[questionKey];
       const option = group?.options?.find((o) => o.id === selectedId);
-      if (!option) return;
+
       const correctOpt = group.options.find((o) => o.correcta);
       const answersFromDatabase = group.options
         .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -1923,10 +1924,10 @@ function B2ReadingExamsPageInner() {
       requestAiJustification(questionKey, {
         style,
         partLabel: selectedPart?.nombre || '',
-        questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
-        userChoiceText: option.formattedText || option.respuesta || '',
+        questionLabel: [`Question ${group.questionNumber}`, group.questionStem].filter(Boolean).join(' · '),
+        userChoiceText: option?.formattedText || option?.respuesta || 'No answer submitted',
         correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
-        isCorrect: !!option.correcta,
+        isCorrect: !!option?.correcta,
         answersFromDatabase: answersFromDatabase || undefined,
       });
     },
@@ -2039,7 +2040,28 @@ function B2ReadingExamsPageInner() {
 
   const practiceExplanationFooter = useMemo(() => {
     if (uoeInlineExplanationFooter) return uoeInlineExplanationFooter;
-    if (hideInstantFeedback || !readingSidePanelExplanationEntries.length) return null;
+    if (hideInstantFeedback) return null;
+    if (useAnchoredAnswerReview && isReadingPart) {
+      const entries = buildMcqGroupExplanationEntries({
+        mcqGroups: mcqGroupsForCheck,
+        getQuestionKey: (_, group, index) => resolveMcqQuestionKey(group, index),
+        selectedOptions,
+        checkedQuestions,
+        includeUnanswered: true,
+      }).filter((entry) => entry.questionKey === answerReviewSelection?.key);
+      if (!entries.length) return null;
+      return (
+        <RuoeAnchoredReview selection={answerReviewSelection} onClose={closeAnswerReview}>
+          <SkillPartExplanationsPanel
+            ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
+            entries={entries}
+            aiHintsByKey={aiHintsByKey}
+            onRequestExplanation={handleReadingMcqExplanationRequest}
+          />
+        </RuoeAnchoredReview>
+      );
+    }
+    if (!readingSidePanelExplanationEntries.length) return null;
     return (
       <SkillPartExplanationsPanel
         entries={readingSidePanelExplanationEntries}
@@ -2049,6 +2071,16 @@ function B2ReadingExamsPageInner() {
     );
   }, [
     uoeInlineExplanationFooter,
+    useAnchoredAnswerReview,
+    isReadingPart,
+    mcqGroupsForCheck,
+    resolveMcqQuestionKey,
+    selectedOptions,
+    checkedQuestions,
+    answerReviewSelection,
+    closeAnswerReview,
+    partNumberReading,
+    selectedPartContent.texto,
     hideInstantFeedback,
     readingSidePanelExplanationEntries,
     aiHintsByKey,
@@ -2429,6 +2461,7 @@ function B2ReadingExamsPageInner() {
                 passage={
                   isPart6GappedText ? (
                     <B2ExamInlinePart6Passage
+                      answerReview={answerReview}
                       key={`part6-${examSlot}-${selectedQuestion.preguntaId}`}
                       text={selectedPartContent.texto}
                       mcqGroups={part6McqGroups}
@@ -2633,6 +2666,11 @@ function B2ReadingExamsPageInner() {
                             const showIncorrect = !hideInstantFeedback && isChecked && isSelected && !isCorrect;
 
                             const isLocked = !hideInstantFeedback && isChecked;
+                            const isReviewTarget = isLocked && answerReview &&
+                              (isSelected || !selectedOptions[questionKey] && isCorrect);
+                            const reviewTrigger = isReviewTarget
+                              ? getRuoeReviewTrigger(answerReview, questionKey)
+                              : null;
 
                             const optionStateClass = showCorrect
                               ? 'reading-mcq-option--correct'
@@ -2655,7 +2693,7 @@ function B2ReadingExamsPageInner() {
                                 ]
                                   .filter(Boolean)
                                   .join(' ')}
-                                disabled={isLocked}
+                                disabled={isLocked && !reviewTrigger}
                                 onClick={() => {
                                   if (isLocked) return;
                                   handlePart1McqOptionSelect({
@@ -2665,6 +2703,7 @@ function B2ReadingExamsPageInner() {
                                     questionKey,
                                   });
                                 }}
+                                {...reviewTrigger}
                               >
                                 {option.formattedText || option.respuesta}
                               </button>

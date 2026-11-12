@@ -114,6 +114,8 @@ export default function SkillPartExplanationsPanel({
                 <LevelsAnswerJustification
                   hint={aiHintsByKey[entry.questionKey]}
                   ruoeReview
+                  readingReview={part >= 5 && part <= 7}
+                  readingPassage={passage}
                   onOpenReview={() => requestExplanation(entry)}
                 />
               )}
