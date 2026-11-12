@@ -12,6 +12,7 @@ import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
+import ExamPracticeSurfaceStyles from '@/components/exam/ExamPracticeSurfaceStyles';
 import ReadingPracticeDictionary from '@/components/exam/ReadingPracticeDictionary';
 import ExamPracticeLevelPicker from '@/components/niveles/ExamPracticeLevelPicker';
 import {
@@ -158,6 +159,7 @@ export function B2ExamPracticeLayout({ examPracticeOpen, children }) {
       }}
     >
       {children}
+      <ExamPracticeSurfaceStyles />
     </main>
   );
 }
