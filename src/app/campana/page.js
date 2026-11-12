@@ -2,9 +2,9 @@ import ConversionLandingPage from '@/components/landing/ConversionLandingPage';
 import { pageMetadata } from '@/lib/siteSeo';
 
 export const metadata = pageMetadata({
-  absoluteTitle: 'Prepara tu B2 con Dralo | Plan Plus gratis para los 50 primeros',
+  absoluteTitle: 'Prepara tu B2 First con 3 meses de Plan PREMIUM gratis | Dralo',
   description:
-    'Practica el B2 First de Cambridge con feedback inmediato. Regístrate gratis entre los primeros 50 y consigue el Plan Plus para siempre.',
+    'Practica el B2 First y recibe feedback sobre tus respuestas. Los primeros 25 registros tienen 3 meses de Plan PREMIUM gratis.',
   path: '/campana/',
   robots: { index: false, follow: true },
 });

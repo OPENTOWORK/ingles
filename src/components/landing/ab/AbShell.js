@@ -1,3 +1,4 @@
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import AbTracker from '@/components/landing/ab/AbTracker';
 import AbOrientationQuiz from '@/components/landing/ab/AbOrientationQuiz';
 import './ab-landing.css';
@@ -159,9 +160,9 @@ export function AbFinal({ title, text, cta }) {
 export function OfferPreview({ children }) {
   return (
     <div className="ab-preview ab-preview--offer">
-      <p className="ab-kicker">Plan Plus</p>
-      <strong>Gratis para siempre</strong>
-      <p>Para los primeros registros que completen el formulario a los 30 días.</p>
+      <p className="ab-kicker">{PRO_LAUNCH_COPY.badge}</p>
+      <strong>{PRO_LAUNCH_COPY.title}</strong>
+      <p>{PRO_LAUNCH_COPY.microcopy}</p>
       {children}
     </div>
   );

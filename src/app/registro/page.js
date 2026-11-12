@@ -15,7 +15,8 @@ import PasswordInput from '@/components/PasswordInput';
 import GoogleIdentityButton from '@/components/auth/GoogleIdentityButton';
 import { FORM_LEGAL_SNIPPETS } from '@/lib/legal/legalDocuments';
 import { detectClientDeviceType } from '@/lib/clientDeviceType';
-import { readAttributionFromSearch, FOUNDING_OFFER } from '@/lib/abExperiment';
+import { readAttributionFromSearch } from '@/lib/abExperiment';
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import { trackRegistrationComplete, trackRegistrationStart } from '@/lib/abExperimentTrack';
 import { trackSignUp } from '@/lib/signupTracking';
 import { readStoredVisitorId } from '@/lib/visitorPresence';
@@ -52,10 +53,9 @@ export default function RegistroPage() {
   const router = useRouter();
   useEffect(() => {
     const attribution = readAttributionFromSearch(window.location.search);
-    if (attribution) {
-      setFromCampaign(attribution.pageType === 'campaign');
-      trackRegistrationStart(attribution);
-    }
+    const src = new URLSearchParams(window.location.search).get('src');
+    if (attribution?.pageType === 'campaign' || src === 'promo_25') setFromCampaign(true);
+    if (attribution) trackRegistrationStart(attribution);
   }, []);
 
   useEffect(() => {
@@ -371,9 +371,9 @@ export default function RegistroPage() {
       <h2 style={authHeadingStyle}>Crear cuenta</h2>
       {fromCampaign ? (
         <div style={campaignNoteStyle}>
-          <p style={campaignNoteTitleStyle}>Crea tu cuenta y accede a la promoción del Plan Plus</p>
+          <p style={campaignNoteTitleStyle}>{PRO_LAUNCH_COPY.badge}</p>
           <p style={campaignNoteBodyStyle}>
-            {`Para los primeros ${FOUNDING_OFFER.total} registros. Sin tarjeta. Para conservar el Plus gratis, completa el formulario que recibirás a los ${FOUNDING_OFFER.delayDays} días dentro de los ${FOUNDING_OFFER.responseDays} días siguientes.`}
+            {`${PRO_LAUNCH_COPY.title}. ${PRO_LAUNCH_COPY.microcopy} Sin tarjeta.`}
           </p>
         </div>
       ) : null}

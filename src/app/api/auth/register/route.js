@@ -4,6 +4,7 @@ import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { dispatchAutomatedEmail } from '@/lib/dispatchAutomatedEmail';
 import { notifyAdminsOfRegistration } from '@/lib/notifyAdminsOfRegistration';
+import { maybeGrantProLaunch } from '@/lib/proLaunchOffer';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { generateAuthActionLink, getPublicSiteOrigin } from '@/lib/authActionLinks';
 import { markReferralRegistered } from '@/lib/referrals';
@@ -341,19 +342,21 @@ export async function POST(req) {
     }
 
     try {
-      const founding = await maybeGrantFoundingMemberPlus(adminClient, {
+      const promo = await maybeGrantProLaunch(adminClient, {
         userId,
         email,
         nombre,
+        createdAt: signup.user.created_at,
+        role: 'student',
         sendEmail: false,
       });
-      if (founding.granted) {
+      if (promo.granted) {
         console.info(
-          `api/auth/register founding plus: slot ${founding.slotNumber} → ${email}`,
+          `api/auth/register pro launch: slot ${promo.slotNumber} → ${email}`,
         );
       }
     } catch (err) {
-      console.error('api/auth/register founding plus:', err);
+      console.error('api/auth/register pro launch:', err);
     }
 
     // Solo la confirmación: la bienvenida y el aviso de Plan Plus los envía

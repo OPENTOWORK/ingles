@@ -5,8 +5,14 @@ import {
   FOUNDING_SURVEY_RESPONSE_DAYS,
 } from '@/lib/foundingSurvey.rules';
 import { MAX_FOUNDING_SLOT } from '@/lib/foundingMemberPlus.rules';
+import {
+  PRO_LAUNCH_COPY,
+  PRO_LAUNCH_MONTHS,
+  PRO_LAUNCH_PLAN_LABEL,
+  PRO_LAUNCH_SLOT_LIMIT,
+} from '@/lib/proLaunchOffer.rules';
 
-export const AB_CTA_LABEL = 'Quiero mi plaza gratis';
+export const AB_CTA_LABEL = 'Reservar mi plaza';
 
 export const AB_EVENTS = {
   pageView: 'page_view',
@@ -132,8 +138,7 @@ export const FOUNDING_OFFER = {
   responseDays: FOUNDING_SURVEY_RESPONSE_DAYS,
 };
 
-export const CONDITION_SUMMARY =
-  `Durante los primeros ${FOUNDING_SURVEY_DELAY_DAYS} días pruebas Dralo. Para conservar el Plan Plus gratis hay que completar el formulario: se envía al cumplirse esos ${FOUNDING_SURVEY_DELAY_DAYS} días y tienes ${FOUNDING_SURVEY_RESPONSE_DAYS} días para responder. Si no lo completas, el Plan Plus se retira y la cuenta pasa al plan gratuito.`;
+export const CONDITION_SUMMARY = `${PRO_LAUNCH_COPY.subtitle} ${PRO_LAUNCH_COPY.microcopy}`;
 
 export const PAPERS = [
   {
@@ -173,19 +178,19 @@ export const PRACTICE_LOOP = [
 export const CAMPAIGN_FAQ = [
   {
     q: '¿De verdad es gratis?',
-    a: `Sí, para los primeros ${MAX_FOUNDING_SLOT} registros el Plan Plus no se cobra. La condición es completar el formulario cuando se cumplen ${FOUNDING_SURVEY_DELAY_DAYS} días. Si no lo completas en los ${FOUNDING_SURVEY_RESPONSE_DAYS} días siguientes, el Plan Plus se retira.`,
+    a: `Sí, para los primeros ${PRO_LAUNCH_SLOT_LIMIT} registros: ${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} sin coste. La oferta se cierra al completarse las plazas.`,
   },
   {
-    q: '¿Qué significa “gratis para siempre”?',
-    a: 'Si completas ese formulario dentro del plazo, el Plan Plus se mantiene sin cuota mensual. No es un periodo de prueba que pase solo a un cobro.',
+    q: '¿Cuánto dura el Plan PREMIUM de esta oferta?',
+    a: `${PRO_LAUNCH_MONTHS} meses desde la fecha de registro. ${PRO_LAUNCH_COPY.microcopy}`,
   },
   {
-    q: '¿Qué tengo que hacer durante los primeros 30 días?',
-    a: `Practicar con la cuenta. A los ${FOUNDING_SURVEY_DELAY_DAYS} días Dralo envía el formulario. Tienes ${FOUNDING_SURVEY_RESPONSE_DAYS} días para responderlo.`,
+    q: '¿Qué pasa cuando terminan los 3 meses?',
+    a: 'Los 3 meses no se cobran y el registro no pide tarjeta. La condición exacta al cumplirse ese plazo no está publicada: esta oferta no activa un cobro por sí sola.',
   },
   {
-    q: '¿Qué ocurre si no completo el formulario?',
-    a: 'El Plan Plus se retira y la cuenta pasa al plan gratuito.',
+    q: '¿Qué ocurre al completarse las 25 plazas?',
+    a: 'La oferta se cierra. Quien se registre después crea su cuenta sin esos 3 meses.',
   },
   {
     q: '¿Qué incluye Plan Plus?',
@@ -199,7 +204,7 @@ export const CAMPAIGN_FAQ = [
   },
   {
     q: '¿Cuánto tiempo puedo utilizar Dralo?',
-    a: 'La cuenta no tiene una fecha de cierre en esta promoción. El Plan Plus gratis se conserva si completas el formulario en el plazo. Si no, sigues en el plan gratuito.',
+    a: `La cuenta sigue abierta. Esta oferta cubre ${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} y termina al cumplirse ese plazo o al agotarse las ${PRO_LAUNCH_SLOT_LIMIT} plazas, lo que corresponda a cada alta.`,
   },
   {
     q: '¿Tengo que introducir una tarjeta?',
@@ -291,11 +296,11 @@ export function campaignMetadata(variant) {
   const title =
     normalizeAbVariant(variant) === 'b'
       ? 'Estudias en clase. Aquí ves el fallo en lo que tú has escrito | Dralo'
-      : `Plan Plus gratis para los primeros ${MAX_FOUNDING_SLOT} registros | Dralo`;
+      : `${PRO_LAUNCH_COPY.title} | Dralo`;
   const description =
     normalizeAbVariant(variant) === 'b'
-      ? `Mira la corrección de Writing y las fotos de Speaking. Plan Plus gratis para los primeros ${MAX_FOUNDING_SLOT}, si completas el formulario a los ${FOUNDING_SURVEY_DELAY_DAYS} días.`
-      : `Practica el B2 First y mejora tu Writing. Plan Plus gratis para los primeros ${MAX_FOUNDING_SLOT} registros, si completas el formulario a los ${FOUNDING_SURVEY_DELAY_DAYS} días.`;
+      ? PRO_LAUNCH_COPY.metaDescription
+      : PRO_LAUNCH_COPY.metaDescription;
   return {
     title: { absolute: title },
     description,

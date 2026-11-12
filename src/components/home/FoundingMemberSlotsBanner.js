@@ -2,9 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Sparkles } from 'lucide-react';
+import {
+  PRO_LAUNCH_COPY,
+  PRO_LAUNCH_MONTHS,
+  PRO_LAUNCH_PLAN_LABEL,
+  PRO_LAUNCH_SLOTS_PATH,
+} from '@/lib/proLaunchOffer.rules';
 
-const CONDITIONS_TEXT =
-  'Después de 30 días solo tendrás que rellenar un breve formulario.';
+const CONDITIONS_TEXT = PRO_LAUNCH_COPY.microcopy;
 
 /** Refresco en home: la API ya va sin caché; esto evita números viejos con la pestaña abierta. */
 const FOUNDING_SLOTS_POLL_MS = 45_000;
@@ -13,18 +18,14 @@ function formatSlotsMessage(remaining, total) {
   if (remaining === 1) {
     return (
       <>
-        Queda <strong>1 plaza</strong>{' '}
-        <span className="founding-slots-banner__gratis">GRATIS</span> de <strong>Plan Plus</strong>{' '}
-        <strong>para siempre</strong> entre los {total} primeros registros
+        Queda <strong>1</strong> de <strong>{total} plazas</strong> de {PRO_LAUNCH_PLAN_LABEL} durante {PRO_LAUNCH_MONTHS} meses
       </>
     );
   }
 
   return (
     <>
-      Quedan <strong>{remaining} plazas</strong>{' '}
-      <span className="founding-slots-banner__gratis">GRATIS</span> de <strong>Plan Plus</strong>{' '}
-      <strong>para siempre</strong> entre los {total} primeros registros
+      Quedan <strong>{remaining}</strong> de <strong>{total} plazas</strong> de {PRO_LAUNCH_PLAN_LABEL} durante {PRO_LAUNCH_MONTHS} meses
     </>
   );
 }
@@ -64,7 +65,7 @@ export default function FoundingMemberSlotsBanner() {
 
     async function refreshAvailability() {
       try {
-        const res = await fetch(`/api/founding-member/slots?_=${Date.now()}`, {
+        const res = await fetch(`${PRO_LAUNCH_SLOTS_PATH}?_=${Date.now()}`, {
           cache: 'no-store',
           headers: { Pragma: 'no-cache' },
         });

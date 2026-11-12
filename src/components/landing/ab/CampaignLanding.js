@@ -9,9 +9,8 @@ import {
 } from '@/components/landing/ab/AbShell';
 import FoundingSlotsStatus from '@/components/landing/ab/FoundingSlotsStatus';
 import CampaignVisual from '@/components/landing/ab/CampaignVisual';
+import { PRO_LAUNCH_COPY, PRO_LAUNCH_SLOT_LIMIT } from '@/lib/proLaunchOffer.rules';
 import {
-  FOUNDING_OFFER,
-  PLUS_ENTITLEMENTS,
   buildRegisterHref,
   normalizeAbVariant,
 } from '@/lib/abExperiment';
@@ -24,13 +23,13 @@ function Cta({ source, searchParams, children }) {
       variant="a"
       source={source}
     >
-      {children || 'Crear mi cuenta gratis'}
+      {children || PRO_LAUNCH_COPY.cta}
     </AbCta>
   );
 }
 
 function conditionText() {
-  return `Promoción para los primeros ${FOUNDING_OFFER.total} registros. Para conservar el Plan Plus gratis, completa el formulario que recibirás a los ${FOUNDING_OFFER.delayDays} días. Tendrás ${FOUNDING_OFFER.responseDays} días para responder; si no lo completas, tu cuenta pasará al plan gratuito.`;
+  return `${PRO_LAUNCH_COPY.microcopy} ${PRO_LAUNCH_COPY.previousOfferNote}`;
 }
 
 function WritingExample() {
@@ -60,39 +59,27 @@ function WritingExample() {
 }
 
 function planPoints() {
-  const entitlements = PLUS_ENTITLEMENTS || {};
-  const primary = ['Práctica B2 First: Reading and Use of English, Writing y Listening'];
-  if (Number.isInteger(entitlements.examsPerMonth)) {
-    primary.push(`${entitlements.examsPerMonth} exámenes al mes`);
-  }
-  if (entitlements.writingAdvanced && Number.isInteger(entitlements.writingCorrectionMonthly)) {
-    primary.push(`Corrección avanzada de Writing: ${entitlements.writingCorrectionMonthly} al mes`);
-  }
-  const secondary = [
-    'Training: ejercicios de gramática, pregunta a pregunta',
-    'Quiz: ronda de preguntas con tiempo',
-  ];
-  if (entitlements.examStrategies) {
-    secondary.push('Exam Strategies: consejos por prueba y por parte');
-  }
-  if (entitlements.progressTracking === 'advanced') {
-    secondary.push('Seguimiento de los resultados de tus prácticas');
-  }
-  return { primary, secondary };
+  return {
+    primary: [
+      'Práctica B2 First: Reading and Use of English, Writing y Listening',
+      'Feedback sobre tus respuestas',
+    ],
+    secondary: ['Seguimiento de los resultados de tus prácticas'],
+  };
 }
 
 const FAQ = [
   {
-    q: '¿Qué incluye el Plan Plus?',
-    a: 'La práctica de B2 First que ya está abierta (Reading and Use of English, Writing y Listening), los exámenes del plan, la corrección avanzada de Writing y el seguimiento de tus resultados. Training es la práctica de gramática, pregunta a pregunta. Quiz es una ronda de preguntas con tiempo.',
+    q: '¿Qué incluye esta oferta?',
+    a: '3 meses de Plan PREMIUM para practicar Reading and Use of English, Writing y Listening, con feedback sobre tus respuestas. Speaking, Error Tracking y Training no forman parte de lo que esta oferta da por disponible.',
   },
   {
-    q: '¿Qué significa “gratis para siempre”?',
-    a: `Si completas el formulario dentro de los ${FOUNDING_OFFER.responseDays} días siguientes a recibirlo, el Plan Plus se mantiene sin cuota mensual. No pasa solo a un cobro.`,
+    q: '¿Cuánto dura?',
+    a: `${PRO_LAUNCH_COPY.microcopy} Quien ya tenía la oferta anterior no entra en estas plazas.`,
   },
   {
-    q: '¿Qué ocurre si no completo el formulario?',
-    a: 'El Plan Plus se retira y la cuenta pasa al plan gratuito.',
+    q: '¿Qué pasa al terminar los 3 meses?',
+    a: 'El registro no pide tarjeta y estos 3 meses no se cobran. La condición al cumplirse el plazo no está publicada: la oferta no activa un cobro por sí sola.',
   },
   {
     q: '¿Necesito tarjeta?',
@@ -124,7 +111,8 @@ export default function CampaignLanding({ variant = 'a', source = 'direct', sear
         lead="Practica con formato de examen y mejora tu Writing con correcciones detalladas y explicaciones."
         actions={
           <div className="ab-hero__offer">
-            <p className="ab-offer-line">Consigue el Plan Plus gratis para siempre.</p>
+            <p className="ab-offer-line">{PRO_LAUNCH_COPY.badge}</p>
+            <p className="ab-offer-line">{PRO_LAUNCH_COPY.title}</p>
             <FoundingSlotsStatus variant="sentence" />
             <div className="ab-hero__row">
               <Cta source={origin} searchParams={searchParams} />
@@ -158,9 +146,9 @@ export default function CampaignLanding({ variant = 'a', source = 'direct', sear
       />
 
       <section className="ab-block ab-plan">
-        <h2>Qué incluye el Plan Plus</h2>
+        <h2>Qué puedes usar con esta oferta</h2>
         <p className="ab-block__lead">
-          Estas son las prestaciones del plan que ya puedes usar. La promoción no cambia esos límites.
+          Practica las partes del examen que ya están abiertas y revisa el feedback. La oferta no añade funciones que todavía están en desarrollo.
         </p>
         <ul className="ab-plan__primary">
           {points.primary.map((item) => (
@@ -175,19 +163,19 @@ export default function CampaignLanding({ variant = 'a', source = 'direct', sear
       </section>
 
       <AbSteps
-        title="Cómo conseguir y conservar tu Plan Plus"
+        title="Cómo reservar tu plaza"
         steps={[
           {
             title: 'Crea tu cuenta',
-            text: `Regístrate sin tarjeta. La promoción está disponible para los primeros ${FOUNDING_OFFER.total} registros.`,
+            text: `Regístrate sin tarjeta mientras queden plazas, hasta ${PRO_LAUNCH_SLOT_LIMIT}.`,
           },
           {
-            title: `Prueba Dralo durante ${FOUNDING_OFFER.delayDays} días`,
-            text: 'Utiliza tu Plan Plus y descubre cómo encaja en tu preparación.',
+            title: 'Empieza con Plan PREMIUM',
+            text: 'Practica las partes del examen y revisa el feedback de tus respuestas.',
           },
           {
-            title: 'Completa el formulario',
-            text: `Lo recibirás al cumplirse los ${FOUNDING_OFFER.delayDays} días y tendrás ${FOUNDING_OFFER.responseDays} días para responder. Si lo completas dentro del plazo, conservarás el Plan Plus gratis para siempre. Si no, tu cuenta pasará al plan gratuito.`,
+            title: '3 meses desde el registro',
+            text: PRO_LAUNCH_COPY.microcopy,
           },
         ]}
       />
@@ -196,7 +184,7 @@ export default function CampaignLanding({ variant = 'a', source = 'direct', sear
 
       <AbFinal
         title="Empieza a practicar tu B2 con Dralo"
-        text={`La promoción es para los primeros ${FOUNDING_OFFER.total} registros. Para conservar el Plus, responde el formulario en los ${FOUNDING_OFFER.responseDays} días siguientes a recibirlo.`}
+        text={PRO_LAUNCH_COPY.subtitle}
         cta={<Cta source={origin} searchParams={searchParams} />}
       />
     </AbPage>

@@ -9,6 +9,12 @@ import {
 } from '@/data/financialPlanConfig';
 import { getFoundingMemberSlotAvailability } from '@/lib/foundingMemberPlus';
 import { MAX_FOUNDING_SLOT } from '@/lib/foundingMemberPlus.rules';
+import { getProLaunchSlotAvailability } from '@/lib/proLaunchOffer';
+import {
+  PRO_LAUNCH_MONTHS,
+  PRO_LAUNCH_PLAN_LABEL,
+  PRO_LAUNCH_SLOT_LIMIT,
+} from '@/lib/proLaunchOffer.rules';
 import { REFERRAL_INVITATIONS_TABLE, REFERRAL_STATUS } from '@/lib/referrals';
 import {
   REFERRAL_REWARD_FREE_DAYS,
@@ -251,18 +257,43 @@ function buildReferralProgramCampaign(invitations = [], tableReady = false) {
 function buildFoundingLifetimePlusCampaign(slots = {}) {
   const total = Number(slots.total) || MAX_FOUNDING_SLOT;
   const claimed = Math.max(0, Number(slots.claimed) || 0);
+
+  return {
+    id: 'founding-lifetime-plus',
+    nombre: 'Plan Plus de por vida (oferta anterior, cerrada)',
+    descripcion:
+      'Oferta cerrada. Quienes ya tienen cupo conservan el Plan Plus. Las altas nuevas no entran en esta promoción.',
+    estado: 'inactiva',
+    enlace: '/',
+    meta: `${claimed} cupos históricos de ${total}. La promo pública está cerrada.`,
+  };
+}
+
+function buildProLaunchCampaign(slots = null) {
+  if (!slots) {
+    return {
+      id: 'pro-launch-25',
+      nombre: `${PRO_LAUNCH_PLAN_LABEL}: ${PRO_LAUNCH_MONTHS} meses (${PRO_LAUNCH_SLOT_LIMIT} plazas)`,
+      descripcion: 'Falta aplicar scripts/migrations/pro_launch_offer_25.sql. Hasta entonces el contador no publica una cifra.',
+      estado: 'pendiente_migracion',
+      enlace: '/',
+      meta: 'Sin tabla pro_launch_grants',
+    };
+  }
+  const total = Number(slots.total) || PRO_LAUNCH_SLOT_LIMIT;
+  const claimed = Math.max(0, Number(slots.claimed) || 0);
   const remaining = Math.max(0, Number(slots.remaining) ?? total - claimed);
   const soldOut = Boolean(slots.soldOut ?? remaining === 0);
 
   return {
-    id: 'founding-lifetime-plus',
-    nombre: 'Plan Plus de por vida (50 primeros registros)',
+    id: 'pro-launch-25',
+    nombre: `${PRO_LAUNCH_PLAN_LABEL}: ${PRO_LAUNCH_MONTHS} meses (${PRO_LAUNCH_SLOT_LIMIT} plazas)`,
     descripcion:
-      'Los registros en los cupos 2–50 reciben Plan Plus gratuito de por vida. El banner de la home muestra las plazas restantes. A los 30 días deben completar la encuesta founding para confirmar el beneficio.',
+      'Las altas nuevas, sin cupo founding, reciben Plan PREMIUM durante 3 meses. El contador lee pro_launch_grants. Al llegar a 25 la oferta se cierra.',
     estado: soldOut ? 'inactiva' : 'activa',
     enlace: '/',
     meta: soldOut
-      ? `Agotado · ${claimed}/${total} plazas asignadas`
+      ? `Plazas completadas · ${claimed}/${total}`
       : `Quedan ${remaining} de ${total} plazas · ${claimed} asignadas`,
   };
 }
@@ -284,13 +315,14 @@ function mapReferralRows(invitations = []) {
  * @param {import('@supabase/supabase-js').SupabaseClient} db
  */
 export async function fetchMarketingPlanDashboard(db) {
-  const [promotions, usersSnapshot, referralSnapshot, subscriptionsSnapshot, foundingSlots] =
+  const [promotions, usersSnapshot, referralSnapshot, subscriptionsSnapshot, foundingSlots, proLaunchSlots] =
     await Promise.all([
       fetchPromotionPlans(db),
       fetchUsersSnapshot(db),
       fetchReferralSnapshot(db),
       fetchActiveSubscriptionsCount(db),
       getFoundingMemberSlotAvailability(db),
+      getProLaunchSlotAvailability(db),
     ]);
 
   const users = usersSnapshot.users;
@@ -311,6 +343,7 @@ export async function fetchMarketingPlanDashboard(db) {
     promotions: {
       plans: promotions,
       campaigns: [
+        buildProLaunchCampaign(proLaunchSlots),
         buildFoundingLifetimePlusCampaign(foundingSlots),
         buildReferralProgramCampaign(invitations, referralSnapshot.tableReady),
         {

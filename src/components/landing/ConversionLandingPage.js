@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowRight, BookOpen, MessageSquare, Target, TrendingUp } from 'lucide-react';
+import { PRO_LAUNCH_COPY, PRO_LAUNCH_SLOTS_PATH } from '@/lib/proLaunchOffer.rules';
 import '@/styles/conversion-landing.css';
 
 const FOUNDING_SLOTS_POLL_MS = 45_000;
@@ -12,7 +13,7 @@ const PILLARS = [
   {
     icon: BookOpen,
     title: 'Practica',
-    text: 'Entrena las diferentes partes del examen (Reading, Writing, Speaking, Use of English).',
+    text: 'Entrena Reading, Writing y Use of English con formato de examen.',
   },
   {
     icon: MessageSquare,
@@ -34,8 +35,7 @@ const PILLARS = [
 const FAQ_ITEMS = [
   {
     q: '¿De verdad es gratis?',
-    a:
-      'Sí. Al registrarte entre los primeros 50 usuarios, obtienes el Plan Plus sin coste. A los 30 días te pediremos rellenar un breve formulario para confirmar tu plaza y mantener el acceso gratuito de forma permanente.',
+    a: `Sí. ${PRO_LAUNCH_COPY.microcopy} ${PRO_LAUNCH_COPY.previousOfferNote}`,
   },
   {
     q: '¿Sustituye a mi academia?',
@@ -47,7 +47,7 @@ const FAQ_ITEMS = [
   },
   {
     q: '¿Qué partes del examen puedo practicar?',
-    a: 'Reading, Writing, Speaking y Use of English.',
+    a: 'Reading and Use of English, Writing y Listening. Speaking todavía no está abierto en la práctica.',
   },
 ];
 
@@ -60,7 +60,7 @@ function useReadingTestHref() {
   return `${READING_TEST_1_PATH}?${params.toString()}`;
 }
 
-function ConversionUrgencyBanner() {
+function useLaunchAvailability() {
   const [availability, setAvailability] = useState(null);
 
   useEffect(() => {
@@ -69,7 +69,7 @@ function ConversionUrgencyBanner() {
 
     async function refreshAvailability() {
       try {
-        const res = await fetch(`/api/founding-member/slots?_=${Date.now()}`, {
+        const res = await fetch(`${PRO_LAUNCH_SLOTS_PATH}?_=${Date.now()}`, {
           cache: 'no-store',
           headers: { Pragma: 'no-cache' },
         });
@@ -98,6 +98,10 @@ function ConversionUrgencyBanner() {
     };
   }, []);
 
+  return availability;
+}
+
+function ConversionUrgencyBanner({ availability }) {
   const remaining = availability?.remaining;
   const slotsLabel =
     typeof remaining === 'number'
@@ -108,9 +112,14 @@ function ConversionUrgencyBanner() {
 
   return (
     <div className="conversion-landing__urgency" role="status" aria-live="polite">
-      <strong>Oferta de lanzamiento:</strong> los primeros 50 registros se llevan el Plan Plus{' '}
-      <span className="conversion-landing__urgency-gratis">GRATIS</span> para siempre. Quedan{' '}
-      <strong>{slotsLabel}</strong>.
+      {availability?.soldOut ? (
+        <strong>{PRO_LAUNCH_COPY.soldOutTitle}</strong>
+      ) : (
+        <>
+          <strong>{PRO_LAUNCH_COPY.badge}.</strong> {PRO_LAUNCH_COPY.title}.{' '}
+          <strong>{availability ? `Quedan ${slotsLabel}` : 'Comprobando plazas'}</strong>.
+        </>
+      )}
     </div>
   );
 }
@@ -126,9 +135,12 @@ function ConversionCta({ children, className = '' }) {
 }
 
 function ConversionLandingContent() {
+  const availability = useLaunchAvailability();
+  const offerOpen = !availability?.soldOut;
+  const ctaLabel = offerOpen ? PRO_LAUNCH_COPY.cta : PRO_LAUNCH_COPY.ctaSoldOut;
   return (
     <div className="conversion-landing">
-      <ConversionUrgencyBanner />
+      <ConversionUrgencyBanner availability={availability} />
 
       <div className="conversion-landing__shell">
         <section className="conversion-landing__hero" aria-labelledby="conversion-hero-title">
@@ -139,10 +151,8 @@ function ConversionLandingContent() {
             Practica las partes del B2 First de Cambridge, recibe feedback inmediato y descubre
             exactamente qué necesitas mejorar antes del examen.
           </p>
-          <ConversionCta>Regístrate gratis y consigue el Plan Plus para siempre</ConversionCta>
-          <p className="conversion-landing__microcopy">
-            Solo quedan plazas para los primeros 50 registros. Sin tarjeta. Sin compromiso.
-          </p>
+          <ConversionCta>{ctaLabel}</ConversionCta>
+          {offerOpen ? <p className="conversion-landing__microcopy">{PRO_LAUNCH_COPY.microcopy}</p> : null}
         </section>
 
         <section className="conversion-landing__section" aria-labelledby="conversion-problem">
@@ -197,7 +207,7 @@ function ConversionLandingContent() {
 
         <section className="conversion-landing__offer" aria-labelledby="conversion-offer">
           <h2 id="conversion-offer">
-            Plan Plus GRATIS para siempre, solo para los 50 primeros
+            {PRO_LAUNCH_COPY.title}
           </h2>
           <p className="conversion-landing__section-lead" style={{ textAlign: 'center', color: '#7c2d12' }}>
             Estamos lanzando Dralo y queremos que los primeros usuarios formen parte de esto desde el
@@ -209,24 +219,21 @@ function ConversionLandingContent() {
           <ol className="conversion-landing__steps">
             <li>
               <span className="conversion-landing__step-num">1</span>
-              <span>Te registras hoy — es gratis y no necesitas tarjeta.</span>
+              <span>Te registras hoy, sin tarjeta, mientras queden plazas.</span>
             </li>
             <li>
               <span className="conversion-landing__step-num">2</span>
-              <span>Practicas con el Plan Plus desde el primer día, sin restricciones.</span>
+              <span>Practicas con Plan PREMIUM y revisas el feedback de tus respuestas.</span>
             </li>
             <li>
               <span className="conversion-landing__step-num">3</span>
-              <span>
-                A los 30 días, solo tienes que rellenar un breve formulario para confirmar tu plaza —
-                y el Plan Plus se queda contigo gratis para siempre.
-              </span>
+              <span>{PRO_LAUNCH_COPY.microcopy}</span>
             </li>
           </ol>
           <div style={{ marginTop: '1.25rem' }}>
-            <ConversionCta>Quiero mi plaza gratis</ConversionCta>
+            <ConversionCta>{ctaLabel}</ConversionCta>
             <p className="conversion-landing__microcopy conversion-landing__microcopy--dark">
-              Plazas limitadas a los primeros 50 registros. Sin permanencia, sin sorpresas.
+              {PRO_LAUNCH_COPY.previousOfferNote} Sin tarjeta.
             </p>
           </div>
         </section>
@@ -302,15 +309,14 @@ function ConversionLandingContent() {
             No dejes tu preparación solo en manos de la clase.
           </h2>
           <p>
-            Empieza a entrenar hoy y asegúrate el Plan Plus gratis para siempre — solo quedan plazas
-            para los primeros 50 registros.
+            {offerOpen ? PRO_LAUNCH_COPY.subtitle : PRO_LAUNCH_COPY.soldOutText}
           </p>
           <ConversionCta className="conversion-landing__cta--light">
-            Reservar mi plaza gratis
+            {ctaLabel}
           </ConversionCta>
-          <p className="conversion-landing__microcopy">
-            Sin tarjeta. Sin compromiso. Cancelas cuando quieras.
-          </p>
+          {offerOpen ? (
+            <p className="conversion-landing__microcopy">{PRO_LAUNCH_COPY.microcopy}</p>
+          ) : null}
         </section>
 
         <p className="conversion-landing__footer-note">

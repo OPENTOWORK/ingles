@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { FOUNDING_OFFER } from '@/lib/abExperiment';
+import { PRO_LAUNCH_COPY, PRO_LAUNCH_SLOT_LIMIT, PRO_LAUNCH_SLOTS_PATH } from '@/lib/proLaunchOffer.rules';
 
 /**
  * Muestra plazas solo cuando el endpoint público ya existente devuelve un número.
@@ -12,12 +12,12 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('/api/founding-member/slots/', { cache: 'no-store' })
+    fetch(PRO_LAUNCH_SLOTS_PATH, { cache: 'no-store' })
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('slots'))))
       .then((data) => {
         if (cancelled) return;
         const remaining = Number(data?.remaining);
-        const total = Number(data?.total) || FOUNDING_OFFER.total;
+        const total = Number(data?.total) || PRO_LAUNCH_SLOT_LIMIT;
         if (!Number.isInteger(remaining) || remaining < 0) {
           setState({ status: 'unknown' });
           return;
@@ -41,14 +41,14 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
     if (state.status === 'ready' && state.soldOut) {
       return (
         <p className="ab-seats-line" role="status">
-          Las {state.total} plazas de esta promoción ya están asignadas.
+          {PRO_LAUNCH_COPY.soldOutTitle}
         </p>
       );
     }
     if (state.status === 'ready') {
       return (
         <p className="ab-seats-line" role="status">
-          Quedan {state.remaining} plazas.
+          Quedan {state.remaining} de {state.total} plazas.
         </p>
       );
     }
@@ -66,7 +66,7 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
     const remaining = state.status === 'ready' && !state.soldOut ? state.remaining : null;
     const label =
       state.status === 'ready' && state.soldOut
-        ? 'Plazas asignadas'
+        ? PRO_LAUNCH_COPY.soldOutTitle
         : state.status === 'loading'
           ? 'Plazas limitadas'
           : 'Plazas limitadas';
@@ -88,7 +88,7 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
     const remaining = state.status === 'ready' && !state.soldOut ? state.remaining : null;
     const label =
       state.status === 'ready' && state.soldOut
-        ? 'Plazas asignadas'
+        ? PRO_LAUNCH_COPY.soldOutTitle
         : state.status === 'loading'
           ? 'Plazas'
           : 'Plazas limitadas';
@@ -110,7 +110,7 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
   if (state.status === 'ready' && state.soldOut) {
     return (
       <p className="ab-slots" role="status">
-        Las {state.total} plazas de esta promoción ya están asignadas.
+        {PRO_LAUNCH_COPY.soldOutTitle}
       </p>
     );
   }
@@ -118,7 +118,7 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
   if (state.status === 'ready') {
     return (
       <p className="ab-slots" role="status">
-        {`Plazas disponibles: ${state.remaining} de ${state.total}.`}
+        {`Quedan ${state.remaining} de ${state.total} plazas.`}
       </p>
     );
   }
@@ -133,7 +133,7 @@ export default function FoundingSlotsStatus({ variant = 'text' }) {
 
   return (
     <p className="ab-slots" role="status">
-      La promoción es para los primeros {FOUNDING_OFFER.total} registros. [PLAZAS RESTANTES]
+      {PRO_LAUNCH_COPY.badge}
     </p>
   );
 }

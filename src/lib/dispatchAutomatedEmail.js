@@ -25,6 +25,7 @@ const CTA_LABEL_BY_TRIGGER = {
   confirmation_reminder: 'Confirmar mi email',
   password_reset_requested: 'Crear nueva contraseña',
   founding_member_plus_granted: 'Entrar en Dralo',
+  pro_launch_granted: 'Entrar en Dralo',
   founding_member_survey: 'Responder el formulario',
   founding_member_survey_reminder: 'Responder ahora',
   founding_member_survey_confirmed: 'Entrar en Dralo',
