@@ -144,3 +144,33 @@
     display: none;
   }
 }
+
+.anchored {
+  position: absolute;
+  z-index: 1050;
+}
+.anchored .card {
+  box-shadow: 0 8px 24px rgb(20 35 57 / 18%);
+  margin: 0;
+}
+.anchored .heading {
+  padding-inline-end: 2.75rem;
+}
+.close {
+  align-items: center;
+  background: #edf8ff;
+  border: 1px solid #c9e7fc;
+  border-radius: .5rem;
+  color: #174c78;
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 1.35rem;
+  height: 2.75rem;
+  justify-content: center;
+  line-height: 1;
+  position: absolute;
+  right: .45rem;
+  top: .45rem;
+  width: 2.75rem;
+}

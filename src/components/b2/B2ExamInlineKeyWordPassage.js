@@ -1,6 +1,7 @@
 'use client';
 
 
+import { RuoeReviewableInput } from '@/components/exam/RuoeAnchoredReview';
 import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
 import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
@@ -40,6 +41,7 @@ export default function B2ExamInlineKeyWordPassage({
   aiHintsByKey = {},
   labels = {},
   onRequestExplanation,
+  answerReview,
 }) {
   const activeSet = new Set(activeQuestionNumbers);
   const items = parseB2KeyWordTransformItems(text);
@@ -103,7 +105,9 @@ export default function B2ExamInlineKeyWordPassage({
                 </span>
               ) : (
                 <span className="levels-exam-inline-gap__group levels-exam-inline-gap__group--kwt">
-                  <input
+                  <RuoeReviewableInput
+                    review={answerReview}
+                    questionKey={questionKey}
                     type="text"
                     className={`levels-exam-inline-gap__input levels-exam-inline-gap__input--kwt${inputStateClass ? ` ${inputStateClass}` : ''}`}
                     value={currentValue}
