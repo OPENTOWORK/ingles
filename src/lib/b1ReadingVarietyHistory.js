@@ -1,6 +1,10 @@
 import { assessExamVariety } from '@/lib/examVarietyAllocation';
 import { buildB1TwentyExamAllocation } from '@/lib/b1PreliminaryReadingSpec';
 
+// SAFETY: this draft branch writes B1 pilot history only to an isolated table.
+// Do not point this at live exam/content tables.
+const B1_DEV_HISTORY_TABLE = 'b1_motor_dev_variety_history';
+
 /**
  * B1 development-only topic allocation. Reads actual persisted selections and
  * refuses to generate if history is inaccessible (no silent random fallback).
@@ -8,7 +12,7 @@ import { buildB1TwentyExamAllocation } from '@/lib/b1PreliminaryReadingSpec';
  */
 export async function chooseB1ReadingVariety(adminDb, { examSlot, partNumber, topicOverride = null }) {
   const { data, error } = await adminDb
-    .from('exam_generation_variety_history')
+    .from(B1_DEV_HISTORY_TABLE)
     .select('exam_slot,part_number,topic_id,context_id,genre_id,title_pattern_family,created_at')
     .eq('level_slug', 'b1')
     .order('created_at', { ascending: true });
@@ -69,7 +73,7 @@ export async function chooseB1ReadingVariety(adminDb, { examSlot, partNumber, to
 }
 
 export async function recordB1ReadingVariety(adminDb, { examSlot, partNumber, chosen }) {
-  const { error } = await adminDb.from('exam_generation_variety_history').upsert({
+  const { error } = await adminDb.from(B1_DEV_HISTORY_TABLE).upsert({
     level_slug: 'b1', exam_slot: examSlot, part_number: partNumber,
     topic_id: chosen.topicId, context_id: chosen.contextId || null,
     genre_id: chosen.genreId || null,
