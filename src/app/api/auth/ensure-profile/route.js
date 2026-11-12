@@ -8,13 +8,13 @@ import {
 import { pickRandomMascotVariant } from '@/lib/profileDefaultAvatar';
 import { maybeSendWelcomeRegistrationEmail } from '@/lib/welcomeRegistrationEmail';
 import { notifyAdminsOfRegistration } from '@/lib/notifyAdminsOfRegistration';
-import { maybeGrantFoundingMemberPlus } from '@/lib/foundingMemberPlus';
+import { maybeGrantProLaunch } from '@/lib/proLaunchOffer';
 import {
   normalizeRegistrationDeviceType,
   persistRegistrationDevice,
 } from '@/lib/registrationDevice';
 
-async function grantFoundingPlusForAuthUser(adminClient, user) {
+async function grantProLaunchForAuthUser(adminClient, user) {
   if (!user?.email) return;
   const nombre =
     user.user_metadata?.name ||
@@ -22,19 +22,20 @@ async function grantFoundingPlusForAuthUser(adminClient, user) {
     user.user_metadata?.nombre ||
     '';
   try {
-    const founding = await maybeGrantFoundingMemberPlus(adminClient, {
+    const promo = await maybeGrantProLaunch(adminClient, {
       userId: user.id,
       email: user.email,
       nombre,
       createdAt: user.created_at,
+      role: user.user_metadata?.role,
     });
-    if (founding.granted) {
+    if (promo.granted) {
       console.info(
-        `api/auth/ensure-profile founding plus: slot ${founding.slotNumber} → ${user.email}`,
+        `api/auth/ensure-profile pro launch: slot ${promo.slotNumber} → ${user.email}`,
       );
     }
   } catch (err) {
-    console.error('api/auth/ensure-profile founding plus:', err);
+    console.error('api/auth/ensure-profile pro launch:', err);
   }
 }
 
@@ -116,7 +117,7 @@ export async function POST(req) {
           .eq('user_id', user.id);
       }
 
-      await grantFoundingPlusForAuthUser(adminClient, user);
+      await grantProLaunchForAuthUser(adminClient, user);
       await persistRegistrationDevice(adminClient, user.id, registrationDevice);
       const welcomeMail = await maybeSendWelcomeRegistrationEmail(adminClient, user);
       try {
@@ -183,7 +184,7 @@ export async function POST(req) {
       }
     }
 
-    await grantFoundingPlusForAuthUser(adminClient, user);
+    await grantProLaunchForAuthUser(adminClient, user);
     await persistRegistrationDevice(adminClient, user.id, registrationDevice);
 
     return NextResponse.json({ ok: true, created: true });

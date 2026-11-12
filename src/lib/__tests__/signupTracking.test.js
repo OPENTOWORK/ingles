@@ -9,6 +9,7 @@ describe('signup attribution', () => {
       '/registro/?utm_source=google&utm_medium=cpc&gclid=click-1&fbclid=fb&src=hero',
     );
     assert.equal(normalizeSignupSource('plan_plus'), 'plan_plus');
+    assert.equal(normalizeSignupSource('promo_25'), 'promo_25');
     assert.equal(normalizeSignupSource('no-existe'), 'otros');
     assert.equal(buildSignupHref('', 'header'), '/registro/?src=otros');
   });
@@ -44,9 +45,19 @@ describe('signup attribution', () => {
     assert.equal(first, true);
     assert.equal(repeat, false);
     assert.equal(other, true);
+    const promo = pushSignUpEvent({
+      method: 'email',
+      userId: 'user-3',
+      search: '?src=promo_25',
+      storage: memory,
+      layer,
+    });
+    assert.equal(promo, true);
     assert.deepEqual(layer, [
       { event: 'sign_up', method: 'email', signup_source: 'hero' },
       { event: 'sign_up', method: 'email', signup_source: 'plan_plus' },
+      { event: 'sign_up', method: 'email', signup_source: 'promo_25' },
+      { event: 'signup_promo_25', method: 'email', signup_source: 'promo_25' },
     ]);
   });
 });

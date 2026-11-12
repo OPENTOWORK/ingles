@@ -13,11 +13,8 @@ import {
   ReadingPreview,
 } from '@/components/landing/ab/AbShell';
 import FoundingSlotsStatus from '@/components/landing/ab/FoundingSlotsStatus';
-import {
-  CONDITION_SUMMARY,
-  FOUNDING_OFFER,
-  buildRegisterHref,
-} from '@/lib/abExperiment';
+import { CONDITION_SUMMARY, buildRegisterHref } from '@/lib/abExperiment';
+import { PRO_LAUNCH_COPY, PRO_LAUNCH_SLOT_LIMIT } from '@/lib/proLaunchOffer.rules';
 
 function Cta({ source }) {
   return (
@@ -27,19 +24,19 @@ function Cta({ source }) {
       variant="b"
       source={source}
     >
-      Crear mi cuenta gratis
+      {PRO_LAUNCH_COPY.cta}
     </AbCta>
   );
 }
 
 const FAQ = [
   {
-    q: '¿El Plus de esta promo se paga?',
-    a: `No, si entras entre los ${FOUNDING_OFFER.total} primeros y respondes el formulario. Si no lo respondes en el plazo, el Plus se retira y te quedas en el plan gratuito.`,
+    q: '¿El Plan PREMIUM de esta promo se paga?',
+    a: `No durante ${PRO_LAUNCH_COPY.microcopy}`,
   },
   {
-    q: '¿Cuándo llega ese formulario?',
-    a: `A los ${FOUNDING_OFFER.delayDays} días. Desde entonces tienes ${FOUNDING_OFFER.responseDays} días para completarlo.`,
+    q: '¿Cuántas plazas hay?',
+    a: `Hay ${PRO_LAUNCH_SLOT_LIMIT}. ${PRO_LAUNCH_COPY.previousOfferNote} Al completarse, el registro sigue sin esta oferta.`,
   },
   {
     q: '¿Hace falta tarjeta en el alta?',
@@ -61,7 +58,7 @@ export default function CampaignVisual({ source = 'direct' }) {
         actions={<Cta source={source} />}
         extra={
           <AbTrust
-            items={['Sin tarjeta', 'Feedback sobre tu texto', `${FOUNDING_OFFER.total} plazas de Plan Plus`]}
+            items={['Sin tarjeta', 'Feedback sobre tu texto', PRO_LAUNCH_COPY.badge]}
           />
         }
         visual={<ReadingPreview />}
@@ -153,7 +150,7 @@ export default function CampaignVisual({ source = 'direct' }) {
       />
 
       <AbOffer
-        title={`Plan Plus gratis para los primeros ${FOUNDING_OFFER.total}`}
+        title={PRO_LAUNCH_COPY.title}
         text={CONDITION_SUMMARY}
         cta={<Cta source={source} />}
         seats={<FoundingSlotsStatus variant="badge" />}

@@ -59,9 +59,9 @@ describe('ab experiment routes and attribution', () => {
       ['40 %', '20 %', '20 %', '20 %'],
     );
     assert.equal(PAPERS[0].name, 'Reading and Use of English');
-    assert.match(CONDITION_SUMMARY, /30 días/);
-    assert.match(CONDITION_SUMMARY, /formulario/);
-    assert.equal(AB_CTA_LABEL, 'Quiero mi plaza gratis');
+    assert.match(CONDITION_SUMMARY, /25/);
+    assert.match(CONDITION_SUMMARY, /3 meses/);
+    assert.equal(AB_CTA_LABEL, 'Reservar mi plaza');
     assert.ok(PLUS_HIGHLIGHTS.some((item) => /Writing Correction/i.test(item)));
     assert.ok(CAMPAIGN_FAQ.some((item) => item.q.includes('tarjeta')));
   });

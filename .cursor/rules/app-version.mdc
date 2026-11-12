@@ -5,7 +5,7 @@ alwaysApply: true
 
 # App version on GitHub updates
 
-The product version is `1.0.x`. It is **1.0.18** on `main`. The next push is **1.0.19**.
+The product version is `1.0.x`. It is **1.0.31** on `release/1.0.1`. The next push is **1.0.32**.
 
 On every update that is committed and pushed to GitHub, bump the patch by 1 before the commit (`1.0.1` → `1.0.2` → `1.0.3`). Do this even when the push is not to production.
 

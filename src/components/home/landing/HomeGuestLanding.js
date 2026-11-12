@@ -21,11 +21,12 @@ import {
 } from 'lucide-react';
 import { APP_ROUTES } from '@/config/appRoutes';
 import DraloTagline from '@/components/DraloTagline';
-import { MAX_FOUNDING_SLOT } from '@/lib/foundingMemberPlus.rules';
 import {
-  FOUNDING_SURVEY_DELAY_DAYS,
-  FOUNDING_SURVEY_RESPONSE_DAYS,
-} from '@/lib/foundingSurvey.rules';
+  PRO_LAUNCH_COPY,
+  PRO_LAUNCH_SLOT_LIMIT,
+  PRO_LAUNCH_SLOTS_PATH,
+  proLaunchSlotsLabel,
+} from '@/lib/proLaunchOffer.rules';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
 import { buildSignupHref } from '@/lib/signupTracking';
 import { sitePublicPath } from '@/utils/sitePublicPath';
@@ -248,8 +249,14 @@ const FAQ = [
     published: true,
   },
   {
-    q: '¿Cómo conservo el Plan Plus gratis?',
-    a: `Pruebas Dralo durante ${FOUNDING_SURVEY_DELAY_DAYS} días. Al cumplirse, te enviamos un formulario con preguntas sobre qué te parece la web y qué se puede mejorar, y tienes ${FOUNDING_SURVEY_RESPONSE_DAYS} días para completarlo. Si lo completas, conservas el Plan Plus gratis para siempre. Si no, tu cuenta pasa al plan gratuito.`,
+    q: '¿Quién consigue los 3 meses de Plan PREMIUM?',
+    a: `Quien cree su cuenta mientras queden plazas de esta oferta, hasta ${PRO_LAUNCH_SLOT_LIMIT}. No entra quien ya tiene la oferta anterior. Al asignarse la plaza ${PRO_LAUNCH_SLOT_LIMIT}, la oferta se cierra y el registro sigue sin ella. ${PRO_LAUNCH_COPY.microcopy}`,
+    offer: true,
+    published: true,
+  },
+  {
+    q: '¿Qué pasa cuando terminan los 3 meses?',
+    a: 'Los 3 meses no se cobran y el registro no pide tarjeta. La condición exacta al cumplirse ese plazo no está publicada todavía: esta oferta no activa un cobro por sí sola ni promete un plan concreto después.',
     offer: true,
     published: true,
   },
@@ -339,7 +346,7 @@ function useFoundingSlots(enabled) {
     let cancelled = false;
 
     const load = () => {
-      fetch(`/api/founding-member/slots/?_=${Date.now()}`, { cache: 'no-store' })
+      fetch(`${PRO_LAUNCH_SLOTS_PATH}?_=${Date.now()}`, { cache: 'no-store' })
         .then((response) => (response.ok ? response.json() : Promise.reject(new Error('slots'))))
         .then((data) => {
           if (cancelled) return;
@@ -349,9 +356,11 @@ function useFoundingSlots(enabled) {
             setSlots({ status: 'unknown' });
             return;
           }
+          const total = Number(data?.total);
           setSlots({
             status: 'ready',
             remaining,
+            total: Number.isInteger(total) && total > 0 ? total : PRO_LAUNCH_SLOT_LIMIT,
             soldOut: Boolean(data?.soldOut) || remaining === 0,
           });
         })
@@ -383,7 +392,8 @@ function useSignupHrefs() {
 
   return {
     hero: buildSignupHref(search, 'hero'),
-    plan: buildSignupHref(search, 'plan_plus'),
+    promo: buildSignupHref(search, 'promo_25'),
+    plan: buildSignupHref(search, 'promo_25'),
     other: buildSignupHref(search, 'otros'),
   };
 }
@@ -392,15 +402,15 @@ function SlotsBox({ slots, href }) {
   if (slots.status === 'unknown') return null;
   if (slots.status === 'ready' && (slots.soldOut || slots.remaining === 0)) {
     return (
-      <p className="hl-slots hl-slots--sold-out" role="status">
+      <p className="hl-slots hl-slots--sold-out" role="status" aria-label={PRO_LAUNCH_COPY.soldOutTitle}>
         <span className="hl-slots__kicker">
           <span className="hl-slots__dot" aria-hidden="true" />
-          Agotado
+          Cerrada
         </span>
         <span className="hl-slots__count">
-          <strong className="hl-slots__num hl-slots__num--word">Agotadas</strong>
+          <strong className="hl-slots__num hl-slots__num--word">Completadas</strong>
         </span>
-        <span className="hl-slots__of">Las {MAX_FOUNDING_SLOT} plazas iniciales ya están asignadas.</span>
+        <span className="hl-slots__of">{PRO_LAUNCH_COPY.soldOutTitle}</span>
       </p>
     );
   }
@@ -408,7 +418,13 @@ function SlotsBox({ slots, href }) {
   const loading = slots.status === 'loading';
   const one = slots.remaining === 1;
   return (
-    <Link href={href} className="hl-slots" role="status" aria-busy={loading}>
+    <Link
+      href={href}
+      className="hl-slots"
+      role="status"
+      aria-busy={loading}
+      aria-label={loading ? 'Comprobando plazas' : proLaunchSlotsLabel(slots.remaining, PRO_LAUNCH_SLOT_LIMIT)}
+    >
       <span className="hl-slots__kicker">
         <span className="hl-slots__dot" aria-hidden="true" />
         {one ? 'Solo queda' : 'Solo quedan'}
@@ -419,9 +435,9 @@ function SlotsBox({ slots, href }) {
         ) : (
           <strong className="hl-slots__num">{slots.remaining}</strong>
         )}
-        <span className="hl-slots__unit">{one ? 'plaza' : 'plazas'}</span>
+        <span className="hl-slots__unit">de {PRO_LAUNCH_SLOT_LIMIT}</span>
       </span>
-      <span className="hl-slots__of">de las {MAX_FOUNDING_SLOT} iniciales</span>
+      <span className="hl-slots__of">plazas</span>
       <span className="hl-slots__go" aria-hidden="true">
         <ChevronRight />
       </span>
@@ -660,13 +676,9 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             </Link>
             {offerOpen ? (
               <a href="#plan-plus" className="hl-nav__link">
-                Plan Plus
+                Oferta
               </a>
-            ) : (
-              <Link href="/precios" className="hl-nav__link">
-                Plan Plus
-              </Link>
-            )}
+            ) : null}
             <a href="#preguntas-frecuentes" className="hl-nav__link hl-nav__link--wide">
               Preguntas frecuentes
             </a>
@@ -704,11 +716,13 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
                 <Link
-                  href={signupHref.hero}
+                  href={offerOpen ? signupHref.promo : signupHref.hero}
                   className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
-                  onClick={() => trackHomeEvent('cta_hero_register')}
+                  onClick={() => trackHomeEvent(offerOpen ? 'cta_hero_promo_25' : 'cta_hero_register')}
                 >
-                  <span className="hl-hero__cta-copy">Crear mi cuenta gratis</span>
+                  <span className="hl-hero__cta-copy">
+                    {offerOpen ? PRO_LAUNCH_COPY.cta : 'Crear mi cuenta gratis'}
+                  </span>
                   <span className="hl-hero__cta-arrows" aria-hidden="true">
                     <ChevronRight />
                     <ChevronRight />
@@ -716,6 +730,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
                   </span>
                 </Link>
               </div>
+              {offerOpen ? <p className="hl-hero__fine">{PRO_LAUNCH_COPY.microcopy}</p> : null}
               <div className="hl-hero__meta">
                 <ul className="hl-hero__notes">
                   <li>
@@ -751,25 +766,39 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
           </span>
         ) : null}
         <div>
+          <p className="hl-kicker">{PRO_LAUNCH_COPY.badge}</p>
           <h2 id="hl-offer-title" className="hl-offer__title">
-            {offerOpen ? 'Tu Plan Plus gratis para siempre' : 'Plazas agotadas'}
+            {offerOpen ? PRO_LAUNCH_COPY.title : PRO_LAUNCH_COPY.soldOutTitle}
           </h2>
           <p className="hl-offer__text">
-            {offerOpen
-              ? `Para los primeros ${MAX_FOUNDING_SLOT} registros. Úsalo ${FOUNDING_SURVEY_DELAY_DAYS} días y, después, cuéntanos tu experiencia en un formulario breve. Sin tarjeta.`
-              : `Las ${MAX_FOUNDING_SLOT} plazas iniciales de Plan Plus ya están asignadas.`}
+            {offerOpen ? PRO_LAUNCH_COPY.subtitle : PRO_LAUNCH_COPY.soldOutText}
           </p>
           {offerOpen ? (
+            <>
+              <p className="hl-offer__text">{PRO_LAUNCH_COPY.microcopy}</p>
+              <p className="hl-offer__text">{PRO_LAUNCH_COPY.previousOfferNote}</p>
+              <div className="hl-offer__actions">
+                <Link
+                  href={signupHref.plan}
+                  className="hl-btn hl-btn--primary"
+                  onClick={() => trackHomeEvent('cta_plan_register')}
+                >
+                  {PRO_LAUNCH_COPY.cta}
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+                <a href="#condiciones-plan-plus" className="hl-offer__conditions">
+                  Ver condiciones
+                </a>
+              </div>
+            </>
+          ) : (
             <div className="hl-offer__actions">
-              <Link href={signupHref.plan} className="hl-btn hl-btn--primary">
-                Reservar mi plaza
+              <Link href={signupHref.other} className="hl-btn hl-btn--primary">
+                {PRO_LAUNCH_COPY.ctaSoldOut}
                 <ArrowRight aria-hidden="true" />
               </Link>
-              <a href="#condiciones-plan-plus" className="hl-offer__conditions">
-                Ver condiciones
-              </a>
             </div>
-          ) : null}
+          )}
         </div>
         <SlotsBox slots={slots} href={signupHref.plan} />
       </section>
@@ -894,13 +923,10 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             </span>
             <div>
               <h2 id="hl-cta-title" className="hl-cta__title">
-                Empieza con el Plan Plus gratis para siempre
+                {PRO_LAUNCH_COPY.title}
               </h2>
               <p className="hl-cta__text">
-                Prueba DRALO durante {FOUNDING_SURVEY_DELAY_DAYS} días. Después te enviaremos un
-                formulario con preguntas sobre qué te parece la web y qué se puede mejorar:
-                complétalo en los {FOUNDING_SURVEY_RESPONSE_DAYS} días siguientes para conservar el
-                Plan Plus gratis. Si no lo completas, tu cuenta pasa al plan gratuito.
+                {PRO_LAUNCH_COPY.subtitle} {PRO_LAUNCH_COPY.microcopy}
               </p>
             </div>
             <Link
@@ -908,7 +934,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
               className="hl-btn hl-btn--primary hl-btn--lg"
               onClick={() => trackHomeEvent('cta_plan_register')}
             >
-              Quiero empezar gratis
+              {PRO_LAUNCH_COPY.cta}
               <ArrowRight aria-hidden="true" />
             </Link>
           </section>

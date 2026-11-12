@@ -13,7 +13,7 @@ export const SIGNUP_ACQUISITION_KEYS = [
   'msclkid',
 ];
 
-const NAMED_SOURCES = new Set(['hero', 'plan_plus', 'post_practice']);
+const NAMED_SOURCES = new Set(['hero', 'plan_plus', 'post_practice', 'promo_25']);
 const TRACKED_KEY = 'dralo_sign_up_tracked';
 const trackedInMemory = new Set();
 
@@ -68,7 +68,12 @@ export function pushSignUpEvent({
     /* la marca en memoria evita el doble disparo de esta carga */
   }
   const payload = { event: 'sign_up', method, signup_source: signupSource };
-  if (layer && typeof layer.push === 'function') layer.push(payload);
+  if (layer && typeof layer.push === 'function') {
+    layer.push(payload);
+    if (signupSource === 'promo_25') {
+      layer.push({ event: 'signup_promo_25', method, signup_source: signupSource });
+    }
+  }
   return true;
 }
 

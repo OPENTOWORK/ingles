@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import { buildSignupHref } from '@/lib/signupTracking';
+import { PRO_LAUNCH_SLOTS_PATH, proLaunchSlotsLabel } from '@/lib/proLaunchOffer.rules';
 import styles from './GuestPracticeSignupPrompt.module.css';
 
 const DISMISS_KEY = 'dralo_post_practice_signup_dismissed';
@@ -42,11 +43,17 @@ export default function GuestPracticeSignupPrompt({ open }) {
   useEffect(() => {
     if (!latched || signedIn) return undefined;
     let cancelled = false;
-    fetch(`/api/founding-member/slots/?_=${Date.now()}`, { cache: 'no-store' })
+    fetch(`${PRO_LAUNCH_SLOTS_PATH}?_=${Date.now()}`, { cache: 'no-store' })
       .then((response) => (response.ok ? response.json() : Promise.reject(new Error('slots'))))
       .then((data) => {
         const value = Number(data?.remaining);
-        if (!cancelled && Number.isInteger(value) && value >= 0) setRemaining(value);
+        const total = Number(data?.total);
+        if (!cancelled && Number.isInteger(value) && value > 0) {
+          setRemaining({
+            remaining: value,
+            total: Number.isInteger(total) && total > 0 ? total : value,
+          });
+        }
       })
       .catch(() => {});
     return () => {
@@ -57,11 +64,7 @@ export default function GuestPracticeSignupPrompt({ open }) {
   if (!latched || signedIn !== false || dismissed) return null;
 
   const places =
-    remaining == null
-      ? ''
-      : remaining === 1
-        ? ' Queda 1 plaza de Plan Plus gratis para siempre.'
-        : ` Quedan ${remaining} plazas de Plan Plus gratis para siempre.`;
+    remaining == null ? '' : ` ${proLaunchSlotsLabel(remaining.remaining, remaining.total)}.`;
 
   const close = () => {
     setDismissed(true);

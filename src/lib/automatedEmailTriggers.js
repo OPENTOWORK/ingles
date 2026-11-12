@@ -12,6 +12,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   STAFF_TASK_REMINDER: 'staff_task_reminder',
   STAFF_TASK_MESSAGE: 'staff_task_message',
   FOUNDING_MEMBER_PLUS_GRANTED: 'founding_member_plus_granted',
+  PRO_LAUNCH_GRANTED: 'pro_launch_granted',
   FOUNDING_MEMBER_SURVEY: 'founding_member_survey',
   FOUNDING_MEMBER_SURVEY_REMINDER: 'founding_member_survey_reminder',
   FOUNDING_MEMBER_SURVEY_CONFIRMED: 'founding_member_survey_confirmed',
@@ -82,6 +83,12 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     label: 'Mensaje en chat de tarea',
     description:
       'Avisa a los involucrados cuando hay un mensaje nuevo en la conversación de una tarea.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.PRO_LAUNCH_GRANTED,
+    label: 'Plan PREMIUM de lanzamiento (25 plazas, 3 meses)',
+    description:
+      'Se envía a quien entra en las 25 plazas nuevas y recibe 3 meses de Plan PREMIUM, cuando confirma su email.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_PLUS_GRANTED,

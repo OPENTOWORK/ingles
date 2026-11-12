@@ -1,3 +1,5 @@
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
+
 /** Canonical production URL for SEO (metadataBase, Open Graph, canonical). Never vercel.app. */
 export const SITE_URL = 'https://www.dralo.es';
 
@@ -54,8 +56,7 @@ export function pageMetadata({
 export const SEO_PAGE_META = {
   home: {
     title: 'Práctica B2 First online con corrección de Writing | Dralo',
-    description:
-      'Practica el B2 First con ejercicios en formato examen, entiende tus errores y recibe correcciones de Writing. Crea tu cuenta gratis, sin tarjeta.',
+    description: PRO_LAUNCH_COPY.metaDescription,
   },
   registro: {
     title: 'Crea tu cuenta gratis',
@@ -63,9 +64,8 @@ export const SEO_PAGE_META = {
       'Crea tu cuenta en Dralo y practica el B2 First con correcciones y seguimiento de tu progreso. Sin tarjeta: solo nombre, correo y contraseña.',
   },
   precios: {
-    title: 'Precios y Plan Plus gratis',
-    description:
-      'Compara el plan gratuito y el Plan Plus de Dralo. Prueba 30 días sin tarjeta y conserva el Plan Plus gratis si completas el formulario.',
+    title: 'Precios: plan gratuito, Plus y PREMIUM',
+    description: `Compara el plan gratuito, el Plan Plus y el Plan PREMIUM. ${PRO_LAUNCH_COPY.subtitle}`,
   },
   examPractice: {
     title: 'Práctica de exámenes Cambridge',
