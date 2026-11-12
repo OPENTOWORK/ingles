@@ -8,25 +8,26 @@ import { allocateExamVariety } from '@/lib/examVarietyAllocation';
 export async function chooseB1ReadingVariety(adminDb, { examSlot, partNumber, themes }) {
   const { data, error } = await adminDb
     .from('exam_generation_variety_history')
-    .select('exam_slot,topic_id,context_id,genre_id,title_pattern_family,created_at')
+    .select('exam_slot,part_number,topic_id,context_id,genre_id,title_pattern_family,created_at')
     .eq('level_slug', 'b1')
-    .eq('part_number', partNumber)
     .order('created_at', { ascending: true });
   if (error) throw new Error('B1 variety history unavailable: ' + error.message);
-  const history = (data || []).map((row) => ({
+  const relevant = (data || []).filter((row) =>
+    row.part_number === partNumber || row.exam_slot === examSlot);
+  const history = relevant.map((row) => ({
     topicId: row.topic_id, contextId: row.context_id,
     genreId: row.genre_id, titlePatternFamily: row.title_pattern_family,
   }));
   const candidates = themes.map((theme, index) => ({
     topicId: 'theme-' + index, topic: theme,
   }));
-  const existing = (data || []).find((row) => row.exam_slot === examSlot);
+  const existing = (data || []).find((row) => row.exam_slot === examSlot && row.part_number === partNumber);
   if (existing) {
     const match = candidates.find((candidate) => candidate.topicId === existing.topic_id);
     if (!match) throw new Error('Existing B1 topic allocation no longer exists in the topic bank.');
     return match;
   }
-  const chosen = allocateExamVariety(candidates, history);
+  const chosen = allocateExamVariety(candidates, history, { recentWindow: 11 });
   return chosen;
 }
 
