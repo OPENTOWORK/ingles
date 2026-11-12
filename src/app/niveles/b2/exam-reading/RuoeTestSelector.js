@@ -1,25 +1,48 @@
 'use client';
 
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import styles from './RuoeTestSelector.module.css';
 
 export default function RuoeTestSelector({ currentSlot, slots, planLockedSlots, isSlotUnlocked, onSelect }) {
   const dialogId = useId();
   const dialogRef = useRef(null);
+  const anchorRef = useRef(null);
   const currentOptionRef = useRef(null);
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
 
+  useEffect(() => {
+    if (!open) return;
+    const dialog = dialogRef.current;
+    const breakpoint = window.matchMedia('(max-width: 640px)');
+    const close = () => dialog.close();
+    const dismissOutside = (event) => {
+      if (!breakpoint.matches && !anchorRef.current?.contains(event.target)) close();
+    };
+    document.addEventListener('pointerdown', dismissOutside);
+    breakpoint.addEventListener('change', close);
+    return () => {
+      document.removeEventListener('pointerdown', dismissOutside);
+      breakpoint.removeEventListener('change', close);
+    };
+  }, [open]);
+
   function openSelector(event) {
     const dialog = dialogRef.current;
-    const { left, top, bottom } = event.currentTarget.getBoundingClientRect();
-    const roomBelow = window.innerHeight - bottom;
-    const opensAbove = roomBelow < 300 && top > roomBelow;
-    dialog.style.setProperty('--picker-left', `${left}px`);
-    dialog.style.setProperty('--picker-top', opensAbove ? 'auto' : `${bottom + 6}px`);
-    dialog.style.setProperty('--picker-bottom', opensAbove ? `${window.innerHeight - top + 6}px` : 'auto');
-    dialog.style.setProperty('--picker-room', `${Math.max(0, (opensAbove ? top : roomBelow) - 14)}px`);
-    dialog.showModal();
+    if (dialog.open) {
+      dialog.close();
+      return;
+    }
+    if (window.matchMedia('(max-width: 640px)').matches) {
+      dialog.showModal();
+    } else {
+      const { top, bottom } = event.currentTarget.getBoundingClientRect();
+      const roomBelow = window.innerHeight - bottom;
+      const opensAbove = roomBelow < 300 && top > roomBelow;
+      dialog.classList.toggle(styles.above, opensAbove);
+      dialog.style.setProperty('--picker-room', `${Math.max(0, (opensAbove ? top : roomBelow) - 14)}px`);
+      dialog.show();
+    }
     setOpen(true);
     currentOptionRef.current?.focus();
   }
@@ -36,7 +59,7 @@ export default function RuoeTestSelector({ currentSlot, slots, planLockedSlots, 
   }
 
   return (
-    <>
+    <div className={styles.anchor} ref={anchorRef}>
       <button
         type="button"
         className={styles.trigger}
@@ -54,6 +77,12 @@ export default function RuoeTestSelector({ currentSlot, slots, planLockedSlots, 
         className={styles.dialog}
         aria-labelledby={`${dialogId}-label`}
         onClose={() => setOpen(false)}
+        onKeyDown={(event) => {
+          if (event.key === 'Escape') {
+            event.preventDefault();
+            event.currentTarget.close();
+          }
+        }}
         onClick={(event) => {
           if (event.target === event.currentTarget) event.currentTarget.close();
         }}
@@ -87,6 +116,6 @@ export default function RuoeTestSelector({ currentSlot, slots, planLockedSlots, 
           })}
         </ul>
       </dialog>
-    </>
+    </div>
   );
 }

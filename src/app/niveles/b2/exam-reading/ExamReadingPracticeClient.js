@@ -2841,6 +2841,7 @@ function B2ReadingExamsPageInner() {
       />
 
       <B2ExamPracticeModuleNav
+        className={`${part4Styles.navigation} ${landingFont.variable}`}
         slug="b2"
         partNumber={partNumberReading}
         pagePartMax={partMax}
