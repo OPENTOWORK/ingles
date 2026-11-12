@@ -1,6 +1,6 @@
 {
   "name": "english-practice",
-  "version": "1.0.31",
+  "version": "1.0.33",
   "description": "Plataforma completa de práctica de inglés con IA adaptativa, gamificación y modo offline",
   "private": true,
   "scripts": {
@@ -64,7 +64,8 @@
     "regen:b2-exam": "node --loader ./scripts/alias-loader.mjs scripts/regen-b2-exam.mjs",
     "clone:b2-exam": "node --loader ./scripts/alias-loader.mjs scripts/clone-b2-exam-random.mjs",
     "seed:b2-exam6": "node --loader ./scripts/alias-loader.mjs scripts/seed-b2-exam6-offline.mjs",
-    "synth:b2-exam6-audio": "node --loader ./scripts/alias-loader.mjs scripts/synth-b2-exam6-audio.mjs"
+    "synth:b2-exam6-audio": "node --loader ./scripts/alias-loader.mjs scripts/synth-b2-exam6-audio.mjs",
+    "test:b1-reading-motor": "node --loader ./scripts/alias-loader.mjs --test src/lib/__tests__/b1PreliminaryReadingMotor.test.js src/lib/__tests__/b1Part5DoubleKey.test.js"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

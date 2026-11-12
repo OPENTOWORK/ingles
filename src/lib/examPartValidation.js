@@ -22,6 +22,10 @@ import { gradeB2KeyWordTransformation } from '@/lib/gradeB2KeyWordTransformation
 import { validatePart6HardRules } from '@/lib/ruoePart6HardValidators';
 import { validatePart4Quality } from '@/lib/ruoePart4Quality';
 import { validateRuoeEditorialQuality } from '@/lib/ruoeEditorialQuality';
+import {
+  b1Part3CoverageGaps,
+  findB1AboveLevelTerms,
+} from '@/lib/b1ReadingConstruction';
 
 const WRITING_PART2_FORMATS = new Set(['article', 'email', 'letter', 'review', 'report']);
 const B1_WRITING_PART2_FORMATS = new Set(['article', 'story']);
@@ -1580,6 +1584,197 @@ function validateB2Part7Strict(gen, errors, warnings) {
   warnings.push(...analysis.warnings);
 }
 
+
+function validateB1ReadingStrict(partDef, gen, errors, warnings) {
+  const part = Number(partDef?.partNumber);
+  const questions = asArray(gen.questions);
+  const answers = asArray(gen.modelAnswers);
+  const answerById = new Map(answers.map((a) => [String(a?.id ?? ''), a]));
+  const answerByNumber = new Map(answers.map((a) => [Number(a?.number), a]));
+
+  const getAnswer = (q, i) =>
+    String(
+      answerById.get(String(q?.id ?? ''))?.answer ??
+      answerByNumber.get(Number(q?.number))?.answer ??
+      answers[i]?.answer ??
+      '',
+    ).trim().toUpperCase();
+
+  const rejectAboveLevelLanguage = () => {
+    const aboveLevel = findB1AboveLevelTerms(JSON.stringify({
+      passage: gen.passage,
+      questions: gen.questions,
+      sentencePool: gen.sentencePool,
+      sections: gen.sections,
+    }));
+    for (const term of aboveLevel) {
+      errors.push(`B1 Reading Part ${part} uses language above B1: "${term}". Replace it with ordinary B1 wording.`);
+    }
+  };
+
+  const requireNumberRange = (start, end) => {
+    const expectedCount = end - start + 1;
+    if (questions.length !== expectedCount) {
+      errors.push(`B1 Reading Part ${part} must have exactly ${expectedCount} questions (got ${questions.length}).`);
+    }
+    const seen = new Set();
+    questions.forEach((q, i) => {
+      const n = Number(q?.number);
+      if (!Number.isInteger(n) || n < start || n > end) {
+        errors.push(`B1 Reading Part ${part} question ${q?.number ?? i + 1}: number must be ${start}–${end}.`);
+      } else if (seen.has(n)) {
+        errors.push(`B1 Reading Part ${part}: duplicate question number ${n}.`);
+      } else seen.add(n);
+    });
+    for (let n = start; n <= end; n += 1) {
+      if (!seen.has(n)) errors.push(`B1 Reading Part ${part} is missing question ${n}.`);
+    }
+  };
+
+  const validateMcq = (letters, expectedOptions) => {
+    questions.forEach((q, i) => {
+      const n = Number(q?.number ?? i + 1);
+      const opts = asArray(q?.options).map((o) => String(o ?? '').trim());
+      if (opts.length !== expectedOptions) {
+        errors.push(`B1 Reading Part ${part} question ${n}: needs exactly ${expectedOptions} options (got ${opts.length}).`);
+      }
+      opts.forEach((opt, oi) => {
+        const expected = letters[oi];
+        if (expected && !new RegExp(`^${expected}\\)\\s*.+`, 'i').test(opt)) {
+          errors.push(`B1 Reading Part ${part} question ${n}: option ${oi + 1} must be labelled ${expected}) and contain text.`);
+        }
+      });
+      const a = getAnswer(q, i);
+      if (!new RegExp(`^[${letters.join('')}]$`).test(a)) {
+        errors.push(`B1 Reading Part ${part} question ${n}: answer must be one of ${letters.join('/')}. `);
+      }
+    });
+  };
+
+  if (part === 1) {
+    requireNumberRange(1, 5);
+    validateMcq(['A','B','C'], 3);
+    questions.forEach((q, i) => {
+      if (!hasText(q?.text) && !hasText(q?.message) && !hasText(q?.notice)) {
+        errors.push(`B1 Reading Part 1 question ${q?.number ?? i + 1}: missing short real-world text.`);
+      }
+      if (!hasText(q?.prompt) && !hasText(q?.question)) {
+        errors.push(`B1 Reading Part 1 question ${q?.number ?? i + 1}: missing question/prompt.`);
+      }
+    });
+    return;
+  }
+
+  if (part === 2) {
+    requireNumberRange(6, 10);
+    const sections = asArray(gen.sections);
+    if (sections.length !== 8) errors.push(`B1 Reading Part 2 needs exactly 8 texts A–H (got ${sections.length}).`);
+    const expected = ['A','B','C','D','E','F','G','H'];
+    sections.forEach((sec, i) => {
+      const letter = String(sec?.letter ?? '').trim().toUpperCase();
+      if (letter !== expected[i]) errors.push(`B1 Reading Part 2 text ${i + 1} must be labelled ${expected[i]}.`);
+      if (!hasText(sec?.text)) errors.push(`B1 Reading Part 2 text ${expected[i]} is empty.`);
+    });
+    questions.forEach((q, i) => {
+      if (!hasText(q?.prompt) && !hasText(q?.description)) {
+        errors.push(`B1 Reading Part 2 question ${q?.number ?? i + 6}: missing person description.`);
+      }
+      const a = getAnswer(q, i);
+      if (!/^[A-H]$/.test(a)) errors.push(`B1 Reading Part 2 question ${q?.number ?? i + 6}: answer must be A–H.`);
+    });
+    if (new Set(questions.map((q,i)=>getAnswer(q,i)).filter((a)=>/^[A-H]$/.test(a))).size !== questions.length) {
+      warnings.push('B1 Reading Part 2 normally uses a different text for each person; check duplicate answer letters carefully.');
+    }
+    return;
+  }
+
+  if (part === 3) {
+    requireNumberRange(11, 15);
+    if (!hasText(gen.passage)) errors.push('B1 Reading Part 3 must include one longer passage.');
+    validateMcq(['A','B','C','D'], 4);
+    const coverageGaps = b1Part3CoverageGaps(questions);
+    if (coverageGaps.length) {
+      errors.push(`B1 Reading Part 3 must include detail, inference, attitude and gist coverage. Missing: ${coverageGaps.join(', ')}.`);
+    }
+    rejectAboveLevelLanguage();
+    return;
+  }
+
+  if (part === 4) {
+    requireNumberRange(16, 20);
+    if (!hasText(gen.passage)) errors.push('B1 Reading Part 4 must include a gapped passage.');
+    const gapNumbers = [...String(gen.passage || '').matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
+    for (let n = 16; n <= 20; n += 1) {
+      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 4 passage must contain gap (${n}) exactly once.`);
+    }
+    const pool = asArray(gen.sentencePool);
+    if (pool.length !== 8) errors.push(`B1 Reading Part 4 needs exactly 8 candidate sentences A–H (got ${pool.length}).`);
+    const poolLetters = pool.map((x) => String(x ?? '').trim().match(/^([A-H])\)/i)?.[1]?.toUpperCase());
+    ['A','B','C','D','E','F','G','H'].forEach((letter, i) => {
+      if (poolLetters[i] !== letter) errors.push(`B1 Reading Part 4 sentencePool item ${i + 1} must be labelled ${letter}).`);
+    });
+    const used = [];
+    questions.forEach((q, i) => {
+      const a = getAnswer(q, i);
+      if (!/^[A-H]$/.test(a)) errors.push(`B1 Reading Part 4 question ${q?.number ?? i + 16}: answer must be A–H.`);
+      else used.push(a);
+    });
+    if (new Set(used).size !== used.length) errors.push('B1 Reading Part 4 must use five different answer letters.');
+    if (used.length === 5 && new Set(used).size === 5 && 8 - new Set(used).size !== 3) {
+      errors.push('B1 Reading Part 4 must leave exactly three candidate sentences unused.');
+    }
+    rejectAboveLevelLanguage();
+    return;
+  }
+
+  if (part === 5) {
+    requireNumberRange(21, 26);
+    if (!hasText(gen.passage)) errors.push('B1 Reading Part 5 must include a short cloze passage.');
+    validateMcq(['A','B','C','D'], 4);
+    const gapNumbers = [...String(gen.passage || '').matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
+    for (let n = 21; n <= 26; n += 1) {
+      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 5 passage must contain gap (${n}) exactly once.`);
+    }
+    if (gapNumbers.includes(0)) errors.push('B1 Reading Part 5 has no example gap (0).');
+    rejectAboveLevelLanguage();
+    return;
+  }
+
+  if (part === 6) {
+    requireNumberRange(27, 32);
+    if (!hasText(gen.passage)) errors.push('B1 Reading Part 6 must include a short open-cloze passage.');
+    const gapNumbers = [...String(gen.passage || '').matchAll(/\((\d+)\)\s*(?:_+|\.{2,}|…+)/g)].map((m) => Number(m[1]));
+    for (let n = 27; n <= 32; n += 1) {
+      if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 6 passage must contain gap (${n}) exactly once.`);
+    }
+    if (gapNumbers.includes(0)) errors.push('B1 Reading Part 6 has no example gap (0).');
+    questions.forEach((q, i) => {
+      if (asArray(q?.options).length) errors.push(`B1 Reading Part 6 question ${q?.number ?? i + 27}: open cloze must not have options.`);
+      const raw = String(
+        answerById.get(String(q?.id ?? ''))?.answer ??
+        answerByNumber.get(Number(q?.number))?.answer ??
+        answers[i]?.answer ??
+        '',
+      ).trim();
+      if (!raw) errors.push(`B1 Reading Part 6 question ${q?.number ?? i + 27}: missing answer.`);
+      else if (/\s/.test(raw) || !/^[A-Za-z'’-]+$/.test(raw)) {
+        errors.push(`B1 Reading Part 6 question ${q?.number ?? i + 27}: answer must be exactly one word.`);
+      }
+    });
+    const answerWords = questions.map((q, i) => String(
+      answerById.get(String(q?.id ?? ''))?.answer ??
+      answerByNumber.get(Number(q?.number))?.answer ??
+      answers[i]?.answer ??
+      '',
+    ).trim().toLowerCase()).filter((word) => word && !/\s/.test(word));
+    if (answerWords.length === 6 && new Set(answerWords).size !== 6) {
+      errors.push('B1 Reading Part 6 must use six different one-word answers so each gap tests a different grammar target.');
+    }
+  }
+
+  rejectAboveLevelLanguage();
+}
+
 function validateReadingUseOfEnglish(partDef, gen, errors, warnings) {
   if (!hasText(gen.instructions) && !hasText(gen.directions) && partDef.mode !== 'use-of-english') {
     warnings.push('Missing instructions (optional for some cloze parts).');
@@ -1587,6 +1782,7 @@ function validateReadingUseOfEnglish(partDef, gen, errors, warnings) {
 
   const needsPassage =
     partDef.activity !== 'key-word' &&
+    partDef.activity !== 'notice-mcq' &&
     !(partDef.activity === 'multiple-matching' && partDef.mode === 'reading' && gen.sections?.length);
 
   if (needsPassage && partDef.mode !== 'speaking' && partDef.mode !== 'writing') {
@@ -1922,6 +2118,9 @@ export function validateGeneratedExamPart(slug, partNumber, generated) {
       break;
     default:
       validateReadingUseOfEnglish(partDef, normalized, errors, warnings);
+      if (key === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6) {
+        validateB1ReadingStrict(partDef, normalized, errors, warnings);
+      }
       if (key === 'b2' && partDef.partNumber === 1 && partDef.activity === 'multiple-choice-cloze') {
         validateB2Part1Strict(normalized, errors, warnings);
       }

@@ -24,6 +24,16 @@ import {
 import { validateGeneratedExamPart } from '@/lib/examPartValidation';
 import { logExamGeneration } from '@/lib/examGenerationLog';
 import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
+import { buildB1ReadingEnunciadoFromGenerated, buildB1ReadingAnswerRowsFromGenerated } from '@/lib/formatB1ReadingEnunciado';
+import {
+  B1_ABOVE_LEVEL_TERMS,
+  B1_PART6_TARGETS,
+  b1Part3CoverageGaps,
+  findB1AboveLevelTerms,
+  markedAnswerMismatches,
+  part4CohesionProblems,
+  part6TargetProblems,
+} from '@/lib/b1ReadingConstruction';
 import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 
 /**
@@ -445,7 +455,19 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
 
   // RUOE B2 (partes 1–7) falla a menudo por límites de palabras / gaps: más reintentos + repair.
   const isB2Ruoe = slug === 'b2' && partDef.partNumber >= 1 && partDef.partNumber <= 7;
-  const maxAttempts = partDef.mode === 'listening' ? 5 : isB2Ruoe ? 8 : 3;
+  const isB1Reading = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
+  const maxAttempts =
+    partDef.mode === 'listening'
+      ? 5
+      : isB2Ruoe
+        ? 8
+        : isB1Reading && partDef.partNumber === 4
+          ? 10
+          : isB1Reading && [3, 5, 6].includes(partDef.partNumber)
+            ? 8
+          : isB1Reading
+            ? 5
+            : 3;
 
   const baseUserPrompt =
     options.userPrompt ||
@@ -462,9 +484,20 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
     let repairSuffix = '';
     if (attempt > 0 && Array.isArray(validation.errors) && validation.errors.length) {
       const pn = partDef.partNumber;
-      let lengthHint =
-        'CRITICAL length: for cloze Parts 1–3, passage must be 150–180 words (prefer ~160–170). If too long, cut clauses; if too short, add natural detail. Keep all required gaps.';
-      if (pn === 5) {
+      let lengthHint = isB1Reading
+        ? 'CRITICAL B1 Preliminary repair: preserve the official B1 task shape and numbering. Fix the semantic/structural defects listed above rather than copying a B2 format.'
+        : 'CRITICAL length: for cloze Parts 1–3, passage must be 150–180 words (prefer ~160–170). If too long, cut clauses; if too short, add natural detail. Keep all required gaps.';
+      if (isB1Reading) {
+        const b1Hints = {
+          1: 'B1 Part 1: exactly five independent short real-world texts, three options A-C each; one clear main-message answer.',
+          2: 'B1 Part 2: five people Q6-10, eight texts A-H, three unused; match all requirements, not copied words.',
+          3: 'B1 Part 3: one longer everyday text, questions Q11-15, four options A-D. Cover detail, inference, attitude and gist. Replace every above-B1 word with ordinary language, and do not let the correct option copy a sentence from the text.',
+          4: 'B1 Part 4: five gaps Q16-20 and eight sentences A-H, exactly three unused. Give each removed sentence its own two-word cohesion anchor that also appears in the chunk immediately before or after that gap, and in no extra sentence.',
+          5: 'B1 Part 5: six vocabulary-led multiple-choice cloze gaps Q21-26, four options A-D. The word inside each [[21:word]] marker must be the answer. Where two options would both be accepted as the key, rewrite the extra option so the collocation or the meaning rules it out. A tempting but incorrect distractor is required.',
+          6: 'B1 Part 6: six different one-word answers. Q27 article/determiner, Q28 preposition, Q29 pronoun/relative, Q30 auxiliary/modal, Q31 linking word, Q32 phrasal particle or fixed-phrase word. Do not test a content noun.',
+        };
+        lengthHint = b1Hints[pn] || lengthHint;
+      } else if (pn === 5) {
         lengthHint =
           'CRITICAL length: Part 5 passage MUST be 550–650 words (never under 500). Expand with detail, examples and contrast — do not return a short summary.';
       } else if (pn === 6) {
@@ -492,11 +525,19 @@ ${lengthHint}`;
         ...options,
         userPrompt: `${baseUserPrompt}${repairSuffix}`,
         varietySeed: seedBase + Math.max(partIndex, 0) + attempt * 3000,
+        repairErrors: attempt > 0 ? (validation.errors || []) : [],
       });
     } catch (e) {
+      const message = String(e?.message || e || '');
+      const billingBlocked =
+        Number(e?.status) === 429 &&
+        /no credits remaining|billing|quota|insufficient/i.test(message);
+      if (billingBlocked) {
+        throw new Error(`B1 generation stopped: OpenAI API billing/credits are unavailable. ${message}`);
+      }
       validation = {
         ok: false,
-        errors: [`Generation/parse error: ${e?.message || e}`],
+        errors: [`Generation/parse error: ${message}`],
         warnings: [],
         normalized: generated,
       };
@@ -505,6 +546,30 @@ ${lengthHint}`;
 
     validation = validateGeneratedExamPart(slug, partDef.partNumber, generated);
     generated = validation.normalized;
+
+    if (validation.ok && isB1Reading) {
+      try {
+        const { validateB1ReadingQuality } = await import('@/lib/b1ReadingQualityValidator');
+        const semantic = await validateB1ReadingQuality(partDef.partNumber, generated);
+        validation = {
+          ...validation,
+          ok: validation.ok && semantic.ok,
+          errors: [...(validation.errors || []), ...(semantic.errors || [])],
+          warnings: [...(validation.warnings || []), ...(semantic.warnings || [])],
+          semanticQuality: semantic,
+        };
+      } catch (e) {
+        validation = {
+          ...validation,
+          ok: false,
+          errors: [
+            ...(validation.errors || []),
+            `B1 semantic quality validator failed to run: ${e?.message || e}`,
+          ],
+        };
+      }
+    }
+
     if (validation.ok && isPartComplete(generated, partDef, slug)) {
       return { generated, validation };
     }
@@ -513,19 +578,534 @@ ${lengthHint}`;
   return { generated: validation.normalized || generated, validation };
 }
 
+function assertOrdinaryB1Language(text, label) {
+  const hits = findB1AboveLevelTerms(text);
+  if (hits.length) {
+    throw new Error(`${label} uses language above B1: ${hits.join(', ')}. Rewrite it in ordinary B1 wording.`);
+  }
+}
+
+async function generateB1Part3PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above in a new text. Do not reuse the same above-level wording.`
+    : '';
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 3 plan in natural British English.
+Topic/context: ${topic}.
+
+Write the passage first, in language a normal B1 learner can read. Then write five questions that can only be answered by understanding the text.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "passage":"one continuous everyday text",
+  "questions":[
+    {"number":11,"questionType":"detail","prompt":"...","options":["...","...","...","..."],"answer":"A"},
+    {"number":12,"questionType":"inference","prompt":"...","options":["...","...","...","..."],"answer":"C"},
+    {"number":13,"questionType":"attitude","prompt":"...","options":["...","...","...","..."],"answer":"B"},
+    {"number":14,"questionType":"gist","prompt":"...","options":["...","...","...","..."],"answer":"D"},
+    {"number":15,"questionType":"detail","prompt":"...","options":["...","...","...","..."],"answer":"A"}
+  ]
+}
+
+HARD RULES:
+- Exactly five questions, numbered 11-15. Each has exactly four options and one answer letter A, B, C or D.
+- Cover all four of these question types: detail, inference, attitude, gist. The fifth question may repeat one of them.
+- The passage must sound like everyday B1 writing, not an academic article. Prefer common words and straightforward sentences.
+- Do not use any of these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
+- The correct option must be a paraphrase. It must not copy a sentence or a distinctive phrase from the passage.
+- The other three options must use ideas that are in the text, but change or overstate them. Do not write obviously unrelated options.
+- Use British spelling.
+- Do not copy sample-test wording.
+${repair}`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.35,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const passage = String(plan?.passage || '').trim().replace(/\s+/g, ' ');
+  const rows = Array.isArray(plan?.questions) ? plan.questions : [];
+  if (rows.length !== 5) throw new Error(`B1 Part 3 planner returned ${rows.length} questions; expected 5.`);
+  const words = passage.split(/\s+/).filter(Boolean).length;
+  if (words < 180 || words > 520) {
+    throw new Error(`B1 Part 3 planner passage is ${words} words; keep it between 180 and 520.`);
+  }
+
+  const byNumber = new Map(rows.map((row) => [Number(row?.number), row]));
+  const questions = [];
+  const modelAnswers = [];
+  for (let number = 11; number <= 15; number += 1) {
+    const row = byNumber.get(number);
+    if (!row) throw new Error(`B1 Part 3 planner missing question ${number}.`);
+    const options = Array.isArray(row?.options) ? row.options.map((option) => String(option || '').trim()) : [];
+    const answer = String(row?.answer || '').trim().toUpperCase();
+    if (options.length !== 4 || options.some((option) => !option)) {
+      throw new Error(`B1 Part 3 planner question ${number} needs exactly four options.`);
+    }
+    if (!/^[A-D]$/.test(answer)) throw new Error(`B1 Part 3 planner question ${number} answer must be A-D.`);
+    const letters = ['A', 'B', 'C', 'D'];
+    questions.push({
+      id: `q${number - 10}`,
+      number,
+      type: 'mcq',
+      questionType: String(row?.questionType || '').trim().toLowerCase(),
+      prompt: String(row?.prompt || '').trim(),
+      options: options.map((option, index) => `${letters[index]}) ${option.replace(/^[A-D]\)\s*/i, '')}`),
+    });
+    modelAnswers.push({ id: `q${number - 10}`, number, answer });
+  }
+  const coverageGaps = b1Part3CoverageGaps(questions);
+  if (coverageGaps.length) {
+    throw new Error(`B1 Part 3 planner is missing question coverage: ${coverageGaps.join(', ')}.`);
+  }
+  assertOrdinaryB1Language(JSON.stringify({ passage, questions }), 'B1 Part 3 planner');
+
+  return {
+    partTitle: 'B1 Preliminary Reading Part 3',
+    directions: 'Read the text and questions below. For each question, choose the correct answer A, B, C or D.',
+    title: String(plan?.title || '').trim(),
+    passage,
+    questions,
+    modelAnswers,
+  };
+}
+
+async function generateB1Part4PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above in a genuinely new plan.`
+    : '';
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 4 plan in natural British English.
+Topic/context: ${topic}.
+
+This is a precision-first construction stage. Write the coherent completed text first, then split it into six chunks by removing exactly five complete sentences.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "chunks":[
+    "text before gap 16",
+    "text between gaps 16 and 17",
+    "text between gaps 17 and 18",
+    "text between gaps 18 and 19",
+    "text between gaps 19 and 20",
+    "text after gap 20"
+  ],
+  "removedSentences":[
+    {"number":16,"sentence":"complete sentence","anchor":"two content words","anchorReason":"why this sentence is forced here and fails the other four gaps"},
+    {"number":17,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."},
+    {"number":18,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."},
+    {"number":19,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."},
+    {"number":20,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."}
+  ],
+  "extras":[
+    {"sentence":"topic-plausible extra sentence","rejectionReason":"why it fits none of the five gaps"},
+    {"sentence":"topic-plausible extra sentence","rejectionReason":"..."},
+    {"sentence":"topic-plausible extra sentence","rejectionReason":"..."}
+  ]
+}
+
+HARD RULES:
+- The completed text made by chunk0 + removed16 + chunk1 + removed17 + ... + removed20 + chunk5 must read like a naturally written B1 article/story.
+- Exactly six chunks, five removed sentences numbered 16-20, and three extras.
+- Each removed sentence must include an "anchor": a unique phrase of at least two content words. That exact phrase must appear in the removed sentence AND in the chunk immediately before or after its own gap. It must not appear in another removed sentence or in any extra sentence.
+- Make the five gap environments structurally different. Do not make several gaps generic moments about feelings, participants, an instructor, or "the experience".
+- Avoid generic removed sentences such as "It was a great experience", "Everyone was friendly", "This made me feel better", or anything that could move around the text.
+- For each removed sentence, mentally insert it into all five gap positions. It must be natural in exactly ONE.
+- For each extra sentence, mentally insert it into all five gaps. It must fail all five because of reference, chronology, logic or meaning, not because it is absurd or off-topic.
+- Check whole-text chronology. Do not mention people, objects, decisions or outcomes before they are introduced.
+- Avoid redundant sequencing such as "The class began with an introduction" immediately followed by "The instructor introduced herself".
+- Use British spelling and normal B1 vocabulary. Avoid specialist or academic prose.
+- Do not use these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
+- Do not copy sample-test wording.
+${repair}`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.2,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const chunks = Array.isArray(plan?.chunks) ? plan.chunks.map((x) => String(x || '').trim()) : [];
+  const removed = Array.isArray(plan?.removedSentences) ? plan.removedSentences : [];
+  const extras = Array.isArray(plan?.extras) ? plan.extras : [];
+  if (chunks.length !== 6) throw new Error(`B1 Part 4 planner returned ${chunks.length} chunks; expected 6.`);
+  if (removed.length !== 5) throw new Error(`B1 Part 4 planner returned ${removed.length} removed sentences; expected 5.`);
+  if (extras.length !== 3) throw new Error(`B1 Part 4 planner returned ${extras.length} extras; expected 3.`);
+
+  const byNumber = new Map(removed.map((x) => [Number(x?.number), String(x?.sentence || '').trim()]));
+  for (let number = 16; number <= 20; number += 1) {
+    if (!byNumber.get(number)) throw new Error(`B1 Part 4 planner missing removed sentence ${number}.`);
+  }
+
+  let passage = chunks[0];
+  for (let number = 16; number <= 20; number += 1) {
+    passage += ` (${number}) ___ ${chunks[number - 15]}`;
+  }
+  passage = passage.replace(/\s+/g, ' ').trim();
+
+  const answerSentences = Array.from({ length: 5 }, (_, i) => byNumber.get(16 + i));
+  const extraSentences = extras.map((x) => String(x?.sentence || '').trim()).filter(Boolean);
+  if (extraSentences.length !== 3) throw new Error('B1 Part 4 planner extras must contain three complete sentences.');
+  const all = [...answerSentences, ...extraSentences];
+  if (new Set(all.map((x) => x.toLowerCase())).size !== 8) {
+    throw new Error('B1 Part 4 planner produced duplicate candidate sentences.');
+  }
+  const cohesionErrors = part4CohesionProblems({ chunks, removed, extras });
+  if (cohesionErrors.length) throw new Error(cohesionErrors.join(' '));
+  assertOrdinaryB1Language(`${passage}\n${all.join('\n')}`, 'B1 Part 4 planner');
+
+  const patterns = [
+    ['B','F','A','H','D'],
+    ['G','C','H','A','E'],
+    ['D','A','F','C','H'],
+    ['H','D','B','G','A'],
+  ];
+  const pattern = patterns[Math.abs(Number(options?.varietySeed || 0)) % patterns.length];
+  const letters = ['A','B','C','D','E','F','G','H'];
+  const used = new Set(pattern);
+  const extraLetters = letters.filter((x) => !used.has(x));
+  const sentenceByLetter = new Map();
+  pattern.forEach((letter, i) => sentenceByLetter.set(letter, answerSentences[i]));
+  extraLetters.forEach((letter, i) => sentenceByLetter.set(letter, extraSentences[i]));
+
+  const sentencePool = letters.map((letter) => `${letter}) ${sentenceByLetter.get(letter)}`);
+  const questions = Array.from({ length: 5 }, (_, i) => ({
+    id: `q${i + 1}`,
+    number: 16 + i,
+  }));
+  const modelAnswers = pattern.map((letter, i) => ({
+    id: `q${i + 1}`,
+    number: 16 + i,
+    answer: letter,
+  }));
+
+  return {
+    partTitle: 'B1 Preliminary Reading Part 4',
+    directions: 'Five sentences have been removed from the text below. Choose from sentences A–H the one which fits each gap. There are three extra sentences which you do not need to use.',
+    title: String(plan?.title || '').trim(),
+    passage,
+    sentencePool,
+    questions,
+    modelAnswers,
+  };
+}
+
+async function generateB1Part5PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above in a genuinely new lexical plan.`
+    : '';
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 5 lexical plan in natural British English.
+Topic/context: ${topic}.
+
+This is a precision-first planning stage. Build the completed text FIRST, then create the options.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "markedPassage":"a coherent B1 text containing exactly [[21:ANSWER]] ... [[26:ANSWER]] in reading order",
+  "items":[
+    {
+      "number":21,
+      "answer":"one word",
+      "targetType":"fixed collocation|phrasal/prepositional verb|verb-noun collocation|dependent preposition/complementation|fixed phrase|precise lexical choice",
+      "distractors":["one word","one word","one word"],
+      "rejectionReasons":["why distractor 1 fails in this exact sentence","why distractor 2 fails","why distractor 3 fails"]
+    }
+  ]
+}
+
+HARD RULES:
+- Exactly six marked answers, numbered 21-26, each answer ONE word.
+- The passage must read as a natural short B1 Preliminary text once the marked answers are inserted.
+- Use British spelling, vocabulary and collocations throughout.
+- Part 5 tests mainly vocabulary. Use a varied lexical mix; do not make the set mainly grammar.
+- Use this exact target mix: Q21 fixed collocation; Q22 phrasal/prepositional verb; Q23 dependent preposition/complementation; Q24 verb-noun collocation; Q25 fixed phrase; Q26 precise lexical choice.
+- Do not reuse the same targetType for several items.
+- Each answer must be a normal B1 word or common B1 chunk.
+- Each item has exactly three one-word distractors.
+- Wrong options should be plausible to a learner but MUST fail in this exact sentence because of collocation, complementation, fixed phrase, phrasal-verb pattern, register or precise contextual meaning.
+- Do not create broad free-choice synonym slots. Avoid sets where two ordinary words can both make good English.
+- Especially avoid ambiguous families such as explore/discover; help/allow when both structures work; damaged/broken without a forcing collocation; think/believe; rent/hire; start/begin; finish/end; choose/select; buy/purchase; like/love when the surrounding wording does not force one.
+- Mentally substitute the answer and all three distractors into the complete sentence. If two produce natural, contextually correct British English, rewrite the sentence or options before returning JSON.
+- The answer must not depend on obscure C1/C2 vocabulary.
+- The word inside each [[number:word]] marker must be exactly the answer for that number.
+- Do not use these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
+- Do not copy sample-test wording.
+${repair}`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.25,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const items = Array.isArray(plan?.items) ? plan.items : [];
+  if (items.length !== 6) throw new Error(`B1 Part 5 planner returned ${items.length} items; expected 6.`);
+
+  const byNumber = new Map(items.map((item) => [Number(item?.number), item]));
+  const expectedTypes = new Map([
+    [21, 'fixed collocation'],
+    [22, 'phrasal/prepositional verb'],
+    [23, 'dependent preposition/complementation'],
+    [24, 'verb-noun collocation'],
+    [25, 'fixed phrase'],
+    [26, 'precise lexical choice'],
+  ]);
+  const riskyPairs = [
+    ['explore','discover'], ['help','allow'], ['damaged','broken'], ['think','believe'],
+    ['rent','hire'], ['start','begin'], ['finish','end'], ['choose','select'],
+    ['buy','purchase'], ['like','love'],
+  ];
+  for (let number = 21; number <= 26; number += 1) {
+    const item = byNumber.get(number);
+    if (!item) throw new Error(`B1 Part 5 planner missing item ${number}.`);
+    const answer = String(item?.answer || '').trim();
+    const distractors = Array.isArray(item?.distractors)
+      ? item.distractors.map((x) => String(x || '').trim()).filter(Boolean)
+      : [];
+    const targetType = String(item?.targetType || '').trim().toLowerCase();
+    if (targetType !== expectedTypes.get(number)) {
+      throw new Error(`B1 Part 5 planner item ${number} must use targetType "${expectedTypes.get(number)}"; got "${targetType || 'missing'}".`);
+    }
+    const rejectionReasons = Array.isArray(item?.rejectionReasons)
+      ? item.rejectionReasons.map((x) => String(x || '').trim()).filter(Boolean)
+      : [];
+    if (rejectionReasons.length !== 3) {
+      throw new Error(`B1 Part 5 planner item ${number} must explain why all three distractors fail.`);
+    }
+    if (!/^[A-Za-zÀ-ÿ'-]+$/.test(answer)) {
+      throw new Error(`B1 Part 5 planner answer ${number} must be one word.`);
+    }
+    if (distractors.length !== 3 || distractors.some((x) => !/^[A-Za-zÀ-ÿ'-]+$/.test(x))) {
+      throw new Error(`B1 Part 5 planner item ${number} needs exactly three one-word distractors.`);
+    }
+    const normalised = [answer, ...distractors].map((x) => x.toLowerCase());
+    if (new Set(normalised).size !== 4) {
+      throw new Error(`B1 Part 5 planner item ${number} has duplicate options.`);
+    }
+    for (const [a, b] of riskyPairs) {
+      if (normalised.includes(a) && normalised.includes(b)) {
+        throw new Error(`B1 Part 5 planner item ${number} contains risky near-synonyms "${a}/${b}". Use a more strongly constrained option set.`);
+      }
+    }
+  }
+
+  let passage = String(plan?.markedPassage || '');
+  const markerErrors = markedAnswerMismatches(
+    passage,
+    Array.from({ length: 6 }, (_, index) => ({
+      number: 21 + index,
+      answer: byNumber.get(21 + index)?.answer,
+    })),
+  );
+  if (markerErrors.length) throw new Error(markerErrors.join(' '));
+  for (let number = 21; number <= 26; number += 1) {
+    const marker = new RegExp(`\\[\\[${number}:[^\\]]+\\]\\]`, 'i');
+    if (!marker.test(passage)) {
+      throw new Error(`B1 Part 5 planner passage missing marker ${number}.`);
+    }
+    passage = passage.replace(marker, `(${number}) ___`);
+  }
+  if (/\[\[2[1-6]:/i.test(passage)) {
+    throw new Error('B1 Part 5 planner left unresolved marked answers in passage.');
+  }
+
+  // Rotate the correct answer position deterministically so the key is not patterned.
+  const correctIndexes = [1, 3, 0, 2, 1, 3]; // B, D, A, C, B, D
+  const questions = [];
+  const modelAnswers = [];
+  for (let number = 21; number <= 26; number += 1) {
+    const item = byNumber.get(number);
+    const answer = String(item.answer).trim();
+    const distractors = item.distractors.map((x) => String(x).trim());
+    const correctIndex = correctIndexes[number - 21];
+    const values = [...distractors];
+    values.splice(correctIndex, 0, answer);
+    const letters = ['A', 'B', 'C', 'D'];
+    questions.push({
+      id: `q${number - 20}`,
+      number,
+      type: 'mcq',
+      options: values.map((value, i) => `${letters[i]}) ${value}`),
+      targetType: item?.targetType || null,
+    });
+    modelAnswers.push({
+      id: `q${number - 20}`,
+      number,
+      answer: letters[correctIndex],
+    });
+  }
+
+  assertOrdinaryB1Language(JSON.stringify({ passage, questions }), 'B1 Part 5 planner');
+  return {
+    partTitle: 'B1 Preliminary Reading Part 5',
+    directions: 'Read the text below and choose the correct word for each space. For each question, choose A, B, C or D.',
+    title: String(plan?.title || '').trim(),
+    passage,
+    questions,
+    modelAnswers,
+  };
+}
+
+async function generateB1Part6PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above. Keep six different grammar words.`
+    : '';
+  const targetLines = B1_PART6_TARGETS
+    .map((target) => `- Q${target.number} ${target.type}. Allowed words: ${target.words.join(', ')}.`)
+    .join('\n');
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 6 open-cloze plan in natural British English.
+Topic/context: ${topic}.
+
+Write the completed text first, then remove exactly six grammar words.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "markedPassage":"a short everyday text containing [[27:word]] ... [[32:word]] in reading order",
+  "items":[
+    {"number":27,"answer":"the","targetType":"article/determiner"},
+    {"number":28,"answer":"for","targetType":"preposition"},
+    {"number":29,"answer":"who","targetType":"pronoun/relative"},
+    {"number":30,"answer":"was","targetType":"auxiliary/modal"},
+    {"number":31,"answer":"because","targetType":"linking word"},
+    {"number":32,"answer":"up","targetType":"phrasal particle/fixed phrase"}
+  ]
+}
+
+HARD RULES:
+- Exactly six gaps, numbered 27-32. Each answer is ONE word, and all six answers are different.
+- Use this exact target mix:
+${targetLines}
+- The word inside [[number:word]] must be exactly that item's answer.
+- Each gap must accept only that one ordinary word. Do not leave a gap where which/that, a/the, or in/on would both be correct.
+- Test grammar and fixed language, not content vocabulary.
+- Use British spelling and everyday B1 language.
+- Do not use these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
+- Do not copy sample-test wording.
+${repair}`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.3,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const items = Array.isArray(plan?.items) ? plan.items : [];
+  const targetErrors = part6TargetProblems(items);
+  if (targetErrors.length) throw new Error(targetErrors.join(' '));
+
+  let passage = String(plan?.markedPassage || '');
+  const markerErrors = markedAnswerMismatches(
+    passage,
+    items.map((item) => ({ number: item?.number, answer: item?.answer })),
+  );
+  if (markerErrors.length) throw new Error(markerErrors.join(' '));
+  for (const item of items) {
+    const number = Number(item?.number);
+    const marker = new RegExp(`\\[\\[${number}:[^\\]]+\\]\\]`, 'i');
+    if (!marker.test(passage)) throw new Error(`B1 Part 6 planner passage missing marker ${number}.`);
+    passage = passage.replace(marker, `(${number}) ___`);
+  }
+  if (/\[\[\d+:/.test(passage)) {
+    throw new Error('B1 Part 6 planner left unresolved marked answers in the passage.');
+  }
+  assertOrdinaryB1Language(passage, 'B1 Part 6 planner');
+
+  const byNumber = new Map(items.map((item) => [Number(item?.number), item]));
+  const questions = [];
+  const modelAnswers = [];
+  for (let number = 27; number <= 32; number += 1) {
+    const item = byNumber.get(number);
+    questions.push({
+      id: `q${number - 26}`,
+      number,
+      type: 'short',
+      grammarTarget: item.targetType,
+    });
+    modelAnswers.push({
+      id: `q${number - 26}`,
+      number,
+      answer: String(item.answer).trim(),
+    });
+  }
+
+  return {
+    partTitle: 'B1 Preliminary Reading Part 6',
+    directions: 'Read the text below and write one word in each gap. Write only one word for each answer.',
+    title: String(plan?.title || '').trim(),
+    passage: passage.replace(/\s+/g, ' ').trim(),
+    questions,
+    modelAnswers,
+  };
+}
+
 async function generatePartJson(levelLabel, partDef, options) {
   const prompt =
     options.userPrompt ||
     buildLevelExamPartUserPrompt(levelLabel, partDef, options);
   const system = options.systemPrompt || getLevelExamPartSystemPrompt(levelLabel);
 
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'multiple-choice' &&
+    Number(partDef?.partNumber) === 3
+  ) {
+    return generateB1Part3PlannedJson(system, options);
+  }
+
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'gapped-text' &&
+    Number(partDef?.partNumber) === 4
+  ) {
+    return generateB1Part4PlannedJson(system, options);
+  }
+
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'multiple-choice-cloze' &&
+    Number(partDef?.partNumber) === 5
+  ) {
+    return generateB1Part5PlannedJson(system, options);
+  }
+
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'open-cloze' &&
+    Number(partDef?.partNumber) === 6
+  ) {
+    return generateB1Part6PlannedJson(system, options);
+  }
+
   const readingHeavy =
     partDef.mode === 'reading' ||
     (partDef.partNumber >= 5 && partDef.partNumber <= 7);
+  const isB1 = String(levelLabel || '').toUpperCase() === 'B1';
+  const b1PartNumber = Number(partDef.partNumber);
+  const b1Temperature =
+    isB1 && b1PartNumber === 4
+      ? 0.25
+      : isB1 && [3, 5, 6].includes(b1PartNumber)
+        ? 0.45
+        : 0.9;
   const { text } = await cambridgeExamGenerationCompletion({
     system,
     messages: [{ role: 'user', content: prompt }],
-    temperature: 0.9,
+    temperature: b1Temperature,
     max_tokens: readingHeavy ? 12288 : 8192,
     response_format: { type: 'json_object' },
   });
@@ -649,7 +1229,10 @@ export async function persistCambridgeGeneratedPart(db, {
   skipAudio = false,
 }) {
   const levelLabel = getLevelExamLabel(levelSlug);
-  const enunciado = buildB2EnunciadoFromGenerated(generated, partNumber);
+  const isB1Reading = String(levelSlug || '').toLowerCase() === 'b1' && Number(partNumber) >= 1 && Number(partNumber) <= 6;
+  const enunciado = isB1Reading
+    ? buildB1ReadingEnunciadoFromGenerated(generated, partNumber)
+    : buildB2EnunciadoFromGenerated(generated, partNumber);
 
   const { data: pregunta, error: pqErr } = await db
     .from('levels_preguntas')
@@ -663,7 +1246,9 @@ export async function persistCambridgeGeneratedPart(db, {
     .single();
   if (pqErr) throw new Error(`levels_preguntas: ${pqErr.message}`);
 
-  const { mcq, open } = buildAnswerRowsFromGenerated(generated);
+  const { mcq, open } = isB1Reading
+    ? buildB1ReadingAnswerRowsFromGenerated(generated, partNumber)
+    : buildAnswerRowsFromGenerated(generated);
 
   if (mcq.length) {
     const letterOnlyMcq =
@@ -770,6 +1355,10 @@ export async function generateAndPersistLevelExamPart(adminDb, {
   }
 
   const slug = String(levelSlug || '').toLowerCase();
+  // Never bypass structural validation for B1/B2 reading exam parts.
+  if (persistDespiteValidation && (slug === 'b1' || slug === 'b2') && partNumber >= 1 && partNumber <= (slug === 'b1' ? 6 : 7)) {
+    throw new Error('Validation bypass is disabled for B1/B2 Reading and Use of English.');
+  }
   const levelLabel = getLevelExamLabel(slug);
   const partDef = getLevelExamPartDef(slug, partNumber);
   if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
@@ -788,7 +1377,25 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     };
   }
 
-  const theme = topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  const isB1Reading = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
+  const varietyApi = isB1Reading ? await import('@/lib/b1ReadingVarietyHistory') : null;
+  const chosenVariety = isB1Reading
+    ? await varietyApi.chooseB1ReadingVariety(adminDb, {
+        examSlot,
+        partNumber: partDef.partNumber,
+        topicOverride: topic || null,
+      })
+    : null;
+  const b1PlannedTheme = chosenVariety
+    ? [
+        chosenVariety.topic,
+        chosenVariety.context ? `context/genre: ${chosenVariety.context}` : null,
+        chosenVariety.grammarFocus ? `grammar focus: ${chosenVariety.grammarFocus}` : null,
+      ]
+        .filter(Boolean)
+        .join('; ')
+    : null;
+  const theme = b1PlannedTheme || topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
   const parts = getLevelExamParts(slug) || [];
   const seedBase = varietySeed ?? Date.now() + examSlot * 1000;
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
@@ -798,7 +1405,7 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     resolveEffectiveExamPartGenerationPrompt,
     resolveDefaultExamPartGenerationPrompt,
   } = await import('@/lib/examPartGenerationPrompt');
-  const generationPrompt = useCodePrompts
+  const generationPrompt = (useCodePrompts || isB1Reading)
     ? resolveDefaultExamPartGenerationPrompt({
         levelSlug: slug,
         partNumber: partDef.partNumber,
@@ -860,12 +1467,18 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     skipAudio,
   });
 
+  if (chosenVariety) {
+    await varietyApi.recordB1ReadingVariety(adminDb, {
+      examSlot, partNumber: partDef.partNumber, chosen: chosenVariety,
+    });
+  }
+
   logExamGeneration('part_saved', {
     level: slug,
     examNumber: examSlot,
     partNumber: partDef.partNumber,
     durationMs: Date.now() - t0,
-    validationOk: true,
+    validationOk: validation.ok,
     saved: true,
   });
 
@@ -875,6 +1488,46 @@ export async function generateAndPersistLevelExamPart(adminDb, {
     preguntaId,
     partTitle: partDef.section,
     skipped: false,
+  };
+}
+
+export async function generateAndPersistB1ReadingExam(adminDb, {
+  levelId,
+  examSlot,
+  preserveExistingParts = true,
+  replacePartContent = false,
+  onProgress,
+}) {
+  const results = [];
+  const readingParts = [1, 2, 3, 4, 5, 6];
+
+  for (let i = 0; i < readingParts.length; i += 1) {
+    const partNumber = readingParts[i];
+    onProgress?.({ step: i + 1, total: readingParts.length, part: partNumber });
+    const row = await generateAndPersistLevelExamPart(adminDb, {
+      levelSlug: 'b1',
+      levelId,
+      examSlot,
+      partNumber,
+      skipAudio: true,
+      preserveExistingParts,
+      replacePartContent,
+      persistDespiteValidation: false,
+      useCodePrompts: true,
+    });
+    results.push({
+      examenId: row.examenId,
+      partNumber: row.partNumber,
+      preguntaId: row.preguntaId,
+      skipped: row.skipped,
+    });
+  }
+
+  return {
+    examenId: results[0]?.examenId || null,
+    parts: results.map(({ examenId, ...part }) => part),
+    created: results.filter((r) => r.preguntaId).length,
+    skipped: results.filter((r) => r.skipped).length,
   };
 }
 
@@ -904,7 +1557,7 @@ export async function generateAndPersistLevelExam(adminDb, {
   }
 
   const varietySeed = Date.now();
-  const topic = EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  const topic = slug === 'b1' ? null : EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
   const results = [];
 
   for (let i = 0; i < parts.length; i += 1) {
@@ -966,19 +1619,45 @@ export async function previewLevelExamPartGeneration({
   const partDef = getLevelExamPartDef(slug, partNumber);
   if (!partDef) throw new Error(`Parte inválida: ${partNumber}`);
 
-  const theme = topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  const isB1ReadingPreview = slug === 'b1' && partDef.partNumber >= 1 && partDef.partNumber <= 6;
+  let theme = topic || EXAM_THEMES[(examSlot - 1) % EXAM_THEMES.length];
+  if (isB1ReadingPreview && !topic) {
+    const { buildB1TwentyExamAllocation } = await import('@/lib/b1PreliminaryReadingSpec');
+    const planned = buildB1TwentyExamAllocation()
+      .find((exam) => exam.examNumber === examSlot)?.parts
+      ?.find((part) => part.partNumber === partDef.partNumber);
+    if (!planned) throw new Error(`No approved B1 Reading allocation for Exam ${examSlot}, Part ${partDef.partNumber}.`);
+    theme = [
+      planned.topic,
+      planned.context ? `context/genre: ${planned.context}` : null,
+      planned.grammarFocus ? `grammar focus: ${planned.grammarFocus}` : null,
+    ]
+      .filter(Boolean)
+      .join('; ');
+  }
   const parts = getLevelExamParts(slug) || [];
   const seedBase = varietySeed ?? Date.now() + examSlot * 1000;
   const partIndex = parts.findIndex((p) => p.partNumber === partDef.partNumber);
 
-  const { resolveEffectiveExamPartGenerationPrompt } = await import('@/lib/examPartGenerationPrompt');
-  const generationPrompt = await resolveEffectiveExamPartGenerationPrompt(adminDb, {
-    levelSlug: slug,
-    partNumber,
-    examSlot,
-    topic: theme,
-    varietySeed: seedBase + partIndex,
-  });
+  const {
+    resolveEffectiveExamPartGenerationPrompt,
+    resolveDefaultExamPartGenerationPrompt,
+  } = await import('@/lib/examPartGenerationPrompt');
+  const generationPrompt = isB1ReadingPreview
+    ? resolveDefaultExamPartGenerationPrompt({
+        levelSlug: slug,
+        partNumber,
+        examSlot,
+        topic: theme,
+        varietySeed: seedBase + partIndex,
+      })
+    : await resolveEffectiveExamPartGenerationPrompt(adminDb, {
+        levelSlug: slug,
+        partNumber,
+        examSlot,
+        topic: theme,
+        varietySeed: seedBase + partIndex,
+      });
 
   const t0 = Date.now();
   const { generated, validation } = await generatePartJsonWithRetries(slug, levelLabel, partDef, {
@@ -989,7 +1668,9 @@ export async function previewLevelExamPartGeneration({
     systemPrompt: generationPrompt.system,
   });
 
-  const enunciadoPreview = buildB2EnunciadoFromGenerated(generated, partDef.partNumber);
+  const enunciadoPreview = isB1ReadingPreview
+    ? buildB1ReadingEnunciadoFromGenerated(generated, partDef.partNumber)
+    : buildB2EnunciadoFromGenerated(generated, partDef.partNumber);
   const partTitle = getExamPartDisplayLabel(slug, partDef.partNumber);
 
   // Validación de calidad IA (B2 Parts 1–2): blind solve + rúbrica. Sus errores bloquean igual que los mecánicos.

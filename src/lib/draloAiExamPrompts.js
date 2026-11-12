@@ -287,6 +287,60 @@ Return ONLY JSON with: partTitle, directions, example {number:0, sentence1, keyw
       return `{"id":"${id}","answer":"exact one-word or short phrase answer"}`;
     }).join(',')}]`;
 
+    if (L === 'B1' && activity === 'multiple-choice-cloze') {
+      return `Create ONE complete B1 Preliminary Reading Part 5: multiple-choice cloze (Q21–26).
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+OFFICIAL TASK SHAPE:
+- Exactly 6 scored gaps numbered 21–26; no example gap.
+- Short coherent B1-level text with a title.
+- Exactly four options A–D for each gap.
+- The task tests mainly vocabulary; an element of grammar such as complementation may also be tested.
+- Exactly one answer must be defensible in context.
+- Use everyday B1 vocabulary and natural British English; avoid obscure C1/C2 lexis.
+- Mix lexical relationships: collocation, near-synonym choice, fixed phrase, phrasal verb, dependent preposition/complementation and word choice.
+- Distractors must be plausible and from the same grammatical class where appropriate.
+- Do not make the set mainly grammar gaps; that is Part 6.
+- Do not copy or closely imitate any supplied sample-test text.
+
+ITEM-BUILD METHOD — CRITICAL:
+1. Choose the intended lexical relationship BEFORE writing the options.
+2. Write the full sentence with the intended word inserted and make sure it is a natural, standard B1 British English collocation or phrase.
+3. Remove that word to create the gap.
+4. Create three distractors that are tempting because of meaning or word class, but that fail in THIS exact sentence because of collocation, complementation, register or meaning.
+5. Substitute A, B, C and D back into the complete sentence one by one. If two options are both natural and defensible, rewrite the sentence or the options.
+6. Avoid broad adjective/noun slots where several ordinary synonyms could work equally well (for example flexible/spacious/comfortable, damaged/broken, think/believe) unless the surrounding wording clearly forces one choice.
+7. Prefer established lexical chunks such as traffic jam, book a ticket, take part, make a decision, rather than vague free combinations.
+8. Before returning JSON, perform a second option-by-option cross-fit check for all six gaps. Exactly one option per gap must survive.
+
+Return ONLY JSON with: partTitle, directions, title, passage containing gaps (21) ___ to (26) ___,
+questions[{id:"q1"–"q6",number:21–26,type:"mcq",options:["A) ...","B) ...","C) ...","D) ..."]}],
+modelAnswers[{id,number:21–26,answer:"A"|"B"|"C"|"D"}].`;
+    }
+
+    if (L === 'B1' && activity === 'open-cloze') {
+      return `Create ONE complete B1 Preliminary Reading Part 6: open cloze (Q27–32).
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+OFFICIAL TASK SHAPE:
+- Exactly 6 scored gaps numbered 27–32; no example gap.
+- Short coherent B1-level text with a title.
+- Candidate writes exactly ONE word in each gap; no options.
+- The task primarily tests grammatical structures, with some phrasal verbs and common fixed phrases.
+- Every gap must have one clearly intended answer; reject gaps with two normal alternatives.
+- Across the six items vary the grammar target, using the official B1 range: articles/determiners, pronouns, auxiliaries/modals, prepositions, connectives, infinitive marker/verb pattern, quantifiers, phrasal-verb particles and common fixed phrases.
+- Use natural British English and everyday B1 contexts.
+- Do not turn this into a vocabulary guessing task and do not copy supplied sample-test text.
+
+Return ONLY JSON with: partTitle, directions, title, passage containing gaps (27) ___ to (32) ___,
+questions[{id:"q1"–"q6",number:27–32,type:"short"}],
+modelAnswers[{id,number:27–32,answer:"one word"}].`;
+    }
+
     if (activity === 'multiple-choice-cloze' && L === 'B2') {
       return `Create ONE complete B2 Reading and Use of English Part 1: multiple-choice cloze (Q1–8).
 The task should match official B2 First style, difficulty and item design.
@@ -557,6 +611,107 @@ ${baseExamSchema(directions, `,"title":"short text title","passage":"full text w
   }
 
   if (mode === 'reading') {
+    if (L === 'B1' && activity === 'notice-mcq') {
+      return `Create ONE complete B1 Preliminary Reading Part 1 (Q1–5).
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+OFFICIAL TASK SHAPE:
+- Exactly five independent real-world short texts: notices, messages, emails, signs or similar everyday texts.
+- One 3-option multiple-choice question per text, numbered 1–5.
+- Test the main message/communicative meaning, not isolated vocabulary.
+- Each item must include enough context to identify the situation without relying on an image.
+- Options must be A–C, plausible paraphrases, with exactly one correct answer.
+- Use everyday B1 vocabulary, natural British English and varied contexts.
+- Do not copy supplied sample-test wording.
+
+Return ONLY JSON with: partTitle, directions,
+questions[{id:"q1"–"q5",number:1–5,type:"mcq",text:"short real-world text",prompt:"question",options:["A) ...","B) ...","C) ..."]}],
+modelAnswers[{id,number:1–5,answer:"A"|"B"|"C"}].`;
+    }
+
+    if (L === 'B1' && activity === 'multiple-matching') {
+      return `Create ONE complete B1 Preliminary Reading Part 2 (Q6–10).
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+OFFICIAL TASK SHAPE:
+- Five descriptions of people, numbered 6–10.
+- Eight short texts on ONE shared practical topic, labelled A–H.
+- Match each person to the single most suitable text; three texts remain unused.
+- Test detailed factual comprehension and whole-meaning matching, not word spotting.
+- Each person description must contain several requirements so the answer depends on matching all important details.
+- Make distractor texts partially suitable but wrong on at least one decisive requirement.
+- Everyday B1 vocabulary, natural British English, varied practical contexts.
+- Do not copy supplied sample-test wording.
+
+Return ONLY JSON with: partTitle, directions, matchingIntro,
+sections[{letter:"A"–"H",name:"short heading",text:"short text"}],
+questions[{id:"q1"–"q5",number:6–10,prompt:"person description"}],
+modelAnswers[{id,number:6–10,answer:"A"|"B"|"C"|"D"|"E"|"F"|"G"|"H"}].`;
+    }
+
+    if (L === 'B1' && activity === 'multiple-choice') {
+      return `Create ONE complete B1 Preliminary Reading Part 3 (Q11–15).
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+OFFICIAL TASK SHAPE:
+- One longer coherent B1-level text.
+- Exactly five 4-option multiple-choice questions, numbered 11–15.
+- Test a balanced mix of detailed comprehension, gist/global meaning, inference and writer attitude/opinion.
+- Questions should broadly follow text order; include a global question where appropriate.
+- Four plausible options A–D; exactly one fully supported answer.
+- Distractors should distort or partially match ideas actually present in the passage, not be obviously unrelated.
+- Natural British English and everyday/intermediate subject matter.
+- Do not copy supplied sample-test wording.
+
+Return ONLY JSON with: partTitle, directions, title, passage,
+questions[{id:"q1"–"q5",number:11–15,type:"mcq",questionType:"detail|gist|inference|attitude|global",prompt:"question",options:["A) ...","B) ...","C) ...","D) ..."],evidence:"brief support"}],
+modelAnswers[{id,number:11–15,answer:"A"|"B"|"C"|"D"}].`;
+    }
+
+    if (L === 'B1' && activity === 'gapped-text') {
+      return `Create ONE complete B1 Preliminary Reading Part 4 (Q16–20).
+${variety}
+${SHARED_JSON_RULES}
+${directions}
+
+OFFICIAL TASK SHAPE:
+- One longer coherent B1-level text with exactly five gaps numbered 16–20.
+- Exactly eight candidate sentences A–H; five are used and THREE are extra.
+- The task tests narrative/argument progression, attitudes/opinions and how a coherent well-structured text is formed.
+- Each correct sentence must fit both before and after its gap grammatically and logically.
+- Candidate sentences must depend on cohesion: reference, pronouns, sequencing, contrast, cause/effect, lexical chains or logical progression.
+- The three extras must be topic-plausible but fail cohesion or meaning at every gap.
+- Use five different answer letters; leave exactly three unused.
+- Natural British English at B1; do not copy supplied sample-test wording.
+- Keep the lexical level genuinely B1 throughout. Prefer common everyday words and straightforward sentence structures.
+- Avoid specialist labels, academic phrasing and unnecessarily abstract vocabulary. Do not use words/phrases such as "predominantly", "cognitive abilities", "adept", "nuance", "polyglot", "immersion", "unparalleled" or similar higher-level wording when a simple B1 expression would work.
+- An occasional unfamiliar word is acceptable only if its meaning is made clear by the surrounding sentence and it is not needed to answer a question.
+- Before returning JSON, reread the passage as a B1 learner: simplify any sentence that sounds like an academic article rather than a B1 exam text.
+
+BUILD METHOD — FOLLOW THIS ORDER:
+1. First write a complete coherent ungapped text.
+2. Identify five complete sentences whose removal creates genuine cohesion decisions.
+3. Remove those exact five sentences and insert gaps 16–20 in their original positions.
+4. Use the removed sentences as five of A–H, then write three extra sentences that are topically plausible but cannot fit any gap.
+5. Before returning JSON, test EVERY sentence A–H in EVERY gap. If any sentence fits more than one gap naturally, rewrite the sentence or the surrounding text.
+6. Check each intended answer has a strong backward link AND a strong forward link. Avoid generic sentences such as "It was a great experience", "The other participants were friendly", "This was interesting", or any sentence about people/feelings that could sit in several places.
+7. Give EACH correct sentence at least one UNIQUE local cohesion anchor that ties it to its own gap and not to the other four. Good anchors include a specific pronoun/referent, a cause/result phrase whose cause is immediately before, a time-sequence phrase tied to a unique event, or a lexical chain continued immediately after. The anchor must be understandable from the surrounding text and must not depend on hidden knowledge.
+8. Make the five gaps structurally different from one another: do not create several gaps that all sit between generic event-description sentences or several gaps that all concern interactions with other participants.
+9. For every correct sentence, write a mental rejection reason for the other four gaps. If you cannot explain why it fails each of them, rewrite it.
+10. Reconstruct the full text with the five intended answers and read it as continuous British English. It must be coherent, natural and unambiguous at whole-text level, not merely grammatical sentence by sentence.
+
+Return ONLY JSON with: partTitle, directions, title, passage with markers (16) ___ to (20) ___,
+sentencePool:["A) ...","B) ...","C) ...","D) ...","E) ...","F) ...","G) ...","H) ..."],
+questions[{id:"q1"–"q5",number:16–20}],
+modelAnswers[{id,number:16–20,answer:"A"|"B"|"C"|"D"|"E"|"F"|"G"|"H"}].`;
+    }
+
     if (activity === 'multiple-choice' && L === 'B2') {
       return `Create ONE complete B2 Reading Part 5: Multiple choice (Q31–36).
 The task should match official B2 First style, difficulty, wording and item design.
