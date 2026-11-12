@@ -100,6 +100,7 @@ import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import { landingFont } from '@/components/home/landing/landingFont';
 import part4Styles from './Part4Practice.module.css';
 import RuoeTestSelector from './RuoeTestSelector';
+import testSelectorStyles from './RuoeTestSelector.module.css';
 import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import {
@@ -2354,7 +2355,7 @@ function B2ReadingExamsPageInner() {
   }) && (
     <button
       type="button"
-      className="levels-exam-module-nav__btn levels-exam-module-nav__btn--check"
+      className={`${testSelectorStyles.check} ${landingFont.variable}`}
       onClick={handleCheckAllAnswers}
       disabled={!hasCheckableAnswers}
     >

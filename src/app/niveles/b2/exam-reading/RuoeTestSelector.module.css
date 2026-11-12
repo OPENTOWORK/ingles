@@ -23,6 +23,13 @@
   cursor: pointer;
 }
 
+.check {
+  composes: trigger;
+  flex: 0 0 auto;
+  justify-self: start;
+  font-family: var(--font-landing), system-ui, sans-serif;
+}
+
 .chevron {
   width: .4rem;
   height: .4rem;
