@@ -22,6 +22,10 @@ import { gradeB2KeyWordTransformation } from '@/lib/gradeB2KeyWordTransformation
 import { validatePart6HardRules } from '@/lib/ruoePart6HardValidators';
 import { validatePart4Quality } from '@/lib/ruoePart4Quality';
 import { validateRuoeEditorialQuality } from '@/lib/ruoeEditorialQuality';
+import {
+  b1Part3CoverageGaps,
+  findB1AboveLevelTerms,
+} from '@/lib/b1ReadingConstruction';
 
 const WRITING_PART2_FORMATS = new Set(['article', 'email', 'letter', 'review', 'report']);
 const B1_WRITING_PART2_FORMATS = new Set(['article', 'story']);
@@ -1596,6 +1600,18 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
       '',
     ).trim().toUpperCase();
 
+  const rejectAboveLevelLanguage = () => {
+    const aboveLevel = findB1AboveLevelTerms(JSON.stringify({
+      passage: gen.passage,
+      questions: gen.questions,
+      sentencePool: gen.sentencePool,
+      sections: gen.sections,
+    }));
+    for (const term of aboveLevel) {
+      errors.push(`B1 Reading Part ${part} uses language above B1: "${term}". Replace it with ordinary B1 wording.`);
+    }
+  };
+
   const requireNumberRange = (start, end) => {
     const expectedCount = end - start + 1;
     if (questions.length !== expectedCount) {
@@ -1676,8 +1692,11 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     requireNumberRange(11, 15);
     if (!hasText(gen.passage)) errors.push('B1 Reading Part 3 must include one longer passage.');
     validateMcq(['A','B','C','D'], 4);
-    const types = new Set(questions.map((q) => String(q?.questionType || '').trim().toLowerCase()).filter(Boolean));
-    if (types.size < 3) warnings.push('B1 Reading Part 3 should mix detail, gist/global meaning, inference and writer attitude/opinion.');
+    const coverageGaps = b1Part3CoverageGaps(questions);
+    if (coverageGaps.length) {
+      errors.push(`B1 Reading Part 3 must include detail, inference, attitude and gist coverage. Missing: ${coverageGaps.join(', ')}.`);
+    }
+    rejectAboveLevelLanguage();
     return;
   }
 
@@ -1704,6 +1723,7 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     if (used.length === 5 && new Set(used).size === 5 && 8 - new Set(used).size !== 3) {
       errors.push('B1 Reading Part 4 must leave exactly three candidate sentences unused.');
     }
+    rejectAboveLevelLanguage();
     return;
   }
 
@@ -1716,6 +1736,7 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
       if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 5 passage must contain gap (${n}) exactly once.`);
     }
     if (gapNumbers.includes(0)) errors.push('B1 Reading Part 5 has no example gap (0).');
+    rejectAboveLevelLanguage();
     return;
   }
 
@@ -1740,7 +1761,18 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
         errors.push(`B1 Reading Part 6 question ${q?.number ?? i + 27}: answer must be exactly one word.`);
       }
     });
+    const answerWords = questions.map((q, i) => String(
+      answerById.get(String(q?.id ?? ''))?.answer ??
+      answerByNumber.get(Number(q?.number))?.answer ??
+      answers[i]?.answer ??
+      '',
+    ).trim().toLowerCase()).filter((word) => word && !/\s/.test(word));
+    if (answerWords.length === 6 && new Set(answerWords).size !== 6) {
+      errors.push('B1 Reading Part 6 must use six different one-word answers so each gap tests a different grammar target.');
+    }
   }
+
+  rejectAboveLevelLanguage();
 }
 
 function validateReadingUseOfEnglish(partDef, gen, errors, warnings) {

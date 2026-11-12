@@ -1,5 +1,6 @@
 import { cambridgeChatCompletion } from '@/lib/draloAiEngine';
 import { collectPart5Disputes, confirmedPart5DoubleKeys } from '@/lib/b1Part5DoubleKey';
+import { findB1AboveLevelTerms } from '@/lib/b1ReadingConstruction';
 
 function asArray(value) {
   if (Array.isArray(value)) return value;
@@ -105,7 +106,7 @@ function pushMismatchErrors(errors, solved, expected, label = 'question') {
   }
 }
 
-function findings(rubric, errors, warnings) {
+function findings(rubric, errors, warnings, { literalAsError = false } = {}) {
   for (const x of asArray(rubric?.ambiguousItems)) {
     errors.push(`B1 ambiguity Q${x?.number ?? '?'}: ${x?.reason || 'more than one answer is defensible'}`);
   }
@@ -113,7 +114,12 @@ function findings(rubric, errors, warnings) {
     errors.push(`B1 weak distractor Q${x?.number ?? '?'}${x?.letter ? ` ${x.letter}` : ''}: ${x?.reason || 'not plausibly tempting'}`);
   }
   for (const x of asArray(rubric?.literalSolveItems)) {
-    warnings.push(`B1 Q${x?.number ?? '?'} may be solvable by word spotting: ${x?.reason || ''}`);
+    const reason = x?.reason || 'the answer can be copied from the text';
+    if (literalAsError) {
+      errors.push(`B1 Q${x?.number ?? '?'} is solvable by copying wording: ${reason}`);
+    } else {
+      warnings.push(`B1 Q${x?.number ?? '?'} may be solvable by word spotting: ${reason}`);
+    }
   }
   for (const x of asArray(rubric?.issues)) {
     if (x) warnings.push(`B1 quality review: ${x}`);
@@ -336,9 +342,14 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   const errors = britishEnglishErrors(generated);
   const warnings = [];
 
-  if ([1,2,3,5].includes(part)) {
+  if ([1, 2, 5].includes(part)) {
     pushMismatchErrors(errors, rubric?.answers, generated?.modelAnswers);
     findings(rubric, errors, warnings);
+  }
+
+  if (part === 3) {
+    pushMismatchErrors(errors, rubric?.answers, generated?.modelAnswers);
+    findings(rubric, errors, warnings, { literalAsError: true });
   }
 
   if (part === 2) {
@@ -348,6 +359,12 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   }
 
   if (part === 3) {
+    for (const term of findB1AboveLevelTerms(JSON.stringify(generated || {}))) {
+      errors.push(`B1 Part 3 level issue: "${term}" — above normal B1 reading level`);
+    }
+    if (String(rubric?.levelOverall || '').toLowerCase() === 'too_high') {
+      errors.push('B1 Part 3 lexical-level review judged the passage above ordinary B1. Rewrite it in everyday language.');
+    }
     for (const item of asArray(rubric?.levelIssues)) {
       errors.push(`B1 Part 3 level issue: "${item?.text || '?'}" — ${item?.reason || 'above normal B1 reading level'}`);
     }
@@ -375,6 +392,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
     }
     for (const issue of asArray(rubric?.sequenceIssues)) {
       errors.push(`B1 Part 4 completed-text sequence issue: ${issue?.reason || issue?.location || 'whole-text flow is not coherent'}`);
+    }
+    if (String(rubric?.sequenceOverall || '').toLowerCase() === 'revise' && !asArray(rubric?.sequenceIssues).length) {
+      errors.push('B1 Part 4 whole-text review asked for a revision. Rebuild the cohesion so the completed text reads as one continuous piece.');
     }
     const unused = asArray(rubric?.unusedLetters).map((x) => String(x).toUpperCase()).filter(Boolean);
     if (unused.length && unused.length !== 3) {

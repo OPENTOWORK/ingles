@@ -25,6 +25,15 @@ import { validateGeneratedExamPart } from '@/lib/examPartValidation';
 import { logExamGeneration } from '@/lib/examGenerationLog';
 import { getExamPartDisplayLabel } from '@/lib/examPartDisplayLabel';
 import { buildB1ReadingEnunciadoFromGenerated, buildB1ReadingAnswerRowsFromGenerated } from '@/lib/formatB1ReadingEnunciado';
+import {
+  B1_ABOVE_LEVEL_TERMS,
+  B1_PART6_TARGETS,
+  b1Part3CoverageGaps,
+  findB1AboveLevelTerms,
+  markedAnswerMismatches,
+  part4CohesionProblems,
+  part6TargetProblems,
+} from '@/lib/b1ReadingConstruction';
 import { getB2ListeningAudioTargets } from '@/lib/b2ListeningAudioTargets';
 
 /**
@@ -482,10 +491,10 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
         const b1Hints = {
           1: 'B1 Part 1: exactly five independent short real-world texts, three options A-C each; one clear main-message answer.',
           2: 'B1 Part 2: five people Q6-10, eight texts A-H, three unused; match all requirements, not copied words.',
-          3: 'B1 Part 3: one longer text, five questions Q11-15, four options A-D; include detail, inference, attitude/opinion and global/gist coverage.',
-          4: 'B1 Part 4: five gaps Q16-20 and eight sentences A-H, exactly three unused; remove multifit and strengthen backward/forward cohesion.',
-          5: 'B1 Part 5: six vocabulary-led multiple-choice cloze gaps Q21-26, four options A-D. Where two options would both be accepted as the key, rewrite the extra option so the collocation or the meaning rules it out. A tempting but incorrect distractor is required.',
-          6: 'B1 Part 6: six one-word gaps Q27-32; make every gap accept exactly one ordinary B1 answer and primarily test grammar/fixed language.',
+          3: 'B1 Part 3: one longer everyday text, questions Q11-15, four options A-D. Cover detail, inference, attitude and gist. Replace every above-B1 word with ordinary language, and do not let the correct option copy a sentence from the text.',
+          4: 'B1 Part 4: five gaps Q16-20 and eight sentences A-H, exactly three unused. Give each removed sentence its own two-word cohesion anchor that also appears in the chunk immediately before or after that gap, and in no extra sentence.',
+          5: 'B1 Part 5: six vocabulary-led multiple-choice cloze gaps Q21-26, four options A-D. The word inside each [[21:word]] marker must be the answer. Where two options would both be accepted as the key, rewrite the extra option so the collocation or the meaning rules it out. A tempting but incorrect distractor is required.',
+          6: 'B1 Part 6: six different one-word answers. Q27 article/determiner, Q28 preposition, Q29 pronoun/relative, Q30 auxiliary/modal, Q31 linking word, Q32 phrasal particle or fixed-phrase word. Do not test a content noun.',
         };
         lengthHint = b1Hints[pn] || lengthHint;
       } else if (pn === 5) {
@@ -569,6 +578,102 @@ ${lengthHint}`;
   return { generated: validation.normalized || generated, validation };
 }
 
+function assertOrdinaryB1Language(text, label) {
+  const hits = findB1AboveLevelTerms(text);
+  if (hits.length) {
+    throw new Error(`${label} uses language above B1: ${hits.join(', ')}. Rewrite it in ordinary B1 wording.`);
+  }
+}
+
+async function generateB1Part3PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above in a new text. Do not reuse the same above-level wording.`
+    : '';
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 3 plan in natural British English.
+Topic/context: ${topic}.
+
+Write the passage first, in language a normal B1 learner can read. Then write five questions that can only be answered by understanding the text.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "passage":"one continuous everyday text",
+  "questions":[
+    {"number":11,"questionType":"detail","prompt":"...","options":["...","...","...","..."],"answer":"A"},
+    {"number":12,"questionType":"inference","prompt":"...","options":["...","...","...","..."],"answer":"C"},
+    {"number":13,"questionType":"attitude","prompt":"...","options":["...","...","...","..."],"answer":"B"},
+    {"number":14,"questionType":"gist","prompt":"...","options":["...","...","...","..."],"answer":"D"},
+    {"number":15,"questionType":"detail","prompt":"...","options":["...","...","...","..."],"answer":"A"}
+  ]
+}
+
+HARD RULES:
+- Exactly five questions, numbered 11-15. Each has exactly four options and one answer letter A, B, C or D.
+- Cover all four of these question types: detail, inference, attitude, gist. The fifth question may repeat one of them.
+- The passage must sound like everyday B1 writing, not an academic article. Prefer common words and straightforward sentences.
+- Do not use any of these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
+- The correct option must be a paraphrase. It must not copy a sentence or a distinctive phrase from the passage.
+- The other three options must use ideas that are in the text, but change or overstate them. Do not write obviously unrelated options.
+- Use British spelling.
+- Do not copy sample-test wording.
+${repair}`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.35,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const passage = String(plan?.passage || '').trim().replace(/\s+/g, ' ');
+  const rows = Array.isArray(plan?.questions) ? plan.questions : [];
+  if (rows.length !== 5) throw new Error(`B1 Part 3 planner returned ${rows.length} questions; expected 5.`);
+  const words = passage.split(/\s+/).filter(Boolean).length;
+  if (words < 180 || words > 520) {
+    throw new Error(`B1 Part 3 planner passage is ${words} words; keep it between 180 and 520.`);
+  }
+
+  const byNumber = new Map(rows.map((row) => [Number(row?.number), row]));
+  const questions = [];
+  const modelAnswers = [];
+  for (let number = 11; number <= 15; number += 1) {
+    const row = byNumber.get(number);
+    if (!row) throw new Error(`B1 Part 3 planner missing question ${number}.`);
+    const options = Array.isArray(row?.options) ? row.options.map((option) => String(option || '').trim()) : [];
+    const answer = String(row?.answer || '').trim().toUpperCase();
+    if (options.length !== 4 || options.some((option) => !option)) {
+      throw new Error(`B1 Part 3 planner question ${number} needs exactly four options.`);
+    }
+    if (!/^[A-D]$/.test(answer)) throw new Error(`B1 Part 3 planner question ${number} answer must be A-D.`);
+    const letters = ['A', 'B', 'C', 'D'];
+    questions.push({
+      id: `q${number - 10}`,
+      number,
+      type: 'mcq',
+      questionType: String(row?.questionType || '').trim().toLowerCase(),
+      prompt: String(row?.prompt || '').trim(),
+      options: options.map((option, index) => `${letters[index]}) ${option.replace(/^[A-D]\)\s*/i, '')}`),
+    });
+    modelAnswers.push({ id: `q${number - 10}`, number, answer });
+  }
+  const coverageGaps = b1Part3CoverageGaps(questions);
+  if (coverageGaps.length) {
+    throw new Error(`B1 Part 3 planner is missing question coverage: ${coverageGaps.join(', ')}.`);
+  }
+  assertOrdinaryB1Language(JSON.stringify({ passage, questions }), 'B1 Part 3 planner');
+
+  return {
+    partTitle: 'B1 Preliminary Reading Part 3',
+    directions: 'Read the text and questions below. For each question, choose the correct answer A, B, C or D.',
+    title: String(plan?.title || '').trim(),
+    passage,
+    questions,
+    modelAnswers,
+  };
+}
+
 async function generateB1Part4PlannedJson(system, options) {
   const topic = String(options?.topic || 'an everyday B1 topic').trim();
   const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
@@ -591,11 +696,11 @@ Return ONLY valid JSON with exactly:
     "text after gap 20"
   ],
   "removedSentences":[
-    {"number":16,"sentence":"complete sentence","anchorReason":"why this sentence is forced here and fails the other four gaps"},
-    {"number":17,"sentence":"complete sentence","anchorReason":"..."},
-    {"number":18,"sentence":"complete sentence","anchorReason":"..."},
-    {"number":19,"sentence":"complete sentence","anchorReason":"..."},
-    {"number":20,"sentence":"complete sentence","anchorReason":"..."}
+    {"number":16,"sentence":"complete sentence","anchor":"two content words","anchorReason":"why this sentence is forced here and fails the other four gaps"},
+    {"number":17,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."},
+    {"number":18,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."},
+    {"number":19,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."},
+    {"number":20,"sentence":"complete sentence","anchor":"two content words","anchorReason":"..."}
   ],
   "extras":[
     {"sentence":"topic-plausible extra sentence","rejectionReason":"why it fits none of the five gaps"},
@@ -607,7 +712,7 @@ Return ONLY valid JSON with exactly:
 HARD RULES:
 - The completed text made by chunk0 + removed16 + chunk1 + removed17 + ... + removed20 + chunk5 must read like a naturally written B1 article/story.
 - Exactly six chunks, five removed sentences numbered 16-20, and three extras.
-- Each removed sentence must have a UNIQUE local cohesion anchor to its own gap: a clear referent, time sequence, cause/result link, contrast, or lexical chain.
+- Each removed sentence must include an "anchor": a unique phrase of at least two content words. That exact phrase must appear in the removed sentence AND in the chunk immediately before or after its own gap. It must not appear in another removed sentence or in any extra sentence.
 - Make the five gap environments structurally different. Do not make several gaps generic moments about feelings, participants, an instructor, or "the experience".
 - Avoid generic removed sentences such as "It was a great experience", "Everyone was friendly", "This made me feel better", or anything that could move around the text.
 - For each removed sentence, mentally insert it into all five gap positions. It must be natural in exactly ONE.
@@ -615,6 +720,7 @@ HARD RULES:
 - Check whole-text chronology. Do not mention people, objects, decisions or outcomes before they are introduced.
 - Avoid redundant sequencing such as "The class began with an introduction" immediately followed by "The instructor introduced herself".
 - Use British spelling and normal B1 vocabulary. Avoid specialist or academic prose.
+- Do not use these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
 - Do not copy sample-test wording.
 ${repair}`;
 
@@ -651,6 +757,9 @@ ${repair}`;
   if (new Set(all.map((x) => x.toLowerCase())).size !== 8) {
     throw new Error('B1 Part 4 planner produced duplicate candidate sentences.');
   }
+  const cohesionErrors = part4CohesionProblems({ chunks, removed, extras });
+  if (cohesionErrors.length) throw new Error(cohesionErrors.join(' '));
+  assertOrdinaryB1Language(`${passage}\n${all.join('\n')}`, 'B1 Part 4 planner');
 
   const patterns = [
     ['B','F','A','H','D'],
@@ -727,6 +836,8 @@ HARD RULES:
 - Especially avoid ambiguous families such as explore/discover; help/allow when both structures work; damaged/broken without a forcing collocation; think/believe; rent/hire; start/begin; finish/end; choose/select; buy/purchase; like/love when the surrounding wording does not force one.
 - Mentally substitute the answer and all three distractors into the complete sentence. If two produce natural, contextually correct British English, rewrite the sentence or options before returning JSON.
 - The answer must not depend on obscure C1/C2 vocabulary.
+- The word inside each [[number:word]] marker must be exactly the answer for that number.
+- Do not use these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
 - Do not copy sample-test wording.
 ${repair}`;
 
@@ -790,6 +901,14 @@ ${repair}`;
   }
 
   let passage = String(plan?.markedPassage || '');
+  const markerErrors = markedAnswerMismatches(
+    passage,
+    Array.from({ length: 6 }, (_, index) => ({
+      number: 21 + index,
+      answer: byNumber.get(21 + index)?.answer,
+    })),
+  );
+  if (markerErrors.length) throw new Error(markerErrors.join(' '));
   for (let number = 21; number <= 26; number += 1) {
     const marker = new RegExp(`\\[\\[${number}:[^\\]]+\\]\\]`, 'i');
     if (!marker.test(passage)) {
@@ -827,6 +946,7 @@ ${repair}`;
     });
   }
 
+  assertOrdinaryB1Language(JSON.stringify({ passage, questions }), 'B1 Part 5 planner');
   return {
     partTitle: 'B1 Preliminary Reading Part 5',
     directions: 'Read the text below and choose the correct word for each space. For each question, choose A, B, C or D.',
@@ -837,11 +957,115 @@ ${repair}`;
   };
 }
 
+async function generateB1Part6PlannedJson(system, options) {
+  const topic = String(options?.topic || 'an everyday B1 topic').trim();
+  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above. Keep six different grammar words.`
+    : '';
+  const targetLines = B1_PART6_TARGETS
+    .map((target) => `- Q${target.number} ${target.type}. Allowed words: ${target.words.join(', ')}.`)
+    .join('\n');
+  const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 6 open-cloze plan in natural British English.
+Topic/context: ${topic}.
+
+Write the completed text first, then remove exactly six grammar words.
+
+Return ONLY valid JSON with exactly:
+{
+  "title":"short natural title",
+  "markedPassage":"a short everyday text containing [[27:word]] ... [[32:word]] in reading order",
+  "items":[
+    {"number":27,"answer":"the","targetType":"article/determiner"},
+    {"number":28,"answer":"for","targetType":"preposition"},
+    {"number":29,"answer":"who","targetType":"pronoun/relative"},
+    {"number":30,"answer":"was","targetType":"auxiliary/modal"},
+    {"number":31,"answer":"because","targetType":"linking word"},
+    {"number":32,"answer":"up","targetType":"phrasal particle/fixed phrase"}
+  ]
+}
+
+HARD RULES:
+- Exactly six gaps, numbered 27-32. Each answer is ONE word, and all six answers are different.
+- Use this exact target mix:
+${targetLines}
+- The word inside [[number:word]] must be exactly that item's answer.
+- Each gap must accept only that one ordinary word. Do not leave a gap where which/that, a/the, or in/on would both be correct.
+- Test grammar and fixed language, not content vocabulary.
+- Use British spelling and everyday B1 language.
+- Do not use these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
+- Do not copy sample-test wording.
+${repair}`;
+
+  const { text } = await cambridgeExamGenerationCompletion({
+    system,
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.3,
+    max_tokens: 8192,
+    response_format: { type: 'json_object' },
+  });
+  const plan = parseJsonFromModel(text);
+  const items = Array.isArray(plan?.items) ? plan.items : [];
+  const targetErrors = part6TargetProblems(items);
+  if (targetErrors.length) throw new Error(targetErrors.join(' '));
+
+  let passage = String(plan?.markedPassage || '');
+  const markerErrors = markedAnswerMismatches(
+    passage,
+    items.map((item) => ({ number: item?.number, answer: item?.answer })),
+  );
+  if (markerErrors.length) throw new Error(markerErrors.join(' '));
+  for (const item of items) {
+    const number = Number(item?.number);
+    const marker = new RegExp(`\\[\\[${number}:[^\\]]+\\]\\]`, 'i');
+    if (!marker.test(passage)) throw new Error(`B1 Part 6 planner passage missing marker ${number}.`);
+    passage = passage.replace(marker, `(${number}) ___`);
+  }
+  if (/\[\[\d+:/.test(passage)) {
+    throw new Error('B1 Part 6 planner left unresolved marked answers in the passage.');
+  }
+  assertOrdinaryB1Language(passage, 'B1 Part 6 planner');
+
+  const byNumber = new Map(items.map((item) => [Number(item?.number), item]));
+  const questions = [];
+  const modelAnswers = [];
+  for (let number = 27; number <= 32; number += 1) {
+    const item = byNumber.get(number);
+    questions.push({
+      id: `q${number - 26}`,
+      number,
+      type: 'short',
+      grammarTarget: item.targetType,
+    });
+    modelAnswers.push({
+      id: `q${number - 26}`,
+      number,
+      answer: String(item.answer).trim(),
+    });
+  }
+
+  return {
+    partTitle: 'B1 Preliminary Reading Part 6',
+    directions: 'Read the text below and write one word in each gap. Write only one word for each answer.',
+    title: String(plan?.title || '').trim(),
+    passage: passage.replace(/\s+/g, ' ').trim(),
+    questions,
+    modelAnswers,
+  };
+}
+
 async function generatePartJson(levelLabel, partDef, options) {
   const prompt =
     options.userPrompt ||
     buildLevelExamPartUserPrompt(levelLabel, partDef, options);
   const system = options.systemPrompt || getLevelExamPartSystemPrompt(levelLabel);
+
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'multiple-choice' &&
+    Number(partDef?.partNumber) === 3
+  ) {
+    return generateB1Part3PlannedJson(system, options);
+  }
 
   if (
     String(levelLabel || '').toUpperCase() === 'B1' &&
@@ -857,6 +1081,14 @@ async function generatePartJson(levelLabel, partDef, options) {
     Number(partDef?.partNumber) === 5
   ) {
     return generateB1Part5PlannedJson(system, options);
+  }
+
+  if (
+    String(levelLabel || '').toUpperCase() === 'B1' &&
+    partDef?.activity === 'open-cloze' &&
+    Number(partDef?.partNumber) === 6
+  ) {
+    return generateB1Part6PlannedJson(system, options);
   }
 
   const readingHeavy =
