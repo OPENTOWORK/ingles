@@ -145,3 +145,19 @@ exports/
 .vercel
 
 src-writes.log
+
+# App móvil (Capacitor). La clave de Google Play no se sube.
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
+android/keystore.properties
+android/app/*.keystore
+android/app/*.jks
+android/captures/
+ios/App/Pods/
+ios/App/build/
+ios/DerivedData/
+*.mobileprovision
+*.p12
+*.orig.
