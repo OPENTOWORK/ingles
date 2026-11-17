@@ -1,0 +1,94 @@
+.exercise,
+.directions:global(.levels-exam-split__enunciado) {
+  font-family: var(--font-landing), 'Segoe UI', system-ui, sans-serif;
+}
+
+.exercise:global(.levels-exam-split-card) :is(
+  :global(.levels-exam-split__text),
+  :global(.levels-exam-split__passage-panel),
+  :global(.levels-exam-split__section-title),
+  :global(.levels-exam-kwt-item) p,
+  :global(.levels-exam-kwt-item__sentence1),
+  :global(.levels-exam-inline-gap__check)
+),
+.directions:global(.levels-exam-split__enunciado) p,
+.directions:global(.levels-exam-split__enunciado) > :global(.levels-exam-split__section-title) {
+  font-family: inherit;
+}
+
+:global(body:not(.reading-night-mode)) :is(
+  .directions,
+  :global(.levels-b2-practice--skill-compact[data-skill-theme]) .directions
+):global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) {
+  --exam-example-answer-background: #d5ecff;
+  background: #edf8ff;
+  border: 1px solid #c9e7fc;
+  border-radius: 1rem;
+  padding: clamp(.75rem, 2vw, 1rem);
+}
+
+:global(body:not(.reading-night-mode)) :is(
+  .directions,
+  :global(.levels-b2-practice--skill-compact[data-skill-theme]) .directions
+):global(.levels-exam-split__enunciado):not(:global(.reading-area--high-contrast) *) > :global(.levels-exam-split__section-title) {
+  color: #174c78;
+  letter-spacing: .02em;
+}
+
+nav.navigation:global(.levels-exam-module-nav) {
+  --ruoe-nav-surface: #edf8ff;
+  --ruoe-nav-border: #c9e7fc;
+  --ruoe-nav-text: #174c78;
+  --ruoe-nav-button: #fff;
+  --ruoe-nav-primary: #d5ecff;
+  max-width: none;
+  min-height: 0;
+  padding: .65rem .8rem;
+  border: 1px solid var(--ruoe-nav-border);
+  border-radius: 1rem;
+  background: var(--ruoe-nav-surface);
+  box-shadow: none;
+  font-family: var(--font-landing), system-ui, sans-serif;
+}
+
+:global(body.reading-night-mode) nav.navigation:global(.levels-exam-module-nav) {
+  --ruoe-nav-surface: #172132;
+  --ruoe-nav-border: #475569;
+  --ruoe-nav-text: #d5ecff;
+  --ruoe-nav-button: #1e293b;
+  --ruoe-nav-primary: #1e3a5f;
+}
+
+nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn) {
+  gap: .35rem;
+  padding: .45rem .7rem;
+  border-color: var(--ruoe-nav-border);
+  border-radius: .55rem;
+  background: var(--ruoe-nav-button);
+  color: var(--ruoe-nav-text);
+  box-shadow: none;
+  transform: none;
+}
+
+nav.navigation:global(.levels-exam-module-nav) :is(
+  :global(.levels-exam-module-nav__btn--continue),
+  :global(.levels-exam-module-nav__btn--check)
+) {
+  background: var(--ruoe-nav-primary);
+}
+
+nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn):hover:not(:disabled) {
+  border-color: currentColor;
+}
+
+nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn):disabled {
+  opacity: .55;
+}
+
+nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn) :global(.levels-exam-module-nav__chevron) {
+  width: 1rem;
+  height: 1rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+}

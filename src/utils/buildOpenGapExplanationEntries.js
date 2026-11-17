@@ -133,6 +133,7 @@ export function buildMcqGroupExplanationEntries({
   selectedOptions = {},
   checkedQuestions = {},
   getOptionLabel,
+  includeUnanswered = false,
 }) {
   return mcqGroups
     .filter((group) => group?.questionNumber != null && group.questionNumber !== 0)
@@ -143,7 +144,7 @@ export function buildMcqGroupExplanationEntries({
           : getQuestionKey(group.questionNumber);
       if (!checkedQuestions[questionKey]) return null;
       const selectedOption = group.options?.find((o) => o.id === selectedOptions[questionKey]);
-      if (!selectedOption) return null;
+      if (!selectedOption && !includeUnanswered) return null;
       const correctOption = group.options?.find((o) => o.correcta);
       const labelFn =
         getOptionLabel ||
@@ -151,8 +152,8 @@ export function buildMcqGroupExplanationEntries({
       return {
         questionNumber: group.questionNumber,
         questionKey,
-        isCorrect: !!selectedOption.correcta,
-        userAnswer: labelFn(selectedOption),
+        isCorrect: !!selectedOption?.correcta,
+        userAnswer: selectedOption ? labelFn(selectedOption) : undefined,
         correctAnswer: correctOption ? labelFn(correctOption) : undefined,
         group,
       };

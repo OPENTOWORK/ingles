@@ -1,0 +1,112 @@
+.workspace {
+  --workspace-border: var(--exam-panel-border, #b9d8ee);
+  --workspace-surface: var(--exam-example-answer-background, #eef7ff);
+  min-width: 0;
+}
+
+.toolbar {
+  position: sticky;
+  top: var(--reading-workspace-sticky-top, 0px);
+  z-index: 4;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.4rem 0 0.65rem;
+  pointer-events: none;
+}
+
+.toggle, .close, .questionNumbers button {
+  border: 1px solid var(--workspace-border);
+  border-radius: 0.65rem;
+  color: inherit;
+  background: var(--workspace-surface);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.toggle {
+  padding: 0.45rem 0.8rem;
+  pointer-events: auto;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.8rem;
+}
+
+.passage, .panel {
+  min-width: 0;
+}
+
+.panel {
+  border: 1px solid var(--workspace-border);
+  border-radius: 0.85rem;
+  background: var(--workspace-surface);
+  scroll-margin-top: 1rem;
+}
+
+.panel[hidden] { display: none; }
+
+.panelHeader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--workspace-surface);
+  border-radius: 0.85rem 0.85rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid var(--workspace-border);
+}
+
+.panelTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.panelTitle h3 { margin: 0; font-size: 1rem; }
+.close { min-width: 2.15rem; min-height: 2.15rem; font-size: 1.2rem; }
+
+.questionNumbers {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-top: 0.45rem;
+}
+
+.questionNumbers button { min-width: 2rem; min-height: 2rem; }
+.panelBody { padding: 0.75rem; }
+.panelBody [data-question-number] { scroll-margin-top: 8rem; }
+
+@media (min-width: 900px) {
+  .open { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
+
+  .passage, .panel {
+    max-height: clamp(26rem, 68dvh, 55rem);
+    overflow: auto;
+    scrollbar-gutter: stable;
+  }
+}
+
+@media (max-width: 899px) {
+  .panelHeader { position: static; }
+
+  .sentenceBank {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 1010;
+    max-height: 48dvh;
+    overflow: auto;
+    overscroll-behavior: contain;
+    padding-bottom: env(safe-area-inset-bottom);
+    box-shadow: 0 -4px 24px #152b4826;
+  }
+
+  .sentenceBank .panelHeader { position: sticky; }
+}
+
+:global(body.reading-night-mode) .workspace {
+  --workspace-border: #3c5976;
+  --workspace-surface: #1a2c40;
+}

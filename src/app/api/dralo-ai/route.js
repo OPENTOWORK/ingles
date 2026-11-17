@@ -13,7 +13,7 @@ import {
   getDailyLimit,
 } from '@/lib/aiUsage';
 import { aiErrorJson, aiSuccessJson, runAiPreflight } from '@/lib/aiUsageRouteHelpers';
-import { findLevelsJustificacion } from '@/lib/levelsJustificacionesServer';
+import { findLevelsJustificacion, hasReadingEvidence, isB2ReadingEvidenceRequest } from '@/lib/levelsJustificacionesServer';
 import {
   normalizeAction,
   handleExamWritingCorrection,
@@ -165,7 +165,7 @@ export async function POST(request) {
         preguntaId,
         itemNum,
       });
-      if (cached?.justificacion) {
+      if (cached?.justificacion && (!isB2ReadingEvidenceRequest(body) || hasReadingEvidence(cached.justificacion))) {
         return aiSuccessJson({
           action,
           result: { found: true, explanation: cached.justificacion, cached: true },

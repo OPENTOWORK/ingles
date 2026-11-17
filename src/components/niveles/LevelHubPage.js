@@ -3,6 +3,7 @@
 import PageHero from '@/components/PageHero';
 import { landingFont } from '@/components/home/landing/landingFont';
 import ExamPracticeHubSection from '@/components/niveles/ExamPracticeHubSection';
+import ExamPracticeSurfaceStyles from '@/components/exam/ExamPracticeSurfaceStyles';
 import StarsWayHubTabs from '@/components/niveles/StarsWayHubTabs';
 import { useUserRole } from '@/context/UserRoleContext';
 import usePlanEntitlements from '@/hooks/usePlanEntitlements';
@@ -108,6 +109,7 @@ export default function LevelHubPage({ config }) {
     <main className={`shell content-hub-shell exam-practice-level-hub ${pageClass} ${landingFont.variable}`}>
       {usesPracticeQuadrant ? <div className="levels-b2-page-content">{hubBody}</div> : hubBody}
 
+      <ExamPracticeSurfaceStyles />
       <LevelHubStyles />
     </main>
   );

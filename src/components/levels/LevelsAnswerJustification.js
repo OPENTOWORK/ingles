@@ -9,7 +9,7 @@ import { buildClientApiUrl } from '@/utils/clientApiUrl';
 /**
  * @param {{ hint?: { loading?: boolean, error?: string | null, text?: string | null } }} props
  */
-export default function LevelsAnswerJustification({ hint, ruoeReview = false, onOpenReview }) {
+export default function LevelsAnswerJustification({ hint, ruoeReview = false, readingReview = false, readingPassage = '', readingGap, exactEvidence = '', hideEvidence = false, evidenceOnly = false, onOpenReview }) {
   const [spanish, setSpanish] = useState('');
   const [showSpanish, setShowSpanish] = useState(false);
   const [translating, setTranslating] = useState(false);
@@ -74,9 +74,26 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, on
 
   const review = ruoeReview ? splitRuoeExplanation(hint?.text) : null;
   const onReviewToggle = (event) => {
-    if (event.currentTarget.open) onOpenReview?.();
+    if (event.currentTarget.open && !(evidenceOnly && exactEvidence)) onOpenReview?.();
   };
-  const reviewSections = review && [
+  const explanation = String(hint?.text || '');
+  const quote = readingReview ? exactEvidence || explanation.match(/[“"]([^”"]+)[”"]/)?.[1] : '';
+  const normalise = (value) => value.replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase();
+  const gapMarker = readingGap ? new RegExp('\\(' + Number(readingGap) + '\\)\\s*(?:_+|\\.{2,}|…{2,})?') : null;
+  const gapContext = gapMarker ? readingPassage.split(gapMarker) : [];
+  const adjacentText = gapContext.length === 2
+    ? gapContext[0].trim().split(/\s+/).slice(-16).join(' ')
+    : '';
+  const passageText = normalise(readingPassage);
+  const verifiedQuote = quote && [quote, quote.replace(/[.!?]+$/, '')]
+    .find((candidate) => normalise(candidate) && passageText.includes(normalise(candidate)));
+  const evidence = verifiedQuote || adjacentText;
+  const reason = explanation.replace(/^The correct answer is [A-G]\.\s*/i, '')
+    .replace(/^The text says:\s*[“"][^”"]+[”"][.!]?\s*/i, '');
+  const reviewSections = readingReview ? [
+    ...(!hideEvidence ? [{ title: 'Evidence in the text', text: evidence, empty: 'No exact quotation is available for this answer.' }] : []),
+    ...(!evidenceOnly ? [{ title: 'Why it’s correct', text: reason, empty: 'Explanation temporarily unavailable.' }] : []),
+  ] : review && [
     { title: 'What it tests', text: review.focus, empty: 'A skill label is unavailable for this question.' },
     { title: 'Why it’s correct', text: review.reason, empty: 'Explanation temporarily unavailable.' },
   ];
@@ -86,13 +103,13 @@ export default function LevelsAnswerJustification({ hint, ruoeReview = false, on
         <details className={reviewStyles.feedbackSection} key={title} onToggle={onReviewToggle}>
           <summary className={reviewStyles.toggle}>{title}</summary>
           <p className={reviewStyles.feedbackBody}>
-            {hint?.loading || (!hint?.text && !hint?.error)
+            {evidenceOnly && text ? text : hint?.loading || (!hint?.text && !hint?.error)
               ? <span role="status">Loading…</span>
               : hint?.error ? 'Explanation temporarily unavailable.' : text || empty}
           </p>
         </details>
       )) : <p className="levels-answer-justification__text">💡 {hint.text}</p>}
-      {hint?.text && (
+      {hint?.text && !evidenceOnly && (
       <button
         type="button"
         className="levels-answer-justification__translate"

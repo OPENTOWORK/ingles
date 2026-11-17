@@ -64,6 +64,7 @@ import { buildExerciseFavoriteMeta } from '@/lib/exerciseFavoriteMeta';
 import { getExamSkillSectionTitle } from '@/data/levelExamPartMap';
 import {
   B2ExamPracticeContent,
+  B2ExamPassageText,
   B2ExamQuestionItem,
   SkillPartInstructionsPanel,
   buildPracticeDirectionsBlocks,
@@ -73,6 +74,8 @@ import B2ExamInlineOpenClozePassage from '@/components/b2/B2ExamInlineOpenClozeP
 import B2ExamInlineKeyWordPassage from '@/components/b2/B2ExamInlineKeyWordPassage';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import B2ExamInlinePart6Passage from '@/components/b2/B2ExamInlinePart6Passage';
+import LevelsAnswerJustification from '@/components/levels/LevelsAnswerJustification';
+import RuoeAnchoredReview, { getRuoeReviewTrigger } from '@/components/exam/RuoeAnchoredReview';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
 import { resolveCorrectAnswerRowIds } from '@/utils/levelsJustifyPayload';
 import {
@@ -94,6 +97,11 @@ import GuestPracticeSignupPrompt from '@/components/exam/GuestPracticeSignupProm
 import { getB2ReadingStrategyPack } from '@/data/b2ReadingPracticeStrategies';
 import { ReadingPracticeSessionProvider } from '@/context/ReadingPracticeSessionContext';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
+import { landingFont } from '@/components/home/landing/landingFont';
+import part4Styles from './Part4Practice.module.css';
+import RuoeTestSelector from './RuoeTestSelector';
+import testSelectorStyles from './RuoeTestSelector.module.css';
+import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import {
   runKeepPracticingSkillFlow,
@@ -135,6 +143,8 @@ import {
   getExamChromeSubtitle,
 } from '@/lib/examPracticeMode';
 import { resolvePracticeScoreSourceFromExamModeParam } from '@/utils/levelsScoreSource';
+
+const directionsClassName = `${part4Styles.directions} ${landingFont.variable}`;
 
 function splitEnunciadoAndTextFallback(rawText = '') {
   const normalized = rawText.replace(/\r\n/g, '\n').trim();
@@ -214,6 +224,14 @@ function B2ReadingExamsPageInner() {
   const [checkedQuestions, setCheckedQuestions] = useState({});
   const [openInputs, setOpenInputs] = useState({});
   const [openChecks, setOpenChecks] = useState({});
+  const [answerReviewSelection, setAnswerReviewSelection] = useState(null);
+  const closeAnswerReview = useCallback((key) => {
+    setAnswerReviewSelection(null);
+    document.querySelector(`[data-ruoe-review-key="${CSS.escape(key)}"]`)?.focus({ preventScroll: true });
+  }, []);
+  const toggleAnswerReview = useCallback((key) => {
+    setAnswerReviewSelection((previous) => previous?.key === key ? null : { key, scroll: false });
+  }, []);
   /** @type {Record<string, import('@/lib/b2Part4Grading').B2Part4OpenGrade>} */
   const [openGrades, setOpenGrades] = useState({});
   /** @type {Record<string, { loading?: boolean, error?: string | null, text?: string | null }>} */
@@ -227,6 +245,7 @@ function B2ReadingExamsPageInner() {
 
   useEffect(() => {
     readingSession.resetAnswersRevealed();
+    setAnswerReviewSelection(null);
   }, [examSlot, selectedPartId, readingSession.resetAnswersRevealed]);
 
 
@@ -750,6 +769,11 @@ function B2ReadingExamsPageInner() {
   ]);
 
   const isUoePart = isCombinedPaper && partNumberReading >= 1 && partNumberReading <= 4;
+  const isReadingPart = partNumberReading >= 5 && partNumberReading <= 7;
+  const useAnchoredAnswerReview = (isUoePart || isReadingPart) && isSkillPracticeSession;
+  const answerReview = useAnchoredAnswerReview
+    ? { selectedKey: answerReviewSelection?.key, toggle: toggleAnswerReview }
+    : undefined;
   const isOpenClozePart = isCombinedPaper && partNumberReading >= 2 && partNumberReading <= 4;
   const isKeyWordPart = isCombinedPaper && partNumberReading === 4;
   const scoringV2Part4 = isB2ScoringV2Enabled() && isKeyWordPart;
@@ -1553,7 +1577,7 @@ function B2ReadingExamsPageInner() {
       if (existing?.loading || existing?.text) return;
       const selectedId = selectedOptions[questionKey];
       const option = group?.options?.find((o) => o.id === selectedId);
-      if (!option) return;
+      if (!option && !checkedQuestions[questionKey]) return;
       const correctOpt = group.options.find((o) => o.correcta);
       const answersFromDatabase = group.options
         .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -1565,13 +1589,13 @@ function B2ReadingExamsPageInner() {
         respuestaId: correctOpt?.id,
         partLabel: selectedPart?.nombre || '',
         questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
-        userChoiceText: option.formattedText || option.respuesta || '',
+        userChoiceText: option?.formattedText || option?.respuesta || '',
         correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
-        isCorrect: !!option.correcta,
+        isCorrect: !!option?.correcta,
         answersFromDatabase: answersFromDatabase || undefined,
       });
     },
-    [aiHintsByKey, selectedOptions, requestAiJustification, selectedPart?.nombre],
+    [aiHintsByKey, checkedQuestions, selectedOptions, requestAiJustification, selectedPart?.nombre],
   );
 
   const handleOpenGapCheck = useCallback(
@@ -1674,8 +1698,8 @@ function B2ReadingExamsPageInner() {
 
   const mcqGroupsForCheck = useMemo(() => {
     if (isPart1McqCloze) return part1McqGroups;
-    return readingSyntheticMcqGroups || groupedAnswersForUiAndScore || [];
-  }, [isPart1McqCloze, part1McqGroups, readingSyntheticMcqGroups, groupedAnswersForUiAndScore]);
+    return groupedAnswersForUiAndScore || [];
+  }, [isPart1McqCloze, part1McqGroups, groupedAnswersForUiAndScore]);
 
   const resolveMcqQuestionKey = useCallback(
     (group, groupIndex) => {
@@ -1784,6 +1808,22 @@ function B2ReadingExamsPageInner() {
         ? { openGrades: nextOpenGrades, checkedQuestions: nextChecked }
         : { openChecks: nextOpenChecks, checkedQuestions: nextChecked },
     );
+    if (useAnchoredAnswerReview && !readingSession.instantFeedback) {
+      const entries = isOpenClozePart || isKeyWordPart
+        ? openQuestionNumbers.map((number) => {
+            const key = getQuestionKey(selectedPart.id, number, 'open');
+            const isCorrect = scoringV2Part4 ? nextOpenGrades[key]?.score === 2 : nextOpenChecks[key] === true;
+            return { number, key, isCorrect, answered: Boolean(openInputs[key]?.trim()) };
+          })
+        : mcqGroupsForCheck.map((group, index) => {
+            const key = resolveMcqQuestionKey(group, index);
+            const option = group.options.find((item) => item.id === selectedOptions[key]);
+            return { number: group.questionNumber, key, isCorrect: option?.correcta === true, answered: Boolean(option) };
+          });
+      const firstIncorrect = entries.sort((a, b) => a.number - b.number)
+        .find((item) => item.answered && !item.isCorrect);
+      setAnswerReviewSelection(firstIncorrect ? { key: firstIncorrect.key, scroll: true } : null);
+    }
     readingSession.revealAnswers();
     if (hasAnyAnswer) readingSession.incrementCheckAttempts();
   }, [
@@ -1808,6 +1848,7 @@ function B2ReadingExamsPageInner() {
     getQuestionKey,
     readingSession,
     isSkillPracticeSession,
+    useAnchoredAnswerReview,
   ]);
 
   /** Explicación lazy para huecos open cloze / word formation / key word. */
@@ -1873,7 +1914,7 @@ function B2ReadingExamsPageInner() {
       if (!checkedQuestions[questionKey]) return;
       const selectedId = selectedOptions[questionKey];
       const option = group?.options?.find((o) => o.id === selectedId);
-      if (!option) return;
+
       const correctOpt = group.options.find((o) => o.correcta);
       const answersFromDatabase = group.options
         .map((o) => (o.formattedText || o.respuesta || '').trim())
@@ -1889,11 +1930,14 @@ function B2ReadingExamsPageInner() {
               : '';
       requestAiJustification(questionKey, {
         style,
+        questionNumber: group.questionNumber,
+        partNumber: partNumberReading,
+        level: 'b2',
         partLabel: selectedPart?.nombre || '',
-        questionLabel: group.questionNumber ? `Question ${group.questionNumber}` : 'Item',
-        userChoiceText: option.formattedText || option.respuesta || '',
-        correctChoiceText: correctOpt?.formattedText || correctOpt?.respuesta || '',
-        isCorrect: !!option.correcta,
+        questionLabel: [`Question ${group.questionNumber}`, group.questionStem].filter(Boolean).join(' · '),
+        userChoiceText: option?.formattedText || option?.respuesta || 'No answer submitted',
+        correctChoiceText: [correctOpt?.formattedText || correctOpt?.respuesta, partNumberReading === 6 && correctOpt?.optionText].filter(Boolean).join(' '),
+        isCorrect: !!option?.correcta,
         answersFromDatabase: answersFromDatabase || undefined,
       });
     },
@@ -1909,6 +1953,23 @@ function B2ReadingExamsPageInner() {
 
   const uoeInlineExplanationFooter = useMemo(() => {
     if (hideInstantFeedback) return null;
+    const renderReview = (entries, onRequestExplanation) => {
+      const visibleEntries = useAnchoredAnswerReview
+        ? entries.filter((entry) => entry.questionKey === answerReviewSelection?.key)
+        : entries;
+      if (!visibleEntries.length) return null;
+      const panel = (
+        <SkillPartExplanationsPanel
+          ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
+          entries={visibleEntries}
+          aiHintsByKey={aiHintsByKey}
+          onRequestExplanation={onRequestExplanation}
+        />
+      );
+      return useAnchoredAnswerReview
+        ? <RuoeAnchoredReview selection={answerReviewSelection} onClose={closeAnswerReview}>{panel}</RuoeAnchoredReview>
+        : panel;
+    };
 
     if (isPart1McqCloze) {
       const entries = buildMcqGroupExplanationEntries({
@@ -1925,16 +1986,9 @@ function B2ReadingExamsPageInner() {
         },
         selectedOptions,
         checkedQuestions,
+        includeUnanswered: useAnchoredAnswerReview,
       });
-      if (!entries.length) return null;
-      return (
-        <SkillPartExplanationsPanel
-          ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
-          entries={entries}
-          aiHintsByKey={aiHintsByKey}
-          onRequestExplanation={handlePart1ExplanationRequest}
-        />
-      );
+      return renderReview(entries, handlePart1ExplanationRequest);
     }
 
     if (isKeyWordPart) {
@@ -1950,15 +2004,7 @@ function B2ReadingExamsPageInner() {
         openAnswerRows: selectedQuestion?.respuestasAbiertas || [],
         part4ParsedKeys: scoringV2Part4 ? part4ParsedKeys : null,
       });
-      if (!entries.length) return null;
-      return (
-        <SkillPartExplanationsPanel
-          ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
-          entries={entries}
-          aiHintsByKey={aiHintsByKey}
-          onRequestExplanation={handleOpenGapExplanationRequest}
-        />
-      );
+      return renderReview(entries, handleOpenGapExplanationRequest);
     }
 
     if (isInlinePassagePart) {
@@ -1971,20 +2017,15 @@ function B2ReadingExamsPageInner() {
         openAnswerMap,
         openAnswerRows: selectedQuestion?.respuestasAbiertas || [],
       });
-      if (!entries.length) return null;
-      return (
-        <SkillPartExplanationsPanel
-          ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto }}
-          entries={entries}
-          aiHintsByKey={aiHintsByKey}
-          onRequestExplanation={handleOpenGapExplanationRequest}
-        />
-      );
+      return renderReview(entries, handleOpenGapExplanationRequest);
     }
 
     return null;
   }, [
     partNumberReading,
+    useAnchoredAnswerReview,
+    answerReviewSelection,
+    closeAnswerReview,
     selectedPartContent.texto,
     hideInstantFeedback,
     isPart1McqCloze,
@@ -2007,9 +2048,55 @@ function B2ReadingExamsPageInner() {
     handleOpenGapExplanationRequest,
   ]);
 
+  const activeMatchingEvidence = useMemo(() => {
+    if (partNumberReading !== 7 || !useAnchoredAnswerReview || hideInstantFeedback || !answerReviewSelection) return null;
+    const group = mcqGroupsForCheck.find((item, index) =>
+      resolveMcqQuestionKey(item, index) === answerReviewSelection.key);
+    const option = group?.options.find((item) => item.correcta);
+    const letter = String(option?.formattedText || option?.respuesta || '').match(/^(?:\d+\s+)?([A-D])\b/i)?.[1]?.toUpperCase();
+    const profiles = parsePart7PeopleProfiles(extractPart7ProfilesBlock(selectedQuestion?.enunciado));
+    const profile = profiles[letter];
+    const line = profile?.body.split('\n').map((text) => text.trim()).find(Boolean);
+    if (!line || !selectedPartContent.texto.split('\n').some((text) => text.trim() === line)) return null;
+    const exactEvidence = group.questionStem === 'Who values ordinary community stories more than widely known historical events?'
+      ? 'I now value everyday stories equally, even more than big historical events'
+      : '';
+    return { group, profile, line, exactEvidence, id: `reading-evidence-${group.questionNumber}` };
+  }, [
+    partNumberReading, useAnchoredAnswerReview, hideInstantFeedback, answerReviewSelection,
+    mcqGroupsForCheck, resolveMcqQuestionKey, selectedQuestion?.enunciado, selectedPartContent.texto,
+  ]);
+
   const practiceExplanationFooter = useMemo(() => {
     if (uoeInlineExplanationFooter) return uoeInlineExplanationFooter;
-    if (hideInstantFeedback || !readingSidePanelExplanationEntries.length) return null;
+    if (hideInstantFeedback) return null;
+    if (useAnchoredAnswerReview && isReadingPart) {
+      const entries = buildMcqGroupExplanationEntries({
+        mcqGroups: mcqGroupsForCheck,
+        getQuestionKey: (_, group, index) => resolveMcqQuestionKey(group, index),
+        selectedOptions,
+        checkedQuestions,
+        includeUnanswered: true,
+        getOptionLabel: (option) => {
+          const label = option?.formattedText || option?.respuesta || '';
+          return partNumberReading === 6 && option?.optionText && !label.includes(option.optionText)
+            ? `${label} ${option.optionText}`
+            : label;
+        },
+      }).filter((entry) => entry.questionKey === answerReviewSelection?.key);
+      if (!entries.length) return null;
+      return (
+        <RuoeAnchoredReview selection={answerReviewSelection} onClose={closeAnswerReview}>
+          <SkillPartExplanationsPanel
+            ruoeReview={{ part: partNumberReading, passage: selectedPartContent.texto, passageEvidenceId: activeMatchingEvidence?.id }}
+            entries={entries}
+            aiHintsByKey={aiHintsByKey}
+            onRequestExplanation={handleReadingMcqExplanationRequest}
+          />
+        </RuoeAnchoredReview>
+      );
+    }
+    if (!readingSidePanelExplanationEntries.length) return null;
     return (
       <SkillPartExplanationsPanel
         entries={readingSidePanelExplanationEntries}
@@ -2019,6 +2106,17 @@ function B2ReadingExamsPageInner() {
     );
   }, [
     uoeInlineExplanationFooter,
+    activeMatchingEvidence,
+    useAnchoredAnswerReview,
+    isReadingPart,
+    mcqGroupsForCheck,
+    resolveMcqQuestionKey,
+    selectedOptions,
+    checkedQuestions,
+    answerReviewSelection,
+    closeAnswerReview,
+    partNumberReading,
+    selectedPartContent.texto,
     hideInstantFeedback,
     readingSidePanelExplanationEntries,
     aiHintsByKey,
@@ -2184,7 +2282,9 @@ function B2ReadingExamsPageInner() {
       stripExample: isUoeExamInlinePart,
     });
     if (!blocks.length) return null;
-    return <SkillPartInstructionsPanel label={directionsLabel} blocks={blocks} />;
+    return (
+      <SkillPartInstructionsPanel label={directionsLabel} blocks={blocks} className={directionsClassName} />
+    );
   }, [
     phoneSkillSteps,
     selectedPartContent.enunciado,
@@ -2246,6 +2346,30 @@ function B2ReadingExamsPageInner() {
     selectedQuestion?.preguntaId,
     selectedQuestion?.enunciado,
   ]);
+
+  const manualCheckButton = useAnchoredAnswerReview && shouldShowCheckAnswersButton({
+    skillPracticeMode: isSkillPracticeSession,
+    hideFeedback,
+    answersRevealed: readingSession.answersRevealed,
+    instantFeedback: readingSession.instantFeedback,
+  }) && (
+    <button
+      type="button"
+      className={`${testSelectorStyles.check} ${landingFont.variable}`}
+      onClick={handleCheckAllAnswers}
+      disabled={!hasCheckableAnswers}
+    >
+      Check
+    </button>
+  );
+  const readingQuestions = useAnchoredAnswerReview && isReadingPart && partNumberReading !== 6 && selectedPartContent.texto && mcqGroupsForCheck.length > 0
+    ? {
+        exerciseKey: `${examSlot}-${selectedQuestion?.preguntaId}`,
+        numbers: [...new Set(mcqGroupsForCheck.map((group) => group.questionNumber).filter(Boolean))],
+        footer: manualCheckButton,
+        onClose: () => setAnswerReviewSelection(null),
+      }
+    : null;
 
   return (
     <B2ExamPracticeLayout examPracticeOpen={layoutPracticeOpen}>
@@ -2354,8 +2478,26 @@ function B2ReadingExamsPageInner() {
           <>
             {selectedPart && selectedQuestion && (
               <B2ExamPracticeContent
+                readingQuestions={readingQuestions}
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
+                testSelector={
+                  isCombinedPaper && showExerciseFavorite && examSlotPickerProps.availableSlots.length > 1 ? (
+                    <RuoeTestSelector
+                      currentSlot={Number(examSlot)}
+                      slots={examSlotPickerProps.availableSlots}
+                      planLockedSlots={skillNav.planLockedSlots}
+                      isSlotUnlocked={(slot) => isExerciseSlotUnlocked(
+                        skillProgressForNav,
+                        partNumberReading,
+                        slot,
+                        examSlotPickerProps.availableSlots,
+                        skillNav.slotUnlockOptions,
+                      )}
+                      onSelect={(slot) => skillNav.guardExamSlotSelect(slot, handleSelectExamSlot)}
+                    />
+                  ) : null
+                }
                 skillUnlock={
                   isSkillPracticeSession
                     ? {
@@ -2382,6 +2524,7 @@ function B2ReadingExamsPageInner() {
                 }
                 directionsText={selectedPartContent.enunciado}
                 directionsLabel={directionsLabel}
+                directionsClassName={directionsClassName}
                 showDirections={true}
                 textLabel={isUoeExamInlinePart || isPart6GappedText ? null : 'Text'}
                 questionsLabel="Questions"
@@ -2394,6 +2537,8 @@ function B2ReadingExamsPageInner() {
                 passage={
                   isPart6GappedText ? (
                     <B2ExamInlinePart6Passage
+                      passageFirst={useAnchoredAnswerReview}
+                      answerReview={answerReview}
                       key={`part6-${examSlot}-${selectedQuestion.preguntaId}`}
                       text={selectedPartContent.texto}
                       mcqGroups={part6McqGroups}
@@ -2418,6 +2563,7 @@ function B2ReadingExamsPageInner() {
                     />
                   ) : isPart1McqCloze ? (
                     <B2ExamInlineMcqClozePassage
+                      answerReview={answerReview}
                       key={`mcq-${examSlot}-${selectedQuestion.preguntaId}`}
                       text={selectedPartContent.texto}
                       mcqGroups={part1McqGroups}
@@ -2442,6 +2588,7 @@ function B2ReadingExamsPageInner() {
                     />
                   ) : isKeyWordPart ? (
                     <B2ExamInlineKeyWordPassage
+                      answerReview={answerReview}
                       text={selectedPartContent.texto}
                       activeQuestionNumbers={openQuestionNumbers}
                       getQuestionKey={(questionNumber) =>
@@ -2464,6 +2611,7 @@ function B2ReadingExamsPageInner() {
                     />
                   ) : isInlinePassagePart ? (
                     <B2ExamInlineOpenClozePassage
+                      answerReview={answerReview}
                       text={selectedPartContent.texto}
                       activeQuestionNumbers={openQuestionNumbers}
                       getQuestionKey={(questionNumber) =>
@@ -2483,24 +2631,53 @@ function B2ReadingExamsPageInner() {
                       showInlineExample={useSkillUoeExampleLayout}
                       exampleGap0Word={exampleGap0Word}
                     />
+                  ) : activeMatchingEvidence ? (
+                    <B2ExamPassageText
+                      text={selectedPartContent.texto}
+                      renderAfterLine={(line) => line === activeMatchingEvidence.line && (
+                        <div id={activeMatchingEvidence.id}>
+                          <LevelsAnswerJustification
+                            hint={aiHintsByKey[answerReviewSelection.key]}
+                            ruoeReview
+                            readingReview
+                            evidenceOnly
+                            readingPassage={activeMatchingEvidence.profile.body}
+                            exactEvidence={activeMatchingEvidence.exactEvidence}
+                            onOpenReview={() => handleReadingMcqExplanationRequest({
+                              questionKey: answerReviewSelection.key,
+                              group: activeMatchingEvidence.group,
+                            })}
+                          />
+                        </div>
+                      )}
+                    />
                   ) : null
                 }
-                split={isInlinePassagePart || isPart1McqCloze || isPart6GappedText ? true : 'auto'}
+                split={
+                  isKeyWordPart ? false : isInlinePassagePart || isPart1McqCloze || isPart6GappedText ? true : 'auto'
+                }
                 contentClassName={
-                  isUoeExamInlinePart
-                    ? 'levels-exam-uoe-inline'
-                    : isPart6GappedText
-                      ? 'levels-exam-part6-inline'
-                      : isPart1McqCloze
-                        ? 'levels-exam-mcq-cloze-inline'
-                        : isInlinePassagePart
-                          ? 'levels-exam-open-cloze-inline'
-                          : partNumberReading === 6 && part6SentencePoolBlock
-                            ? 'levels-exam-part6-split'
-                            : ''
+                  isKeyWordPart
+                    ? `${part4Styles.exercise} ${landingFont.variable}`
+                    : isUoeExamInlinePart
+                      ? 'levels-exam-uoe-inline'
+                      : isPart6GappedText
+                        ? 'levels-exam-part6-inline'
+                        : isPart1McqCloze
+                          ? 'levels-exam-mcq-cloze-inline'
+                          : isInlinePassagePart
+                            ? 'levels-exam-open-cloze-inline'
+                            : partNumberReading === 6 && part6SentencePoolBlock
+                              ? 'levels-exam-part6-split'
+                              : ''
                 }
                 showQuestionsHeading={!isInlinePassagePart && !isPart1McqCloze && !isPart6GappedText}
-                footer={practiceExplanationFooter}
+                footer={
+                  <>
+                    {!readingQuestions && manualCheckButton}
+                    {practiceExplanationFooter}
+                  </>
+                }
                 questions={
                   isInlinePassagePart || isPart1McqCloze || isPart6GappedText
                     ? null
@@ -2574,6 +2751,11 @@ function B2ReadingExamsPageInner() {
                             const showIncorrect = !hideInstantFeedback && isChecked && isSelected && !isCorrect;
 
                             const isLocked = !hideInstantFeedback && isChecked;
+                            const isReviewTarget = isLocked && answerReview &&
+                              (isSelected || !selectedOptions[questionKey] && isCorrect);
+                            const reviewTrigger = isReviewTarget
+                              ? getRuoeReviewTrigger(answerReview, questionKey)
+                              : null;
 
                             const optionStateClass = showCorrect
                               ? 'reading-mcq-option--correct'
@@ -2596,7 +2778,7 @@ function B2ReadingExamsPageInner() {
                                 ]
                                   .filter(Boolean)
                                   .join(' ')}
-                                disabled={isLocked}
+                                disabled={isLocked && !reviewTrigger}
                                 onClick={() => {
                                   if (isLocked) return;
                                   handlePart1McqOptionSelect({
@@ -2606,6 +2788,7 @@ function B2ReadingExamsPageInner() {
                                     questionKey,
                                   });
                                 }}
+                                {...reviewTrigger}
                               >
                                 {option.formattedText || option.respuesta}
                               </button>
@@ -2659,6 +2842,7 @@ function B2ReadingExamsPageInner() {
       />
 
       <B2ExamPracticeModuleNav
+        className={`${part4Styles.navigation} ${landingFont.variable}`}
         slug="b2"
         partNumber={partNumberReading}
         pagePartMax={partMax}
@@ -2683,7 +2867,7 @@ function B2ReadingExamsPageInner() {
         onContinueModule={
           examModeActive && !reviewMode ? handleContinueModuleInExamMode : undefined
         }
-        showCheckAnswersButton={shouldShowCheckAnswersButton({
+        showCheckAnswersButton={!useAnchoredAnswerReview && shouldShowCheckAnswersButton({
           skillPracticeMode: isSkillPracticeSession,
           hideFeedback,
           answersRevealed: readingSession.answersRevealed,
@@ -2749,11 +2933,12 @@ function B2ReadingExamsPageInner() {
 }
 
 export default function ExamReadingPracticeClient() {
+  const pathname = usePathname();
   return (
     <Suspense
       fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>Loading practice…</main>}
     >
-      <ReadingPracticeSessionProvider>
+      <ReadingPracticeSessionProvider defaultInstantFeedback={!pathname?.includes('/exam-reading-and-use-of-english')}>
         <B2ReadingExamsPageInner />
       </ReadingPracticeSessionProvider>
     </Suspense>

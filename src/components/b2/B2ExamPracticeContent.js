@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
+import ReadingPassageWorkspace from './ReadingPassageWorkspace';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
 import { SkillPartExerciseFavorite } from '@/components/exam/ExerciseFavoriteButton';
 import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
@@ -12,7 +13,7 @@ const blockStyles = {
   answer: {
     margin: '0.45rem 0',
     padding: '0.45rem 0.6rem',
-    background: '#ebf8ff',
+    background: 'var(--exam-example-answer-background, #ebf8ff)',
     borderRadius: '8px',
     fontWeight: 600,
   },
@@ -63,7 +64,7 @@ export function B2ExamFormattedEnunciado({ blocks, keyPrefix = 'enunciado' }) {
 /**
  * @param {{ text?: string, showTitle?: boolean }} props
  */
-export function B2ExamPassageText({ text = '', showTitle = true }) {
+export function B2ExamPassageText({ text = '', showTitle = true, renderAfterLine }) {
   const lines = text
     .split('\n')
     .map((line) => line.trim())
@@ -104,9 +105,10 @@ export function B2ExamPassageText({ text = '', showTitle = true }) {
           );
         }
         return (
-          <p key={`passage-${idx}`} style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>
-            {line}
-          </p>
+          <Fragment key={`passage-${idx}`}>
+            <p style={{ margin: '0.5rem 0', lineHeight: 1.78 }}>{line}</p>
+            {renderAfterLine?.(line)}
+          </Fragment>
         );
       })}
     </>
@@ -121,12 +123,12 @@ export function B2ExamQuestionItem({ children, className = '' }) {
 }
 
 /**
- * @param {{ label?: string, blocks?: Array<{ type: string, text: string }> }} props
+ * @param {{ label?: string, blocks?: Array<{ type: string, text: string }>, className?: string }} props
  */
-export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = [] }) {
+export function SkillPartInstructionsPanel({ label = 'Instructions', blocks = [], className = '' }) {
   if (!blocks?.length) return null;
   return (
-    <div className="levels-exam-split__enunciado">
+    <div className={`levels-exam-split__enunciado${className ? ` ${className}` : ''}`}>
       <p className="levels-exam-split__section-title">{label}</p>
       <B2ExamFormattedEnunciado blocks={blocks} />
     </div>
@@ -155,6 +157,7 @@ export function buildPracticeDirectionsBlocks({
  *   titleSubtitle?: string | null,
  *   directionsText?: string,
  *   directionsLabel?: string,
+ *   directionsClassName?: string,
  *   textLabel?: string,
  *   questionsLabel?: string,
  *   passageText?: string,
@@ -170,6 +173,7 @@ export function buildPracticeDirectionsBlocks({
  *   footer?: import('react').ReactNode,
  *   titleActions?: import('react').ReactNode,
  *   exerciseLabel?: string | null,
+ *   testSelector?: import('react').ReactNode,
  *   showExerciseFavorite?: boolean,
  *   favoritePreguntaId?: string | null,
  *   favoriteMeta?: import('@/lib/exerciseFavoriteMeta').ExerciseFavoriteMeta | null,
@@ -182,6 +186,7 @@ export function B2ExamPracticeContent({
   titleSubtitle = null,
   titleActions = null,
   exerciseLabel = null,
+  testSelector = null,
   showExerciseFavorite = false,
   favoritePreguntaId = null,
   favoriteMeta = null,
@@ -189,12 +194,14 @@ export function B2ExamPracticeContent({
   skillUnlock = null,
   directionsText = '',
   directionsLabel = 'Directions',
+  directionsClassName = '',
   textLabel = 'Text',
   questionsLabel = 'Questions',
   passageText = '',
   passage = null,
   beforeQuestions = null,
   questions = null,
+  readingQuestions = null,
   split = 'auto',
   showDirections = true,
   showPassagePanel = true,
@@ -220,6 +227,7 @@ export function B2ExamPracticeContent({
           title={title}
           subtitle={titleSubtitle}
           exerciseLabel={exerciseLabel}
+          testSelector={testSelector}
           unlockHint={unlockHint}
           titleActions={
             titleActions || showExerciseFavorite ? (
@@ -238,12 +246,22 @@ export function B2ExamPracticeContent({
 
         <div className={useSplit ? 'levels-exam-split__body' : 'levels-exam-split__body levels-exam-split__body--stacked'}>
           {showDirections && directionBlocks.length > 0 ? (
-            <SkillPartInstructionsPanel label={directionsLabel} blocks={directionBlocks} />
+            <SkillPartInstructionsPanel label={directionsLabel} blocks={directionBlocks} className={directionsClassName} />
           ) : null}
 
           {beforeQuestions}
 
-          {useSplit ? (
+          {readingQuestions && hasPassage && questions ? (
+            <ReadingPassageWorkspace
+              key={readingQuestions.exerciseKey}
+              passage={passage || <B2ExamPassageText text={passageText} />}
+              panel={<>{questions}{readingQuestions.footer}</>}
+              panelTitle="Questions"
+              openLabel="Open questions"
+              questionNumbers={readingQuestions.numbers}
+              onPanelClose={readingQuestions.onClose}
+            />
+          ) : useSplit ? (
             <div className="levels-exam-split">
               {hasPassage ? (
                 <div className="levels-exam-split__panel levels-exam-split__text">

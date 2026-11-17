@@ -10,6 +10,7 @@ export default function SkillPartPracticeHeader({
   title,
   subtitle = null,
   exerciseLabel = null,
+  testSelector = null,
   titleActions = null,
   unlockHint = null,
 }) {
@@ -19,9 +20,9 @@ export default function SkillPartPracticeHeader({
       <div className="levels-exam-split-card__title-row levels-exam-split-card__title-row--title-mode">
         <div className="levels-exam-split-card__part-title-block">
           <h1 className="levels-exam-split-card__part-title">{[title, subtitle].filter(Boolean).join(' - ')}</h1>
-          {exerciseLabel || testLabel ? (
+          {testSelector || (exerciseLabel || testLabel ? (
             <p className="practice-exercise-test-label" title={unlockHint || undefined}>{exerciseLabel || testLabel}</p>
-          ) : null}
+          ) : null)}
         </div>
         {titleActions}
       </div>

@@ -67,6 +67,7 @@ export default function B2ExamPracticeModuleNav({
   pagePartMin = null,
   progressBySlot = null,
   livePartProgress = null,
+  className = '',
 }) {
   const searchParams = useSearchParams();
   const bypassStarGating = useExamStarGatingBypass();
@@ -358,7 +359,7 @@ export default function B2ExamPracticeModuleNav({
         effectiveSkillPractice ? ' levels-exam-module-nav--skill' : ''
       }${showCheckAnswersButton ? ' levels-exam-module-nav--with-check' : ''}${
         useBalancedLayout ? ' levels-exam-module-nav--balanced' : ''
-      }${useCenteredPartNav ? ' levels-exam-module-nav--centered-parts' : ''}`}
+      }${useCenteredPartNav ? ' levels-exam-module-nav--centered-parts' : ''}${className ? ` ${className}` : ''}`}
       data-skill-theme={effectiveSkillPractice && skillPracticeTheme ? skillPracticeTheme : undefined}
       aria-label={isEn ? 'Module navigation' : 'Navegación del módulo'}
     >
