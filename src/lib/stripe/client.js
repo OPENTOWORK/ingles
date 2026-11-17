@@ -2,6 +2,7 @@
  * Acciones de pago desde el navegador. Todas piden al backend una URL de
  * Stripe y redirigen: nunca se manipulan importes ni planes en el cliente.
  */
+import { isNativeStoreApp, openStoreManagement, startStoreCheckout } from '@/lib/store/client';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { redirectToStripe } from '@/lib/stripe/redirect';
 import { supabase } from '@/utils/supabaseClient';
@@ -43,8 +44,13 @@ async function postWithAuth(path, body) {
  * @param {{ planSlug: string, billingCycle: 'monthly' | 'annual' }} params
  */
 export async function startCheckout({ planSlug, billingCycle }) {
+  if (isNativeStoreApp()) return startStoreCheckout({ planSlug, billingCycle });
   const payload = await postWithAuth('/api/stripe/checkout', { planSlug, billingCycle });
   if (payload.usePortal) return openBillingPortal();
+  if (payload.store === 'google' || payload.store === 'apple') {
+    openStoreManagement(payload.store);
+    return payload;
+  }
   if (!payload.url) throw new Error('Stripe no devolvió una URL de pago.');
   redirectToStripe(payload.url);
   return payload;

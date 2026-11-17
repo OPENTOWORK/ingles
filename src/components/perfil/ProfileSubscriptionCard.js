@@ -9,6 +9,7 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { buildPlanUsageItems } from '@/lib/planUsageLabels';
 import { isSubscriptionActive, openBillingPortal, syncSubscriptionAfterCheckout } from '@/lib/stripe/client';
+import { isNativeStoreApp, openStoreManagement, restoreStorePurchases } from '@/lib/store/client';
 import styles from './ProfileSubscriptionCard.module.css';
 
 function cleanBadge(text) {
@@ -141,6 +142,12 @@ function ProfileSubscriptionCardInner({
   const [portalError, setPortalError] = useState('');
   const [checkoutSyncing, setCheckoutSyncing] = useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState('');
+  const [nativeApp, setNativeApp] = useState(false);
+  const [restoreLoading, setRestoreLoading] = useState(false);
+
+  useEffect(() => {
+    setNativeApp(isNativeStoreApp());
+  }, []);
 
   useEffect(() => {
     if (searchParams.get('checkout') !== 'success') return;
@@ -193,7 +200,9 @@ function ProfileSubscriptionCardInner({
       ? effectivePlan.precioLabel
       : 'Free · forever';
 
-  const canManageBilling = Boolean(subscription?.stripe_customer_id);
+  const storeName = subscription?.store === 'google' || subscription?.store === 'apple' ? subscription.store : '';
+  const canManageStore = Boolean(storeName);
+  const canManageBilling = Boolean(subscription?.stripe_customer_id) && !canManageStore;
   const statusLabel = billingStatusLabel(subscription);
 
   async function handleManageBilling() {
@@ -204,6 +213,26 @@ function ProfileSubscriptionCardInner({
     } catch (err) {
       setPortalError(err?.message || 'Could not open the billing portal.');
       setPortalLoading(false);
+    }
+  }
+
+  async function handleRestorePurchases() {
+    setPortalError('');
+    setRestoreLoading(true);
+    try {
+      const result = await restoreStorePurchases();
+      await Promise.all([refresh(), refreshEntitlements?.()]);
+      setCheckoutMessage(
+        result?.restored
+          ? 'Your store purchase is now active on this account.'
+          : 'This device has no purchases to restore.',
+      );
+    } catch (err) {
+      if (err?.code !== 'cancelled') {
+        setPortalError(err?.message || 'Could not restore purchases.');
+      }
+    } finally {
+      setRestoreLoading(false);
     }
   }
 
@@ -253,7 +282,7 @@ function ProfileSubscriptionCardInner({
 
         {statusLabel ? <p className={styles.billingStatus}>{statusLabel}</p> : null}
 
-        {canManageBilling || showPricingLink ? (
+        {canManageBilling || canManageStore || nativeApp || showPricingLink ? (
           <div className={styles.footer}>
             {canManageBilling ? (
               <button
@@ -263,6 +292,25 @@ function ProfileSubscriptionCardInner({
                 disabled={portalLoading}
               >
                 {portalLoading ? 'Opening Stripe…' : 'Manage subscription'}
+              </button>
+            ) : null}
+            {canManageStore ? (
+              <button
+                type="button"
+                className={styles.manageBtn}
+                onClick={() => openStoreManagement(storeName, subscription?.store_product_id)}
+              >
+                {storeName === 'apple' ? 'Manage in the App Store' : 'Manage in Google Play'}
+              </button>
+            ) : null}
+            {nativeApp ? (
+              <button
+                type="button"
+                className={styles.manageBtn}
+                onClick={handleRestorePurchases}
+                disabled={restoreLoading}
+              >
+                {restoreLoading ? 'Restoring…' : 'Restore purchases'}
               </button>
             ) : null}
             {showPricingLink ? (

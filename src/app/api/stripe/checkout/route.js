@@ -65,6 +65,9 @@ export async function POST(req) {
     // así se prorratea en lugar de crear una segunda suscripción.
     const existing = await findSubscriptionByUserId(db, auth.user.id);
     if (existing && subscriptionGrantsAccess(existing.status)) {
+      if (existing.store === 'google' || existing.store === 'apple') {
+        return NextResponse.json({ alreadySubscribed: true, store: existing.store });
+      }
       return NextResponse.json({ alreadySubscribed: true, usePortal: true });
     }
 

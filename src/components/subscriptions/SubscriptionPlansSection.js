@@ -276,6 +276,10 @@ export default function SubscriptionPlansSection({
         window.location.assign('/login/');
         return;
       }
+      if (err?.code === 'cancelled') {
+        setCheckoutPlan('');
+        return;
+      }
       setCheckoutError(err?.message || 'No se pudo iniciar el pago.');
       setCheckoutPlan('');
     }

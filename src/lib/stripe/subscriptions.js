@@ -172,6 +172,18 @@ export async function syncUserSubscriptionFromStripe(user) {
   let customerId = null;
 
   const existing = await findSubscriptionByUserId(db, user.id);
+  if (
+    existing &&
+    (existing.store === 'google' || existing.store === 'apple') &&
+    subscriptionGrantsAccess(existing.status)
+  ) {
+    return {
+      synced: true,
+      store: existing.store,
+      planSlug: existing.plan_id,
+      status: existing.status,
+    };
+  }
   if (existing?.stripe_customer_id) {
     customerId = existing.stripe_customer_id;
   } else {
