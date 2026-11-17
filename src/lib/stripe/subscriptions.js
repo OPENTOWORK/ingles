@@ -7,6 +7,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import {
+  findPlanByLookupKey,
   findPlanByPriceId,
   getStripe,
   isStripeConfigured,
@@ -83,6 +84,8 @@ export async function resolveUserId(db, subscription) {
 function resolvePlanSlug(subscription) {
   const byPrice = findPlanByPriceId(subscriptionPriceId(subscription));
   if (byPrice) return byPrice.planSlug;
+  const byLookupKey = findPlanByLookupKey(subscription?.items?.data?.[0]?.price?.lookup_key);
+  if (byLookupKey) return byLookupKey.planSlug;
   return subscription?.metadata?.plan_slug || null;
 }
 

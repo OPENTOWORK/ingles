@@ -9,8 +9,8 @@ import { resolveUserPlanSlug } from '@/lib/planAccess';
 import {
   getSiteUrl,
   getStripe,
-  getStripePriceId,
   isStripeConfigured,
+  resolveActivePriceId,
   subscriptionGrantsAccess,
   toStripeInterval,
 } from '@/lib/stripe/server';
@@ -43,7 +43,7 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Plan no válido.' }, { status: 400 });
     }
 
-    const priceId = getStripePriceId(plan.slug, interval);
+    const priceId = await resolveActivePriceId(plan.slug, interval);
     if (!priceId) {
       return NextResponse.json(
         { error: `Falta el precio de Stripe para ${plan.slug} (${interval}).` },

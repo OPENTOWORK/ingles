@@ -10,8 +10,8 @@ import {
 } from '@/lib/stripe/subscriptions';
 import {
   getStripe,
-  getStripePriceId,
   isStripeConfigured,
+  resolveActivePriceId,
   subscriptionGrantsAccess,
 } from '@/lib/stripe/server';
 
@@ -39,7 +39,7 @@ export async function grantReferralReward({ inviterUserId, invitationId }) {
   const db = getSubscriptionsDb();
   if (!db) return { ok: false, reason: 'no_db' };
 
-  const priceId = getStripePriceId(REFERRAL_REWARD_PLAN_SLUG, 'month');
+  const priceId = await resolveActivePriceId(REFERRAL_REWARD_PLAN_SLUG, 'month');
   if (!priceId) {
     console.error('[referral-reward] Falta STRIPE_PRICE_PREMIUM_MONTHLY');
     return { ok: false, reason: 'no_price_id' };

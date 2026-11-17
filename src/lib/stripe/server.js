@@ -60,6 +60,24 @@ export function getStripePriceId(planSlug, interval) {
   return (process.env[priceEnvName(planSlug, interval)] || '').trim();
 }
 
+/** Clave con la que `npm run stripe:setup` marca el precio vigente de cada plan. */
+export function stripeLookupKey(planSlug, interval) {
+  return `dralo_${planSlug}_${interval}`;
+}
+
+/**
+ * Precio activo del plan. La lookup_key pasa al precio nuevo cada vez que cambia
+ * un importe, así que manda sobre la variable de entorno, que puede quedarse atrás.
+ */
+export async function resolveActivePriceId(planSlug, interval) {
+  const found = await getStripe().prices.list({
+    lookup_keys: [stripeLookupKey(planSlug, interval)],
+    active: true,
+    limit: 1,
+  });
+  return found.data[0]?.id || getStripePriceId(planSlug, interval);
+}
+
 /** Planes de pago que ya tienen sus dos precios configurados en Stripe. */
 export function getPurchasablePlanSlugs() {
   return DRALO_SUBSCRIPTION_PLANS.filter(
@@ -76,6 +94,19 @@ export function findPlanByPriceId(priceId) {
   for (const plan of DRALO_SUBSCRIPTION_PLANS) {
     for (const interval of STRIPE_INTERVALS) {
       if (getStripePriceId(plan.slug, interval) === priceId) {
+        return { planSlug: plan.slug, interval };
+      }
+    }
+  }
+  return null;
+}
+
+/** Igual que `findPlanByPriceId`, pero con la lookup_key del precio. */
+export function findPlanByLookupKey(lookupKey) {
+  if (!lookupKey) return null;
+  for (const plan of DRALO_SUBSCRIPTION_PLANS) {
+    for (const interval of STRIPE_INTERVALS) {
+      if (stripeLookupKey(plan.slug, interval) === lookupKey) {
         return { planSlug: plan.slug, interval };
       }
     }
