@@ -6,11 +6,13 @@ import {
   ANNUAL_BILLING_DISCOUNT_PERCENT,
   COMING_SOON,
   DRALO_SUBSCRIPTION_PLANS,
+  getPublicSubscriptionPlans,
   canUpgradeToPlan,
   formatEuroAmount,
   formatPlanAnnualTotal,
   formatPlanPriceAmount,
   formatPlanPriceLabel,
+  getPlanAnnualSavingsPercent,
   getPlanCrossedPrices,
   getPlanLaunchDiscountPercent,
   getPlanListDiscountPercent,
@@ -30,13 +32,16 @@ import styles from './SubscriptionPlansSection.module.css';
 
 function comparisonCellValue(row, planSlug, billingCycle) {
   if (row.id === 'exams') {
-    if (planSlug === 'pro') return true;
+    const plan = DRALO_SUBSCRIPTION_PLANS.find((item) => item.slug === planSlug);
+    if (plan?.entitlements?.examsPerMonth == null && planSlug !== 'free') return true;
     return examsLimitLabel(planSlug);
   }
   if (row.id === 'price') {
     const plan = DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === planSlug);
     if (!plan) return row.values[planSlug];
-    const crossed = getPlanCrossedPrices(plan, billingCycle);
+    const crossed = getPlanCrossedPrices(plan, billingCycle).map((amount) =>
+      billingCycle === 'annual' ? amount * 12 : amount,
+    );
     const discount = getPlanLaunchDiscountPercent(plan, billingCycle) ?? getPlanListDiscountPercent(plan, billingCycle);
     return {
       kind: 'price',
@@ -96,15 +101,20 @@ function CellValue({ value, type }) {
   return <span className={styles.cellText}>{value}</span>;
 }
 
+function publicAnnualSavingsPercent() {
+  const paid = getPublicSubscriptionPlans().find((plan) => Number(plan.precio) > 0);
+  return (paid && getPlanAnnualSavingsPercent(paid)) || ANNUAL_BILLING_DISCOUNT_PERCENT;
+}
+
 function annualBillingHint() {
-  const hasLaunchPrice = DRALO_SUBSCRIPTION_PLANS.some((plan) => planHasLaunchPricing(plan));
+  const hasLaunchPrice = getPublicSubscriptionPlans().some((plan) => planHasLaunchPricing(plan));
   if (hasLaunchPrice && isFounderPriceActive()) {
-    return 'Precio fundador al pagar el año completo de una vez.';
+    return '23,88 € al año, cobrados de una vez.';
   }
   if (hasLaunchPrice) {
     return 'Precio de lanzamiento al pagar el año completo de una vez.';
   }
-  return `Ahorra un ${ANNUAL_BILLING_DISCOUNT_PERCENT}% pagando el año completo de una vez.`;
+  return `Ahorra un ${publicAnnualSavingsPercent()}% pagando el año completo de una vez.`;
 }
 
 function FounderPriceNote({ className }) {
@@ -160,6 +170,67 @@ function resolvePlanCardCta(plan, { currentPlanSlug, enableCheckout, interactive
   };
 }
 
+function PlanCtaControl({
+  cta,
+  planSlug,
+  onSelectPlan,
+  isSelected,
+  onCheckout,
+  checkoutPlan,
+  planLoading,
+  showCta,
+}) {
+  if (cta.kind === 'select') {
+    return (
+      <button
+        type="button"
+        className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
+        onClick={() => onSelectPlan(planSlug)}
+        aria-pressed={isSelected}
+      >
+        {cta.label}
+      </button>
+    );
+  }
+
+  if (cta.kind === 'checkout') {
+    return (
+      <button
+        type="button"
+        className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
+        onClick={() => onCheckout(planSlug)}
+        disabled={Boolean(checkoutPlan) || planLoading}
+      >
+        {checkoutPlan === planSlug ? 'Redirigiendo a Stripe…' : cta.label}
+      </button>
+    );
+  }
+
+  if (cta.kind === 'static') {
+    return (
+      <span
+        className={`${styles.cardBtn} ${
+          cta.variant === 'current' ? styles.cardBtnCurrent : styles.cardBtnDisabled
+        }`}
+        aria-disabled="true"
+      >
+        {cta.label}
+      </span>
+    );
+  }
+
+  if (!showCta) return null;
+
+  return (
+    <Link
+      href={cta.href}
+      className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
+    >
+      {cta.label}
+    </Link>
+  );
+}
+
 /**
  * Tarjetas de planes + tabla comparativa (página pública o admin).
  * @param {{
@@ -186,6 +257,7 @@ export default function SubscriptionPlansSection({
   const [activeCard, setActiveCard] = useState(0);
   const cardsRef = useRef(null);
   const isAnnual = billingCycle === 'annual';
+  const publicPlans = getPublicSubscriptionPlans();
   const { data: entitlementsData, planSlug: userPlanSlug, loading: planLoading } = usePlanEntitlements();
   const currentPlanSlug = enableCheckout && entitlementsData ? userPlanSlug : null;
 
@@ -211,7 +283,7 @@ export default function SubscriptionPlansSection({
 
   /** Paso del carrusel móvil: en escritorio las tarjetas son una rejilla y no hay desplazamiento. */
   function cardStep(track) {
-    return track.scrollWidth / DRALO_SUBSCRIPTION_PLANS.length;
+    return track.scrollWidth / publicPlans.length;
   }
 
   function handleCardsScroll(event) {
@@ -219,7 +291,7 @@ export default function SubscriptionPlansSection({
     const step = cardStep(track);
     if (!step) return;
     const index = Math.min(
-      DRALO_SUBSCRIPTION_PLANS.length - 1,
+      publicPlans.length - 1,
       Math.max(0, Math.round(track.scrollLeft / step)),
     );
     setActiveCard(index);
@@ -262,7 +334,7 @@ export default function SubscriptionPlansSection({
             onClick={() => setBillingCycle('annual')}
           >
             Anual
-            <span className={styles.billingToggleBadge}>-{ANNUAL_BILLING_DISCOUNT_PERCENT}%</span>
+            <span className={styles.billingToggleBadge}>-{publicAnnualSavingsPercent()}%</span>
           </button>
         </div>
         {isAnnual ? (
@@ -273,7 +345,7 @@ export default function SubscriptionPlansSection({
       </div>
 
       <div className={styles.cards} ref={cardsRef} onScroll={handleCardsScroll}>
-        {DRALO_SUBSCRIPTION_PLANS.map((plan) => {
+        {publicPlans.map((plan) => {
           const isSelected = selectedSlug === plan.slug;
           const isPremium = plan.recommended;
           const hasPaidPlan = plan.precio > 0;
@@ -283,8 +355,11 @@ export default function SubscriptionPlansSection({
             interactive,
             isSelected,
           });
-          const listPrice = getPlanListPrice(plan, billingCycle);
-          const crossedPrices = getPlanCrossedPrices(plan, billingCycle);
+          const listPriceRaw = getPlanListPrice(plan, billingCycle);
+          const listPrice = listPriceRaw && isAnnual ? listPriceRaw * 12 : listPriceRaw;
+          const crossedPrices = getPlanCrossedPrices(plan, billingCycle).map((amount) =>
+            isAnnual ? amount * 12 : amount,
+          );
           const listDiscount = getPlanListDiscountPercent(plan, billingCycle);
           const launchDiscount = getPlanLaunchDiscountPercent(plan, billingCycle);
           const showLaunchLabel = hasPaidPlan && planHasLaunchPricing(plan);
@@ -329,9 +404,11 @@ export default function SubscriptionPlansSection({
                         </span>
                       ) : null}
                       <span className={styles.cardPriceAmount}>
-                        {formatPlanPriceAmount(plan, billingCycle)}
+                        {isAnnual
+                          ? formatPlanAnnualTotal(plan)
+                          : formatPlanPriceAmount(plan, billingCycle)}
                       </span>
-                      <span className={styles.cardPricePeriod}>/mes</span>
+                      <span className={styles.cardPricePeriod}>{isAnnual ? '/año' : '/mes'}</span>
                       {showLaunchLabel && launchDiscount ? (
                         <span className={styles.cardPriceDiscount}>-{launchDiscount}%</span>
                       ) : listDiscount && !showLaunchLabel ? (
@@ -343,7 +420,7 @@ export default function SubscriptionPlansSection({
                     ) : null}
                     {isAnnual ? (
                       <span className={styles.cardPriceAnnual}>
-                        {formatPlanAnnualTotal(plan)} facturados al año
+                        Equivale a {formatPlanPriceAmount(plan, 'annual')}/mes
                       </span>
                     ) : null}
                   </>
@@ -355,60 +432,50 @@ export default function SubscriptionPlansSection({
 
               <ul className={styles.cardFeatures}>
                 {plan.highlights.map((line) => {
-                  const isSoon = /próximamente|coming soon/i.test(line);
+                  const label = typeof line === 'string' ? line : line.text;
+                  const excluded = typeof line === 'object' && line.included === false;
+                  const isSoon = !excluded && /próximamente|coming soon/i.test(label);
                   return (
                     <li
-                      key={line}
-                      className={isSoon ? styles.cardFeatureSoon : styles.cardFeatureYes}
+                      key={label}
+                      className={
+                        excluded
+                          ? styles.cardFeatureNo
+                          : isSoon
+                            ? styles.cardFeatureSoon
+                            : styles.cardFeatureYes
+                      }
                     >
-                      {line}
+                      {excluded ? <span className="sr-only">No incluido: </span> : null}
+                      {label}
                     </li>
                   );
                 })}
+                {(plan.excludedHighlights || []).map((line) => (
+                  <li key={line} className={styles.cardFeatureNo}>
+                    <span className="sr-only">No incluido: </span>
+                    {line}
+                  </li>
+                ))}
               </ul>
 
-              {cta.kind === 'select' ? (
-                <button
-                  type="button"
-                  className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
-                  onClick={() => onSelectPlan(plan.slug)}
-                  aria-pressed={isSelected}
-                >
-                  {cta.label}
-                </button>
-              ) : cta.kind === 'checkout' ? (
-                <button
-                  type="button"
-                  className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
-                  onClick={() => handleCheckout(plan.slug)}
-                  disabled={Boolean(checkoutPlan) || planLoading}
-                >
-                  {checkoutPlan === plan.slug ? 'Redirigiendo a Stripe…' : cta.label}
-                </button>
-              ) : cta.kind === 'static' ? (
-                <span
-                  className={`${styles.cardBtn} ${
-                    cta.variant === 'current' ? styles.cardBtnCurrent : styles.cardBtnDisabled
-                  }`}
-                  aria-disabled="true"
-                >
-                  {cta.label}
-                </span>
-              ) : showCta ? (
-                <Link
-                  href={cta.href}
-                  className={`${styles.cardBtn}${cta.isPremium ? ` ${styles.cardBtnPrimary}` : ''}`}
-                >
-                  {cta.label}
-                </Link>
-              ) : null}
+              <PlanCtaControl
+                cta={cta}
+                planSlug={plan.slug}
+                onSelectPlan={onSelectPlan}
+                isSelected={isSelected}
+                onCheckout={handleCheckout}
+                checkoutPlan={checkoutPlan}
+                planLoading={planLoading}
+                showCta={showCta}
+              />
             </article>
           );
         })}
       </div>
 
       <div className={styles.cardsNav}>
-        {DRALO_SUBSCRIPTION_PLANS.map((plan, index) => (
+        {publicPlans.map((plan, index) => (
           <button
             key={plan.slug}
             type="button"
@@ -433,11 +500,49 @@ export default function SubscriptionPlansSection({
         <div className={styles.tableScroll}>
           <table className={styles.table}>
             <thead>
+              {publicPlans.some((p) => {
+                const cta = resolvePlanCardCta(p, {
+                  currentPlanSlug,
+                  enableCheckout,
+                  interactive,
+                  isSelected: selectedSlug === p.slug,
+                });
+                return cta.kind !== 'link' || showCta;
+              }) ? (
+                <tr>
+                  <td className={styles.thCtaSpacer} />
+                  {publicPlans.map((p) => {
+                    const cta = resolvePlanCardCta(p, {
+                      currentPlanSlug,
+                      enableCheckout,
+                      interactive,
+                      isSelected: selectedSlug === p.slug,
+                    });
+                    return (
+                      <td
+                        key={p.slug}
+                        className={p.recommended ? styles.thCtaPopular : styles.thCta}
+                      >
+                        <PlanCtaControl
+                          cta={cta}
+                          planSlug={p.slug}
+                          onSelectPlan={onSelectPlan}
+                          isSelected={selectedSlug === p.slug}
+                          onCheckout={handleCheckout}
+                          checkoutPlan={checkoutPlan}
+                          planLoading={planLoading}
+                          showCta={showCta}
+                        />
+                      </td>
+                    );
+                  })}
+                </tr>
+              ) : null}
               <tr>
                 <th scope="col" className={styles.thFeature}>
                   Característica
                 </th>
-                {DRALO_SUBSCRIPTION_PLANS.map((p) => (
+                {publicPlans.map((p) => (
                   <th
                     key={p.slug}
                     scope="col"
@@ -455,7 +560,7 @@ export default function SubscriptionPlansSection({
                   <th scope="row" className={styles.rowLabel}>
                     {row.label}
                   </th>
-                  {DRALO_SUBSCRIPTION_PLANS.map((p) => (
+                  {publicPlans.map((p) => (
                     <td
                       key={p.slug}
                       className={p.recommended ? styles.tdPopular : undefined}

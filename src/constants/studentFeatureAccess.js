@@ -54,7 +54,7 @@ export function isTrainingLockedForUser(userRole = '') {
 }
 
 /**
- * Exam Strategies for students: included on all student plans (FREE, PLUS, PREMIUM).
+ * Exam Strategies: el plan gratuito solo abre la parte 1. Plus abre el resto.
  * Staff and roles without student limits always have access.
  */
 export function isExamStrategiesLockedForUser(userRole = '', planSlug = 'free') {

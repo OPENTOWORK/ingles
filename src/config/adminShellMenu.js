@@ -39,6 +39,11 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
         label: 'Visualización en móvil y tablet',
         accessHref: '/informatico',
       },
+      {
+        href: '/admin/vista-app',
+        label: 'Visualización de la app',
+        accessHrefs: ['/admin/profesor', '/teacher', '/admin/ejercicios', '/informatico'],
+      },
     ],
   },
   {
@@ -47,7 +52,6 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
     items: [
       { href: '/admin/profesor', label: 'Profesor' },
       COORDINATOR_ADMIN_PANEL_ITEM,
-      { href: '/admin/plan-objetivos', label: 'Formularios' },
       { href: '/admin/ejercicios', label: 'Ejercicios' },
     ],
   },
@@ -57,6 +61,8 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
     items: [
       { href: '/admin', label: 'Analíticas' },
       { href: '/admin/marketing', label: 'Marketing' },
+      { href: '/admin/plan-objetivos', label: 'Formularios' },
+      { href: '/admin/notificaciones', label: 'Notificaciones' },
       {
         href: '/soporte/correos',
         label: 'Correos automáticos',

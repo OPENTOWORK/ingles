@@ -9,6 +9,7 @@ import {
   markOpenMainMenuAfterLogin,
 } from '@/utils/postAuthNavigation';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
+import { isDraloAppSurface, withAppPreviewSearch } from '@/lib/draloAppShell';
 import toast from 'react-hot-toast';
 import { reportLoginAttempt } from '@/utils/reportLoginAttempt';
 
@@ -76,16 +77,18 @@ function AuthCallbackInner() {
         const nextRaw = searchParams.get('next');
         const nextPath =
           nextRaw && nextRaw.startsWith('/') && !nextRaw.startsWith('//') ? nextRaw : null;
+        const app = isDraloAppSurface();
         const destination = destinationAfterLogin({
           nextPath,
           rolePath: redirectPath,
           phone,
+          app,
         });
         if (destination === '/' && phone) markOpenMainMenuAfterLogin();
 
         if (cancelled) return;
         toast.success('Sesión iniciada correctamente');
-        router.replace(destination);
+        router.replace(app ? withAppPreviewSearch(destination) : destination);
       } catch (err) {
         console.error('Error en /auth/callback:', err);
         const detail = String(err?.message || '').toLowerCase();
@@ -101,7 +104,9 @@ function AuthCallbackInner() {
             (err?.message || 'Inténtalo de nuevo.')
         );
         setMessage('Error iniciando sesión. Redirigiendo al login...');
-        setTimeout(() => router.replace('/login'), 1500);
+        setTimeout(() => {
+          router.replace(isDraloAppSurface() ? withAppPreviewSearch('/login/') : '/login');
+        }, 1500);
       }
     };
 

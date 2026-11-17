@@ -6,6 +6,7 @@ import {
   FOUNDING_SURVEY_FORM_ID,
   FOUNDING_SURVEY_FORM_TITLE,
 } from '@/lib/foundingSurvey.rules';
+import { downloadFormResponsesWorkbook } from '@/lib/formResponsesWorkbook';
 import styles from './AdminPlanObjetivosPanel.module.css';
 
 async function getAdminFetchHeaders() {
@@ -84,6 +85,7 @@ export default function AdminFormularioRespuestas({
   const [toDate, setToDate] = useState('');
   const [onlyUserId, setOnlyUserId] = useState(userId);
   const [viewMode, setViewMode] = useState('lista');
+  const [exporting, setExporting] = useState(false);
 
   useEffect(() => {
     setFormFilter(formularioId || '');
@@ -151,6 +153,47 @@ export default function AdminFormularioRespuestas({
 
   const publishFilters = (nextForm, nextUser) => {
     onFiltersChange?.({ formularioId: nextForm, userId: nextUser });
+  };
+
+  const exportToExcel = async () => {
+    if (!filtered.length || exporting) return;
+    const usedLabels = new Map();
+    const questionHeaders = columns.map((column) => {
+      const base = String(column.label || 'Pregunta').replace(/\s+/g, ' ').trim() || 'Pregunta';
+      const count = usedLabels.get(base) || 0;
+      usedLabels.set(base, count + 1);
+      return { key: column.key, label: count ? `${base} (${count + 1})` : base };
+    });
+    const headers = ['Nombre', 'Correo', 'Formulario', 'Fecha', ...questionHeaders.map((column) => column.label)];
+    const sheetRows = filtered.map((row) => [
+      row.nombre || 'Sin nombre',
+      row.email || '',
+      row.formulario_titulo || 'Formulario',
+      formatAnsweredAt(row.completado_en),
+      ...questionHeaders.map((column) => {
+        const text = answerText(row, column.key);
+        return text === '—' ? '' : text;
+      }),
+    ]);
+    const formTitle = formOptions.find((form) => form.id === formFilter)?.titulo;
+    const exportedAt = new Date().toLocaleString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    const summary = [
+      `${filtered.length} ${filtered.length === 1 ? 'respuesta' : 'respuestas'}`,
+      formTitle || 'Todos los formularios',
+      `Exportado el ${exportedAt}`,
+    ].join('  ·  ');
+    setExporting(true);
+    try {
+      await downloadFormResponsesWorkbook({ headers, rows: sheetRows, summary });
+    } finally {
+      setExporting(false);
+    }
   };
 
   const clearFilters = () => {
@@ -240,6 +283,14 @@ export default function AdminFormularioRespuestas({
             Quitar filtros
           </button>
         ) : null}
+        <button
+          type="button"
+          className={styles.exportExcel}
+          onClick={exportToExcel}
+          disabled={loading || exporting || filtered.length === 0}
+        >
+          {exporting ? 'Exportando…' : 'Exportar a Excel'}
+        </button>
         <div className={styles.viewToggle} role="group" aria-label="Vista de respuestas">
           <button
             type="button"

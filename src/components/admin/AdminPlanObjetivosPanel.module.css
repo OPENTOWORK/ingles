@@ -29,9 +29,30 @@
   background: #fff;
 }
 
+.exportExcel {
+  appearance: none;
+  margin-left: auto;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 0.48rem 0.95rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+}
+
+.exportExcel:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.exportExcel:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .viewToggle {
   display: inline-flex;
-  margin-left: auto;
   padding: 0.2rem;
   border: 1px solid #e2e8f0;
   border-radius: 0.85rem;
@@ -318,6 +339,7 @@
 
 :global(body.reading-night-mode) .tab,
 :global(body.reading-night-mode) .restart,
+:global(body.reading-night-mode) .exportExcel,
 :global(body.reading-night-mode) .welcome {
   background: #1e293b;
   border-color: #334155;

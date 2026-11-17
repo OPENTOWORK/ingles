@@ -105,49 +105,53 @@ export default function ReviewInvitePanel() {
   }
 
   return (
-    <section className={`${styles.card} ${styles.sheet}`} aria-labelledby="review-invite-heading">
-      <h2 id="review-invite-heading" className={styles.heading}>
-        Pedir reseñas
-      </h2>
-      <p className={styles.lead}>
-        Envía un correo a quienes pidieron la guía y aceptaron los envíos comerciales, con el enlace para dejar su reseña en la web.
-      </p>
-      {loading ? <p className={styles.summary}>Cargando…</p> : null}
-      {!loading ? (
-        <div className={styles.inviteActions}>
-          <button type="button" className={styles.primary} onClick={sendInvite} disabled={sending || accepted === 0}>
-            {sending ? 'Enviando…' : 'Enviar correo de reseña'}
-          </button>
-          <p className={styles.summary}>
-            {accepted} {accepted === 1 ? 'persona acepta' : 'personas aceptan'} los envíos comerciales.
-          </p>
-        </div>
-      ) : null}
-      {error ? <p className={styles.error}>{error}</p> : null}
-      {message ? <p className={styles.summary}>{message}</p> : null}
+    <details className={styles.card}>
+      <summary className={styles.toggle}>
+        <h2 id="review-invite-heading" className={styles.heading}>
+          Pedir reseñas
+        </h2>
+      </summary>
+      <div className={styles.body}>
+        <p className={styles.lead}>
+          Envía un correo a quienes pidieron la guía y aceptaron los envíos comerciales, con el enlace para dejar su reseña en la web.
+        </p>
+        {loading ? <p className={styles.summary}>Cargando…</p> : null}
+        {!loading ? (
+          <div className={styles.inviteActions}>
+            <button type="button" className={styles.primary} onClick={sendInvite} disabled={sending || accepted === 0}>
+              {sending ? 'Enviando…' : 'Enviar correo de reseña'}
+            </button>
+            <p className={styles.summary}>
+              {accepted} {accepted === 1 ? 'persona acepta' : 'personas aceptan'} los envíos comerciales.
+            </p>
+          </div>
+        ) : null}
+        {error ? <p className={styles.error}>{error}</p> : null}
+        {message ? <p className={styles.summary}>{message}</p> : null}
 
-      <h3 className={styles.subheading}>Reseñas en la web</h3>
-      {reviews.length ? (
-        <ul className={styles.reviewList}>
-          {reviews.map((review) => (
-            <li key={review.id}>
-              <p>
-                <strong>{review.name}</strong>
-                {' '}
-                {'★'.repeat(review.stars || 0)}
-                {' '}
-                {review.published ? 'Visible' : 'Oculta'}
-              </p>
-              <p>{review.text}</p>
-              <button type="button" className={styles.filter} onClick={() => setPublished(review, !review.published)}>
-                {review.published ? 'Ocultar' : 'Mostrar'}
-              </button>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className={styles.empty}>{loading ? '' : 'Todavía no hay reseñas.'}</p>
-      )}
-    </section>
+        <h3 className={styles.subheading}>Reseñas en la web</h3>
+        {reviews.length ? (
+          <ul className={styles.reviewList}>
+            {reviews.map((review) => (
+              <li key={review.id}>
+                <p>
+                  <strong>{review.name}</strong>
+                  {' '}
+                  {'★'.repeat(review.stars || 0)}
+                  {' '}
+                  {review.published ? 'Visible' : 'Oculta'}
+                </p>
+                <p>{review.text}</p>
+                <button type="button" className={styles.filter} onClick={() => setPublished(review, !review.published)}>
+                  {review.published ? 'Ocultar' : 'Mostrar'}
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className={styles.empty}>{loading ? '' : 'Todavía no hay reseñas.'}</p>
+        )}
+      </div>
+    </details>
   );
 }

@@ -50,9 +50,9 @@
 .heading {
   margin: 0;
   flex: 1;
-  font-size: 1.15rem;
-  font-weight: 650;
-  color: #0f172a;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #000;
 }
 
 .lead {
@@ -267,7 +267,7 @@
 }
 
 :global(body.reading-night-mode) .heading {
-  color: #e2e8f0;
+  color: #fff;
 }
 
 :global(body.reading-night-mode) .toggle::after {

@@ -60,6 +60,43 @@ export function visitorElapsedSeconds(firstSeen, lastSeen) {
     : null;
 }
 
+/**
+ * `creado_en` is a timestamp without time zone that stores the UTC clock time.
+ * A value without Z must be read as UTC. Reading it as local time shifts the
+ * signup earlier and the visit no longer counts as a registration.
+ */
+export function parseStoredUtc(value) {
+  if (!value) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+  const hasZone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(raw);
+  const iso = hasZone ? raw : `${raw.replace(' ', 'T')}Z`;
+  const time = new Date(iso).getTime();
+  return Number.isFinite(time) ? new Date(time).toISOString() : null;
+}
+
+/** The account was created on this visit, with two minutes of grace before the cookie. */
+export function signedUpDuringVisit(accountCreatedAt, visitorCreatedAt) {
+  const account = parseStoredUtc(accountCreatedAt);
+  const visit = parseStoredUtc(visitorCreatedAt);
+  if (!account || !visit) return false;
+  return new Date(account).getTime() >= new Date(visit).getTime() - 2 * 60 * 1000;
+}
+
+/** One registration per person. Extra cookies of the same account do not add another signup. */
+export function dedupeAccountVisitors(rows = []) {
+  const seen = new Set();
+  const kept = [];
+  for (const row of rows) {
+    if (row?.kind === 'account' && row.userId) {
+      if (seen.has(row.userId)) continue;
+      seen.add(row.userId);
+    }
+    kept.push(row);
+  }
+  return kept;
+}
+
 /** Classification belongs to the visitor's linked account, never a shared IP. */
 export function summarizeClassifiedVisitors(classified = []) {
   const counts = { entered: 0, registered: 0, unregistered: 0, staff: 0 };

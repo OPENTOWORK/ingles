@@ -889,6 +889,7 @@ export default function AdminAnalyticsPanels({
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('growth');
   const [visitStats, setVisitStats] = useState(null);
+  const [entriesStatus, setEntriesStatus] = useState('idle');
   const [entriesWithoutStaff, setEntriesWithoutStaff] = useState(true);
   const [entriesRange, setEntriesRange] = useState('all');
   const [entriesAnchor, setEntriesAnchor] = useState(() => startOfDay(new Date()));
@@ -1058,6 +1059,7 @@ export default function AdminAnalyticsPanels({
   useEffect(() => {
     if (activeTab !== 'entries') return undefined;
     let cancelled = false;
+    setEntriesStatus('loading');
 
     (async () => {
       try {
@@ -1068,9 +1070,19 @@ export default function AdminAnalyticsPanels({
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         const payload = await res.json().catch(() => ({}));
-        if (!cancelled && res.ok) setVisitStats(payload);
+        if (cancelled) return;
+        if (!res.ok) {
+          setVisitStats(null);
+          setEntriesStatus('error');
+          return;
+        }
+        setVisitStats(payload);
+        setEntriesStatus('ready');
       } catch {
-        if (!cancelled) setVisitStats(null);
+        if (!cancelled) {
+          setVisitStats(null);
+          setEntriesStatus('error');
+        }
       }
     })();
 
@@ -1150,17 +1162,21 @@ export default function AdminAnalyticsPanels({
                 {entriesWithoutStaff
                   ? ' El equipo tampoco.'
                   : ' Con staff incluye las visitas del equipo.'}
-                {entriesRangeLabel(entriesRange, entryView.start, entryView.end)
-                  ? ` ${entriesRangeLabel(entriesRange, entryView.start, entryView.end)}.`
-                  : visitStats?.since
-                    ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}.`
-                    : ' Todavía no hay ninguna visita guardada.'}
+                {entriesStatus === 'loading'
+                  ? ' Cargando entradas…'
+                  : entriesStatus === 'error'
+                    ? ' No se han podido cargar las entradas.'
+                    : entriesRangeLabel(entriesRange, entryView.start, entryView.end)
+                      ? ` ${entriesRangeLabel(entriesRange, entryView.start, entryView.end)}.`
+                      : visitStats?.since
+                        ? ` Contando desde el ${new Date(visitStats.since).toLocaleString('es-ES', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}.`
+                        : ' Todavía no hay ninguna visita guardada.'}
               </p>
               <div className={styles.entriesFilters}>
               <div className={styles.tabList} role="group" aria-label="Periodo de entradas">
@@ -1238,11 +1254,13 @@ export default function AdminAnalyticsPanels({
                 icon={Users}
                 label="Entraron"
                 value={
-                  visitStats
-                    ? (
-                        entryView.counts.entered + (entriesWithoutStaff ? 0 : entryView.counts.staff)
-                      ).toLocaleString('es-ES')
-                    : '…'
+                  entriesStatus === 'error'
+                    ? '—'
+                    : visitStats
+                      ? (
+                          entryView.counts.entered + (entriesWithoutStaff ? 0 : entryView.counts.staff)
+                        ).toLocaleString('es-ES')
+                      : '…'
                 }
                 hint={
                   entriesWithoutStaff
@@ -1255,7 +1273,7 @@ export default function AdminAnalyticsPanels({
               <KpiCard
                 icon={UserPlus}
                 label="Se registraron"
-                value={visitStats ? entryView.counts.registered.toLocaleString('es-ES') : '…'}
+                value={entriesStatus === 'error' ? '—' : visitStats ? entryView.counts.registered.toLocaleString('es-ES') : '…'}
                 hint="De esas entradas, crearon cuenta"
                 accent="#10b981"
                 iconBg="#ecfdf5"
@@ -1263,7 +1281,7 @@ export default function AdminAnalyticsPanels({
               <KpiCard
                 icon={UserMinus}
                 label="Sin registrarse"
-                value={visitStats ? entryView.counts.unregistered.toLocaleString('es-ES') : '…'}
+                value={entriesStatus === 'error' ? '—' : visitStats ? entryView.counts.unregistered.toLocaleString('es-ES') : '…'}
                 hint="Entraron y siguieron sin cuenta"
                 accent="#f59e0b"
                 iconBg="#fffbeb"
@@ -1288,7 +1306,13 @@ export default function AdminAnalyticsPanels({
               <div id="admin-entries-log">
               {(() => {
                 const rows = visibleEntryRows;
-                if (!visitStats) return <p className={styles.emptyState}>Cargando…</p>;
+                if (entriesStatus === 'loading' || !visitStats) {
+                  return (
+                    <p className={styles.emptyState}>
+                      {entriesStatus === 'error' ? 'No se han podido cargar las entradas.' : 'Cargando…'}
+                    </p>
+                  );
+                }
                 if (!rows.length) {
                   return (
                     <p className={styles.emptyState}>

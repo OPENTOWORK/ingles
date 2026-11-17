@@ -3,6 +3,7 @@
  * Stripe y redirigen: nunca se manipulan importes ni planes en el cliente.
  */
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
+import { redirectToStripe } from '@/lib/stripe/redirect';
 import { supabase } from '@/utils/supabaseClient';
 
 /** Estados de Stripe con los que el alumno tiene el plan de pago activo. */
@@ -45,7 +46,7 @@ export async function startCheckout({ planSlug, billingCycle }) {
   const payload = await postWithAuth('/api/stripe/checkout', { planSlug, billingCycle });
   if (payload.usePortal) return openBillingPortal();
   if (!payload.url) throw new Error('Stripe no devolvió una URL de pago.');
-  window.location.assign(payload.url);
+  redirectToStripe(payload.url);
   return payload;
 }
 
@@ -53,7 +54,7 @@ export async function startCheckout({ planSlug, billingCycle }) {
 export async function openBillingPortal() {
   const payload = await postWithAuth('/api/stripe/portal', {});
   if (!payload.url) throw new Error('Stripe no devolvió una URL del portal.');
-  window.location.assign(payload.url);
+  redirectToStripe(payload.url);
   return payload;
 }
 

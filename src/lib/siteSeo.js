@@ -64,8 +64,8 @@ export const SEO_PAGE_META = {
       'Crea tu cuenta en Dralo y practica el B2 First con correcciones y seguimiento de tu progreso. Sin tarjeta: solo nombre, correo y contraseña.',
   },
   precios: {
-    title: 'Precios: plan gratuito, Plus y PREMIUM',
-    description: `Compara el plan gratuito, el Plan Plus y el Plan PREMIUM. ${PRO_LAUNCH_COPY.subtitle}`,
+    title: 'Precios: plan gratuito y Plus',
+    description: `Compara el plan gratuito y el Plan Plus. ${PRO_LAUNCH_COPY.subtitle}`,
   },
   examPractice: {
     title: 'Práctica de exámenes Cambridge',

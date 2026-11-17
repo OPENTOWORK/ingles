@@ -37,13 +37,16 @@ export function clearOpenMainMenuAfterLogin() {
 /**
  * Destino tras login. Con `next` se respeta la página pedida.
  * Un estudiante va a Exam Practice (Reading and Use of English) en cualquier
- * tamaño de pantalla. En el móvil, el resto de roles sigue entrando por la home.
+ * tamaño de pantalla. En la app, el administrador entra en su panel. En el
+ * móvil web, el resto de roles sigue entrando por la home.
  */
-export function destinationAfterLogin({ nextPath, rolePath, phone }) {
+export function destinationAfterLogin({ nextPath, rolePath, phone, app = false }) {
   if (nextPath) return normalizePostAuthPath(nextPath);
   const resolved = normalizePostAuthPath(rolePath || '/perfil/');
   const studentEntry = normalizePostAuthPath(APP_ROUTES.examPracticeStudentEntry);
   if (resolved === studentEntry) return studentEntry;
+  // En la app, el administrador entra en su panel. En el móvil web, el resto sigue por la home.
+  if (app && resolved.startsWith('/admin')) return resolved;
   if (phone) return '/';
   return resolved;
 }

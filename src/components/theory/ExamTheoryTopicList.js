@@ -22,6 +22,7 @@ import ExamTheoryPartTipsSection from '@/components/theory/ExamTheoryPartTipsSec
 import ExamStrategiesStudentIndex from '@/components/theory/ExamStrategiesStudentIndex';
 import ExamStrategiesChapterStyles from '@/components/theory/ExamStrategiesChapterStyles';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
 import { landingFont } from '@/components/home/landing/landingFont';
 
 export default function ExamTheoryTopicList({
@@ -35,6 +36,7 @@ export default function ExamTheoryTopicList({
   const { userRole, session } = useUserRole();
   const isStudent = usesStudentContentRestrictions(userRole);
   const isGuest = !session;
+  const { firstPartOnly } = useExamStrategiesAccess();
   const showStudentIndex = isStudent || isGuest;
   const { topicProgressByHref: globalTopicProgress } = useExamTheoryProgress(
     session?.user?.id,
@@ -118,6 +120,7 @@ export default function ExamTheoryTopicList({
           sectionSlug={sectionSlug}
           sectionAccent={sectionAccent}
           guestPreview={isGuest}
+          restrictToFirstPart={!isGuest && firstPartOnly}
         />
       ) : (
         <ExamTheoryPartTipsSection

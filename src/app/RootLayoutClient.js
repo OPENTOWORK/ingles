@@ -12,6 +12,7 @@ import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 import { nextRoleConfirmation } from '@/lib/userRoleResolution';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
+import { isDraloAppSurface } from '@/lib/draloAppShell';
 import { capturePwaInstallPrompt } from '@/lib/pwaInstallPrompt';
 
 if (typeof window !== 'undefined') capturePwaInstallPrompt();
@@ -408,7 +409,7 @@ function RootLayoutClientInner({ children }) {
   }, []);
 
   useEffect(() => {
-    if (!cookieConsentHydrated || cookieConsent) {
+    if (!cookieConsentHydrated || cookieConsent || isDraloAppSurface()) {
       setCookieBannerVisible(false);
       return undefined;
     }
@@ -792,7 +793,7 @@ function RootLayoutClientInner({ children }) {
                   <span className="legal-footer-meta__sep" aria-hidden="true">
                     ·
                   </span>
-                  <span className="legal-footer-version">Versión 1.0.31</span>
+                  <span className="legal-footer-version">Versión 1.0.32</span>
                 </p>
               </div>
             </div>

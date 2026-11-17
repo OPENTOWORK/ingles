@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useUserRole } from '@/context/UserRoleContext';
-import { DRALO_SUBSCRIPTION_PLANS } from '@/data/financialPlanConfig';
+import { getPublicSubscriptionPlans } from '@/data/financialPlanConfig';
 import { canViewPricing } from '@/utils/pricingAccess';
 import styles from './HomePricingTeaser.module.css';
 
@@ -26,12 +26,12 @@ export default function HomePricingTeaser() {
           Planes para cada etapa
         </h2>
         <p className={styles.desc}>
-          Empieza gratis con A2, B1 y B2; elige PLUS para C1–C2 o desbloquea PREMIUM con más Writing Correction y límites diarios ampliados.
+          Empieza gratis o elige Plus, con exámenes, correcciones y Dralo AI incluidos.
         </p>
       </div>
 
       <div className={styles.grid}>
-        {DRALO_SUBSCRIPTION_PLANS.map((plan) => (
+        {getPublicSubscriptionPlans().map((plan) => (
           <article
             key={plan.slug}
             className={`${styles.card}${plan.recommended ? ` ${styles.cardPopular}` : ''}`}

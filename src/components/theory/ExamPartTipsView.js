@@ -15,6 +15,9 @@ import {
   getGuestRegisterHref,
   isGuestExamStrategiesChapterAllowed,
 } from '@/lib/guestPreviewAccess';
+import { isFreeExamStrategiesPathAllowed } from '@/lib/examStrategiesPlanAccess';
+import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
+import { ExamStrategiesPlusPartScreen } from '@/components/exam/ExamStrategiesFeatureGuard';
 
 /** Fallback para niveles sin ficha redactada: reusa el texto plano de part-info. */
 function buildFallbackContent(info) {
@@ -39,8 +42,10 @@ export default function ExamPartTipsView({
 }) {
   const { userRole, session } = useUserRole();
   const { isGuest } = useGuestPreview();
+  const { firstPartOnly, loading: planLoading } = useExamStrategiesAccess();
   const isStudent = usesStudentContentRestrictions(userRole);
   const guestLocked = !session && !isGuestExamStrategiesChapterAllowed(pathname);
+  const planLocked = Boolean(session) && firstPartOnly && !isFreeExamStrategiesPathAllowed(pathname);
 
   const partNum = parseInt(String(partParam).replace(/^part-/, ''), 10);
   const title = info.title || `Part ${partNum}`;
@@ -54,14 +59,14 @@ export default function ExamPartTipsView({
   const nextHrefRaw = nav.showNext
     ? buildTeoriaExamPartTipsHref(levelSlug, skillFolder, partNum + 1)
     : null;
-  const prevHref =
-    prevHrefRaw && isGuest && !isGuestExamStrategiesChapterAllowed(prevHrefRaw)
-      ? getGuestRegisterHref(prevHrefRaw)
-      : prevHrefRaw;
-  const nextHref =
-    nextHrefRaw && isGuest && !isGuestExamStrategiesChapterAllowed(nextHrefRaw)
-      ? getGuestRegisterHref(nextHrefRaw)
-      : nextHrefRaw;
+  const lockedHref = (href) => {
+    if (!href) return href;
+    if (isGuest && !isGuestExamStrategiesChapterAllowed(href)) return getGuestRegisterHref(href);
+    if (session && firstPartOnly && !isFreeExamStrategiesPathAllowed(href)) return '/precios';
+    return href;
+  };
+  const prevHref = lockedHref(prevHrefRaw);
+  const nextHref = lockedHref(nextHrefRaw);
 
   const content =
     getExamStrategiesPartContent(levelSlug, skillFolder, partNum) || buildFallbackContent(info);
@@ -70,6 +75,18 @@ export default function ExamPartTipsView({
   const [selected, setSelected] = useState(0);
   const exercise = getExercise?.(partNum, selected + 1);
   const showExercises = !isStudent && Boolean(getExercise && exercise);
+
+  if (session && planLoading) {
+    return (
+      <main className={`shell content-hub-shell teoria-page exam-strategies-chapter-page ${landingFont.variable}`}>
+        <p>Cargando…</p>
+      </main>
+    );
+  }
+
+  if (planLocked) {
+    return <ExamStrategiesPlusPartScreen />;
+  }
 
   if (guestLocked) {
     return (

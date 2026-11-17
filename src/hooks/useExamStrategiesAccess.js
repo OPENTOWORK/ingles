@@ -7,6 +7,7 @@ import {
   hasFullNivelesLevelAccess,
   isExamStrategiesLockedForUser,
 } from '@/constants/studentFeatureAccess';
+import { isExamStrategiesFirstPartOnlyPlan } from '@/lib/examStrategiesPlanAccess';
 
 /**
  * Exam Strategies access for the logged-in student (plan entitlements).
@@ -20,20 +21,22 @@ export function useExamStrategiesAccess({ userRole: roleOverride, session: sessi
 
   return useMemo(() => {
     if (!session) {
-      return { locked: false, loading: false };
+      return { locked: false, firstPartOnly: false, loading: false };
     }
     if (hasFullNivelesLevelAccess(userRole)) {
-      return { locked: false, loading: false };
+      return { locked: false, firstPartOnly: false, loading: false };
     }
     if (!applyLimits) {
-      return { locked: false, loading: false };
+      return { locked: false, firstPartOnly: false, loading: false };
     }
     if (loading) {
-      return { locked: false, loading: true };
+      return { locked: false, firstPartOnly: false, loading: true };
     }
     const slug = planSlug || 'free';
+    const locked = isExamStrategiesLockedForUser(userRole, slug);
     return {
-      locked: isExamStrategiesLockedForUser(userRole, slug),
+      locked,
+      firstPartOnly: !locked && isExamStrategiesFirstPartOnlyPlan(slug),
       loading: false,
     };
   }, [session, userRole, applyLimits, planSlug, loading]);

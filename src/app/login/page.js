@@ -19,6 +19,13 @@ import GoogleIdentityButton from '@/components/auth/GoogleIdentityButton';
 import { readAttributionFromSearch } from '@/lib/abExperiment';
 import { trackRegistrationStart } from '@/lib/abExperimentTrack';
 import { landingFont } from '@/components/home/landing/landingFont';
+import {
+  DRALO_APP_DROP_PARAM,
+  appSessionShouldPersist,
+  isDraloAppSurface,
+  markAppRemember,
+  withAppPreviewSearch,
+} from '@/lib/draloAppShell';
 
 const LOGIN_GREETINGS = [
   '¡Tu B2 empieza aquí! 🚀',
@@ -61,19 +68,20 @@ async function resolvePostLoginPath(user, searchParams) {
   const nextPath = getSafeNextPath(searchParams);
   const phone = isPhoneViewport();
 
+  const app = isDraloAppSurface();
   let path;
   if (nextPath) {
-    path = destinationAfterLogin({ nextPath, phone });
+    path = destinationAfterLogin({ nextPath, phone, app });
   } else {
     const cachedRole = peekCachedRoleName(user.id);
     const rolePath = cachedRole
       ? getRedirectPathByRoleName(cachedRole)
       : await getRedirectPathByUserId(user.id, user.email);
-    path = destinationAfterLogin({ rolePath, phone });
+    path = destinationAfterLogin({ rolePath, phone, app });
   }
 
   if (path === '/' && phone) markOpenMainMenuAfterLogin();
-  return path;
+  return app ? withAppPreviewSearch(path) : path;
 }
 
 /** Mensajes de /auth/confirm cuando un enlace de correo no se puede canjear. */
@@ -101,6 +109,7 @@ function LoginPageInner() {
   const [googleRetry, setGoogleRetry] = useState(0);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [greeting, setGreeting] = useState('');
+  const [entryChoice, setEntryChoice] = useState(null);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -113,16 +122,31 @@ function LoginPageInner() {
   useEffect(() => {
     let cancelled = false;
     (async () => {
+      if (entryChoice) return;
       clearLogoutPending();
+      const inApp = isDraloAppSurface();
+      const dropSavedSession = searchParams.get(DRALO_APP_DROP_PARAM) === '1'
+        || (inApp && !appSessionShouldPersist());
+      if (dropSavedSession) {
+        await supabase.auth.signOut();
+        if (!cancelled && searchParams.get(DRALO_APP_DROP_PARAM) === '1') {
+          router.replace(withAppPreviewSearch('/login/'));
+        }
+        return;
+      }
       const { data: { session } } = await supabase.auth.getSession();
       if (cancelled || !session?.user) return;
+      if (inApp && !getSafeNextPath(searchParams)) {
+        router.replace(withAppPreviewSearch('/'));
+        return;
+      }
       const path = await resolvePostLoginPath(session.user, searchParams);
       if (!cancelled) router.replace(path);
     })();
     return () => {
       cancelled = true;
     };
-  }, [router, searchParams]);
+  }, [router, searchParams, entryChoice]);
 
   useEffect(() => {
     const attribution = readAttributionFromSearch(searchParams.toString());
@@ -244,6 +268,11 @@ function LoginPageInner() {
     void ensureAppUserProfile().catch(() => {});
 
     const path = await resolvePostLoginPath(result.user, searchParams);
+    if (isDraloAppSurface()) {
+      setEntryChoice({ path });
+      return;
+    }
+
     router.replace(path);
   };
 
@@ -324,8 +353,41 @@ function LoginPageInner() {
     toast.success('Inicio de sesión exitoso');
     void ensureAppUserProfile().catch(() => {});
     const path = await resolvePostLoginPath(result.user, searchParams);
+    if (isDraloAppSurface()) {
+      setEntryChoice({ path });
+      return;
+    }
     router.replace(path);
   };
+
+  const confirmAppEntry = (save) => {
+    markAppRemember(save);
+    router.replace(withAppPreviewSearch(entryChoice?.path || '/'));
+  };
+
+  if (entryChoice) {
+    return (
+      <main className={`login-page ${landingFont.variable}`} style={styles.main}>
+        <div className="login-page__mascot">
+          <SiteMascot variant={3} width={132} alt="Dralo te da la bienvenida" />
+        </div>
+        <h2 className="login-page__title">¿Guardar el acceso?</h2>
+        <p style={{ margin: '0 0 1.25rem', textAlign: 'center', lineHeight: 1.5 }}>
+          Si lo guardas, la próxima vez la app se abre en la página de inicio, sin volver a pedir la contraseña.
+        </p>
+        <button type="button" style={styles.button} onClick={() => confirmAppEntry(true)}>
+          Guardar y entrar
+        </button>
+        <button
+          type="button"
+          onClick={() => confirmAppEntry(false)}
+          style={{ ...styles.button, marginTop: '0.75rem', background: '#fff', color: '#5333d6', border: '1.5px solid #cfc3ff', boxShadow: 'none' }}
+        >
+          Solo esta vez
+        </button>
+      </main>
+    );
+  }
 
   return (
     <main className={`login-page ${landingFont.variable}`} style={styles.main}>

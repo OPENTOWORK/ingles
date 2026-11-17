@@ -54,8 +54,12 @@ async function performPreviewFrameLogout() {
   const next = new URLSearchParams();
   const role = current.get('itPreviewRole');
   const reload = current.get('_itPreview');
+  const app = current.get('itPreviewApp');
+  const platform = current.get('itPreviewPlatform');
   if (role) next.set('itPreviewRole', role);
   if (reload) next.set('_itPreview', reload);
+  if (app) next.set('itPreviewApp', app);
+  if (platform) next.set('itPreviewPlatform', platform);
   const qs = next.toString();
   window.location.assign(qs ? `/login?${qs}` : '/login');
 }

@@ -15,6 +15,7 @@ import ClientAppProviders from './ClientAppProviders';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 import { SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
 import { SESSION_HINT_BOOT_SCRIPT } from '@/lib/sessionHint';
+import { DRALO_APP_BOOT_SCRIPT } from '@/lib/draloAppShell';
 import { SITE_THEME_BOOT_SCRIPT } from '@/lib/siteTheme';
 import {
   DRALO_APP_ICON_SRC,
@@ -80,6 +81,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <head>
         <script id="session-hint-boot" dangerouslySetInnerHTML={{ __html: SESSION_HINT_BOOT_SCRIPT }} />
+        <script id="dralo-app-boot" dangerouslySetInnerHTML={{ __html: DRALO_APP_BOOT_SCRIPT }} />
         <script id="site-theme-boot" dangerouslySetInnerHTML={{ __html: SITE_THEME_BOOT_SCRIPT }} />
         <link rel="preconnect" href="https://qnazrzvwvkwhkfbqsbmr.supabase.co" crossOrigin="" />
         <link rel="dns-prefetch" href="https://qnazrzvwvkwhkfbqsbmr.supabase.co" />

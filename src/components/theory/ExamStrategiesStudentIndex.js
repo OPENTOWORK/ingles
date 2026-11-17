@@ -7,6 +7,7 @@ import {
   getGuestRegisterHref,
   isGuestExamStrategiesChapterAllowed,
 } from '@/lib/guestPreviewAccess';
+import { isFreeExamStrategiesPathAllowed } from '@/lib/examStrategiesPlanAccess';
 
 function normalizePath(path = '') {
   const raw = String(path || '').split('?')[0].split('#')[0];
@@ -37,6 +38,7 @@ export default function ExamStrategiesStudentIndex({
   variant = 'hub',
   activeHref = '',
   guestPreview = false,
+  restrictToFirstPart = false,
 }) {
   const chapters = getExamStrategiesStudentIndex(sectionSlug);
   if (!chapters?.length) return null;
@@ -62,6 +64,7 @@ export default function ExamStrategiesStudentIndex({
             activeHref={activeHref}
             isSidebar={isSidebar}
             guestPreview={guestPreview}
+            restrictToFirstPart={restrictToFirstPart}
           />
         ))}
       </ol>
@@ -69,7 +72,14 @@ export default function ExamStrategiesStudentIndex({
   );
 }
 
-function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false, guestPreview = false }) {
+function IndexChapterItem({
+  chapter,
+  activeHref,
+  isSidebar,
+  nested = false,
+  guestPreview = false,
+  restrictToFirstPart = false,
+}) {
   if (chapter.children?.length) {
     const groupActive = chapterTreeIsActive(chapter, activeHref);
     return (
@@ -93,6 +103,7 @@ function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false, gues
               isSidebar={isSidebar}
               nested
               guestPreview={guestPreview}
+              restrictToFirstPart={restrictToFirstPart}
             />
           ))}
         </ol>
@@ -112,6 +123,8 @@ function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false, gues
 
   const isActive = hrefMatchesActive(chapter.href, activeHref);
   const guestLocked = guestPreview && !isGuestExamStrategiesChapterAllowed(chapter.href);
+  const planLocked =
+    !guestLocked && restrictToFirstPart && !isFreeExamStrategiesPathAllowed(chapter.href);
 
   return (
     <li
@@ -119,13 +132,15 @@ function IndexChapterItem({ chapter, activeHref, isSidebar, nested = false, gues
         isActive ? ' exam-strategies-index__item--current' : ''
       }`}
     >
-      {guestLocked ? (
+      {guestLocked || planLocked ? (
         <Link
-          href={getGuestRegisterHref(chapter.href)}
+          href={guestLocked ? getGuestRegisterHref(chapter.href) : '/precios'}
           className="exam-strategies-index__link exam-strategies-index__link--guest-lock"
         >
           <ChapterLinkText chapter={chapter} />
-          <span className="exam-strategies-index__link-cta">{GUEST_PREVIEW_REGISTER_LABEL}</span>
+          <span className="exam-strategies-index__link-cta">
+            {guestLocked ? GUEST_PREVIEW_REGISTER_LABEL : 'Plan Plus'}
+          </span>
         </Link>
       ) : (
         <Link

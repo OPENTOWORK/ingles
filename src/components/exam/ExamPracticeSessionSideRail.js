@@ -2,6 +2,7 @@
 
 import ExamPracticeSideRail from '@/components/exam/ExamPracticeSideRail';
 import ReadingPracticeToolsPanel from '@/components/exam/ReadingPracticeToolsPanel';
+import ReadingPracticeDictionary from '@/components/exam/ReadingPracticeDictionary';
 
 /**
  * Side rail for skill practice (listening, writing, speaking, …).
@@ -20,6 +21,7 @@ export default function ExamPracticeSessionSideRail({
       strategy={strategy}
       progress={progress}
       tools={<ReadingPracticeToolsPanel lang={lang} />}
+      dictionary={<ReadingPracticeDictionary lang={lang} />}
       finishNotice={finishNotice}
     />
   );

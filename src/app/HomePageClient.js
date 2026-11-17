@@ -17,6 +17,7 @@ import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { supabase } from '@/utils/supabaseClient';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
+import { appSessionShouldPersist, isDraloAppSurface, withAppPreviewSearch } from '@/lib/draloAppShell';
 
 const HomeInstallAppButton = dynamic(() => import('@/components/home/HomeInstallAppButton'), {
   ssr: false,
@@ -42,6 +43,7 @@ export default function HomePageClient() {
   const phone = usePhoneViewport();
   /** El bloque en inglés solo existe mientras se confirma una sesión ya guardada. */
   const [omitHiddenEnglish, setOmitHiddenEnglish] = useState(false);
+  const [appAsksLogin, setAppAsksLogin] = useState(false);
 
   useLayoutEffect(() => {
     if (!document.documentElement.classList.contains(SESSION_HINT_CLASS)) {
@@ -64,14 +66,23 @@ export default function HomePageClient() {
 
   useEffect(() => {
     let cancelled = false;
-    supabase.auth.getSession().then(({ data }) => {
+    supabase.auth.getSession().then(async ({ data }) => {
       if (cancelled) return;
-      setHasStoredUser(Boolean(data.session?.user));
+      const signedIn = Boolean(data.session?.user);
+      if (isDraloAppSurface() && (!signedIn || !appSessionShouldPersist())) {
+        setAppAsksLogin(true);
+        if (signedIn) await supabase.auth.signOut();
+        if (!cancelled) window.location.replace(withAppPreviewSearch('/login/'));
+        return;
+      }
+      if (!cancelled) setHasStoredUser(signedIn);
     });
     return () => {
       cancelled = true;
     };
   }, [session?.user?.id]);
+
+  if (appAsksLogin) return null;
 
   return (
     <>

@@ -132,3 +132,41 @@
     max-width: none;
   }
 }
+
+:global(body.reading-night-mode) .search {
+  background: #334155;
+  border-color: #64748b;
+  color: #f8fafc;
+}
+
+:global(body.reading-night-mode) .search::placeholder {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .count,
+:global(body.reading-night-mode) .status {
+  color: #94a3b8;
+}
+
+:global(body.reading-night-mode) .card {
+  background: #172033;
+  border-color: #475569;
+}
+
+:global(body.reading-night-mode) .card h3 {
+  color: #f1f5f9;
+}
+
+:global(body.reading-night-mode) .sound {
+  color: #c4b5fd;
+}
+
+:global(body.reading-night-mode) .card p {
+  color: #cbd5e1;
+}
+
+:global(body.reading-night-mode) .danger {
+  background: #1e293b;
+  border-color: #7f1d1d;
+  color: #fca5a5;
+}

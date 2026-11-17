@@ -26,7 +26,6 @@ import {
 import { ADMIN_EMAIL, normalizeEmail } from '@/utils/authRoles';
 import {
   getMaxExamSlotForPlan as resolveMaxExamSlotForPlan,
-  getPlusUnlockProgress,
   getSubscriptionTenureMonths,
 } from '@/lib/plusExamUnlock';
 
@@ -323,9 +322,7 @@ export async function getStudentPlanContext(userId, userEmail = '', userMetadata
   const subscriptionAnchor = await resolvePlusSubscriptionAnchor(userId, planSlug);
   const subscriptionMonths = getSubscriptionTenureMonths(subscriptionAnchor);
   const maxExamSlot = resolveMaxExamSlotForPlan(planSlug, { subscriptionMonths });
-  const plusExamUnlock = isPlusTierPlanSlug(planSlug)
-      ? getPlusUnlockProgress(subscriptionMonths)
-      : null;
+  const plusExamUnlock = null;
 
   return {
     planSlug,

@@ -25,12 +25,11 @@ describe('plusExamUnlock', () => {
     );
   });
 
-  it('unlocks 10 exams per subscription month for PLUS', () => {
+  it('gives PLUS the full exam catalog', () => {
     assert.equal(getPlusMaxExamSlot(1), 10);
     assert.equal(getPlusMaxExamSlot(2), 20);
-    assert.equal(getPlusMaxExamSlot(3), 20);
-    assert.equal(getMaxExamSlotForPlan('premium', { subscriptionMonths: 1 }), 10);
-    assert.equal(getMaxExamSlotForPlan('premium', { subscriptionMonths: 2 }), 20);
+    assert.equal(getMaxExamSlotForPlan('premium', { subscriptionMonths: 1 }), 20);
+    assert.equal(getMaxExamSlotForPlan('friendly_plus', { subscriptionMonths: 1 }), 20);
   });
 
   it('keeps exam-mode exam 1 free for every student', () => {

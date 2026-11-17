@@ -45,7 +45,7 @@ export const STAFF_PERMISSION_DEFINITIONS = [
   { key: 'coordinadorAdmin', label: 'Coordinador (admin)', category: 'Pedagogía' },
   { key: 'soporte', label: 'Soporte', category: 'Soporte' },
   { key: 'informatico', label: 'Informático', category: 'Técnico' },
-  { key: 'planObjetivos', label: 'Formularios', category: 'Estrategia' },
+  { key: 'planObjetivos', label: 'Formularios', category: 'Comercial' },
   { key: 'planFinanciero', label: 'Financiero', category: 'Estrategia' },
   { key: 'ejercicios', label: 'Ejercicios', category: 'Contenido' },
   { key: 'blog', label: 'Blog', category: 'Marketing' },

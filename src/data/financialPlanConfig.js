@@ -1,5 +1,5 @@
 /**
- * Catálogo de suscripciones Dralo (FREE · PLUS · PREMIUM).
+ * Catálogo de suscripciones Dralo (FREE · PLUS). PREMIUM queda fuera del catálogo público.
  * Compatible con monetizacion_planes (nombre = slug) y Stripe (stripe_price_id opcional).
  */
 
@@ -136,7 +136,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 36500,
     descripcionCorta: 'Empieza a aprender inglés gratis.',
     descripcion:
-      'Nivel B2 disponible, 1 examen de prueba, Training con 3 vidas (se recupera 1 cada 10 horas), Quiz con 3 vidas (se recupera 1 cada 10 horas), Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes. A2 y B1 próximamente.',
+      'A2, B1 y B2: 1 examen de prueba. No el nivel completo. Sin C1 ni C2. Training con 3 vidas (se recupera 1 cada 10 horas), Quiz con 3 vidas (se recupera 1 cada 10 horas), Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes.',
     badge: null,
     badgeVariant: null,
     recommended: false,
@@ -144,16 +144,23 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     orden: 0,
     activo: true,
     highlights: [
-      'Nivel B2',
+      'A2, B1 y B2: 1 examen de prueba',
       'Training: 3 vidas (se recupera 1 cada 10 h)',
       'Quiz: 3 vidas (se recupera 1 cada 10 h)',
-      'A2 y B1: próximamente',
-      '1 examen de prueba',
       'Writing Correction: 1/mes',
       'Speaking Correction: 1/mes',
       '3 consultas Dralo Assistant al mes',
-      'Exam Strategies (tips por skill y parte)',
+      'Exam Strategies: 1ª parte de cada nivel y skill',
       'Soporte prioritario: hasta 72h',
+    ],
+    excludedHighlights: [
+      'A2, B1 y B2 completos',
+      'Corrección Writing avanzada',
+      'Dralo AI',
+      'Acceso prioritario a nuevas funciones',
+      'Seguimiento de progreso',
+      'Nivel C1',
+      'Nivel C2',
     ],
     entitlements: {
       levels: ['a2', 'b1', 'b2'],
@@ -183,13 +190,13 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     precio: 3.99,
     precioRegular: 7.99,
     precioLista: 9.99,
-    precioAnualLanzamiento: 1.99,
+    precioAnualLanzamiento: 1.99, // 23,88 € al año, cobrados de una vez
     precioAnualRegular: 5.99,
     precioLabel: '3,99€/mes',
     duracion_dias: 30,
     descripcionCorta: 'La opción más popular para preparar exámenes y mejorar rápidamente.',
     descripcion:
-      'Nivel B2, 10 exámenes mensuales, Training con vidas ilimitadas, Quiz con vidas ilimitadas, Writing Correction (10/mes), Speaking Correction (10/mes), corrección Writing avanzada y 30 consultas Dralo Assistant al día. A2, B1 y C1 próximamente.',
+      'Nivel B2, exámenes, Writing Correction, Speaking Correction, Dralo AI y consultas Dralo Assistant sin límite, Training y Quiz ilimitados, corrección Writing avanzada, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h). A2, B1 y C1 próximamente.',
     badge: '🏆 MÁS POPULAR',
     badgeVariant: 'popular',
     recommended: true,
@@ -201,29 +208,31 @@ export const DRALO_SUBSCRIPTION_PLANS = [
       'Training: vidas ilimitadas',
       'Quiz: vidas ilimitadas',
       'A2, B1 y C1: próximamente',
-      '10 exámenes mensuales',
-      'Writing Correction: 10/mes',
-      'Speaking Correction: 10/mes',
+      'Exámenes mensuales',
+      'Writing Correction',
+      'Speaking Correction',
       'Corrección Writing avanzada',
-      '30 consultas Dralo Assistant al día',
+      'Dralo AI',
+      'Consultas Dralo Assistant',
       'Exam Strategies',
+      'Acceso prioritario a nuevas funciones',
       'Seguimiento de progreso',
-      'Soporte prioritario: hasta 48h',
+      'Soporte prioritario: hasta 24h',
     ],
     entitlements: {
-      levels: ['a2', 'b1', 'b2', 'c1'],
-      examsPerMonth: 10,
+      levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
+      examsPerMonth: null,
       placementTest: true,
       writingBasic: true,
       writingAdvanced: true,
-      speakingCoach: false,
-      draloAiDaily: 30,
-      writingCorrectionMonthly: 10,
-      speakingCorrectionMonthly: 10,
-      speakingMissionsDaily: 10,
+      speakingCoach: true,
+      draloAiDaily: null,
+      writingCorrectionMonthly: null,
+      speakingCorrectionMonthly: null,
+      speakingMissionsDaily: 20,
       progressTracking: 'advanced',
-      priorityAccess: false,
-      prioritySupport: false,
+      priorityAccess: true,
+      prioritySupport: true,
       examStrategies: true,
       trainingLives: null,
       quizLives: null,
@@ -247,7 +256,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     recommended: false,
     stripe_price_id: null,
     orden: 2,
-    activo: true,
+    activo: false,
     highlights: [
       'Nivel B2',
       'Training: vidas ilimitadas',
@@ -294,7 +303,7 @@ export const FRIENDLY_GRANT_PLANS = [
     duracion_dias: 36500,
     descripcionCorta: 'Plan PLUS gratuito (asignación manual, sin Stripe).',
     descripcion:
-      'Mismos permisos que Plan PLUS: nivel B2, 10 exámenes mensuales, correcciones y Dralo Assistant. Solo asignable desde el panel de administración.',
+      'Mismos permisos que Plan PLUS: catálogo completo, correcciones, Dralo AI y Dralo Assistant sin límite práctico. Solo asignable desde el panel de administración.',
     badge: '🤝 FRIENDLY',
     badgeVariant: 'friendly',
     recommended: false,
@@ -308,19 +317,19 @@ export const FRIENDLY_GRANT_PLANS = [
       'No gestionado por Stripe',
     ],
     entitlements: {
-      levels: ['a2', 'b1', 'b2', 'c1'],
-      examsPerMonth: 10,
+      levels: ['a2', 'b1', 'b2', 'c1', 'c2'],
+      examsPerMonth: null,
       placementTest: true,
       writingBasic: true,
       writingAdvanced: true,
-      speakingCoach: false,
-      draloAiDaily: 30,
-      writingCorrectionMonthly: 10,
-      speakingCorrectionMonthly: 10,
-      speakingMissionsDaily: 10,
+      speakingCoach: true,
+      draloAiDaily: null,
+      writingCorrectionMonthly: null,
+      speakingCorrectionMonthly: null,
+      speakingMissionsDaily: 20,
       progressTracking: 'advanced',
-      priorityAccess: false,
-      prioritySupport: false,
+      priorityAccess: true,
+      prioritySupport: true,
       examStrategies: true,
       trainingLives: null,
       quizLives: null,
@@ -474,11 +483,24 @@ export function formatPlanPriceAmount(plan, billingCycle = 'monthly') {
   return formatEuroAmount(monthly);
 }
 
+/** Ahorro real del año completo frente a pagar el mismo plan mes a mes. */
+export function getPlanAnnualSavingsPercent(plan) {
+  const monthly = Number(plan?.precio) || 0;
+  const annualMonthly = getPlanMonthlyPrice(plan, 'annual');
+  if (monthly <= 0 || annualMonthly <= 0 || annualMonthly >= monthly) return null;
+  return Math.round(((monthly - annualMonthly) / monthly) * 100);
+}
+
 /** @param {'monthly'|'annual'} billingCycle */
 export function formatPlanPriceLabel(plan, billingCycle = 'monthly') {
+  if (billingCycle === 'annual') {
+    const total = getPlanMonthlyPrice(plan, 'annual') * 12;
+    if (total <= 0) return '0€';
+    return `${formatEuroAmount(total)}/año`;
+  }
   const monthly = getPlanMonthlyPrice(plan, billingCycle);
   if (monthly <= 0) return '0€';
-  return `${formatPlanPriceAmount(plan, billingCycle)}/mes`;
+  return `${formatEuroAmount(monthly)}/mes`;
 }
 
 /** Total anual facturado de una vez (precio mensual con descuento × 12). */
@@ -497,16 +519,16 @@ export const PLAN_COMPARISON_ROWS = [
   {
     id: 'a2',
     label: 'Nivel A2',
-    type: 'bool',
+    type: 'text',
     values: { free: COMING_SOON, premium: COMING_SOON, pro: COMING_SOON },
   },
   {
     id: 'b1',
     label: 'Nivel B1',
-    type: 'bool',
+    type: 'text',
     values: { free: COMING_SOON, premium: COMING_SOON, pro: COMING_SOON },
   },
-  { id: 'b2', label: 'Nivel B2', type: 'bool', values: { free: true, premium: true, pro: true } },
+  { id: 'b2', label: 'Nivel B2', type: 'text', values: { free: '1 examen de prueba', premium: true, pro: true } },
   {
     id: 'c1',
     label: 'Nivel C1',
@@ -517,7 +539,7 @@ export const PLAN_COMPARISON_ROWS = [
     id: 'c2',
     label: 'Nivel C2',
     type: 'bool',
-    values: { free: false, premium: false, pro: COMING_SOON },
+    values: { free: false, premium: COMING_SOON, pro: COMING_SOON },
   },
   {
     id: 'writing-advanced',
@@ -529,13 +551,13 @@ export const PLAN_COMPARISON_ROWS = [
     id: 'priority-features',
     label: 'Acceso prioritario a nuevas funciones',
     type: 'bool',
-    values: { free: false, premium: false, pro: true },
+    values: { free: false, premium: true, pro: true },
   },
   {
     id: 'priority-support',
     label: 'Soporte prioritario',
     type: 'text',
-    values: { free: 'Hasta 72h', premium: 'Hasta 48h', pro: 'Hasta 24h' },
+    values: { free: 'Hasta 72h', premium: 'Hasta 24h', pro: 'Hasta 24h' },
   },
   {
     id: 'training',
@@ -553,37 +575,37 @@ export const PLAN_COMPARISON_ROWS = [
     id: 'exams',
     label: 'Exámenes mensuales',
     type: 'text',
-    values: { free: '1', premium: '10 exámenes al mes', pro: true },
+    values: { free: '1', premium: true, pro: true },
   },
   {
     id: 'writing-correction',
     label: 'Writing Correction',
     type: 'text',
-    values: { free: '1/mes', premium: '10/mes', pro: true },
+    values: { free: '1/mes', premium: true, pro: true },
   },
   {
     id: 'speaking-correction',
     label: 'Speaking Correction',
     type: 'text',
-    values: { free: '1/mes', premium: '10/mes', pro: true },
+    values: { free: '1/mes', premium: true, pro: true },
   },
   {
     id: 'speaking',
     label: 'Dralo AI',
     type: 'text',
-    values: { free: false, premium: false, pro: true },
+    values: { free: false, premium: true, pro: true },
   },
   {
     id: 'exam-strategies',
     label: 'Exam Strategies',
-    type: 'bool',
-    values: { free: true, premium: true, pro: true },
+    type: 'text',
+    values: { free: '1ª parte', premium: true, pro: true },
   },
   {
     id: 'dralo-ai',
     label: 'Consultas Dralo Assistant',
     type: 'text',
-    values: { free: '3/mes', premium: '30/día', pro: true },
+    values: { free: '3/mes', premium: true, pro: true },
   },
   {
     id: 'progress',
@@ -599,7 +621,7 @@ export const PREMIUM_EXAM_LEVELS = [
   { slug: 'b1', label: 'B1', access: 'free', note: 'Incluido en FREE y todos los planes de pago.' },
   { slug: 'b2', label: 'B2', access: 'free', note: 'Incluido en FREE y todos los planes de pago.' },
   { slug: 'c1', label: 'C1', access: 'premium', note: 'Desde plan PLUS.' },
-  { slug: 'c2', label: 'C2', access: 'pro', note: 'Desde plan PREMIUM.' },
+  { slug: 'c2', label: 'C2', access: 'premium', note: 'Desde plan PLUS.' },
 ];
 
 /** Plantillas para monetizacion_planes (seed / sync). */
@@ -644,15 +666,13 @@ const PROFILE_PLAN_DISPLAY = {
   free: {
     descripcionCorta: 'Start learning English for free.',
     highlights: [
-      'Level B2',
+      'A2, B1 and B2: 1 trial exam',
       'Training: 3 lives (1 recovers every 10 hours)',
       'Quiz: 3 lives (1 recovers every 10 hours)',
-      'A2 and B1: coming soon',
-      '1 trial exam',
       'Writing Correction: 1/month',
       'Speaking Correction: 1/month',
       '3 Dralo Assistant queries per month',
-      'Exam Strategies (tips by skill and part)',
+      'Exam Strategies: part 1 of each level and skill',
       'Priority support: within 72h',
     ],
     badge: null,
@@ -678,13 +698,16 @@ const PROFILE_PLAN_DISPLAY = {
       'Training: unlimited lives',
       'Quiz: unlimited lives',
       'A2, B1 and C1: coming soon',
-      '10 exams per month',
-      'Writing Correction: 10/month',
-      'Speaking Correction: 10/month',
+      'Monthly exams',
+      'Writing Correction',
+      'Speaking Correction',
       'Advanced Writing correction',
-      '30 Dralo Assistant queries per day',
+      'Dralo AI',
+      'Dralo Assistant queries',
+      'Exam Strategies',
+      'Priority access to new features',
       'Progress tracking',
-      'Priority support: within 48h',
+      'Priority support: within 24h',
     ],
     badge: 'Most popular',
   },
@@ -735,6 +758,11 @@ export function getPlanProfileDisplay(plan) {
   };
 }
 
+/** Planes que se muestran en precios: Gratis y Plus. */
+export function getPublicSubscriptionPlans() {
+  return DRALO_SUBSCRIPTION_PLANS.filter((plan) => plan.activo !== false && !plan.adminGrantOnly);
+}
+
 export function getPlanBySlug(slug) {
   const s = normalizeUserPlanSlug(slug);
   const fromCatalog = DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === s);
@@ -765,15 +793,15 @@ export function planSlugFromDbRow(row) {
 }
 
 /** Mínimo plan slug que desbloquea un nivel CEFR. */
-const LEVEL_MIN_PLAN = { a2: 'free', b1: 'free', b2: 'free', c1: 'premium', c2: 'pro' };
+const LEVEL_MIN_PLAN = { a2: 'free', b1: 'free', b2: 'free', c1: 'premium', c2: 'premium' };
 
 const PLAN_RANK = {
   free: 0,
   starter: 1,
   premium: 2,
   friendly_plus: 2,
-  pro: 3,
-  friendly_premium: 3,
+  pro: 2,
+  friendly_premium: 2,
 };
 
 export function getPlanTierRank(slug) {

@@ -112,9 +112,12 @@ body.reading-night-mode .text-sky-700 {
 /* ——— Support panel (styled-jsx scoped classes) ——— */
 body.reading-night-mode .support-panel__title,
 body.reading-night-mode .support-panel__subtitle,
-body.reading-night-mode .auto-emails-panel__title,
 body.reading-night-mode .auto-emails-panel__subtitle {
   color: #f8fafc;
+}
+
+body.reading-night-mode .auto-emails-panel__title {
+  color: #fff;
 }
 
 body.reading-night-mode .auto-emails-panel__summary,

@@ -262,7 +262,7 @@ const FAQ = [
   },
   {
     q: '¿Qué incluye el plan gratuito y qué el Plus?',
-    a: 'En el plan gratuito hay 1 examen de prueba, 1 corrección de Writing al mes, Training y Quiz con 3 vidas (se recupera 1 cada 10 horas) y Exam Strategies. El Plan Plus incluye 10 exámenes al mes, 10 correcciones de Writing al mes con corrección avanzada, Training y Quiz con vidas ilimitadas, seguimiento del progreso y 30 consultas a Dralo Assistant al día.',
+    a: 'En el plan gratuito hay 1 examen de prueba, 1 corrección de Writing al mes, Training y Quiz con 3 vidas (se recupera 1 cada 10 horas) y la primera parte de Exam Strategies en cada nivel y skill. El Plan Plus incluye Exam Strategies completo, exámenes, Writing Correction, Speaking Correction y Dralo Assistant sin límite mensual, Dralo AI, Training y Quiz con vidas ilimitadas, corrección Writing avanzada, seguimiento del progreso, acceso prioritario a nuevas funciones y soporte prioritario en 24 horas.',
     published: true,
   },
   {

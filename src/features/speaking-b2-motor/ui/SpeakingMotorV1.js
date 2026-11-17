@@ -493,21 +493,15 @@ const SpeakingMotorV1 = forwardRef(function SpeakingMotorV1(
           </section>
         );
       }
-      if (!error) return null;
-      return (
-        <section className={shellClass}>
-          <p className={styles.error}>{error}</p>
-          <div className={styles.actions}>
-            <button type="button" className={styles.ghost} onClick={() => void beginAudioCheck()} disabled={busy}>
-              Try again
-            </button>
-          </div>
-        </section>
-      );
     }
     return (
       <section className={shellClass}>
-        {embedded ? null : (
+        {embedded ? (
+          <p className={styles.lead}>
+            Individual Part 1 interview, about two minutes. The examiner will not correct you during
+            the test.
+          </p>
+        ) : (
           <>
             <p className={styles.eyebrow}>B2 First · Speaking</p>
             <h2 className={styles.title}>{exam.title}</h2>

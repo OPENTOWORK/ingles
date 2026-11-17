@@ -54,14 +54,14 @@ function DraloAiPremiumDialog({ onClose }) {
         aria-labelledby="dralo-ai-premium-dialog-title"
         onClick={(event) => event.stopPropagation()}
       >
-        <p className="dralo-ai-premium-dialog__kicker">Plan Premium</p>
-        <h2 id="dralo-ai-premium-dialog-title">Esta función es Premium</h2>
+        <p className="dralo-ai-premium-dialog__kicker">Plan Plus</p>
+        <h2 id="dralo-ai-premium-dialog-title">Esta función es de Plus</h2>
         <p>
-          Puedes ver cómo está hecha la herramienta. Para usarla, pasa al plan Premium.
+          Puedes ver cómo está hecha la herramienta. Para usarla, pasa al Plan Plus.
         </p>
         <div className="dralo-ai-premium-dialog__actions">
           <Link href="/precios" className="dralo-ai-premium-dialog__primary">
-            Ver el plan Premium
+            Ver el Plan Plus
           </Link>
           <button type="button" className="dralo-ai-premium-dialog__ghost" onClick={onClose}>
             Seguir explorando

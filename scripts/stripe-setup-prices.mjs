@@ -125,6 +125,41 @@ function productIdOf(price) {
   return typeof price.product === 'string' ? price.product : price.product?.id || null;
 }
 
+/** El catálogo público solo vende los planes activos. Archiva el resto en Stripe. */
+async function archiveRetiredPaidPlans() {
+  const retired = DRALO_SUBSCRIPTION_PLANS.filter(
+    (plan) => plan.activo === false && Number(plan.precio) > 0,
+  );
+  if (!retired.length) return;
+
+  console.log('Planes de pago retirados del catálogo:\n');
+  for (const plan of retired) {
+    const productIds = new Set();
+    for (const interval of ['month', 'year']) {
+      const lookupKey = `dralo_${plan.slug}_${interval}`;
+      const existing = await findPriceByLookupKey(lookupKey);
+      if (!existing) {
+        console.log(`  ${lookupKey}: ya archivado o inexistente`);
+        continue;
+      }
+      await stripe.prices.update(existing.id, { active: false });
+      const productId = productIdOf(existing);
+      if (productId) productIds.add(productId);
+      console.log(`  ${lookupKey}: archivado (${existing.id})`);
+    }
+
+    for (const productId of productIds) {
+      const stillActive = await stripe.prices.list({ product: productId, active: true, limit: 1 });
+      if (stillActive.data.length) continue;
+      const product = await stripe.products.retrieve(productId);
+      if (!product.active) continue;
+      await stripe.products.update(productId, { active: false });
+      console.log(`  producto archivado: ${product.name} (${productId})`);
+    }
+    console.log('');
+  }
+}
+
 function upsertEnvLocal(lines) {
   if (!existsSync(ENV_LOCAL)) return;
   const keys = new Set(lines.map((line) => line.split('=')[0]));
@@ -141,6 +176,8 @@ function upsertEnvLocal(lines) {
 async function main() {
   console.log(`Stripe en modo ${isLive ? 'LIVE (dinero real)' : 'TEST'}\n`);
   console.log('Precios de lanzamiento (financialPlanConfig.js):\n');
+
+  await archiveRetiredPaidPlans();
 
   const envLines = [];
   const portalProducts = [];
@@ -163,7 +200,11 @@ async function main() {
 
     envLines.push(`STRIPE_PRICE_${plan.slug.toUpperCase()}_MONTHLY=${monthly.id}`);
     envLines.push(`STRIPE_PRICE_${plan.slug.toUpperCase()}_YEARLY=${yearly.id}`);
-    portalProducts.push({ product: productId, prices: [monthly.id, yearly.id] });
+    portalProducts.push({
+      product: productId,
+      prices: [monthly.id, yearly.id],
+      adjustable_quantity: { enabled: false },
+    });
     console.log('');
   }
 

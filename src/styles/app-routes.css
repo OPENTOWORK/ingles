@@ -6173,17 +6173,24 @@ button.exam-practice-level-strip__pill {
   opacity: 0.45;
 }
 
-@media (max-width: 540px) {
+@media (max-width: 720px) {
   .levels-exam-module-nav {
     flex-direction: column;
     align-items: stretch;
     gap: 0.55rem;
+    min-width: 0;
+    max-width: 100%;
   }
 
-  .levels-exam-module-nav--balanced {
+  .levels-exam-module-nav--balanced,
+  .levels-exam-module-nav--with-check.levels-exam-module-nav--balanced,
+  .levels-exam-module-nav--next-hint.levels-exam-module-nav--balanced {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    grid-template-columns: none;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .levels-exam-module-nav--centered-parts {
@@ -6207,9 +6214,22 @@ button.exam-practice-level-strip__pill {
   .levels-exam-module-nav__zone--center,
   .levels-exam-module-nav__zone--forward {
     width: 100%;
+    min-width: 0;
+    max-width: 100%;
     justify-self: stretch;
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .levels-exam-module-nav__exercise-pair,
+  .levels-exam-module-nav__part-pair,
+  .levels-exam-module-nav__next-exercise-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .levels-exam-module-nav__start,
@@ -6225,7 +6245,10 @@ button.exam-practice-level-strip__pill {
 
   .levels-exam-module-nav__btn {
     width: 100%;
+    max-width: 100%;
     justify-content: center;
+    white-space: normal;
+    text-align: center;
   }
 
   .levels-exam-module-nav__btn--continue {

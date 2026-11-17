@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect } from 'react';
 import SubscriptionPlansSection from '@/components/subscriptions/SubscriptionPlansSection';
 import PageHero from '@/components/PageHero';
-import { DRALO_SUBSCRIPTION_PLANS } from '@/data/financialPlanConfig';
+import { getPublicSubscriptionPlans } from '@/data/financialPlanConfig';
 import { useUserRole } from '@/context/UserRoleContext';
 import { canViewPricing } from '@/utils/pricingAccess';
 import { landingFont } from '@/components/home/landing/landingFont';
@@ -16,7 +16,7 @@ function planHeroStatLabel(plan) {
   return plan.precioLabel?.replace('/mes', '') || `${plan.precio}€`;
 }
 
-const PLAN_HERO_STATS = DRALO_SUBSCRIPTION_PLANS.map((plan) => ({
+const PLAN_HERO_STATS = getPublicSubscriptionPlans().map((plan) => ({
   value: plan.nombre,
   label: planHeroStatLabel(plan),
 }));

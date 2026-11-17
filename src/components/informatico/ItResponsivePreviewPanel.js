@@ -9,6 +9,7 @@ import {
   getItPreviewPresetsForRole,
   isItPreviewPathAccessible,
 } from '@/lib/itPreviewRole';
+import { STRIPE_OPEN_MESSAGE, isStripeHostedUrl } from '@/lib/stripe/redirect';
 
 const DEVICES = [
   { id: 'mobile', label: 'Móvil', width: 390, height: 844, bezel: 'rounded-[2rem] border-[10px]' },
@@ -20,6 +21,55 @@ const DEVICES = [
     bezel: 'rounded-[1.25rem] border-[12px]',
   },
 ];
+
+const APP_DEVICES = [
+  {
+    id: 'ios',
+    platform: 'ios',
+    label: 'Apple',
+    width: 390,
+    height: 844,
+    bezel: 'rounded-[2.6rem] border-[11px]',
+  },
+  {
+    id: 'android',
+    platform: 'android',
+    label: 'Android',
+    width: 412,
+    height: 892,
+    bezel: 'rounded-[1.5rem] border-[8px]',
+  },
+];
+
+function StoreChrome({ platform }) {
+  if (platform === 'ios') {
+    return (
+      <div className="pointer-events-none absolute inset-0 z-10" aria-hidden>
+        <div className="absolute left-0 right-0 top-0 flex h-[54px] items-end justify-between px-7 pb-1.5 text-[13px] font-semibold text-slate-900">
+          <span>9:41</span>
+          <span className="mb-0.5 h-2.5 w-6 rounded-[3px] border border-slate-900" />
+        </div>
+        <div className="absolute left-1/2 top-[11px] h-[34px] w-[118px] -translate-x-1/2 rounded-full bg-slate-900" />
+        <div className="absolute bottom-2 left-1/2 h-[5px] w-[132px] -translate-x-1/2 rounded-full bg-slate-900/75" />
+      </div>
+    );
+  }
+
+  if (platform === 'android') {
+    return (
+      <div className="pointer-events-none absolute inset-0 z-10" aria-hidden>
+        <div className="absolute left-0 right-0 top-0 flex h-8 items-center justify-between px-4 text-[12px] font-medium text-slate-900">
+          <span>9:41</span>
+          <span className="h-2.5 w-5 rounded-[2px] border border-slate-800" />
+        </div>
+        <div className="absolute left-1/2 top-2 h-2.5 w-2.5 -translate-x-1/2 rounded-full bg-slate-900" />
+        <div className="absolute bottom-1.5 left-1/2 h-1 w-24 -translate-x-1/2 rounded-full bg-slate-800/80" />
+      </div>
+    );
+  }
+
+  return null;
+}
 
 function normalizePath(input = '') {
   const trimmed = String(input || '').trim();
@@ -82,36 +132,45 @@ function DevicePreview({ device, src, reloadToken }) {
           className={`relative shrink-0 overflow-hidden border-slate-900 bg-slate-900 shadow-2xl ${device.bezel}`}
           style={{ width: frameWidth, height: frameHeight }}
         >
-          {device.id === 'mobile' ? (
-            <div
-              className="pointer-events-none absolute left-1/2 top-2 z-10 h-1.5 w-16 -translate-x-1/2 rounded-full bg-slate-700"
-              aria-hidden
-            />
-          ) : null}
-          <iframe
-            key={`${device.id}-${src}`}
-            title={`Vista ${device.label}`}
-            src={src}
-            credentialless=""
-            width={device.width}
-            height={device.height}
-            className="block bg-white"
+          <div
+            className="absolute left-0 top-0"
             style={{
+              width: device.width,
+              height: device.height,
               transform: `scale(${scale})`,
               transformOrigin: 'top left',
-              border: 'none',
             }}
-          />
+          >
+            {device.id === 'mobile' ? (
+              <div
+                className="pointer-events-none absolute left-1/2 top-2 z-10 h-1.5 w-16 -translate-x-1/2 rounded-full bg-slate-700"
+                aria-hidden
+              />
+            ) : null}
+            <StoreChrome platform={device.platform} />
+            <iframe
+              key={`${device.id}-${src}`}
+              title={`Vista ${device.label}`}
+              src={src}
+              credentialless=""
+              width={device.width}
+              height={device.height}
+              className="block bg-white"
+              style={{ border: 'none' }}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
-export default function ItResponsivePreviewPanel() {
+export default function ItResponsivePreviewPanel({ variant = 'web' }) {
+  const appPreview = variant === 'app';
+  const rootRef = useRef(null);
   const [previewRoleId, setPreviewRoleId] = useState('student');
-  const [path, setPath] = useState('/niveles/b2');
-  const [draftPath, setDraftPath] = useState('/niveles/b2');
+  const [path, setPath] = useState(appPreview ? '/login' : '/niveles/b2');
+  const [draftPath, setDraftPath] = useState(appPreview ? '/login' : '/niveles/b2');
   const [reloadToken, setReloadToken] = useState(0);
   const [showTabletLandscape, setShowTabletLandscape] = useState(false);
 
@@ -124,13 +183,23 @@ export default function ItResponsivePreviewPanel() {
 
   const previewPath = useMemo(() => normalizePath(path), [path]);
 
-  const previewUrl = useMemo(() => {
-    if (typeof window === 'undefined') return previewPath;
-    const base = /^https?:\/\//i.test(previewPath)
-      ? previewPath
-      : `${window.location.origin}${previewPath}`;
-    return appendItPreviewParams(base, { roleId: previewRoleId, reloadToken });
-  }, [previewPath, previewRoleId, reloadToken]);
+  const previewUrlFor = useCallback(
+    (platform = '') => {
+      if (typeof window === 'undefined') return previewPath;
+      const base = /^https?:\/\//i.test(previewPath)
+        ? previewPath
+        : `${window.location.origin}${previewPath}`;
+      return appendItPreviewParams(base, {
+        roleId: previewRoleId,
+        reloadToken,
+        app: appPreview,
+        platform,
+      });
+    },
+    [previewPath, previewRoleId, reloadToken, appPreview],
+  );
+
+  const previewUrl = previewUrlFor(appPreview ? 'ios' : '');
 
   const tabletDevice = useMemo(() => {
     const base = DEVICES.find((d) => d.id === 'tablet');
@@ -160,18 +229,46 @@ export default function ItResponsivePreviewPanel() {
 
   const reloadPreviews = () => setReloadToken((t) => t + 1);
 
+  useEffect(() => {
+    const onMessage = (event) => {
+      const data = event.data;
+      if (!data || data.type !== STRIPE_OPEN_MESSAGE || !isStripeHostedUrl(data.url)) return;
+      const root = rootRef.current;
+      if (!root) return;
+      const frames = [...root.querySelectorAll('iframe')];
+      let owned = false;
+      let unreadable = frames.length === 0;
+      for (const frame of frames) {
+        try {
+          if (!frame.contentWindow) unreadable = true;
+          else if (frame.contentWindow === event.source) owned = true;
+        } catch {
+          unreadable = true;
+        }
+      }
+      if (!owned && !unreadable) return;
+      const sameSite = event.origin === window.location.origin || event.origin === 'null';
+      if (!owned && !sameSite) return;
+      window.location.assign(data.url);
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
+
   const selectedRole =
     IT_PREVIEW_ROLE_OPTIONS.find((option) => option.id === previewRoleId) ||
     IT_PREVIEW_ROLE_OPTIONS[1];
 
   return (
-    <div className="space-y-4">
+    <div ref={rootRef} className="space-y-4">
       <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">Visualización en móvil y tablet</h2>
+        <h2 className="text-lg font-semibold text-slate-900">
+          {appPreview ? 'Visualización de la app' : 'Visualización en móvil y tablet'}
+        </h2>
         <p className="mt-1 max-w-3xl text-sm text-slate-600">
-          Dentro de móvil y tablet puedes iniciar y cerrar sesión con otras cuentas, o quedarte sin sesión.
-          Eso no cierra la tuya. Cada marco tiene su propia sesión. Visitante muestra la web sin login; el
-          resto de roles cambia los menús de esa vista.
+          {appPreview
+            ? 'A la izquierda se ve en Apple y a la derecha en Android. Las dos cargan las mismas pantallas, sin el aviso de instalar y con la barra de cada sistema. Iniciar sesión dentro de un marco no cierra la tuya.'
+            : 'Dentro de móvil y tablet puedes iniciar y cerrar sesión con otras cuentas, o quedarte sin sesión. Eso no cierra la tuya. Cada marco tiene su propia sesión. Visitante muestra la web sin login; el resto de roles cambia los menús de esa vista.'}
         </p>
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
@@ -272,22 +369,37 @@ export default function ItResponsivePreviewPanel() {
         </form>
 
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-600">
-          <label className="inline-flex cursor-pointer items-center gap-2">
-            <input
-              type="checkbox"
-              checked={showTabletLandscape}
-              onChange={(e) => setShowTabletLandscape(e.target.checked)}
-              className="rounded border-slate-300"
-            />
-            Tablet en horizontal (1024 × 768)
-          </label>
+          {appPreview ? null : (
+            <label className="inline-flex cursor-pointer items-center gap-2">
+              <input
+                type="checkbox"
+                checked={showTabletLandscape}
+                onChange={(e) => setShowTabletLandscape(e.target.checked)}
+                className="rounded border-slate-300"
+              />
+              Tablet en horizontal (1024 × 768)
+            </label>
+          )}
           <span className="text-xs text-slate-500">Ruta: {previewPath}</span>
         </div>
       </div>
 
       <div className="grid min-h-[640px] grid-cols-1 gap-4 xl:grid-cols-2">
-        <DevicePreview device={DEVICES[0]} src={previewUrl} reloadToken={reloadToken} />
-        <DevicePreview device={tabletDevice} src={previewUrl} reloadToken={reloadToken} />
+        {appPreview ? (
+          APP_DEVICES.map((device) => (
+            <DevicePreview
+              key={device.id}
+              device={device}
+              src={previewUrlFor(device.platform)}
+              reloadToken={reloadToken}
+            />
+          ))
+        ) : (
+          <>
+            <DevicePreview device={DEVICES[0]} src={previewUrl} reloadToken={reloadToken} />
+            <DevicePreview device={tabletDevice} src={previewUrl} reloadToken={reloadToken} />
+          </>
+        )}
       </div>
     </div>
   );

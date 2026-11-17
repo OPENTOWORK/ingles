@@ -30,7 +30,11 @@ export function applyAdminShellMenuOrder(items = [], savedOrder = []) {
 }
 
 /** Items added after a saved order was stored. Keep them next to their anchor until the user reorders. */
-const UNSAVED_ITEM_ANCHORS = [{ href: '/soporte/correos', after: '/admin/marketing' }];
+const UNSAVED_ITEM_ANCHORS = [
+  { href: '/soporte/correos', after: '/admin/marketing' },
+  { href: '/admin/plan-objetivos', after: '/admin/marketing' },
+  { href: '/admin/notificaciones', after: '/admin/plan-objetivos' },
+];
 
 function moveItemAfter(items, href, afterHref) {
   const index = items.findIndex((item) => normalizeHref(item.href) === href);

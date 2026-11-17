@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { isDraloAiLockedForRole } from '@/config/appNavMenu';
-import { isProTierPlanSlug } from '@/data/financialPlanConfig';
+import { isPlusTierPlanSlug, isProTierPlanSlug } from '@/data/financialPlanConfig';
 import { getSupabaseUserFromRequest } from '@/lib/getSupabaseUserFromRequest';
 import { resolveUserPlanSlug, shouldApplyPlanUsageLimits } from '@/lib/planAccess';
 import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
@@ -29,9 +29,9 @@ export function canAccessDraloAiForRole(userRole) {
   return !isDraloAiLockedForRole(userRole);
 }
 
-/** Dralo AI en la tabla de precios: solo el plan Premium (y Friendly Premium). */
+/** Dralo AI: Plan Plus y quien conserva el antiguo Premium. */
 export function studentPlanIncludesDraloAi(planSlug) {
-  return isProTierPlanSlug(planSlug);
+  return isPlusTierPlanSlug(planSlug) || isProTierPlanSlug(planSlug);
 }
 
 /** Resolve session, role and plan access for Dralo AI routes and APIs. */

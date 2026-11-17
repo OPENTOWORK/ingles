@@ -494,7 +494,9 @@ export default function AutomatedEmailsPanel() {
         }
         .auto-emails-panel__title {
           margin: 0;
-          font-size: 1.15rem;
+          font-size: 1.45rem;
+          font-weight: 700;
+          color: #000;
         }
         .auto-emails-panel__subtitle {
           margin: 0;

@@ -3,6 +3,28 @@
 import Link from 'next/link';
 import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
 
+export function ExamStrategiesPlusPartScreen() {
+  return (
+    <main className="shell niveles-page" style={{ padding: '2rem 1.5rem', maxWidth: 520 }}>
+      <h1 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.75rem' }}>
+        Esta parte es del Plan Plus
+      </h1>
+      <p style={{ color: '#4b5563', lineHeight: 1.6, marginBottom: '1rem' }}>
+        En el plan gratuito puedes leer la primera parte de cada nivel y de cada skill. El resto de
+        Exam Strategies está en el Plan Plus.
+      </p>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+        <Link href="/precios" className="home-cta__btn home-cta__btn--inline">
+          Ver el Plan Plus
+        </Link>
+        <Link href="/exam-strategies" className="home-cta__btn home-cta__btn--inline">
+          Volver a Exam Strategies
+        </Link>
+      </div>
+    </main>
+  );
+}
+
 export function ExamStrategiesBlockedScreen() {
   return (
     <main className="shell niveles-page" style={{ padding: '2rem 1.5rem', maxWidth: 520 }}>

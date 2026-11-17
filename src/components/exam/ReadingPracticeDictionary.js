@@ -302,32 +302,23 @@ export default function ReadingPracticeDictionary({ lang = 'en', alwaysOn = fals
         )
       : null;
 
-  if (alwaysOn) return popupView;
+  const stateLabel = active ? (en ? 'On' : 'Activado') : en ? 'Off' : 'Desactivado';
 
   return (
-    <aside
-      className={[
-        'levels-listening-strategy',
-        'exam-practice-rail-disclosure',
-        'reading-dictionary-tool',
-        active ? 'exam-practice-rail-disclosure--open' : '',
-      ]
-        .filter(Boolean)
-        .join(' ')}
-    >
-      <button
-        type="button"
-        className="levels-listening-strategy__toggle levels-listening-strategy__toggle--dictionary"
-        aria-pressed={active}
-        title={hint}
-        onClick={() => setActive((value) => !value)}
-      >
-        <span className="reading-dictionary-tool__icon" aria-hidden>
-          Aa
-        </span>
-        <span>{label}</span>
-      </button>
+    <>
+      <div className="reading-practice-header-tools reading-dictionary-tool">
+        <button
+          type="button"
+          className={`reading-practice-header-tools__btn${active ? ' is-active' : ''}`}
+          aria-pressed={active}
+          title={hint}
+          onClick={() => setActive((value) => !value)}
+        >
+          <span className="reading-practice-header-tools__btn-title">{label}</span>
+          <span className="reading-practice-header-tools__btn-state">{stateLabel}</span>
+        </button>
+      </div>
       {popupView}
-    </aside>
+    </>
   );
 }

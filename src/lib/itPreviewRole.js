@@ -20,6 +20,8 @@ import {
 
 export const IT_PREVIEW_ROLE_PARAM = 'itPreviewRole';
 export const IT_PREVIEW_RELOAD_PARAM = '_itPreview';
+export const IT_PREVIEW_APP_PARAM = 'itPreviewApp';
+export const IT_PREVIEW_PLATFORM_PARAM = 'itPreviewPlatform';
 
 /** Roles disponibles en el panel informático (solo UI; no cambia permisos reales). */
 export const IT_PREVIEW_ROLE_OPTIONS = [
@@ -199,10 +201,14 @@ export function getItPreviewNavSummary(roleId = 'student') {
   return items;
 }
 
-export function appendItPreviewParams(url, { roleId, reloadToken = 0 } = {}) {
+export function appendItPreviewParams(url, { roleId, reloadToken = 0, app = false, platform = '' } = {}) {
   const base = String(url || '');
   const sep = base.includes('?') ? '&' : '?';
   const parts = [`${IT_PREVIEW_RELOAD_PARAM}=${reloadToken}`];
   if (roleId) parts.push(`${IT_PREVIEW_ROLE_PARAM}=${encodeURIComponent(roleId)}`);
+  if (app) parts.push(`${IT_PREVIEW_APP_PARAM}=1`);
+  if (app && (platform === 'ios' || platform === 'android')) {
+    parts.push(`${IT_PREVIEW_PLATFORM_PARAM}=${platform}`);
+  }
   return `${base}${sep}${parts.join('&')}`;
 }

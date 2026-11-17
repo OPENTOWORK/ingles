@@ -287,7 +287,7 @@ export default function MarketingOperationsPanel({ section }) {
           <p className={styles.lead}>ROAS y CAC</p>
           <p className={styles.meta}>
             No hay gasto de anuncios cargado, así que ROAS y CAC no se pueden calcular. El ingreso de arriba
-            es el de los planes de pago activos: Plus 3,99 €/mes y Premium 8,99 €/mes (o su equivalente anual).
+            es el del Plan Plus, a 3,99 €/mes (o su equivalente anual). Premium ya no se vende.
           </p>
         </div>
       </section>

@@ -231,6 +231,13 @@ a:hover {
   }
 }
 
+/* En la home con sesión, el móvil y la tablet llevan Legal y privacidad dentro del menú. */
+@media (max-width: 1099px) {
+  body.has-home-side-menu .legal-footer {
+    display: none;
+  }
+}
+
 .footer-review__title {
   display: inline-flex;
   flex-direction: row;
@@ -1994,6 +2001,14 @@ body.nav-open {
       bottom: max(12px, env(safe-area-inset-bottom, 0px));
       height: auto;
       max-height: calc(100dvh - 5.25rem);
+      overflow: hidden;
+    }
+
+    .app-side-menu--open .app-side-menu__panel {
+      flex: 1 1 auto;
+      height: 100%;
+      max-height: 100%;
+      min-height: 0;
     }
   }
 
@@ -3904,4 +3919,60 @@ body:not(.reading-night-mode) .precios-page .page-hero__mascot-img {
     max-width: 31rem;
     font-size: 0.9rem;
   }
+}
+
+/* App nativa. El navegador no lleva la clase; la vista previa de la app sí. */
+html.dralo-native-app {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html.dralo-native-app,
+html.dralo-native-app body {
+  overscroll-behavior-y: none;
+}
+
+html.dralo-native-app body {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html.dralo-native-app .full-page-layout {
+  min-height: 100dvh;
+}
+
+html.dralo-native-ios {
+  --dralo-safe-top: 54px;
+  --dralo-safe-bottom: 28px;
+}
+
+html.dralo-native-android {
+  --dralo-safe-top: 32px;
+  --dralo-safe-bottom: 24px;
+}
+
+html.dralo-native-app .site-header {
+  padding-top: var(--dralo-safe-top, env(safe-area-inset-top, 0px));
+}
+
+html.dralo-native-app .legal-footer {
+  padding-bottom: calc(1.05rem + var(--dralo-safe-bottom, env(safe-area-inset-bottom, 0px)));
+}
+
+html.dralo-native-app .site-header__install,
+html.dralo-native-app [data-home-install-slot],
+html.dralo-native-app .home-install-app,
+html.dralo-native-app .cookie-banner,
+html.dralo-native-app .cookie-settings-panel {
+  display: none !important;
+}
+
+html.dralo-native-app input,
+html.dralo-native-app textarea,
+html.dralo-native-app select {
+  font-size: 16px;
+}
+
+html.dralo-native-app .site-assistant-fab {
+  right: calc(1.25rem + env(safe-area-inset-right, 0px));
+  bottom: calc(1.25rem + var(--dralo-safe-bottom, env(safe-area-inset-bottom, 0px)));
 }

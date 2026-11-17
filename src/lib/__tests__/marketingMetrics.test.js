@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   readAllMarketingRows, readMarketingRowsByIds, buildAttributionSummary,
-  visitorElapsedSeconds, summarizeClassifiedVisitors,
+  visitorElapsedSeconds, summarizeClassifiedVisitors, parseStoredUtc, signedUpDuringVisit,
 } from '../marketingMetrics.js';
 
 function paginated(rows, cap = 500) {
@@ -173,4 +173,51 @@ test('summary route reports database failure instead of a plausible partial tota
   const result = await GET({});
   assert.equal(result.status, 500);
   assert.equal(result.body.entered, undefined);
+});
+
+test('a naive UTC signup time still counts on the registration day, once per person', () => {
+  assert.equal(parseStoredUtc('2026-11-15 02:25:24.067854'), '2026-11-15T02:25:24.067Z');
+  assert.equal(
+    signedUpDuringVisit('2026-11-15 02:25:24.067854', '2026-11-15T02:24:45.487Z'),
+    true,
+  );
+  assert.equal(
+    signedUpDuringVisit('2026-11-15 07:03:10.338377', '2026-11-15T06:59:23.155Z'),
+    true,
+  );
+  assert.equal(
+    signedUpDuringVisit('2026-01-01 00:00:00', '2026-11-15T06:46:42.870Z'),
+    false,
+  );
+});
+
+test('summary route counts each new account once, on the day the account was created', async () => {
+  const db = fakeDb({
+    marketing_visitors: [
+      { visitor_id: 'a1', user_id: 'u1', created_at: '2026-11-15T02:24:45.487Z', last_seen_at: '2026-11-15T02:24:45.179Z' },
+      { visitor_id: 'a2', user_id: 'u1', created_at: '2026-11-15T02:26:20.686Z', last_seen_at: '2026-11-15T02:42:43.445Z' },
+      { visitor_id: 'b1', user_id: 'u2', created_at: '2026-11-15T06:46:42.870Z', last_seen_at: '2026-11-15T09:36:00.726Z' },
+      { visitor_id: 'c1', user_id: 'u3', created_at: '2026-11-15T06:59:23.155Z', last_seen_at: '2026-11-15T07:03:25.777Z' },
+      { visitor_id: 'c2', user_id: 'u3', created_at: '2026-11-15T07:04:00.242Z', last_seen_at: '2026-11-15T07:17:30.216Z' },
+      { visitor_id: 'd1', user_id: 'u4', created_at: '2026-11-10T08:10:35.828Z', last_seen_at: '2026-11-15T10:12:32.445Z' },
+      { visitor_id: 'anon', user_id: null, created_at: '2026-11-15T11:00:00.000Z', last_seen_at: '2026-11-15T11:05:00.000Z' },
+    ],
+    Usuarios_y_Perfil_users: [
+      { id: 'u1', rol_id: 'alumno', email: 'a@example.test', creado_en: '2026-11-15 02:25:24.067854' },
+      { id: 'u2', rol_id: 'alumno', email: 'b@example.test', creado_en: '2026-11-15 06:46:48.315054' },
+      { id: 'u3', rol_id: 'alumno', email: 'c@example.test', creado_en: '2026-11-15 07:03:10.338377' },
+      { id: 'u4', rol_id: 'alumno', email: 'd@example.test', creado_en: '2026-11-15 09:45:50.496683' },
+    ],
+    Usuarios_y_Perfil_roles: [{ id: 'alumno', nombre: 'alumno' }],
+  });
+  const GET = await loadSummaryRoute(async () => ({ db }));
+  const result = await GET({});
+  assert.equal(result.status, 200);
+  assert.equal(result.body.registered, 4);
+  assert.equal(result.body.unregistered, 1);
+  assert.equal(result.body.entered, 5);
+  const signupDays = result.body.ipLog
+    .filter((row) => row.kind === 'account')
+    .map((row) => row.seenAt.slice(0, 10));
+  assert.deepEqual(signupDays, ['2026-11-15', '2026-11-15', '2026-11-15', '2026-11-15']);
 });

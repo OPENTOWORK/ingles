@@ -27,6 +27,9 @@ test('other roles see every module, locked without permission', () => {
   assert.equal(teacher.find((item) => item.label === 'Tareas').locked, false);
   assert.equal(teacher.find((item) => item.label === 'Analíticas').locked, true);
   assert.equal(teacher.find((item) => item.label === 'Facturación').locked, true);
+  assert.equal(teacher.find((item) => item.label === 'Visualización de la app').section, 'Informática');
+  assert.equal(teacher.find((item) => item.label === 'Visualización de la app').locked, false);
+  assert.equal(labels('soporte').find((item) => item.label === 'Visualización de la app').locked, true);
   assert.equal(shouldShowAdminShell('/teacher', 'profesor'), true);
   assert.equal(shouldShowAdminShell('/buzon', 'teacher'), true);
   assert.equal(shouldShowAdminShell('/exam-practice/b2', 'profesor'), false);

@@ -7,11 +7,26 @@ import { examStrategiesSkillPath } from '@/config/appRoutes';
 import { landingFont } from '@/components/home/landing/landingFont';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isGuestExamStrategiesChapterAllowed } from '@/lib/guestPreviewAccess';
+import { isFreeExamStrategiesPathAllowed } from '@/lib/examStrategiesPlanAccess';
+import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
+import { ExamStrategiesPlusPartScreen } from '@/components/exam/ExamStrategiesFeatureGuard';
 
 export default function ExamStrategiesChapterView({ skill, title, intro, content }) {
   const pathname = usePathname();
   const { session } = useUserRole();
+  const { firstPartOnly, loading } = useExamStrategiesAccess();
   const sectionBackHref = examStrategiesSkillPath(skill);
+
+  if (session && (loading || (firstPartOnly && !isFreeExamStrategiesPathAllowed(pathname)))) {
+    if (loading) {
+      return (
+        <main className={`shell content-hub-shell teoria-page exam-strategies-chapter-page ${landingFont.variable}`}>
+          <p>Cargando…</p>
+        </main>
+      );
+    }
+    return <ExamStrategiesPlusPartScreen />;
+  }
 
   if (!session && !isGuestExamStrategiesChapterAllowed(pathname)) {
     return (

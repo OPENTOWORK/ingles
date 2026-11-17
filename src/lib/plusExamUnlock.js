@@ -1,9 +1,8 @@
 /**
- * Desbloqueo progresivo de exámenes B2 para plan PLUS (slug `premium`).
- * Mes 1 → exámenes 1–10, mes 2 → 11–20, etc., hasta completar el catálogo.
+ * Cupo de exámenes B2. El plan gratuito tiene el examen 1.
+ * Plus y el antiguo Premium abren el catálogo completo.
  */
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
-import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
 
 export const PLUS_EXAMS_UNLOCK_BATCH = 10;
 
@@ -36,12 +35,9 @@ export function isComplimentaryExamModeSlot(examSlot) {
   return Number(examSlot) === 1;
 }
 
-export function getMaxExamSlotForPlan(planSlug, { subscriptionMonths = null } = {}) {
+export function getMaxExamSlotForPlan(planSlug) {
   const slug = String(planSlug || 'free').toLowerCase();
   if (slug === 'free') return 1;
-  if (isPlusTierPlanSlug(slug)) {
-    return getPlusMaxExamSlot(subscriptionMonths ?? 1);
-  }
   return B2_EXAM_SLOT_MAX;
 }
 

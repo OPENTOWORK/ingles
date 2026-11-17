@@ -1294,7 +1294,6 @@ function UseOfEnglishExamsPageInner() {
 
   return (
     <>
-    <ReadingPracticeDictionary alwaysOn lang="en" />
     <main
       className={`levels-exam-practice-root ${landingFont.variable}`}
       style={{
@@ -1340,6 +1339,7 @@ function UseOfEnglishExamsPageInner() {
           <SiteMascot variant={10} width={128} alt="" />
         </div>
         <p className="levels-b2-practice__subtitle">Parts 1 to 4</p>
+        <ReadingPracticeDictionary lang="en" />
       {canSeeRefreshControls && (
         <div className="levels-b2-practice__refresh">
           <button

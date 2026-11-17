@@ -215,10 +215,10 @@ export const CAMPAIGN_FAQ = [
     a: 'No. La academia o la profesora enseñan. Dralo sirve para practicar fuera de clase, ver el feedback y seguir el progreso.',
   },
   {
-    q: '¿Qué ocurre si más adelante quiero Premium?',
-    a: PREMIUM_PUBLIC_PRICE.startsWith('[')
+    q: '¿Qué ocurre si más adelante quiero el plan de pago?',
+    a: PLUS_PUBLIC_PRICE.startsWith('[')
       ? '[COMPLETAR]'
-      : `El catálogo público tiene un plan Premium por encima de Plus, a ${PREMIUM_PUBLIC_PRICE}. Se consulta en la página de precios.`,
+      : `El plan de pago es Plus, a ${PLUS_PUBLIC_PRICE}, e incluye el catálogo completo. Se consulta en la página de precios.`,
   },
 ];
 
