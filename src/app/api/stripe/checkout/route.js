@@ -56,7 +56,11 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Servidor sin configurar.' }, { status: 503 });
     }
 
-    const currentPlanSlug = await resolveUserPlanSlug(auth.user.id, auth.user.user_metadata);
+    const currentPlanSlug = await resolveUserPlanSlug(
+      auth.user.id,
+      auth.user.user_metadata,
+      auth.accessToken,
+    );
     if (!canUpgradeToPlan(currentPlanSlug, plan.slug)) {
       return NextResponse.json({ error: 'Ya tienes este plan o uno superior.' }, { status: 400 });
     }

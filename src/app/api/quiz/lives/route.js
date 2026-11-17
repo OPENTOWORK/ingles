@@ -10,7 +10,7 @@ const noStore = { 'Cache-Control': 'no-store, no-cache, must-revalidate' };
 async function contextFor(req) {
   const auth = await getSupabaseUserFromRequest(req);
   if (!auth?.user?.id) return { error: NextResponse.json({ error: 'AUTH_REQUIRED' }, { status: 401, headers: noStore }) };
-  const ctx = await getStudentPlanContext(auth.user.id, auth.user.email ?? '', auth.user.user_metadata);
+  const ctx = await getStudentPlanContext(auth.user.id, auth.user.email ?? '', auth.user.user_metadata, auth.accessToken);
   return { userId: auth.user.id, ctx };
 }
 

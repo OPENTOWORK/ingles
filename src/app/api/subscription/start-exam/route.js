@@ -39,6 +39,7 @@ export async function POST(req) {
     auth.user.id,
     auth.user.email ?? '',
     auth.user.user_metadata,
+    auth.accessToken,
   );
 
   if (!ctx.applyLimits) {

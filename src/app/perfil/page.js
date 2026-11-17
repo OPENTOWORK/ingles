@@ -42,7 +42,15 @@ import {
   isCustomProfilePhotoUrl,
   resolveProfileAvatarDisplay,
 } from '@/lib/profileDefaultAvatar';
-import { authMetadataPlanSlug, getPlanBySlug, getPlanProfileDisplay } from '@/data/financialPlanConfig';
+import {
+  authMetadataPlanSlug,
+  getPlanBySlug,
+  getPlanProfileDisplay,
+  isPlusTierPlanSlug,
+  isProTierPlanSlug,
+  normalizeUserPlanSlug,
+} from '@/data/financialPlanConfig';
+import { syncSubscriptionAfterCheckout } from '@/lib/stripe/client';
 import { canViewPricing } from '@/utils/pricingAccess';
 import { getPersonalizedRecommendations } from '@/utils/adaptiveLearning';
 import { formatProfileStudyTimer, useProfileStudyTimer } from '@/context/ProfileStudyTimerContext';
@@ -187,11 +195,88 @@ export default function ProfilePage() {
 
   const router = useRouter();
   const { userRole, session: layoutSession } = useUserRole();
-  const { subscription, isActive: subscriptionIsActive } = useSubscription();
+  const {
+    subscription,
+    isActive: subscriptionIsActive,
+    loading: subscriptionLoading,
+    refresh: refreshSubscription,
+  } = useSubscription();
   const isStudent = usesStudentContentRestrictions(userRole);
-  const { applyLimits, progressTracking, loading: planLoading, planSlug } = usePlanEntitlements();
-  const showProgressTracking = !applyLimits || progressTracking;
-  const showFreePlanUpgrade = !planLoading && applyLimits && !progressTracking;
+  const {
+    applyLimits,
+    progressTracking,
+    loading: planLoading,
+    planSlug,
+    refresh: refreshEntitlements,
+  } = usePlanEntitlements();
+  const [activatingPlan, setActivatingPlan] = useState(false);
+
+  const livePlanSlug =
+    subscriptionIsActive && subscription?.plan_id
+      ? normalizeUserPlanSlug(subscription.plan_id)
+      : null;
+  const metadataPlanSlug = authMetadataPlanSlug(user?.user_metadata?.subscription_plan);
+  const subscriptionEnded = Boolean(subscription) && !subscriptionIsActive;
+  const unlockedPlanSlug = subscriptionEnded
+    ? null
+    : [livePlanSlug, planSlug, metadataPlanSlug].find(
+        (slug) => isPlusTierPlanSlug(slug) || isProTierPlanSlug(slug),
+      ) || null;
+  const paidProfile = Boolean(unlockedPlanSlug);
+  const profilePlanReady = !planLoading && !subscriptionLoading && !activatingPlan;
+  const showProgressTracking = !subscriptionEnded && (!applyLimits || progressTracking || paidProfile);
+  const showFreePlanUpgrade =
+    profilePlanReady && !paidProfile && (subscriptionEnded || (applyLimits && !progressTracking));
+  const activePlan = unlockedPlanSlug ? getPlanBySlug(unlockedPlanSlug) : null;
+
+  const reloadPlanFromStripe = useCallback(async () => {
+    try {
+      await syncSubscriptionAfterCheckout();
+    } catch {
+      /* El webhook puede haber escrito la fila antes de que el perfil pregunte. */
+    }
+    try {
+      await supabase.auth.refreshSession();
+      const { user: freshUser } = await getClientAuth();
+      if (freshUser) setUser(freshUser);
+    } catch {
+      /* La fila de suscripciones sigue siendo la fuente del plan. */
+    }
+    await Promise.all([refreshSubscription(), refreshEntitlements()]);
+  }, [refreshSubscription, refreshEntitlements]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const fromCheckout = new URLSearchParams(window.location.search).get('checkout') === 'success';
+    let cancelled = false;
+    if (fromCheckout) setActivatingPlan(true);
+
+    void (async () => {
+      await reloadPlanFromStripe();
+      if (!cancelled) setActivatingPlan(false);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [reloadPlanFromStripe]);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const onVisible = () => {
+      if (document.visibilityState !== 'visible') return;
+      void reloadPlanFromStripe();
+    };
+    document.addEventListener('visibilitychange', onVisible);
+    return () => document.removeEventListener('visibilitychange', onVisible);
+  }, [reloadPlanFromStripe]);
+
+  useEffect(() => {
+    if (planLoading || !livePlanSlug) return;
+    if (!(isPlusTierPlanSlug(livePlanSlug) || isProTierPlanSlug(livePlanSlug))) return;
+    if (planSlug === livePlanSlug) return;
+    void refreshEntitlements();
+  }, [planLoading, livePlanSlug, planSlug, refreshEntitlements]);
 
   /** Aplica ?tab= solo al entrar (deep link). No re-leer en cada cambio de pestaña. */
   useEffect(() => {
@@ -1022,6 +1107,35 @@ export default function ProfilePage() {
       {/* Tab: Resumen */}
       {activeTab === 'overview' && (
         <div className="profile-tab-panels">
+          {activatingPlan && !paidProfile ? (
+            <section className="profile-plan-upgrade-card" aria-live="polite" aria-labelledby="profile-plan-activating-title">
+              <span className="profile-plan-upgrade-card__badge">Plus plan</span>
+              <h2 id="profile-plan-activating-title" className="profile-plan-upgrade-card__title">
+                Activating your plan
+              </h2>
+              <p className="profile-plan-upgrade-card__text">
+                Payment received. Your Plus plan will show here as soon as it is registered.
+              </p>
+            </section>
+          ) : null}
+
+          {paidProfile && activePlan ? (
+            <section className="profile-plan-upgrade-card" aria-labelledby="profile-plan-active-title">
+              <span className="profile-plan-upgrade-card__badge">
+                {activePlan.nombre} plan
+              </span>
+              <h2 id="profile-plan-active-title" className="profile-plan-upgrade-card__title">
+                You&apos;re on the {activePlan.nombre} plan
+              </h2>
+              <p className="profile-plan-upgrade-card__text">
+                {activePlan.precioLabel && activePlan.precioLabel !== '0€'
+                  ? `${activePlan.precioLabel}. `
+                  : ''}
+                Progress tracking, exam statistics and detailed analytics are included.
+              </p>
+            </section>
+          ) : null}
+
           {showFreePlanUpgrade ? (
             <section className="profile-plan-upgrade-card" aria-labelledby="profile-plan-upgrade-title">
               <span className="profile-plan-upgrade-card__badge">

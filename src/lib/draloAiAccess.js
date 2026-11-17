@@ -73,7 +73,11 @@ export async function getDraloAiAccessFromRequest(req) {
     };
   }
 
-  const planSlug = await resolveUserPlanSlug(auth.user.id, auth.user.user_metadata ?? null);
+  const planSlug = await resolveUserPlanSlug(
+    auth.user.id,
+    auth.user.user_metadata ?? null,
+    auth.accessToken,
+  );
   if (!studentPlanIncludesDraloAi(planSlug)) {
     return {
       allowed: false,

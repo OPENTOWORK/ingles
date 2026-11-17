@@ -20,7 +20,7 @@ export async function checkSpeakingCorrectionQuota(userId, options = {}) {
   const applyPlanLimits = await shouldApplyPlanUsageLimits(userId, userEmail);
 
   if (applyPlanLimits) {
-    const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null);
+    const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null, options.accessToken ?? null);
     const planResult = await checkPlanUsage(userId, PLAN_USAGE_KEYS.SPEAKING_CORRECTION, planSlug);
     if (!planResult.allowed) {
       return {
@@ -93,7 +93,7 @@ export async function resolveSpeakingB2QuotaChargeArgs(userId, options = {}) {
   const userEmail = options.userEmail || '';
   const applyPlanLimits = await shouldApplyPlanUsageLimits(userId, userEmail);
   if (applyPlanLimits) {
-    const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null);
+    const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null, options.accessToken ?? null);
     const planResult = await checkPlanUsage(userId, PLAN_USAGE_KEYS.SPEAKING_CORRECTION, planSlug);
     if (!planResult.allowed) {
       return { ok: false, status: 429, body: { code: planResult.code || 'PLAN_LIMIT_REACHED' } };

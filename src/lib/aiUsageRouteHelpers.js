@@ -71,7 +71,7 @@ export async function runAiPreflight(userId, action, options = {}) {
 
   if (!skipDailyLimit) {
     if (applyPlanLimits) {
-      const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null);
+      const planSlug = await resolveUserPlanSlug(userId, options.userMetadata ?? null, options.accessToken ?? null);
       const planResult = await consumePlanUsage(userId, planUsageKey, planSlug);
       if (!planResult.allowed) {
         return {

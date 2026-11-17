@@ -5,7 +5,7 @@
  * service role key. El cliente lee su propia fila vía RLS.
  */
 import { createClient } from '@supabase/supabase-js';
-import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
+import { getSupabaseAnonKey, getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import {
   findPlanByLookupKey,
   findPlanByPriceId,
@@ -27,6 +27,17 @@ export function getSubscriptionsDb() {
   if (!url || !serviceKey) return null;
   return createClient(url, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
+
+/** Lectura con el JWT del alumno. La policy de RLS le deja ver su propia fila. */
+export function getUserSubscriptionsDb(accessToken) {
+  const url = getSupabaseUrl();
+  const anonKey = getSupabaseAnonKey();
+  if (!url || !anonKey || !accessToken) return null;
+  return createClient(url, anonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { headers: { Authorization: `Bearer ${accessToken}` } },
   });
 }
 
@@ -142,14 +153,14 @@ export async function syncSubscriptionFromStripe(subscription, { userId: knownUs
     cancel_at_period_end: Boolean(subscription?.cancel_at_period_end),
   };
 
+  const effectivePlan = active && planSlug ? planSlug : 'free';
+  row.plan_id = effectivePlan;
+
   const { error } = await db.from(SUBSCRIPTIONS_TABLE).upsert(row, { onConflict: 'user_id' });
   if (error) throw error;
 
-  if (active && planSlug) {
-    await db.from('Usuarios_y_Perfil_users').update({ plan_id: planSlug }).eq('id', userId);
-  }
-
-  await syncAuthPlanMetadata(db, userId, active && planSlug ? planSlug : 'free');
+  await db.from('Usuarios_y_Perfil_users').update({ plan_id: effectivePlan }).eq('id', userId);
+  await syncAuthPlanMetadata(db, userId, effectivePlan);
 
   if (active && isPaidPlanSlug(planSlug)) {
     try {

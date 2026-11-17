@@ -16,7 +16,11 @@ import {
 } from '@/lib/subscriptionPlans';
 import { B2_EXAM_SLOT_MAX } from '@/lib/b2ExamCatalog';
 import { subscriptionGrantsAccess } from '@/lib/stripe/server';
-import { getSubscriptionsDb, findSubscriptionByUserId } from '@/lib/stripe/subscriptions';
+import {
+  getSubscriptionsDb,
+  getUserSubscriptionsDb,
+  findSubscriptionByUserId,
+} from '@/lib/stripe/subscriptions';
 import { getSupabaseAdmin } from '@/lib/aiUsage';
 import { getUserRoleNameServer } from '@/lib/userRoleServer';
 import {
@@ -60,25 +64,48 @@ export async function shouldApplyPlanUsageLimits(userId, userEmail = '') {
   return isStudentRole(role);
 }
 
-/** Plan activo: suscripción Stripe viva → plan asignado en perfil → metadata JWT → free. */
-export async function resolveUserPlanSlug(userId, userMetadata = null) {
-  const db = getDb();
-  if (db && userId) {
+async function entitledPlanSlug(db, userId) {
+  if (!db || !userId) return null;
+  try {
     const row = await findSubscriptionByUserId(db, userId);
-    if (row && subscriptionGrantsAccess(row.status) && row.plan_id) {
+    if (!row) return null;
+    if (subscriptionGrantsAccess(row.status) && row.plan_id && row.plan_id !== 'free') {
       return normalizeAdminAssignablePlanSlug(row.plan_id);
     }
+    return 'free';
+  } catch {
+    return null;
+  }
+}
 
-    const { data: profileRow } = await db
+async function profilePlanSlug(db, userId) {
+  if (!db || !userId) return null;
+  try {
+    const { data: profileRow, error } = await db
       .from('Usuarios_y_Perfil_users')
       .select('plan_id')
       .eq('id', userId)
       .maybeSingle();
-
-    if (profileRow?.plan_id) {
-      return normalizeAdminAssignablePlanSlug(profileRow.plan_id);
-    }
+    if (error || !profileRow?.plan_id) return null;
+    return normalizeAdminAssignablePlanSlug(profileRow.plan_id);
+  } catch {
+    return null;
   }
+}
+
+/** Plan activo: suscripción Stripe viva → plan asignado en perfil → metadata JWT → free. */
+export async function resolveUserPlanSlug(userId, userMetadata = null, accessToken = null) {
+  const adminDb = getDb();
+  const userDb = getUserSubscriptionsDb(accessToken);
+
+  const fromSubscription =
+    (await entitledPlanSlug(adminDb, userId)) || (await entitledPlanSlug(userDb, userId));
+  if (fromSubscription) return fromSubscription;
+
+  const fromProfile =
+    (await profilePlanSlug(adminDb, userId)) || (await profilePlanSlug(userDb, userId));
+  if (fromProfile) return fromProfile;
+
   return authMetadataPlanSlug(userMetadata?.subscription_plan);
 }
 
@@ -296,8 +323,8 @@ export async function getPlanUsageSnapshot(userId, usageKey, planSlug) {
   };
 }
 
-export async function getStudentPlanContext(userId, userEmail = '', userMetadata = null) {
-  const planSlug = await resolveUserPlanSlug(userId, userMetadata);
+export async function getStudentPlanContext(userId, userEmail = '', userMetadata = null, accessToken = null) {
+  const planSlug = await resolveUserPlanSlug(userId, userMetadata, accessToken);
   const applyLimits = await shouldApplyPlanUsageLimits(userId, userEmail);
 
   /**

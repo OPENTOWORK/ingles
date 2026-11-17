@@ -164,7 +164,10 @@ function ProfileSubscriptionCardInner({
         if (cancelled) return;
         if (result?.synced) {
           await Promise.all([refresh(), refreshEntitlements?.()]);
-          setCheckoutMessage('Your PLUS subscription is now active.');
+          const planName = getPlanBySlug(result.planSlug).nombre;
+          setCheckoutMessage(
+            result.active ? `Your ${planName} plan is now active.` : 'Your plan is now Free.',
+          );
         } else {
           setCheckoutMessage('Payment received. Your plan will update shortly.');
         }
@@ -185,10 +188,12 @@ function ProfileSubscriptionCardInner({
   // La fila de Stripe manda sobre user_metadata, que va con el JWT y puede
   // quedarse atrás justo después de pagar.
   const livePlan =
-    isSubscriptionActive(subscription) && subscription.plan_id
+    isSubscriptionActive(subscription) && subscription.plan_id && subscription.plan_id !== 'free'
       ? getPlanBySlug(subscription.plan_id)
       : null;
-  const effectivePlan = livePlan || plan;
+  const effectivePlan = subscription && !isSubscriptionActive(subscription)
+    ? getPlanBySlug('free')
+    : livePlan || plan;
   const display = livePlan ? getPlanProfileDisplay(livePlan) : null;
 
   const slug = effectivePlan?.slug || 'free';

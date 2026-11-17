@@ -18,6 +18,7 @@ export async function GET(req) {
     auth.user.id,
     auth.user.email ?? '',
     auth.user.user_metadata,
+    auth.accessToken,
   );
 
   const usage = ctx.applyLimits

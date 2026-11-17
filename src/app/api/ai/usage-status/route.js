@@ -27,7 +27,7 @@ export async function GET(req) {
   const applyPlan = await shouldApplyPlanUsageLimits(userId, userEmail);
 
   if (applyPlan) {
-    const ctx = await getStudentPlanContext(userId, userEmail, auth.user.user_metadata);
+    const ctx = await getStudentPlanContext(userId, userEmail, auth.user.user_metadata, auth.accessToken);
     const [writing, speaking] = await Promise.all([
       getPlanUsageSnapshot(userId, PLAN_USAGE_KEYS.WRITING_CORRECTION, ctx.planSlug),
       getPlanUsageSnapshot(userId, PLAN_USAGE_KEYS.SPEAKING_CORRECTION, ctx.planSlug),
