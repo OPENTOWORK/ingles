@@ -22,6 +22,7 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   ADMIN_REGISTRATION_NOTICE: 'admin_registration_notice',
   ADMIN_REVIEW_NOTICE: 'admin_review_notice',
   ADMIN_SUPPORT_TICKET_NOTICE: 'admin_support_ticket_notice',
+  ADMIN_PAID_PLAN_NOTICE: 'admin_paid_plan_notice',
 };
 
 export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
@@ -144,6 +145,12 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_SUPPORT_TICKET_NOTICE,
     label: 'Aviso a admin y marketing: ticket de soporte',
     description: 'Se envía a administración y a marketing cuando un usuario abre un ticket.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_PAID_PLAN_NOTICE,
+    label: 'Aviso a admin y marketing: plan de pago',
+    description:
+      'Se envía a administración y a marketing cuando alguien pasa a un plan de pago. No se repite en las renovaciones del mismo plan.',
   },
 ];
 

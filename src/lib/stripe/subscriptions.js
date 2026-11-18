@@ -16,6 +16,7 @@ import {
   subscriptionPeriodEndIso,
   subscriptionPriceId,
 } from './server';
+import { notifyAdminsOfPaidPlan, shouldNotifyPaidPlan } from '@/lib/notifyAdminsOfPaidPlan';
 import { isPaidPlanSlug, markReferralPaid } from '@/lib/referrals';
 
 export const SUBSCRIPTIONS_TABLE = 'suscripciones';
@@ -136,6 +137,8 @@ export async function syncSubscriptionFromStripe(subscription, { userId: knownUs
     return { skipped: 'unknown_user', subscriptionId: subscription?.id || null };
   }
 
+  const previous = await findSubscriptionByUserId(db, userId);
+
   const customerId = customerIdOf(subscription);
   const planSlug = resolvePlanSlug(subscription);
   const status = String(subscription?.status || 'incomplete');
@@ -167,6 +170,26 @@ export async function syncSubscriptionFromStripe(subscription, { userId: knownUs
       await markReferralPaid({ userId, planSlug });
     } catch (err) {
       console.error('[subscriptions] referral paid', err);
+    }
+  }
+
+  if (
+    shouldNotifyPaidPlan({
+      previousActive: Boolean(previous && subscriptionGrantsAccess(previous.status)),
+      previousPlan: previous?.plan_id,
+      nextPlan: effectivePlan,
+    })
+  ) {
+    try {
+      await notifyAdminsOfPaidPlan(db, {
+        userId,
+        planSlug: effectivePlan,
+        interval: row.interval,
+        channel: 'stripe',
+        subscriptionId: subscription?.id || '',
+      });
+    } catch (err) {
+      console.error('[subscriptions] paid plan notice', err);
     }
   }
 

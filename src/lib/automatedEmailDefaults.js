@@ -683,6 +683,33 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
     delay_minutos: 0,
     es_sistema: true,
   },
+  {
+    slug: 'admin_paid_plan_notice',
+    nombre: 'Aviso a admin y marketing: plan de pago',
+    trigger_event: AUTOMATED_EMAIL_TRIGGERS.ADMIN_PAID_PLAN_NOTICE,
+    trigger_reason:
+      'Se envía a administración y a marketing cuando alguien pasa a un plan de pago. No se repite en las renovaciones del mismo plan.',
+    asunto: 'Nuevo plan de pago en Dralo',
+    cuerpo: [
+      'Preheader: Alguien acaba de coger un plan de pago.',
+      '',
+      'Alguien acaba de coger un plan de pago en Dralo.',
+      '',
+      'Nombre: {{nombre}}',
+      'Email: {{email}}',
+      'Plan: {{plan}}',
+      'Periodicidad: {{periodo}}',
+      'Precio: {{precio}}',
+      'Canal: {{canal}}',
+      '',
+      '{{action_url}}',
+      '',
+      'CTA: Ver ficha',
+    ].join('\n'),
+    activo: true,
+    delay_minutos: 0,
+    es_sistema: true,
+  },
 ];
 
 export function getDefaultTemplatesByTrigger(triggerEvent) {

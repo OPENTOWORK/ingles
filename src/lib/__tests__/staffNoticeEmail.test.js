@@ -4,6 +4,7 @@ import { DEFAULT_AUTOMATED_EMAIL_TEMPLATES } from '@/lib/automatedEmailDefaults'
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { buildBrandedEmailFromPlainText } from '@/lib/emailBrandedLayout';
 import { renderEmailTemplate, splitEmailDeliveryMeta } from '@/lib/renderEmailTemplate';
+import { shouldNotifyPaidPlan } from '@/lib/notifyAdminsOfPaidPlan';
 import { listAdminAndMarketingEmails } from '@/lib/staffNoticeRecipients';
 
 function tableClient({ roles, users, failTable }) {
@@ -136,4 +137,45 @@ test('registration notice includes confirmation, the form, the source and the pr
   const html = buildBrandedEmailFromPlainText(body.text, { ctaLabel: body.ctaLabel });
   assert.match(html.html, /https:\/\/www\.dralo\.es\/admin\/usuarios\/user-1\//);
   assert.match(html.html, /Ver ficha/);
+});
+
+test('paid plan notice tells admins who paid and skips a renewal of the same plan', () => {
+  const template = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.find(
+    (item) => item.slug === 'admin_paid_plan_notice',
+  );
+  assert.equal(template.trigger_event, AUTOMATED_EMAIL_TRIGGERS.ADMIN_PAID_PLAN_NOTICE);
+  assert.equal(template.delay_minutos, 0);
+
+  const body = splitEmailDeliveryMeta(
+    renderEmailTemplate(template.cuerpo, {
+      nombre: 'Carlos',
+      email: 'carlos@example.com',
+      plan: 'PLUS',
+      periodo: 'Mensual',
+      precio: '3,99€/mes',
+      canal: 'Stripe',
+      action_url: 'https://www.dralo.es/admin/usuarios/user-1/',
+    }),
+  );
+  assert.equal(body.ctaLabel, 'Ver ficha');
+  assert.match(body.text, /Plan: PLUS/);
+  assert.match(body.text, /3,99€\/mes/);
+  assert.match(body.text, /Canal: Stripe/);
+  const html = buildBrandedEmailFromPlainText(body.text, { ctaLabel: body.ctaLabel });
+  assert.match(html.html, /https:\/\/www\.dralo\.es\/admin\/usuarios\/user-1\//);
+
+  assert.equal(shouldNotifyPaidPlan({ nextPlan: 'premium' }), true);
+  assert.equal(
+    shouldNotifyPaidPlan({ previousActive: true, previousPlan: 'premium', nextPlan: 'premium' }),
+    false,
+  );
+  assert.equal(
+    shouldNotifyPaidPlan({ previousActive: true, previousPlan: 'premium', nextPlan: 'pro' }),
+    true,
+  );
+  assert.equal(
+    shouldNotifyPaidPlan({ previousActive: false, previousPlan: 'premium', nextPlan: 'premium' }),
+    true,
+  );
+  assert.equal(shouldNotifyPaidPlan({ nextPlan: 'free' }), false);
 });

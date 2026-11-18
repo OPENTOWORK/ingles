@@ -2,7 +2,9 @@
  * Activa en Supabase el plan comprado en Google Play o en la App Store.
  * La fila es la misma que usa Stripe (`suscripciones`), con el origen en `store`.
  */
+import { notifyAdminsOfPaidPlan, shouldNotifyPaidPlan } from '@/lib/notifyAdminsOfPaidPlan';
 import { isPaidPlanSlug, markReferralPaid } from '@/lib/referrals';
+import { subscriptionGrantsAccess } from '@/lib/stripe/server';
 import {
   findSubscriptionByUserId,
   getSubscriptionsDb,
@@ -47,6 +49,7 @@ async function assertTokenOwner(db, transactionId, userId) {
 }
 
 async function writeGrant(db, userId, { store, product, entitlement, purchaseToken }) {
+  const previous = await findSubscriptionByUserId(db, userId);
   await assertTokenOwner(db, entitlement.transactionId || purchaseToken, userId);
   const planSlug = entitlement.active ? product.planSlug : 'free';
   const row = {
@@ -80,6 +83,26 @@ async function writeGrant(db, userId, { store, product, entitlement, purchaseTok
       await markReferralPaid({ userId, planSlug });
     } catch (err) {
       console.error('[store] referral paid', err);
+    }
+  }
+
+  if (
+    shouldNotifyPaidPlan({
+      previousActive: Boolean(previous && subscriptionGrantsAccess(previous.status)),
+      previousPlan: previous?.plan_id,
+      nextPlan: planSlug,
+    })
+  ) {
+    try {
+      await notifyAdminsOfPaidPlan(db, {
+        userId,
+        planSlug,
+        interval: product.interval,
+        channel: store,
+        subscriptionId: entitlement.transactionId || purchaseToken || '',
+      });
+    } catch (err) {
+      console.error('[store] paid plan notice', err);
     }
   }
 
