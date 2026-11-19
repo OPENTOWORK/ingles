@@ -53,3 +53,21 @@ test('the website opens Stripe in the same tab', () => {
   assert.deepEqual(assigned, ['https://billing.stripe.com/p/session/test']);
   delete globalThis.window;
 });
+
+test('the installed app does not open Stripe', () => {
+  const assigned = [];
+  const page = {
+    location: { assign: (url) => assigned.push(url), search: '' },
+    navigator: { userAgent: 'Mozilla DraloApp' },
+  };
+  page.self = page;
+  page.top = page;
+  globalThis.window = page;
+
+  assert.throws(
+    () => redirectToStripe('https://checkout.stripe.com/c/pay/cs_test_123'),
+    /Google Play/,
+  );
+  assert.deepEqual(assigned, []);
+  delete globalThis.window;
+});

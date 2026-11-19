@@ -1,3 +1,5 @@
+import { isNativeStoreApp } from '@/lib/store/client';
+
 /** El Checkout y el portal no pueden cargarse dentro del iframe de la vista app. */
 export const STRIPE_OPEN_MESSAGE = 'dralo-open-stripe';
 
@@ -30,6 +32,9 @@ export function redirectToStripe(url) {
     throw new Error('La URL de pago no es válida.');
   }
   if (typeof window === 'undefined') return;
+  if (isNativeStoreApp()) {
+    throw new Error('En la app el pago se hace con Google Play.');
+  }
 
   if (!isEmbeddedFrame()) {
     window.location.assign(url);

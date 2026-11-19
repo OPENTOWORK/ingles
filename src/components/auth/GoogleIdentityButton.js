@@ -7,6 +7,7 @@ import {
   loadGoogleIdentityScript,
 } from '@/lib/googleIdentity';
 import { isDraloAppSurface } from '@/lib/draloAppShell';
+import { isNativeCapacitorApp, startNativeGoogleOAuth } from '@/lib/nativeGoogleAuth';
 import { supabase } from '@/utils/supabaseClient';
 import { useReadingNightMode } from '@/hooks/useReadingNightMode';
 import styles from './GoogleIdentityButton.module.css';
@@ -24,6 +25,10 @@ function googleMustStayInThisWindow() {
 }
 
 async function startGoogleRedirect() {
+  if (isNativeCapacitorApp()) {
+    await startNativeGoogleOAuth();
+    return;
+  }
   const redirectTo = new URL('/auth/callback/', window.location.origin);
   const current = new URLSearchParams(window.location.search);
   for (const key of PREVIEW_QUERY_KEYS) {

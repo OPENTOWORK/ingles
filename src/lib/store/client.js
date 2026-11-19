@@ -6,11 +6,29 @@ import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { supabase } from '@/utils/supabaseClient';
 import { STORE_PACKAGE_NAME, storeProductFor } from './products.js';
 
+function isAppPreviewFrame() {
+  try {
+    return new URLSearchParams(window.location.search).get('itPreviewApp') === '1';
+  } catch {
+    return false;
+  }
+}
+
+/** La app instalada. El navegador, también el del móvil, sigue en Stripe. */
 export function isNativeStoreApp() {
-  if (typeof window === 'undefined') return false;
+  if (typeof window === 'undefined' || isAppPreviewFrame()) return false;
   const ua = window.navigator?.userAgent || '';
   if (ua.includes('DraloApp')) return true;
-  return window.Capacitor?.isNativePlatform?.() === true;
+  try {
+    if (window.Capacitor?.isNativePlatform?.() === true) return true;
+  } catch {
+    /* sin puente nativo */
+  }
+  try {
+    return document.documentElement.classList.contains('dralo-native-app');
+  } catch {
+    return false;
+  }
 }
 
 async function postWithAuth(path, body) {

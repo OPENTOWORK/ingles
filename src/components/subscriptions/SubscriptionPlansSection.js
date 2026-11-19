@@ -32,6 +32,7 @@ import {
 } from '@/data/financialPlanConfig';
 import { examsLimitLabel } from '@/lib/subscriptionPlans';
 import { startCheckout } from '@/lib/stripe/client';
+import { isNativeStoreApp } from '@/lib/store/client';
 import usePlanEntitlements from '@/hooks/usePlanEntitlements';
 import styles from './SubscriptionPlansSection.module.css';
 
@@ -194,7 +195,11 @@ function PlanCtaControl({
         onClick={() => onCheckout(planSlug)}
         disabled={Boolean(checkoutPlan) || planLoading}
       >
-        {checkoutPlan === planSlug ? 'Redirigiendo a Stripe…' : cta.label}
+        {checkoutPlan === planSlug
+          ? isNativeStoreApp()
+            ? 'Abriendo Google Play…'
+            : 'Redirigiendo a Stripe…'
+          : cta.label}
       </button>
     );
   }
@@ -278,7 +283,6 @@ export default function SubscriptionPlansSection({
     setCheckoutError('');
     setCheckoutPlan(planSlug);
     try {
-      // Redirige a Stripe si todo va bien, así que no hace falta limpiar el estado.
       await startCheckout({ planSlug, billingCycle });
     } catch (err) {
       if (err?.code === 'no_session') {
