@@ -31,6 +31,7 @@ import {
   PLUS_OFFER_END_DATE,
   PLUS_OFFER_UNTIL_LABEL,
   plusAnnualRenewalCopy,
+  plusBlackFridayAccessCopy,
 } from '@/data/financialPlanConfig';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
 import { buildSignupHref, withAcquisitionParams } from '@/lib/signupTracking';
@@ -265,7 +266,7 @@ const FAQ = [
   },
   {
     q: '¿Qué incluye la oferta de Black Friday?',
-    a: `El año de Plus por ${formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}, con 12 meses de acceso y dos meses de regalo incluidos. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+    a: `${plusBlackFridayAccessCopy()}. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
     published: true,
     offer: 'black-friday',
   },
@@ -675,12 +676,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
                 trackHomeEvent('black_friday_annual_cta');
               }}
             >
-              <span className="hl-bf-long">
-                Black Friday: el año de Plus por {formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}. Te regalamos dos meses. Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
-              </span>
-              <span className="hl-bf-short">
-                Black Friday: año por {formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}. Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
-              </span>
+              Black Friday: {plusBlackFridayAccessCopy()}. Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
             </Link>
             <Link
               href={annualHref}
@@ -704,7 +700,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </p>
       </div>
 
-      <section className="hl-hero" aria-labelledby="hl-hero-title">
+      <section id="plan-plus" className="hl-hero" aria-labelledby="hl-hero-title">
         <div className="hl-container hl-hero__grid">
           <div className="hl-hero__intro">
             <p className="hl-kicker">{PRO_LAUNCH_COPY.badge}</p>
@@ -712,11 +708,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
               {PRO_LAUNCH_COPY.title}
             </h1>
             <p className="hl-hero__lead">{PRO_LAUNCH_COPY.subtitle}</p>
-            {blackFriday ? (
-              <p className="hl-hero__bf">
-                Black Friday: el año de Plus por {formatEuroAmount(PLUS_ANNUAL_BF_PRICE)} con dos meses de regalo, hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
-              </p>
-            ) : null}
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
                 {blackFriday ? (
@@ -780,30 +771,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             </div>
           </div>
           <HeroShotCarousel />
-        </div>
-      </section>
-
-      <section id="plan-plus" className="hl-container hl-offer" aria-labelledby="hl-offer-title">
-        <div>
-          <p className="hl-kicker">{PRO_LAUNCH_COPY.badge}</p>
-          <h2 id="hl-offer-title" className="hl-offer__title">
-            {PRO_LAUNCH_COPY.title}
-          </h2>
-          <p className="hl-offer__text">{PRO_LAUNCH_COPY.subtitle}</p>
-          <p className="hl-offer__text">{PRO_LAUNCH_COPY.microcopy}</p>
-          <div className="hl-offer__actions">
-            <Link
-              href="/precios/"
-              className="hl-btn hl-btn--primary"
-              onClick={() => trackHomeEvent('cta_plan_register')}
-            >
-              {PRO_LAUNCH_COPY.cta}
-              <ArrowRight aria-hidden="true" />
-            </Link>
-            <a href="#preguntas-frecuentes" className="hl-offer__conditions">
-              Ver condiciones
-            </a>
-          </div>
         </div>
       </section>
 
@@ -923,11 +890,9 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         <section id="condiciones-plan-plus" className="hl-container hl-cta" aria-labelledby="hl-cta-title">
           <div>
             <h2 id="hl-cta-title" className="hl-cta__title">
-              {PRO_LAUNCH_COPY.title}
+              {PRO_LAUNCH_COPY.subtitle}
             </h2>
-            <p className="hl-cta__text">
-              {PRO_LAUNCH_COPY.subtitle} {PRO_LAUNCH_COPY.microcopy}
-            </p>
+            <p className="hl-cta__text">{PRO_LAUNCH_COPY.microcopy}</p>
           </div>
           <Link
             href="/precios/"

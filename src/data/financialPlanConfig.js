@@ -85,6 +85,10 @@ export function plusBlackFridayEffectiveMonthly() {
   return plusEuros(plusCents(PLUS_ANNUAL_BF_PRICE) / 12);
 }
 
+export function plusBlackFridayAccessCopy() {
+  return `12 meses de Plus por ${formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}, unos ${formatEuroAmount(plusBlackFridayEffectiveMonthly())} al mes`;
+}
+
 export function isBlackFridayOfferActive(now = new Date()) {
   const date = now instanceof Date ? now : new Date(now);
   if (Number.isNaN(date.getTime())) return false;
@@ -601,7 +605,7 @@ export function plusBlackFridayFaqItems(now = new Date()) {
   const items = [
     {
       q: '¿Qué incluye la oferta de Black Friday?',
-      a: `El año de Plus por ${formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}, con 12 meses de acceso y dos meses de regalo incluidos. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+      a: `${plusBlackFridayAccessCopy()}. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
       blackFriday: true,
     },
     {

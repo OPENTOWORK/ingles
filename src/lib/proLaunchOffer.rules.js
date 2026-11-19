@@ -63,7 +63,7 @@ export const PRO_LAUNCH_COPY = {
   soldOutTitle: 'Oferta cerrada',
   soldOutText: 'Puedes crear tu cuenta y ver el Plan Plus en la página de precios.',
   previousOfferNote: '',
-  microcopy: '3,99 €/mes en lugar de 9,99 €. Oferta disponible hasta el 31/12/2026.',
+  microcopy: '3,99 €/mes. Oferta disponible hasta el 31/12/2026.',
   metaDescription:
     'Practica el B2 First, recibe feedback sobre tus respuestas y entiende tus errores. Plan Plus a 3,99 €/mes hasta el 31/12/2026.',
   metaDescriptionClosed:

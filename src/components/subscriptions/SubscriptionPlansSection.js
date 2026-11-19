@@ -13,22 +13,16 @@ import {
   formatPlanPriceAmount,
   formatPlanPriceLabel,
   getPlanAnnualSavingsPercent,
-  getPlanCrossedPrices,
-  getPlanLaunchDiscountPercent,
-  getPlanListDiscountPercent,
-  getPlanListPrice,
   getPlanTierRank,
   isCurrentPlanSlug,
   isBlackFridayOfferActive,
   isPlusOfferActive,
-  PLUS_ANNUAL_BF_GIFT_MONTHS,
   PLUS_ANNUAL_BF_PRICE,
   PLUS_ANNUAL_REGULAR_PRICE,
   PLUS_BLACK_FRIDAY_UNTIL_LABEL,
   PLUS_MONTHLY_PRICE,
   PLUS_OFFER_UNTIL_LABEL,
   plusAnnualRegularDiscountPercent,
-  plusAnnualRegularSavingsEuros,
   plusAnnualRenewalCopy,
   plusAnnualSavingsVersusMonthlyEuros,
   plusBlackFridayEffectiveMonthly,
@@ -50,16 +44,12 @@ function comparisonCellValue(row, planSlug, billingCycle) {
   if (row.id === 'price') {
     const plan = DRALO_SUBSCRIPTION_PLANS.find((p) => p.slug === planSlug);
     if (!plan) return row.values[planSlug];
-    const crossed = getPlanCrossedPrices(plan, billingCycle).map((amount) =>
-      billingCycle === 'annual' ? amount * 12 : amount,
-    );
-    const discount = getPlanLaunchDiscountPercent(plan, billingCycle) ?? getPlanListDiscountPercent(plan, billingCycle);
     return {
       kind: 'price',
-      crossed: crossed.map((amount) => formatEuroAmount(amount)),
-      list: crossed.length ? formatEuroAmount(crossed[crossed.length - 1]) : null,
+      crossed: [],
+      list: null,
       current: formatPlanPriceLabel(plan, billingCycle),
-      discount,
+      discount: null,
       launch: planHasLaunchPricing(plan),
     };
   }
@@ -357,7 +347,6 @@ export default function SubscriptionPlansSection({
             onClick={() => selectBillingCycle('annual')}
           >
             Anual
-            <span className={styles.billingToggleBadge}>-{publicAnnualSavingsPercent()}%</span>
           </button>
         </div>
         {isAnnual && annualBillingHint() ? (
@@ -395,17 +384,9 @@ export default function SubscriptionPlansSection({
             interactive,
             isSelected,
           });
-          const listPriceRaw = getPlanListPrice(plan, billingCycle);
-          const listPrice = listPriceRaw && isAnnual ? listPriceRaw * 12 : listPriceRaw;
-          const crossedPrices = getPlanCrossedPrices(plan, billingCycle).map((amount) =>
-            isAnnual ? amount * 12 : amount,
-          );
-          const listDiscount = getPlanListDiscountPercent(plan, billingCycle);
-          const launchDiscount = getPlanLaunchDiscountPercent(plan, billingCycle);
           const showLaunchLabel = hasPaidPlan && planHasLaunchPricing(plan);
           const blackFridayYear = isAnnual && plan.slug === 'premium' && isBlackFridayOfferActive();
           const annualPlus = isAnnual && plan.slug === 'premium';
-          const shownDiscount = launchDiscount;
           const cardCta = blackFridayYear && cta.label === 'Suscribirme' ? { ...cta, label: 'Quiero el año' } : cta;
           return (
             <article
@@ -432,36 +413,13 @@ export default function SubscriptionPlansSection({
               <p className={styles.cardPrice}>
                 {hasPaidPlan ? (
                   <>
-                    {showLaunchLabel && crossedPrices.length > 0 ? (
-                      <span className={styles.cardPriceWasRow}>
-                        {crossedPrices.map((amount) => (
-                          <span
-                            key={amount}
-                            className={styles.cardPriceWas}
-                            aria-label="Precio anterior"
-                          >
-                            {formatEuroAmount(amount)}
-                          </span>
-                        ))}
-                      </span>
-                    ) : null}
                     <span className={styles.cardPriceRow}>
-                      {!showLaunchLabel && listPrice ? (
-                        <span className={styles.cardPriceWas} aria-label="Precio habitual">
-                          {formatEuroAmount(listPrice)}
-                        </span>
-                      ) : null}
                       <span className={styles.cardPriceAmount}>
                         {isAnnual
                           ? formatPlanAnnualTotal(plan)
                           : formatPlanPriceAmount(plan, billingCycle)}
                       </span>
                       <span className={styles.cardPricePeriod}>{isAnnual ? '/año' : '/mes'}</span>
-                      {showLaunchLabel && shownDiscount ? (
-                        <span className={styles.cardPriceDiscount}>-{shownDiscount}%</span>
-                      ) : listDiscount && !showLaunchLabel ? (
-                        <span className={styles.cardPriceDiscount}>-{listDiscount}%</span>
-                      ) : null}
                     </span>
                     {showLaunchLabel && isPlusOfferActive() && !isAnnual ? (
                       <span className={styles.cardPriceLaunch}>
@@ -469,17 +427,9 @@ export default function SubscriptionPlansSection({
                       </span>
                     ) : null}
                     {blackFridayYear ? (
-                      <>
-                        <span className={styles.cardPriceAnnual}>
-                          Ahorras {formatEuroAmount(plusAnnualRegularSavingsEuros())} sobre el precio normal del plan anual.
-                        </span>
-                        <span className={styles.cardPriceAnnual}>
-                          12 meses de acceso, con {PLUS_ANNUAL_BF_GIFT_MONTHS} meses de regalo incluidos.
-                        </span>
-                        <span className={styles.cardPriceAnnual}>
-                          Equivale a {formatEuroAmount(plusBlackFridayEffectiveMonthly())}/mes
-                        </span>
-                      </>
+                      <span className={styles.cardPriceAnnual}>
+                        Equivale a {formatEuroAmount(plusBlackFridayEffectiveMonthly())}/mes
+                      </span>
                     ) : isAnnual && plan.slug !== 'premium' ? (
                       <span className={styles.cardPriceAnnual}>
                         Equivale a {formatPlanPriceAmount(plan, 'annual')}/mes

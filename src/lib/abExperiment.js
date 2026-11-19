@@ -2,11 +2,11 @@ import { SITE_URL } from '@/lib/siteSeo';
 import {
   formatEuroAmount,
   getPlanBySlug,
-  PLUS_ANNUAL_BF_PRICE,
   PLUS_BLACK_FRIDAY_UNTIL_LABEL,
   PLUS_MONTHLY_PRICE,
   PLUS_OFFER_UNTIL_LABEL,
   plusAnnualRenewalCopy,
+  plusBlackFridayAccessCopy,
 } from '@/data/financialPlanConfig';
 import {
   FOUNDING_SURVEY_DELAY_DAYS,
@@ -189,7 +189,7 @@ export const CAMPAIGN_FAQ = [
   },
   {
     q: '¿Qué incluye la oferta de Black Friday?',
-    a: `El año de Plus por ${formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}, con 12 meses de acceso y dos meses de regalo incluidos. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+    a: `${plusBlackFridayAccessCopy()}. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
   },
   {
     q: '¿Se renueva automáticamente?',
