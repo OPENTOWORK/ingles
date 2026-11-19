@@ -10,7 +10,6 @@ import {
   Check,
   ChevronDown,
   CircleHelp,
-  Clock,
   Maximize2,
   Minimize2,
   Pause,
@@ -22,6 +21,7 @@ import DraloTagline from '@/components/DraloTagline';
 import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import {
   formatEuroAmount,
+  activeHomeOffer,
   isBlackFridayOfferActive,
   PLUS_ANNUAL_BF_END_DATE,
   PLUS_ANNUAL_BF_PRICE,
@@ -138,7 +138,11 @@ function reviewFromApi(row) {
 function ReviewCard({ review, hidden }) {
   const score = Math.max(1, Math.min(5, Number(review.stars) || 5));
   return (
-    <article className="hl-review" aria-hidden={hidden || undefined}>
+    <article
+      className="hl-review"
+      aria-hidden={hidden || undefined}
+      tabIndex={hidden ? -1 : undefined}
+    >
       <div className="hl-review__head">
         <span className="hl-review__avatar" aria-hidden="true">{review.initial}</span>
         <h3>{review.name}</h3>
@@ -329,19 +333,40 @@ function faqJsonLd(items) {
   }).replace(/</g, '\\u003c');
 }
 
-/** dataLayer/gtag ya usados por GA4. Solo con consentimiento de analítica. */
-function trackHomeEvent(eventName) {
-  if (typeof window === 'undefined') return;
+function analyticsAllowed() {
+  if (typeof window === 'undefined') return false;
   try {
     const raw = window.localStorage.getItem('dralo_cookie_consent');
     const parsed = raw ? JSON.parse(raw) : null;
-    if (!parsed?.preferences?.analytics) return;
+    return Boolean(parsed?.preferences?.analytics);
   } catch {
-    return;
+    return false;
   }
+}
+
+/** dataLayer/gtag ya usados por GA4. Solo con consentimiento de analítica. */
+function trackHomeEvent(eventName) {
+  if (!analyticsAllowed()) return;
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: eventName });
   if (typeof window.gtag === 'function') window.gtag('event', eventName);
+}
+
+function trackHomeCta(ctaId, destination) {
+  if (!analyticsAllowed()) return;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: 'cta_click',
+    cta_id: ctaId,
+    cta_destination: destination,
+  });
+}
+
+function withSrc(href, src, search) {
+  const [path, query = ''] = String(href || '').split('?');
+  const params = new URLSearchParams(query);
+  params.set('src', src);
+  return withAcquisitionParams(`${path}?${params.toString()}`, search);
 }
 
 /** No cargar el vídeo hasta saber si la cookie de sesión va a ocultar la landing. */
@@ -616,10 +641,18 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
   const { ready, sessionHint } = useLandingViewport();
   const visible = ready && !(pending && sessionHint);
   const signupHref = useSignupHrefs();
+  const offer = activeHomeOffer();
   const blackFriday = isBlackFridayOfferActive();
   const faq = publishedFaq(FAQ, blackFriday);
-  const annualHref = withAcquisitionParams('/precios/?facturacion=anual', signupHref.search);
-  const monthlyHref = withAcquisitionParams('/precios/', signupHref.search);
+  const search = signupHref.search;
+  const headerHref = withSrc('/registro/', 'header', search);
+  const heroHref = withSrc('/registro/', 'hero', search);
+  const heroOfferHref = withSrc(blackFriday ? '/precios/?facturacion=anual' : '/precios/', 'hero-oferta', search);
+  const exerciseHref = withSrc(TRY_EXERCISE_HREF, 'hero-ejercicio', search);
+  const writingHref = withSrc(WRITING_PRACTICE_HREF, 'writing', search);
+  const midHref = withSrc('/registro/', 'mid', search);
+  const closeHref = withSrc('/registro/', 'cierre', search);
+  const topbarHref = offer ? withSrc(offer.href, 'topbar', search) : '';
 
   return (
     <div className={`home-landing ${landingFont.variable}${pending ? ' home-landing--pending' : ''}`}>
@@ -658,7 +691,11 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <Link href={APP_ROUTES.login} className="hl-btn hl-btn--ghost">
               Iniciar sesión
             </Link>
-            <Link href={signupHref.other} className="hl-btn hl-btn--primary">
+            <Link
+              href={headerHref}
+              className="hl-btn hl-btn--primary"
+              onClick={() => trackHomeCta('header', headerHref)}
+            >
               Crear mi cuenta gratis
               <ArrowRight aria-hidden="true" />
             </Link>
@@ -666,108 +703,54 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </div>
       </header>
 
-      <div className="hl-offer-stack">
-        {blackFriday ? (
-          <p className="hl-offer-banner">
-            <Link
-              href={annualHref}
-              onClick={() => {
-                trackHomeEvent('cta_black_friday_year');
-                trackHomeEvent('black_friday_annual_cta');
-              }}
-            >
-              Black Friday: {plusBlackFridayAccessCopy()}. Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
-            </Link>
-            <Link
-              href={annualHref}
-              className="hl-offer-banner__cta"
-              onClick={() => {
-                trackHomeEvent('cta_black_friday_year');
-                trackHomeEvent('black_friday_annual_cta');
-              }}
-            >
-              Quiero el año
+      {offer ? (
+        <div className="hl-offer-stack">
+          <p className={`hl-offer-banner${blackFriday ? '' : ' hl-offer-banner--month'}`}>
+            <Link href={topbarHref} onClick={() => trackHomeCta('topbar', topbarHref)}>
+              {offer.text}
             </Link>
           </p>
-        ) : null}
-        <p className="hl-offer-banner hl-offer-banner--month">
-          <Link
-            href={monthlyHref}
-            onClick={() => trackHomeEvent('monthly_plan_cta')}
-          >
-            Plan Plus a {formatEuroAmount(PLUS_MONTHLY_PRICE)}/mes hasta el {PLUS_OFFER_UNTIL_LABEL}.
-          </Link>
-        </p>
-      </div>
+        </div>
+      ) : null}
 
       <section id="plan-plus" className="hl-hero" aria-labelledby="hl-hero-title">
         <div className="hl-container hl-hero__grid">
           <div className="hl-hero__intro">
-            <p className="hl-kicker">{PRO_LAUNCH_COPY.badge}</p>
+            {offer ? <p className="hl-kicker">{offer.text}</p> : null}
             <h1 id="hl-hero-title" className="hl-hero__title">
-              {PRO_LAUNCH_COPY.title}
+              Prepara tu B2 First a tu ritmo y entiende tus errores
             </h1>
-            <p className="hl-hero__lead">{PRO_LAUNCH_COPY.subtitle}</p>
+            <p className="hl-hero__lead">
+              Practica cada parte del examen con formato real, recibe feedback sobre tu Writing y descubre qué necesitas mejorar.
+            </p>
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
-                {blackFriday ? (
-                  <Link
-                    href={annualHref}
-                    className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
-                    onClick={() => {
-                      trackHomeEvent('cta_black_friday_year');
-                      trackHomeEvent('black_friday_annual_cta');
-                    }}
-                  >
-                    <span className="hl-hero__cta-copy">Quiero el año</span>
-                    <span className="hl-hero__cta-arrows" aria-hidden="true">
-                      <ChevronRight />
-                      <ChevronRight />
-                      <ChevronRight />
-                    </span>
-                  </Link>
-                ) : null}
                 <Link
-                  href={monthlyHref}
-                  className={`hl-btn hl-btn--lg ${blackFriday ? 'hl-btn--ghost' : 'hl-btn--primary hl-hero__cta'}`}
+                  href={heroHref}
+                  className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
                   onClick={() => {
-                    trackHomeEvent('cta_hero_promo_25');
-                    trackHomeEvent('cta_hero_plus');
-                    trackHomeEvent('monthly_plan_cta');
+                    trackHomeEvent('cta_hero_register');
+                    trackHomeCta('hero', heroHref);
                   }}
-                >
-                  <span className="hl-hero__cta-copy">{PRO_LAUNCH_COPY.cta}</span>
-                  {blackFriday ? null : (
-                    <span className="hl-hero__cta-arrows" aria-hidden="true">
-                      <ChevronRight />
-                      <ChevronRight />
-                      <ChevronRight />
-                    </span>
-                  )}
-                </Link>
-                <Link
-                  href={signupHref.hero}
-                  className="hl-btn hl-btn--ghost hl-btn--lg"
-                  onClick={() => trackHomeEvent('cta_hero_register')}
                 >
                   Probar DRALO gratis
                 </Link>
-              </div>
-              <p className="hl-hero__fine">{PRO_LAUNCH_COPY.microcopy}</p>
-              <div className="hl-hero__meta">
-                <ul className="hl-hero__notes">
-                  <li>
-                    <Clock aria-hidden="true" />A tu ritmo
-                  </li>
-                </ul>
                 <Link
-                  href={TRY_EXERCISE_HREF}
-                  className="hl-btn hl-btn--ghost hl-hero__register"
-                  onClick={() => trackHomeEvent('cta_hero_try_exercise')}
+                  href={heroOfferHref}
+                  className="hl-btn hl-btn--ghost hl-hero__offer"
+                  onClick={() => trackHomeCta('hero-oferta', heroOfferHref)}
                 >
-                  Prueba un ejercicio sin registrarte
+                  Ver la oferta
                 </Link>
               </div>
+              <p className="hl-hero__fine">Sin tarjeta. Empiezas a practicar en un minuto.</p>
+              <Link
+                href={exerciseHref}
+                className="hl-hero__exercise"
+                onClick={() => trackHomeCta('hero-ejercicio', exerciseHref)}
+              >
+                Prueba un ejercicio sin registrarte
+              </Link>
             </div>
           </div>
           <HeroShotCarousel />
@@ -791,6 +774,41 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             Descubre cómo practicar con DRALO
           </figcaption>
         </figure>
+      </section>
+
+      <section className="hl-section" aria-labelledby="hl-writing-title">
+        <div className="hl-container hl-writing">
+          <div>
+            <h2 id="hl-writing-title" className="hl-h2">
+              Tu Writing merece más que una nota.
+            </h2>
+            <p className="hl-lead">
+              Recibe correcciones y comentarios detallados para entender qué puedes mejorar.
+            </p>
+            <ul className="hl-checks">
+              {WRITING_CHECKS.map((item) => (
+                <li key={item}>
+                  <span className="hl-check" aria-hidden="true">
+                    <Check />
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Link
+              href={writingHref}
+              className="hl-btn hl-btn--primary hl-writing__cta"
+              onClick={() => {
+                trackHomeEvent('cta_writing_try');
+                trackHomeCta('writing', writingHref);
+              }}
+            >
+              Prueba la corrección de Writing
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+          <WritingFeedbackMock />
+        </div>
       </section>
 
       <section className="hl-section" aria-labelledby="hl-problem-title">
@@ -819,38 +837,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
               </li>
             ))}
           </ul>
-        </div>
-      </section>
-
-      <section className="hl-section" aria-labelledby="hl-writing-title">
-        <div className="hl-container hl-writing">
-          <div>
-            <h2 id="hl-writing-title" className="hl-h2">
-              Tu Writing merece más que una nota.
-            </h2>
-            <p className="hl-lead">
-              Recibe correcciones y comentarios detallados para entender qué puedes mejorar.
-            </p>
-            <ul className="hl-checks">
-              {WRITING_CHECKS.map((item) => (
-                <li key={item}>
-                  <span className="hl-check" aria-hidden="true">
-                    <Check />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href={WRITING_PRACTICE_HREF}
-              className="hl-btn hl-btn--primary hl-writing__cta"
-              onClick={() => trackHomeEvent('cta_writing_try')}
-            >
-              Prueba la corrección de Writing
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </div>
-          <WritingFeedbackMock />
         </div>
       </section>
 
@@ -892,16 +878,21 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <h2 id="hl-cta-title" className="hl-cta__title">
               {PRO_LAUNCH_COPY.subtitle}
             </h2>
-            <p className="hl-cta__text">{PRO_LAUNCH_COPY.microcopy}</p>
           </div>
-          <Link
-            href="/precios/"
-            className="hl-btn hl-btn--primary hl-btn--lg"
-            onClick={() => trackHomeEvent('cta_plan_register')}
-          >
-            {PRO_LAUNCH_COPY.cta}
-            <ArrowRight aria-hidden="true" />
-          </Link>
+          <div className="hl-cta__action">
+            <Link
+              href={midHref}
+              className="hl-btn hl-btn--primary hl-btn--lg"
+              onClick={() => {
+                trackHomeEvent('cta_plan_register');
+                trackHomeCta('mid', midHref);
+              }}
+            >
+              Probar DRALO gratis
+              <ArrowRight aria-hidden="true" />
+            </Link>
+            {offer ? <p className="hl-cta__offer">{offer.text}</p> : null}
+          </div>
         </section>
 
         <div className="hl-container hl-claim">
@@ -959,11 +950,14 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             preparación.
           </p>
           <Link
-            href={signupHref.other}
+            href={closeHref}
             className="hl-btn hl-btn--light hl-btn--lg"
-            onClick={() => trackHomeEvent('cta_final_register')}
+            onClick={() => {
+              trackHomeEvent('cta_final_register');
+              trackHomeCta('cierre', closeHref);
+            }}
           >
-            Crear mi cuenta gratis
+            Probar DRALO gratis
             <ArrowRight aria-hidden="true" />
           </Link>
           <p className="hl-final__contact">

@@ -10,12 +10,11 @@ import HomeStudentMobileBoard from '@/components/home/HomeStudentMobileBoard';
 import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
 import HomeGuestLanding from '@/components/home/landing/HomeGuestLanding';
 import { landingFont } from '@/components/home/landing/landingFont';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTutorial } from '@/context/TutorialContext';
 import { useConfirmedUserRole, useUserRole } from '@/context/UserRoleContext';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
 import { supabase } from '@/utils/supabaseClient';
-import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
 import { appSessionShouldPersist, isDraloAppSurface, withAppPreviewSearch } from '@/lib/draloAppShell';
 
 const HomeInstallAppButton = dynamic(() => import('@/components/home/HomeInstallAppButton'), {
@@ -40,19 +39,8 @@ export default function HomePageClient() {
   /** En ordenador el invitado ve la landing; mientras se lee la sesión, también. */
   const showGuestLanding = isGuestHome || authPending;
   const phone = usePhoneViewport();
-  /** El bloque en inglés solo existe mientras se confirma una sesión ya guardada. */
-  const [omitHiddenEnglish, setOmitHiddenEnglish] = useState(false);
   const [appAsksLogin, setAppAsksLogin] = useState(false);
-
-  useLayoutEffect(() => {
-    if (!document.documentElement.classList.contains(SESSION_HINT_CLASS)) {
-      setOmitHiddenEnglish(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (session?.user) setOmitHiddenEnglish(false);
-  }, [session?.user]);
+  const showStudentHome = Boolean(session?.user) || hasStoredUser === true;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -86,7 +74,7 @@ export default function HomePageClient() {
   return (
     <>
       {showGuestLanding ? <HomeGuestLanding pending={authPending} prioritizeLcp /> : null}
-      {isGuestHome || (omitHiddenEnglish && !session?.user) ? null : (
+      {showStudentHome ? (
       <main className={`home-page ${landingFont.variable} home-page--student-mobile${authPending ? ' home-page--pending' : ''}`}>
         <div className="home-page__inner">
           {isRegistered ? <InviteFriendPromoBanner /> : null}
@@ -151,7 +139,7 @@ export default function HomePageClient() {
           {isRegistered ? <HomeQuickNav /> : null}
         </div>
       </main>
-      )}
+      ) : null}
     </>
   );
 }

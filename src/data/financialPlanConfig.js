@@ -113,6 +113,40 @@ export function isPlusOfferActive(now = new Date()) {
   return ymd <= PLUS_OFFER_END_DATE;
 }
 
+/** Textos y fechas de la barra, la etiqueta y la banda de la home. */
+export const HOME_OFFER = {
+  blackFriday: {
+    endDate: PLUS_ANNUAL_BF_END_DATE,
+    text: 'Black Friday: 12 meses de Plan Plus por 19,99 € · hasta el 30/11',
+    href: '/precios/?facturacion=anual',
+  },
+  monthly: {
+    endDate: PLUS_OFFER_END_DATE,
+    text: 'Plan Plus a 3,99 €/mes · hasta el 31/12',
+    href: '/precios/',
+  },
+};
+
+function madridYmd(now = new Date()) {
+  const date = now instanceof Date ? now : new Date(now);
+  if (Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+}
+
+/** Oferta visible en la home: Black Friday hasta el 30/11, mensual hasta el 31/12, luego ninguna. */
+export function activeHomeOffer(now = new Date()) {
+  const ymd = madridYmd(now);
+  if (!ymd) return null;
+  if (ymd <= HOME_OFFER.blackFriday.endDate) return HOME_OFFER.blackFriday;
+  if (ymd <= HOME_OFFER.monthly.endDate) return HOME_OFFER.monthly;
+  return null;
+}
+
 export function plusOfferDiscountPercent(price = PLUS_PRICE, original = PLUS_ORIGINAL_PRICE) {
   const current = Number(price);
   const list = Number(original);
