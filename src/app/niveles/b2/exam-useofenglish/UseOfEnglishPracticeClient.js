@@ -11,6 +11,7 @@ import { useSearchParams } from 'next/navigation';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
+import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
 import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { LEVELS_SCORE_SOURCE } from '@/utils/levelsScoreSource';
 import { computeB2PartScoreMetrics } from '@/utils/levelsPaperScoreMetrics';
@@ -1376,13 +1377,16 @@ function UseOfEnglishExamsPageInner() {
       />
       </div>
       {partFinishNotice && !partFinishNotice.error && (
-        <LevelsPartFinishBanner
-          passed={partFinishNotice.passed}
-          correct={partFinishNotice.correct}
-          total={partFinishNotice.total}
-          passing={partFinishNotice.passing}
-          lang={uoeUiLang}
-        />
+        <>
+          <LevelsPartFinishBanner
+            passed={partFinishNotice.passed}
+            correct={partFinishNotice.correct}
+            total={partFinishNotice.total}
+            passing={partFinishNotice.passing}
+            lang={uoeUiLang}
+          />
+          <BlackFridayResultsNotice />
+        </>
       )}
       {partFinishNotice?.error && (
         <LevelsPartFinishBanner

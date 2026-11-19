@@ -7,6 +7,7 @@ import { isAdminRole } from '@/utils/authRoles';
 import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/trainingFeedbackSounds';
 import { getGuestRegisterHref } from '@/lib/guestPreviewAccess';
 import { TrainingLivesEmpty, TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
+import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
 import { useTrainingLives } from '@/hooks/useTrainingLives';
 import { getQuizGameBank } from '@/data/quizGameLevels';
 import {
@@ -386,6 +387,7 @@ function QuizGameBoard({ level = 'b2' }) {
 
         {phase === 'results' ? (
           <section className={styles.panel} aria-labelledby="quiz-results">
+            <BlackFridayResultsNotice />
             <p className={styles.eyebrow}>Round over</p>
             <h1 id="quiz-results" className={styles.title}>
               {correctCount === answers.length && answers.length > 0 ? 'Clean sweep' : 'Nice run'}

@@ -22,6 +22,8 @@ import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import {
   formatEuroAmount,
   activeHomeOffer,
+  homeBandCta,
+  homeHeroCta,
   isBlackFridayOfferActive,
   PLUS_ANNUAL_BF_END_DATE,
   PLUS_ANNUAL_BF_PRICE,
@@ -646,12 +648,21 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
   const faq = publishedFaq(FAQ, blackFriday);
   const search = signupHref.search;
   const headerHref = withSrc('/registro/', 'header', search);
-  const heroHref = withSrc('/registro/', 'hero', search);
-  const heroOfferHref = withSrc(blackFriday ? '/precios/?facturacion=anual' : '/precios/', 'hero-oferta', search);
+  const heroCta = homeHeroCta();
+  const heroPrimaryHref = withSrc(heroCta.primary.href, heroCta.primary.src, search);
+  const heroSecondaryHref = withSrc(heroCta.secondary.href, heroCta.secondary.src, search);
   const exerciseHref = withSrc(TRY_EXERCISE_HREF, 'hero-ejercicio', search);
   const writingHref = withSrc(WRITING_PRACTICE_HREF, 'writing', search);
-  const midHref = withSrc('/registro/', 'mid', search);
-  const closeHref = withSrc('/registro/', 'cierre', search);
+  const midCta = homeBandCta('mid');
+  const closeCta = homeBandCta('cierre');
+  const midPrimaryHref = withSrc(midCta.primary.href, midCta.primary.src, search);
+  const midSecondaryHref = midCta.secondary
+    ? withSrc(midCta.secondary.href, midCta.secondary.src, search)
+    : '';
+  const closePrimaryHref = withSrc(closeCta.primary.href, closeCta.primary.src, search);
+  const closeSecondaryHref = closeCta.secondary
+    ? withSrc(closeCta.secondary.href, closeCta.secondary.src, search)
+    : '';
   const topbarHref = offer ? withSrc(offer.href, 'topbar', search) : '';
 
   return (
@@ -726,24 +737,27 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
                 <Link
-                  href={heroHref}
+                  href={heroPrimaryHref}
                   className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
                   onClick={() => {
-                    trackHomeEvent('cta_hero_register');
-                    trackHomeCta('hero', heroHref);
+                    if (heroCta.primary.href.startsWith('/registro')) trackHomeEvent('cta_hero_register');
+                    trackHomeCta(heroCta.primary.src, heroPrimaryHref);
                   }}
                 >
-                  Probar DRALO gratis
+                  {heroCta.primary.label}
                 </Link>
                 <Link
-                  href={heroOfferHref}
+                  href={heroSecondaryHref}
                   className="hl-btn hl-btn--ghost hl-hero__offer"
-                  onClick={() => trackHomeCta('hero-oferta', heroOfferHref)}
+                  onClick={() => {
+                    if (heroCta.secondary.href.startsWith('/registro')) trackHomeEvent('cta_hero_register');
+                    trackHomeCta(heroCta.secondary.src, heroSecondaryHref);
+                  }}
                 >
-                  Ver la oferta
+                  {heroCta.secondary.label}
                 </Link>
               </div>
-              <p className="hl-hero__fine">Sin tarjeta. Empiezas a practicar en un minuto.</p>
+              <p className="hl-hero__fine">{heroCta.microcopy}</p>
               <Link
                 href={exerciseHref}
                 className="hl-hero__exercise"
@@ -881,16 +895,28 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
           </div>
           <div className="hl-cta__action">
             <Link
-              href={midHref}
+              href={midPrimaryHref}
               className="hl-btn hl-btn--primary hl-btn--lg"
               onClick={() => {
-                trackHomeEvent('cta_plan_register');
-                trackHomeCta('mid', midHref);
+                if (midCta.primary.href.startsWith('/registro')) trackHomeEvent('cta_plan_register');
+                trackHomeCta(midCta.primary.src, midPrimaryHref);
               }}
             >
-              Probar DRALO gratis
+              {midCta.primary.label}
               <ArrowRight aria-hidden="true" />
             </Link>
+            {midCta.secondary ? (
+              <Link
+                href={midSecondaryHref}
+                className="hl-btn hl-btn--ghost hl-cta__secondary"
+                onClick={() => {
+                  trackHomeEvent('cta_plan_register');
+                  trackHomeCta(midCta.secondary.src, midSecondaryHref);
+                }}
+              >
+                {midCta.secondary.label}
+              </Link>
+            ) : null}
             {offer ? <p className="hl-cta__offer">{offer.text}</p> : null}
           </div>
         </section>
@@ -949,17 +975,31 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             Practica el B2 First, revisa tus errores y utiliza tus resultados para orientar tu
             preparación.
           </p>
-          <Link
-            href={closeHref}
-            className="hl-btn hl-btn--light hl-btn--lg"
-            onClick={() => {
-              trackHomeEvent('cta_final_register');
-              trackHomeCta('cierre', closeHref);
-            }}
-          >
-            Probar DRALO gratis
-            <ArrowRight aria-hidden="true" />
-          </Link>
+          <div className="hl-final__actions">
+            <Link
+              href={closePrimaryHref}
+              className="hl-btn hl-btn--light hl-btn--lg"
+              onClick={() => {
+                if (closeCta.primary.href.startsWith('/registro')) trackHomeEvent('cta_final_register');
+                trackHomeCta(closeCta.primary.src, closePrimaryHref);
+              }}
+            >
+              {closeCta.primary.label}
+              <ArrowRight aria-hidden="true" />
+            </Link>
+            {closeCta.secondary ? (
+              <Link
+                href={closeSecondaryHref}
+                className="hl-btn hl-btn--lg hl-final__secondary"
+                onClick={() => {
+                  trackHomeEvent('cta_final_register');
+                  trackHomeCta(closeCta.secondary.src, closeSecondaryHref);
+                }}
+              >
+                {closeCta.secondary.label}
+              </Link>
+            ) : null}
+          </div>
           <p className="hl-final__contact">
             Contacto:{' '}
             <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>

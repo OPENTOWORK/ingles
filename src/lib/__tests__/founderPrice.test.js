@@ -7,6 +7,8 @@ import {
   PLUS_ORIGINAL_PRICE,
   PLUS_PRICE,
   PLUS_PRICE_AFTER_OFFER,
+  homeBandCta,
+  homeHeroCta,
   isBlackFridayOfferActive,
   isPlusOfferActive,
   plusAnnualRegularDiscountPercent,
@@ -40,6 +42,19 @@ describe('plus price offer', () => {
     assert.equal(isBlackFridayOfferActive(new Date('2026-11-30T22:59:59.000Z')), true);
     assert.equal(isBlackFridayOfferActive(new Date('2026-11-30T23:00:00.000Z')), false);
     assert.equal(isBlackFridayOfferActive(new Date('2026-12-01T00:00:00.000Z')), false);
+  });
+
+  it('puts the year first on the home only through 30 November 2026', () => {
+    const during = new Date('2026-11-30T22:59:59.000Z');
+    const after = new Date('2026-12-01T00:00:00.000Z');
+    assert.equal(homeHeroCta(during).primary.src, 'hero-anual');
+    assert.equal(homeHeroCta(during).secondary.src, 'hero');
+    assert.equal(homeHeroCta(after).primary.label, 'Probar DRALO gratis');
+    assert.equal(homeHeroCta(after).secondary.label, 'Ver la oferta');
+    assert.equal(homeBandCta('mid', during).primary.src, 'mid-anual');
+    assert.equal(homeBandCta('cierre', during).secondary.src, 'cierre');
+    assert.equal(homeBandCta('mid', after).secondary, null);
+    assert.equal(homeBandCta('cierre', after).primary.src, 'cierre');
   });
 
   it('stays visible through the end of 31 December 2026 in Madrid', () => {

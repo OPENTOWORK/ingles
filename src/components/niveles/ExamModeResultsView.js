@@ -9,6 +9,7 @@ import { getNivelesLevelHub } from '@/data/nivelesLevelHub';
 import { getB2PartPassingPoints } from '@/utils/levelsB2PartScoring';
 import { getExamSectionPartTitle } from '@/utils/formatLevelsPartDisplayName';
 import TheoryLevelStars from '@/components/theory/TheoryLevelStars';
+import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
 import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 import styles from './ExamModeResultsView.module.css';
 
@@ -508,6 +509,8 @@ function ExamModeResultsViewInner({ slug }) {
             </div>
           ) : null}
         </header>
+
+        {stats.allComplete ? <BlackFridayResultsNotice /> : null}
 
         {attemptHistory.length > 0 ? (
           <section className={styles.history}>

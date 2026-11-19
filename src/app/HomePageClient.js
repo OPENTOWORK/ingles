@@ -8,6 +8,7 @@ import HomeQuickNav from '@/components/home/HomeQuickNav';
 import HomeTutorialButton from '@/components/home/HomeTutorialButton';
 import HomeStudentMobileBoard from '@/components/home/HomeStudentMobileBoard';
 import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
+import { BlackFridayDashboardBanner } from '@/components/promo/BlackFridayAppPromo';
 import HomeGuestLanding from '@/components/home/landing/HomeGuestLanding';
 import { landingFont } from '@/components/home/landing/landingFont';
 import { useEffect, useState } from 'react';
@@ -77,6 +78,7 @@ export default function HomePageClient() {
       {showStudentHome ? (
       <main className={`home-page ${landingFont.variable} home-page--student-mobile${authPending ? ' home-page--pending' : ''}`}>
         <div className="home-page__inner">
+          {isRegistered ? <BlackFridayDashboardBanner /> : null}
           {isRegistered ? <InviteFriendPromoBanner /> : null}
           <section className="home-hero" aria-labelledby="home-title">
             <HomeInstallAppButton />

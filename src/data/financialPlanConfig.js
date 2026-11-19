@@ -147,6 +147,62 @@ export function activeHomeOffer(now = new Date()) {
   return null;
 }
 
+/** Botones del hero. Durante el Black Friday el año es el principal. */
+export const HOME_HERO_CTA = {
+  blackFriday: {
+    primary: { label: 'Quiero el año por 19,99 €', href: '/precios/?facturacion=anual', src: 'hero-anual' },
+    secondary: { label: 'Probar DRALO gratis', href: '/registro/', src: 'hero' },
+    microcopy: '12 meses por 19,99 € (1,67 €/mes) · Oferta hasta el 30/11',
+  },
+  standard: {
+    primary: { label: 'Probar DRALO gratis', href: '/registro/', src: 'hero' },
+    secondary: { label: 'Ver la oferta', href: '/precios/', src: 'hero-oferta' },
+    microcopy: 'Sin tarjeta. Empiezas a practicar en un minuto.',
+  },
+};
+
+export function homeHeroCta(now = new Date()) {
+  return isBlackFridayOfferActive(now) ? HOME_HERO_CTA.blackFriday : HOME_HERO_CTA.standard;
+}
+
+/** Banda intermedia y cierre. Fuera del Black Friday queda el botón de registro. */
+export function homeBandCta(placement, now = new Date()) {
+  const freeSrc = placement === 'cierre' ? 'cierre' : 'mid';
+  if (!isBlackFridayOfferActive(now)) {
+    return {
+      primary: { label: 'Probar DRALO gratis', href: '/registro/', src: freeSrc },
+      secondary: null,
+    };
+  }
+  return {
+    primary: {
+      label: 'Quiero el año por 19,99 €',
+      href: '/precios/?facturacion=anual',
+      src: placement === 'cierre' ? 'cierre-anual' : 'mid-anual',
+    },
+    secondary: { label: 'Probar DRALO gratis', href: '/registro/', src: freeSrc },
+  };
+}
+
+/** Avisos del Black Friday dentro de la cuenta, hasta el 30/11 incluido. */
+export const BLACK_FRIDAY_APP_PROMO = {
+  banner: {
+    title: 'Black Friday: 12 meses de Plan Plus por 19,99 €',
+    text: 'Corrección de Writing y Speaking, exámenes mensuales y seguimiento de tu progreso durante todo el año. Hasta el 30/11.',
+    cta: 'Quiero el año',
+    href: '/precios/?facturacion=anual&src=app-banner',
+    src: 'app-banner',
+  },
+  results: {
+    title: 'Acabas de practicar. Sigue con todo el año por 19,99 €.',
+    text: 'Con el Plan Plus tienes corrección de Writing y Speaking, Training y Quiz sin límite de vidas y seguimiento de tu progreso. Son 1,67 € al mes.',
+    cta: 'Quiero el año',
+    dismiss: 'Ahora no',
+    href: '/precios/?facturacion=anual&src=app-resultados',
+    src: 'app-resultados',
+  },
+};
+
 export function plusOfferDiscountPercent(price = PLUS_PRICE, original = PLUS_ORIGINAL_PRICE) {
   const current = Number(price);
   const list = Number(original);

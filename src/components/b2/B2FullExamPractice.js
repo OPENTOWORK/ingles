@@ -10,6 +10,7 @@ import { B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
+import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
 import { useLevelsCategoryTimer } from '@/hooks/useLevelsCategoryTimer';
 import { supabase } from '@/utils/supabaseClient';
 import { getCachedB2Level, getCachedB2ExamNamesBySlot } from '@/utils/b2LevelCache';
@@ -242,12 +243,15 @@ function B2FullExamPracticeInner() {
           </div>
 
           {examComplete ? (
-            <LevelsPartFinishBanner
-              passed
-              correct={approvedParts}
-              total={B2_FULL_EXAM_PARTS_COUNT}
-              passing={B2_FULL_EXAM_PARTS_COUNT}
-            />
+            <>
+              <LevelsPartFinishBanner
+                passed
+                correct={approvedParts}
+                total={B2_FULL_EXAM_PARTS_COUNT}
+                passing={B2_FULL_EXAM_PARTS_COUNT}
+              />
+              <BlackFridayResultsNotice />
+            </>
           ) : null}
 
           <div

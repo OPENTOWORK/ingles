@@ -18,6 +18,7 @@ import {
   TypedGapText,
 } from '@/components/training/TrainingItemWidgets';
 import TrainingStarsCelebration from '@/components/training/TrainingStarsCelebration';
+import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
 import { playTrainingAnswerSound, playTrainingFinishSound } from '@/lib/trainingFeedbackSounds';
 import {
   formatTrainingSolution,
@@ -436,6 +437,7 @@ export default function TrainingGapFillExercise({
           <section className={styles.card}>
             {header}
 
+            <BlackFridayResultsNotice />
             <h2 className={styles.summaryTitle}>Exercise complete</h2>
             <p className={styles.score}>
               Score: {correctCount} / {total}

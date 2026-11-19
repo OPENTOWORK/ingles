@@ -10,6 +10,7 @@ import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPick
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
+import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
 import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ExamPracticeReportError from '@/components/exam/ExamPracticeReportError';
 import ExamPracticeSurfaceStyles from '@/components/exam/ExamPracticeSurfaceStyles';
@@ -1076,6 +1077,7 @@ export function B2ExamPracticeChrome({
               lang={lang}
             />
           ) : null}
+          {resolvedPartFinishNotice && !resolvedPartFinishNotice.error ? <BlackFridayResultsNotice /> : null}
 
           {!phoneSkillChrome && !useFoldableSkillNav && partTabsVariant !== 'excel'
             ? partTabsEl
