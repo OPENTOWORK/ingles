@@ -99,6 +99,35 @@ body.reading-night-mode .perfil-page {
   color: #e2e8f0;
 }
 
+body.reading-night-mode .perfil-student__side,
+body.reading-night-mode .perfil-student__card,
+body.reading-night-mode .perfil-student__help,
+body.reading-night-mode .perfil-student__menu {
+  background: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+body.reading-night-mode .perfil-student__identity strong,
+body.reading-night-mode .perfil-student__heading h1,
+body.reading-night-mode .perfil-student__card h2,
+body.reading-night-mode .perfil-student__stat,
+body.reading-night-mode .perfil-student__side a,
+body.reading-night-mode .perfil-student__card .setting-label {
+  color: #f8fafc;
+}
+
+body.reading-night-mode .perfil-student__side a.is-active,
+body.reading-night-mode .perfil-student__side a.is-active:hover {
+  background: #734a91;
+  color: #fff;
+}
+
+body.reading-night-mode .perfil-student__identity,
+body.reading-night-mode .perfil-student__results li {
+  border-color: #475569;
+}
+
 body.reading-night-mode .header p,
 body.reading-night-mode .breadcrumb,
 body.reading-night-mode .area-card__desc,

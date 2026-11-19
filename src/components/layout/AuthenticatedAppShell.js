@@ -13,7 +13,7 @@ import { useItPreviewAdminBuzonLayout } from '@/hooks/useItPreviewAdminBuzonLayo
 import AppNav from '@/components/layout/AppNav';
 import { landingFont } from '@/components/home/landing/landingFont';
 import AdminShell from '@/components/admin/AdminShell';
-import { shouldShowAdminShell } from '@/config/appNavMenu';
+import { isAppNavReady, shouldShowAdminShell } from '@/config/appNavMenu';
 import StudySessionBarGate from '@/components/study/StudySessionBarGate';
 import ProfileStudyTimerPill from '@/components/study/ProfileStudyTimerPill';
 
@@ -45,9 +45,8 @@ export default function AuthenticatedAppShell({
   useItPreviewAdminBuzonLayout();
   const showAdminShell = shouldShowAdminShell(pathname, preview.userRole);
   const showStudyBar = Boolean(preview.session?.access_token) && !showAdminShell;
-  const sessionUserId = preview.session?.user?.id ?? null;
   /** Sin rol aún, la barra no pinta un menú a medias: Tests saldría después. */
-  const navReady = !sessionUserId || roleSettledForUserId === sessionUserId;
+  const navReady = isAppNavReady(preview.session, roleSettledForUserId);
 
   return (
     <>
@@ -72,6 +71,7 @@ export default function AuthenticatedAppShell({
         userRole={preview.userRole}
         session={preview.session}
         roleConfirmedForUserId={roleConfirmedForUserId}
+        roleSettledForUserId={roleSettledForUserId}
       >
         <TutorialProvider>
           <PlacementAccessProvider session={preview.session} userRole={preview.userRole}>

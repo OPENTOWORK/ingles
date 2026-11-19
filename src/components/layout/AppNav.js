@@ -283,7 +283,7 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
           ) : null}
         </div>
 
-        <ReadingNightModeToggle variant="desktop" />
+        {navModel.showNightMode ? <ReadingNightModeToggle variant="desktop" /> : null}
 
         <div className="app-nav__account" role="group" aria-label="Account">
           {navModel.guest ? (

@@ -95,6 +95,12 @@ export function isGuestNavSession(session) {
   return !session;
 }
 
+/** Header stays blank until a signed-in role has settled. Guests are ready immediately. */
+export function isAppNavReady(session, roleSettledForUserId) {
+  const sessionUserId = session?.user?.id ?? null;
+  return !sessionUserId || roleSettledForUserId === sessionUserId;
+}
+
 /** Enlace a login conservando la ruta de destino tras iniciar sesión. */
 export function getGuestLoginHref(targetHref) {
   return `/login?next=${encodeURIComponent(targetHref)}`;
@@ -137,9 +143,16 @@ export function shouldShowLoggedInPrimaryNav(_session) {
   return true;
 }
 
-/** Dralo AI visible para todos (visitantes → login al pulsar sub-ítems). */
-export function shouldShowDraloNav(_session) {
-  return true;
+/** Dralo AI stays in the header for staff only. Students and guests do not see it. */
+export function shouldShowDraloNav(userRole) {
+  return (
+    isAdminRole(userRole) ||
+    isTeacherRole(userRole) ||
+    isCoordinatorRole(userRole) ||
+    isSupportRole(userRole) ||
+    isItRole(userRole) ||
+    isMarketingRole(userRole)
+  );
 }
 
 /**
@@ -149,7 +162,8 @@ export function shouldShowDraloNav(_session) {
 export function buildAppNavModel(userRole, session) {
   const guest = isGuestNavSession(session);
   const admin = isAdminRole(userRole);
-  const showPricing = guest || canViewPricing(userRole);
+  const student = !guest && usesStudentContentRestrictions(userRole);
+  const showPricing = !student && (guest || canViewPricing(userRole));
   const staffItems = guest ? [] : getStaffPanelMenuItemsForRole(userRole);
   const useAdminSidebarNav = admin && staffItems.length > 0;
 
@@ -158,13 +172,14 @@ export function buildAppNavModel(userRole, session) {
     admin,
     sectionLinks: getNavLinksForMobileDrawer(userRole, session),
     showPrimaryNav: shouldShowLoggedInPrimaryNav(session),
-    showDralo: shouldShowDraloNav(session),
+    showDralo: !guest && shouldShowDraloNav(userRole),
     draloLocked: isDraloAiLockedForRole(userRole),
     /** Cabecera, entre Dralo AI y Night. Solo admin: los estudiantes no lo ven. */
     showPlacement: !guest && canViewPlacementAndTraining(userRole),
     /** Sobrescribir con useExamStrategiesAccess() cuando haya sesión (plan real). */
     examStrategiesLocked: false,
     showPricing,
+    showNightMode: !student,
     showContact: true,
     showLogin: guest,
     showProfile: !guest,
@@ -177,7 +192,7 @@ export function buildAppNavModel(userRole, session) {
     staffAdminLabel: 'Admin',
     showStaffDropdown: !useAdminSidebarNav && staffItems.length > 1,
     showStaffSingleLink: !useAdminSidebarNav && staffItems.length === 1,
-    isStudent: usesStudentContentRestrictions(userRole),
+    isStudent: student,
   };
 }
 /** Estado activo de enlaces del menú principal (incluye pestaña theory y rutas /teoria de examen). */

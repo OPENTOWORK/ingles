@@ -7,12 +7,19 @@ const UserRoleContext = createContext({
   userRole: 'student',
   session: null,
   roleConfirmedForUserId: null,
+  roleSettledForUserId: null,
 });
 
-export function UserRoleProvider({ userRole, session, roleConfirmedForUserId = null, children }) {
+export function UserRoleProvider({
+  userRole,
+  session,
+  roleConfirmedForUserId = null,
+  roleSettledForUserId = null,
+  children,
+}) {
   const value = useMemo(
-    () => ({ userRole, session, roleConfirmedForUserId }),
-    [userRole, session, roleConfirmedForUserId],
+    () => ({ userRole, session, roleConfirmedForUserId, roleSettledForUserId }),
+    [userRole, session, roleConfirmedForUserId, roleSettledForUserId],
   );
   return <UserRoleContext.Provider value={value}>{children}</UserRoleContext.Provider>;
 }

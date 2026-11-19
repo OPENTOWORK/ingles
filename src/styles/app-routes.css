@@ -16364,6 +16364,340 @@ body.reading-night-mode .levels-writing-strategy__check-item {
   box-sizing: border-box;
 }
 
+.perfil-page--student.shell {
+  max-width: 1450px;
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.perfil-student__nav {
+  position: sticky;
+  top: 88px;
+}
+
+.perfil-student__menu,
+.perfil-student__backdrop {
+  display: none;
+}
+
+.perfil-student__side {
+  background: #fff;
+  border: 1px solid #e6def1;
+  border-radius: 24px;
+  padding: 22px 16px;
+  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
+}
+
+.perfil-student__identity {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 0 8px 18px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #e6def1;
+}
+
+.perfil-student__identity strong,
+.perfil-student__heading h1,
+.perfil-student__card h2 {
+  color: #211c50;
+}
+
+.perfil-student__identity strong {
+  display: block;
+  font-size: 15px;
+}
+
+.perfil-student__identity small,
+.perfil-student__eyebrow,
+.perfil-student__note,
+.perfil-student__card p,
+.perfil-student__results time {
+  color: #6c6886;
+}
+
+.perfil-student__avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.perfil-student__avatar--letter {
+  display: grid;
+  place-items: center;
+  background: #734a91;
+  color: #fff;
+  font-weight: 800;
+}
+
+.perfil-student__group-label {
+  margin: 16px 8px 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #734a91;
+}
+
+.perfil-student__side ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.perfil-student__side a {
+  display: block;
+  margin: 2px 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: #211c50;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.perfil-student__menu:focus-visible,
+.perfil-student__side a:focus-visible {
+  outline: 2px solid #734a91;
+  outline-offset: 2px;
+}
+
+.perfil-student__side a:hover,
+.perfil-student__side a:focus-visible {
+  background: #f4effb;
+}
+
+.perfil-student__side a.is-active {
+  background: #734a91;
+  color: #fff;
+}
+
+.perfil-student__heading {
+  margin-bottom: 18px;
+}
+
+.perfil-student__eyebrow {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.perfil-student__heading h1 {
+  margin: 0 0 6px;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+}
+
+.perfil-student__heading p,
+.perfil-student__card p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.perfil-student__metrics,
+.perfil-student__split {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.perfil-student__split {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+}
+
+.perfil-student__card {
+  background: #fff;
+  border: 1px solid #e6def1;
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 16px;
+  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
+}
+
+.perfil-student__metrics .perfil-student__card,
+.perfil-student__split .perfil-student__card {
+  margin-bottom: 0;
+}
+
+.perfil-student__pill {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #734a91;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.perfil-student__stat {
+  margin: 0 0 6px;
+  color: #211c50;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.perfil-student__results {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
+.perfil-student__results li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-top: 1px solid #e6def1;
+  color: #211c50;
+}
+
+.perfil-student__card--danger {
+  border-color: #fecdd3;
+}
+
+.perfil-student__danger-title {
+  color: #9f1239;
+}
+
+.perfil-student__identity-row {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.perfil-student__row,
+.perfil-student__help {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.perfil-student__help {
+  margin-top: 8px;
+  padding: 18px 22px;
+  border-radius: 22px;
+  background: #fff;
+  border: 1px solid #e6def1;
+}
+
+.perfil-student__switch {
+  width: 52px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: #ddd6ea;
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.perfil-student__switch::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+}
+
+.perfil-student__switch.is-on {
+  background: #734a91;
+}
+
+.perfil-student__switch.is-on::after {
+  transform: translateX(20px);
+}
+
+.perfil-student__card .setting-label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 12px 0;
+  font-weight: 700;
+  color: #211c50;
+}
+
+.perfil-student__card .action-btn,
+.perfil-student__card .profile-plan-upgrade-card__cta {
+  margin-top: 16px;
+}
+
+@media (max-width: 900px) {
+  .perfil-page--student.shell {
+    grid-template-columns: 1fr;
+  }
+
+  .perfil-student__nav {
+    position: static;
+  }
+
+  .perfil-student__menu {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    border: 1px solid #e6def1;
+    border-radius: 999px;
+    background: #fff;
+    color: #211c50;
+    font-weight: 800;
+  }
+
+  .perfil-student__backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    border: 0;
+    background: rgba(33, 28, 80, 0.45);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .perfil-student__backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .perfil-student__side {
+    position: fixed;
+    z-index: 80;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(320px, 88vw);
+    overflow: auto;
+    border-radius: 0 24px 24px 0;
+    transform: translateX(-105%);
+    visibility: hidden;
+    transition: transform 0.2s ease;
+  }
+
+  .perfil-student__side.is-open {
+    transform: none;
+    visibility: visible;
+  }
+
+  .perfil-student__metrics,
+  .perfil-student__split,
+  .perfil-student__results li,
+  .perfil-student__row,
+  .perfil-student__help {
+    grid-template-columns: 1fr;
+    display: grid;
+  }
+}
+
 /* Perfil con el formato de la home: fondo lavanda, fuente y acentos morados. */
 body:not(.reading-night-mode):has(.perfil-page) {
   background:
@@ -16388,6 +16722,15 @@ body:not(.reading-night-mode) .perfil-page a {
 
 body:not(.reading-night-mode) .perfil-page a:hover {
   color: #5634d6;
+}
+
+body:not(.reading-night-mode) .perfil-page .perfil-student__side a {
+  color: #211c50;
+}
+
+body:not(.reading-night-mode) .perfil-page .perfil-student__side a.is-active,
+body:not(.reading-night-mode) .perfil-page .perfil-student__side a.is-active:hover {
+  color: #fff;
 }
 
 body:not(.reading-night-mode) .perfil-page .header h1,

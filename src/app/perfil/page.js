@@ -32,8 +32,15 @@ import ProfileStudyPlannerPanel from '@/components/perfil/ProfileStudyPlannerPan
 import ProfileVocabularyPanel from '@/components/perfil/ProfileVocabularyPanel';
 import ProfileComingSoon from '@/components/perfil/ProfileComingSoon';
 import ProfileTabsNav from '@/components/perfil/ProfileTabsNav';
+import ProfileStudentSidebar from '@/components/perfil/ProfileStudentSidebar';
+import ProfileStudentSections from '@/components/perfil/ProfileStudentSections';
 import { PROFILE_TABS, PROFILE_TAB_LABELS, isStudentHiddenProfileTab, getVisibleProfileTabs } from '@/components/perfil/profileTabsConfig';
-import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
+import {
+  buildStudentProfileHistoryUrl,
+  isStudentSidebarSection,
+  resolveProfileShell,
+  resolveStudentProfileTab,
+} from '@/lib/studentProfileNav';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
 import { useSubscription } from '@/hooks/useSubscription';
 import ProfileAvatarUpload from '@/components/perfil/ProfileAvatarUpload';
@@ -194,14 +201,19 @@ export default function ProfilePage() {
   });
 
   const router = useRouter();
-  const { userRole, session: layoutSession } = useUserRole();
+  const { userRole, session: layoutSession, roleSettledForUserId } = useUserRole();
   const {
     subscription,
     isActive: subscriptionIsActive,
     loading: subscriptionLoading,
     refresh: refreshSubscription,
   } = useSubscription();
-  const isStudent = usesStudentContentRestrictions(userRole);
+  const profileShell = resolveProfileShell({
+    session: layoutSession,
+    userRole,
+    roleSettledForUserId,
+  });
+  const isStudent = profileShell.isStudent;
   const {
     applyLimits,
     progressTracking,
@@ -278,19 +290,26 @@ export default function ProfilePage() {
     void refreshEntitlements();
   }, [planLoading, livePlanSlug, planSlug, refreshEntitlements]);
 
-  /** Aplica ?tab= solo al entrar (deep link). No re-leer en cada cambio de pestaña. */
+  /** Students follow the address on load and on back/forward. Staff keep the first deep link. */
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const params = new URLSearchParams(window.location.search);
-    const tab = params.get('tab');
-    const invite = params.get('invite') === '1';
-    if (invite) setOpenInviteFromUrl(true);
-    if (tab) {
-      const valid = PROFILE_TABS.find((t) => t.id === tab);
-      if (valid && !(isStudent && isStudentHiddenProfileTab(tab, true))) {
-        setActiveTab(tab);
+    if (typeof window === 'undefined') return undefined;
+    const applyFromLocation = () => {
+      const params = new URLSearchParams(window.location.search);
+      const invite = params.get('invite') === '1';
+      setOpenInviteFromUrl(invite);
+      const tab = params.get('tab');
+      if (isStudent) {
+        setActiveTab(resolveStudentProfileTab(tab, { invite }));
+        return;
       }
-    }
+      if (!tab) return;
+      const valid = PROFILE_TABS.find((item) => item.id === tab);
+      if (valid && !isStudentHiddenProfileTab(tab, false)) setActiveTab(tab);
+    };
+    applyFromLocation();
+    if (!isStudent) return undefined;
+    window.addEventListener('popstate', applyFromLocation);
+    return () => window.removeEventListener('popstate', applyFromLocation);
   }, [isStudent]);
 
   useEffect(() => {
@@ -303,16 +322,17 @@ export default function ProfilePage() {
     (tabId) => {
       setActiveTab(tabId);
       if (typeof window === 'undefined') return;
-      const url = new URL(window.location.href);
-      if (tabId === 'overview') {
-        url.searchParams.delete('tab');
-      } else {
-        url.searchParams.set('tab', tabId);
+      if (isStudent) {
+        const next = buildStudentProfileHistoryUrl(window.location.href, tabId);
+        window.history.pushState({ profileTab: tabId }, '', next);
+        return;
       }
-      const next = `${url.pathname}${url.search}`;
-      router.replace(next, { scroll: false });
+      const url = new URL(window.location.href);
+      if (tabId === 'overview') url.searchParams.delete('tab');
+      else url.searchParams.set('tab', tabId);
+      router.replace(`${url.pathname}${url.search}`, { scroll: false });
     },
-    [router],
+    [router, isStudent],
   );
 
   const integratedStatsLoadedRef = useRef(false);
@@ -1019,7 +1039,7 @@ export default function ProfilePage() {
   };
 
   // Funciones de metas
-  if (loading) {
+  if (loading || !profileShell.roleReady) {
     return (
       <main className={`shell perfil-page center ${landingFont.variable}`}>
         <div className="loader" aria-label="Loading" />
@@ -1068,8 +1088,20 @@ export default function ProfilePage() {
     : null;
 
   return (
-    <main className={`shell perfil-page ${landingFont.variable}${activeTab === 'mis-datos' ? ' perfil-page--mis-datos' : ''}`}>
-      <ProfileTabsNav {...tabsProps} />
+    <main className={`shell perfil-page ${landingFont.variable}${isStudent ? ' perfil-page--student' : ''}${activeTab === 'mis-datos' ? ' perfil-page--mis-datos' : ''}`}>
+      {isStudent ? (
+        <ProfileStudentSidebar
+          activeTab={activeTab}
+          onSelectTab={handleSelectTab}
+          displayName={displayName}
+          avatarUrl={avatarDisplay.displayUrl}
+          planLabel={activePlan?.nombre ? `${activePlan.nombre} plan` : subscriptionPlan?.nombre ? `${subscriptionPlan.nombre} plan` : ''}
+        />
+      ) : (
+        <ProfileTabsNav {...tabsProps} />
+      )}
+      <div className={isStudent ? 'perfil-student__column' : undefined}>
+      {isStudent ? null : (
       <header className="header header--mascot">
           <ProfileAvatarUpload
             avatarUrl={avatarDisplay.displayUrl}
@@ -1099,8 +1131,74 @@ export default function ProfilePage() {
             <SiteMascot variant={6} width={130} alt="" />
           </div>
         </header>
+      )}
 
-      {studentTabLocked ? (
+      {isStudent && isStudentSidebarSection(activeTab) ? (
+        <ProfileStudentSections
+          activeTab={activeTab}
+          user={user}
+          showProgressTracking={showProgressTracking}
+          activatingPlan={activatingPlan}
+          paidProfile={paidProfile}
+          activePlan={activePlan}
+          showFreePlanUpgrade={showFreePlanUpgrade}
+          subscriptionPlan={subscriptionPlan}
+          planSlug={planSlug}
+          onOpenSubscription={() => handleSelectTab('subscription')}
+          onOpenExams={() => handleSelectTab('exam-statistics')}
+          accessToken={layoutSession?.access_token}
+          fullName={fullName}
+          setFullName={setFullName}
+          birthDate={birthDate}
+          setBirthDate={setBirthDate}
+          biography={biography}
+          setBiography={setBiography}
+          personalSaveError={personalSaveError}
+          personalSaveMessage={personalSaveMessage}
+          saving={saving}
+          onSavePersonalData={handleSavePersonalData}
+          clearPersonalStatus={() => {
+            setPersonalSaveMessage('');
+            setPersonalSaveError('');
+          }}
+          avatarDisplay={avatarDisplay}
+          mascotFallbackUrl={mascotFallbackUrl}
+          displayName={displayName}
+          onSelectAvatar={handleAvatarUpload}
+          avatarUploading={avatarUploading}
+          avatarError={avatarError}
+          subscriptionIsActive={subscriptionIsActive}
+          subscriptionPeriodLabel={subscriptionPeriodLabel}
+          deleteFlowActive={deleteFlowActive}
+          deleteCode={deleteCode}
+          setDeleteCode={setDeleteCode}
+          deleteCodeSentAt={deleteCodeSentAt}
+          sendingDeleteCode={sendingDeleteCode}
+          deletingAccount={deletingAccount}
+          onSendDeleteCode={handleSendDeleteCode}
+          onDeleteAccount={handleDeleteAccount}
+          subscriptionDisplay={subscriptionDisplay}
+          showPricingLink={showPricingLink}
+          openInviteFromUrl={openInviteFromUrl}
+          inviteEmail={inviteEmail}
+          setInviteEmail={setInviteEmail}
+          inviteMessage={inviteMessage}
+          setInviteMessage={setInviteMessage}
+          invitingFriend={invitingFriend}
+          onInviteFriend={handleInviteFriend}
+          inviteFeedback={inviteFeedback}
+          clearInviteFeedback={() => setInviteFeedback(null)}
+          loadingReferrals={loadingReferrals}
+          referralInvitations={referralInvitations}
+          referralStatusLabel={referralStatusLabel}
+          newPassword={newPassword}
+          setNewPassword={setNewPassword}
+          onPasswordChange={handlePasswordChange}
+          notifications={notifications}
+          setNotifications={setNotifications}
+          onSaveSettings={handleSettingsUpdate}
+        />
+      ) : studentTabLocked ? (
         <ProfileComingSoon section={PROFILE_TAB_LABELS[activeTab]} />
       ) : (
         <>
@@ -2201,6 +2299,7 @@ export default function ProfilePage() {
       )}
         </>
       )}
+      </div>
 
       <GlobalStyles />
     </main>

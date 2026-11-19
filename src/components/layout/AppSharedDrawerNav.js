@@ -7,6 +7,7 @@ import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import SiteThemePicker from '@/components/layout/SiteThemePicker';
+import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import {
   NAV_LINK_CONTACT,
   NAV_LINK_DRALO_AI,
@@ -69,6 +70,7 @@ export function AppSharedDrawerNav({
     showLogin,
     showProfile,
     showLogout,
+    showNightMode,
     staffItems,
     showStaffDropdown,
     showStaffSingleLink,
@@ -217,6 +219,8 @@ export function AppSharedDrawerNav({
           {staffItems[0].label}
         </NavLink>
       ) : null}
+
+      {showNightMode ? <ReadingNightModeToggle variant="mobile" /> : null}
 
       {showProfile ? (
         <NavLink
