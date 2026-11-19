@@ -12,6 +12,7 @@ import {
   AbTrust,
   ReadingPreview,
 } from '@/components/landing/ab/AbShell';
+import { plusBlackFridayFaqItems } from '@/data/financialPlanConfig';
 import FoundingSlotsStatus from '@/components/landing/ab/FoundingSlotsStatus';
 import { CONDITION_SUMMARY, buildRegisterHref } from '@/lib/abExperiment';
 import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
@@ -156,7 +157,7 @@ export default function CampaignVisual({ source = 'direct' }) {
         seats={<FoundingSlotsStatus variant="badge" />}
       />
 
-      <AbFaq title="Antes de registrarte" items={FAQ} />
+      <AbFaq title="Antes de registrarte" items={[...FAQ, ...plusBlackFridayFaqItems()]} />
 
       <AbFinal
         title="Tu preparación continúa fuera de clase."

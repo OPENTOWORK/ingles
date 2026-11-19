@@ -1,4 +1,4 @@
-import { getPlanBySlug } from '@/data/financialPlanConfig';
+import { getPlanBySlug, plusAnnualChargeEuros } from '@/data/financialPlanConfig';
 import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { notifyAdminsAndMarketing } from '@/lib/notifyAdminsAndMarketing';
 import { normalizeEmail } from '@/utils/authRoles';
@@ -51,10 +51,9 @@ function channelLabel(channel) {
 function priceLabel(planSlug, interval) {
   const plan = getPlanBySlug(planSlug);
   if (interval === 'year') {
-    const monthly = Number(plan?.precioAnualLanzamiento);
-    if (monthly > 0) {
-      const yearly = (monthly * 12).toFixed(2).replace('.', ',');
-      return `${yearly} €/año`;
+    const yearly = plusAnnualChargeEuros(plan);
+    if (yearly > 0) {
+      return `${yearly.toFixed(2).replace('.', ',')} €/año`;
     }
   }
   return plan?.precioLabel && plan.precioLabel !== '0€' ? plan.precioLabel : 'De pago';

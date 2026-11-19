@@ -1,5 +1,13 @@
 import { SITE_URL } from '@/lib/siteSeo';
-import { getPlanBySlug } from '@/data/financialPlanConfig';
+import {
+  formatEuroAmount,
+  getPlanBySlug,
+  PLUS_ANNUAL_BF_PRICE,
+  PLUS_BLACK_FRIDAY_UNTIL_LABEL,
+  PLUS_MONTHLY_PRICE,
+  PLUS_OFFER_UNTIL_LABEL,
+  plusAnnualRenewalCopy,
+} from '@/data/financialPlanConfig';
 import {
   FOUNDING_SURVEY_DELAY_DAYS,
   FOUNDING_SURVEY_RESPONSE_DAYS,
@@ -177,7 +185,23 @@ export const CAMPAIGN_FAQ = [
   },
   {
     q: '¿Hasta cuándo está disponible esta oferta?',
-    a: 'Hasta el 31/12/2026.',
+    a: `Hasta el ${PLUS_OFFER_UNTIL_LABEL}.`,
+  },
+  {
+    q: '¿Qué incluye la oferta de Black Friday?',
+    a: `El año de Plus por ${formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}, con 12 meses de acceso y dos meses de regalo incluidos. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+  },
+  {
+    q: '¿Se renueva automáticamente?',
+    a: `Sí. ${plusAnnualRenewalCopy()}`,
+  },
+  {
+    q: '¿Hasta cuándo puedo contratarla?',
+    a: `Hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+  },
+  {
+    q: '¿Puedo seguir pagando mensual?',
+    a: `Sí. El Plan Plus a ${formatEuroAmount(PLUS_MONTHLY_PRICE)}/mes está disponible hasta el ${PLUS_OFFER_UNTIL_LABEL}.`,
   },
   {
     q: '¿Qué incluye Plan Plus?',

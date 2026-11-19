@@ -22,6 +22,19 @@ export function normalizeSignupSource(value) {
   return NAMED_SOURCES.has(raw) ? raw : 'otros';
 }
 
+/** Conserva UTM y clics de anuncio al pasar de la home a precios. */
+export function withAcquisitionParams(href, search) {
+  const incoming = new URLSearchParams(String(search || '').replace(/^\?/, ''));
+  const [path, query = ''] = String(href || '').split('?');
+  const params = new URLSearchParams(query);
+  for (const key of SIGNUP_ACQUISITION_KEYS) {
+    const value = incoming.get(key);
+    if (value) params.set(key, value);
+  }
+  const next = params.toString();
+  return next ? `${path}?${next}` : path;
+}
+
 /** /registro/ con la atribución de la URL actual y el botón que convierte. */
 export function buildSignupHref(search, src) {
   const incoming = new URLSearchParams(String(search || '').replace(/^\?/, ''));

@@ -9,6 +9,7 @@ import {
 } from '@/components/landing/ab/AbShell';
 import FoundingSlotsStatus from '@/components/landing/ab/FoundingSlotsStatus';
 import CampaignVisual from '@/components/landing/ab/CampaignVisual';
+import { plusBlackFridayFaqItems } from '@/data/financialPlanConfig';
 import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import {
   buildRegisterHref,
@@ -176,7 +177,7 @@ export default function CampaignLanding({ variant = 'a', source = 'direct', sear
         ]}
       />
 
-      <AbFaq title="Preguntas frecuentes" items={FAQ} />
+      <AbFaq title="Preguntas frecuentes" items={[...FAQ, ...plusBlackFridayFaqItems()]} />
 
       <AbFinal
         title="Empieza a practicar tu B2 con Dralo"

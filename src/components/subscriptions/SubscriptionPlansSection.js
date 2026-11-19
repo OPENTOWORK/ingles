@@ -21,10 +21,18 @@ import {
   isCurrentPlanSlug,
   isBlackFridayOfferActive,
   isPlusOfferActive,
+  PLUS_ANNUAL_BF_GIFT_MONTHS,
+  PLUS_ANNUAL_BF_PRICE,
+  PLUS_ANNUAL_REGULAR_PRICE,
   PLUS_BLACK_FRIDAY_UNTIL_LABEL,
-  PLUS_BLACK_FRIDAY_YEAR_PRICE,
+  PLUS_MONTHLY_PRICE,
   PLUS_OFFER_UNTIL_LABEL,
-  PLUS_YEAR_PRICE,
+  plusAnnualRegularDiscountPercent,
+  plusAnnualRegularSavingsEuros,
+  plusAnnualRenewalCopy,
+  plusAnnualSavingsVersusMonthlyEuros,
+  plusBlackFridayEffectiveMonthly,
+  plusTwelveMonthsMonthlyTotal,
   planHasLaunchPricing,
   PLAN_COMPARISON_ROWS,
 } from '@/data/financialPlanConfig';
@@ -45,10 +53,7 @@ function comparisonCellValue(row, planSlug, billingCycle) {
     const crossed = getPlanCrossedPrices(plan, billingCycle).map((amount) =>
       billingCycle === 'annual' ? amount * 12 : amount,
     );
-    const blackFridayYear = billingCycle === 'annual' && plan.slug === 'premium' && isBlackFridayOfferActive();
-    const discount = blackFridayYear
-      ? getPlanAnnualSavingsPercent(plan)
-      : getPlanLaunchDiscountPercent(plan, billingCycle) ?? getPlanListDiscountPercent(plan, billingCycle);
+    const discount = getPlanLaunchDiscountPercent(plan, billingCycle) ?? getPlanListDiscountPercent(plan, billingCycle);
     return {
       kind: 'price',
       crossed: crossed.map((amount) => formatEuroAmount(amount)),
@@ -107,17 +112,16 @@ function CellValue({ value, type }) {
 }
 
 function publicAnnualSavingsPercent() {
+  if (isBlackFridayOfferActive()) return plusAnnualRegularDiscountPercent();
   const paid = getPublicSubscriptionPlans().find((plan) => Number(plan.precio) > 0);
   return (paid && getPlanAnnualSavingsPercent(paid)) || ANNUAL_BILLING_DISCOUNT_PERCENT;
 }
 
 function annualBillingHint() {
   const hasLaunchPrice = getPublicSubscriptionPlans().some((plan) => planHasLaunchPricing(plan));
-  if (hasLaunchPrice && isBlackFridayOfferActive()) {
-    return `Black Friday en Plus: el año por ${PLUS_BLACK_FRIDAY_YEAR_PRICE.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €, con dos meses de regalo.`;
-  }
+  if (hasLaunchPrice && isBlackFridayOfferActive()) return '';
   if (hasLaunchPrice && isPlusOfferActive()) {
-    return `${PLUS_YEAR_PRICE.toLocaleString('es-ES', { minimumFractionDigits: 2 })} € al año, cobrados de una vez.`;
+    return `${formatEuroAmount(PLUS_ANNUAL_REGULAR_PRICE)} al año, cobrados de una vez.`;
   }
   if (hasLaunchPrice) {
     return 'Al pagar el año completo de una vez.';
@@ -248,14 +252,25 @@ export default function SubscriptionPlansSection({
   onSelectPlan,
   title = 'Elige tu plan',
   subtitle = 'Compara características y encuentra el plan que mejor encaja con tu preparación.',
+  initialBillingCycle = 'monthly',
 }) {
   const interactive = typeof onSelectPlan === 'function';
-  const [billingCycle, setBillingCycle] = useState('monthly');
+  const [billingCycle, setBillingCycle] = useState(initialBillingCycle === 'annual' ? 'annual' : 'monthly');
 
   useEffect(() => {
-    const cycle = new URLSearchParams(window.location.search).get('facturacion');
-    if (cycle === 'anual') setBillingCycle('annual');
-  }, []);
+    setBillingCycle(initialBillingCycle === 'annual' ? 'annual' : 'monthly');
+  }, [initialBillingCycle]);
+
+  function selectBillingCycle(cycle) {
+    setBillingCycle(cycle);
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (cycle === 'annual') params.set('facturacion', 'anual');
+    else params.delete('facturacion');
+    const query = params.toString();
+    const next = `${window.location.pathname}${query ? `?${query}` : ''}${window.location.hash}`;
+    window.history.replaceState(null, '', next);
+  }
   const [checkoutPlan, setCheckoutPlan] = useState('');
   const [checkoutError, setCheckoutError] = useState('');
   const [activeCard, setActiveCard] = useState(0);
@@ -331,7 +346,7 @@ export default function SubscriptionPlansSection({
             type="button"
             className={`${styles.billingToggleBtn}${!isAnnual ? ` ${styles.billingToggleBtnActive}` : ''}`}
             aria-pressed={!isAnnual}
-            onClick={() => setBillingCycle('monthly')}
+            onClick={() => selectBillingCycle('monthly')}
           >
             Mensual
           </button>
@@ -339,16 +354,33 @@ export default function SubscriptionPlansSection({
             type="button"
             className={`${styles.billingToggleBtn}${isAnnual ? ` ${styles.billingToggleBtnActive}` : ''}`}
             aria-pressed={isAnnual}
-            onClick={() => setBillingCycle('annual')}
+            onClick={() => selectBillingCycle('annual')}
           >
             Anual
             <span className={styles.billingToggleBadge}>-{publicAnnualSavingsPercent()}%</span>
           </button>
         </div>
-        {isAnnual ? (
+        {isAnnual && annualBillingHint() ? (
           <p className={styles.billingToggleHint}>
             {annualBillingHint()}
           </p>
+        ) : null}
+        {isBlackFridayOfferActive() ? (
+          <div className={styles.bfCompare}>
+            <p className={styles.bfCompareRow}>
+              <span>Mensual</span>
+              <span>
+                {formatEuroAmount(PLUS_MONTHLY_PRICE)}/mes → {formatEuroAmount(plusTwelveMonthsMonthlyTotal())} si lo pagas durante 12 meses
+              </span>
+            </p>
+            <p className={styles.bfCompareRow}>
+              <span>Anual Black Friday</span>
+              <span>{formatEuroAmount(PLUS_ANNUAL_BF_PRICE)} → 12 meses de acceso</span>
+            </p>
+            <p className={styles.bfCompareClose}>
+              Con el año pagas {formatEuroAmount(plusAnnualSavingsVersusMonthlyEuros())} menos que con 12 mensualidades.
+            </p>
+          </div>
         ) : null}
       </div>
 
@@ -372,15 +404,21 @@ export default function SubscriptionPlansSection({
           const launchDiscount = getPlanLaunchDiscountPercent(plan, billingCycle);
           const showLaunchLabel = hasPaidPlan && planHasLaunchPricing(plan);
           const blackFridayYear = isAnnual && plan.slug === 'premium' && isBlackFridayOfferActive();
-          const shownDiscount = blackFridayYear ? getPlanAnnualSavingsPercent(plan) : launchDiscount;
+          const annualPlus = isAnnual && plan.slug === 'premium';
+          const shownDiscount = launchDiscount;
+          const cardCta = blackFridayYear && cta.label === 'Suscribirme' ? { ...cta, label: 'Quiero el año' } : cta;
           return (
             <article
               key={plan.slug}
               className={`${styles.card}${isPremium ? ` ${styles.cardPopular}` : ''}${
-                isSelected ? ` ${styles.cardSelected}` : ''
-              }`}
+                annualPlus ? ` ${styles.cardAnnual}` : ''
+              }${isSelected ? ` ${styles.cardSelected}` : ''}`}
             >
-              {plan.badge ? (
+              {blackFridayYear ? (
+                <span className={`${styles.badge} ${styles.badgePopular}`}>
+                  Black Friday · hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}
+                </span>
+              ) : plan.badge ? (
                 <span
                   className={`${styles.badge}${
                     plan.badgeVariant === 'value' ? ` ${styles.badgeValue}` : ` ${styles.badgePopular}`
@@ -394,7 +432,7 @@ export default function SubscriptionPlansSection({
               <p className={styles.cardPrice}>
                 {hasPaidPlan ? (
                   <>
-                    {showLaunchLabel && !blackFridayYear && crossedPrices.length > 0 ? (
+                    {showLaunchLabel && crossedPrices.length > 0 ? (
                       <span className={styles.cardPriceWasRow}>
                         {crossedPrices.map((amount) => (
                           <span
@@ -425,14 +463,24 @@ export default function SubscriptionPlansSection({
                         <span className={styles.cardPriceDiscount}>-{listDiscount}%</span>
                       ) : null}
                     </span>
-                    {showLaunchLabel && isPlusOfferActive() ? (
+                    {showLaunchLabel && isPlusOfferActive() && !isAnnual ? (
                       <span className={styles.cardPriceLaunch}>
-                        {isAnnual && plan.slug === 'premium' && isBlackFridayOfferActive()
-                          ? `Black Friday hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}`
-                          : `Oferta disponible hasta el ${PLUS_OFFER_UNTIL_LABEL}`}
+                        Oferta disponible hasta el {PLUS_OFFER_UNTIL_LABEL}
                       </span>
                     ) : null}
-                    {isAnnual ? (
+                    {blackFridayYear ? (
+                      <>
+                        <span className={styles.cardPriceAnnual}>
+                          Ahorras {formatEuroAmount(plusAnnualRegularSavingsEuros())} sobre el precio normal del plan anual.
+                        </span>
+                        <span className={styles.cardPriceAnnual}>
+                          12 meses de acceso, con {PLUS_ANNUAL_BF_GIFT_MONTHS} meses de regalo incluidos.
+                        </span>
+                        <span className={styles.cardPriceAnnual}>
+                          Equivale a {formatEuroAmount(plusBlackFridayEffectiveMonthly())}/mes
+                        </span>
+                      </>
+                    ) : isAnnual && plan.slug !== 'premium' ? (
                       <span className={styles.cardPriceAnnual}>
                         Equivale a {formatPlanPriceAmount(plan, 'annual')}/mes
                       </span>
@@ -474,7 +522,7 @@ export default function SubscriptionPlansSection({
               </ul>
 
               <PlanCtaControl
-                cta={cta}
+                cta={cardCta}
                 planSlug={plan.slug}
                 onSelectPlan={onSelectPlan}
                 isSelected={isSelected}
@@ -483,6 +531,9 @@ export default function SubscriptionPlansSection({
                 planLoading={planLoading}
                 showCta={showCta}
               />
+              {annualPlus ? (
+                <p className={styles.cardRenewal}>{plusAnnualRenewalCopy()}</p>
+              ) : null}
             </article>
           );
         })}

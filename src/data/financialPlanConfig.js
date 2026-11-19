@@ -39,11 +39,51 @@ export const PLUS_OFFER_END_DATE = '2026-12-31';
 export const PLUS_PRICE_AFTER_OFFER = null;
 export const PLUS_OFFER_UNTIL_LABEL = '31/12/2026';
 
-/** Black Friday: el año de Plus a 19,99 €. El año habitual son 23,88 € (1,99 € × 12): dos meses de regalo. */
-export const PLUS_YEAR_PRICE = 23.88;
-export const PLUS_BLACK_FRIDAY_YEAR_PRICE = 19.99;
-export const PLUS_BLACK_FRIDAY_END_DATE = '2026-11-30';
+/** Nombres públicos de la oferta. El mensual reutiliza PLUS_PRICE. */
+export const PLUS_MONTHLY_PRICE = PLUS_PRICE;
+export const PLUS_MONTHLY_ORIGINAL_PRICE = PLUS_ORIGINAL_PRICE;
+export const PLUS_MONTHLY_OFFER_END = PLUS_OFFER_END_DATE;
+export const PLUS_ANNUAL_REGULAR_PRICE = 34.99;
+export const PLUS_ANNUAL_BF_PRICE = 19.99;
+export const PLUS_ANNUAL_BF_GIFT_MONTHS = 2;
+/** Inclusive hasta las 23:59:59 de ese día en Europe/Madrid. */
+export const PLUS_ANNUAL_BF_END = '2026-11-30T23:59:59';
+export const PLUS_ANNUAL_BF_END_DATE = '2026-11-30';
+export const PLUS_YEAR_PRICE = PLUS_ANNUAL_REGULAR_PRICE;
+export const PLUS_BLACK_FRIDAY_YEAR_PRICE = PLUS_ANNUAL_BF_PRICE;
+export const PLUS_BLACK_FRIDAY_END_DATE = PLUS_ANNUAL_BF_END_DATE;
 export const PLUS_BLACK_FRIDAY_UNTIL_LABEL = '30/11/2026';
+
+function plusCents(amount) {
+  return Math.round(Number(amount) * 100);
+}
+
+function plusEuros(cents) {
+  return Math.round(cents) / 100;
+}
+
+export function plusTwelveMonthsMonthlyTotal(monthly = PLUS_MONTHLY_PRICE) {
+  return plusEuros(plusCents(monthly) * 12);
+}
+
+export function plusAnnualRegularSavingsEuros() {
+  return plusEuros(plusCents(PLUS_ANNUAL_REGULAR_PRICE) - plusCents(PLUS_ANNUAL_BF_PRICE));
+}
+
+export function plusAnnualRegularDiscountPercent() {
+  const regular = plusCents(PLUS_ANNUAL_REGULAR_PRICE);
+  const promo = plusCents(PLUS_ANNUAL_BF_PRICE);
+  if (!(regular > promo)) return null;
+  return Math.round(((regular - promo) / regular) * 100);
+}
+
+export function plusAnnualSavingsVersusMonthlyEuros() {
+  return plusEuros(plusCents(plusTwelveMonthsMonthlyTotal()) - plusCents(PLUS_ANNUAL_BF_PRICE));
+}
+
+export function plusBlackFridayEffectiveMonthly() {
+  return plusEuros(plusCents(PLUS_ANNUAL_BF_PRICE) / 12);
+}
 
 export function isBlackFridayOfferActive(now = new Date()) {
   const date = now instanceof Date ? now : new Date(now);
@@ -54,7 +94,7 @@ export function isBlackFridayOfferActive(now = new Date()) {
     month: '2-digit',
     day: '2-digit',
   }).format(date);
-  return ymd <= PLUS_BLACK_FRIDAY_END_DATE;
+  return ymd <= PLUS_ANNUAL_BF_END_DATE;
 }
 
 export function isPlusOfferActive(now = new Date()) {
@@ -240,7 +280,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     precio: PLUS_PRICE,
     precioRegular: 7.99,
     precioLista: PLUS_ORIGINAL_PRICE,
-    precioAnualLanzamiento: 1.99, // 23,88 € al año, cobrados de una vez
+    precioAnualLanzamiento: 1.99, // legado interno; el anual público es PLUS_ANNUAL_REGULAR_PRICE
     precioAnualRegular: 5.99,
     precioLabel: '3,99€/mes',
     duracion_dias: 30,
@@ -446,8 +486,9 @@ export function getPlanMonthlyPrice(plan, billingCycle = 'monthly') {
   const base = Number(plan?.precio) || 0;
   if (base <= 0) return 0;
   if (billingCycle === 'annual') {
-    if (plan?.slug === 'premium' && isBlackFridayOfferActive()) {
-      return PLUS_BLACK_FRIDAY_YEAR_PRICE / 12;
+    if (plan?.slug === 'premium') {
+      const total = isBlackFridayOfferActive() ? PLUS_ANNUAL_BF_PRICE : PLUS_ANNUAL_REGULAR_PRICE;
+      return total / 12;
     }
     const annualLaunch = Number(plan?.precioAnualLanzamiento);
     if (annualLaunch > 0) return annualLaunch;
@@ -464,7 +505,11 @@ export function getPlanCrossedPrices(plan, billingCycle = 'monthly') {
   if (!(list > current)) return [];
 
   if (billingCycle === 'annual') {
-    if (plan?.slug === 'premium' && isBlackFridayOfferActive()) return [];
+    if (plan?.slug === 'premium') {
+      if (!isBlackFridayOfferActive()) return [];
+      const regularMonth = PLUS_ANNUAL_REGULAR_PRICE / 12;
+      return regularMonth > current ? [regularMonth] : [];
+    }
     const annualList = list * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
     return annualList > current ? [annualList] : [];
   }
@@ -530,9 +575,7 @@ export function getPlanAnnualSavingsPercent(plan) {
 /** @param {'monthly'|'annual'} billingCycle */
 export function formatPlanPriceLabel(plan, billingCycle = 'monthly') {
   if (billingCycle === 'annual') {
-    const total = plan?.slug === 'premium' && isBlackFridayOfferActive()
-      ? PLUS_BLACK_FRIDAY_YEAR_PRICE
-      : Math.round(getPlanMonthlyPrice(plan, 'annual') * 12 * 100) / 100;
+    const total = plusAnnualChargeEuros(plan);
     if (total <= 0) return '0€';
     return `${formatEuroAmount(total)}/año`;
   }
@@ -541,16 +584,46 @@ export function formatPlanPriceLabel(plan, billingCycle = 'monthly') {
   return `${formatEuroAmount(monthly)}/mes`;
 }
 
+/** Total anual que se muestra en la tarjeta. El cobro real lo fija Stripe. */
+export function plusAnnualChargeEuros(plan) {
+  if (plan?.slug === 'premium') {
+    return isBlackFridayOfferActive() ? PLUS_ANNUAL_BF_PRICE : PLUS_ANNUAL_REGULAR_PRICE;
+  }
+  return Math.round(getPlanMonthlyPrice(plan, 'annual') * 12 * 100) / 100;
+}
+
+export function plusAnnualRenewalCopy() {
+  return `Se renueva automáticamente cada año al precio vigente en ese momento (actualmente ${formatEuroAmount(PLUS_ANNUAL_REGULAR_PRICE)}/año).`;
+}
+
+export function plusBlackFridayFaqItems(now = new Date()) {
+  const active = isBlackFridayOfferActive(now);
+  const items = [
+    {
+      q: '¿Qué incluye la oferta de Black Friday?',
+      a: `El año de Plus por ${formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}, con 12 meses de acceso y dos meses de regalo incluidos. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+      blackFriday: true,
+    },
+    {
+      q: '¿Se renueva automáticamente?',
+      a: `Sí. ${plusAnnualRenewalCopy()}`,
+    },
+    {
+      q: '¿Hasta cuándo puedo contratarla?',
+      a: `Hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+      blackFriday: true,
+    },
+    {
+      q: '¿Puedo seguir pagando mensual?',
+      a: `Sí. El Plan Plus a ${formatEuroAmount(PLUS_MONTHLY_PRICE)}/mes está disponible hasta el ${PLUS_OFFER_UNTIL_LABEL}.`,
+    },
+  ];
+  return items.filter((item) => !item.blackFriday || active).map(({ q, a }) => ({ q, a }));
+}
+
 /** Total anual facturado de una vez (precio mensual con descuento × 12). */
 export function formatPlanAnnualTotal(plan) {
-  if (plan?.slug === 'premium' && isBlackFridayOfferActive()) {
-    return new Intl.NumberFormat('es-ES', {
-      style: 'currency',
-      currency: 'EUR',
-      minimumFractionDigits: 2,
-    }).format(PLUS_BLACK_FRIDAY_YEAR_PRICE);
-  }
-  const total = Math.round(getPlanMonthlyPrice(plan, 'annual') * 12 * 100) / 100;
+  const total = plusAnnualChargeEuros(plan);
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR',

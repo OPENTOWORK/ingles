@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowRight, BookOpen, MessageSquare, Target, TrendingUp } from 'lucide-react';
+import { plusBlackFridayFaqItems } from '@/data/financialPlanConfig';
 import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import '@/styles/conversion-landing.css';
 
@@ -235,7 +236,7 @@ function ConversionLandingContent() {
             Preguntas frecuentes
           </h2>
           <div className="conversion-landing__faq">
-            {FAQ_ITEMS.map((item) => (
+            {[...FAQ_ITEMS, ...plusBlackFridayFaqItems()].map((item) => (
               <details key={item.q}>
                 <summary>{item.q}</summary>
                 <p>{item.a}</p>

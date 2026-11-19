@@ -1,12 +1,20 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 import {
+  PLUS_ANNUAL_BF_PRICE,
+  PLUS_ANNUAL_REGULAR_PRICE,
   PLUS_OFFER_END_DATE,
   PLUS_ORIGINAL_PRICE,
   PLUS_PRICE,
   PLUS_PRICE_AFTER_OFFER,
+  isBlackFridayOfferActive,
   isPlusOfferActive,
+  plusAnnualRegularDiscountPercent,
+  plusAnnualRegularSavingsEuros,
+  plusAnnualSavingsVersusMonthlyEuros,
+  plusBlackFridayEffectiveMonthly,
   plusOfferDiscountPercent,
+  plusTwelveMonthsMonthlyTotal,
 } from '../../data/financialPlanConfig.js';
 
 describe('plus price offer', () => {
@@ -16,6 +24,22 @@ describe('plus price offer', () => {
     assert.equal(PLUS_OFFER_END_DATE, '2026-12-31');
     assert.equal(PLUS_PRICE_AFTER_OFFER, null);
     assert.equal(plusOfferDiscountPercent(), 60);
+  });
+
+  it('calculates the Black Friday year from the annual constants', () => {
+    assert.equal(PLUS_ANNUAL_REGULAR_PRICE, 34.99);
+    assert.equal(PLUS_ANNUAL_BF_PRICE, 19.99);
+    assert.equal(plusTwelveMonthsMonthlyTotal(), 47.88);
+    assert.equal(plusAnnualRegularSavingsEuros(), 15);
+    assert.equal(plusAnnualRegularDiscountPercent(), 43);
+    assert.equal(plusAnnualSavingsVersusMonthlyEuros(), 27.89);
+    assert.equal(plusBlackFridayEffectiveMonthly(), 1.67);
+  });
+
+  it('ends the Black Friday year at 23:59:59 Madrid on 30 November 2026', () => {
+    assert.equal(isBlackFridayOfferActive(new Date('2026-11-30T22:59:59.000Z')), true);
+    assert.equal(isBlackFridayOfferActive(new Date('2026-11-30T23:00:00.000Z')), false);
+    assert.equal(isBlackFridayOfferActive(new Date('2026-12-01T00:00:00.000Z')), false);
   });
 
   it('stays visible through the end of 31 December 2026 in Madrid', () => {

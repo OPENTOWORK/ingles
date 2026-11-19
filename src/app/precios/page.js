@@ -56,6 +56,7 @@ function PreciosContent() {
         title="Compara y elige"
         showCta
         enableCheckout
+        initialBillingCycle={searchParams.get('facturacion') === 'anual' ? 'annual' : 'monthly'}
       />
     </main>
   );

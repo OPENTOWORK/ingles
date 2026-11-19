@@ -21,14 +21,19 @@ import { APP_ROUTES } from '@/config/appRoutes';
 import DraloTagline from '@/components/DraloTagline';
 import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import {
+  formatEuroAmount,
   isBlackFridayOfferActive,
+  PLUS_ANNUAL_BF_END_DATE,
+  PLUS_ANNUAL_BF_PRICE,
+  PLUS_ANNUAL_REGULAR_PRICE,
   PLUS_BLACK_FRIDAY_UNTIL_LABEL,
-  PLUS_BLACK_FRIDAY_YEAR_PRICE,
+  PLUS_MONTHLY_PRICE,
   PLUS_OFFER_END_DATE,
-  PLUS_PRICE,
+  PLUS_OFFER_UNTIL_LABEL,
+  plusAnnualRenewalCopy,
 } from '@/data/financialPlanConfig';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
-import { buildSignupHref } from '@/lib/signupTracking';
+import { buildSignupHref, withAcquisitionParams } from '@/lib/signupTracking';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 import { landingFont } from './landingFont';
 import { PracticePickerMock, ResultsMock, ReviewMock, WritingFeedbackMock } from './LandingMocks';
@@ -255,7 +260,29 @@ const FAQ = [
   },
   {
     q: '¿Hasta cuándo está disponible esta oferta?',
-    a: 'Hasta el 31/12/2026.',
+    a: `Hasta el ${PLUS_OFFER_UNTIL_LABEL}.`,
+    published: true,
+  },
+  {
+    q: '¿Qué incluye la oferta de Black Friday?',
+    a: `El año de Plus por ${formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}, con 12 meses de acceso y dos meses de regalo incluidos. Disponible hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+    published: true,
+    offer: 'black-friday',
+  },
+  {
+    q: '¿Se renueva automáticamente?',
+    a: `Sí. ${plusAnnualRenewalCopy()}`,
+    published: true,
+  },
+  {
+    q: '¿Hasta cuándo puedo contratarla?',
+    a: `Hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}.`,
+    published: true,
+    offer: 'black-friday',
+  },
+  {
+    q: '¿Puedo seguir pagando mensual?',
+    a: `Sí. El Plan Plus a ${formatEuroAmount(PLUS_MONTHLY_PRICE)}/mes está disponible hasta el ${PLUS_OFFER_UNTIL_LABEL}.`,
     published: true,
   },
   {
@@ -338,6 +365,7 @@ function useSignupHrefs() {
   }, []);
 
   return {
+    search,
     hero: buildSignupHref(search, 'hero'),
     promo: buildSignupHref(search, 'promo_25'),
     plan: buildSignupHref(search, 'promo_25'),
@@ -346,18 +374,39 @@ function useSignupHrefs() {
 }
 
 function offerJsonLd() {
+  const offers = [
+    {
+      '@type': 'Offer',
+      name: 'Plan Plus mensual',
+      price: PLUS_MONTHLY_PRICE.toFixed(2),
+      priceCurrency: 'EUR',
+      priceValidUntil: PLUS_OFFER_END_DATE,
+      url: 'https://www.dralo.es/precios/',
+    },
+    {
+      '@type': 'Offer',
+      name: 'Plan Plus anual',
+      price: PLUS_ANNUAL_REGULAR_PRICE.toFixed(2),
+      priceCurrency: 'EUR',
+      url: 'https://www.dralo.es/precios/?facturacion=anual',
+    },
+  ];
+  if (isBlackFridayOfferActive()) {
+    offers.push({
+      '@type': 'Offer',
+      name: 'Plan Plus anual Black Friday',
+      price: PLUS_ANNUAL_BF_PRICE.toFixed(2),
+      priceCurrency: 'EUR',
+      priceValidUntil: PLUS_ANNUAL_BF_END_DATE,
+      url: 'https://www.dralo.es/precios/?facturacion=anual',
+    });
+  }
   return JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: 'Plan Plus',
     brand: { '@type': 'Brand', name: 'DRALO' },
-    offers: {
-      '@type': 'Offer',
-      price: PLUS_PRICE.toFixed(2),
-      priceCurrency: 'EUR',
-      priceValidUntil: PLUS_OFFER_END_DATE,
-      url: 'https://www.dralo.es/precios/',
-    },
+    offers,
   }).replace(/</g, '\\u003c');
 }
 
@@ -566,7 +615,10 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
   const { ready, sessionHint } = useLandingViewport();
   const visible = ready && !(pending && sessionHint);
   const signupHref = useSignupHrefs();
-  const faq = publishedFaq(FAQ, true);
+  const blackFriday = isBlackFridayOfferActive();
+  const faq = publishedFaq(FAQ, blackFriday);
+  const annualHref = withAcquisitionParams('/precios/?facturacion=anual', signupHref.search);
+  const monthlyHref = withAcquisitionParams('/precios/', signupHref.search);
 
   return (
     <div className={`home-landing ${landingFont.variable}${pending ? ' home-landing--pending' : ''}`}>
@@ -613,31 +665,44 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </div>
       </header>
 
-      {isBlackFridayOfferActive() ? (
-        <section className="hl-bf" aria-labelledby="hl-bf-title">
-          <div className="hl-container hl-bf__inner">
-            <p className="hl-bf__kicker">Black Friday</p>
-            <h2 id="hl-bf-title" className="hl-bf__title">
-              El año de Plus por {PLUS_BLACK_FRIDAY_YEAR_PRICE.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €
-            </h2>
-            <p className="hl-bf__text">
-              Te regalamos dos meses.
-            </p>
-            <p className="hl-bf__until">Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.</p>
+      <div className="hl-offer-stack">
+        {blackFriday ? (
+          <p className="hl-offer-banner">
             <Link
-              href="/precios/?facturacion=anual"
-              className="hl-btn hl-btn--primary hl-bf__cta"
-              onClick={() => trackHomeEvent('cta_black_friday_year')}
+              href={annualHref}
+              onClick={() => {
+                trackHomeEvent('cta_black_friday_year');
+                trackHomeEvent('black_friday_annual_cta');
+              }}
+            >
+              <span className="hl-bf-long">
+                Black Friday: el año de Plus por {formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}. Te regalamos dos meses. Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
+              </span>
+              <span className="hl-bf-short">
+                Black Friday: año por {formatEuroAmount(PLUS_ANNUAL_BF_PRICE)}. Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
+              </span>
+            </Link>
+            <Link
+              href={annualHref}
+              className="hl-offer-banner__cta"
+              onClick={() => {
+                trackHomeEvent('cta_black_friday_year');
+                trackHomeEvent('black_friday_annual_cta');
+              }}
             >
               Quiero el año
             </Link>
-          </div>
-        </section>
-      ) : null}
-
-      <p className="hl-offer-banner">
-        <Link href="/precios/">Plan Plus a 3,99 €/mes hasta el 31/12/2026.</Link>
-      </p>
+          </p>
+        ) : null}
+        <p className="hl-offer-banner hl-offer-banner--month">
+          <Link
+            href={monthlyHref}
+            onClick={() => trackHomeEvent('monthly_plan_cta')}
+          >
+            Plan Plus a {formatEuroAmount(PLUS_MONTHLY_PRICE)}/mes hasta el {PLUS_OFFER_UNTIL_LABEL}.
+          </Link>
+        </p>
+      </div>
 
       <section className="hl-hero" aria-labelledby="hl-hero-title">
         <div className="hl-container hl-hero__grid">
@@ -647,22 +712,47 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
               {PRO_LAUNCH_COPY.title}
             </h1>
             <p className="hl-hero__lead">{PRO_LAUNCH_COPY.subtitle}</p>
+            {blackFriday ? (
+              <p className="hl-hero__bf">
+                Black Friday: el año de Plus por {formatEuroAmount(PLUS_ANNUAL_BF_PRICE)} con dos meses de regalo, hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.
+              </p>
+            ) : null}
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
+                {blackFriday ? (
+                  <Link
+                    href={annualHref}
+                    className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
+                    onClick={() => {
+                      trackHomeEvent('cta_black_friday_year');
+                      trackHomeEvent('black_friday_annual_cta');
+                    }}
+                  >
+                    <span className="hl-hero__cta-copy">Quiero el año</span>
+                    <span className="hl-hero__cta-arrows" aria-hidden="true">
+                      <ChevronRight />
+                      <ChevronRight />
+                      <ChevronRight />
+                    </span>
+                  </Link>
+                ) : null}
                 <Link
-                  href="/precios/"
-                  className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
+                  href={monthlyHref}
+                  className={`hl-btn hl-btn--lg ${blackFriday ? 'hl-btn--ghost' : 'hl-btn--primary hl-hero__cta'}`}
                   onClick={() => {
                     trackHomeEvent('cta_hero_promo_25');
                     trackHomeEvent('cta_hero_plus');
+                    trackHomeEvent('monthly_plan_cta');
                   }}
                 >
                   <span className="hl-hero__cta-copy">{PRO_LAUNCH_COPY.cta}</span>
-                  <span className="hl-hero__cta-arrows" aria-hidden="true">
-                    <ChevronRight />
-                    <ChevronRight />
-                    <ChevronRight />
-                  </span>
+                  {blackFriday ? null : (
+                    <span className="hl-hero__cta-arrows" aria-hidden="true">
+                      <ChevronRight />
+                      <ChevronRight />
+                      <ChevronRight />
+                    </span>
+                  )}
                 </Link>
                 <Link
                   href={signupHref.hero}
