@@ -14,7 +14,7 @@ import {
 } from '@/components/landing/ab/AbShell';
 import FoundingSlotsStatus from '@/components/landing/ab/FoundingSlotsStatus';
 import { CONDITION_SUMMARY, buildRegisterHref } from '@/lib/abExperiment';
-import { PRO_LAUNCH_COPY, PRO_LAUNCH_SLOT_LIMIT } from '@/lib/proLaunchOffer.rules';
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 
 function Cta({ source }) {
   return (
@@ -31,12 +31,12 @@ function Cta({ source }) {
 
 const FAQ = [
   {
-    q: '¿El Plan PREMIUM de esta promo se paga?',
-    a: `No durante ${PRO_LAUNCH_COPY.microcopy}`,
+    q: '¿Qué incluye el Plan Plus a 3,99 €?',
+    a: 'Training y Quiz con vidas ilimitadas, exámenes mensuales, Writing Correction, Speaking Correction, Dralo AI, Exam Strategies y seguimiento de progreso.',
   },
   {
-    q: '¿Cuántas plazas hay?',
-    a: `Hay ${PRO_LAUNCH_SLOT_LIMIT}. ${PRO_LAUNCH_COPY.previousOfferNote} Al completarse, el registro sigue sin esta oferta.`,
+    q: '¿Hasta cuándo está disponible esta oferta?',
+    a: 'Hasta el 31/12/2026.',
   },
   {
     q: '¿Hace falta tarjeta en el alta?',

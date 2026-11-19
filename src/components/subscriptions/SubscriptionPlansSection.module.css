@@ -239,7 +239,7 @@
 .cardPriceWas {
   font-size: 0.95rem;
   font-weight: 600;
-  color: #94a3b8;
+  color: #64748b;
   text-decoration: line-through;
 }
 
@@ -268,10 +268,10 @@
 
 .cardPriceAnnual {
   display: block;
-  margin-top: 4px;
-  font-size: 0.74rem;
-  font-weight: 700;
-  color: #64748b;
+  margin-top: 6px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: #734A91;
 }
 
 .cardTagline {
@@ -711,8 +711,8 @@
   }
 
   .cardPriceAnnual {
-    margin-top: 2px;
-    font-size: 0.68rem;
+    margin-top: 4px;
+    font-size: 0.88rem;
   }
 
   /* Los márgenes automáticos centran la lista cuando el plan tiene pocas ventajas. */

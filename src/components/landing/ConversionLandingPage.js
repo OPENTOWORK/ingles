@@ -1,13 +1,11 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { ArrowRight, BookOpen, MessageSquare, Target, TrendingUp } from 'lucide-react';
-import { PRO_LAUNCH_COPY, PRO_LAUNCH_SLOTS_PATH } from '@/lib/proLaunchOffer.rules';
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import '@/styles/conversion-landing.css';
-
-const FOUNDING_SLOTS_POLL_MS = 45_000;
 
 const PILLARS = [
   {
@@ -34,8 +32,8 @@ const PILLARS = [
 
 const FAQ_ITEMS = [
   {
-    q: '¿De verdad es gratis?',
-    a: `Sí. ${PRO_LAUNCH_COPY.microcopy} ${PRO_LAUNCH_COPY.previousOfferNote}`,
+    q: '¿Hasta cuándo está disponible esta oferta?',
+    a: 'Hasta el 31/12/2026.',
   },
   {
     q: '¿Sustituye a mi academia?',
@@ -60,66 +58,10 @@ function useReadingTestHref() {
   return `${READING_TEST_1_PATH}?${params.toString()}`;
 }
 
-function useLaunchAvailability() {
-  const [availability, setAvailability] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    let intervalId = 0;
-
-    async function refreshAvailability() {
-      try {
-        const res = await fetch(`${PRO_LAUNCH_SLOTS_PATH}?_=${Date.now()}`, {
-          cache: 'no-store',
-          headers: { Pragma: 'no-cache' },
-        });
-        if (!res.ok) throw new Error('availability_fetch_failed');
-        const data = await res.json();
-        if (cancelled) return;
-        setAvailability(data);
-        if (data?.soldOut && intervalId) {
-          window.clearInterval(intervalId);
-          intervalId = 0;
-        }
-      } catch {
-        if (!cancelled) setAvailability(null);
-      }
-    }
-
-    void refreshAvailability();
-    intervalId = window.setInterval(refreshAvailability, FOUNDING_SLOTS_POLL_MS);
-    const onFocus = () => void refreshAvailability();
-    window.addEventListener('focus', onFocus);
-
-    return () => {
-      cancelled = true;
-      if (intervalId) window.clearInterval(intervalId);
-      window.removeEventListener('focus', onFocus);
-    };
-  }, []);
-
-  return availability;
-}
-
-function ConversionUrgencyBanner({ availability }) {
-  const remaining = availability?.remaining;
-  const slotsLabel =
-    typeof remaining === 'number'
-      ? remaining === 1
-        ? '1 plaza'
-        : `${remaining} plazas`
-      : 'plazas limitadas';
-
+function ConversionUrgencyBanner() {
   return (
-    <div className="conversion-landing__urgency" role="status" aria-live="polite">
-      {availability?.soldOut ? (
-        <strong>{PRO_LAUNCH_COPY.soldOutTitle}</strong>
-      ) : (
-        <>
-          <strong>{PRO_LAUNCH_COPY.badge}.</strong> {PRO_LAUNCH_COPY.title}.{' '}
-          <strong>{availability ? `Quedan ${slotsLabel}` : 'Comprobando plazas'}</strong>.
-        </>
-      )}
+    <div className="conversion-landing__urgency" role="status">
+      <strong>Plan Plus a 3,99 €/mes hasta el 31/12/2026.</strong>
     </div>
   );
 }
@@ -135,12 +77,11 @@ function ConversionCta({ children, className = '' }) {
 }
 
 function ConversionLandingContent() {
-  const availability = useLaunchAvailability();
-  const offerOpen = !availability?.soldOut;
+  const offerOpen = true;
   const ctaLabel = offerOpen ? PRO_LAUNCH_COPY.cta : PRO_LAUNCH_COPY.ctaSoldOut;
   return (
     <div className="conversion-landing">
-      <ConversionUrgencyBanner availability={availability} />
+      <ConversionUrgencyBanner />
 
       <div className="conversion-landing__shell">
         <section className="conversion-landing__hero" aria-labelledby="conversion-hero-title">
@@ -210,8 +151,7 @@ function ConversionLandingContent() {
             {PRO_LAUNCH_COPY.title}
           </h2>
           <p className="conversion-landing__section-lead" style={{ textAlign: 'center', color: '#7c2d12' }}>
-            Estamos lanzando Dralo y queremos que los primeros usuarios formen parte de esto desde el
-            minuto uno.
+            Plan Plus a 3,99 €/mes en lugar de 9,99 €. Oferta disponible hasta el 31/12/2026.
           </p>
           <p className="conversion-landing__section-lead" style={{ fontWeight: 700, color: '#9a3412' }}>
             Así funciona:
@@ -219,11 +159,11 @@ function ConversionLandingContent() {
           <ol className="conversion-landing__steps">
             <li>
               <span className="conversion-landing__step-num">1</span>
-              <span>Te registras hoy, sin tarjeta, mientras queden plazas.</span>
+              <span>Crea tu cuenta con nombre, correo y contraseña.</span>
             </li>
             <li>
               <span className="conversion-landing__step-num">2</span>
-              <span>Practicas con Plan PREMIUM y revisas el feedback de tus respuestas.</span>
+              <span>Practicas con el Plan Plus y revisas el feedback de tus respuestas.</span>
             </li>
             <li>
               <span className="conversion-landing__step-num">3</span>
@@ -233,7 +173,7 @@ function ConversionLandingContent() {
           <div style={{ marginTop: '1.25rem' }}>
             <ConversionCta>{ctaLabel}</ConversionCta>
             <p className="conversion-landing__microcopy conversion-landing__microcopy--dark">
-              {PRO_LAUNCH_COPY.previousOfferNote} Sin tarjeta.
+              {PRO_LAUNCH_COPY.microcopy}
             </p>
           </div>
         </section>

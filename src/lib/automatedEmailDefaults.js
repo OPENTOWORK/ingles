@@ -409,15 +409,15 @@ export const DEFAULT_AUTOMATED_EMAIL_TEMPLATES = [
   },
   {
     slug: 'pro_launch_premium',
-    nombre: 'Plan PREMIUM — 25 plazas, 3 meses',
+    nombre: 'Plan Plus — 25 plazas, 3 meses',
     trigger_event: AUTOMATED_EMAIL_TRIGGERS.PRO_LAUNCH_GRANTED,
     trigger_reason:
-      'Se envía a las 25 primeras altas de la oferta nueva, con Plan PREMIUM durante 3 meses, cuando confirman su email.',
-    asunto: 'Tus 3 meses de Plan PREMIUM ya están activos',
+      'Se envía a las 25 primeras altas de la oferta nueva, con Plan Plus durante 3 meses, cuando confirman su email.',
+    asunto: 'Tus 3 meses de Plan Plus ya están activos',
     cuerpo: [
       'Hola{{nombre}},',
       '',
-      'Tu plaza está reservada. Tienes Plan PREMIUM durante 3 meses, sin coste, desde hoy.',
+      'Tu plaza está reservada. Tienes Plan Plus durante 3 meses, sin coste, desde hoy.',
       '',
       'Puedes practicar las partes del examen, revisar el feedback de tus respuestas y ver qué necesitas trabajar.',
       '',

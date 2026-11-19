@@ -54,8 +54,18 @@ export async function syncAutomatedEmailSystemTemplates(db) {
     registration &&
     storedRegistration &&
     !String(storedRegistration.cuerpo || '').includes('{{origen}}');
+  const launch = DEFAULT_AUTOMATED_EMAIL_TEMPLATES.find((t) => t.slug === 'pro_launch_premium');
+  const storedLaunch = bySlug.get('pro_launch_premium');
+  const shouldRefreshLaunch =
+    launch && storedLaunch && String(storedLaunch.asunto || '').includes('PREMIUM');
 
-  if (!missing.length && !shouldRefreshWelcome && !shouldRefreshWeekly && !shouldRefreshRegistration) {
+  if (
+    !missing.length &&
+    !shouldRefreshWelcome &&
+    !shouldRefreshWeekly &&
+    !shouldRefreshRegistration &&
+    !shouldRefreshLaunch
+  ) {
     return { inserted: [], updated: [] };
   }
 
@@ -96,6 +106,16 @@ export async function syncAutomatedEmailSystemTemplates(db) {
       .eq('slug', slug);
     if (updateError) throw updateError;
     refreshed.push('admin_registration_notice');
+  }
+
+  if (shouldRefreshLaunch) {
+    const { slug, ...fields } = templateRow(launch);
+    const { error: updateError } = await db
+      .from('soporte_correos_automaticos')
+      .update(fields)
+      .eq('slug', slug);
+    if (updateError) throw updateError;
+    refreshed.push('pro_launch_premium');
   }
 
   return {

@@ -55,7 +55,7 @@ export function pageMetadata({
 
 export const SEO_PAGE_META = {
   home: {
-    title: 'Práctica B2 First online con corrección de Writing | Dralo',
+    title: 'DRALO | Prepara el Cambridge B2 First desde 3,99 €/mes',
     description: PRO_LAUNCH_COPY.metaDescription,
   },
   registro: {
@@ -65,7 +65,7 @@ export const SEO_PAGE_META = {
   },
   precios: {
     title: 'Precios: plan gratuito y Plus',
-    description: `Compara el plan gratuito y el Plan Plus. ${PRO_LAUNCH_COPY.subtitle}`,
+    description: PRO_LAUNCH_COPY.metaDescription,
   },
   examPractice: {
     title: 'Práctica de exámenes Cambridge',

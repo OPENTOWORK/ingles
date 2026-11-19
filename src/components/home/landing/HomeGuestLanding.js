@@ -11,8 +11,6 @@ import {
   ChevronDown,
   CircleHelp,
   Clock,
-  CreditCard,
-  Gift,
   Maximize2,
   Minimize2,
   Pause,
@@ -21,12 +19,14 @@ import {
 } from 'lucide-react';
 import { APP_ROUTES } from '@/config/appRoutes';
 import DraloTagline from '@/components/DraloTagline';
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import {
-  PRO_LAUNCH_COPY,
-  PRO_LAUNCH_SLOT_LIMIT,
-  PRO_LAUNCH_SLOTS_PATH,
-  proLaunchSlotsLabel,
-} from '@/lib/proLaunchOffer.rules';
+  isBlackFridayOfferActive,
+  PLUS_BLACK_FRIDAY_UNTIL_LABEL,
+  PLUS_BLACK_FRIDAY_YEAR_PRICE,
+  PLUS_OFFER_END_DATE,
+  PLUS_PRICE,
+} from '@/data/financialPlanConfig';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
 import { buildSignupHref } from '@/lib/signupTracking';
 import { sitePublicPath } from '@/utils/sitePublicPath';
@@ -249,20 +249,13 @@ const FAQ = [
     published: true,
   },
   {
-    q: '¿Quién consigue los 3 meses de Plan PREMIUM?',
-    a: `Quien cree su cuenta mientras queden plazas de esta oferta, hasta ${PRO_LAUNCH_SLOT_LIMIT}. No entra quien ya tiene la oferta anterior. Al asignarse la plaza ${PRO_LAUNCH_SLOT_LIMIT}, la oferta se cierra y el registro sigue sin ella. ${PRO_LAUNCH_COPY.microcopy}`,
-    offer: true,
+    q: '¿Qué incluye el Plan Plus a 3,99 €?',
+    a: 'Training y Quiz con vidas ilimitadas, exámenes mensuales, Writing Correction, Speaking Correction, Dralo AI, Exam Strategies y seguimiento de progreso.',
     published: true,
   },
   {
-    q: '¿Qué pasa cuando terminan los 3 meses?',
-    a: 'Los 3 meses no se cobran y el registro no pide tarjeta. La condición exacta al cumplirse ese plazo no está publicada todavía: esta oferta no activa un cobro por sí sola ni promete un plan concreto después.',
-    offer: true,
-    published: true,
-  },
-  {
-    q: '¿Qué incluye el plan gratuito y qué el Plus?',
-    a: 'En el plan gratuito hay 1 examen de prueba, 1 corrección de Writing al mes, Training y Quiz con 3 vidas (se recupera 1 cada 10 horas) y la primera parte de Exam Strategies en cada nivel y skill. El Plan Plus incluye Exam Strategies completo, exámenes, Writing Correction, Speaking Correction y Dralo Assistant sin límite mensual, Dralo AI, Training y Quiz con vidas ilimitadas, corrección Writing avanzada, seguimiento del progreso, acceso prioritario a nuevas funciones y soporte prioritario en 24 horas.',
+    q: '¿Hasta cuándo está disponible esta oferta?',
+    a: 'Hasta el 31/12/2026.',
     published: true,
   },
   {
@@ -337,52 +330,6 @@ function useLandingViewport() {
   return view;
 }
 
-/** Plazas del endpoint público. Sin dato no se inventa ninguna cifra. */
-function useFoundingSlots(enabled) {
-  const [slots, setSlots] = useState({ status: 'loading' });
-
-  useEffect(() => {
-    if (!enabled) return undefined;
-    let cancelled = false;
-
-    const load = () => {
-      fetch(`${PRO_LAUNCH_SLOTS_PATH}?_=${Date.now()}`, { cache: 'no-store' })
-        .then((response) => (response.ok ? response.json() : Promise.reject(new Error('slots'))))
-        .then((data) => {
-          if (cancelled) return;
-          const rawRemaining = data?.remaining;
-          const remaining = Number(rawRemaining);
-          if (rawRemaining == null || rawRemaining === '' || !Number.isInteger(remaining) || remaining < 0) {
-            setSlots({ status: 'unknown' });
-            return;
-          }
-          const total = Number(data?.total);
-          setSlots({
-            status: 'ready',
-            remaining,
-            total: Number.isInteger(total) && total > 0 ? total : PRO_LAUNCH_SLOT_LIMIT,
-            soldOut: Boolean(data?.soldOut) || remaining === 0,
-          });
-        })
-        .catch(() => {
-          if (!cancelled) setSlots((prev) => (prev.status === 'ready' ? prev : { status: 'unknown' }));
-        });
-    };
-
-    load();
-    const handleVisible = () => {
-      if (document.visibilityState === 'visible') load();
-    };
-    document.addEventListener('visibilitychange', handleVisible);
-    return () => {
-      cancelled = true;
-      document.removeEventListener('visibilitychange', handleVisible);
-    };
-  }, [enabled]);
-
-  return slots;
-}
-
 function useSignupHrefs() {
   const [search, setSearch] = useState('');
 
@@ -398,51 +345,20 @@ function useSignupHrefs() {
   };
 }
 
-function SlotsBox({ slots, href }) {
-  if (slots.status === 'unknown') return null;
-  if (slots.status === 'ready' && (slots.soldOut || slots.remaining === 0)) {
-    return (
-      <p className="hl-slots hl-slots--sold-out" role="status" aria-label={PRO_LAUNCH_COPY.soldOutTitle}>
-        <span className="hl-slots__kicker">
-          <span className="hl-slots__dot" aria-hidden="true" />
-          Cerrada
-        </span>
-        <span className="hl-slots__count">
-          <strong className="hl-slots__num hl-slots__num--word">Completadas</strong>
-        </span>
-        <span className="hl-slots__of">{PRO_LAUNCH_COPY.soldOutTitle}</span>
-      </p>
-    );
-  }
-
-  const loading = slots.status === 'loading';
-  const one = slots.remaining === 1;
-  return (
-    <Link
-      href={href}
-      className="hl-slots"
-      role="status"
-      aria-busy={loading}
-      aria-label={loading ? 'Comprobando plazas' : proLaunchSlotsLabel(slots.remaining, PRO_LAUNCH_SLOT_LIMIT)}
-    >
-      <span className="hl-slots__kicker">
-        <span className="hl-slots__dot" aria-hidden="true" />
-        {one ? 'Solo queda' : 'Solo quedan'}
-      </span>
-      <span className="hl-slots__count">
-        {loading ? (
-          <span className="hl-slots__num hl-slots__num--loading" aria-hidden="true" />
-        ) : (
-          <strong className="hl-slots__num">{slots.remaining}</strong>
-        )}
-        <span className="hl-slots__unit">de {PRO_LAUNCH_SLOT_LIMIT}</span>
-      </span>
-      <span className="hl-slots__of">plazas</span>
-      <span className="hl-slots__go" aria-hidden="true">
-        <ChevronRight />
-      </span>
-    </Link>
-  );
+function offerJsonLd() {
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: 'Plan Plus',
+    brand: { '@type': 'Brand', name: 'DRALO' },
+    offers: {
+      '@type': 'Offer',
+      price: PLUS_PRICE.toFixed(2),
+      priceCurrency: 'EUR',
+      priceValidUntil: PLUS_OFFER_END_DATE,
+      url: 'https://www.dralo.es/precios/',
+    },
+  }).replace(/</g, '\\u003c');
 }
 
 function HeroTourVideo({ active }) {
@@ -649,10 +565,8 @@ function HeroShotCarousel() {
 export default function HomeGuestLanding({ pending = false, prioritizeLcp = false }) {
   const { ready, sessionHint } = useLandingViewport();
   const visible = ready && !(pending && sessionHint);
-  const slots = useFoundingSlots(visible);
-  const offerOpen = !(slots.status === 'ready' && slots.soldOut);
   const signupHref = useSignupHrefs();
-  const faq = publishedFaq(FAQ, offerOpen);
+  const faq = publishedFaq(FAQ, true);
 
   return (
     <div className={`home-landing ${landingFont.variable}${pending ? ' home-landing--pending' : ''}`}>
@@ -674,11 +588,9 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
             <Link href={APP_ROUTES.examPracticeDefaultLevel} className="hl-nav__link">
               Práctica B2 First
             </Link>
-            {offerOpen ? (
-              <a href="#plan-plus" className="hl-nav__link">
-                Oferta
-              </a>
-            ) : null}
+            <a href="#plan-plus" className="hl-nav__link">
+              Oferta
+            </a>
             <a href="#preguntas-frecuentes" className="hl-nav__link hl-nav__link--wide">
               Preguntas frecuentes
             </a>
@@ -701,42 +613,68 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </div>
       </header>
 
+      {isBlackFridayOfferActive() ? (
+        <section className="hl-bf" aria-labelledby="hl-bf-title">
+          <div className="hl-container hl-bf__inner">
+            <p className="hl-bf__kicker">Black Friday</p>
+            <h2 id="hl-bf-title" className="hl-bf__title">
+              El año de Plus por {PLUS_BLACK_FRIDAY_YEAR_PRICE.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €
+            </h2>
+            <p className="hl-bf__text">
+              Te regalamos dos meses.
+            </p>
+            <p className="hl-bf__until">Hasta el {PLUS_BLACK_FRIDAY_UNTIL_LABEL}.</p>
+            <Link
+              href="/precios/?facturacion=anual"
+              className="hl-btn hl-btn--primary hl-bf__cta"
+              onClick={() => trackHomeEvent('cta_black_friday_year')}
+            >
+              Quiero el año
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
+      <p className="hl-offer-banner">
+        <Link href="/precios/">Plan Plus a 3,99 €/mes hasta el 31/12/2026.</Link>
+      </p>
+
       <section className="hl-hero" aria-labelledby="hl-hero-title">
         <div className="hl-container hl-hero__grid">
           <div className="hl-hero__intro">
-            <p className="hl-kicker">Prepara tu B2 First</p>
+            <p className="hl-kicker">{PRO_LAUNCH_COPY.badge}</p>
             <h1 id="hl-hero-title" className="hl-hero__title">
-              <span>Practica.</span>
-              <span>Entiende tus errores.</span>
-              <span className="hl-hero__title-accent">Mejora tu B2.</span>
+              {PRO_LAUNCH_COPY.title}
             </h1>
-            <p className="hl-hero__lead">
-              Practica con formato de examen y descubre qué necesitas mejorar.
-            </p>
+            <p className="hl-hero__lead">{PRO_LAUNCH_COPY.subtitle}</p>
             <div className="hl-hero__actions">
               <div className="hl-hero__ctas">
                 <Link
-                  href={offerOpen ? signupHref.promo : signupHref.hero}
+                  href="/precios/"
                   className="hl-btn hl-btn--primary hl-btn--lg hl-hero__cta"
-                  onClick={() => trackHomeEvent(offerOpen ? 'cta_hero_promo_25' : 'cta_hero_register')}
+                  onClick={() => {
+                    trackHomeEvent('cta_hero_promo_25');
+                    trackHomeEvent('cta_hero_plus');
+                  }}
                 >
-                  <span className="hl-hero__cta-copy">
-                    {offerOpen ? PRO_LAUNCH_COPY.cta : 'Crear mi cuenta gratis'}
-                  </span>
+                  <span className="hl-hero__cta-copy">{PRO_LAUNCH_COPY.cta}</span>
                   <span className="hl-hero__cta-arrows" aria-hidden="true">
                     <ChevronRight />
                     <ChevronRight />
                     <ChevronRight />
                   </span>
                 </Link>
+                <Link
+                  href={signupHref.hero}
+                  className="hl-btn hl-btn--ghost hl-btn--lg"
+                  onClick={() => trackHomeEvent('cta_hero_register')}
+                >
+                  Probar DRALO gratis
+                </Link>
               </div>
-              {offerOpen ? <p className="hl-hero__fine">{PRO_LAUNCH_COPY.microcopy}</p> : null}
+              <p className="hl-hero__fine">{PRO_LAUNCH_COPY.microcopy}</p>
               <div className="hl-hero__meta">
                 <ul className="hl-hero__notes">
-                  <li>
-                    <CreditCard aria-hidden="true" />
-                    Sin tarjeta
-                  </li>
                   <li>
                     <Clock aria-hidden="true" />A tu ritmo
                   </li>
@@ -755,52 +693,28 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
         </div>
       </section>
 
-      <section
-        id="plan-plus"
-        className={`hl-container hl-offer${offerOpen ? '' : ' hl-offer--sold-out'}`}
-        aria-labelledby="hl-offer-title"
-      >
-        {offerOpen ? (
-          <span className="hl-gift" aria-hidden="true">
-            <Gift />
-          </span>
-        ) : null}
+      <section id="plan-plus" className="hl-container hl-offer" aria-labelledby="hl-offer-title">
         <div>
           <p className="hl-kicker">{PRO_LAUNCH_COPY.badge}</p>
           <h2 id="hl-offer-title" className="hl-offer__title">
-            {offerOpen ? PRO_LAUNCH_COPY.title : PRO_LAUNCH_COPY.soldOutTitle}
+            {PRO_LAUNCH_COPY.title}
           </h2>
-          <p className="hl-offer__text">
-            {offerOpen ? PRO_LAUNCH_COPY.subtitle : PRO_LAUNCH_COPY.soldOutText}
-          </p>
-          {offerOpen ? (
-            <>
-              <p className="hl-offer__text">{PRO_LAUNCH_COPY.microcopy}</p>
-              <p className="hl-offer__text">{PRO_LAUNCH_COPY.previousOfferNote}</p>
-              <div className="hl-offer__actions">
-                <Link
-                  href={signupHref.plan}
-                  className="hl-btn hl-btn--primary"
-                  onClick={() => trackHomeEvent('cta_plan_register')}
-                >
-                  {PRO_LAUNCH_COPY.cta}
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-                <a href="#condiciones-plan-plus" className="hl-offer__conditions">
-                  Ver condiciones
-                </a>
-              </div>
-            </>
-          ) : (
-            <div className="hl-offer__actions">
-              <Link href={signupHref.other} className="hl-btn hl-btn--primary">
-                {PRO_LAUNCH_COPY.ctaSoldOut}
-                <ArrowRight aria-hidden="true" />
-              </Link>
-            </div>
-          )}
+          <p className="hl-offer__text">{PRO_LAUNCH_COPY.subtitle}</p>
+          <p className="hl-offer__text">{PRO_LAUNCH_COPY.microcopy}</p>
+          <div className="hl-offer__actions">
+            <Link
+              href="/precios/"
+              className="hl-btn hl-btn--primary"
+              onClick={() => trackHomeEvent('cta_plan_register')}
+            >
+              {PRO_LAUNCH_COPY.cta}
+              <ArrowRight aria-hidden="true" />
+            </Link>
+            <a href="#preguntas-frecuentes" className="hl-offer__conditions">
+              Ver condiciones
+            </a>
+          </div>
         </div>
-        <SlotsBox slots={slots} href={signupHref.plan} />
       </section>
 
       <section className="hl-tour" aria-labelledby="hl-hero-caption">
@@ -916,29 +830,24 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
       <ReviewCarousel />
 
       <div className="hl-section hl-bands">
-        {offerOpen ? (
-          <section id="condiciones-plan-plus" className="hl-container hl-cta" aria-labelledby="hl-cta-title">
-            <span className="hl-gift hl-gift--lg" aria-hidden="true">
-              <Gift />
-            </span>
-            <div>
-              <h2 id="hl-cta-title" className="hl-cta__title">
-                {PRO_LAUNCH_COPY.title}
-              </h2>
-              <p className="hl-cta__text">
-                {PRO_LAUNCH_COPY.subtitle} {PRO_LAUNCH_COPY.microcopy}
-              </p>
-            </div>
-            <Link
-              href={signupHref.plan}
-              className="hl-btn hl-btn--primary hl-btn--lg"
-              onClick={() => trackHomeEvent('cta_plan_register')}
-            >
-              {PRO_LAUNCH_COPY.cta}
-              <ArrowRight aria-hidden="true" />
-            </Link>
-          </section>
-        ) : null}
+        <section id="condiciones-plan-plus" className="hl-container hl-cta" aria-labelledby="hl-cta-title">
+          <div>
+            <h2 id="hl-cta-title" className="hl-cta__title">
+              {PRO_LAUNCH_COPY.title}
+            </h2>
+            <p className="hl-cta__text">
+              {PRO_LAUNCH_COPY.subtitle} {PRO_LAUNCH_COPY.microcopy}
+            </p>
+          </div>
+          <Link
+            href="/precios/"
+            className="hl-btn hl-btn--primary hl-btn--lg"
+            onClick={() => trackHomeEvent('cta_plan_register')}
+          >
+            {PRO_LAUNCH_COPY.cta}
+            <ArrowRight aria-hidden="true" />
+          </Link>
+        </section>
 
         <div className="hl-container hl-claim">
           <Image
@@ -959,6 +868,7 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
       {faq.length ? (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqJsonLd(faq) }} />
       ) : null}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: offerJsonLd() }} />
 
       <section id="preguntas-frecuentes" className="hl-section hl-section--flush" aria-labelledby="hl-faq-title">
         <div className="hl-container">

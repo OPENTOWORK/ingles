@@ -1,13 +1,10 @@
-/** Una sola config de la oferta: 25 plazas y 3 meses de Plan PREMIUM (slug `pro`). */
+/** Una sola config de la oferta: 25 plazas y 3 meses de Plan Plus (slug `premium`). */
 export const PRO_LAUNCH_COHORT = 'pro_launch_25';
 export const PRO_LAUNCH_SLOT_LIMIT = 25;
 export const PRO_LAUNCH_MONTHS = 3;
-export const PRO_LAUNCH_PLAN_SLUG = 'pro';
-/**
- * En el catálogo público el slug `pro` se llama Plan PREMIUM.
- * No hay un plan distinto llamado "Pro".
- */
-export const PRO_LAUNCH_PLAN_LABEL = 'Plan PREMIUM';
+/** Mismo plan que el Plus de pago. El slug `pro` (PREMIUM) ya no se ofrece. */
+export const PRO_LAUNCH_PLAN_SLUG = 'premium';
+export const PRO_LAUNCH_PLAN_LABEL = 'Plan Plus';
 /** Altas anteriores a esta fecha no entran en el cupo ni lo consumen. */
 export const PRO_LAUNCH_STARTED_AT = '2026-11-12T00:00:00.000Z';
 export const PRO_LAUNCH_SLOTS_PATH = '/api/pro-launch/slots/';
@@ -57,16 +54,18 @@ export function proLaunchSlotsLabel(remaining, total = PRO_LAUNCH_SLOT_LIMIT) {
 }
 
 export const PRO_LAUNCH_COPY = {
-  badge: `Oferta de lanzamiento · ${PRO_LAUNCH_SLOT_LIMIT} plazas`,
-  title: `Prepara tu B2 First con ${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} gratis`,
-  subtitle: `Practica las partes del examen, recibe feedback sobre tus respuestas y entiende qué necesitas mejorar. Solo para los primeros ${PRO_LAUNCH_SLOT_LIMIT} registros.`,
-  cta: 'Reservar mi plaza',
+  badge: 'Oferta hasta el 31/12/2026',
+  title: 'Prepara tu B2 First con el Plan Plus por 3,99 €/mes',
+  subtitle:
+    'Practica las partes del examen, recibe feedback sobre tus respuestas y entiende qué necesitas mejorar.',
+  cta: 'Empezar con el Plan Plus',
   ctaSoldOut: 'Crear mi cuenta',
-  soldOutTitle: 'Plazas completadas',
-  soldOutText: `Las ${PRO_LAUNCH_SLOT_LIMIT} plazas de ${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} ya están asignadas. Puedes crear tu cuenta, sin esta oferta.`,
-  previousOfferNote: 'Las 50 plazas de la oferta anterior ya están asignadas.',
-  microcopy: `${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} sin coste. La oferta termina al completarse las ${PRO_LAUNCH_SLOT_LIMIT} plazas.`,
-  metaDescription: `Practica el B2 First con ejercicios en formato examen. Los primeros ${PRO_LAUNCH_SLOT_LIMIT} registros tienen ${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} gratis.`,
+  soldOutTitle: 'Oferta cerrada',
+  soldOutText: 'Puedes crear tu cuenta y ver el Plan Plus en la página de precios.',
+  previousOfferNote: '',
+  microcopy: '3,99 €/mes en lugar de 9,99 €. Oferta disponible hasta el 31/12/2026.',
+  metaDescription:
+    'Practica el B2 First, recibe feedback sobre tus respuestas y entiende tus errores. Plan Plus a 3,99 €/mes hasta el 31/12/2026.',
   metaDescriptionClosed:
-    'Practica el B2 First con ejercicios en formato examen, entiende tus errores y recibe correcciones de Writing. Crea tu cuenta gratis, sin tarjeta.',
+    'Practica el B2 First, recibe feedback sobre tus respuestas y entiende tus errores. Plan Plus a 3,99 €/mes hasta el 31/12/2026.',
 };

@@ -3,6 +3,8 @@ import { describe, it } from 'node:test';
 import {
   PRO_LAUNCH_AFTER_EXPIRY,
   PRO_LAUNCH_MONTHS,
+  PRO_LAUNCH_PLAN_LABEL,
+  PRO_LAUNCH_PLAN_SLUG,
   PRO_LAUNCH_SLOT_LIMIT,
   PRO_LAUNCH_STARTED_AT,
   computeProLaunchAvailability,
@@ -15,6 +17,8 @@ describe('pro launch offer slots', () => {
   it('counts only the new cap of 25', () => {
     assert.equal(PRO_LAUNCH_SLOT_LIMIT, 25);
     assert.equal(PRO_LAUNCH_MONTHS, 3);
+    assert.equal(PRO_LAUNCH_PLAN_SLUG, 'premium');
+    assert.equal(PRO_LAUNCH_PLAN_LABEL, 'Plan Plus');
     assert.deepEqual(computeProLaunchAvailability(0), {
       cohort: 'pro_launch_25',
       total: 25,

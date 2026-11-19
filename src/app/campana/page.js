@@ -2,9 +2,9 @@ import ConversionLandingPage from '@/components/landing/ConversionLandingPage';
 import { pageMetadata } from '@/lib/siteSeo';
 
 export const metadata = pageMetadata({
-  absoluteTitle: 'Prepara tu B2 First con 3 meses de Plan PREMIUM gratis | Dralo',
+  absoluteTitle: 'DRALO | Prepara el Cambridge B2 First desde 3,99 €/mes',
   description:
-    'Practica el B2 First y recibe feedback sobre tus respuestas. Los primeros 25 registros tienen 3 meses de Plan PREMIUM gratis.',
+    'Practica el B2 First, recibe feedback sobre tus respuestas y entiende tus errores. Plan Plus a 3,99 €/mes hasta el 31/12/2026.',
   path: '/campana/',
   robots: { index: false, follow: true },
 });

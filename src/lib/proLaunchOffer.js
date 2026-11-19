@@ -51,7 +51,7 @@ export function proLaunchExpiryAction() {
 }
 
 /**
- * Reserva una plaza real de la cohorte nueva y asigna Plan PREMIUM (`pro`).
+ * Reserva una plaza real de la cohorte nueva y asigna Plan Plus (`premium`).
  * No toca `founding_member_grants` ni el Plan Plus de quien ya lo tiene.
  *
  * @param {import('@supabase/supabase-js').SupabaseClient} adminClient

@@ -289,7 +289,7 @@ function buildProLaunchCampaign(slots = null) {
     id: 'pro-launch-25',
     nombre: `${PRO_LAUNCH_PLAN_LABEL}: ${PRO_LAUNCH_MONTHS} meses (${PRO_LAUNCH_SLOT_LIMIT} plazas)`,
     descripcion:
-      'Las altas nuevas, sin cupo founding, reciben Plan PREMIUM durante 3 meses. El contador lee pro_launch_grants. Al llegar a 25 la oferta se cierra.',
+      'Las altas nuevas, sin cupo founding, reciben Plan Plus durante 3 meses. El contador lee pro_launch_grants. Al llegar a 25 la oferta se cierra.',
     estado: soldOut ? 'inactiva' : 'activa',
     enlace: '/',
     meta: soldOut
@@ -349,7 +349,7 @@ export async function fetchMarketingPlanDashboard(db) {
         {
           id: 'launch-pricing',
           nombre: LAUNCH_PRICE_LABEL,
-          descripcion: 'Precio fundador visible en la página de precios hasta el 31/12/2026.',
+          descripcion: 'Plan Plus a 3,99 €/mes, con 9,99 € tachado, hasta el 31/12/2026.',
           estado: promotions.some((plan) => plan.tipo === 'lanzamiento') ? 'activa' : 'inactiva',
           enlace: '/precios',
         },

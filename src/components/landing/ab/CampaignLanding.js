@@ -9,7 +9,7 @@ import {
 } from '@/components/landing/ab/AbShell';
 import FoundingSlotsStatus from '@/components/landing/ab/FoundingSlotsStatus';
 import CampaignVisual from '@/components/landing/ab/CampaignVisual';
-import { PRO_LAUNCH_COPY, PRO_LAUNCH_SLOT_LIMIT } from '@/lib/proLaunchOffer.rules';
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import {
   buildRegisterHref,
   normalizeAbVariant,
@@ -70,16 +70,12 @@ function planPoints() {
 
 const FAQ = [
   {
-    q: '¿Qué incluye esta oferta?',
-    a: '3 meses de Plan PREMIUM para practicar Reading and Use of English, Writing y Listening, con feedback sobre tus respuestas. Speaking, Error Tracking y Training no forman parte de lo que esta oferta da por disponible.',
+    q: '¿Qué incluye el Plan Plus a 3,99 €?',
+    a: 'Training y Quiz con vidas ilimitadas, exámenes mensuales, Writing Correction, Speaking Correction, Dralo AI, Exam Strategies y seguimiento de progreso.',
   },
   {
-    q: '¿Cuánto dura?',
-    a: `${PRO_LAUNCH_COPY.microcopy} Quien ya tenía la oferta anterior no entra en estas plazas.`,
-  },
-  {
-    q: '¿Qué pasa al terminar los 3 meses?',
-    a: 'El registro no pide tarjeta y estos 3 meses no se cobran. La condición al cumplirse el plazo no está publicada: la oferta no activa un cobro por sí sola.',
+    q: '¿Hasta cuándo está disponible esta oferta?',
+    a: 'Hasta el 31/12/2026.',
   },
   {
     q: '¿Necesito tarjeta?',
@@ -163,18 +159,18 @@ export default function CampaignLanding({ variant = 'a', source = 'direct', sear
       </section>
 
       <AbSteps
-        title="Cómo reservar tu plaza"
+        title="Cómo empezar"
         steps={[
           {
             title: 'Crea tu cuenta',
-            text: `Regístrate sin tarjeta mientras queden plazas, hasta ${PRO_LAUNCH_SLOT_LIMIT}.`,
+            text: 'Regístrate con nombre, correo y contraseña.',
           },
           {
-            title: 'Empieza con Plan PREMIUM',
+            title: 'Elige el Plan Plus',
             text: 'Practica las partes del examen y revisa el feedback de tus respuestas.',
           },
           {
-            title: '3 meses desde el registro',
+            title: 'Oferta hasta el 31/12/2026',
             text: PRO_LAUNCH_COPY.microcopy,
           },
         ]}

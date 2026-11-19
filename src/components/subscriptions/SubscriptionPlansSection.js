@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
   ANNUAL_BILLING_DISCOUNT_PERCENT,
@@ -19,9 +19,12 @@ import {
   getPlanListPrice,
   getPlanTierRank,
   isCurrentPlanSlug,
-  FOUNDER_PRICE_DETAIL,
-  FOUNDER_PRICE_LABEL,
-  isFounderPriceActive,
+  isBlackFridayOfferActive,
+  isPlusOfferActive,
+  PLUS_BLACK_FRIDAY_UNTIL_LABEL,
+  PLUS_BLACK_FRIDAY_YEAR_PRICE,
+  PLUS_OFFER_UNTIL_LABEL,
+  PLUS_YEAR_PRICE,
   planHasLaunchPricing,
   PLAN_COMPARISON_ROWS,
 } from '@/data/financialPlanConfig';
@@ -42,7 +45,10 @@ function comparisonCellValue(row, planSlug, billingCycle) {
     const crossed = getPlanCrossedPrices(plan, billingCycle).map((amount) =>
       billingCycle === 'annual' ? amount * 12 : amount,
     );
-    const discount = getPlanLaunchDiscountPercent(plan, billingCycle) ?? getPlanListDiscountPercent(plan, billingCycle);
+    const blackFridayYear = billingCycle === 'annual' && plan.slug === 'premium' && isBlackFridayOfferActive();
+    const discount = blackFridayYear
+      ? getPlanAnnualSavingsPercent(plan)
+      : getPlanLaunchDiscountPercent(plan, billingCycle) ?? getPlanListDiscountPercent(plan, billingCycle);
     return {
       kind: 'price',
       crossed: crossed.map((amount) => formatEuroAmount(amount)),
@@ -91,7 +97,6 @@ function CellValue({ value, type }) {
           </span>
         ) : null}
         <span className={styles.cellPriceCurrent}>{value.current}</span>
-        {value.launch && isFounderPriceActive() ? <FounderPriceNote className={styles.cellPriceLaunch} /> : null}
         {value.discount ? (
           <span className={styles.cellPriceDiscount}>-{value.discount}%</span>
         ) : null}
@@ -108,22 +113,16 @@ function publicAnnualSavingsPercent() {
 
 function annualBillingHint() {
   const hasLaunchPrice = getPublicSubscriptionPlans().some((plan) => planHasLaunchPricing(plan));
-  if (hasLaunchPrice && isFounderPriceActive()) {
-    return '23,88 € al año, cobrados de una vez.';
+  if (hasLaunchPrice && isBlackFridayOfferActive()) {
+    return `Black Friday en Plus: el año por ${PLUS_BLACK_FRIDAY_YEAR_PRICE.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €, con dos meses de regalo.`;
+  }
+  if (hasLaunchPrice && isPlusOfferActive()) {
+    return `${PLUS_YEAR_PRICE.toLocaleString('es-ES', { minimumFractionDigits: 2 })} € al año, cobrados de una vez.`;
   }
   if (hasLaunchPrice) {
-    return 'Precio de lanzamiento al pagar el año completo de una vez.';
+    return 'Al pagar el año completo de una vez.';
   }
   return `Ahorra un ${publicAnnualSavingsPercent()}% pagando el año completo de una vez.`;
-}
-
-function FounderPriceNote({ className }) {
-  return (
-    <span className={className}>
-      <span className={styles.founderPriceTitle}>{FOUNDER_PRICE_LABEL}</span>
-      <span className={styles.founderPriceUntil}>{FOUNDER_PRICE_DETAIL}</span>
-    </span>
-  );
 }
 
 function resolvePlanCardCta(plan, { currentPlanSlug, enableCheckout, interactive, isSelected }) {
@@ -252,6 +251,11 @@ export default function SubscriptionPlansSection({
 }) {
   const interactive = typeof onSelectPlan === 'function';
   const [billingCycle, setBillingCycle] = useState('monthly');
+
+  useEffect(() => {
+    const cycle = new URLSearchParams(window.location.search).get('facturacion');
+    if (cycle === 'anual') setBillingCycle('annual');
+  }, []);
   const [checkoutPlan, setCheckoutPlan] = useState('');
   const [checkoutError, setCheckoutError] = useState('');
   const [activeCard, setActiveCard] = useState(0);
@@ -367,6 +371,8 @@ export default function SubscriptionPlansSection({
           const listDiscount = getPlanListDiscountPercent(plan, billingCycle);
           const launchDiscount = getPlanLaunchDiscountPercent(plan, billingCycle);
           const showLaunchLabel = hasPaidPlan && planHasLaunchPricing(plan);
+          const blackFridayYear = isAnnual && plan.slug === 'premium' && isBlackFridayOfferActive();
+          const shownDiscount = blackFridayYear ? getPlanAnnualSavingsPercent(plan) : launchDiscount;
           return (
             <article
               key={plan.slug}
@@ -388,7 +394,7 @@ export default function SubscriptionPlansSection({
               <p className={styles.cardPrice}>
                 {hasPaidPlan ? (
                   <>
-                    {showLaunchLabel && crossedPrices.length > 0 ? (
+                    {showLaunchLabel && !blackFridayYear && crossedPrices.length > 0 ? (
                       <span className={styles.cardPriceWasRow}>
                         {crossedPrices.map((amount) => (
                           <span
@@ -413,14 +419,18 @@ export default function SubscriptionPlansSection({
                           : formatPlanPriceAmount(plan, billingCycle)}
                       </span>
                       <span className={styles.cardPricePeriod}>{isAnnual ? '/año' : '/mes'}</span>
-                      {showLaunchLabel && launchDiscount ? (
-                        <span className={styles.cardPriceDiscount}>-{launchDiscount}%</span>
+                      {showLaunchLabel && shownDiscount ? (
+                        <span className={styles.cardPriceDiscount}>-{shownDiscount}%</span>
                       ) : listDiscount && !showLaunchLabel ? (
                         <span className={styles.cardPriceDiscount}>-{listDiscount}%</span>
                       ) : null}
                     </span>
-                    {showLaunchLabel && isFounderPriceActive() ? (
-                      <FounderPriceNote className={styles.cardPriceLaunch} />
+                    {showLaunchLabel && isPlusOfferActive() ? (
+                      <span className={styles.cardPriceLaunch}>
+                        {isAnnual && plan.slug === 'premium' && isBlackFridayOfferActive()
+                          ? `Black Friday hasta el ${PLUS_BLACK_FRIDAY_UNTIL_LABEL}`
+                          : `Oferta disponible hasta el ${PLUS_OFFER_UNTIL_LABEL}`}
+                      </span>
                     ) : null}
                     {isAnnual ? (
                       <span className={styles.cardPriceAnnual}>

@@ -8,7 +8,6 @@ import HomeQuickNav from '@/components/home/HomeQuickNav';
 import HomeTutorialButton from '@/components/home/HomeTutorialButton';
 import HomeStudentMobileBoard from '@/components/home/HomeStudentMobileBoard';
 import InviteFriendPromoBanner from '@/components/layout/InviteFriendPromoBanner';
-import FoundingMemberSlotsBanner from '@/components/home/FoundingMemberSlotsBanner';
 import HomeGuestLanding from '@/components/home/landing/HomeGuestLanding';
 import { landingFont } from '@/components/home/landing/landingFont';
 import { useEffect, useLayoutEffect, useState } from 'react';
@@ -91,7 +90,6 @@ export default function HomePageClient() {
       <main className={`home-page ${landingFont.variable} home-page--student-mobile${authPending ? ' home-page--pending' : ''}`}>
         <div className="home-page__inner">
           {isRegistered ? <InviteFriendPromoBanner /> : null}
-          {isGuestHome && phone ? <FoundingMemberSlotsBanner /> : null}
           <section className="home-hero" aria-labelledby="home-title">
             <HomeInstallAppButton />
 

@@ -4,20 +4,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabaseClient';
 import { buildSignupHref } from '@/lib/signupTracking';
-import { PRO_LAUNCH_SLOTS_PATH, proLaunchSlotsLabel } from '@/lib/proLaunchOffer.rules';
 import styles from './GuestPracticeSignupPrompt.module.css';
 
 const DISMISS_KEY = 'dralo_post_practice_signup_dismissed';
 
-/**
- * Aviso no bloqueante al ver las respuestas sin cuenta.
- * {N} sale del mismo endpoint que el contador de la home.
- */
+/** Aviso no bloqueante al ver las respuestas sin cuenta. */
 export default function GuestPracticeSignupPrompt({ open }) {
   const [signedIn, setSignedIn] = useState(null);
   const [dismissed, setDismissed] = useState(false);
   const [latched, setLatched] = useState(false);
-  const [remaining, setRemaining] = useState(null);
   const [href, setHref] = useState('/registro/?src=post_practice');
 
   useEffect(() => {
@@ -40,31 +35,7 @@ export default function GuestPracticeSignupPrompt({ open }) {
     };
   }, []);
 
-  useEffect(() => {
-    if (!latched || signedIn) return undefined;
-    let cancelled = false;
-    fetch(`${PRO_LAUNCH_SLOTS_PATH}?_=${Date.now()}`, { cache: 'no-store' })
-      .then((response) => (response.ok ? response.json() : Promise.reject(new Error('slots'))))
-      .then((data) => {
-        const value = Number(data?.remaining);
-        const total = Number(data?.total);
-        if (!cancelled && Number.isInteger(value) && value > 0) {
-          setRemaining({
-            remaining: value,
-            total: Number.isInteger(total) && total > 0 ? total : value,
-          });
-        }
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, [latched, signedIn]);
-
   if (!latched || signedIn !== false || dismissed) return null;
-
-  const places =
-    remaining == null ? '' : ` ${proLaunchSlotsLabel(remaining.remaining, remaining.total)}.`;
 
   const close = () => {
     setDismissed(true);
@@ -81,8 +52,7 @@ export default function GuestPracticeSignupPrompt({ open }) {
         Ya sabes cómo es esta parte. Ahora sigue practicando.
       </h2>
       <p className={styles.text}>
-        Crea tu cuenta gratis para practicar el resto de partes del examen y recibir feedback sobre tus respuestas.
-        {places}
+        Crea tu cuenta para practicar el resto de partes del examen y recibir feedback sobre tus respuestas.
       </p>
       <div className={styles.actions}>
         <Link href={href} className={styles.primary}>

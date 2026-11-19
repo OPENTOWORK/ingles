@@ -28,6 +28,57 @@ export const ADMIN_PANEL_ASSIGNABLE_PLAN_OPTIONS = [
   { slug: 'friendly_premium', label: 'Friendly PREMIUM' },
 ];
 
+/** Única oferta de precio del Plan Plus. El porcentaje se calcula, no se escribe a mano. */
+export const PLUS_PRICE = 3.99;
+export const PLUS_ORIGINAL_PRICE = 9.99;
+export const PLUS_OFFER_END_DATE = '2026-12-31';
+/**
+ * TODO: no hay un precio normal distinto definido para el 01/01/2027.
+ * Al cerrar la oferta se sigue mostrando PLUS_PRICE, sin tachado ni badge.
+ */
+export const PLUS_PRICE_AFTER_OFFER = null;
+export const PLUS_OFFER_UNTIL_LABEL = '31/12/2026';
+
+/** Black Friday: el año de Plus a 19,99 €. El año habitual son 23,88 € (1,99 € × 12): dos meses de regalo. */
+export const PLUS_YEAR_PRICE = 23.88;
+export const PLUS_BLACK_FRIDAY_YEAR_PRICE = 19.99;
+export const PLUS_BLACK_FRIDAY_END_DATE = '2026-11-30';
+export const PLUS_BLACK_FRIDAY_UNTIL_LABEL = '30/11/2026';
+
+export function isBlackFridayOfferActive(now = new Date()) {
+  const date = now instanceof Date ? now : new Date(now);
+  if (Number.isNaN(date.getTime())) return false;
+  const ymd = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+  return ymd <= PLUS_BLACK_FRIDAY_END_DATE;
+}
+
+export function isPlusOfferActive(now = new Date()) {
+  const date = now instanceof Date ? now : new Date(now);
+  if (Number.isNaN(date.getTime())) return false;
+  const ymd = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+  return ymd <= PLUS_OFFER_END_DATE;
+}
+
+export function plusOfferDiscountPercent(price = PLUS_PRICE, original = PLUS_ORIGINAL_PRICE) {
+  const current = Number(price);
+  const list = Number(original);
+  if (!(list > current) || current <= 0) return null;
+  return Math.round(((list - current) / list) * 100);
+}
+
+export const isFounderPriceActive = isPlusOfferActive;
+export const LAUNCH_PRICE_LABEL = 'Oferta Plus';
+
 /** @deprecated Usar ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS */
 export const ADMIN_ASSIGNABLE_PLAN_SLUGS = ADMIN_PANEL_ASSIGNABLE_PLAN_SLUGS;
 
@@ -136,7 +187,7 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     duracion_dias: 36500,
     descripcionCorta: 'Empieza a aprender inglés gratis.',
     descripcion:
-      'A2, B1 y B2: 1 examen de prueba. No el nivel completo. Sin C1 ni C2. Training con 3 vidas (se recupera 1 cada 10 horas), Quiz con 3 vidas (se recupera 1 cada 10 horas), Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes.',
+      'B2: 1 examen de prueba, sin el nivel completo. A2 y B1 próximamente. Sin C1 ni C2. Training con 3 vidas (se recupera 1 cada 10 horas), Quiz con 3 vidas (se recupera 1 cada 10 horas), Writing Correction (1/mes), Speaking Correction (1/mes) y 3 consultas Dralo Assistant al mes.',
     badge: null,
     badgeVariant: null,
     recommended: false,
@@ -144,23 +195,22 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     orden: 0,
     activo: true,
     highlights: [
-      'A2, B1 y B2: 1 examen de prueba',
+      'B2: 1 examen de prueba',
+      'A2 y B1: próximamente',
       'Training: 3 vidas (se recupera 1 cada 10 h)',
       'Quiz: 3 vidas (se recupera 1 cada 10 h)',
       'Writing Correction: 1/mes',
       'Speaking Correction: 1/mes',
       '3 consultas Dralo Assistant al mes',
       'Exam Strategies: 1ª parte de cada nivel y skill',
-      'Soporte prioritario: hasta 72h',
+      'Soporte: hasta 72h',
     ],
     excludedHighlights: [
-      'A2, B1 y B2 completos',
+      'B2 completo',
       'Corrección Writing avanzada',
       'Dralo AI',
       'Acceso prioritario a nuevas funciones',
       'Seguimiento de progreso',
-      'Nivel C1',
-      'Nivel C2',
     ],
     entitlements: {
       levels: ['a2', 'b1', 'b2'],
@@ -187,16 +237,16 @@ export const DRALO_SUBSCRIPTION_PLANS = [
   {
     slug: 'premium',
     nombre: 'PLUS',
-    precio: 3.99,
+    precio: PLUS_PRICE,
     precioRegular: 7.99,
-    precioLista: 9.99,
+    precioLista: PLUS_ORIGINAL_PRICE,
     precioAnualLanzamiento: 1.99, // 23,88 € al año, cobrados de una vez
     precioAnualRegular: 5.99,
     precioLabel: '3,99€/mes',
     duracion_dias: 30,
-    descripcionCorta: 'La opción más popular para preparar exámenes y mejorar rápidamente.',
+    descripcionCorta: 'La opción más popular para preparar el examen y mejorar con feedback.',
     descripcion:
-      'Nivel B2, exámenes, Writing Correction, Speaking Correction, Dralo AI y consultas Dralo Assistant sin límite, Training y Quiz ilimitados, corrección Writing avanzada, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h). A2, B1 y C1 próximamente.',
+      'Nivel B2, exámenes, Writing Correction, Speaking Correction, Dralo AI y consultas Dralo Assistant sin límite, Training y Quiz ilimitados, corrección Writing avanzada, acceso prioritario a nuevas funciones y soporte prioritario (hasta 24h). A2, B1, C1 y C2 próximamente.',
     badge: '🏆 MÁS POPULAR',
     badgeVariant: 'popular',
     recommended: true,
@@ -205,9 +255,10 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     activo: true,
     highlights: [
       'Nivel B2',
+      'A2 y B1: próximamente',
+      'C1 y C2: próximamente',
       'Training: vidas ilimitadas',
       'Quiz: vidas ilimitadas',
-      'A2, B1 y C1: próximamente',
       'Exámenes mensuales',
       'Writing Correction',
       'Speaking Correction',
@@ -259,9 +310,10 @@ export const DRALO_SUBSCRIPTION_PLANS = [
     activo: false,
     highlights: [
       'Nivel B2',
+      'A2 y B1: próximamente',
+      'C1 y C2: próximamente',
       'Training: vidas ilimitadas',
       'Quiz: vidas ilimitadas',
-      'A2, B1 y C1: próximamente',
       'Exámenes mensuales',
       'Writing Correction',
       'Speaking Correction',
@@ -383,24 +435,7 @@ export const COMING_SOON = 'coming-soon';
 /** Descuento al facturar anualmente (mostrado en /precios y vista previa admin). */
 export const ANNUAL_BILLING_DISCOUNT_PERCENT = 25;
 
-/** Etiqueta de marketing del precio fundador, visible hasta el final de este día (Madrid). */
-export const FOUNDER_PRICE_UNTIL = '2026-12-31';
-export const FOUNDER_PRICE_LABEL = 'Precio fundador';
-export const FOUNDER_PRICE_DETAIL = 'Para siempre hasta el 31/12/2026';
-export const LAUNCH_PRICE_LABEL = FOUNDER_PRICE_LABEL;
-
-/** True through 31/12/2026 in Europe/Madrid. The prices stay; only the label uses this. */
-export function isFounderPriceActive(now = new Date()) {
-  const date = now instanceof Date ? now : new Date(now);
-  if (Number.isNaN(date.getTime())) return false;
-  const ymd = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Europe/Madrid',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-  }).format(date);
-  return ymd <= FOUNDER_PRICE_UNTIL;
-}
+/** La oferta de precio sigue activa hasta el final de PLUS_OFFER_END_DATE (Madrid). */
 
 export function planHasLaunchPricing(plan) {
   return Number(plan?.precioRegular) > 0;
@@ -411,6 +446,9 @@ export function getPlanMonthlyPrice(plan, billingCycle = 'monthly') {
   const base = Number(plan?.precio) || 0;
   if (base <= 0) return 0;
   if (billingCycle === 'annual') {
+    if (plan?.slug === 'premium' && isBlackFridayOfferActive()) {
+      return PLUS_BLACK_FRIDAY_YEAR_PRICE / 12;
+    }
     const annualLaunch = Number(plan?.precioAnualLanzamiento);
     if (annualLaunch > 0) return annualLaunch;
     return base * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
@@ -418,22 +456,20 @@ export function getPlanMonthlyPrice(plan, billingCycle = 'monthly') {
   return base;
 }
 
-/** Precios tachados (de mayor a menor) antes del precio de lanzamiento. */
+/** Un solo precio tachado mientras la oferta de Plus sigue en fecha. */
 export function getPlanCrossedPrices(plan, billingCycle = 'monthly') {
+  if (!isPlusOfferActive()) return [];
   const list = Number(plan?.precioLista);
-  const regular = Number(plan?.precioRegular);
-  if (!(list > 0) || !(regular > 0)) return [];
+  const current = getPlanMonthlyPrice(plan, billingCycle);
+  if (!(list > current)) return [];
 
   if (billingCycle === 'annual') {
+    if (plan?.slug === 'premium' && isBlackFridayOfferActive()) return [];
     const annualList = list * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
-    const annualRegular =
-      Number(plan?.precioAnualRegular) > 0
-        ? Number(plan.precioAnualRegular)
-        : regular * (1 - ANNUAL_BILLING_DISCOUNT_PERCENT / 100);
-    return [annualList, annualRegular].filter((n) => n > 0);
+    return annualList > current ? [annualList] : [];
   }
 
-  return [list, regular];
+  return [list];
 }
 
 /** Precio tachado principal (el más reciente antes del lanzamiento). */
@@ -494,7 +530,9 @@ export function getPlanAnnualSavingsPercent(plan) {
 /** @param {'monthly'|'annual'} billingCycle */
 export function formatPlanPriceLabel(plan, billingCycle = 'monthly') {
   if (billingCycle === 'annual') {
-    const total = getPlanMonthlyPrice(plan, 'annual') * 12;
+    const total = plan?.slug === 'premium' && isBlackFridayOfferActive()
+      ? PLUS_BLACK_FRIDAY_YEAR_PRICE
+      : Math.round(getPlanMonthlyPrice(plan, 'annual') * 12 * 100) / 100;
     if (total <= 0) return '0€';
     return `${formatEuroAmount(total)}/año`;
   }
@@ -505,7 +543,14 @@ export function formatPlanPriceLabel(plan, billingCycle = 'monthly') {
 
 /** Total anual facturado de una vez (precio mensual con descuento × 12). */
 export function formatPlanAnnualTotal(plan) {
-  const total = getPlanMonthlyPrice(plan, 'annual') * 12;
+  if (plan?.slug === 'premium' && isBlackFridayOfferActive()) {
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: 2,
+    }).format(PLUS_BLACK_FRIDAY_YEAR_PRICE);
+  }
+  const total = Math.round(getPlanMonthlyPrice(plan, 'annual') * 12 * 100) / 100;
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'EUR',
@@ -666,14 +711,15 @@ const PROFILE_PLAN_DISPLAY = {
   free: {
     descripcionCorta: 'Start learning English for free.',
     highlights: [
-      'A2, B1 and B2: 1 trial exam',
+      'B2: 1 trial exam',
+      'A2 and B1: coming soon',
       'Training: 3 lives (1 recovers every 10 hours)',
       'Quiz: 3 lives (1 recovers every 10 hours)',
       'Writing Correction: 1/month',
       'Speaking Correction: 1/month',
       '3 Dralo Assistant queries per month',
       'Exam Strategies: part 1 of each level and skill',
-      'Priority support: within 72h',
+      'Support: within 72h',
     ],
     badge: null,
   },
@@ -695,9 +741,10 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'The most popular option to prepare for exams and improve quickly.',
     highlights: [
       'Level B2',
+      'A2 and B1: coming soon',
+      'C1 and C2: coming soon',
       'Training: unlimited lives',
       'Quiz: unlimited lives',
-      'A2, B1 and C1: coming soon',
       'Monthly exams',
       'Writing Correction',
       'Speaking Correction',
@@ -715,9 +762,10 @@ const PROFILE_PLAN_DISPLAY = {
     descripcionCorta: 'The most complete experience with the highest daily limits.',
     highlights: [
       'Level B2',
+      'A2 and B1: coming soon',
+      'C1 and C2: coming soon',
       'Training: unlimited lives',
       'Quiz: unlimited lives',
-      'A2, B1 and C1: coming soon',
       'Monthly exams',
       'Writing Correction',
       'Speaking Correction',

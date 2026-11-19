@@ -5,14 +5,9 @@ import {
   FOUNDING_SURVEY_RESPONSE_DAYS,
 } from '@/lib/foundingSurvey.rules';
 import { MAX_FOUNDING_SLOT } from '@/lib/foundingMemberPlus.rules';
-import {
-  PRO_LAUNCH_COPY,
-  PRO_LAUNCH_MONTHS,
-  PRO_LAUNCH_PLAN_LABEL,
-  PRO_LAUNCH_SLOT_LIMIT,
-} from '@/lib/proLaunchOffer.rules';
+import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 
-export const AB_CTA_LABEL = 'Reservar mi plaza';
+export const AB_CTA_LABEL = 'Empezar con el Plan Plus';
 
 export const AB_EVENTS = {
   pageView: 'page_view',
@@ -177,20 +172,12 @@ export const PRACTICE_LOOP = [
 
 export const CAMPAIGN_FAQ = [
   {
-    q: '¿De verdad es gratis?',
-    a: `Sí, para los primeros ${PRO_LAUNCH_SLOT_LIMIT} registros: ${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} sin coste. La oferta se cierra al completarse las plazas.`,
+    q: '¿Qué incluye el Plan Plus a 3,99 €?',
+    a: 'Training y Quiz con vidas ilimitadas, exámenes mensuales, Writing Correction, Speaking Correction, Dralo AI, Exam Strategies y seguimiento de progreso.',
   },
   {
-    q: '¿Cuánto dura el Plan PREMIUM de esta oferta?',
-    a: `${PRO_LAUNCH_MONTHS} meses desde la fecha de registro. ${PRO_LAUNCH_COPY.microcopy}`,
-  },
-  {
-    q: '¿Qué pasa cuando terminan los 3 meses?',
-    a: 'Los 3 meses no se cobran y el registro no pide tarjeta. La condición exacta al cumplirse ese plazo no está publicada: esta oferta no activa un cobro por sí sola.',
-  },
-  {
-    q: '¿Qué ocurre al completarse las 25 plazas?',
-    a: 'La oferta se cierra. Quien se registre después crea su cuenta sin esos 3 meses.',
+    q: '¿Hasta cuándo está disponible esta oferta?',
+    a: 'Hasta el 31/12/2026.',
   },
   {
     q: '¿Qué incluye Plan Plus?',
@@ -204,7 +191,7 @@ export const CAMPAIGN_FAQ = [
   },
   {
     q: '¿Cuánto tiempo puedo utilizar Dralo?',
-    a: `La cuenta sigue abierta. Esta oferta cubre ${PRO_LAUNCH_MONTHS} meses de ${PRO_LAUNCH_PLAN_LABEL} y termina al cumplirse ese plazo o al agotarse las ${PRO_LAUNCH_SLOT_LIMIT} plazas, lo que corresponda a cada alta.`,
+    a: 'La cuenta sigue abierta. El Plan Plus de esta oferta está disponible hasta el 31/12/2026.',
   },
   {
     q: '¿Tengo que introducir una tarjeta?',

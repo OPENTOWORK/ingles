@@ -115,7 +115,7 @@ export default function B2Guide({ variant = 'a' }) {
 
       <AbFinal
         title="Si el formato ya está claro, toca practicarlo"
-        text="Dralo no reemplaza a tu profesora ni a tu academia. La página siguiente explica la oferta de 3 meses de Plan PREMIUM para los primeros 25 registros."
+        text="Dralo no reemplaza a tu profesora ni a tu academia. El Plan Plus cuesta 3,99 €/mes en lugar de 9,99 € hasta el 31/12/2026."
         cta={
           <AbCta href={campaignHref} pageType="guide" variant="a" source="b2-guide">
             Seguir con la guía práctica

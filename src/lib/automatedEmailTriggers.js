@@ -87,9 +87,9 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.PRO_LAUNCH_GRANTED,
-    label: 'Plan PREMIUM de lanzamiento (25 plazas, 3 meses)',
+    label: 'Plan Plus de lanzamiento (25 plazas, 3 meses)',
     description:
-      'Se envía a quien entra en las 25 plazas nuevas y recibe 3 meses de Plan PREMIUM, cuando confirma su email.',
+      'Se envía a quien entra en las 25 plazas nuevas y recibe 3 meses de Plan Plus, cuando confirma su email.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.FOUNDING_MEMBER_PLUS_GRANTED,
