@@ -19,6 +19,7 @@ import { readAttributionFromSearch } from '@/lib/abExperiment';
 import { PRO_LAUNCH_COPY } from '@/lib/proLaunchOffer.rules';
 import { trackRegistrationComplete, trackRegistrationStart } from '@/lib/abExperimentTrack';
 import { trackSignUp } from '@/lib/signupTracking';
+import { claimRememberedCheckout, readPaidCheckout, rememberPaidCheckoutFromSearch } from '@/lib/stripe/guestCheckout';
 import { readStoredVisitorId } from '@/lib/visitorPresence';
 import { reportLoginAttempt } from '@/utils/reportLoginAttempt';
 import { ensureAppUserProfile } from '@/utils/ensureAppUserProfile';
@@ -47,15 +48,21 @@ export default function RegistroPage() {
   const [submitting, setSubmitting] = useState(false);
   const [showPasswordRules, setShowPasswordRules] = useState(false);
   const [fromCampaign, setFromCampaign] = useState(false);
+  const [paidCheckout, setPaidCheckout] = useState(false);
   const [googleUnavailable, setGoogleUnavailable] = useState(false);
   const [googleRetry, setGoogleRetry] = useState(0);
   const [googleLoading, setGoogleLoading] = useState(false);
   const router = useRouter();
   useEffect(() => {
     const attribution = readAttributionFromSearch(window.location.search);
-    const src = new URLSearchParams(window.location.search).get('src');
+    const params = new URLSearchParams(window.location.search);
+    const src = params.get('src');
     if (attribution?.pageType === 'campaign' || src === 'promo_25') setFromCampaign(true);
     if (attribution) trackRegistrationStart(attribution);
+    if (params.get('pago') === 'ok') {
+      rememberPaidCheckoutFromSearch(window.location.search);
+      setPaidCheckout(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -250,7 +257,14 @@ export default function RegistroPage() {
       );
       trackRegistrationComplete();
       trackSignUp({ method: 'email', userId: data?.user?.id });
-      router.push('/login');
+      if (data?.session?.access_token) {
+        try {
+          await claimRememberedCheckout();
+        } catch (claimError) {
+          toast.error(claimError?.message || 'El pago está hecho, pero no se pudo activar el plan.');
+        }
+      }
+      router.push(readPaidCheckout() ? '/login/?pago=ok' : '/login');
       return true;
     };
 
@@ -264,7 +278,7 @@ export default function RegistroPage() {
         );
         trackRegistrationComplete();
         trackSignUp({ method: 'email', userId: server.data?.userId });
-        router.push('/login');
+        router.push(readPaidCheckout() ? '/login/?pago=ok' : '/login');
         return;
       }
 
@@ -289,7 +303,7 @@ export default function RegistroPage() {
 
       if (server.data?.code === 'EMAIL_EXISTS') {
         toast.error(server.data.error, { duration: 6000 });
-        router.push('/login');
+        router.push(readPaidCheckout() ? '/login/?pago=ok' : '/login');
         return;
       }
 
@@ -360,6 +374,11 @@ export default function RegistroPage() {
 
     toast.success('Cuenta lista');
     void ensureAppUserProfile().catch(() => {});
+    try {
+      await claimRememberedCheckout();
+    } catch (claimError) {
+      toast.error(claimError?.message || 'El pago está hecho, pero no se pudo activar el plan.');
+    }
     await enterAfterGoogle(result.user);
   };
 
@@ -368,7 +387,12 @@ export default function RegistroPage() {
       <div style={{ textAlign: 'center', marginBottom: '0.75rem', lineHeight: 0 }}>
         <SiteMascot variant={5} width={120} alt="Dralo" />
       </div>
-      <h2 style={authHeadingStyle}>Crear cuenta</h2>
+      <h2 style={authHeadingStyle}>{paidCheckout ? 'Pago recibido. Crea tu cuenta' : 'Crear cuenta'}</h2>
+      {paidCheckout ? (
+        <p style={{ ...campaignNoteBodyStyle, margin: '0 0 1rem', textAlign: 'center' }}>
+          El año de Plus ya está pagado. Usa el mismo correo del pago para activar la cuenta.
+        </p>
+      ) : null}
       {fromCampaign ? (
         <div style={campaignNoteStyle}>
           <p style={campaignNoteTitleStyle}>{PRO_LAUNCH_COPY.badge}</p>

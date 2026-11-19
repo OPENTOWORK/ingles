@@ -313,6 +313,72 @@ export async function scheduleSubscriptionCancelAtPeriodEnd(db, userId) {
   };
 }
 
+const CHECKOUT_SESSION_ID = /^cs_(test|live)_[A-Za-z0-9]+$/;
+
+/**
+ * Une un Checkout ya pagado, sin cuenta, al usuario que acaba de registrarse.
+ * El correo de Stripe tiene que ser el de la cuenta.
+ */
+export async function claimGuestCheckout(user, sessionId) {
+  const id = String(sessionId || '').trim();
+  if (!CHECKOUT_SESSION_ID.test(id)) {
+    return { claimed: false, reason: 'invalid_session' };
+  }
+  if (!user?.id || !user?.email) {
+    return { claimed: false, reason: 'no_user' };
+  }
+  if (!isStripeConfigured()) {
+    return { claimed: false, reason: 'stripe_not_configured' };
+  }
+
+  const stripe = getStripe();
+  const session = await stripe.checkout.sessions.retrieve(id);
+  if (session.mode !== 'subscription' || session.status !== 'complete') {
+    return { claimed: false, reason: 'unpaid' };
+  }
+  if (session.metadata?.guest_checkout !== '1') {
+    return { claimed: false, reason: 'not_guest' };
+  }
+
+  const paidEmail = String(session.customer_details?.email || session.customer_email || '')
+    .trim()
+    .toLowerCase();
+  const accountEmail = String(user.email || '').trim().toLowerCase();
+  if (!paidEmail || paidEmail !== accountEmail) {
+    return { claimed: false, reason: 'email_mismatch' };
+  }
+
+  const customerId = typeof session.customer === 'string' ? session.customer : session.customer?.id;
+  const subscriptionId = typeof session.subscription === 'string'
+    ? session.subscription
+    : session.subscription?.id;
+  if (!customerId || !subscriptionId) {
+    return { claimed: false, reason: 'incomplete' };
+  }
+
+  const existingCustomer = await stripe.customers.retrieve(customerId);
+  const linkedUser = !existingCustomer?.deleted
+    ? existingCustomer?.metadata?.supabase_user_id
+    : null;
+  if (linkedUser && linkedUser !== user.id) {
+    return { claimed: false, reason: 'already_claimed' };
+  }
+
+  const planSlug = session.metadata?.plan_slug || 'premium';
+  await stripe.customers.update(customerId, {
+    metadata: { supabase_user_id: user.id },
+  });
+  const subscription = await stripe.subscriptions.update(subscriptionId, {
+    metadata: {
+      supabase_user_id: user.id,
+      plan_slug: planSlug,
+      guest_checkout: '1',
+    },
+  });
+  const result = await syncSubscriptionFromStripe(subscription, { userId: user.id });
+  return { claimed: true, ...result };
+}
+
 export async function getOrCreateStripeCustomer(db, user) {
   const stripe = getStripe();
   const existing = await findSubscriptionByUserId(db, user.id);

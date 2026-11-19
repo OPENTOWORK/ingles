@@ -43,8 +43,27 @@ async function postWithAuth(path, body) {
  * el backend responde `usePortal` y abrimos el portal para cambiar de plan.
  * @param {{ planSlug: string, billingCycle: 'monthly' | 'annual' }} params
  */
+async function startGuestCheckout({ planSlug, billingCycle }) {
+  const res = await fetch(buildClientApiUrl('/api/stripe/guest-checkout'), {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ planSlug, billingCycle }),
+  });
+  const payload = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    throw new Error(payload.error || 'No se pudo iniciar el pago.');
+  }
+  if (!payload.url) throw new Error('Stripe no devolvió una URL de pago.');
+  redirectToStripe(payload.url);
+  return payload;
+}
+
 export async function startCheckout({ planSlug, billingCycle }) {
   if (isNativeStoreApp()) return startStoreCheckout({ planSlug, billingCycle });
+  const { data } = await supabase.auth.getSession();
+  if (!data?.session?.access_token && planSlug === 'premium' && billingCycle === 'annual') {
+    return startGuestCheckout({ planSlug, billingCycle });
+  }
   const payload = await postWithAuth('/api/stripe/checkout', { planSlug, billingCycle });
   if (payload.usePortal) return openBillingPortal();
   if (payload.store === 'google' || payload.store === 'apple') {

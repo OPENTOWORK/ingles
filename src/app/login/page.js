@@ -19,6 +19,7 @@ import GoogleIdentityButton from '@/components/auth/GoogleIdentityButton';
 import { readAttributionFromSearch } from '@/lib/abExperiment';
 import { trackRegistrationStart } from '@/lib/abExperimentTrack';
 import { landingFont } from '@/components/home/landing/landingFont';
+import { claimRememberedCheckout } from '@/lib/stripe/guestCheckout';
 import {
   DRALO_APP_DROP_PARAM,
   appSessionShouldPersist,
@@ -266,6 +267,12 @@ function LoginPageInner() {
     toast.success("Inicio de sesión exitoso");
     setFailedAttempts(0);
     void ensureAppUserProfile().catch(() => {});
+    try {
+      const claimed = await claimRememberedCheckout();
+      if (claimed) toast.success('El año de Plus ya está activo en tu cuenta.');
+    } catch (claimError) {
+      toast.error(claimError?.message || 'El pago está hecho, pero no se pudo activar el plan.');
+    }
 
     const path = await resolvePostLoginPath(result.user, searchParams);
     if (isDraloAppSurface()) {
@@ -352,6 +359,12 @@ function LoginPageInner() {
 
     toast.success('Inicio de sesión exitoso');
     void ensureAppUserProfile().catch(() => {});
+    try {
+      const claimed = await claimRememberedCheckout();
+      if (claimed) toast.success('El año de Plus ya está activo en tu cuenta.');
+    } catch (claimError) {
+      toast.error(claimError?.message || 'El pago está hecho, pero no se pudo activar el plan.');
+    }
     const path = await resolvePostLoginPath(result.user, searchParams);
     if (isDraloAppSurface()) {
       setEntryChoice({ path });
