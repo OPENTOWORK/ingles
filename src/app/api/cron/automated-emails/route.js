@@ -4,7 +4,11 @@ import { processAutomatedEmailQueue } from '@/lib/dispatchAutomatedEmail';
 import { runFoundingSurveyCampaign } from '@/lib/foundingSurveyServer';
 import { runConfirmationReminders } from '@/lib/confirmationReminderServer';
 import { runPracticeReminders } from '@/lib/practiceReminderServer';
+import { runBlackFridayEmailSequence } from '@/lib/blackFridayEmailSequence';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
+
+export const dynamic = 'force-dynamic';
+export const maxDuration = 300;
 
 export async function GET(req) {
   const secret = process.env.CRON_SECRET?.trim();
@@ -31,6 +35,7 @@ export async function GET(req) {
   const foundingSurvey = await runFoundingSurveyCampaign(adminClient);
   const confirmationReminders = await runConfirmationReminders(adminClient);
   const practiceReminders = await runPracticeReminders(adminClient);
+  const blackFriday = await runBlackFridayEmailSequence(adminClient);
   const result = await processAutomatedEmailQueue(adminClient, { limit: 50 });
 
   return NextResponse.json({
@@ -38,5 +43,6 @@ export async function GET(req) {
     foundingSurvey,
     confirmationReminders,
     practiceReminders,
+    blackFriday,
   });
 }

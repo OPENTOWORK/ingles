@@ -18,6 +18,9 @@ export const AUTOMATED_EMAIL_TRIGGERS = {
   FOUNDING_MEMBER_SURVEY_CONFIRMED: 'founding_member_survey_confirmed',
   FOUNDING_MEMBER_SURVEY_REVOKED: 'founding_member_survey_revoked',
   PRACTICE_REMINDER: 'practice_reminder',
+  BLACK_FRIDAY_OFFER: 'black_friday_offer',
+  BLACK_FRIDAY_WRITING: 'black_friday_writing',
+  BLACK_FRIDAY_LAST_DAY: 'black_friday_last_day',
   WEEKLY_TUESDAY_CHALLENGE: 'weekly_tuesday_challenge',
   ADMIN_REGISTRATION_NOTICE: 'admin_registration_notice',
   ADMIN_REVIEW_NOTICE: 'admin_review_notice',
@@ -123,6 +126,24 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     label: 'Recordatorio para practicar',
     description:
       'A quien ya confirmó su cuenta y lleva varios días sin practicar. Como máximo uno a la semana, y se detiene al volver.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.BLACK_FRIDAY_OFFER,
+    label: 'Black Friday · oferta del año (20/11)',
+    description:
+      'El 20/11, a quien aceptó comunicaciones y no ha pagado. El año de Plus a 19,99 €.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.BLACK_FRIDAY_WRITING,
+    label: 'Black Friday · recordatorio de Writing (27/11)',
+    description:
+      'El 27/11, solo si sigue sin haber pagado y aceptó comunicaciones.',
+  },
+  {
+    value: AUTOMATED_EMAIL_TRIGGERS.BLACK_FRIDAY_LAST_DAY,
+    label: 'Black Friday · último día (30/11)',
+    description:
+      'La mañana del 30/11, solo si sigue sin haber pagado y aceptó comunicaciones.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
