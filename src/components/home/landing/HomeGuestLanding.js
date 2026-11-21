@@ -25,12 +25,8 @@ import {
   homeBandCta,
   homeHeroCta,
   isBlackFridayOfferActive,
-  PLUS_ANNUAL_BF_END_DATE,
-  PLUS_ANNUAL_BF_PRICE,
-  PLUS_ANNUAL_REGULAR_PRICE,
   PLUS_BLACK_FRIDAY_UNTIL_LABEL,
   PLUS_MONTHLY_PRICE,
-  PLUS_OFFER_END_DATE,
   PLUS_OFFER_UNTIL_LABEL,
   plusAnnualRenewalCopy,
   plusBlackFridayAccessCopy,
@@ -399,43 +395,6 @@ function useSignupHrefs() {
     plan: buildSignupHref(search, 'promo_25'),
     other: buildSignupHref(search, 'otros'),
   };
-}
-
-function offerJsonLd() {
-  const offers = [
-    {
-      '@type': 'Offer',
-      name: 'Plan Plus mensual',
-      price: PLUS_MONTHLY_PRICE.toFixed(2),
-      priceCurrency: 'EUR',
-      priceValidUntil: PLUS_OFFER_END_DATE,
-      url: 'https://www.dralo.es/precios/',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Plan Plus anual',
-      price: PLUS_ANNUAL_REGULAR_PRICE.toFixed(2),
-      priceCurrency: 'EUR',
-      url: 'https://www.dralo.es/precios/?facturacion=anual',
-    },
-  ];
-  if (isBlackFridayOfferActive()) {
-    offers.push({
-      '@type': 'Offer',
-      name: 'Plan Plus anual Black Friday',
-      price: PLUS_ANNUAL_BF_PRICE.toFixed(2),
-      priceCurrency: 'EUR',
-      priceValidUntil: PLUS_ANNUAL_BF_END_DATE,
-      url: 'https://www.dralo.es/precios/?facturacion=anual',
-    });
-  }
-  return JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: 'Plan Plus',
-    brand: { '@type': 'Brand', name: 'DRALO' },
-    offers,
-  }).replace(/</g, '\\u003c');
 }
 
 function HeroTourVideo({ active }) {
@@ -940,7 +899,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
       {faq.length ? (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqJsonLd(faq) }} />
       ) : null}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: offerJsonLd() }} />
 
       <section id="preguntas-frecuentes" className="hl-section hl-section--flush" aria-labelledby="hl-faq-title">
         <div className="hl-container">
