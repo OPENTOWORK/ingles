@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { planPlusProductJsonLd } from '../planPlusProductJsonLd.js';
+import { planPlusProductJsonLd, planPlusProductJsonLdScript } from '../planPlusProductJsonLd.js';
 
 describe('plan plus product json-ld', () => {
   it('publishes one product and the three prices shown on the pricing card', () => {
@@ -24,8 +24,13 @@ describe('plan plus product json-ld', () => {
       assert.equal(offer.priceCurrency, 'EUR');
     }
     assert.equal(data.offers[0].priceValidUntil, '2026-12-31');
-    assert.equal(Object.hasOwn(data.offers[1], 'priceValidUntil'), false);
+    assert.equal(data.offers[1].priceValidUntil, '2026-12-31');
     assert.equal(data.offers[2].priceValidUntil, '2026-11-30');
+    assert.equal(data.offers.every((offer) => typeof offer.priceValidUntil === 'string' && offer.priceValidUntil.length > 0), true);
+    const published = JSON.parse(planPlusProductJsonLdScript());
+    assert.equal(published.offers[1].name, 'Plan Plus anual');
+    assert.equal(published.offers[1].price, '34.99');
+    assert.equal(published.offers[1].priceValidUntil, '2026-12-31');
     assert.equal(data.aggregateRating, undefined);
     assert.equal(data.review, undefined);
   });
