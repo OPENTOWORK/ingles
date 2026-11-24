@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { useUserRole } from '@/context/UserRoleContext';
 import { isExamModeSectionKeyBlockedForStudent } from '@/constants/studentFeatureAccess';
 import { useExamModeSession } from '@/hooks/useExamModeSession';
@@ -29,7 +30,7 @@ import { getCambridgeSectionDurationSeconds } from '@/data/cambridgeExamTimings'
 export function useExamModeStrict({ slug, partMin, partMax, sectionTitle }) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const { userRole } = useUserRole();
   const examModeParam = searchParams.get('examMode');
   const reviewModeRequested = examModeParam === 'review';

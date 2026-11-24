@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { getB2ExamPracticeNavState } from '@/data/b2ExamModuleNav';
 import { getLevelOverviewNav } from '@/utils/levelOverviewNav';
 import {
@@ -69,7 +69,7 @@ export default function B2ExamPracticeModuleNav({
   livePartProgress = null,
   className = '',
 }) {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const bypassStarGating = useExamStarGatingBypass();
   const planGating = useExamSlotPlanGating(progressBySlot || {});
   const examModeParam = searchParams.get('examMode');

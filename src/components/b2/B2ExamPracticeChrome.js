@@ -135,6 +135,10 @@ function getPartTabLabel(part, lang, customLabelFn, partMinForLocalLabels) {
  * Cabecera y rejilla de partes unificada (estilo Use of English) para B2 partes 1–17.
  */
 export function B2ExamPracticeLayout({ examPracticeOpen, children }) {
+  useEffect(() => {
+    document.querySelectorAll('[data-practice-ssr-heading]').forEach((node) => node.remove());
+  }, []);
+
   return (
     <main
       className={`levels-exam-practice-root ${landingFont.variable}`}

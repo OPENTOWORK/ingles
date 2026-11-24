@@ -17,7 +17,7 @@ import {
 } from '@/lib/blogArticles';
 import { categoryForArticle, relatedArticlesInCategory } from '@/lib/blogCategories';
 import { unstable_noStore as noStore } from 'next/cache';
-import { SITE_URL } from '@/lib/siteSeo';
+import { DEFAULT_OG_IMAGE, SITE_URL } from '@/lib/siteSeo';
 
 export const dynamic = 'force-dynamic';
 
@@ -42,13 +42,13 @@ export async function generateMetadata({ params }) {
         title,
         description,
         url: `${SITE_URL}${canonical}`,
-        ...(image ? { images: [{ url: image, alt: title }] } : {}),
+        images: [image ? { url: image, alt: title } : DEFAULT_OG_IMAGE],
       },
       twitter: {
-        card: image ? 'summary_large_image' : 'summary',
+        card: 'summary_large_image',
         title,
         description,
-        ...(image ? { images: [image] } : {}),
+        images: [image || DEFAULT_OG_IMAGE.url],
       },
     };
   } catch {
@@ -100,7 +100,7 @@ export default async function BlogArticlePage({ params }) {
       {cover ? (
         <div className="blog-article-page__cover">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={cover} alt="" />
+          <img src={cover} alt={article.title ? `Portada: ${article.title}` : 'Portada del artículo'} />
         </div>
       ) : null}
 

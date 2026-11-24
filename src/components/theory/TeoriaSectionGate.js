@@ -48,14 +48,7 @@ export default function TeoriaSectionGate({ sectionSlug, sectionTitle, topics })
   );
 
   if (isExam) {
-    if (examStrategiesLoading) {
-      return (
-        <main className="shell teoria-page" style={{ padding: '2rem', textAlign: 'center' }}>
-          <p>Cargando…</p>
-        </main>
-      );
-    }
-    if (examStrategiesLocked) {
+    if (!examStrategiesLoading && examStrategiesLocked) {
       return <ExamStrategiesBlockedScreen />;
     }
     const unitLocked =

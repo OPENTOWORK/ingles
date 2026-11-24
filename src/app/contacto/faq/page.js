@@ -10,7 +10,7 @@ export default function ContactFaqPage() {
     <main className={`shell contacto-page contacto-faq-page ${landingFont.variable}`}>
       <PageHero
         eyebrow="Help centre"
-        title="Frequently asked questions"
+        title="Preguntas frecuentes"
         description="Find quick answers about accounts, exams, progress, billing, and technical issues. If you still need help, open a support ticket from the Contact page."
         mascotVariant={8}
         mascotWidth={130}

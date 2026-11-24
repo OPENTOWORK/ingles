@@ -34,7 +34,7 @@ function ticketStatusClass(status) {
 
 export default function ContactPage() {
   const [session, setSession] = useState(null);
-  const [pageLoading, setPageLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(false);
   const [ticketLoading, setTicketLoading] = useState(false);
   const [myTickets, setMyTickets] = useState([]);
   const [ticketForm, setTicketForm] = useState({

@@ -8,6 +8,14 @@ export const SOCIAL_SHARE = {
   imageAlt: 'Dralo Academy — practica inglés con exámenes e IA',
 };
 
+/** Imagen de marca por defecto (generada en /opengraph-image). */
+export const DEFAULT_OG_IMAGE = {
+  url: '/opengraph-image',
+  width: 1200,
+  height: 630,
+  alt: SOCIAL_SHARE.imageAlt,
+};
+
 export const SITE_FOOTER_TAGLINE =
   'Ejercicios diseñados para practicar tus exámenes de inglés.';
 
@@ -44,10 +52,13 @@ export function pageMetadata({
       title: resolvedTitle,
       description,
       url,
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
+      card: 'summary_large_image',
       title: resolvedTitle,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     },
     ...(robots ? { robots } : {}),
   };

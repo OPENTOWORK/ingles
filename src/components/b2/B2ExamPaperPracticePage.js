@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useLevelExamPracticeSlot } from '@/hooks/useLevelExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
@@ -343,7 +343,7 @@ function B2ExamPaperPracticePageInner({
 }) {
   const levelSlug = String(slug || 'b2').toLowerCase();
   const levelTag = levelSlug.toUpperCase();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const scoreSource = resolvePracticeScoreSourceFromExamModeParam(searchParams.get('examMode'));
   const b2Slot = useB2ExamPracticeSlot();
   const levelSlot = useLevelExamPracticeSlot(levelSlug);

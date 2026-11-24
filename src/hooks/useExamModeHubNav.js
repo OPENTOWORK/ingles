@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { getExamModeHubNav } from '@/utils/examModeSession';
 
 /**
@@ -15,7 +15,7 @@ export function useExamModeHubNav({
   reviewMode = false,
   lang = 'en',
 }) {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const examModeParam = searchParams.get('examMode');
 
   return useMemo(() => {

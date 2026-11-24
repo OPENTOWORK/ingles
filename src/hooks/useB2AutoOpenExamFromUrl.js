@@ -1,13 +1,13 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 
 /**
  * Abre la práctica de examen cuando la URL incluye ?examen=N (p. ej. desde Full Exam).
  */
 export function useB2AutoOpenExamFromUrl({ examPracticeOpen, handleSelectExam, selectExamSlot }) {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const autoOpenedRef = useRef(false);
 
   useEffect(() => {

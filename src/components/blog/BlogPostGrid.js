@@ -20,7 +20,11 @@ export default function BlogPostGrid({ items }) {
               <Link href={blogPostHref(item.slug)} className="blog-card__media">
                 {item.cover_image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={item.cover_image_url} alt="" loading="lazy" />
+                  <img
+                    src={item.cover_image_url}
+                    alt={item.title ? `Portada: ${item.title}` : 'Portada del artículo'}
+                    loading="lazy"
+                  />
                 ) : (
                   <span className="blog-card__media-placeholder" aria-hidden="true">
                     <BlogDraloBrand variant="placeholder" />

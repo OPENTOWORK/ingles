@@ -7,7 +7,7 @@ import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus'
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import ReadingPracticeDictionary from '@/components/exam/ReadingPracticeDictionary';
 import { invalidateLevelExamCache } from '@/utils/levelsLevelCache';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
@@ -77,7 +77,7 @@ import { playSkillPracticeAnswerSound } from '@/lib/skillPracticeFeedbackSounds'
 const UOE_PAGE_PART_MAX = 4;
 
 function UseOfEnglishExamsPageInner() {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const { userRole } = useUserRole();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const [loading, setLoading] = useState(true);

@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import PlanUpgradeModal from '@/components/subscriptions/PlanUpgradeModal';
 import { isPlusTierPlanSlug } from '@/data/financialPlanConfig';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
@@ -33,7 +34,7 @@ export function useExamSlotPlanGating(progressBySlot = {}) {
   const isGuest = !session;
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const guestMaxExamSlot = 1;
   const examModeParam = searchParams?.get('examMode');
   const inExamMode =

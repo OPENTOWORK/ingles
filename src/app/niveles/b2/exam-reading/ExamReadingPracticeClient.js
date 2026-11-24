@@ -3,7 +3,8 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'rea
 import { useLevelsExamAdminFlow, createAdminExamSelectHandler, buildExamSlotPickerProps, reloadExamNamesBySlot } from '@/hooks/useLevelsExamAdminFlow';
 import { useSkillPartFirstNavigation } from '@/hooks/useSkillPartFirstNavigation';
 import A2ExamGenerationStatus from '@/components/niveles/A2ExamGenerationStatus';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
@@ -180,7 +181,7 @@ function getFormattedEnunciado(rawText = '') {
 
 function B2ReadingExamsPageInner() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const isCombinedPaper = pathname?.includes('/exam-reading-and-use-of-english');
   const skillRoute = isCombinedPaper ? 'exam-reading-and-use-of-english' : 'exam-reading';
   const partMin = isCombinedPaper ? 1 : 5;

@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import B2ExamPracticeModuleNav from '@/components/b2/B2ExamPracticeModuleNav';
 import ExamPracticeProgressPanel from '@/components/exam/ExamPracticeProgressPanel';
@@ -39,7 +39,7 @@ function parsePartNumber(text) {
 function LevelSkillPracticePageInner({ slug, skillRoute }) {
   const config = getNivelesLevelHub(slug);
   const routeMeta = getLevelExamSkillRoute(slug, skillRoute);
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const bypassStarGating = useExamStarGatingBypass();
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const [selectedPartId, setSelectedPartId] = useState(null);

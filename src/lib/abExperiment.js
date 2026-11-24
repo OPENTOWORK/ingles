@@ -1,4 +1,4 @@
-import { SITE_URL } from '@/lib/siteSeo';
+import { DEFAULT_OG_IMAGE, SITE_URL } from '@/lib/siteSeo';
 import {
   formatEuroAmount,
   getPlanBySlug,
@@ -289,11 +289,13 @@ export function guideMetadata(variant) {
       locale: 'es_ES',
       type: 'article',
       siteName: 'Dralo',
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${title} (${letter})`,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     },
     other: {
       'ab-variant': letter,
@@ -324,11 +326,13 @@ export function campaignMetadata(variant) {
       locale: 'es_ES',
       type: 'website',
       siteName: 'Dralo',
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
+      images: [DEFAULT_OG_IMAGE.url],
     },
   };
 }

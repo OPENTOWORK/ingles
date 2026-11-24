@@ -1,21 +1,30 @@
-'use client';
-
+import { Suspense } from 'react';
+import PracticeSsrHeading from '@/components/b2/PracticeSsrHeading';
 import B2ExamPaperPracticePage from '@/components/b2/B2ExamPaperPracticePage';
 
 export default function B2ListeningExamsPage() {
   return (
-    <B2ExamPaperPracticePage
-      skillRoute="exam-listening"
-      title="B2 Listening Practice"
-      subtitle="Parts 10 to 13"
-      partMin={10}
-      partMax={13}
-      emptyErrorMessage="No questions available for B2 Listening."
-      loadingLabel="Loading Listening (Parts 10 to 13)…"
-      refreshLabel="Refresh Listening (10–13)"
-      preferOpenInputs={false}
-      showAudioFromEnunciado
-      lang="en"
-    />
+    <>
+      <PracticeSsrHeading
+        title="B2 Listening Practice"
+        subtitle="Parts 10 to 13"
+        note="Loading Listening (Parts 10 to 13)…"
+      />
+      <Suspense fallback={null}>
+        <B2ExamPaperPracticePage
+          skillRoute="exam-listening"
+          title="B2 Listening Practice"
+          subtitle="Parts 10 to 13"
+          partMin={10}
+          partMax={13}
+          emptyErrorMessage="No questions available for B2 Listening."
+          loadingLabel="Loading Listening (Parts 10 to 13)…"
+          refreshLabel="Refresh Listening (10–13)"
+          preferOpenInputs={false}
+          showAudioFromEnunciado
+          lang="en"
+        />
+      </Suspense>
+    </>
   );
 }

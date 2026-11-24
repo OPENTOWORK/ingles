@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 
 export const B2_EXAM_PRACTICE_SLOT_KEY = 'b2-exam-practice-slot';
@@ -23,14 +24,18 @@ export function readInitialB2ExamSlot(searchParams) {
 
 /**
  * Estado del examen 1–5 en páginas B2 de práctica (sync URL ?examen=, sessionStorage).
- * Usar dentro de un boundary Suspense (usa useSearchParams).
+ * La query se lee sin suspender el HTML del servidor.
  */
 export function useB2ExamPracticeSlot() {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const queryString = searchParams.toString();
-  const [examSlot, setExamSlotState] = useState(() => readInitialB2ExamSlot(searchParams));
+  const [examSlot, setExamSlotState] = useState(() => {
+    const q = searchParams.get('examen');
+    if (q !== null && q !== '') return clampB2ExamSlot(q);
+    return 1;
+  });
 
   useEffect(() => {
     const next = readInitialB2ExamSlot(new URLSearchParams(queryString));

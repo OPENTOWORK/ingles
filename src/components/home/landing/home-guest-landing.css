@@ -1909,7 +1909,7 @@
   border-radius: 36px 36px 0 0;
   color: #fff;
   text-align: center;
-  background: #2c1a6e;
+  background: var(--hl-purple);
 }
 
 .home-landing .hl-final__title {
@@ -2342,7 +2342,7 @@
 
 body:has(.home-landing:not(.home-landing--pending)) .legal-footer,
 body.reading-night-mode:has(.home-landing:not(.home-landing--pending)) .legal-footer {
-  background: #2c1a6e;
+  background: #6a4be8;
   color: #fff;
 }
 

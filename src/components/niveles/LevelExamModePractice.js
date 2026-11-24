@@ -2,7 +2,8 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import { useLevelExamPracticeSlot } from '@/hooks/useLevelExamPracticeSlot';
@@ -65,7 +66,7 @@ function sectionIconClass(title = '') {
 function LevelExamModePracticeInner({ slug }) {
   const config = getNivelesLevelHub(slug);
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const { userRole, session: authSession } = useUserRole();
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const { session, ready, repeatExam, userId, resetExam } = useExamModeSession(slug, examSlot);

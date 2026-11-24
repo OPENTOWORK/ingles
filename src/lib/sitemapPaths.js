@@ -1,13 +1,13 @@
+import { normalizeBlogSlug } from '@/lib/blogArticles';
 import { indexableBlogCategoryPaths } from '@/lib/blogCategories';
 import { SITE_URL } from '@/lib/siteSeo';
-
-const CEFR_LEVELS = ['a2', 'b1', 'b2', 'c1', 'c2'];
 
 /**
  * URLs canónicas indexables. Sin variantes noindex, sin redirecciones
  * (/contact, /niveles, /exam-theory) y sin /dralo-ai: el middleware manda
- * a los rastreadores anónimos a /login. Los artículos del blog se descubren
- * desde /blog/; el sitemap no consulta la base de datos.
+ * a los rastreadores anónimos a /login. A2, B1, C1 y C2 siguen en
+ * "Coming soon" y no se listan. Los artículos salen de la misma consulta
+ * que el listado público del blog.
  */
 export const SITEMAP_PATHS = [
   '/',
@@ -34,7 +34,7 @@ export const SITEMAP_PATHS = [
   '/proteccion-datos',
   '/normas-comunidad',
   '/terminos-condiciones',
-  ...CEFR_LEVELS.map((level) => `/exam-practice/${level}`),
+  '/exam-practice/b2',
   '/exam-practice/b2/exam-reading-and-use-of-english',
   '/exam-practice/b2/exam-writing',
   '/exam-practice/b2/exam-listening',
@@ -83,15 +83,41 @@ function priorityFor(path) {
   return 0.7;
 }
 
+function articleLastModified(article) {
+  const raw = article?.updated_at || article?.published_at;
+  if (!raw) return undefined;
+  const date = new Date(raw);
+  if (Number.isNaN(date.getTime())) return undefined;
+  return date;
+}
+
 /**
- * @param {Date} [lastModified]
+ * Las páginas estáticas no tienen una fecha de modificación fiable: no llevan lastmod.
+ * Los artículos usan updated_at o, si no existe, published_at.
+ *
+ * @param {{ articles?: Array<Record<string, unknown>> } | Date} [options]
  * @returns {import('next').MetadataRoute.Sitemap}
  */
-export function buildSitemapEntries(lastModified = new Date()) {
-  return SITEMAP_PATHS.map((path) => ({
+export function buildSitemapEntries(options = {}) {
+  const articles = options && Array.isArray(options.articles) ? options.articles : [];
+  const pages = SITEMAP_PATHS.map((path) => ({
     url: sitemapAbsoluteUrl(path),
-    lastModified,
     changeFrequency: changeFrequencyFor(path),
     priority: priorityFor(path),
   }));
+
+  const posts = [];
+  for (const article of articles) {
+    const slug = normalizeBlogSlug(article?.slug);
+    if (!slug) continue;
+    const lastModified = articleLastModified(article);
+    posts.push({
+      url: sitemapAbsoluteUrl(`/blog/${slug}`),
+      ...(lastModified ? { lastModified } : {}),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    });
+  }
+
+  return [...pages, ...posts];
 }

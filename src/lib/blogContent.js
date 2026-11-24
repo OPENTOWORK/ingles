@@ -112,12 +112,13 @@ function sanitizeImage(tagHtml) {
   if (!srcMatch) return '';
   const src = srcMatch[2].trim();
   if (!/^https?:\/\//i.test(src) && !src.startsWith('/')) return '';
-  const altMatch = tagHtml.match(/\salt\s*=\s*(['"])(.*?)\1/i);
-  const alt = altMatch ? altMatch[2] : '';
   const classMatch = tagHtml.match(/\sclass\s*=\s*(['"])(.*?)\1/i);
   const isMascot =
     classMatch?.[2]?.split(/\s+/).includes('blog-callout__mascot') &&
     src === BLOG_CALLOUT_MASCOT_SRC;
+  const altMatch = tagHtml.match(/\salt\s*=\s*(['"])(.*?)\1/i);
+  const providedAlt = altMatch ? altMatch[2].trim() : '';
+  const alt = providedAlt || (isMascot ? '' : 'Imagen del artículo');
   const classAttr = isMascot ? ' class="blog-callout__mascot"' : '';
   return `<img src="${src.replace(/"/g, '&quot;')}" alt="${String(alt).replace(/"/g, '&quot;')}" loading="lazy"${classAttr} />`;
 }
@@ -157,7 +158,7 @@ function sanitizeOpeningTag(tag, match) {
 }
 
 function slotFigureHtml(slot, url, alt = '') {
-  const safeAlt = String(alt || '').replace(/"/g, '');
+  const safeAlt = String(alt || 'Imagen del artículo').replace(/"/g, '');
   const safeUrl = String(url || '').replace(/"/g, '&quot;');
   return `<figure data-blog-image="${slot}"><img src="${safeUrl}" alt="${safeAlt}" loading="lazy" /></figure>`;
 }

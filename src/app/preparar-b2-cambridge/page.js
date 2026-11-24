@@ -1,5 +1,5 @@
 import B2CambridgePillarPage from '@/components/landing/B2CambridgePillarPage';
-import { pageMetadata } from '@/lib/siteSeo';
+import { DEFAULT_OG_IMAGE, pageMetadata } from '@/lib/siteSeo';
 
 export const metadata = {
   ...pageMetadata({
@@ -15,6 +15,7 @@ export const metadata = {
     type: 'article',
     locale: 'es_ES',
     url: 'https://www.dralo.es/preparar-b2-cambridge/',
+    images: [DEFAULT_OG_IMAGE],
   },
 };
 

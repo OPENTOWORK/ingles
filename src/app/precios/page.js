@@ -1,7 +1,8 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import SubscriptionPlansSection from '@/components/subscriptions/SubscriptionPlansSection';
 import PageHero from '@/components/PageHero';
 import { getPublicSubscriptionPlans } from '@/data/financialPlanConfig';
@@ -22,7 +23,7 @@ const PLAN_HERO_STATS = getPublicSubscriptionPlans().map((plan) => ({
 }));
 
 function PreciosContent() {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const selected = searchParams.get('plan') || '';
   const router = useRouter();
   const { userRole } = useUserRole();
@@ -63,9 +64,5 @@ function PreciosContent() {
 }
 
 export default function PreciosPage() {
-  return (
-    <Suspense fallback={<main className={`dralo-ai-page precios-page ${landingFont.variable}`}><p style={{ padding: 24 }}>Cargando…</p></main>}>
-      <PreciosContent />
-    </Suspense>
-  );
+  return <PreciosContent />;
 }

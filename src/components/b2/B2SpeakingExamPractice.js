@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { useB2ExamPracticeSlot } from '@/hooks/useB2ExamPracticeSlot';
 import { useB2AutoOpenExamFromUrl } from '@/hooks/useB2AutoOpenExamFromUrl';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
@@ -131,7 +131,7 @@ function resolveLongTurnPhotos(taskContext, examSlot) {
  * @param {string} props.refreshLabel
  */
 function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLabel, lang = 'en' }) {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const { examSlot, selectExamSlot } = useB2ExamPracticeSlot();
   const scoreSource = resolvePracticeScoreSourceFromExamModeParam(searchParams.get('examMode'));
   const scoring = useB2ExamScoringSession({

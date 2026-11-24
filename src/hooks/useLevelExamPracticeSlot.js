@@ -1,7 +1,8 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { clampB2ExamSlot } from '@/utils/b2ResolveExam';
 
 export function levelExamPracticeSlotKey(slug) {
@@ -14,7 +15,7 @@ export function levelExamPracticeSlotKey(slug) {
 export function useLevelExamPracticeSlot(slug) {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const queryString = searchParams.toString();
   const storageKey = levelExamPracticeSlotKey(slug);
   const [examSlot, setExamSlotState] = useState(1);

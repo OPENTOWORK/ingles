@@ -387,7 +387,7 @@ export default function RegistroPage() {
       <div style={{ textAlign: 'center', marginBottom: '0.75rem', lineHeight: 0 }}>
         <SiteMascot variant={5} width={120} alt="Dralo" />
       </div>
-      <h2 style={authHeadingStyle}>{paidCheckout ? 'Pago recibido. Crea tu cuenta' : 'Crear cuenta'}</h2>
+      <h1 style={authHeadingStyle}>{paidCheckout ? 'Pago recibido. Crea tu cuenta' : 'Crear cuenta'}</h1>
       {paidCheckout ? (
         <p style={{ ...campaignNoteBodyStyle, margin: '0 0 1rem', textAlign: 'center' }}>
           El año de Plus ya está pagado. Usa el mismo correo del pago para activar la cuenta.

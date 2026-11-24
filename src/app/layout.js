@@ -27,6 +27,29 @@ import {
   DRALO_THEME_COLOR,
 } from '@/config/brandAssets';
 
+const SITE_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://www.dralo.es/#organization',
+      name: 'Dralo',
+      legalName: 'Dralo Academy SL',
+      url: 'https://www.dralo.es/',
+      logo: 'https://www.dralo.es/icon-512.png',
+      email: 'support@dralo.es',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://www.dralo.es/#website',
+      name: 'Dralo',
+      url: 'https://www.dralo.es/',
+      inLanguage: 'es-ES',
+      publisher: { '@id': 'https://www.dralo.es/#organization' },
+    },
+  ],
+};
+
 const GTM_ID = 'GTM-N7KM9KNK';
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-ELSL12SBGQ';
 const ENABLE_MARKETING_TAGS = process.env.NODE_ENV === 'production';
@@ -79,7 +102,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={landingFont.variable} suppressHydrationWarning>
+    <html lang="es" className={landingFont.variable} suppressHydrationWarning>
       <head>
         <script id="session-hint-boot" dangerouslySetInnerHTML={{ __html: SESSION_HINT_BOOT_SCRIPT }} />
         <script id="dralo-app-boot" dangerouslySetInnerHTML={{ __html: DRALO_APP_BOOT_SCRIPT }} />
@@ -129,6 +152,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             />
           </noscript>
         ) : null}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_JSON_LD) }}
+        />
         <AccessibilityProvider>
           <ClientAppProviders>{children}</ClientAppProviders>
         </AccessibilityProvider>

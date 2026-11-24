@@ -176,6 +176,19 @@ test('sitemap lists only absolute indexable URLs that robots allows', () => {
   assert.ok(urls.includes('https://www.dralo.es/contacto/faq/'));
   assert.ok(urls.includes('https://www.dralo.es/'));
   assert.ok(urls.includes('https://www.dralo.es/sitemap.xml') === false);
+  assert.equal(urls.includes('https://www.dralo.es/exam-practice/a2/'), false);
+  assert.equal(urls.includes('https://www.dralo.es/exam-practice/b1/'), false);
+  assert.equal(urls.includes('https://www.dralo.es/exam-practice/c1/'), false);
+  assert.equal(urls.includes('https://www.dralo.es/exam-practice/c2/'), false);
+  assert.ok(urls.includes('https://www.dralo.es/exam-practice/b2/'));
+  assert.equal(entries.some((entry) => entry.lastModified), false);
+
+  const withPost = buildSitemapEntries({
+    articles: [{ slug: 'hola-b2', updated_at: '2026-01-02T00:00:00.000Z', published_at: '2026-01-01T00:00:00.000Z' }],
+  });
+  const post = withPost.find((entry) => entry.url === 'https://www.dralo.es/blog/hola-b2/');
+  assert.ok(post);
+  assert.equal(post.lastModified.toISOString(), '2026-01-02T00:00:00.000Z');
 
   for (const entry of entries) {
     assert.match(entry.url, /^https:\/\/www\.dralo\.es\/?/);

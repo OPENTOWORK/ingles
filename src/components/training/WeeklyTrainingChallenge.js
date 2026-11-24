@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { getWeeklyChallenge, weeklyChallengeMailChoice } from '@/data/weeklyTrainingChallenges';
 import styles from './WeeklyTrainingChallenge.module.css';
 
@@ -9,7 +9,7 @@ const STORAGE_KEY = 'dralo-training-weekly-challenge';
 
 export default function WeeklyTrainingChallenge({ className = '' }) {
   const challenge = getWeeklyChallenge();
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const mailReto = searchParams.get('reto') || searchParams.get('x_reto');
   const mailOption = searchParams.get('opcion') || searchParams.get('x_opcion');
   const [choice, setChoice] = useState(null);

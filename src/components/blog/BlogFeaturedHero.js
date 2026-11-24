@@ -33,7 +33,11 @@ export default function BlogFeaturedHero({ post }) {
       <Link href={blogPostHref(post.slug)} className="blog-mag__featured-visual">
         {post.cover_image_url ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={post.cover_image_url} alt="" loading="eager" />
+          <img
+            src={post.cover_image_url}
+            alt={post.title ? `Portada: ${post.title}` : 'Portada del artículo'}
+            loading="eager"
+          />
         ) : (
           <span className="blog-mag__featured-visual--placeholder" aria-hidden="true" />
         )}

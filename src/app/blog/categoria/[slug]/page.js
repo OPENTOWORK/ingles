@@ -9,7 +9,7 @@ import {
   blogCategoryPath,
 } from '@/lib/blogCategories';
 import { fetchPublishedBlogArticles } from '@/lib/blogArticles';
-import { SITE_URL } from '@/lib/siteSeo';
+import { DEFAULT_OG_IMAGE, SITE_URL } from '@/lib/siteSeo';
 import { unstable_noStore as noStore } from 'next/cache';
 
 export const dynamic = 'force-dynamic';
@@ -31,10 +31,13 @@ export async function generateMetadata({ params }) {
       title,
       description: category.seoDescription,
       url,
+      images: [DEFAULT_OG_IMAGE],
     },
     twitter: {
+      card: 'summary_large_image',
       title,
       description: category.seoDescription,
+      images: [DEFAULT_OG_IMAGE.url],
     },
   };
 }

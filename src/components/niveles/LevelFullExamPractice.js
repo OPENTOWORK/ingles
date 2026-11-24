@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
 import { B2ExamPracticeLayout } from '@/components/b2/B2ExamPracticeChrome';
 import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
@@ -35,7 +35,7 @@ function countApprovedInRange(partsMap, partMin, partMax) {
 
 function LevelFullExamPracticeInner({ slug }) {
   const config = getNivelesLevelHub(slug);
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const { examSlot, selectExamSlot } = useLevelExamPracticeSlot(slug);
   const { partMin, partMax, partsCount } = getLevelFullExamPartRange(slug);
   const scoring = useLevelExamScoringSession({ slug, partMin, partMax });

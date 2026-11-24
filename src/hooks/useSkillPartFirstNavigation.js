@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import { getSkillPracticeThemeKey, resolveSkillPracticeExamSlot } from '@/utils/skillPartFirstProgress';
 import { useExamStarGatingBypass } from '@/hooks/useExamStarGatingBypass';
 import { usePlanEntitlements } from '@/hooks/usePlanEntitlements';
@@ -71,7 +71,7 @@ export function useSkillPartFirstNavigation({
   onRefreshProgress,
   lang = 'en',
 }) {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const bypassStarGating = useExamStarGatingBypass();
   const { maxExamSlot } = usePlanEntitlements();
   const planGating = useExamSlotPlanGating(progressBySlot, { lang });

@@ -1,8 +1,7 @@
 'use client';
 
-import { Suspense } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import {
   ArrowRight,
   BookOpen,
@@ -161,7 +160,7 @@ const FAQ_ITEMS = [
 const READING_TEST_1_PATH = '/exam-practice/b2/exam-reading-and-use-of-english/';
 
 function useReadingTestHref() {
-  const searchParams = useSearchParams();
+  const searchParams = useMountedSearchParams();
   const params = new URLSearchParams(searchParams.toString());
   params.set('examen', '1');
   return `${READING_TEST_1_PATH}?${params.toString()}`;
@@ -404,9 +403,5 @@ function B2CambridgePillarContent() {
 }
 
 export default function B2CambridgePillarPage() {
-  return (
-    <Suspense fallback={<div className="conversion-landing" style={{ minHeight: '50vh' }} />}>
-      <B2CambridgePillarContent />
-    </Suspense>
-  );
+  return <B2CambridgePillarContent />;
 }
