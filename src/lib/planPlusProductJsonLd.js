@@ -59,6 +59,7 @@ export function planPlusProductJsonLd() {
         priceCurrency: 'EUR',
         availability,
         validFrom: PLAN_PLUS_OFFER_VALID_FROM,
+        priceValidUntil: '2026-12-31',
         url: annualUrl,
       },
       {
