@@ -46,9 +46,25 @@ export const PUBLIC_ROUTE_PREFIXES = [
   '/update-password',
 ];
 
+/** Destino interno del rewrite /exam-strategies/:skill → /teoria/:skill. */
+const EXAM_STRATEGY_THEORIA_SKILLS = new Set([
+  'reading-and-use-of-english',
+  'writing',
+  'listening',
+  'speaking',
+  'use-of-english',
+  'reading',
+]);
+
 export function isPublicPath(pathname = '') {
   if (!pathname) return false;
-  return PUBLIC_ROUTE_PREFIXES.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`),
-  );
+  if (
+    PUBLIC_ROUTE_PREFIXES.some(
+      (route) => pathname === route || pathname.startsWith(`${route}/`),
+    )
+  ) {
+    return true;
+  }
+  const teoriaSkill = pathname.match(/^\/teoria\/([^/]+)\/?$/);
+  return Boolean(teoriaSkill && EXAM_STRATEGY_THEORIA_SKILLS.has(teoriaSkill[1]));
 }
