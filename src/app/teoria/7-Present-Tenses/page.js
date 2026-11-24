@@ -322,8 +322,8 @@ const PresentTensesPage = () => {
           Study the lists below, then practise matching keywords to the correct tense.
         </p>
         <div style={{ display: 'grid', gap: '1rem', marginBottom: '1.25rem' }}>
-          <div style={{ padding: '0.85rem 1rem', borderRadius: 10, background: '#eef2ff', border: '1px solid #c7d2fe' }}>
-            <h4 style={{ color: '#4338ca', margin: '0 0 0.35rem', fontSize: '0.95rem' }}>Present Simple</h4>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: 10, background: '#eef2ff', border: '1px solid #e0d6ff' }}>
+            <h4 style={{ color: '#5634d6', margin: '0 0 0.35rem', fontSize: '0.95rem' }}>Present Simple</h4>
             <p style={{ color: '#475569', margin: 0, fontSize: '0.9rem' }}>
               always, usually, often, sometimes, rarely, never, every day, on Mondays
             </p>
@@ -335,7 +335,7 @@ const PresentTensesPage = () => {
             </p>
           </div>
           <div style={{ padding: '0.85rem 1rem', borderRadius: 10, background: '#f5f3ff', border: '1px solid #ddd6fe' }}>
-            <h4 style={{ color: '#6d28d9', margin: '0 0 0.35rem', fontSize: '0.95rem' }}>Present Perfect</h4>
+            <h4 style={{ color: '#5634d6', margin: '0 0 0.35rem', fontSize: '0.95rem' }}>Present Perfect</h4>
             <p style={{ color: '#475569', margin: 0, fontSize: '0.9rem' }}>
               already, just, yet, ever, never, since, for, recently, lately
             </p>

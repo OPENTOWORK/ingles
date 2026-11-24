@@ -16,7 +16,7 @@ const speakingStyles = `
   .question-audio-section {
     margin-bottom: 1.5rem;
     padding: 1rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #6a4be8;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   }
@@ -53,7 +53,7 @@ const speakingStyles = `
     margin: 1rem 0;
     padding: 1rem;
     background: #f8f9fa;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #6a4be8;
     border-radius: 0 8px 8px 0;
   }
 
@@ -104,8 +104,8 @@ const speakingStyles = `
 
   .response-textarea:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    border-color: #6a4be8;
+    box-shadow: 0 0 0 3px rgba(106, 75, 232, 0.1);
   }
 
   .response-feedback {

@@ -240,7 +240,7 @@ export default function LevelsEstadisticasPanel({ userId, embedded = false }) {
           border-radius: 16px;
           background: #ffffff;
           box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
-          font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+          font-family: var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
         }
 
         .lsp--embedded {

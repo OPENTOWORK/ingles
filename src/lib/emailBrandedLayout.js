@@ -67,7 +67,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
       const quote = block.replace(/^Mensaje personal:\s*/i, '').trim();
       bodyBlocks.push({
         type: 'quote',
-        html: `<blockquote style="margin:18px 0 0;padding:16px 18px;border-left:4px solid #6366f1;background:linear-gradient(90deg,#f8fafc 0%,#ffffff 100%);border-radius:0 12px 12px 0;color:#334155;font-style:italic;font-size:15px;line-height:1.6;">${nl2br(quote)}</blockquote>`,
+        html: `<blockquote style="margin:18px 0 0;padding:16px 18px;border-left:4px solid #6a4be8;background:linear-gradient(90deg,#f8fafc 0%,#ffffff 100%);border-radius:0 12px 12px 0;color:#334155;font-style:italic;font-size:15px;line-height:1.6;">${nl2br(quote)}</blockquote>`,
       });
       continue;
     }
@@ -123,7 +123,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
     ? `<p style="margin:0 0 8px;color:#94a3b8;">${escapeHtml(legalName)}</p>`
     : '';
   const supportLine = supportEmail
-    ? ` o escribe a <a href="mailto:${escapeHtml(supportEmail)}" style="color:#4f46e5;text-decoration:none;font-weight:600;">${escapeHtml(supportEmail)}</a>`
+    ? ` o escribe a <a href="mailto:${escapeHtml(supportEmail)}" style="color:#6a4be8;text-decoration:none;font-weight:600;">${escapeHtml(supportEmail)}</a>`
     : '';
   const headline = options.headline ? escapeHtml(options.headline) : '';
   const bodyHtml = bodyBlocks.map((b) => b.html).join('\n');
@@ -132,7 +132,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
 
   const ctaHtml = ctaUrl
     ? `<table role="presentation" cellspacing="0" cellpadding="0" style="margin:28px auto 10px;"><tr><td style="border-radius:12px;background:linear-gradient(135deg,#2563eb 0%,#4f46e5 55%,#7c3aed 100%);box-shadow:0 8px 20px rgba(79,70,229,0.28);"><a href="${escapeHtml(ctaUrl)}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:15px 30px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:12px;letter-spacing:0.01em;">${escapeHtml(ctaLabel)}</a></td></tr></table>
-       <p style="margin:10px 0 0;font-size:12px;color:#94a3b8;text-align:center;word-break:break-all;line-height:1.5;"><a href="${escapeHtml(ctaUrl)}" style="color:#6366f1;text-decoration:none;">${escapeHtml(ctaUrl)}</a></p>`
+       <p style="margin:10px 0 0;font-size:12px;color:#94a3b8;text-align:center;word-break:break-all;line-height:1.5;"><a href="${escapeHtml(ctaUrl)}" style="color:#6a4be8;text-decoration:none;">${escapeHtml(ctaUrl)}</a></p>`
     : '';
 
   const signatureHtml = `<table role="presentation" cellspacing="0" cellpadding="0" style="margin-top:28px;padding-top:22px;border-top:1px solid #e2e8f0;width:100%;">
@@ -176,7 +176,7 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
             </td>
           </tr>
           <tr>
-            <td style="background:#ffffff;border-radius:18px;border:1px solid #dbeafe;box-shadow:0 12px 40px rgba(79,70,229,0.10);overflow:hidden;">
+            <td style="background:#ffffff;border-radius:18px;border:1px solid #dbeafe;box-shadow:0 12px 40px rgba(106,75,232,0.10);overflow:hidden;">
               <div style="height:5px;background:linear-gradient(90deg,#2563eb 0%,#6366f1 50%,#8b5cf6 100%);"></div>
               <div style="padding:34px 30px 30px;">
                 ${headline ? `<h1 style="margin:0 0 18px;font-size:22px;line-height:1.35;font-weight:800;color:#0f172a;letter-spacing:-0.02em;">${headline}</h1>` : ''}
@@ -192,9 +192,9 @@ export function buildBrandedEmailFromPlainText(plainText, options = {}) {
                 Puedes responder a este correo${supportLine}.
               </p>
               <p style="margin:0 0 8px;">
-                <a href="https://www.dralo.es" style="color:#4f46e5;text-decoration:none;font-weight:600;">dralo.es</a>
+                <a href="https://www.dralo.es" style="color:#6a4be8;text-decoration:none;font-weight:600;">dralo.es</a>
                 &nbsp;·&nbsp;
-                <a href="https://www.dralo.es/contacto" style="color:#4f46e5;text-decoration:none;">Contacto</a>
+                <a href="https://www.dralo.es/contacto" style="color:#6a4be8;text-decoration:none;">Contacto</a>
               </p>
               ${legalLine}
               <p style="margin:0;color:#94a3b8;">© ${new Date().getFullYear()} ${copyrightName}. Todos los derechos reservados.</p>

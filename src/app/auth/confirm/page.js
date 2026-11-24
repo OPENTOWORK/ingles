@@ -195,7 +195,7 @@ const mainStyle = {
   backgroundColor: '#fff',
   borderRadius: '8px',
   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-  fontFamily: 'Segoe UI, sans-serif',
+  fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif",
 };
 
 const headingStyle = { textAlign: 'center', marginBottom: '1rem' };

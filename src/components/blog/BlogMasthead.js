@@ -13,9 +13,9 @@ export default function BlogMasthead({ title, lead } = {}) {
         >
           <defs>
             <linearGradient id="blogMastBase" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#8b5cf6" />
-              <stop offset="48%" stopColor="#7c3aed" />
-              <stop offset="100%" stopColor="#5b21b6" />
+              <stop offset="0%" stopColor="#6a4be8" />
+              <stop offset="48%" stopColor="#6a4be8" />
+              <stop offset="100%" stopColor="#5634d6" />
             </linearGradient>
             <filter id="blogMastGoo" x="-20%" y="-20%" width="140%" height="140%">
               <feGaussianBlur in="SourceGraphic" stdDeviation="22" result="blur" />
@@ -28,7 +28,7 @@ export default function BlogMasthead({ title, lead } = {}) {
             </filter>
           </defs>
           <rect width="1440" height="640" fill="url(#blogMastBase)" />
-          <g filter="url(#blogMastGoo)" fill="#4c1d95">
+          <g filter="url(#blogMastGoo)" fill="#3d2398">
             <circle className="blog-mag__blob blog-mag__blob--a" cx="150" cy="70" r="190" />
             <circle className="blog-mag__blob blog-mag__blob--b" cx="420" cy="-10" r="160" />
             <circle className="blog-mag__blob blog-mag__blob--c" cx="70" cy="430" r="170" />
@@ -39,7 +39,7 @@ export default function BlogMasthead({ title, lead } = {}) {
             <circle className="blog-mag__blob blog-mag__blob--h" cx="980" cy="480" r="140" />
             <circle className="blog-mag__blob blog-mag__blob--i" cx="720" cy="260" r="110" />
           </g>
-          <g filter="url(#blogMastGoo)" fill="#6d28d9" opacity="0.55">
+          <g filter="url(#blogMastGoo)" fill="#5634d6" opacity="0.55">
             <circle className="blog-mag__blob blog-mag__blob--j" cx="300" cy="240" r="90" />
             <circle className="blog-mag__blob blog-mag__blob--k" cx="1080" cy="220" r="100" />
           </g>

@@ -300,7 +300,7 @@
 .cityLinkSecondary:hover {
   background: #eff6ff;
   border-color: #cdbfff;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .cityLinkIcon {
@@ -438,7 +438,7 @@
   height: 1.6rem;
   border-radius: 999px;
   background: #eef2ff;
-  color: #3730a3;
+  color: #4528c4;
   font-size: 13px;
   font-weight: 800;
 }

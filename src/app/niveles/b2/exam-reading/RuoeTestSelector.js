@@ -3,7 +3,14 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import styles from './RuoeTestSelector.module.css';
 
-export default function RuoeTestSelector({ currentSlot, slots, planLockedSlots, isSlotUnlocked, onSelect }) {
+export default function RuoeTestSelector({
+  currentSlot,
+  slots,
+  planLockedSlots,
+  isSlotUnlocked,
+  onSelect,
+  accent = 'purple',
+}) {
   const dialogId = useId();
   const dialogRef = useRef(null);
   const anchorRef = useRef(null);
@@ -59,7 +66,12 @@ export default function RuoeTestSelector({ currentSlot, slots, planLockedSlots, 
   }
 
   return (
-    <div className={styles.anchor} ref={anchorRef}>
+    <div
+      className={`${styles.anchor}${
+        accent === 'writing' || accent === 'listening' || accent === 'speaking' ? ` ${styles[accent]}` : ''
+      }`}
+      ref={anchorRef}
+    >
       <button
         type="button"
         className={styles.trigger}

@@ -5,7 +5,7 @@ import { syncAutomatedEmailSystemTemplates } from '@/lib/syncAutomatedEmailSyste
 import { getWeeklyChallenge } from '@/data/weeklyTrainingChallenges';
 import {
   buildWeeklyChallengeEmailVariables,
-  isWeeklyTuesdaySendTime,
+  shouldSendWeeklyChallenge,
 } from '@/lib/weeklyChallengeEmail';
 
 const SLUG = 'weekly_tuesday_challenge';
@@ -42,14 +42,15 @@ async function loadConfirmedUserIds(adminClient) {
 
 /**
  * Envía el reto de la semana a todos los usuarios activos con el email confirmado.
- * Solo el martes a las 10:00, hora de Madrid.
+ * Desde el martes a las 10:00 (Madrid) hasta el lunes siguiente. Quien ya lo recibió
+ * esa semana no entra otra vez. El martes siguiente toca otra pregunta.
  * @param {import('@supabase/supabase-js').SupabaseClient} adminClient
  * @param {Date} [now]
  */
 export async function runWeeklyTuesdayChallenge(adminClient, now = new Date()) {
   if (!adminClient) return { sent: 0, skipped: true };
-  if (!isWeeklyTuesdaySendTime(now)) {
-    return { sent: 0, skipped: true, reason: 'solo martes a las 10:00 (Madrid)' };
+  if (!shouldSendWeeklyChallenge(now)) {
+    return { sent: 0, skipped: true, reason: 'antes del martes a las 10:00 (Madrid)' };
   }
 
   const challenge = getWeeklyChallenge(now);

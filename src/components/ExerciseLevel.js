@@ -329,7 +329,7 @@ export default function ExerciseLevel({ exercises, levelNumber, difficulty, back
   }
 
   return (
-    <main style={{ padding: "2rem", fontFamily: "Segoe UI, sans-serif", background: "linear-gradient(to right, #f0f8ff, #e6f0ff)", minHeight: "100vh", textAlign: "center" }}>
+    <main style={{ padding: "2rem", fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif", background: "linear-gradient(to right, #f0f8ff, #e6f0ff)", minHeight: "100vh", textAlign: "center" }}>
       <div style={{ maxWidth: "600px", margin: "0 auto", backgroundColor: "#fff", borderRadius: "16px", padding: "2rem", boxShadow: "0 8px 32px rgba(0,0,0,0.1)" }}>
         
         {/* Header */}
@@ -420,7 +420,7 @@ export default function ExerciseLevel({ exercises, levelNumber, difficulty, back
                     <button
                       onClick={resetExercise}
                       style={{
-                        backgroundColor: "#8b5cf6",
+                        backgroundColor: "#6a4be8",
                         color: "white",
                         border: "none",
                         borderRadius: "8px",

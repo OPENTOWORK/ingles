@@ -17,9 +17,9 @@
   --cl-surface: #ffffff;
   --cl-ink: #0f172a;
   --cl-muted: #475569;
-  --cl-accent: #5b4bb7;
-  --cl-accent-dark: #4338a5;
-  --cl-hero: linear-gradient(155deg, #667eea 0%, #764ba2 52%, #5b4bb7 100%);
+  --cl-accent: #6a4be8;
+  --cl-accent-dark: #5634d6;
+  --cl-hero: linear-gradient(155deg, #6a4be8 0%, #6a4be8 52%, #6a4be8 100%);
   --cl-offer: #fff7ed;
   --cl-offer-border: #fdba74;
   --cl-cta: #f97316;
@@ -67,7 +67,7 @@
   background: var(--cl-hero);
   color: #fff;
   text-align: center;
-  box-shadow: 0 20px 50px rgba(91, 75, 183, 0.28);
+  box-shadow: 0 20px 50px rgba(106, 75, 232, 0.28);
 }
 
 .conversion-landing__hero-title {

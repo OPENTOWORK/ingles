@@ -301,14 +301,14 @@ const AdminDashboard = ({ isAdmin = false }) => {
             </div>
 
             <div style={{
-              backgroundColor: '#f3e8ff',
+              backgroundColor: '#f0ebff',
               padding: '1rem',
               borderRadius: '8px',
               textAlign: 'center',
-              border: '1px solid #d8b4fe'
+              border: '1px solid #cdbfff'
             }}>
               <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>🏆</div>
-              <div style={{ fontWeight: 'bold', color: '#7c3aed', fontSize: '1.5rem' }}>
+              <div style={{ fontWeight: 'bold', color: '#6a4be8', fontSize: '1.5rem' }}>
                 {dashboardData.database.totalAchievements}
               </div>
               <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Achievements</div>
@@ -403,7 +403,7 @@ const AdminDashboard = ({ isAdmin = false }) => {
                   <span style={{
                     fontSize: '0.8rem',
                     backgroundColor: '#e0e7ff',
-                    color: '#3730a3',
+                    color: '#4528c4',
                     padding: '0.25rem 0.5rem',
                     borderRadius: '4px'
                   }}>
@@ -635,14 +635,14 @@ const AdminDashboard = ({ isAdmin = false }) => {
             </div>
 
             <div style={{
-              backgroundColor: '#f3e8ff',
+              backgroundColor: '#f0ebff',
               padding: '1rem',
               borderRadius: '8px',
               textAlign: 'center',
-              border: '1px solid #d8b4fe'
+              border: '1px solid #cdbfff'
             }}>
               <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>👥</div>
-              <div style={{ fontWeight: 'bold', color: '#7c3aed', fontSize: '1.5rem' }}>
+              <div style={{ fontWeight: 'bold', color: '#6a4be8', fontSize: '1.5rem' }}>
                 {dashboardData.database.totalUsers}
               </div>
               <div style={{ fontSize: '0.9rem', color: '#64748b' }}>Users</div>

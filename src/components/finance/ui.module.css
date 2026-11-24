@@ -96,7 +96,7 @@
 }
 
 .kpiAccent {
-  border-color: #c7d2fe;
+  border-color: #e0d6ff;
   background: linear-gradient(180deg, #ffffff 0%, #eef2ff 100%);
 }
 
@@ -158,7 +158,7 @@
 }
 
 .sortable:hover {
-  color: #4338ca;
+  color: #5634d6;
 }
 
 .sortArrow {
@@ -210,7 +210,7 @@
 
 .badgeInfo {
   background: #e0e7ff;
-  color: #3730a3;
+  color: #4528c4;
 }
 
 .badgeNeutral {
@@ -242,8 +242,8 @@
 }
 
 .button:hover:not(:disabled) {
-  border-color: #c7d2fe;
-  color: #4338ca;
+  border-color: #e0d6ff;
+  color: #5634d6;
 }
 
 .button:disabled {
@@ -252,16 +252,16 @@
 }
 
 .buttonPrimary {
-  background: #4338ca;
-  border-color: #4338ca;
+  background: var(--brand-purple-hover, #5634d6);
+  border-color: #5634d6;
   color: #fff;
 }
 
 .buttonPrimary:hover:not(:disabled) {
-  background: #3730a3;
-  border-color: #3730a3;
+  background: #4528c4;
+  border-color: #4528c4;
   color: #fff;
-  box-shadow: 0 6px 16px rgba(67, 56, 202, 0.24);
+  box-shadow: 0 6px 16px rgba(86, 52, 214, 0.24);
 }
 
 .buttonDanger {
@@ -328,8 +328,8 @@
 .select:focus,
 .textarea:focus {
   outline: none;
-  border-color: #a5b4fc;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  border-color: #b6a6ff;
+  box-shadow: 0 0 0 3px rgba(106, 75, 232, 0.12);
 }
 
 .input:disabled,
@@ -584,13 +584,13 @@
 .bar {
   width: 100%;
   border-radius: 0.3rem 0.3rem 0 0;
-  background: #6366f1;
+  background: #6a4be8;
   min-height: 2px;
   transition: height 0.25s ease;
 }
 
 .barSecondary {
-  background: #a5b4fc;
+  background: #b6a6ff;
   border-radius: 0;
 }
 
@@ -676,7 +676,7 @@
 }
 
 .link {
-  color: #4338ca;
+  color: #5634d6;
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
@@ -812,5 +812,5 @@
 }
 
 :global(body.reading-night-mode) .link {
-  color: #a5b4fc;
+  color: #b6a6ff;
 }

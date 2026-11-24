@@ -52,7 +52,7 @@ const VerbToBePage = () => {
       <TheorySection title="Main Uses" icon="🎯">
         <div style={{ display: 'grid', gap: '1.5rem' }}>
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>1. 🏷️ Identification (Be)</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.75rem' }}>1. 🏷️ Identification (Be)</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
               To say who or what someone or something is.
             </p>
@@ -72,7 +72,7 @@ const VerbToBePage = () => {
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>2. 📍 Location (Be)</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.75rem' }}>2. 📍 Location (Be)</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
               To say where someone or something is.
             </p>
@@ -92,7 +92,7 @@ const VerbToBePage = () => {
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>3. 🎨 Description (Be)</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.75rem' }}>3. 🎨 Description (Be)</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
               To describe characteristics, states, or conditions.
             </p>
@@ -112,7 +112,7 @@ const VerbToBePage = () => {
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.75rem' }}>4. ⏰ Age and Time</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.75rem' }}>4. ⏰ Age and Time</h4>
             <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
               To talk about age, dates, and time.
             </p>

@@ -15,6 +15,7 @@ import {
   parseJsonFromModel,
 } from '@/lib/dictionaryAiHelpers';
 import { DEFAULT_DICTIONARY_LANGUAGE } from '@/data/dictionaryLanguages';
+import { DICTIONARY_ENABLED } from '@/config/dictionaryFeature';
 
 const WINDOW_MS = 60 * 60 * 1000;
 const MAX_PER_IP = 100;
@@ -333,6 +334,10 @@ async function askDralo(word, question, enrichment) {
 }
 
 export async function POST(req) {
+  if (!DICTIONARY_ENABLED) {
+    return NextResponse.json({ error: 'Dictionary is temporarily unavailable.' }, { status: 404 });
+  }
+
   const access = await getDraloAiAccessFromRequest(req);
   if (!access.allowed) return draloAiDeniedResponse(access);
 

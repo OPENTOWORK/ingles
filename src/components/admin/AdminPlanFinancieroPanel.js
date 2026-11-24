@@ -322,7 +322,7 @@ export default function AdminPlanFinancieroPanel() {
                     <td>
                       <strong>{plan.nombre}</strong>
                       {plan.badge ? (
-                        <div style={{ fontSize: '0.75rem', color: '#6366f1', marginTop: 4 }}>
+                        <div style={{ fontSize: '0.75rem', color: '#6a4be8', marginTop: 4 }}>
                           {plan.badge}
                         </div>
                       ) : null}
@@ -397,7 +397,7 @@ export default function AdminPlanFinancieroPanel() {
                 <XAxis dataKey="month" tick={{ fontSize: 11 }} />
                 <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
                 <Tooltip />
-                <Bar dataKey="count" name="Suscriptores" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="count" name="Suscriptores" fill="#6a4be8" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (

@@ -401,7 +401,7 @@ const TheoryLayout = ({
             fontSize: '14px',
             color: 'var(--color-text-secondary, #666)'
           }}>
-            <Link href="/teoria" style={{ color: '#667eea', textDecoration: 'none' }}>
+            <Link href="/teoria" style={{ color: '#6a4be8', textDecoration: 'none' }}>
               📚 Theory
             </Link>
             <span>›</span>
@@ -436,7 +436,7 @@ const TheoryLayout = ({
               alignItems: 'center'
             }}>
               <span style={{
-                background: '#667eea',
+                background: '#6a4be8',
                 color: 'white',
                 padding: '0.25rem 0.75rem',
                 borderRadius: '20px',
@@ -447,12 +447,12 @@ const TheoryLayout = ({
               </span>
               {prerequisites.length > 0 && (
                 <span style={{
-                  background: '#eef2ff',
-                  color: '#4338ca',
+                  background: 'var(--brand-purple-soft, #f0ebff)',
+                  color: 'var(--brand-purple, #6a4be8)',
                   padding: '0.25rem 0.75rem',
                   borderRadius: '20px',
                   fontSize: '0.9rem',
-                  border: '1px solid #c7d2fe'
+                  border: '1px solid #e0d6ff'
                 }}>
                   📋 Requires: {prerequisites.join(', ')}
                 </span>
@@ -472,7 +472,7 @@ const TheoryLayout = ({
                 <span style={{ fontWeight: '500', color: '#4a5568' }}>
                   Topic Progress
                 </span>
-                <span style={{ fontSize: '0.9rem', color: '#667eea' }}>
+                <span style={{ fontSize: '0.9rem', color: '#6a4be8' }}>
                   {progressPercent}%
                 </span>
               </div>
@@ -486,7 +486,7 @@ const TheoryLayout = ({
                 <div style={{
                   width: `${progressPercent}%`,
                   height: '100%',
-                  background: 'linear-gradient(90deg, #667eea, #764ba2)',
+                  background: '#6a4be8',
                   transition: 'width 0.3s ease'
                 }} />
               </div>
@@ -555,15 +555,15 @@ const TheoryLayout = ({
             }
             .theory-tab-btn:hover:not(.theory-tab-btn--active) {
               background: var(--card, #fff);
-              color: #4338ca;
+              color: var(--brand-purple, #6a4be8);
             }
             .theory-tab-btn--active {
               color: #fff;
-              background: #6366f1;
+              background: var(--brand-purple, #6a4be8);
               box-shadow: none;
             }
             .theory-tab-btn--active:hover {
-              background: #4f46e5;
+              background: var(--brand-purple-hover, #5634d6);
             }
             .theory-tab-btn__icon {
               font-size: 1.05rem;
@@ -580,8 +580,8 @@ const TheoryLayout = ({
               font-size: 0.75rem;
               font-weight: 700;
               line-height: 1;
-              background: #e0e7ff;
-              color: #4338ca;
+              background: var(--brand-purple-soft, #f0ebff);
+              color: var(--brand-purple, #6a4be8);
             }
             .theory-tab-btn--active .theory-tab-btn__count {
               background: rgba(255, 255, 255, 0.25);
@@ -660,7 +660,7 @@ const TheoryLayout = ({
             alignItems: 'center',
             gap: '0.5rem',
             padding: '0.75rem 1.5rem',
-            color: '#667eea',
+            color: '#6a4be8',
             textDecoration: 'none',
             borderRadius: '12px',
             fontWeight: '500',
@@ -680,14 +680,14 @@ const TheoryLayout = ({
               alignItems: 'center',
               gap: '0.5rem',
               padding: '0.75rem 1.5rem',
-              background: '#667eea',
+              background: '#6a4be8',
               color: 'white',
               border: 'none',
               borderRadius: '12px',
               cursor: 'pointer',
               fontWeight: '500',
               transition: 'all 0.2s',
-              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+              boxShadow: '0 4px 12px rgba(106, 75, 232, 0.3)'
             }}
           >
             Go to Exercises →

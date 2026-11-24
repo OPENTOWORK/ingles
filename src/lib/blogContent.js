@@ -75,7 +75,7 @@ function sanitizeInlineStyle(styleValue = '') {
       /^[a-z0-9\s,"'%-]+$/i.test(val) &&
       val.length <= 120
     ) {
-      allowed.push(`font-family: ${val}`);
+      allowed.push(`font-family: var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif`);
     }
   }
   return allowed.join('; ');

@@ -179,7 +179,7 @@ function TheoryTopicListStyles() {
         padding: 14px 16px;
         border-radius: 16px;
         background: linear-gradient(180deg, #f5f3ff 0%, #f8fafc 100%);
-        border: 1px solid rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(106, 75, 232, 0.15);
       }
       .theory-topics-page .theory-section-progress__hint {
         margin: 8px 0 0;

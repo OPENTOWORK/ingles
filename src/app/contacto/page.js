@@ -485,7 +485,7 @@ function GlobalStyles() {
         align-self: flex-start;
         min-width: 220px;
         padding: 13px 22px;
-        background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+        background: #6a4be8;
         color: #fff;
         font-size: 0.95rem;
         font-weight: 700;
@@ -597,7 +597,7 @@ function GlobalStyles() {
         font-size: 0.75rem;
         font-weight: 700;
         letter-spacing: 0.04em;
-        color: #5634d6;
+        color: #6a4be8;
       }
       .contact-status {
         display: inline-flex;
@@ -611,7 +611,7 @@ function GlobalStyles() {
       }
       .contact-status--open {
         background: #f4f0ff;
-        color: #5634d6;
+        color: #6a4be8;
       }
       .contact-status--pending {
         background: #fff7ed;
@@ -660,7 +660,7 @@ function GlobalStyles() {
         gap: 8px;
         padding: 12px 20px;
         border-radius: 999px;
-        background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+        background: #6a4be8;
         color: #fff;
         font-size: 0.92rem;
         font-weight: 700;

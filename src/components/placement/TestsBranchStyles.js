@@ -61,14 +61,14 @@ export default function TestsBranchStyles() {
         transform: translateY(-3px);
       }
       .tests-choice--solid {
-        background: linear-gradient(145deg, #6a4be8 0%, #5634d6 100%);
+        background: #6a4be8;
         color: #fff;
-        border: 2px solid #5634d6;
+        border: 2px solid #6a4be8;
         box-shadow: 0 16px 36px rgba(86, 52, 214, 0.28);
       }
       .tests-choice--light {
         background: #fff;
-        color: #3b1d9a;
+        color: #3d2398;
         border: 2px solid #6a4be8;
         box-shadow: 0 12px 28px rgba(106, 75, 232, 0.12);
       }
@@ -101,7 +101,7 @@ export default function TestsBranchStyles() {
         color: rgba(255, 255, 255, 0.92);
       }
       .tests-choice--light .tests-choice__text {
-        color: #4c1d95;
+        color: #3d2398;
       }
       .tests-choice__go {
         margin-top: auto;
@@ -151,7 +151,7 @@ export default function TestsBranchStyles() {
         border-radius: 22px;
         border: 2px solid #6a4be8;
         background: #fff;
-        color: #3b1d9a;
+        color: #3d2398;
         box-shadow: 0 12px 28px rgba(106, 75, 232, 0.12);
       }
       .tests-intro__title {
@@ -160,14 +160,14 @@ export default function TestsBranchStyles() {
         font-weight: 800;
         line-height: 1.15;
         letter-spacing: -0.02em;
-        color: #3b1d9a;
+        color: #3d2398;
       }
       .tests-intro__lead {
         margin: 0.85rem 0 0;
         max-width: 38rem;
         font-size: 1.02rem;
         line-height: 1.55;
-        color: #4c1d95;
+        color: #3d2398;
       }
       .tests-intro__stats {
         display: flex;
@@ -187,7 +187,7 @@ export default function TestsBranchStyles() {
       .tests-intro__stats strong {
         font-size: 1.35rem;
         line-height: 1;
-        color: #5634d6;
+        color: #6a4be8;
       }
       .tests-intro__stats span {
         margin-top: 0.3rem;
@@ -199,7 +199,7 @@ export default function TestsBranchStyles() {
       }
       .tests-intro__error {
         margin: 1rem 0 0;
-        color: #7c3aed;
+        color: #6a4be8;
         font-weight: 700;
       }
       .tests-start {
@@ -220,7 +220,7 @@ export default function TestsBranchStyles() {
       }
       .tests-start:hover,
       .tests-start:focus {
-        background: #5634d6;
+        background: #6a4be8;
         color: #fff;
         text-decoration: none;
       }

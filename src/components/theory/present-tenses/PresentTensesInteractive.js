@@ -4,9 +4,9 @@ import { useState } from 'react';
 import './PresentTensesInteractive.css';
 
 const TENSES = [
-  { id: 'simple', label: 'Present Simple', short: 'Simple', color: '#667eea' },
+  { id: 'simple', label: 'Present Simple', short: 'Simple', color: '#6a4be8' },
   { id: 'continuous', label: 'Present Continuous', short: 'Continuous', color: '#0891b2' },
-  { id: 'perfect', label: 'Present Perfect', short: 'Perfect', color: '#7c3aed' },
+  { id: 'perfect', label: 'Present Perfect', short: 'Perfect', color: '#6a4be8' },
 ];
 
 const TENSE_PICKER_ITEMS = [

@@ -1,5 +1,7 @@
 /** Configuración por apartado del menú Dralo AI */
 
+import { DICTIONARY_ENABLED } from '@/config/dictionaryFeature';
+
 export const DRALO_AI_CEFR_LEVELS = ['A2', 'B1', 'B2', 'C1', 'C2'];
 
 export const DRALO_AI_HUB = {
@@ -53,7 +55,7 @@ export const DRALO_AI_HUB = {
       tagline: 'Definitions, pronunciation and Spanish translation',
       accent: 'violet',
     },
-  ],
+  ].filter((item) => DICTIONARY_ENABLED || item.id !== 'dictionary'),
 };
 
 export const DRALO_AI_MODES = {

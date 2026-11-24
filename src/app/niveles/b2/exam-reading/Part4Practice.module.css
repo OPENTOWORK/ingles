@@ -40,7 +40,7 @@ nav.navigation:global(.levels-exam-module-nav) {
   --ruoe-nav-border: #c9e7fc;
   --ruoe-nav-text: #174c78;
   --ruoe-nav-button: #fff;
-  --ruoe-nav-primary: #d5ecff;
+  --ruoe-nav-primary: #eef6fc;
   max-width: none;
   min-height: 0;
   padding: .65rem .8rem;
@@ -56,18 +56,24 @@ nav.navigation:global(.levels-exam-module-nav) {
   --ruoe-nav-border: #475569;
   --ruoe-nav-text: #d5ecff;
   --ruoe-nav-button: #1e293b;
-  --ruoe-nav-primary: #1e3a5f;
+  --ruoe-nav-primary: #0c4a6e;
 }
 
 nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn) {
   gap: .35rem;
-  padding: .45rem .7rem;
-  border-color: var(--ruoe-nav-border);
-  border-radius: .55rem;
-  background: var(--ruoe-nav-button);
-  color: var(--ruoe-nav-text);
+  width: fit-content;
+  padding: .55rem 1rem;
+  border-color: #d5e8f5;
+  border-radius: 999px;
+  background: var(--ruoe-nav-primary);
+  color: #1e628c;
   box-shadow: none;
   transform: none;
+}
+
+nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn):focus,
+nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn):focus-visible {
+  outline: none;
 }
 
 nav.navigation:global(.levels-exam-module-nav) :is(
@@ -75,10 +81,40 @@ nav.navigation:global(.levels-exam-module-nav) :is(
   :global(.levels-exam-module-nav__btn--check)
 ) {
   background: var(--ruoe-nav-primary);
+  border-color: #d5e8f5;
+  color: #1e628c;
+}
+
+nav.navigation:global(.levels-exam-module-nav) :is(
+  :global(.levels-exam-module-nav__btn--continue),
+  :global(.levels-exam-module-nav__btn--check)
+):hover:not(:disabled) {
+  background: #0284c7;
+  border-color: #0369a1;
+  color: #fff;
+}
+
+:global(body.reading-night-mode) nav.navigation:global(.levels-exam-module-nav) :is(
+  :global(.levels-exam-module-nav__btn--continue),
+  :global(.levels-exam-module-nav__btn--check)
+) {
+  border-color: #0369a1;
+  color: #e0f2fe;
+}
+
+:global(body.reading-night-mode) nav.navigation:global(.levels-exam-module-nav) :is(
+  :global(.levels-exam-module-nav__btn--continue),
+  :global(.levels-exam-module-nav__btn--check)
+):hover:not(:disabled) {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #fff;
 }
 
 nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn):hover:not(:disabled) {
-  border-color: currentColor;
+  background: #0284c7;
+  border-color: #0369a1;
+  color: #fff;
 }
 
 nav.navigation:global(.levels-exam-module-nav) :global(.levels-exam-module-nav__btn):disabled {

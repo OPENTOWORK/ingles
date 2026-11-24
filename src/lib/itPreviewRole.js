@@ -42,7 +42,6 @@ const PRESET_ROUTES = [
   { label: 'Exam Strategies', path: '/exam-strategies', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Hub exámenes', path: '/exam-practice/b2', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Modo examen', path: '/exam-practice/b2/exam-mode', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
-  { label: 'B2 — Quiz game', path: '/exam-practice/b2/quiz-game', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Reading', path: '/exam-practice/b2/exam-reading', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Writing', path: '/exam-practice/b2/exam-writing', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'B2 — Listening', path: '/exam-practice/b2/exam-listening', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
@@ -55,6 +54,7 @@ const PRESET_ROUTES = [
   { label: 'Dralo AI', path: '/dralo-ai', roles: ['student', 'teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Contacto', path: '/contacto', roles: ['guest', 'student', 'teacher', 'coordinator', 'support', 'informatico', 'admin'] },
   { label: 'Panel profesor', path: '/teacher', roles: ['teacher'] },
+  { label: 'Calendario profesor', path: '/teacher/calendario', roles: ['teacher'] },
   { label: 'Panel profesor (admin)', path: '/admin/profesor', roles: ['admin', 'coordinator'] },
   { label: 'Panel coordinador', path: '/coordinador', roles: ['coordinator'] },
   { label: 'Panel soporte', path: '/soporte', roles: ['support', 'admin'] },
@@ -62,7 +62,7 @@ const PRESET_ROUTES = [
   { label: 'Panel tareas', path: '/tareas', roles: ['teacher', 'coordinator', 'support', 'informatico', 'admin'] },
   { label: 'Buzón y reuniones', path: '/buzon', roles: ['teacher', 'coordinator', 'support', 'informatico', 'marketing', 'admin'] },
   { label: 'Blog (admin)', path: '/admin/blog', roles: ['coordinator', 'marketing', 'admin'] },
-  { label: 'Plan de marketing', path: '/admin/marketing/promociones', roles: ['marketing', 'admin'] },
+  { label: 'Plan de marketing', path: '/admin/plan-marketing', roles: ['marketing', 'admin'] },
   { label: 'Permisos', path: '/admin/configuracion', roles: ['admin'] },
   { label: 'Facturación', path: '/admin/finanzas/facturacion', roles: ['admin'] },
   { label: 'Contabilidad', path: '/admin/finanzas/contabilidad', roles: ['admin'] },
@@ -136,7 +136,9 @@ export function isItPreviewPathAccessible(path, roleId = 'student') {
   if (pathname === '/tareas' && !canAccessStaffTasks(roleId)) return false;
   if (pathname === '/paneles' && !canAccessStaffPanelsHub(roleId)) return false;
   if (pathname === '/buzon' && !canAccessStaffBuzon(roleId)) return false;
-  if (pathname === '/teacher' && !isTeacherRole(roleId)) return false;
+  if ((pathname === '/teacher' || pathname.startsWith('/teacher/')) && !isTeacherRole(roleId)) {
+    return false;
+  }
   if (pathname === '/coordinador' && !canAccessCoordinatorPanel(roleId)) return false;
   if (pathname === '/soporte' && !canAccessSupportPanel(roleId)) return false;
   if (pathname === '/informatico' && !canAccessItPanel(roleId)) return false;

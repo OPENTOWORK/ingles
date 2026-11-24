@@ -13,4 +13,4 @@ export const DRALO_MANIFEST_ICONS = [
   { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
 ];
 
-export const DRALO_THEME_COLOR = '#6366f1';
+export const DRALO_THEME_COLOR = '#6a4be8';

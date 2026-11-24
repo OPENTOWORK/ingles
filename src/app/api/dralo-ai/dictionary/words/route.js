@@ -9,6 +9,7 @@ import {
   normalizeDictionaryWord,
 } from '@/lib/dictionarySavedWords';
 import { DEFAULT_DICTIONARY_LANGUAGE } from '@/data/dictionaryLanguages';
+import { DICTIONARY_ENABLED } from '@/config/dictionaryFeature';
 
 const WORD_COLUMNS =
   'id, user_id, word, translation, phonetic, definition, target_language, cefr_level, entry_data, created_at, updated_at';
@@ -51,7 +52,15 @@ function schemaNotReadyResponse() {
   );
 }
 
+function dictionaryOff() {
+  if (DICTIONARY_ENABLED) return null;
+  return NextResponse.json({ error: 'Dictionary is temporarily unavailable.' }, { status: 404 });
+}
+
 export async function GET(request) {
+  const off = dictionaryOff();
+  if (off) return off;
+
   const access = await getDraloAiAccessFromRequest(request);
   if (!access.allowed) return draloAiDeniedResponse(access);
 
@@ -90,6 +99,9 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  const off = dictionaryOff();
+  if (off) return off;
+
   const access = await getDraloAiAccessFromRequest(request);
   if (!access.allowed) return draloAiDeniedResponse(access);
 
@@ -140,6 +152,9 @@ export async function POST(request) {
 }
 
 export async function DELETE(request) {
+  const off = dictionaryOff();
+  if (off) return off;
+
   const access = await getDraloAiAccessFromRequest(request);
   if (!access.allowed) return draloAiDeniedResponse(access);
 

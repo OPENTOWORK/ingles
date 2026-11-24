@@ -12,12 +12,12 @@
 }
 
 .group--phase {
-  border-left: 3px solid #7c3aed;
+  border-left: 3px solid #6a4be8;
 }
 
 .group--sub {
   margin: 0.35rem 0.45rem 0.45rem 1.15rem;
-  border-left: 3px solid #6366f1;
+  border-left: 3px solid #6a4be8;
   background: #f8fafc;
 }
 
@@ -90,7 +90,7 @@
 .track > span {
   display: block;
   height: 100%;
-  background: #7c3aed;
+  background: #6a4be8;
 }
 
 .body {
@@ -132,12 +132,12 @@
 }
 
 .check:hover {
-  border-color: #7c3aed;
+  border-color: #6a4be8;
 }
 
 .checkOn {
-  background: #7c3aed;
-  border-color: #6d28d9;
+  background: #6a4be8;
+  border-color: #5634d6;
 }
 
 .check:disabled {
@@ -195,7 +195,7 @@
   padding: 0;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #6d28d9;
+  color: #5634d6;
   cursor: pointer;
 }
 

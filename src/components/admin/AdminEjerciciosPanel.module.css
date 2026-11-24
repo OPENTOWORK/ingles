@@ -104,7 +104,7 @@
 }
 
 .btnPrimary:hover {
-  background: #5634d6;
+  background: #6a4be8;
 }
 
 .superBox {
@@ -235,7 +235,7 @@
 
 .badgeClosed {
   background: #e0e7ff;
-  color: #3730a3;
+  color: #4528c4;
 }
 
 .badgeOpen {
@@ -294,7 +294,7 @@ td.colActions {
 
 .viewBtnActive {
   background: #eef2ff;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .filterBar {
@@ -530,7 +530,7 @@ td.colActions {
 }
 
 :global(body.reading-night-mode) .rowSelected {
-  background: #312e81;
+  background: #3d2398;
 }
 
 :global(body.reading-night-mode) .btn {
@@ -549,7 +549,7 @@ td.colActions {
 }
 
 :global(body.reading-night-mode) .viewBtnActive {
-  background: #312e81;
+  background: #3d2398;
   color: #c4b5fd;
 }
 

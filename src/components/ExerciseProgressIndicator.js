@@ -394,7 +394,7 @@ export const ExerciseListWithProgress = ({
                         style={{
                           fontSize: '0.7rem',
                           backgroundColor: '#e0e7ff',
-                          color: '#3730a3',
+                          color: '#4528c4',
                           padding: '0.125rem 0.375rem',
                           borderRadius: '3px'
                         }}

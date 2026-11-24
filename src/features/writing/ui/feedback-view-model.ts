@@ -108,6 +108,40 @@ const NEXT_FOCUS_LABEL = 'Next focus';
 /** Doc 04 §7: band 5 is the ceiling. Nothing may imply a band 6 exists. */
 const TOP_BAND_FOCUS_LABEL = 'Keeping it there';
 
+/**
+ * Offsets sometimes drift away from the stored quote. When the quote is still
+ * in the learner's text, bind the highlight to that phrase so the colour is not lost.
+ */
+function rebindWritingAnnotations(
+  candidate: string,
+  annotations: readonly WritingAnnotation[],
+): WritingAnnotation[] {
+  const taken = new Set<string>();
+  return annotations.map((annotation) => {
+    const start = annotation.span_start;
+    const end = annotation.span_end;
+    const quote = annotation.original_text;
+    if (quote && candidate.slice(start, end) === quote) {
+      taken.add(`${start}:${end}`);
+      return annotation;
+    }
+    if (!quote) return annotation;
+    let from = 0;
+    while (from <= candidate.length) {
+      const found = candidate.indexOf(quote, from);
+      if (found < 0) break;
+      const foundEnd = found + quote.length;
+      const key = `${found}:${foundEnd}`;
+      if (!taken.has(key)) {
+        taken.add(key);
+        return { ...annotation, span_start: found, span_end: foundEnd };
+      }
+      from = found + 1;
+    }
+    return annotation;
+  });
+}
+
 function annotationView(annotation: WritingAnnotation): AnnotationFeedbackView {
   return {
     annotation_id: annotation.annotation_id,
@@ -128,14 +162,12 @@ export function buildFeedbackViewModel(input: {
   const payload = input.feedback_payload;
   const candidate = String(input.candidate_response ?? '');
 
-  const { segments } = buildAnnotationSegments(candidate, payload.annotations);
+  const { segments } = buildAnnotationSegments(candidate, rebindWritingAnnotations(candidate, payload.annotations));
 
   const groups: Record<string, AnnotationFeedbackView[]> = {};
-  const usedCategories = new Set<string>();
   for (const segment of segments) {
     if (segment.kind !== 'mark') continue;
     groups[segment.group_id] = segment.annotations.map(annotationView);
-    for (const annotation of segment.annotations) usedCategories.add(annotation.category_key);
   }
 
   const criteria = CAMBRIDGE_CRITERION_KEYS.map((key) => {
@@ -183,7 +215,7 @@ export function buildFeedbackViewModel(input: {
       candidate_response: candidate,
       segments,
       groups,
-      legend: WRITING_MAP_LEGEND.filter((token) => usedCategories.has(token.key)),
+      legend: WRITING_MAP_LEGEND,
       annotation_count: payload.annotations.length,
       text_is_intact: segmentsPreserveText(candidate, segments),
     },

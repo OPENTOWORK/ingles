@@ -443,7 +443,7 @@ export default function LevelsStatsChartsCarousel({
           box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
           font-size: 0.8125rem;
           line-height: 1.45;
-          font-family: 'Segoe UI', system-ui, sans-serif;
+          font-family: var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
           min-width: 160px;
         }
         .lsp-chart-tip__head {
@@ -557,7 +557,7 @@ export default function LevelsStatsChartsCarousel({
           font-weight: 800;
           font-size: 0.875rem;
           color: #fff;
-          background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+          background: #6a4be8;
           border-radius: 10px;
           box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }

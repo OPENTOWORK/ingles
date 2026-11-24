@@ -294,7 +294,6 @@ export default function B2ExamPracticeModuleNav({
         onClick={handlePreviousExercise}
         disabled={!canGoPreviousExercise}
       >
-        <NavChevron direction="back" />
         <span className="levels-exam-module-nav__label">{previousExerciseLabel}</span>
       </button>
     ) : null;
@@ -307,17 +306,9 @@ export default function B2ExamPracticeModuleNav({
         onClick={onCheckAnswers}
         disabled={checkAnswersDisabled}
       >
-        <span
-          className="levels-exam-module-nav__chevron levels-exam-module-nav__chevron--spacer"
-          aria-hidden
-        />
         <span className="levels-exam-module-nav__label">
           {checkAnswersLabel || (isEn ? 'Check' : 'Corregir')}
         </span>
-        <span
-          className="levels-exam-module-nav__chevron levels-exam-module-nav__chevron--spacer"
-          aria-hidden
-        />
       </button>
     ) : null;
 
@@ -345,7 +336,6 @@ export default function B2ExamPracticeModuleNav({
               }
             >
               <span className="levels-exam-module-nav__label">{continueLabel}</span>
-              <NavChevron direction="forward" />
             </button>
           </div>
         ) : null}
@@ -388,20 +378,20 @@ export default function B2ExamPracticeModuleNav({
         </div>
       ) : null}
 
-      {useBalancedLayout && exercisePairBlock ? (
+      {useBalancedLayout && !showCheckAnswersButton && exercisePairBlock ? (
         <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--center">
           {exercisePairBlock}
         </div>
       ) : null}
 
-      {!useBalancedLayout && showCheckAnswersButton && typeof onCheckAnswers === 'function' ? (
+      {showCheckAnswersButton && typeof onCheckAnswers === 'function' ? (
         <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--center">
           {checkAnswersButton}
         </div>
       ) : null}
 
       <div className="levels-exam-module-nav__zone levels-exam-module-nav__zone--forward">
-        {useBalancedLayout && checkAnswersButton ? checkAnswersButton : null}
+        {useBalancedLayout && showCheckAnswersButton ? exercisePairBlock : null}
 
         {!useCenteredPartNav &&
         !useBalancedLayout &&

@@ -5,15 +5,15 @@ import SiteMascot from '@/components/SiteMascot';
 
 const ACCENTS = {
   violet: {
-    gradient: 'linear-gradient(135deg, #4f46e5 0%, #7c3aed 48%, #a855f7 100%)',
-    glow: 'rgba(99, 102, 241, 0.45)',
+    gradient: 'linear-gradient(135deg, #6a4be8 0%, #6a4be8 48%, #6a4be8 100%)',
+    glow: 'rgba(106, 75, 232, 0.45)',
   },
   sky: {
     gradient: 'linear-gradient(135deg, #38bdf8 0%, #7dd3fc 55%, #bae6fd 100%)',
     glow: 'rgba(56, 189, 248, 0.38)',
   },
   ocean: {
-    gradient: 'linear-gradient(135deg, #0284c7 0%, #2563eb 52%, #6366f1 100%)',
+    gradient: 'linear-gradient(135deg, #0284c7 0%, #2563eb 52%, #6a4be8 100%)',
     glow: 'rgba(37, 99, 235, 0.4)',
   },
   emerald: {
@@ -25,12 +25,12 @@ const ACCENTS = {
     glow: 'rgba(245, 158, 11, 0.42)',
   },
   rose: {
-    gradient: 'linear-gradient(135deg, #e11d48 0%, #db2777 50%, #a855f7 100%)',
+    gradient: 'linear-gradient(135deg, #e11d48 0%, #db2777 50%, #6a4be8 100%)',
     glow: 'rgba(219, 39, 119, 0.38)',
   },
   indigo: {
-    gradient: 'linear-gradient(135deg, #4338ca 0%, #6366f1 55%, #8b5cf6 100%)',
-    glow: 'rgba(99, 102, 241, 0.42)',
+    gradient: 'linear-gradient(135deg, #5634d6 0%, #6a4be8 55%, #6a4be8 100%)',
+    glow: 'rgba(106, 75, 232, 0.42)',
   },
   lime: {
     gradient: 'linear-gradient(135deg, #65a30d 0%, #84cc16 48%, #22c55e 100%)',

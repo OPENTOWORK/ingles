@@ -321,7 +321,7 @@ export default function AdminExamPartPromptBox({
                     </span>
                     <input
                       type="color"
-                      defaultValue="#4f46e5"
+                      defaultValue="#6a4be8"
                       onMouseDown={preventToolbarBlur}
                       onChange={(e) => userEditorRef.current?.applyColor(e.target.value)}
                       title={isEn ? 'More colors' : 'Más colores'}

@@ -22,8 +22,8 @@ export default function ExamPracticeSurfaceStyles() {
       }
 
       .levels-b2-practice[data-skill-theme='writing'] {
-        --practice-accent: #17a77b;
-        --practice-accent-soft: #effbf7;
+        --practice-accent: #1b9a62;
+        --practice-accent-soft: #f4faf6;
       }
 
       .levels-b2-practice[data-skill-theme='listening'] {

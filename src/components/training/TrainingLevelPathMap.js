@@ -504,8 +504,8 @@ export default function TrainingLevelPathMap({
                   x2={geometry.width}
                   y2={geometry.height}
                 >
-                  <stop offset="0%" stopColor="#6366f1" />
-                  <stop offset="100%" stopColor="#a855f7" />
+                  <stop offset="0%" stopColor="#6a4be8" />
+                  <stop offset="100%" stopColor="#6a4be8" />
                 </linearGradient>
               </defs>
               <path d={geometry.track} className={styles.pathTrack} />

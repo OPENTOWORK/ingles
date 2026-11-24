@@ -85,8 +85,8 @@
 }
 
 .search:focus {
-  outline: 2px solid #c7d2fe;
-  border-color: #818cf8;
+  outline: 2px solid #e0d6ff;
+  border-color: #a48fff;
 }
 
 .filters {
@@ -108,9 +108,9 @@
 }
 
 .filterActive {
-  color: #312e81;
+  color: #3d2398;
   background: #e0e7ff;
-  border-color: #c7d2fe;
+  border-color: #e0d6ff;
 }
 
 .summary {
@@ -210,7 +210,7 @@
   padding: 0 1rem;
   border: 0;
   border-radius: 999px;
-  background: #4f46e5;
+  background: var(--brand-purple, #6a4be8);
   color: #fff;
   font: inherit;
   font-size: 0.9rem;
@@ -262,8 +262,8 @@
 
 :global(body.reading-night-mode) .filterActive {
   color: #e0e7ff;
-  background: #312e81;
-  border-color: #6366f1;
+  background: #3d2398;
+  border-color: #6a4be8;
 }
 
 :global(body.reading-night-mode) .heading {

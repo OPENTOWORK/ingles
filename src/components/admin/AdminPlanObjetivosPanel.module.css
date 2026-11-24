@@ -72,7 +72,7 @@
 
 .viewBtnActive {
   background: #eef2ff;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .responseGrid {
@@ -103,7 +103,7 @@
   padding: 0.3rem 0.65rem;
   border-radius: 999px;
   background: #eef2ff;
-  color: #3730a3;
+  color: #4528c4;
   font-size: 0.8rem;
   font-weight: 700;
 }
@@ -268,9 +268,9 @@
 
 .tab {
   appearance: none;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #e0d6ff;
   background: #fff;
-  color: #5634d6;
+  color: #6a4be8;
   font-size: 0.95rem;
   font-weight: 700;
   padding: 0.55rem 1rem;
@@ -332,7 +332,7 @@
   padding: 0.6rem 0.75rem;
   border-radius: 0.65rem;
   background: #eef2ff;
-  color: #3730a3;
+  color: #4528c4;
   font-size: 0.85rem;
   line-height: 1.45;
 }
@@ -361,7 +361,7 @@
 }
 
 :global(body.reading-night-mode) .momentNote {
-  background: #312e81;
+  background: #3d2398;
   color: #e0e7ff;
 }
 
@@ -390,7 +390,7 @@
 }
 
 :global(body.reading-night-mode) .viewBtnActive {
-  background: #312e81;
+  background: #3d2398;
   color: #e0e7ff;
 }
 

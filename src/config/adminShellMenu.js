@@ -13,6 +13,18 @@ export const STAFF_TASKS_PANEL_ITEM = {
   label: 'Tareas',
 };
 
+/** El rol de profesor no ve el índice de administración: solo su panel y el calendario. */
+export const TEACHER_SHELL_MENU_SECTIONS = [
+  {
+    id: 'profesor',
+    title: null,
+    items: [
+      { href: '/teacher', label: 'Profesor' },
+      { href: '/teacher/calendario', label: 'Calendario' },
+    ],
+  },
+];
+
 /** Índice lateral del shell admin agrupado por departamento. */
 export const ADMIN_SHELL_MENU_SECTIONS = [
   {
@@ -62,6 +74,11 @@ export const ADMIN_SHELL_MENU_SECTIONS = [
       { href: '/admin', label: 'Analíticas' },
       { href: '/admin/marketing', label: 'Marketing' },
       { href: '/admin/plan-objetivos', label: 'Formularios' },
+      {
+        href: '/admin/plan-marketing',
+        label: 'Plan de marketing',
+        accessHref: '/admin/marketing',
+      },
       { href: '/admin/notificaciones', label: 'Notificaciones' },
       {
         href: '/soporte/correos',

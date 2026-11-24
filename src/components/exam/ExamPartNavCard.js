@@ -32,9 +32,6 @@ export default function ExamPartNavCard({
           </span>
         ) : null}
       </span>
-      <span className={styles.partArrow} aria-hidden>
-        →
-      </span>
     </>
   );
 

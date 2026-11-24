@@ -48,22 +48,19 @@ export async function POST(req) {
     }
 
     const seenAt = new Date().toISOString();
-    const { error: insertError } = await db.from('marketing_visitors').insert({
-      visitor_id: visitorId,
-      last_ip: ip,
-      last_seen_at: seenAt,
-    });
-    if (insertError && insertError.code !== '23505') {
-      console.error('[activity/visitor] insert', insertError);
+    // Upsert: un INSERT repetido chocaba con visitor_id y Postgres lo registraba
+    // como error 23505 aunque la visita siguiera bien.
+    const { error: upsertError } = await db.from('marketing_visitors').upsert(
+      {
+        visitor_id: visitorId,
+        last_ip: ip,
+        last_seen_at: seenAt,
+      },
+      { onConflict: 'visitor_id' },
+    );
+    if (upsertError) {
+      console.error('[activity/visitor] upsert', upsertError);
       return NextResponse.json({ error: 'No se pudo guardar la visita.' }, { status: 500 });
-    }
-
-    const { error: ipError } = await db
-      .from('marketing_visitors')
-      .update({ last_ip: ip, last_seen_at: seenAt })
-      .eq('visitor_id', visitorId);
-    if (ipError) {
-      console.error('[activity/visitor] last_ip', ipError);
     }
 
     const auth = await getSupabaseUserFromRequest(req);

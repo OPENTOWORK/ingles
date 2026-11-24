@@ -41,14 +41,14 @@
   min-height: 2.6rem;
   padding: 0 1.15rem;
   border-radius: 999px;
-  background: #5b4bb7;
+  background: #6a4be8;
   color: #fff;
   font-weight: 700;
   text-decoration: none;
 }
 
 .cta:hover {
-  background: #4c3ea0;
+  background: #5634d6;
 }
 
 .dismiss {

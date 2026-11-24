@@ -1,8 +1,8 @@
 .page {
   --nl-ink: #1c1542;
   --nl-muted: #5c5678;
-  --nl-purple: #6d4aff;
-  --nl-purple-dark: #5b3ae0;
+  --nl-purple: #6a4be8;
+  --nl-purple-dark: #6a4be8;
   --nl-line: #e6e0f5;
   --nl-soft: #f4f0ff;
   position: relative;
@@ -145,7 +145,7 @@
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: 24px;
   background: #fff;
-  box-shadow: 0 18px 50px rgba(88, 62, 180, 0.08);
+  box-shadow: 0 18px 50px rgba(86, 52, 214, 0.08);
 }
 
 .formTitle {
@@ -199,7 +199,7 @@
 }
 
 .input:focus {
-  outline: 3px solid rgba(109, 74, 255, 0.18);
+  outline: 3px solid rgba(106, 75, 232, 0.18);
   border-color: var(--nl-purple);
 }
 
@@ -324,7 +324,7 @@
   padding: 2rem 1.5rem 1.7rem;
   border-radius: 28px;
   background: #fff;
-  box-shadow: 0 24px 60px rgba(70, 42, 160, 0.12);
+  box-shadow: 0 24px 60px rgba(69, 40, 196, 0.12);
   text-align: left;
 }
 
@@ -367,7 +367,7 @@
 }
 
 :global(body.reading-night-mode) .page::before {
-  background: radial-gradient(closest-side, rgba(90, 60, 180, 0.35), rgba(18, 16, 31, 0));
+  background: radial-gradient(closest-side, rgba(86, 52, 214, 0.35), rgba(18, 16, 31, 0));
 }
 
 :global(body.reading-night-mode) .card,

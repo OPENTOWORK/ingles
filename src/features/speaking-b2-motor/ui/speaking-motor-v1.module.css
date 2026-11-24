@@ -55,7 +55,7 @@
 
 .button {
   border: 0;
-  background: #4f46e5;
+  background: var(--brand-purple, #6a4be8);
   color: #fff;
 }
 
@@ -99,7 +99,7 @@
   margin: 0 0 1rem;
   padding: 1rem;
   background: #f8fafc;
-  border-left: 4px solid #4f46e5;
+  border-left: 4px solid #6a4be8;
   border-radius: 12px;
   font-size: 1.15rem;
 }

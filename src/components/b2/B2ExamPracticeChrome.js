@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import SiteMascot from '@/components/SiteMascot';
 import ExamSkillIcon from '@/components/exam/ExamSkillIcon';
 import { B2ExamSlotProgressPicker } from '@/components/b2/B2ExamSlotProgressPicker';
-import LevelsCategoryTimer from '@/components/levels/LevelsCategoryTimer';
 import LevelsPartScorePanel from '@/components/levels/LevelsPartScorePanel';
 import LevelsPartFinishBanner from '@/components/levels/LevelsPartFinishBanner';
 import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
@@ -22,12 +21,7 @@ import {
   ExamPracticePhoneStepLoading,
 } from '@/components/exam/ExamPracticePhoneSteps';
 import ExamPracticeSkillPicker from '@/components/niveles/ExamPracticeSkillPicker';
-import SkillExerciseStarsBadge from '@/components/exam/SkillExerciseStarsBadge';
 import { getLevelSkillPracticeHref } from '@/data/nivelesLevelHub';
-import {
-  getB2StarsWayColumnBySkillRoute,
-  getB2StarsWayPageHref,
-} from '@/data/b2StarsWayConfig';
 import { ExamPracticeToolsProvider } from '@/context/ExamPracticeToolsContext';
 import {
   ExamPracticeSidebarSlotsProvider,
@@ -38,9 +32,8 @@ import { resolvePartFinishNoticeFromProgress } from '@/utils/partFinishNoticeDis
 import { isAdminRole } from '@/utils/authRoles';
 import { useExamSlotPlanGating } from '@/hooks/useExamSlotPlanGating';
 import { usePhoneViewport } from '@/hooks/usePhoneViewport';
-import { starsFromPartExerciseScore, formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
+import { formatSkillExerciseLabel } from '@/utils/skillPartFirstProgress';
 import { getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
-import { starsFromLevelsEarnedMax } from '@/lib/levelsStars';
 
 /** Split chrome titles like "B2 Reading and Use of English Practice" for structured header UI. */
 function parsePracticeChromeTitle(title = '') {
@@ -223,10 +216,6 @@ export function B2ExamPracticeChrome({
   examPracticeOpen,
   title,
   subtitle,
-  timerLabel,
-  timerControls = null,
-  timerHidden = false,
-  onToggleTimerHidden = null,
   focusMode = false,
   onExitFocusMode = null,
   refreshLabel,
@@ -396,49 +385,11 @@ export function B2ExamPracticeChrome({
   const statusAreaRef = useRef(null);
   const statusRowRef = useRef(null);
   const workBodyRef = useRef(null);
-  const [internalTimerHidden, setInternalTimerHidden] = useState(false);
-  const sessionTimerHideEnabled = effectiveTimerVariant === 'session';
-  const resolvedTimerHidden = sessionTimerHideEnabled
-    ? onToggleTimerHidden
-      ? timerHidden
-      : internalTimerHidden
-    : timerHidden;
-  const handleToggleTimerHidden = useCallback(() => {
-    if (onToggleTimerHidden) onToggleTimerHidden();
-    else setInternalTimerHidden((prev) => !prev);
-  }, [onToggleTimerHidden]);
-  const showTimerHideToggle = sessionTimerHideEnabled || Boolean(onToggleTimerHidden);
   const showSidebarTopRail =
     compactSkillHeader && studyNotesPlacement === 'sidebar-top';
 
-  const skillExercisePartNumber = skillExercisePartNumberEarly;
-
-
-  const skillExerciseStars = useMemo(() => {
-    if (!skillExercisePartNumber || !examSlot) return 0;
-
-    const partScore = progressBySlot?.[examSlot]?.parts?.[skillExercisePartNumber];
-    const savedStars = starsFromPartExerciseScore(partScore);
-
-    if (partScoreMetrics?.questionsAnswered > 0 || partScoreMetrics?.correctCount > 0) {
-      const isV2 = Number(partScoreMetrics.scoringVersion) === 2;
-      const earned = isV2
-        ? partScoreMetrics.pointsEarned ?? partScoreMetrics.correctCount
-        : partScoreMetrics.correctCount;
-      const max = isV2
-        ? partScoreMetrics.maxPoints ?? partScoreMetrics.totalSlots
-        : partScoreMetrics.totalSlots;
-      const liveStars = starsFromLevelsEarnedMax(earned, max);
-      if (liveStars > 0) return liveStars;
-    }
-
-    return savedStars;
-  }, [skillExercisePartNumber, examSlot, progressBySlot, partScoreMetrics]);
-
-  const showSkillExerciseStars =
-    showLevelPicker && compactSkillHeader && Boolean(skillExercisePartNumber);
-  const showSkillExerciseStarsInHeader =
-    showSkillExerciseStars && studyNotesPlacement === 'header';
+  const showSkillExerciseStars = false;
+  const showSkillExerciseStarsInHeader = false;
   const showSkillExerciseStarsInSidebar =
     showSkillExerciseStars && studyNotesPlacement === 'sidebar-top';
   const showSkillExerciseStarsInSidebarTop = showSkillExerciseStarsInSidebar;
@@ -452,26 +403,7 @@ export function B2ExamPracticeChrome({
     (!showCombinedToolbar && showStatusRow);
   const showToolbarFinishNotice = showCombinedToolbar && showHeaderFinishNotice;
 
-  const starsWayHref = useMemo(() => {
-    if (!showSkillExerciseStars || !skillRoute || !skillExercisePartNumber || !examSlot) {
-      return null;
-    }
-    const column = getB2StarsWayColumnBySkillRoute(skillRoute);
-    if (!column) return null;
-    return getB2StarsWayPageHref({
-      skillKey: column.key,
-      globalPartNumber: skillExercisePartNumber,
-      examSlot,
-    });
-  }, [showSkillExerciseStars, skillRoute, skillExercisePartNumber, examSlot]);
-
-  const exerciseStarsBadge = showSkillExerciseStars ? (
-    <SkillExerciseStarsBadge
-      stars={skillExerciseStars}
-      href={starsWayHref}
-      lang={lang === 'es' ? 'es' : 'en'}
-    />
-  ) : null;
+  const exerciseStarsBadge = null;
 
   const showExerciseStarsInToolbarRow =
     showSkillExerciseStarsInSidebarTop && showCombinedToolbar;
@@ -589,25 +521,7 @@ export function B2ExamPracticeChrome({
     showLevelPicker,
   ]);
 
-  const categoryTimerEl = showCategoryTimer ? (
-    <LevelsCategoryTimer
-      compact={compactPracticeToolbar}
-      categoryLabel=""
-      timeLabel={timerLabel}
-      variant={effectiveTimerVariant}
-      lang={lang === 'es' ? 'es' : 'en'}
-      isRunning={timerControls?.isRunning}
-      isPaused={timerControls?.isPaused}
-      isIdle={timerControls?.isIdle}
-      isStopped={timerControls?.isStopped}
-      onStart={timerControls?.start}
-      onPause={timerControls?.pause}
-      onResume={timerControls?.resume}
-      onStop={timerControls?.stop}
-      timerHidden={resolvedTimerHidden}
-      onToggleTimerHidden={showTimerHideToggle ? handleToggleTimerHidden : null}
-    />
-  ) : null;
+  const categoryTimerEl = null;
 
   const useFoldableSkillNav =
     compactSkillHeader && showLevelPicker && levelSlug && skillRoute && !focusMode;
@@ -868,13 +782,8 @@ export function B2ExamPracticeChrome({
               compactToolbar={compactPracticeToolbar}
               testLabel={examSlot ? formatSkillExerciseLabel(examSlot, lang) : null}
               menuHeaderTools={headerTools}
-              menuTimerTools={compactPracticeToolbar ? (
-                <div className="practice-timer-menu-actions">
-                  {timerControls?.stop ? <button type="button" onClick={timerControls.stop}>{lang === 'es' ? 'Detener cronómetro' : 'Stop timer'}</button> : null}
-                  {showTimerHideToggle ? <button type="button" onClick={handleToggleTimerHidden}>{lang === 'es' ? (resolvedTimerHidden ? 'Mostrar cronómetro' : 'Ocultar cronómetro') : (resolvedTimerHidden ? 'Show timer' : 'Hide timer')}</button> : null}
-                </div>
-              ) : null}
-              menuExerciseStars={exerciseStarsBadge}
+              menuTimerTools={null}
+              menuExerciseStars={null}
               lang={lang}
               overlayContainerRef={workPanelRef}
               sideRailMountRef={sideRailMountRef}
@@ -933,31 +842,12 @@ export function B2ExamPracticeChrome({
                 <div className="levels-b2-practice__toolbar-band-main">
                   <div className="levels-b2-practice__toolbar-band-start">
                     <div className="levels-b2-practice__study-tools">{headerTools}</div>
-                    {showSkillExerciseStarsInHeader ? (
-                      <div className="levels-b2-practice__exercise-stars">
-                        <SkillExerciseStarsBadge
-                          stars={skillExerciseStars}
-                          href={starsWayHref}
-                          lang={lang}
-                        />
-                      </div>
-                    ) : null}
                     {examModeSaveControls ? (
                       <div className="levels-b2-practice__exam-save-tools">{examModeSaveControls}</div>
                     ) : null}
                   </div>
                   <div className="levels-b2-practice__toolbar-band-end">
                     {categoryTimerEl}
-                    {showExerciseStarsInToolbarRow ? (
-                      <div className="levels-b2-practice__toolbar-inline-stars">
-                        <SkillExerciseStarsBadge
-                          stars={skillExerciseStars}
-                          href={starsWayHref}
-                          lang={lang === 'es' ? 'es' : 'en'}
-                          variant="toolbar"
-                        />
-                      </div>
-                    ) : null}
                   </div>
                 </div>
                 {!showSidebarTopRail && showToolbarBandAside ? (
@@ -984,15 +874,6 @@ export function B2ExamPracticeChrome({
               <div className="levels-b2-practice__status-tools-row">
                 {headerTools ? (
                   <div className="levels-b2-practice__study-tools">{headerTools}</div>
-                ) : null}
-                {showSkillExerciseStarsInHeader ? (
-                  <div className="levels-b2-practice__exercise-stars">
-                    <SkillExerciseStarsBadge
-                      stars={skillExerciseStars}
-                      href={starsWayHref}
-                      lang={lang}
-                    />
-                  </div>
                 ) : null}
                 {examModeSaveControls ? (
                   <div className="levels-b2-practice__exam-save-tools">{examModeSaveControls}</div>

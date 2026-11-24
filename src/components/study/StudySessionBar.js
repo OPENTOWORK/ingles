@@ -162,7 +162,7 @@ export default function StudySessionBar({ session }) {
 
   if (activeSession) {
     return (
-      <div className={styles.bar} role="status">
+      <div className={`${styles.bar} study-session-float`} role="status">
         <span className={styles.live}>
           <span className={styles.liveDot} aria-hidden="true" />
           Estudiando
@@ -188,7 +188,7 @@ export default function StudySessionBar({ session }) {
     <>
       <button
         type="button"
-        className={`${styles.launcher} study-session-launcher`}
+        className={`${styles.launcher} study-session-launcher study-session-float`}
         onClick={() => setAskingConsent(true)}
         aria-label="Start studying"
       >

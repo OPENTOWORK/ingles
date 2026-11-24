@@ -36,12 +36,12 @@
 
 /* Header */
 .exam-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   border-radius: 16px;
   padding: 2rem;
   margin-bottom: 2rem;
   color: white;
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 30px rgba(106, 75, 232, 0.3);
   position: relative;
   overflow: hidden;
 }
@@ -205,7 +205,7 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   border-radius: 0 2px 2px 0;
 }
 
@@ -228,7 +228,7 @@
   color: var(--text);
   font-size: 1.3rem;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -292,14 +292,14 @@
 .option:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: rgba(106, 75, 232, 0.3);
 }
 
 .option.selected {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   color: white;
-  border-color: #667eea;
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+  border-color: #6a4be8;
+  box-shadow: 0 8px 24px rgba(106, 75, 232, 0.3);
   transform: translateY(-2px);
 }
 
@@ -524,8 +524,8 @@
 
 .text-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #6a4be8;
+  box-shadow: 0 0 0 3px rgba(106, 75, 232, 0.1);
   transform: translateY(-1px);
 }
 
@@ -583,8 +583,8 @@
 
 .writing-textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #6a4be8;
+  box-shadow: 0 0 0 3px rgba(106, 75, 232, 0.1);
   transform: translateY(-1px);
 }
 
@@ -697,14 +697,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   color: white;
-  box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 16px rgba(106, 75, 232, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 24px rgba(106, 75, 232, 0.4);
 }
 
 .btn-secondary {
@@ -2653,7 +2653,7 @@
   font-weight: 700;
   font-size: 1rem;
   color: #374151;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2745,7 +2745,7 @@
 .reading-text-modern .text-content p strong {
   color: #1f2937;
   font-weight: 700;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2758,7 +2758,7 @@
 .questions-section-header h2 {
   font-size: 1.8rem;
   font-weight: 800;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -2792,7 +2792,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

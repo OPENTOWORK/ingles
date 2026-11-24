@@ -149,7 +149,7 @@ export const AUTOMATED_EMAIL_TRIGGER_OPTIONS = [
     value: AUTOMATED_EMAIL_TRIGGERS.WEEKLY_TUESDAY_CHALLENGE,
     label: 'Reto del martes',
     description:
-      'Cada martes a las 10:00 (hora de Madrid), a todos los usuarios con el email confirmado. Muestra el hueco de la semana, pide que elijan antes de entrar y deja la explicación al final. El botón abre Training.',
+      'Cada martes a las 10:00 (hora de Madrid), a todos los usuarios con el email confirmado. Si ese martes no sale, el mismo reto se manda a la mañana siguiente. El martes siguiente cambia la pregunta. La explicación queda para cuando eligen una opción. El botón abre Training.',
   },
   {
     value: AUTOMATED_EMAIL_TRIGGERS.ADMIN_REGISTRATION_NOTICE,

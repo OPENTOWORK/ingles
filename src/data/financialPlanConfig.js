@@ -679,9 +679,9 @@ export function formatPlanPriceLabel(plan, billingCycle = 'monthly') {
 }
 
 /** Total anual que se muestra en la tarjeta. El cobro real lo fija Stripe. */
-export function plusAnnualChargeEuros(plan) {
+export function plusAnnualChargeEuros(plan, now = new Date()) {
   if (plan?.slug === 'premium') {
-    return isBlackFridayOfferActive() ? PLUS_ANNUAL_BF_PRICE : PLUS_ANNUAL_REGULAR_PRICE;
+    return isBlackFridayOfferActive(now) ? PLUS_ANNUAL_BF_PRICE : PLUS_ANNUAL_REGULAR_PRICE;
   }
   return Math.round(getPlanMonthlyPrice(plan, 'annual') * 12 * 100) / 100;
 }

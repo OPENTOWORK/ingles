@@ -55,9 +55,9 @@
 }
 
 .roleActive {
-  border-color: #818cf8;
+  border-color: #a48fff;
   background: var(--admin-primary-soft, #eef2ff);
-  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 4px 14px rgba(106, 75, 232, 0.1);
 }
 
 .roleMeta {
@@ -187,8 +187,8 @@
 }
 
 :global(body.reading-night-mode) .roleActive {
-  background: #312e81;
-  border-color: #818cf8;
+  background: #3d2398;
+  border-color: #a48fff;
   color: #f8fafc;
 }
 

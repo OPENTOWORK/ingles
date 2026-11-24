@@ -6,7 +6,7 @@ import { AUTOMATED_EMAIL_TRIGGERS } from '@/lib/automatedEmailTriggers';
 import { renderEmailTemplate, splitEmailDeliveryMeta } from '@/lib/renderEmailTemplate';
 import {
   buildWeeklyChallengeEmailVariables,
-  isWeeklyTuesdaySendTime,
+  shouldSendWeeklyChallenge,
   renderWeeklyChallengeEmail,
 } from '@/lib/weeklyChallengeEmail';
 
@@ -49,7 +49,7 @@ test('tuesday challenge mail lets you mark an option and checks it on the site',
   assert.match(email.html, /Ese B2 está cada vez más cerca\./);
   assert.match(email.html, /01 &nbsp; CALENTAMOS/);
   assert.match(email.html, /¿Cuál pondrías tú\?/);
-  assert.match(email.html, /I’m not used to <span style="color:#5634d6;">_____<\/span> English every day\./);
+  assert.match(email.html, /I’m not used to <span style="color:#6a4be8;">_____<\/span> English every day\./);
   assert.match(email.html, /mascot\/3\.png/);
   assert.match(email.html, /Chequear respuesta/);
   assert.match(email.html, /Acepto el reto/);
@@ -65,12 +65,15 @@ test('tuesday challenge mail lets you mark an option and checks it on the site',
 });
 
 test('the same challenge stays all week and the next tuesday moves on', () => {
-  assert.equal(isWeeklyTuesdaySendTime(FIRST_TUESDAY), true);
-  assert.equal(isWeeklyTuesdaySendTime(THURSDAY_SAME_WEEK), false);
-  assert.equal(isWeeklyTuesdaySendTime(MONDAY_BEFORE), false);
-  assert.equal(isWeeklyTuesdaySendTime(MONDAY_AFTER), false);
-  assert.equal(isWeeklyTuesdaySendTime(new Date('2026-10-27T08:00:00.000Z')), false);
-  assert.equal(isWeeklyTuesdaySendTime(new Date('2026-10-27T09:00:00.000Z')), true);
+  assert.equal(shouldSendWeeklyChallenge(FIRST_TUESDAY), true);
+  assert.equal(shouldSendWeeklyChallenge(new Date('2026-10-20T07:00:00.000Z')), false);
+  assert.equal(shouldSendWeeklyChallenge(THURSDAY_SAME_WEEK), true);
+  assert.equal(shouldSendWeeklyChallenge(MONDAY_BEFORE), true);
+  assert.equal(shouldSendWeeklyChallenge(MONDAY_AFTER), true);
+  assert.equal(shouldSendWeeklyChallenge(new Date('2026-10-27T08:00:00.000Z')), false);
+  assert.equal(shouldSendWeeklyChallenge(new Date('2026-10-27T09:00:00.000Z')), true);
+  assert.equal(shouldSendWeeklyChallenge(new Date('2026-10-27T10:00:00.000Z')), true);
+  assert.equal(shouldSendWeeklyChallenge(new Date('2026-10-28T07:00:00.000Z')), true);
 
   const thisWeek = buildWeeklyChallengeEmailVariables(THURSDAY_SAME_WEEK);
   const opening = buildWeeklyChallengeEmailVariables(FIRST_TUESDAY);

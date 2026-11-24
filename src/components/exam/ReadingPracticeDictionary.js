@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { buildClientApiUrl } from '@/utils/clientApiUrl';
 import { supabase } from '@/utils/supabaseClient';
 import { lookupVocabularySound } from '@/lib/vocabularyStore';
+import { DICTIONARY_ENABLED } from '@/config/dictionaryFeature';
 
 const HIGHLIGHT_KEY = 'reading-dictionary';
 const VISIBLE_MS = 12000;
@@ -72,7 +73,12 @@ function popupPosition(rect) {
   return { top, left, width };
 }
 
-export default function ReadingPracticeDictionary({ lang = 'en', alwaysOn = false }) {
+export default function ReadingPracticeDictionary(props) {
+  if (!DICTIONARY_ENABLED) return null;
+  return <ReadingPracticeDictionaryLive {...props} />;
+}
+
+function ReadingPracticeDictionaryLive({ lang = 'en', alwaysOn = false }) {
   const en = lang === 'en';
   const [active, setActive] = useState(alwaysOn);
   const [popup, setPopup] = useState(null);

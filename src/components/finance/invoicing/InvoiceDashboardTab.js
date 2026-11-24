@@ -100,7 +100,7 @@ export default function InvoiceDashboardTab({ direction = 'sale', reloadToken = 
             collected: point.collected,
           }))}
           series={[
-            { key: 'billed', label: isPurchase ? 'Facturado' : 'Facturado', color: '#6366f1' },
+            { key: 'billed', label: isPurchase ? 'Facturado' : 'Facturado', color: '#6a4be8' },
             { key: 'collected', label: isPurchase ? 'Pagado' : 'Cobrado', color: '#14b8a6' },
           ]}
         />

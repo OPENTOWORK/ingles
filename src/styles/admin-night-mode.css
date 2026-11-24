@@ -9,7 +9,7 @@ body.reading-night-mode .admin-shell-page {
   --admin-border-strong: #64748b;
   --admin-text: #f8fafc;
   --admin-text-muted: #94a3b8;
-  --admin-primary-soft: #312e81;
+  --admin-primary-soft: #3d2398;
   --admin-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
   --admin-shadow-md: 0 10px 30px rgba(0, 0, 0, 0.28);
   --admin-shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.4);
@@ -18,7 +18,7 @@ body.reading-night-mode .admin-shell-page {
 
 body.reading-night-mode .admin-shell__main {
   background:
-    radial-gradient(1200px 420px at 100% -10%, rgba(99, 102, 241, 0.14), transparent 55%),
+    radial-gradient(1200px 420px at 100% -10%, rgba(106, 75, 232, 0.14), transparent 55%),
     radial-gradient(900px 360px at -5% 0%, rgba(14, 165, 233, 0.08), transparent 50%),
     var(--admin-bg);
 }
@@ -33,8 +33,8 @@ body.reading-night-mode .admin-subsection {
 }
 
 body.reading-night-mode .admin-bulk-bar {
-  border-color: #4338ca;
-  background: linear-gradient(90deg, #312e81 0%, #1e1b4b 100%);
+  border-color: #5634d6;
+  background: linear-gradient(90deg, #3d2398 0%, #1e1b4b 100%);
 }
 
 body.reading-night-mode .admin-bulk-bar__label {
@@ -76,7 +76,7 @@ body.reading-night-mode .admin-config-notice--ok {
 }
 
 body.reading-night-mode .admin-config-page code {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(106, 75, 232, 0.2);
   color: #c4b5fd;
 }
 

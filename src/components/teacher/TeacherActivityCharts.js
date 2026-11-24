@@ -111,7 +111,7 @@ export default function TeacherActivityCharts({
                     }
                   />
                   <Legend />
-                  <Bar yAxisId="users" dataKey="userCount" name="Alumnos activos" fill="#6366f1" />
+                  <Bar yAxisId="users" dataKey="userCount" name="Alumnos activos" fill="#6a4be8" />
                   <Line
                     yAxisId="time"
                     type="monotone"

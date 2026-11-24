@@ -70,7 +70,7 @@
   margin-top: 0.25rem;
   font-size: 0.68rem;
   font-weight: 600;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .tabList {
@@ -218,8 +218,8 @@
 
 .filterField select:focus,
 .filterField input:focus {
-  outline: 2px solid #c7d2fe;
-  border-color: #818cf8;
+  outline: 2px solid #e0d6ff;
+  border-color: #a48fff;
 }
 
 .filterActions {
@@ -246,7 +246,7 @@
 }
 
 .btnPrimary:hover:not(:disabled) {
-  background: #5634d6;
+  background: #6a4be8;
 }
 
 .btnPrimary:disabled {
@@ -702,7 +702,7 @@
   padding: 0.25rem 0.55rem;
   border-radius: 999px;
   background: #eef2ff;
-  color: #5634d6;
+  color: #6a4be8;
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -830,7 +830,7 @@
   font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .trackingScoreLabel {
@@ -872,7 +872,7 @@
 }
 
 .areaChipStudy {
-  color: #5634d6;
+  color: #6a4be8;
   background: #eef2ff;
   border-color: #e0e7ff;
 }
@@ -906,7 +906,7 @@
   background: #eef2ff;
   font-size: 0.82rem;
   line-height: 1.55;
-  color: #312e81;
+  color: #3d2398;
 }
 
 .registrationToolbar {
@@ -930,8 +930,8 @@
 
 .registrationFilterActive {
   background: #eef2ff;
-  border-color: #c7d2fe;
-  color: #3730a3;
+  border-color: #e0d6ff;
+  color: #4528c4;
 }
 
 .registrationTableWrap {
@@ -978,11 +978,11 @@
   align-items: center;
   justify-content: center;
   min-width: 3.25rem;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #e0d6ff;
   background: #eef2ff;
   padding: 0.28rem 0.7rem;
   border-radius: 999px;
-  color: #3730a3;
+  color: #4528c4;
   font: inherit;
   font-size: 0.75rem;
   font-weight: 800;
@@ -993,7 +993,7 @@
 
 .journeyLink:hover:not(:disabled) {
   background: #e0e7ff;
-  border-color: #a5b4fc;
+  border-color: #b6a6ff;
 }
 
 .journeyLink:disabled {
@@ -1174,18 +1174,18 @@
 }
 
 :global(body.reading-night-mode) .journeyLink {
-  background: #312e81;
-  border-color: #4c1d95;
-  color: #c7d2fe;
+  background: #3d2398;
+  border-color: #3d2398;
+  color: #e0d6ff;
 }
 
 :global(body.reading-night-mode) .journeyLink:hover:not(:disabled) {
-  background: #3730a3;
+  background: #4528c4;
   color: #e0e7ff;
 }
 
 :global(body.reading-night-mode) .journeyProfileLink {
-  color: #a5b4fc;
+  color: #b6a6ff;
 }
 
 :global(body.reading-night-mode) .pageItem {
@@ -1196,8 +1196,8 @@
 :global(body.reading-night-mode) .areaChipStudy,
 :global(body.reading-night-mode) .registrationFilterActive,
 :global(body.reading-night-mode) .monitoredSummary {
-  background: #312e81;
-  border-color: #4c1d95;
+  background: #3d2398;
+  border-color: #3d2398;
   color: #c4b5fd;
 }
 

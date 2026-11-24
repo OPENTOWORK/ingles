@@ -41,7 +41,7 @@
 .progressBar {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  background: #6a4be8;
   transition: width 0.25s ease;
 }
 
@@ -59,7 +59,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #6366f1;
+  color: #6a4be8;
 }
 
 .question {
@@ -98,18 +98,18 @@
 }
 
 .option:hover {
-  border-color: #a5b4fc;
+  border-color: #b6a6ff;
 }
 
 .optionSelected {
-  border-color: #6366f1;
+  border-color: #6a4be8;
   background: #eef2ff;
 }
 
 .option input {
   flex-shrink: 0;
   margin-top: 0.2rem;
-  accent-color: #6366f1;
+  accent-color: #6a4be8;
 }
 
 .optionText {
@@ -139,9 +139,9 @@
 }
 
 .input:focus {
-  outline: 2px solid #818cf8;
+  outline: 2px solid #a48fff;
   outline-offset: 1px;
-  border-color: #6366f1;
+  border-color: #6a4be8;
 }
 
 .error {
@@ -171,12 +171,12 @@
 
 .primary {
   border: none;
-  background: #4f46e5;
+  background: var(--brand-purple, #6a4be8);
   color: #fff;
 }
 
 .primary:hover:not(:disabled) {
-  background: #4338ca;
+  background: var(--brand-purple-hover, #5634d6);
 }
 
 .primary:disabled,
@@ -234,7 +234,7 @@
   background: #eef2ff;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #3730a3;
+  color: #4528c4;
 }
 
 @media (max-width: 480px) {
@@ -266,8 +266,8 @@
 }
 
 :global(body.reading-night-mode) .optionSelected {
-  border-color: #818cf8;
-  background: #312e81;
+  border-color: #a48fff;
+  background: #3d2398;
 }
 
 :global(body.reading-night-mode) .formTitle,
@@ -285,6 +285,6 @@
 }
 
 :global(body.reading-night-mode) .introList li {
-  background: #312e81;
+  background: #3d2398;
   color: #e0e7ff;
 }

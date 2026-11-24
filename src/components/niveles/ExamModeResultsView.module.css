@@ -1,7 +1,7 @@
 .page {
   min-height: calc(100vh - 4rem);
   padding: clamp(1.25rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.5rem) 3rem;
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
   background: linear-gradient(165deg, #f5f3ff 0%, #faf5ff 42%, #ede9fe 100%);
 }
 
@@ -21,7 +21,7 @@
 }
 
 .breadcrumb a {
-  color: #7c3aed;
+  color: #6a4be8;
   text-decoration: none;
   font-weight: 500;
 }
@@ -41,10 +41,10 @@
   padding: clamp(1.5rem, 4vw, 2.25rem);
   border-radius: 20px;
   background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
-  border: 1px solid rgba(167, 139, 250, 0.35);
+  border: 1px solid rgba(164, 143, 255, 0.35);
   box-shadow:
-    0 1px 2px rgba(91, 33, 182, 0.04),
-    0 12px 40px rgba(124, 58, 237, 0.1);
+    0 1px 2px rgba(86, 52, 214, 0.04),
+    0 12px 40px rgba(106, 75, 232, 0.1);
 }
 
 .heroRingCorner {
@@ -68,7 +68,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #7c3aed;
+  color: #6a4be8;
 }
 
 .title {
@@ -217,7 +217,7 @@
 }
 
 .ringFg--mid {
-  stroke: #8b5cf6;
+  stroke: #6a4be8;
 }
 
 .ringFg--low {
@@ -295,9 +295,9 @@
 .card {
   background: #fff;
   border-radius: 16px;
-  border: 1px solid #e9d5ff;
+  border: 1px solid #e0d6ff;
   padding: 1.15rem 1.25rem 1.25rem;
-  box-shadow: 0 2px 12px rgba(91, 33, 182, 0.05);
+  box-shadow: 0 2px 12px rgba(86, 52, 214, 0.05);
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
@@ -337,7 +337,7 @@
 
 .card:hover {
   border-color: #c4b5fd;
-  box-shadow: 0 6px 24px rgba(91, 33, 182, 0.08);
+  box-shadow: 0 6px 24px rgba(86, 52, 214, 0.08);
 }
 
 .cardHead {
@@ -505,7 +505,7 @@
 }
 
 .progressFill--mid {
-  background: linear-gradient(90deg, #a78bfa, #7c3aed);
+  background: linear-gradient(90deg, #a48fff, #6a4be8);
 }
 
 .progressFill--low {
@@ -650,7 +650,7 @@
 
 .badge--active {
   background: #ede9fe;
-  color: #6d28d9;
+  color: #5634d6;
 }
 
 .badge--pending {
@@ -693,7 +693,7 @@
 }
 
 .verdict--progress .verdictIcon {
-  background: #8b5cf6;
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -822,8 +822,8 @@
   padding: 1rem 1.15rem;
   border-radius: 12px;
   background: #fff;
-  border: 1px solid #e9d5ff;
-  box-shadow: 0 2px 10px rgba(91, 33, 182, 0.04);
+  border: 1px solid #e0d6ff;
+  box-shadow: 0 2px 10px rgba(86, 52, 214, 0.04);
 }
 
 .improveItem--reading {
@@ -953,7 +953,7 @@
   padding: 0.55rem 1rem;
   border-radius: 10px;
   background: #f5f3ff;
-  color: #6d28d9;
+  color: #5634d6;
   font-size: 0.875rem;
   font-weight: 700;
   text-decoration: none;
@@ -1022,12 +1022,12 @@
 }
 
 .footerLink--primary {
-  background: #7c3aed;
+  background: #6a4be8;
   color: #fff;
 }
 
 .footerLink--primary:hover {
-  background: #6d28d9;
+  background: #5634d6;
 }
 
 .footerLink--secondary {
@@ -1043,7 +1043,7 @@
 .footerLink--repeat {
   background: #fff;
   color: #0f172a;
-  border: 2px solid #8b5cf6;
+  border: 2px solid #6a4be8;
 }
 
 .footerLink--repeat:hover {

@@ -91,7 +91,7 @@ function OpenTextExercise({
           style={{
             marginTop: '1rem',
             padding: '0.65rem 1.25rem',
-            background: value.trim() ? '#667eea' : '#e2e8f0',
+            background: value.trim() ? '#6a4be8' : '#e2e8f0',
             color: value.trim() ? 'white' : '#a0aec0',
             border: 'none',
             borderRadius: '10px',

@@ -14,13 +14,13 @@ const PRACTICE_ENTRY_LINKS = [
     level: 'B2',
     label: 'Reading & Use of English',
     href: '/niveles/b2/exam-reading-and-use-of-english',
-    accent: '#7c3aed',
+    accent: '#6a4be8',
   },
   {
     level: 'B2',
     label: 'Use of English',
     href: '/niveles/b2/exam-useofenglish',
-    accent: '#6366f1',
+    accent: '#6a4be8',
   },
   {
     level: 'B2',

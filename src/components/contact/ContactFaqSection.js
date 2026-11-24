@@ -164,12 +164,12 @@ export default function ContactFaqSection({
         }
         .contact-faq__filter:hover {
           border-color: #cdbfff;
-          color: #5634d6;
+          color: #6a4be8;
         }
         .contact-faq__filter--active {
           border-color: #6a4be8;
           background: #f4f0ff;
-          color: #5634d6;
+          color: #6a4be8;
         }
         .contact-faq__filter-count {
           min-width: 1.25rem;
@@ -213,7 +213,7 @@ export default function ContactFaqSection({
           font-family: inherit;
         }
         .contact-faq__item--open .contact-faq__trigger {
-          background: linear-gradient(180deg, #f4f0ff 0%, #fff 100%);
+          background: #f8f5ff;
         }
         .contact-faq__chevron {
           flex-shrink: 0;

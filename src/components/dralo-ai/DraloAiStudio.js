@@ -24,12 +24,12 @@ import {
 import { formatWritingFeedbackDisplay } from '@/lib/formatWritingFeedback';
 
 const ACCENT_SOLID = {
-  indigo: '#6366f1',
+  indigo: '#6a4be8',
   ocean: '#2563eb',
   amber: '#d97706',
   emerald: '#059669',
   rose: '#e11d48',
-  violet: '#7c3aed',
+  violet: '#6a4be8',
 };
 
 async function callDraloAi(payload) {

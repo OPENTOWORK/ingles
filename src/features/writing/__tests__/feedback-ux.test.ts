@@ -760,15 +760,11 @@ test('M — screen-reader labels say what the mark is and which words it covers'
   assert.match(result, /writing-result__sr-only/);
 });
 
-test('M — the reading order is result, strengths, writing, criteria, review, action', () => {
+test('M — the reading order is the corrected writing, then the four criteria', () => {
   const page = readComponent('WritingFeedbackPage.js');
   const order = [
-    'WritingGlobalResult',
-    'WritingOpeningStrengths',
     'WritingMapCanvas',
     'writing-v3__criteria',
-    'WritingReviewNext',
-    'writing-v3__cta',
   ];
   let cursor = page.indexOf('return (');
   for (const marker of order) {

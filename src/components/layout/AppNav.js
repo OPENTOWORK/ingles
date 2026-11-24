@@ -2,7 +2,7 @@
 
 import NavLink from '@/components/layout/NavLink';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMountedSearchParams } from '@/hooks/useMountedSearchParams';
 import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
@@ -31,6 +31,8 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
   const searchParams = useMountedSearchParams();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopHoverMenu, setDesktopHoverMenu] = useState(null);
+  const toggleRef = useRef(null);
+  const closeRef = useRef(null);
 
   const { locked: examStrategiesPlanLocked } = useExamStrategiesAccess({ userRole, session });
   const navModel = useMemo(() => {
@@ -58,6 +60,26 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
   }, [mobileOpen]);
 
   useEffect(() => {
+    if (!mobileOpen) return undefined;
+    window.dispatchEvent(new CustomEvent('dralo-close-profile-drawer'));
+    closeRef.current?.focus();
+    const onKeyDown = (event) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      setMobileOpen(false);
+      toggleRef.current?.focus();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [mobileOpen]);
+
+  useEffect(() => {
+    const closeForProfile = () => setMobileOpen(false);
+    window.addEventListener('dralo-profile-drawer-open', closeForProfile);
+    return () => window.removeEventListener('dralo-profile-drawer-open', closeForProfile);
+  }, []);
+
+  useEffect(() => {
     const desktop = window.matchMedia('(min-width: 901px)');
     const closeOnDesktop = () => {
       if (desktop.matches) setMobileOpen(false);
@@ -75,8 +97,9 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
     }
   }, [pathname, searchParams.toString()]);
 
-  const closeMobile = () => {
+  const closeMobile = (restoreFocus = false) => {
     setMobileOpen(false);
+    if (restoreFocus) toggleRef.current?.focus();
   };
 
   const closeDesktopDropdowns = () => {
@@ -115,6 +138,7 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
     <>
       {showMenuButton ? (
         <button
+          ref={toggleRef}
           type="button"
           className="app-nav__toggle"
           aria-expanded={mobileOpen}
@@ -385,7 +409,7 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
         className={`app-nav__backdrop${mobileOpen ? ' is-visible' : ''}`}
         aria-hidden={!mobileOpen}
         tabIndex={mobileOpen ? 0 : -1}
-        onClick={closeMobile}
+        onClick={() => closeMobile(true)}
       />
       ) : null}
 
@@ -394,11 +418,20 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
         id="app-mobile-nav"
         className={`app-nav__drawer${mobileOpen ? ' is-open' : ''}`}
         aria-hidden={!mobileOpen}
+        role="dialog"
+        aria-modal={mobileOpen}
+        aria-label="Site menu"
       >
         <div className="app-nav__drawer-head">
           <span className="app-nav__drawer-title">Menu</span>
-          <button type="button" className="app-nav__drawer-close" onClick={closeMobile} aria-label="Close">
-            ✕
+          <button
+            ref={closeRef}
+            type="button"
+            className="app-nav__drawer-close"
+            onClick={() => closeMobile(true)}
+            aria-label="Close menu"
+          >
+            ×
           </button>
         </div>
 
@@ -406,8 +439,9 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
           <AppSharedDrawerNav
             navModel={navModel}
             linkClass={mobileLinkClass}
-            onNavigate={closeMobile}
+            onNavigate={() => closeMobile(false)}
             onLogout={onLogout}
+            hidePricingAndNight
           />
         </nav>
       </aside>

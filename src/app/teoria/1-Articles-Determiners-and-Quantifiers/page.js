@@ -38,7 +38,7 @@ const ArticlesPage = () => {
         
         <div style={{ display: 'grid', gap: '1rem', marginBottom: '1.5rem' }}>
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>🔤 A / An (Indefinite Articles)</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>🔤 A / An (Indefinite Articles)</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.75rem' }}>
               They are used with singular countable nouns when we talk about something for the first time or in a general way.
             </p>
@@ -63,7 +63,7 @@ const ArticlesPage = () => {
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>🎯 The (Definite Article)</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>🎯 The (Definite Article)</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.75rem' }}>
               It is used when we refer to something specific that we already know or that is unique.
             </p>

@@ -31,8 +31,9 @@ import WritingMapBottomSheet from './WritingMapBottomSheet';
 export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
   const [state, dispatch] = useReducer(selectionReducer, initialViewportWidth, initialSelectionState);
   const containerRef = useRef(null);
+  const textRef = useRef(null);
   const markRefs = useRef(new Map());
-  const [flipped, setFlipped] = useState(false);
+  const [bubbleTop, setBubbleTop] = useState(0);
 
   const activeItems = state.active_group_id ? map.groups[state.active_group_id] : null;
   const surfaceId = state.active_group_id
@@ -83,20 +84,15 @@ export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
     previousActive.current = null;
   }, [state.active_group_id, state.presentation, state.return_focus_group_id]);
 
-  // The bubble opens to the right of the mark unless that would leave the reading
-  // column, in which case it is flipped. Measured, never guessed from the index.
+  // The bubble sits beside the text, level with the highlighted sentence.
   useLayoutEffect(() => {
-    if (!state.active_group_id || state.presentation !== 'bubble') {
-      setFlipped(false);
-      return;
-    }
+    if (!state.active_group_id || state.presentation !== 'bubble') return;
     const mark = markRefs.current.get(state.active_group_id);
-    const container = containerRef.current;
-    if (!mark || !container) return;
-    const markBox = mark.getBoundingClientRect();
-    const containerBox = container.getBoundingClientRect();
-    setFlipped(markBox.left + 360 > containerBox.right);
-  }, [state.active_group_id, state.presentation, setFlipped]);
+    const text = textRef.current;
+    if (!mark || !text) return;
+    const top = mark.getBoundingClientRect().top - text.getBoundingClientRect().top;
+    setBubbleTop(Math.max(0, top));
+  }, [state.active_group_id, state.presentation]);
 
   const registerMark = useCallback((groupId) => (node) => {
     if (node) markRefs.current.set(groupId, node);
@@ -112,47 +108,43 @@ export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
         const items = map.groups[segment.group_id] ?? [];
         const open = isOpen(state, segment.group_id);
         return (
-          <span className="writing-map__anchor" key={`m-${segment.start}-${segment.group_id}`}>
-            <WritingMapAnnotation
-              ref={registerMark(segment.group_id)}
-              segment={segment}
-              items={items}
-              open={open}
-              bubbleId={surfaceId}
-              onActivate={activate}
-            />
-            {open && state.presentation === 'bubble' ? (
-              <WritingMapBubble
-                id={surfaceId}
-                items={items}
-                labelId={`${surfaceId}-quote`}
-                flipped={flipped}
-                onClose={dismiss}
-              />
-            ) : null}
-          </span>
+          <WritingMapAnnotation
+            key={`m-${segment.start}-${segment.group_id}`}
+            ref={registerMark(segment.group_id)}
+            segment={segment}
+            items={items}
+            open={open}
+            bubbleId={surfaceId}
+            onActivate={activate}
+          />
         );
       }),
-    [map.segments, map.groups, state, surfaceId, flipped, activate, dismiss, registerMark],
+    [map.segments, map.groups, state, surfaceId, activate, registerMark],
   );
+
+  const showSideBubble = Boolean(activeItems && state.presentation === 'bubble');
 
   return (
     <section className="writing-map" aria-labelledby="writing-map-title">
-      <div className="writing-map__header">
-        <p className="levels-exam-split__section-title" id="writing-map-title">
-          Your writing
-        </p>
-        <p className="writing-map__hint">
-          {map.annotation_count} marked{' '}
-          {map.annotation_count === 1 ? 'moment' : 'moments'} in your text. Select any
-          highlighted words to read the feedback.
-        </p>
-      </div>
-
-      <WritingMapLegend legend={map.legend} />
-
-      <div className="writing-map__canvas" ref={containerRef}>
-        <div className="writing-map__text">{nodes}</div>
+      <h2 className="writing-map__title" id="writing-map-title">
+        Your corrected writing
+      </h2>
+      <div
+        className={`writing-map__canvas${showSideBubble ? ' writing-map__canvas--with-bubble' : ''}`}
+        ref={containerRef}
+      >
+        <WritingMapLegend legend={map.legend} />
+        <div className="writing-map__text" ref={textRef}>{nodes}</div>
+        {showSideBubble ? (
+          <div className="writing-map__aside">
+            <WritingMapBubble
+              id={surfaceId}
+              items={activeItems}
+              top={bubbleTop}
+              onClose={dismiss}
+            />
+          </div>
+        ) : null}
         {activeItems && state.presentation === 'sheet' ? (
           <WritingMapBottomSheet id={surfaceId} items={activeItems} onClose={dismiss} />
         ) : null}
@@ -162,8 +154,7 @@ export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
 }
 
 /**
- * The legend names every category present in this response. It is what makes the
- * marks readable without relying on colour perception at all.
+ * Every colour category is listed, even when this essay does not use all of them.
  */
 export function WritingMapLegend({ legend }) {
   if (!legend.length) return null;

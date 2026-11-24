@@ -40,7 +40,7 @@
   border-radius: 999px;
   border: 2px solid #e0d6ff;
   background: #fff;
-  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.12);
+  box-shadow: 0 6px 18px rgba(106, 75, 232, 0.12);
 }
 
 .billingToggleBtn {
@@ -59,13 +59,13 @@
 }
 
 .billingToggleBtn:hover {
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .billingToggleBtnActive {
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  background: #6a4be8;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.32);
+  box-shadow: 0 4px 12px rgba(106, 75, 232, 0.32);
 }
 
 .billingToggleBtnActive:hover {
@@ -159,15 +159,15 @@
 .cardPopular {
   border: 2px solid #6a4be8;
   box-shadow:
-    0 0 0 1px rgba(99, 102, 241, 0.15),
-    0 16px 40px rgba(99, 102, 241, 0.18);
+    0 0 0 1px rgba(106, 75, 232, 0.15),
+    0 16px 40px rgba(106, 75, 232, 0.18);
   transform: translateY(-4px);
 }
 
 .cardAnnual {
-  border: 2px solid #734A91;
-  background: linear-gradient(180deg, #F1D7FF 0%, #ffffff 42%);
-  box-shadow: 0 16px 40px rgba(115, 74, 145, 0.22);
+  border: 2px solid #6a4be8;
+  background: linear-gradient(180deg, #f0ebff 0%, #ffffff 42%);
+  box-shadow: 0 16px 40px rgba(106, 75, 232, 0.22);
 }
 
 .cardRenewal {
@@ -175,7 +175,7 @@
   font-size: 0.82rem;
   line-height: 1.4;
   font-weight: 700;
-  color: #3b2463;
+  color: #3d2398;
   text-align: center;
 }
 
@@ -184,7 +184,7 @@
   width: min(40rem, 100%);
   margin: 14px auto 0;
   padding: 12px 14px;
-  border: 1px solid #E0B0FF;
+  border: 1px solid #cdbfff;
   border-radius: 16px;
   background: #ffffff;
   text-align: left;
@@ -203,18 +203,18 @@
 
 .bfCompareRow span:first-child {
   font-weight: 800;
-  color: #734A91;
+  color: #6a4be8;
 }
 
 .bfCompareClose {
   margin: 4px 0 0;
   font-size: 0.95rem;
   font-weight: 800;
-  color: #734A91;
+  color: #6a4be8;
 }
 
 .cardSelected {
-  outline: 3px solid rgba(99, 102, 241, 0.35);
+  outline: 3px solid rgba(106, 75, 232, 0.35);
   outline-offset: 2px;
 }
 
@@ -233,12 +233,12 @@
 }
 
 .badgePopular {
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  background: #6a4be8;
   color: #fff;
 }
 
 .badgeValue {
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -267,7 +267,7 @@
 .cardPriceAmount {
   font-size: 1.75rem;
   font-weight: 900;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .cardPricePeriod {
@@ -312,7 +312,7 @@
   margin-top: 6px;
   line-height: 1.25;
   text-align: center;
-  color: #6d28d9;
+  color: #5634d6;
 }
 
 .cardPriceAnnual {
@@ -320,7 +320,7 @@
   margin-top: 6px;
   font-size: 1rem;
   font-weight: 800;
-  color: #734A91;
+  color: #6a4be8;
 }
 
 .cardTagline {
@@ -383,7 +383,7 @@
   border-radius: 999px;
   border: 1.5px solid #e0d6ff;
   background: #fff;
-  color: #5634d6;
+  color: #6a4be8;
   font-size: 0.88rem;
   font-weight: 800;
   text-align: center;
@@ -395,14 +395,14 @@
 .cardBtn:hover {
   background: #eef2ff;
   border-color: #cdbfff;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .cardBtnPrimary {
   border: none;
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  background: #6a4be8;
   color: #fff;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 8px 20px rgba(106, 75, 232, 0.35);
 }
 
 .cardBtnPrimary:hover {
@@ -493,7 +493,7 @@
 }
 
 .thCtaPopular {
-  background: linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, rgba(99, 102, 241, 0.02) 100%);
+  background: linear-gradient(180deg, rgba(106, 75, 232, 0.06) 0%, rgba(106, 75, 232, 0.02) 100%);
   border-left: 2px solid #6a4be8;
   border-right: 2px solid #6a4be8;
 }
@@ -509,7 +509,7 @@
 
 .thPlanPopular,
 .tdPopular {
-  background: linear-gradient(180deg, rgba(99, 102, 241, 0.06) 0%, rgba(99, 102, 241, 0.02) 100%);
+  background: linear-gradient(180deg, rgba(106, 75, 232, 0.06) 0%, rgba(106, 75, 232, 0.02) 100%);
 }
 
 .thPlan {
@@ -519,7 +519,7 @@
 
 .thPlanPopular {
   font-weight: 800;
-  color: #5634d6;
+  color: #6a4be8;
   border-left: 2px solid #6a4be8;
   border-right: 2px solid #6a4be8;
 }
@@ -597,7 +597,7 @@
   margin: 2px auto 0;
   line-height: 1.25;
   text-align: center;
-  color: #6d28d9;
+  color: #5634d6;
 }
 
 .founderPriceTitle {
@@ -625,7 +625,7 @@
   border-radius: 999px;
   background: #eef2ff;
   border: 1px solid #e0d6ff;
-  color: #5634d6;
+  color: #6a4be8;
   font-size: 0.7rem;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -683,7 +683,7 @@
   .billingToggle {
     padding: 3px;
     border-width: 1px;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.14);
+    box-shadow: 0 4px 12px rgba(106, 75, 232, 0.14);
   }
 
   .billingToggleBtn {
@@ -815,7 +815,7 @@
   .cardsNavBtnActive {
     border-color: #e0d6ff;
     background: #eef2ff;
-    color: #5634d6;
+    color: #6a4be8;
   }
 
   .checkoutError {
@@ -889,7 +889,7 @@
 }
 
 :global(body.reading-night-mode) .billingToggleBtnActive {
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -910,15 +910,15 @@
 }
 
 :global(body.reading-night-mode) .card:hover {
-  border-color: #818cf8;
-  box-shadow: 0 16px 40px rgba(99, 102, 241, 0.2);
+  border-color: #a48fff;
+  box-shadow: 0 16px 40px rgba(106, 75, 232, 0.2);
 }
 
 :global(body.reading-night-mode) .cardPopular {
-  border-color: #818cf8;
+  border-color: #a48fff;
   box-shadow:
-    0 0 0 1px rgba(129, 140, 248, 0.35),
-    0 16px 40px rgba(99, 102, 241, 0.28);
+    0 0 0 1px rgba(164, 143, 255, 0.35),
+    0 16px 40px rgba(106, 75, 232, 0.28);
 }
 
 :global(body.reading-night-mode) .cardPriceAmount {
@@ -956,13 +956,13 @@
 
 :global(body.reading-night-mode) .cardBtn:hover {
   background: #475569;
-  border-color: #818cf8;
+  border-color: #a48fff;
   color: #fff;
 }
 
 :global(body.reading-night-mode) .cardBtnPrimary {
   border: none;
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -988,7 +988,7 @@
 :global(body.reading-night-mode) .thCtaPopular,
 :global(body.reading-night-mode) .thPlanPopular,
 :global(body.reading-night-mode) .tdPopular {
-  background: linear-gradient(180deg, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0.06) 100%);
+  background: linear-gradient(180deg, rgba(106, 75, 232, 0.18) 0%, rgba(106, 75, 232, 0.06) 100%);
   border-color: #6a4be8;
 }
 
@@ -1005,14 +1005,14 @@
 }
 
 :global(body.reading-night-mode) .cellSoon {
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(106, 75, 232, 0.15);
   border-color: #6a4be8;
   color: #c4b5fd;
 }
 
 :global(body.reading-night-mode) .cardsNavBtnActive {
   border-color: #6a4be8;
-  background: rgba(99, 102, 241, 0.18);
+  background: rgba(106, 75, 232, 0.18);
   color: #c4b5fd;
 }
 

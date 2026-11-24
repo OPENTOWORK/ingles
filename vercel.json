@@ -9,11 +9,11 @@
     },
     {
       "path": "/api/cron/weekly-tuesday",
-      "schedule": "0 8,9 * * 2"
+      "schedule": "0 9 * * *"
     },
     {
       "path": "/api/cron/newsletter-monday",
-      "schedule": "0 8,9 * * 1"
+      "schedule": "0 9 * * 1"
     },
     {
       "path": "/api/cron/buzon-digest",

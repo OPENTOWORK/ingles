@@ -190,6 +190,7 @@ export default function AdminShellNav({
   userRole,
   collapsed,
   isAdminNavActive,
+  label = 'Módulos de administración',
 }) {
   const [orderedSections, setOrderedSections] = useState(menuSections);
   const sortDisabled = collapsed;
@@ -209,7 +210,7 @@ export default function AdminShellNav({
   };
 
   return (
-    <nav className={styles.nav} aria-label="Módulos de administración">
+    <nav className={styles.nav} aria-label={label}>
       {orderedSections.map((section) => (
         <NavSection
           key={section.id}

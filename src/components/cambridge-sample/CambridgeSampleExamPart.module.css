@@ -1,6 +1,6 @@
 .paper {
   width: 100%;
-  font-family: 'Segoe UI', system-ui, -apple-system, Arial, Helvetica, sans-serif;
+  font-family: var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
   color: #1a202c;
   line-height: 1.55;
   display: flex;
@@ -263,7 +263,7 @@
   padding: 0.05rem 0.45rem;
   border-radius: 6px;
   background: #e0e7ff;
-  color: #3730a3;
+  color: #4528c4;
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.04em;

@@ -84,7 +84,7 @@ export default function TrainingStatistics() {
       const sectionMax = levels.length * TRAINING_MASTERY_STARS;
       return {
         title: section.title,
-        color: section.color || '#6366f1',
+        color: section.color || '#6a4be8',
         from: section.from,
         to: section.to,
         completed: sectionCompleted,

@@ -11,6 +11,8 @@ import { usePartPracticeTimer } from '@/hooks/usePartPracticeTimer';
 import { getB2PartScoring } from '@/utils/levelsB2PartScoring';
 import { supabase } from '@/utils/supabaseClient';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
+import RuoeTestSelector from '@/app/niveles/b2/exam-reading/RuoeTestSelector';
+import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
 import { getFormattedEnunciado, omitSpeakingExaminerQuestionBlocks } from '@/utils/b2ExamPaperShared';
 import { formatLevelsPartDisplayName, getSkillLocalPartNumber, getSkillPartTabLabel, getSkillPartPracticeTitle } from '@/utils/formatLevelsPartDisplayName';
@@ -893,6 +895,24 @@ function B2SpeakingExamPracticeInner({ title, subtitle, loadingLabel, refreshLab
               <SkillPartPracticeHeader
                 title={selectedPartTitleParts.heading}
                 subtitle={selectedPartTitleParts.subtitle}
+                testSelector={
+                  isSkillPracticeSession && examSlotPickerProps.availableSlots.length > 1 ? (
+                    <RuoeTestSelector
+                      accent="speaking"
+                      currentSlot={Number(examSlot)}
+                      slots={examSlotPickerProps.availableSlots}
+                      planLockedSlots={skillNav.planLockedSlots}
+                      isSlotUnlocked={(slot) => isExerciseSlotUnlocked(
+                        scoring.progressBySlot,
+                        partNumber,
+                        slot,
+                        examSlotPickerProps.availableSlots,
+                        skillNav.slotUnlockOptions,
+                      )}
+                      onSelect={(slot) => skillNav.guardExamSlotSelect(slot, handleSelectExamSlot)}
+                    />
+                  ) : null
+                }
                 titleActions={
                   <SkillPartExerciseFavorite
                     show={showExerciseFavorite}
@@ -2199,7 +2219,7 @@ export default function B2SpeakingExamPractice(props) {
   return (
     <Suspense
       fallback={
-        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
+        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" }}>
           Loading speaking practice…
         </main>
       }

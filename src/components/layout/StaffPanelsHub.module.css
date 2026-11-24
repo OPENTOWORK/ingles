@@ -28,7 +28,7 @@
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgb(91 33 182 / 0.12);
+  box-shadow: 0 8px 24px rgb(86 52 214 / 0.12);
   border-color: rgb(196 181 253);
 }
 
@@ -39,7 +39,7 @@
   width: 3.25rem;
   height: 3.25rem;
   border-radius: 0.9rem;
-  color: rgb(91 33 182);
+  color: rgb(86 52 214);
 }
 
 .iconWrap svg {
@@ -54,12 +54,12 @@
 
 .accentViolet {
   background: rgb(237 233 254);
-  color: rgb(109 40 217);
+  color: rgb(86 52 214);
 }
 
 .accentIndigo {
   background: rgb(224 231 255);
-  color: rgb(67 56 202);
+  color: rgb(86 52 214);
 }
 
 .accentEmerald {
@@ -68,8 +68,8 @@
 }
 
 .accentPurple {
-  background: rgb(243 232 255);
-  color: rgb(126 34 206);
+  background: rgb(240 235 255);
+  color: rgb(86 52 214);
 }
 
 .accentAmber {

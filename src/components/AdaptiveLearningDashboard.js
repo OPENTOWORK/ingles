@@ -225,7 +225,7 @@ const AdaptiveLearningDashboard = ({ userId, onStudyPlanGenerated }) => {
                       <span style={{
                         fontSize: '0.8rem',
                         backgroundColor: '#e0e7ff',
-                        color: '#3730a3',
+                        color: '#4528c4',
                         padding: '0.25rem 0.5rem',
                         borderRadius: '4px',
                         fontWeight: 'bold'
@@ -390,7 +390,7 @@ const AdaptiveLearningDashboard = ({ userId, onStudyPlanGenerated }) => {
                         <span style={{
                           fontSize: '0.8rem',
                           backgroundColor: '#e0e7ff',
-                          color: '#3730a3',
+                          color: '#4528c4',
                           padding: '0.25rem 0.5rem',
                           borderRadius: '4px'
                         }}>

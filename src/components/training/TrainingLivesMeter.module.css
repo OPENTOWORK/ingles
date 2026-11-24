@@ -84,7 +84,7 @@
 }
 
 .primary {
-  background: #4f46e5;
+  background: var(--brand-purple, #6a4be8);
   color: #fff;
 }
 

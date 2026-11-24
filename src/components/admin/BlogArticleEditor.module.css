@@ -74,8 +74,8 @@
 .input:focus,
 .textarea:focus {
   outline: none;
-  border-color: #818cf8;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  border-color: #a48fff;
+  box-shadow: 0 0 0 3px rgba(106, 75, 232, 0.15);
 }
 
 .textarea {
@@ -144,7 +144,7 @@
   padding: 0.55rem 1rem;
   border-radius: 10px;
   background: #eef2ff;
-  color: #5634d6;
+  color: #6a4be8;
   font-weight: 600;
   font-size: 0.88rem;
   cursor: pointer;
@@ -162,9 +162,9 @@
   gap: 0.4rem;
   padding: 0.55rem 1rem;
   border-radius: 10px;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #e0d6ff;
   background: #fff;
-  color: #5634d6;
+  color: #6a4be8;
   font-weight: 600;
   font-size: 0.88rem;
   cursor: pointer;
@@ -215,7 +215,7 @@
 
 .imageMenuItem:hover {
   background: #eef2ff;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .fileInput {
@@ -249,7 +249,7 @@
   padding: 0.25rem 0.65rem;
   border-radius: 999px;
   background: #eef2ff;
-  color: #5634d6;
+  color: #6a4be8;
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;

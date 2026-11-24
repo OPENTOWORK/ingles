@@ -113,6 +113,7 @@ export default function AppSideMenuPanel({ defaultOpen = true }) {
             linkClass={linkClass}
             onNavigate={closeMenu}
             onLogout={handleLogout}
+            hidePricingAndNight
             draloVariant="side"
             guestEntryHref={null}
             onOpenTutorial={openTutorial}

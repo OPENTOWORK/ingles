@@ -310,28 +310,28 @@ const FutureTensesPage = () => {
       <TheorySection title="Key Words" icon="🔑">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Will:</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>Will:</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
               I think, probably, perhaps, maybe, in my opinion
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Going to:</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>Going to:</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
               I plan to, I intend to, look at, watch out, be careful
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Present Continuous (Future):</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>Present Continuous (Future):</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
               tomorrow, next week, tonight, this weekend, on Monday
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Present Simple (Future):</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>Present Simple (Future):</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
               at 6 PM, on schedule, according to the timetable
             </p>

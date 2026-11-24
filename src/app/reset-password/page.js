@@ -199,14 +199,14 @@ const authButtonStyle = {
   width: '100%',
   padding: '0.9rem 1.35rem',
   marginTop: '1.5rem',
-  background: 'linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%)',
+  background: '#6a4be8',
   color: '#fff',
   fontWeight: 700,
   fontSize: '1rem',
   border: 'none',
   borderRadius: '999px',
   cursor: 'pointer',
-  boxShadow: '0 10px 24px rgba(99, 67, 236, 0.32)',
+  boxShadow: '0 10px 24px rgba(106, 75, 232, 0.32)',
 };
 
 const errorStyle = {

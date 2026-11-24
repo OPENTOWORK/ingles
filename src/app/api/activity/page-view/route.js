@@ -68,13 +68,22 @@ export async function POST(req) {
 
     if (validVisitor) {
       const seenAt = new Date().toISOString();
-      const { error: insertVisitorError } = await db.from('marketing_visitors').insert({
+      const visitorRow = {
         visitor_id: visitorId,
         last_seen_at: seenAt,
-        ...(user?.id ? { user_id: user.id, identified_at: seenAt } : {}),
+      };
+      if (user?.id) {
+        visitorRow.user_id = user.id;
+        visitorRow.identified_at = seenAt;
+      }
+      // Si el visitante ya existe no se toca la fila: así no se pisa el usuario
+      // vinculado y Postgres no registra un 23505.
+      const { error: upsertVisitorError } = await db.from('marketing_visitors').upsert(visitorRow, {
+        onConflict: 'visitor_id',
+        ignoreDuplicates: true,
       });
-      if (insertVisitorError && insertVisitorError.code !== '23505') {
-        console.error('[activity/page-view] visitor', insertVisitorError);
+      if (upsertVisitorError) {
+        console.error('[activity/page-view] visitor', upsertVisitorError);
       }
 
       const { error: pageError } = await db.from('marketing_visitor_pages').insert({

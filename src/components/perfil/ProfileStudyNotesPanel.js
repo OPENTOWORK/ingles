@@ -264,7 +264,7 @@ export default function ProfileStudyNotesPanel({ lang = 'en' }) {
           background: #f8fafc;
         }
         .note-save-btn:hover:not(:disabled) {
-          background: #5634d6;
+          background: #6a4be8;
         }
       `}</style>
     </ProfileCollapsibleSection>

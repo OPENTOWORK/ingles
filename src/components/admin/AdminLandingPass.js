@@ -131,7 +131,7 @@ export default function AdminLandingPass() {
                         tick={{ fill: '#334155', fontSize: 12 }}
                       />
                       <Tooltip />
-                      <Bar dataKey="total" name="Visitas" fill="#6366f1" radius={[0, 6, 6, 0]} />
+                      <Bar dataKey="total" name="Visitas" fill="#6a4be8" radius={[0, 6, 6, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>

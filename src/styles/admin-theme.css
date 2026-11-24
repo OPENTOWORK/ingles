@@ -14,7 +14,7 @@ body:not(.reading-night-mode):has(.admin-shell-page) {
   --admin-text: #1d1857;
   --admin-text-muted: #6c6989;
   --admin-primary: #6a4be8;
-  --admin-primary-hover: #5634d6;
+  --admin-primary-hover: #6a4be8;
   --admin-primary-soft: #f0ebff;
   --admin-shadow-sm: 0 8px 22px rgba(76, 56, 170, 0.06);
   --admin-shadow-md: 0 18px 44px rgba(76, 56, 170, 0.08);
@@ -227,8 +227,8 @@ body:not(.reading-night-mode):has(.admin-shell-page) {
   border-radius: 999px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
-  box-shadow: 0 10px 24px rgba(99, 67, 236, 0.28);
+  background: #6a4be8;
+  box-shadow: 0 10px 24px rgba(106, 75, 232, 0.28);
   transition:
     transform var(--admin-transition),
     box-shadow var(--admin-transition),
@@ -238,7 +238,7 @@ body:not(.reading-night-mode):has(.admin-shell-page) {
 .admin-shell__main button[class*='bg-indigo']:not(:disabled):hover,
 .admin-shell__main button[class*='bg-blue']:not(:disabled):hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 30px rgba(99, 67, 236, 0.38);
+  box-shadow: 0 14px 30px rgba(106, 75, 232, 0.38);
 }
 
 .admin-shell__main button:disabled {
@@ -301,7 +301,7 @@ body:not(.reading-night-mode) .admin-shell-page .page-hero__desc {
 }
 
 body:not(.reading-night-mode) .admin-shell-page .page-hero__eyebrow {
-  color: #5634d6;
+  color: #6a4be8;
   background: #f0ebff;
   border-color: #e0d6ff;
   backdrop-filter: none;
@@ -409,7 +409,7 @@ body:not(.reading-night-mode) .admin-shell-page a {
 .admin-bulk-bar__label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .admin-btn {
@@ -443,19 +443,19 @@ body:not(.reading-night-mode) .admin-shell-page a {
 
 .admin-btn--primary {
   border: none;
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
+  background: #6a4be8;
   color: #fff;
-  box-shadow: 0 10px 24px rgba(99, 67, 236, 0.28);
+  box-shadow: 0 10px 24px rgba(106, 75, 232, 0.28);
 }
 
 .admin-btn--primary:not(:disabled):hover {
-  background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
-  box-shadow: 0 14px 30px rgba(99, 67, 236, 0.38);
+  background: #6a4be8;
+  box-shadow: 0 14px 30px rgba(106, 75, 232, 0.38);
 }
 
 .admin-btn--secondary {
   background: var(--admin-surface);
-  color: #5634d6;
+  color: #6a4be8;
   border-color: #e0d6ff;
 }
 

@@ -394,7 +394,7 @@ function LoginPageInner() {
         <button
           type="button"
           onClick={() => confirmAppEntry(false)}
-          style={{ ...styles.button, marginTop: '0.75rem', background: '#fff', color: '#5333d6', border: '1.5px solid #cfc3ff', boxShadow: 'none' }}
+          style={{ ...styles.button, marginTop: '0.75rem', background: '#fff', color: '#6a4be8', border: '1.5px solid #cfc3ff', boxShadow: 'none' }}
         >
           Solo esta vez
         </button>
@@ -543,14 +543,14 @@ const styles = {
     width: "100%",
     padding: "0.9rem 1.35rem",
     marginTop: "1.5rem",
-    background: "linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%)",
+    background: "#6a4be8",
     color: "#fff",
     fontWeight: 700,
     fontSize: "1rem",
     border: "none",
     borderRadius: "999px",
     cursor: "pointer",
-    boxShadow: "0 10px 24px rgba(99, 67, 236, 0.32)",
+    boxShadow: "0 10px 24px rgba(106, 75, 232, 0.32)",
   },
   linkText: { marginTop: "1rem", fontSize: "0.92rem", textAlign: "center", color: "#6c6989" },
   link: { color: "#6a4be8", textDecoration: "none", fontWeight: 700 },

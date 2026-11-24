@@ -253,7 +253,7 @@
 }
 .exam-stats__kpi--violet .exam-stats__kpi-icon {
   background: #f5f3ff;
-  color: #7c3aed;
+  color: #6a4be8;
 }
 .exam-stats__kpi--amber .exam-stats__kpi-icon {
   background: #fffbeb;
@@ -688,7 +688,7 @@ body.reading-night-mode .exam-stats__kpi--green .exam-stats__kpi-icon {
 }
 
 body.reading-night-mode .exam-stats__kpi--violet .exam-stats__kpi-icon {
-  background: rgba(124, 58, 237, 0.2);
+  background: rgba(106, 75, 232, 0.2);
   color: #c4b5fd;
 }
 

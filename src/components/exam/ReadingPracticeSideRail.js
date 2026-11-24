@@ -4,7 +4,6 @@ import ExamPracticeSideRail from '@/components/exam/ExamPracticeSideRail';
 import B2ReadingStrategyPanel from '@/components/b2/B2ReadingStrategyPanel';
 import ReadingPracticeProgressPanel from '@/components/exam/ReadingPracticeProgressPanel';
 import ReadingPracticeToolsPanel from '@/components/exam/ReadingPracticeToolsPanel';
-import ReadingInstantFeedbackToggle from '@/components/exam/ReadingInstantFeedbackToggle';
 import ReadingPracticeDictionary from '@/components/exam/ReadingPracticeDictionary';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
 
@@ -41,7 +40,7 @@ export default function ReadingPracticeSideRail({
 
   return (
     <ExamPracticeSideRail
-      leading={hideTools ? null : <ReadingInstantFeedbackToggle lang={lang} />}
+      leading={null}
       topRail={topRail}
       strategy={
         strategyPack ? (

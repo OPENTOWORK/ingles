@@ -128,9 +128,9 @@ export default function HomePageClient() {
                   loop
                   playsInline
                   preload="metadata"
-                  aria-label="Práctica en Dralo: reading, writing, listening, quiz y training"
+                  aria-label="Práctica en Dralo: reading, writing, listening y training"
                 >
-                  <source src="/dralo-tour.mp4?v=4" type="video/mp4" />
+                  <source src="/dralo-tour.mp4?v=5" type="video/mp4" />
                 </video>
               </div>
             ) : null}

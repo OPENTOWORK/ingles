@@ -7,6 +7,7 @@ import {
   planHasLaunchPricing,
   planSlugFromDbRow,
 } from '@/data/financialPlanConfig';
+import { buildBlackFridayCampaign, buildPlusFreeMonthCampaign } from '@/lib/marketingCampaigns';
 import { getFoundingMemberSlotAvailability } from '@/lib/foundingMemberPlus';
 import { MAX_FOUNDING_SLOT } from '@/lib/foundingMemberPlus.rules';
 import { getProLaunchSlotAvailability } from '@/lib/proLaunchOffer';
@@ -346,6 +347,8 @@ export async function fetchMarketingPlanDashboard(db) {
         buildProLaunchCampaign(proLaunchSlots),
         buildFoundingLifetimePlusCampaign(foundingSlots),
         buildReferralProgramCampaign(invitations, referralSnapshot.tableReady),
+        buildBlackFridayCampaign(),
+        buildPlusFreeMonthCampaign(),
         {
           id: 'launch-pricing',
           nombre: LAUNCH_PRICE_LABEL,

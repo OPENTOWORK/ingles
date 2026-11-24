@@ -132,7 +132,7 @@
 }
 
 :global(body.reading-night-mode) .accentIndigo {
-  --icon-bg: #312e81;
+  --icon-bg: #3d2398;
 }
 
 :global(body.reading-night-mode) .accentEmerald {

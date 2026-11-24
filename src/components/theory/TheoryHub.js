@@ -91,7 +91,7 @@ export default function TheoryHub() {
           percent={globalPercent}
           label="Progreso total Theory"
           size="md"
-          accentColor="#7c3aed"
+          accentColor="#6a4be8"
         />
         <p className="theory-hub-global-progress__hint">
           Media de Grammar, Vocabulary y Pronunciation
@@ -123,7 +123,7 @@ export default function TheoryHub() {
               const isLocked = Boolean(unlock?.locked);
               const area = THEORY_SECTION_CATALOG.find((a) => a.key === topic.sectionKey);
               const percent = unlock?.percent ?? topicProgressByHref?.[topic.href] ?? 0;
-              const accent = area?.accent ?? '#7c3aed';
+              const accent = area?.accent ?? '#6a4be8';
 
               return (
                 <li
@@ -271,7 +271,7 @@ function TheoryHubStyles() {
         padding: 14px 16px;
         border-radius: 16px;
         background: linear-gradient(180deg, #f5f3ff 0%, #f8fafc 100%);
-        border: 1px solid rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(106, 75, 232, 0.15);
       }
       .theory-hub-page .theory-hub-global-progress__hint {
         margin: 8px 0 0;
@@ -329,11 +329,11 @@ function TheoryHubStyles() {
       }
       .theory-hub-page .theory-hub-topic-grid--search .theory-topic-card {
         text-decoration: none;
-        border-color: color-mix(in srgb, var(--section-accent, #7c3aed) 28%, #eaeaea);
+        border-color: color-mix(in srgb, var(--section-accent, #6a4be8) 28%, #eaeaea);
       }
       .theory-hub-page .theory-hub-topic-grid--search .theory-topic-card:hover {
-        border-color: var(--section-accent, #7c3aed);
-        background: color-mix(in srgb, var(--section-accent, #7c3aed) 6%, #fff);
+        border-color: var(--section-accent, #6a4be8);
+        background: color-mix(in srgb, var(--section-accent, #6a4be8) 6%, #fff);
         transform: translateY(-2px);
       }
       .theory-hub-page .theory-hub-topic-grid--search .card__section {

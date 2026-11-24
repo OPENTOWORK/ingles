@@ -54,7 +54,7 @@ export default function SkillPartExplanationsPanel({
   };
 
   return (
-    <div className="levels-exam-mcq-explanations">
+    <div className="levels-exam-mcq-explanations" data-ruoe-review-scroll={ruoeReview ? '' : undefined}>
       {!ruoeReview && <p className="levels-exam-mcq-explanations__title">{title}</p>}
       {sorted.map((entry) => {
         const isOpen = !!openExplanations[entry.questionKey];

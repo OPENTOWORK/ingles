@@ -1,8 +1,17 @@
+import {
+  PLUS_ANNUAL_BF_END_DATE,
+  PLUS_ANNUAL_REGULAR_PRICE,
+  formatEuroAmount,
+  plusBlackFridayAccessCopy,
+} from '@/data/financialPlanConfig';
+import { projectCalendarEvents } from '@/lib/projectRoadmap';
+
 /** Fechas de campaña para el calendario de marketing. España, con picos comerciales internacionales. */
 
 export const MARKETING_CATEGORIES = {
   comercial: { id: 'comercial', label: 'Comercial' },
   academia: { id: 'academia', label: 'Academia' },
+  proyecto: { id: 'proyecto', label: 'Proyecto' },
 };
 
 const MONTHS = [
@@ -152,6 +161,89 @@ function addDays(date, days) {
   return { year: next.getFullYear(), month: next.getMonth() + 1, day: next.getDate() };
 }
 
+/** La oferta de Plus anual tiene fin. El programa de referidos no entra: no caduca. */
+function blackFridayOfferEnd(year) {
+  const [endYear, month, day] = PLUS_ANNUAL_BF_END_DATE.split('-').map(Number);
+  if (year !== endYear) return null;
+  return {
+    year,
+    month,
+    day,
+    name: 'Fin Black Friday · Plan Plus anual',
+    category: 'comercial',
+    promoId: 'promo-black-friday-plus-year',
+    note: `Último día de la oferta: ${plusBlackFridayAccessCopy()}, en lugar de ${formatEuroAmount(PLUS_ANNUAL_REGULAR_PRICE)}.`,
+  };
+}
+
+/** Un color por promo, en este orden. La siguiente promo temporal usa el siguiente tono. */
+export const PROMO_COLORS = ['green', 'amber', 'blue', 'rose', 'teal', 'violet'];
+
+/**
+ * Promos con inicio y fin. El calendario pinta todos los días del tramo, no solo el cierre.
+ * El programa de referidos no está: no tiene fecha de fin.
+ * El color sale de la posición: no se repite mientras queden tonos libres.
+ */
+const PROMO_RANGES = [
+  {
+    id: 'promo-black-friday-plus-year',
+    name: 'Black Friday · Plan Plus anual',
+    start: '2026-11-18',
+    end: PLUS_ANNUAL_BF_END_DATE,
+    note: `Del 18 al 30 de noviembre: ${plusBlackFridayAccessCopy()}, en lugar de ${formatEuroAmount(PLUS_ANNUAL_REGULAR_PRICE)}.`,
+  },
+  {
+    id: 'promo-plus-free-month',
+    name: 'Te regalamos un mes gratis con tu Plan Plus',
+    start: '2026-12-01',
+    end: '2026-12-31',
+    published: false,
+    note: 'Sin publicar. En diciembre, un mes gratis con el Plan Plus.',
+  },
+];
+
+function splitYmd(value) {
+  const [year, month, day] = value.split('-').map(Number);
+  return { year, month, day };
+}
+
+/**
+ * @param {number} year
+ * @returns {Array<{ id: string, name: string, category: 'promo', startKey: string, endKey: string, start: { year: number, month: number, day: number }, end: { year: number, month: number, day: number }, note: string }>}
+ */
+export function getMarketingPromos(year) {
+  return PROMO_RANGES.filter((promo) => {
+    const start = splitYmd(promo.start);
+    const end = splitYmd(promo.end);
+    return year >= start.year && year <= end.year;
+  }).map((promo) => {
+    const index = PROMO_RANGES.findIndex((item) => item.id === promo.id);
+    return {
+      id: promo.id,
+      name: promo.name,
+      category: 'promo',
+      published: promo.published !== false,
+      color: PROMO_COLORS[index % PROMO_COLORS.length],
+      startKey: promo.start,
+      endKey: promo.end,
+      start: splitYmd(promo.start),
+      end: splitYmd(promo.end),
+      note: promo.note,
+    };
+  });
+}
+
+/** Si dos promos coinciden un día, manda la que empieza más tarde. */
+export function promoOnDay(promos, key) {
+  return promos
+    .filter((promo) => promoIncludesKey(promo, key))
+    .sort((a, b) => b.startKey.localeCompare(a.startKey))[0] || null;
+}
+
+export function promoIncludesKey(promo, key) {
+  return key >= promo.startKey && key <= promo.endKey;
+}
+
 function dateKey(date) {
   return `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`;
 }
@@ -196,17 +288,25 @@ export function getMarketingEvents(year) {
       ...friday,
       name: 'Black Friday',
       category: 'comercial',
+      promoId: 'promo-black-friday-plus-year',
       note: 'Mayor pico de descuento del año. Preparar la oferta en la primera quincena de noviembre.',
     },
     {
       ...monday,
       name: 'Cyber Monday',
       category: 'comercial',
+      promoId: 'promo-black-friday-plus-year',
       note: 'Lunes posterior al Black Friday. Sirve para alargar la misma promo un día más.',
     },
   ];
 
-  return [...FIXED_EVENTS.map((event) => ({ ...event, year })), ...variable]
+  const offerEnd = blackFridayOfferEnd(year);
+  return [
+    ...FIXED_EVENTS.map((event) => ({ ...event, year })),
+    ...variable,
+    ...(offerEnd ? [offerEnd] : []),
+    ...projectCalendarEvents(year),
+  ]
     .map((event) => ({
       ...event,
       id: `${event.category}-${dateKey(event)}-${event.name}`,

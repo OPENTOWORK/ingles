@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getAdminShellMenuSections } from '@/config/appNavMenu';
-import { getRoleNameByUserId } from '@/utils/authRoles';
+import { getRoleNameByUserId, isTeacherRole } from '@/utils/authRoles';
 import { getClientAuth } from '@/utils/getClientAuth';
 import RouteLoadingMascot from '@/components/RouteLoadingMascot';
 import AdminShellNav from '@/components/admin/AdminShellNav';
@@ -21,7 +21,14 @@ function normalizePath(path = '') {
 function isAdminNavActive(href, pathname) {
   const target = normalizePath(href);
   const current = normalizePath(pathname);
-  if (target === '/admin' || target === '/informatico' || target === '/soporte') return current === target;
+  if (
+    target === '/admin' ||
+    target === '/informatico' ||
+    target === '/soporte' ||
+    target === '/teacher'
+  ) {
+    return current === target;
+  }
   return current === target || current.startsWith(`${target}/`);
 }
 
@@ -32,6 +39,8 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
   const [collapsed, setCollapsed] = useState(false);
   const [permissionOverrides, setPermissionOverrides] = useState({});
   const menuSections = getAdminShellMenuSections(userRole, permissionOverrides);
+  const teacherShell = isTeacherRole(userRole);
+  const shellLabel = teacherShell ? 'Módulos de profesor' : 'Módulos de administración';
 
   useEffect(() => {
     try {
@@ -116,23 +125,23 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
       <div className={styles.layout}>
         <aside
           className={`${styles.sidebar}${collapsed ? ` ${styles.sidebarCollapsed}` : ''}`}
-          aria-label="Módulos de administración"
+          aria-label={shellLabel}
         >
           <div className={styles.sidebarTop}>
             {!collapsed ? (
               <div className={styles.sidebarHeader}>
-                <p className={styles.sidebarEyebrow}>Administración</p>
+                <p className={styles.sidebarEyebrow}>{teacherShell ? 'Profesor' : 'Administración'}</p>
                 <h1 className={styles.sidebarTitle}>Módulos</h1>
               </div>
             ) : (
-              <p className={styles.sidebarCollapsedLabel} aria-hidden>A</p>
+              <p className={styles.sidebarCollapsedLabel} aria-hidden>{teacherShell ? 'P' : 'A'}</p>
             )}
             <button
               type="button"
               className={styles.collapseBtn}
               onClick={toggleCollapsed}
               aria-expanded={!collapsed}
-              aria-label={collapsed ? 'Expandir menú de administración' : 'Minimizar menú de administración'}
+              aria-label={collapsed ? `Expandir ${shellLabel.toLowerCase()}` : `Minimizar ${shellLabel.toLowerCase()}`}
               title={collapsed ? 'Expandir menú' : 'Minimizar menú'}
             >
               <span aria-hidden>{collapsed ? '›' : '‹'}</span>
@@ -145,6 +154,7 @@ export default function AdminShell({ children, userRole: userRoleProp = '' }) {
             userRole={userRole}
             collapsed={collapsed}
             isAdminNavActive={isAdminNavActive}
+            label={shellLabel}
           />
         </aside>
 

@@ -29,7 +29,7 @@
   font-size: 0.68rem;
   font-weight: 700;
   color: #fff;
-  background: #7c3aed;
+  background: #6a4be8;
 }
 
 .closed {
@@ -71,7 +71,7 @@
 .bubbleMine {
   align-self: flex-end;
   background: #ede9fe;
-  color: #312e81;
+  color: #3d2398;
   border-bottom-right-radius: 0.2rem;
 }
 
@@ -110,7 +110,7 @@
 
 .textarea:focus {
   outline: 2px solid #c4b5fd;
-  border-color: #7c3aed;
+  border-color: #6a4be8;
 }
 
 .actions {
@@ -122,7 +122,7 @@
   padding: 0.45rem 0.85rem;
   border: 0;
   border-radius: 0.55rem;
-  background: #7c3aed;
+  background: #6a4be8;
   color: #fff;
   font-size: 0.78rem;
   font-weight: 700;

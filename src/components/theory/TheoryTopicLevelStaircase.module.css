@@ -187,7 +187,7 @@
 
 .emptyMascot {
   line-height: 0;
-  filter: drop-shadow(0 12px 28px rgba(99, 102, 241, 0.12));
+  filter: drop-shadow(0 12px 28px rgba(106, 75, 232, 0.12));
 }
 
 @media (max-width: 720px) {

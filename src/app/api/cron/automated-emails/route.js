@@ -5,6 +5,7 @@ import { runFoundingSurveyCampaign } from '@/lib/foundingSurveyServer';
 import { runConfirmationReminders } from '@/lib/confirmationReminderServer';
 import { runPracticeReminders } from '@/lib/practiceReminderServer';
 import { runBlackFridayEmailSequence } from '@/lib/blackFridayEmailSequence';
+import { runWeeklyTuesdayChallenge } from '@/lib/weeklyChallengeEmailServer';
 import { getSupabaseServiceRoleKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 
 export const dynamic = 'force-dynamic';
@@ -36,6 +37,12 @@ export async function GET(req) {
   const confirmationReminders = await runConfirmationReminders(adminClient);
   const practiceReminders = await runPracticeReminders(adminClient);
   const blackFriday = await runBlackFridayEmailSequence(adminClient);
+  let weeklyChallenge;
+  try {
+    weeklyChallenge = await runWeeklyTuesdayChallenge(adminClient);
+  } catch (err) {
+    weeklyChallenge = { sent: 0, error: err instanceof Error ? err.message : String(err) };
+  }
   const result = await processAutomatedEmailQueue(adminClient, { limit: 50 });
 
   return NextResponse.json({
@@ -44,5 +51,6 @@ export async function GET(req) {
     confirmationReminders,
     practiceReminders,
     blackFriday,
+    weeklyChallenge,
   });
 }

@@ -11,7 +11,7 @@
   align-items: center;
   gap: 0.4rem 0.55rem;
   padding: 0.45rem 0.55rem;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #e0d6ff;
   border-radius: 10px;
   background: #f8fafc;
 }
@@ -32,7 +32,7 @@
 }
 
 .toolBtn:hover {
-  border-color: #818cf8;
+  border-color: #a48fff;
   background: #eef2ff;
 }
 
@@ -73,7 +73,7 @@
 
 .swatch:hover {
   transform: scale(1.12);
-  box-shadow: 0 0 0 2px #c7d2fe;
+  box-shadow: 0 0 0 2px #e0d6ff;
 }
 
 .customColor {
@@ -105,10 +105,10 @@
   min-width: 2.35rem;
   height: 2rem;
   padding: 0 0.55rem;
-  border: 1px solid #a5b4fc;
+  border: 1px solid #b6a6ff;
   border-radius: 8px;
   background: #eef2ff;
-  color: #3730a3;
+  color: #4528c4;
   cursor: pointer;
   font-size: 0.78rem;
   font-weight: 800;
@@ -153,8 +153,8 @@
 }
 
 .editor:focus {
-  border-color: #818cf8;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18);
+  border-color: #a48fff;
+  box-shadow: 0 0 0 3px rgba(106, 75, 232, 0.18);
 }
 
 .editor:empty::before {

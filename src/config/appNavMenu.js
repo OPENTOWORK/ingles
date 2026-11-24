@@ -15,6 +15,7 @@ import { isExamTheoryPartTipsPath } from '@/lib/nivelesPartTipsRoutes';
 import { usesStudentContentRestrictions } from '@/constants/studentFeatureAccess';
 import { getExamStrategiesMenuItems } from '@/data/examSkillTheme';
 import { APP_ROUTES, isExamPracticeAppPath, isExamStrategiesPath } from '@/config/appRoutes';
+import { DICTIONARY_ENABLED } from '@/config/dictionaryFeature';
 import { STAFF_PANELS_HUB_PATH } from '@/config/staffPanelHub';
 import {
   permissionKeysToMenuItems,
@@ -25,6 +26,7 @@ import {
   ADMIN_SHELL_MENU_SECTIONS,
   STAFF_BUZON_PANEL_ITEM,
   STAFF_TASKS_PANEL_ITEM,
+  TEACHER_SHELL_MENU_SECTIONS,
   getAdminPanelMenuItems,
 } from '@/config/adminShellMenu';
 
@@ -251,7 +253,7 @@ export const DRALO_MENU_ITEMS = [
   { label: 'Grammar Coach', href: '/dralo-ai/grammar-coach' },
   { label: 'Pronunciation Coach', href: '/dralo-ai/pronunciation-coach' },
   { label: 'Dictionary', href: '/dralo-ai/dictionary' },
-];
+].filter((item) => DICTIONARY_ENABLED || item.href !== '/dralo-ai/dictionary');
 
 /** Dralo AI abierto para alumnos y staff. Otros roles sin identificar siguen bloqueados. */
 export function isDraloAiLockedForRole(userRole) {
@@ -307,6 +309,13 @@ function canViewAdminShell(roleName = '') {
 /** Índice lateral agrupado por departamento. Los módulos sin permiso se ven, bloqueados. */
 export function getAdminShellMenuSections(roleName = '', permissionOverridesByRole = {}) {
   if (!canViewAdminShell(roleName)) return [];
+
+  if (isTeacherRole(roleName)) {
+    return TEACHER_SHELL_MENU_SECTIONS.map((section) => ({
+      ...section,
+      items: (section.items || []).map((item) => ({ ...item, locked: false })),
+    }));
+  }
 
   const allowed = new Set(
     getStaffPanelMenuItemsForRole(roleName, permissionOverridesByRole).map((item) =>

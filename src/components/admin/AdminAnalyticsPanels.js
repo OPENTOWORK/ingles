@@ -155,10 +155,10 @@ const HOUR_BUCKETS = [
 ];
 
 const CHART_COLORS = {
-  primary: '#6366f1',
+  primary: '#6a4be8',
   secondary: '#0ea5e9',
   success: '#10b981',
-  levels: ['#6366f1', '#8b5cf6', '#0ea5e9', '#14b8a6', '#f59e0b', '#f97316', '#ec4899'],
+  levels: ['#6a4be8', '#a48fff', '#0ea5e9', '#14b8a6', '#f59e0b', '#f97316', '#ec4899'],
 };
 
 function normalizeDayKey(value = '') {
@@ -318,7 +318,7 @@ function PeriodFilters({
   );
 }
 
-function KpiCard({ label, value, hint, icon: Icon, accent = '#6366f1', iconBg = '#eef2ff' }) {
+function KpiCard({ label, value, hint, icon: Icon, accent = '#6a4be8', iconBg = '#f0ebff' }) {
   return (
     <article
       className={styles.kpiCard}
@@ -373,7 +373,7 @@ function ActivityHeatmap({ heatmap = [], horaPico = '-', diaPico = '-' }) {
   const cellColor = (intensity) => {
     if (intensity <= 0) return '#f8fafc';
     const alpha = 0.18 + intensity * 0.72;
-    return `rgba(99, 102, 241, ${alpha})`;
+    return `rgba(106, 75, 232, ${alpha})`;
   };
 
   return (
@@ -632,7 +632,7 @@ function StudyTrackingPanel({ tracking, loading, navigationReady, filters = null
           label="Tiempo de estudio"
           value={summary.studyLabel}
           hint="En ejercicios, teoría y speaking"
-          accent="#6366f1"
+          accent="#6a4be8"
           iconBg="#eef2ff"
         />
         <KpiCard
@@ -1267,7 +1267,7 @@ export default function AdminAnalyticsPanels({
                     ? `Personas que no eran usuarias${entryView.counts.staff ? ` (${entryView.counts.staff} del equipo fuera)` : ''}`
                     : 'Personas que no eran usuarias, más el equipo'
                 }
-                accent="#6366f1"
+                accent="#6a4be8"
                 iconBg="#eef2ff"
               />
               <KpiCard
@@ -1550,7 +1550,7 @@ export default function AdminAnalyticsPanels({
                 label="Incorporaciones"
                 value={totalIncorporaciones.toLocaleString('es-ES')}
                 hint="Nuevos registros en el periodo"
-                accent="#6366f1"
+                accent="#6a4be8"
                 iconBg="#eef2ff"
               />
               <KpiCard
@@ -1561,7 +1561,7 @@ export default function AdminAnalyticsPanels({
                   maximumFractionDigits: 2,
                 })}
                 hint="Altas de media cada día del periodo"
-                accent="#8b5cf6"
+                accent="#a48fff"
                 iconBg="#f5f3ff"
               />
               <KpiCard
@@ -1696,7 +1696,7 @@ export default function AdminAnalyticsPanels({
                 label="Usuarios activos"
                 value={connectionAnalytics.activeUsers.toLocaleString('es-ES')}
                 hint="Con al menos una sesión"
-                accent="#6366f1"
+                accent="#6a4be8"
                 iconBg="#eef2ff"
               />
               <KpiCard

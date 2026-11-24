@@ -47,10 +47,10 @@ export function newsletterMondayId(date = new Date()) {
   return new Date(monday).toISOString().slice(0, 10);
 }
 
-/** Lunes a las 10:00 en Madrid. El cron dispara a las 08:00 y a las 09:00 UTC. */
+/** Lunes por la mañana en Madrid. El cron dispara una vez, a las 09:00 UTC. */
 export function isNewsletterMondaySendTime(date = new Date()) {
   const parts = madridDateParts(date);
-  return parts.weekday === 'Mon' && parts.hour === 10;
+  return parts.weekday === 'Mon' && (parts.hour === 10 || parts.hour === 11);
 }
 
 export function newsletterMondaySlug(mondayId) {
@@ -151,7 +151,7 @@ function pillButton(href, label, variant) {
   const primary = variant === 'primary';
   const style = primary
     ? 'display:inline-block;padding:14px 22px;border-radius:999px;background:#6a4be8;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;border:1px solid #6a4be8;'
-    : 'display:inline-block;padding:12px 18px;border-radius:999px;background:#f8f5ff;color:#4c1d95;font-size:15px;font-weight:700;text-decoration:none;border:1px solid #ddd6fe;';
+    : 'display:inline-block;padding:12px 18px;border-radius:999px;background:#f8f5ff;color:#3d2398;font-size:15px;font-weight:700;text-decoration:none;border:1px solid #ddd6fe;';
   return `<a href="${escapeHtml(href)}" style="${style}">${escapeHtml(label)}</a>`;
 }
 
@@ -167,17 +167,17 @@ function renderNewsletterMondayHtml({ issue, label, audience, unsubscribeUrl, ho
       ? `<p style="margin:22px 0 0;font-size:14px;color:#64748b;">${escapeHtml(STAFF_NOTE)}</p>`
       : '';
   const unsubscribe = unsubscribeUrl
-    ? `<p style="margin:22px 0 0;font-size:14px;color:#64748b;">Puedes <a href="${escapeHtml(unsubscribeUrl)}" style="color:#6d28d9;">darte de baja</a> cuando quieras.</p>`
+    ? `<p style="margin:22px 0 0;font-size:14px;color:#64748b;">Puedes <a href="${escapeHtml(unsubscribeUrl)}" style="color:#5634d6;">darte de baja</a> cuando quieras.</p>`
     : '';
 
-  return `<div style="margin:0;padding:0;background:#f4edff;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4edff;margin:0;padding:0;">
+  return `<div style="margin:0;padding:0;background:#f0ebff;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0ebff;margin:0;padding:0;">
     <tr>
       <td align="center" style="padding:32px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:22px;overflow:hidden;">
           <tr>
             <td style="padding:28px 32px 8px;font-family:Arial,Helvetica,sans-serif;">
-              <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6d28d9;">Newsletter B2 First</p>
+              <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5634d6;">Newsletter B2 First</p>
               <p style="margin:10px 0 0;font-size:26px;line-height:1.2;font-weight:800;color:#241b4a;">${escapeHtml(issue.title)}</p>
               <p style="margin:8px 0 0;font-size:14px;color:#64748b;">${escapeHtml(label)}</p>
             </td>

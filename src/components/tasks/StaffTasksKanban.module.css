@@ -21,9 +21,9 @@
 }
 
 .columnOver {
-  border-color: #8b5cf6;
+  border-color: #6a4be8;
   background: #f5f3ff;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 0 3px rgba(106, 75, 232, 0.15);
 }
 
 .columnHead {
@@ -83,7 +83,7 @@
 
 .cardOverlay {
   border-radius: 12px;
-  border: 1px solid #8b5cf6;
+  border: 1px solid #6a4be8;
   background: #ffffff;
   padding: 0.85rem 0.9rem;
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.18);
@@ -129,7 +129,7 @@
   background: none;
   font-size: 0.72rem;
   font-weight: 600;
-  color: #7c3aed;
+  color: #6a4be8;
   cursor: pointer;
   text-align: left;
 }
@@ -162,7 +162,7 @@
 }
 
 .cardAction:hover {
-  color: #5b21b6;
+  color: #5634d6;
   text-decoration: underline;
 }
 
@@ -252,8 +252,8 @@
 .viewBtnActive {
   background: #ffffff;
   border-color: #c4b5fd;
-  color: #5b21b6;
-  box-shadow: 0 2px 8px rgba(124, 58, 237, 0.12);
+  color: #5634d6;
+  box-shadow: 0 2px 8px rgba(106, 75, 232, 0.12);
 }
 
 .kanbanHint {
@@ -269,7 +269,7 @@ body.reading-night-mode .column {
 
 body.reading-night-mode .columnOver {
   background: #1e1b4b;
-  border-color: #8b5cf6;
+  border-color: #6a4be8;
 }
 
 body.reading-night-mode .columnHead {
@@ -330,7 +330,7 @@ body.reading-night-mode .viewBtn {
 body.reading-night-mode .viewBtn:hover,
 body.reading-night-mode .viewBtnActive {
   background: #1e293b;
-  border-color: #6366f1;
+  border-color: #6a4be8;
   color: #e0e7ff;
 }
 
@@ -339,7 +339,7 @@ body.reading-night-mode .kanbanHint {
 }
 
 body.reading-night-mode .cardAction {
-  color: #a78bfa;
+  color: #a48fff;
 }
 
 body.reading-night-mode .cardAction:hover {

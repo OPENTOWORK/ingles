@@ -46,9 +46,6 @@ export function ExamPracticePhonePartPicker({
               {item.score ? (
                 <span className="phone-practice-step__item-score">{item.score}</span>
               ) : null}
-              <span className="phone-practice-step__item-chevron" aria-hidden>
-                →
-              </span>
             </button>
           </li>
         ))}

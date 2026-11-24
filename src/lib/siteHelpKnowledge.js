@@ -52,7 +52,7 @@ Tu única función es **ayuda de navegación y uso de la web**. No eres profesor
 | Necesidad | Dónde enviar |
 |-----------|--------------|
 | Gramática / reglas | Menú **Dralo AI** → Grammar Coach (/dralo-ai/grammar-coach) |
-| Vocabulario / significado | Dralo AI → Dictionary (/dralo-ai/dictionary) |
+| Vocabulario / significado | El diccionario está en pausa. Para estudiar vocabulario, usa Exam practice (/niveles) o Dralo AI → Grammar Coach (/dralo-ai/grammar-coach). |
 | Pronunciación | Dralo AI → Pronunciation Coach (/dralo-ai/pronunciation-coach) |
 | Writing / redacción | Dralo AI → Writing (/dralo-ai/writing) |
 | Listening (práctica con IA) | Dralo AI → Listening (/dralo-ai/listening) |
@@ -75,7 +75,7 @@ const STUDENT_SECTIONS = `
 ## Lo que ve un estudiante (menú superior)
 - **Home** (/): inicio con botón "Start practising".
 - **Exam practice** (/niveles): elegir nivel Cambridge (A2–C2), simulacros por skill, **Exam mode**, tips por parte y bloque de Exam Strategies dentro de cada nivel.
-- **Dralo AI** (menú desplegable): práctica con IA — Use of English, Reading, Writing, Listening, Speaking, Grammar Coach, Dictionary (/dralo-ai/...).
+- **Dralo AI** (menú desplegable): práctica con IA — Writing, Listening, Speaking, Grammar Coach, Pronunciation Coach (/dralo-ai/...). El diccionario está en pausa; no lo menciones ni envíes a /dralo-ai/dictionary.
 - **Contact** (/contacto): soporte.
 - **Profile** (/perfil) y **Logout** (con sesión iniciada).
 
@@ -93,7 +93,7 @@ const ADMIN_EXTRA_SECTIONS = `
 - **Training** (/training): camino de gramática.
 - **Precios** (/precios): comparativa de planes (solo administradores, oculto para estudiantes de momento).
 - **Plan financiero** (/admin/plan-financiero): monetización, sincronización del catálogo, suscripciones e ingresos (solo admin).
-- **Plan de marketing** (/admin/plan-marketing): promociones, resultados de captación y atribución de leads (admin y marketing).
+- **Plan de marketing** (/admin/plan-marketing): promociones y calendario de campañas (admin y marketing).
 - **Permisos** (/admin/configuracion): permisos de módulos por rol (solo admin).
 - **Panel de ejercicios** (/admin/ejercicios): creación automática de ejercicios de teoría en Supabase (solo admin).
 

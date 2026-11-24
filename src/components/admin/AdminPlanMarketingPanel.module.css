@@ -50,9 +50,9 @@
 
 .tabActive {
   background: #ffffff;
-  border-color: #c7d2fe;
-  color: #5634d6;
-  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.12);
+  border-color: #e0d6ff;
+  color: #6a4be8;
+  box-shadow: 0 6px 18px rgba(106, 75, 232, 0.12);
 }
 
 .error {
@@ -121,6 +121,30 @@
   border-bottom: 1px solid #e8edf5;
 }
 
+.sectionHeadSplit {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 1rem;
+}
+
+.inactiveToggle {
+  border: 1px solid #e0e7ff;
+  border-radius: 999px;
+  background: #fff;
+  color: #5634d6;
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.inactiveToggle:hover {
+  background: #eef2ff;
+}
+
 .sectionTitle {
   margin: 0;
   font-size: 1.02rem;
@@ -157,8 +181,8 @@
 }
 
 .card:hover {
-  border-color: #c7d2fe;
-  box-shadow: 0 14px 32px rgba(99, 102, 241, 0.1);
+  border-color: #e0d6ff;
+  box-shadow: 0 14px 32px rgba(106, 75, 232, 0.1);
   transform: translateY(-1px);
 }
 
@@ -251,22 +275,22 @@
 .linkBtn {
   background: #6a4be8;
   color: #fff;
-  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
+  box-shadow: 0 8px 18px rgba(106, 75, 232, 0.22);
 }
 
 .linkBtn:hover {
-  background: #5634d6;
+  background: #6a4be8;
 }
 
 .linkBtnSecondary {
   background: #fff;
-  color: #5634d6;
-  border: 1px solid #c7d2fe;
+  color: #6a4be8;
+  border: 1px solid #e0d6ff;
 }
 
 .linkBtnSecondary:hover {
   background: #eef2ff;
-  border-color: #a5b4fc;
+  border-color: #b6a6ff;
 }
 
 .chartBox {
@@ -410,5 +434,5 @@
 }
 
 :global(body.reading-night-mode) .linkBtnSecondary:hover {
-  background: #312e81;
+  background: #3d2398;
 }

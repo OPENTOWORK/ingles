@@ -124,7 +124,7 @@ function AuthCallbackInner() {
         margin: '6rem auto',
         padding: '2rem',
         textAlign: 'center',
-        fontFamily: 'Segoe UI, sans-serif',
+        fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif",
       }}
     >
       <h2 style={{ marginBottom: '1rem' }}>Conectando con tu proveedor...</h2>
@@ -143,7 +143,7 @@ export default function AuthCallbackPage() {
             margin: '6rem auto',
             padding: '2rem',
             textAlign: 'center',
-            fontFamily: 'Segoe UI, sans-serif',
+            fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif",
           }}
         >
           <h2>Conectando con tu proveedor...</h2>

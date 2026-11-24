@@ -37,7 +37,7 @@ export default function ExamStrategiesArticle({
   const meta = SKILL_META[skillSlug];
   const skillLabel = meta?.key || 'Exam Strategies';
   const heroAccent = meta?.heroAccent || 'violet';
-  const sectionAccent = meta?.accent || '#667eea';
+  const sectionAccent = meta?.accent || '#6a4be8';
   const hasContent = Boolean(content);
   const timingColumns = content?.timingColumns || DEFAULT_TIMING_COLUMNS;
   const hasSkillIndex = Boolean(getExamStrategiesStudentIndex(skillSlug));

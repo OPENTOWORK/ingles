@@ -119,7 +119,7 @@
 }
 
 .levelBadge--premium {
-  background: #7c3aed;
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -213,7 +213,7 @@
 }
 
 .btnPrimary:hover {
-  background: #5634d6;
+  background: #6a4be8;
 }
 
 .error {
@@ -264,7 +264,7 @@
 }
 
 :global(body.reading-night-mode) .levelCard--premium {
-  background: linear-gradient(145deg, #312e81 0%, #1e293b 100%);
+  background: linear-gradient(145deg, #3d2398 0%, #1e293b 100%);
   border-color: #6a4be8;
 }
 

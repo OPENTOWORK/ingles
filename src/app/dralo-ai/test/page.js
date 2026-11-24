@@ -105,7 +105,7 @@ export default function DraloAiTestPage() {
   }
 
   return (
-    <main style={{ maxWidth: 720, margin: '2rem auto', padding: '0 1rem', fontFamily: 'system-ui' }}>
+    <main style={{ maxWidth: 720, margin: '2rem auto', padding: '0 1rem', fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" }}>
       <h1 style={{ fontSize: '1.35rem' }}>DRALO AI — Test lab</h1>
       <p style={{ color: '#4a5568', lineHeight: 1.5 }}>
         Verificación local de <strong>POST /api/dralo-ai</strong>. El navegador no llama a OpenAI

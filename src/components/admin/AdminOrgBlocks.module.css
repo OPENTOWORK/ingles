@@ -65,7 +65,7 @@
   padding: 0 0.45rem;
   border-radius: 999px;
   background: #eef2ff;
-  color: #3730a3;
+  color: #4528c4;
   font-size: 0.75rem;
   font-weight: 700;
 }
@@ -333,7 +333,7 @@
 }
 
 .facts a {
-  color: #5634d6;
+  color: #6a4be8;
 }
 
 .secret {
@@ -351,7 +351,7 @@
 .inlineButton {
   border: 0;
   background: transparent;
-  color: #5634d6;
+  color: #6a4be8;
   font: inherit;
   font-size: 0.78rem;
   font-weight: 700;
@@ -391,7 +391,7 @@
 }
 
 :global(body.reading-night-mode) .count {
-  background: #312e81;
+  background: #3d2398;
   color: #e0e7ff;
 }
 
@@ -405,5 +405,5 @@
 
 :global(body.reading-night-mode) .facts a,
 :global(body.reading-night-mode) .inlineButton {
-  color: #a5b4fc;
+  color: #b6a6ff;
 }

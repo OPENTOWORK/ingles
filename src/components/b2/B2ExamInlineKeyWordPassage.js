@@ -2,8 +2,6 @@
 
 
 import { RuoeReviewableInput } from '@/components/exam/RuoeAnchoredReview';
-import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
-import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 import { parseB2KeyWordTransformItems } from '@/utils/b2ExamTextBlocks';
 
 /**
@@ -136,21 +134,6 @@ export default function B2ExamInlineKeyWordPassage({
         );
       })}
 
-      {hideFeedback && activeQuestionNumbers.some((qn) => openInputs[getQuestionKey(qn)]?.trim()) ? (
-        <div className="reading-question-meta-list">
-          {activeQuestionNumbers.map((questionNumber) => {
-            const questionKey = getQuestionKey(questionNumber);
-            if (!openInputs[questionKey]?.trim()) return null;
-            return (
-              <div key={`meta-kwt-${questionNumber}`} className="reading-question-meta">
-                <span className="reading-question-meta__label">Q{questionNumber}</span>
-                <ReadingQuestionFlagButton questionKey={questionKey} questionNumber={questionNumber} />
-                <ReadingConfidenceSelector questionKey={questionKey} />
-              </div>
-            );
-          })}
-        </div>
-      ) : null}
     </div>
   );
 }

@@ -611,7 +611,7 @@ function ProfilePrivateTutorStyles() {
       }
       .profile-tutor-modality--online {
         background: #dbeafe;
-        color: #5634d6;
+        color: #6a4be8;
       }
       .profile-tutor-modality--inperson {
         background: #dcfce7;
@@ -632,7 +632,7 @@ function ProfilePrivateTutorStyles() {
         padding: 2px 8px;
         border-radius: 999px;
         background: #dbeafe;
-        color: #5634d6;
+        color: #6a4be8;
         font-size: 11px;
         font-weight: 700;
         vertical-align: middle;

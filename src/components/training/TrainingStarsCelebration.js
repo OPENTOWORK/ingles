@@ -3,7 +3,7 @@
 import { useEffect, useMemo } from 'react';
 import styles from './TrainingStarsCelebration.module.css';
 
-const CONFETTI_COLORS = ['#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#f43f5e'];
+const CONFETTI_COLORS = ['#f59e0b', '#10b981', '#3b82f6', '#6a4be8', '#f43f5e'];
 
 /**
  * @param {{

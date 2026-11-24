@@ -17,6 +17,7 @@ import { SITE_URL, SOCIAL_SHARE } from '@/lib/siteSeo';
 import { SESSION_HINT_BOOT_SCRIPT } from '@/lib/sessionHint';
 import { DRALO_APP_BOOT_SCRIPT } from '@/lib/draloAppShell';
 import { SITE_THEME_BOOT_SCRIPT } from '@/lib/siteTheme';
+import { landingFont } from '@/components/home/landing/landingFont';
 import {
   DRALO_APP_ICON_SRC,
   DRALO_APPLE_TOUCH_ICON_PATH,
@@ -78,7 +79,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={landingFont.variable} suppressHydrationWarning>
       <head>
         <script id="session-hint-boot" dangerouslySetInnerHTML={{ __html: SESSION_HINT_BOOT_SCRIPT }} />
         <script id="dralo-app-boot" dangerouslySetInnerHTML={{ __html: DRALO_APP_BOOT_SCRIPT }} />
@@ -113,7 +114,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           </>
         ) : null}
       </head>
-      <body className="full-page-layout">
+      <body className={`${landingFont.className} full-page-layout`}>
         <Script id="night-mode-boot" strategy="beforeInteractive">
           {`(function(){try{var r=localStorage.getItem('dralo_reading_practice_settings');var t=r?JSON.parse(r).theme:'normal';var on=t==='night';document.documentElement.classList.toggle('reading-night-mode',on);if(document.body)document.body.classList.toggle('reading-night-mode',on);}catch(e){}})();`}
         </Script>

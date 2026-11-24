@@ -18,7 +18,7 @@ export default function Error({ error, reset }) {
       textAlign: 'center',
       background: 'linear-gradient(180deg, #0b1020, #10183a 60%, #0b1020)',
       color: '#e8ecf3',
-      fontFamily: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial'
+      fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif"
     }}>
       <h1 style={{ fontSize: '48px', margin: '0 0 16px', color: '#6c8dff' }}>
         ¡Oops!

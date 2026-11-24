@@ -58,6 +58,11 @@ export const STAFF_PANEL_HUB_META = {
     accent: 'rose',
     description: 'Formularios de la encuesta de objetivos',
   },
+  '/admin/plan-marketing': {
+    icon: 'finance',
+    accent: 'rose',
+    description: 'Promociones y calendario de campañas',
+  },
   '/admin/notificaciones': {
     icon: 'panel',
     accent: 'sky',

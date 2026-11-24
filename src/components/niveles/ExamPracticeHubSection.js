@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import ExamSkillHubCard, { getExamSkillKindFromSlug } from '@/components/exam/ExamSkillHubCard';
 import ExamSkillHubCardStyles from '@/components/exam/ExamSkillHubCardStyles';
-import { TrainingLivesMeter } from '@/components/training/TrainingLivesMeter';
-import { useTrainingLives } from '@/hooks/useTrainingLives';
 import {
   GUEST_PREVIEW_REGISTER_LABEL,
   getGuestRegisterHref,
@@ -37,6 +35,28 @@ function getExamLinkMeta(exam) {
   };
 }
 
+function hubSkillLabel(kind, label) {
+  if (kind === 'reading' && /use of english/i.test(label)) {
+    return (
+      <>
+        Reading
+        <br />
+        &amp; Use of English
+      </>
+    );
+  }
+  if (kind === 'exam-mode') {
+    return (
+      <>
+        Exam mode
+        <br />
+        <span className="exam-practice-hub__exam-mode-sub">Full timed simulation</span>
+      </>
+    );
+  }
+  return label;
+}
+
 function ExamPracticeCard({ exam, isStudent, guestPreview = false, variant = 'skill' }) {
   const blockedForStudent = isStudent && !exam.enabledForStudents;
   const guestLocked = guestPreview && isGuestExamPracticeLockedHref(exam.href);
@@ -53,8 +73,8 @@ function ExamPracticeCard({ exam, isStudent, guestPreview = false, variant = 'sk
             : exam.href
       }
       kind={kind}
-      label={label}
-      hint={isExamMode ? 'Full timed simulation' : null}
+      label={hubSkillLabel(kind, label)}
+      hint={null}
       badge={guestLocked ? GUEST_PREVIEW_REGISTER_LABEL : blockedForStudent ? 'Coming soon' : null}
       disabled={blockedForStudent && !guestLocked}
       featured={isExamMode}
@@ -88,32 +108,6 @@ export function ExamLevelSwitch({ levelSlug }) {
   );
 }
 
-function QuizGameCard({ quizGame, guestPreview = false }) {
-  const quizLives = useTrainingLives({ path: '/api/quiz/lives' });
-  if (!quizGame?.href) return null;
-  const guestLocked = guestPreview && isGuestExamPracticeLockedHref(quizGame.href);
-  return (
-    <div className="exam-practice-hub__quiz-game" data-tour="practice-quiz">
-      <ExamSkillHubCard
-        href={guestLocked ? getGuestRegisterHref(quizGame.href) : quizGame.href}
-        kind="quiz-game"
-        label={quizGame.label || 'Quiz game'}
-        hint={quizGame.hint || 'Timed English quiz'}
-        badge={guestLocked ? GUEST_PREVIEW_REGISTER_LABEL : null}
-      />
-      <span className="exam-practice-hub__quiz-lives">
-        <TrainingLivesMeter
-          loading={quizLives.loading}
-          unlimited={quizLives.unlimited}
-          lives={quizLives.lives}
-          max={quizLives.max}
-          nextLifeAt={quizLives.nextLifeAt}
-        />
-      </span>
-    </div>
-  );
-}
-
 export default function ExamPracticeHubSection({
   examLinks = [],
   isStudent,
@@ -122,7 +116,6 @@ export default function ExamPracticeHubSection({
   skillsQuadrant = false,
   sectionTitle = null,
   quadrantFooter = null,
-  quizGame = null,
   levelSlug = '',
 }) {
   if (!examLinks.length) return null;
@@ -170,7 +163,6 @@ export default function ExamPracticeHubSection({
             ) : null}
             <div className="exam-practice-hub__body">
               {skillsGrid}
-              <QuizGameCard quizGame={quizGame} guestPreview={guestPreview} />
               {examModeLink ? (
                 <div className="exam-practice-hub__exam-mode">
                   <ExamPracticeCard
@@ -199,15 +191,13 @@ export default function ExamPracticeHubSection({
         <div className="exam-practice-hub__quadrant-inner">
           <div className="exam-practice-hub__body">
             {skillsGrid}
-            <QuizGameCard quizGame={quizGame} guestPreview={guestPreview} />
             {examModeLink ? (
               <div className="exam-practice-hub__exam-mode">
-                <ExamPracticeCard
-                  exam={examModeLink}
-                  isStudent={isStudent}
-                  guestPreview={guestPreview}
-                  variant="banner"
-                />
+                  <ExamPracticeCard
+                    exam={examModeLink}
+                    isStudent={isStudent}
+                    guestPreview={guestPreview}
+                  />
               </div>
             ) : null}
           </div>
@@ -215,15 +205,13 @@ export default function ExamPracticeHubSection({
       ) : (
         <div className="exam-practice-hub__body">
           {skillsGrid}
-          <QuizGameCard quizGame={quizGame} guestPreview={guestPreview} />
           {examModeLink ? (
             <div className="exam-practice-hub__exam-mode">
-              <ExamPracticeCard
-                exam={examModeLink}
-                isStudent={isStudent}
-                guestPreview={guestPreview}
-                variant="banner"
-              />
+                  <ExamPracticeCard
+                    exam={examModeLink}
+                    isStudent={isStudent}
+                    guestPreview={guestPreview}
+                  />
             </div>
           ) : null}
         </div>
@@ -249,10 +237,26 @@ function ExamPracticeHubLayoutStyles() {
         margin-top: 1.5rem;
         padding: 0;
       }
-      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode,
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode {
+        display: flex;
+        justify-content: center;
+        margin-top: 14px;
+        margin-bottom: 0;
+      }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game {
         margin-top: 14px;
         margin-bottom: 0;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game .exam-practice-hub__card {
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card {
+        width: fit-content;
+        height: auto;
+        min-height: 0;
+        margin-inline: auto;
+        box-sizing: border-box;
       }
       .exam-practice-hub__quiz-game {
         position: relative;
@@ -263,11 +267,6 @@ function ExamPracticeHubLayoutStyles() {
         right: 18px;
         z-index: 1;
         pointer-events: none;
-      }
-      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card,
-      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quiz-game .exam-practice-hub__card {
-        width: 100%;
-        box-sizing: border-box;
       }
       .niveles-level-page .exam-practice-hub__skills-quadrant {
         margin-top: 0;
@@ -292,9 +291,9 @@ function ExamPracticeHubLayoutStyles() {
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-eyebrow {
         margin-bottom: 0;
-        color: #4338ca;
-        background: rgba(99, 102, 241, 0.12);
-        border: 1px solid rgba(99, 102, 241, 0.22);
+        color: var(--brand-purple, #6a4be8);
+        background: var(--brand-purple-soft, #f0ebff);
+        border: 1px solid #cdbfff;
       }
       .exam-practice-hub__levels {
         display: flex;
@@ -307,9 +306,9 @@ function ExamPracticeHubLayoutStyles() {
         margin: 0;
         padding: 6px 12px;
         border-radius: 999px;
-        border: 1px solid #e0d6ff;
+        border: 1px solid #cdbfff;
         background: #fff;
-        color: #4338ca;
+        color: var(--brand-purple, #6a4be8);
         font-size: 0.82rem;
         font-weight: 800;
         letter-spacing: 0.02em;
@@ -318,12 +317,12 @@ function ExamPracticeHubLayoutStyles() {
       }
       .exam-practice-hub__level:hover {
         text-decoration: none;
-        background: #f4f0ff;
-        border-color: #c4b5fd;
+        background: var(--brand-purple-soft, #f0ebff);
+        border-color: var(--brand-purple, #6a4be8);
       }
       .exam-practice-hub__level.is-active {
-        background: #4f46e5;
-        border-color: #4f46e5;
+        background: var(--brand-purple, #6a4be8);
+        border-color: var(--brand-purple, #6a4be8);
         color: #fff;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__body {
@@ -413,14 +412,14 @@ function ExamPracticeHubLayoutStyles() {
       body.reading-night-mode .exam-practice-hub__level {
         background: #1e293b;
         border-color: #475569;
-        color: #c7d2fe;
+        color: #e0d6ff;
       }
       body.reading-night-mode .exam-practice-hub__level:hover {
         background: #334155;
       }
       body.reading-night-mode .exam-practice-hub__level.is-active {
-        background: #6366f1;
-        border-color: #6366f1;
+        background: var(--brand-purple, #6a4be8);
+        border-color: var(--brand-purple, #6a4be8);
         color: #fff;
       }
       @media (max-width: 639px) {
@@ -481,11 +480,30 @@ function ExamPracticeHubLayoutStyles() {
           row-gap: 1px;
           padding: 8px 12px;
         }
+        .niveles-level-page .exam-practice-hub__exam-mode .exam-practice-hub__card,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode .exam-practice-hub__card {
+          display: flex;
+          flex: 0 0 auto;
+          flex-direction: row;
+          align-items: center;
+          width: fit-content;
+          margin-inline: auto;
+          padding: 10px 14px;
+        }
         .niveles-level-page .exam-practice-hub__icon-wrap {
           grid-column: 1;
           grid-row: 1 / span 2;
           width: 2.15rem;
           height: 2.15rem;
+        }
+        .niveles-level-page .exam-practice-hub__skills-grid .exam-practice-hub__icon-wrap,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid .exam-practice-hub__icon-wrap {
+          grid-row: 1;
+          align-self: center;
+        }
+        .niveles-level-page .exam-practice-hub__skills-grid .exam-practice-hub__card--reading .exam-practice-hub__label,
+        .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-grid .exam-practice-hub__card--reading .exam-practice-hub__label {
+          text-align: center;
         }
         .niveles-level-page .exam-practice-hub__label,
         .niveles-level-page .exam-practice-hub--split .exam-practice-hub__label {

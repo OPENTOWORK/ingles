@@ -9,9 +9,15 @@ function madridHour(date = new Date()) {
   return Number(parts.find((part) => part.type === 'hour')?.value);
 }
 
-/** Martes a las 10:00 en Madrid. El cron dispara a las 08:00 y a las 09:00 UTC para cubrir verano e invierno. */
-export function isWeeklyTuesdaySendTime(date = new Date()) {
-  return madridWeekday(date) === 'Tue' && madridHour(date) === 10;
+/**
+ * A partir del martes a las 10:00 en Madrid, y el resto de esa semana.
+ * El cron de Hobby solo puede una vez al día (09:00 UTC: las 10:00 en invierno
+ * y las 11:00 en verano). Si el martes no sale, el mismo reto se manda
+ * a la mañana siguiente. El martes siguiente ya es otra pregunta.
+ */
+export function shouldSendWeeklyChallenge(date = new Date()) {
+  if (madridWeekday(date) !== 'Tue') return true;
+  return madridHour(date) >= 10;
 }
 
 /**
@@ -51,7 +57,7 @@ function escapeHtml(value) {
 }
 
 function promptHtml(prompt) {
-  const safe = escapeHtml(prompt).replace(/_____/g, '<span style="color:#5634d6;">_____</span>');
+  const safe = escapeHtml(prompt).replace(/_____/g, '<span style="color:#6a4be8;">_____</span>');
   return `“${safe}”`;
 }
 
@@ -76,7 +82,7 @@ function optionRows(optionsText) {
       const { letter, label } = parseOption(line);
       return `<tr><td style="padding:0 0 8px;">
         <label style="display:block;cursor:pointer;color:#1d1857;background:#fbfaff;border:1px solid #e8e4f7;border-radius:12px;padding:14px 16px;font-size:17px;line-height:24px;">
-          <input type="radio" name="opcion" value="${escapeHtml(letter)}" required style="width:16px;height:16px;accent-color:#5634d6;vertical-align:middle;margin:0 12px 0 0;" />
+          <input type="radio" name="opcion" value="${escapeHtml(letter)}" required style="width:16px;height:16px;accent-color:#6a4be8;vertical-align:middle;margin:0 12px 0 0;" />
           <span style="color:#6c6989;font-size:13px;font-weight:bold;">${escapeHtml(letter)}</span>&nbsp;&nbsp;${escapeHtml(label)}
         </label>
       </td></tr>`;
@@ -166,7 +172,7 @@ export function renderWeeklyChallengeEmail(variables = {}) {
         </td></tr>
         <tr><td height="16" style="height:16px;font-size:1px;line-height:16px;">&nbsp;</td></tr>
         <tr><td bgcolor="#ffffff" style="background-color:#ffffff;border:1px solid #e8e4f7;border-radius:24px;padding:28px;">
-          <p style="margin:0 0 12px;font-size:11px;font-weight:bold;letter-spacing:1.7px;color:#5634d6;">01 &nbsp; CALENTAMOS</p>
+          <p style="margin:0 0 12px;font-size:11px;font-weight:bold;letter-spacing:1.7px;color:#6a4be8;">01 &nbsp; CALENTAMOS</p>
           <h2 style="margin:0 0 10px;font-size:25px;line-height:31px;letter-spacing:-0.5px;">¿Cuál pondrías tú?</h2>
           <p style="margin:0 0 22px;color:#6c6989;font-size:15px;line-height:23px;">Sin traductor. Confía en lo que sabes.</p>
           <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0"><tr><td bgcolor="#fbfaff" style="background-color:#fbfaff;border-radius:14px;padding:22px 18px;">
@@ -178,18 +184,18 @@ export function renderWeeklyChallengeEmail(variables = {}) {
               ${optionRows(options)}
             </table>
             <p style="margin:6px 0 16px;font-size:13px;line-height:20px;color:#6c6989;">Marca una opción. Chequear respuesta abre el reto y te dice si has acertado y por qué.</p>
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" bgcolor="#5634d6" style="background-color:#5634d6;border-radius:12px;mso-padding-alt:18px 24px;">
-              <button type="submit" style="display:block;width:100%;border:1px solid #5634d6;border-radius:12px;padding:18px 24px;background:#5634d6;font-size:17px;line-height:22px;font-weight:bold;text-align:center;text-decoration:none;color:#ffffff;cursor:pointer;">Chequear respuesta &nbsp; &rarr;</button>
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" bgcolor="#6a4be8" style="background-color:#6a4be8;border-radius:12px;mso-padding-alt:18px 24px;">
+              <button type="submit" style="display:block;width:100%;border:1px solid #6a4be8;border-radius:12px;padding:18px 24px;background:#6a4be8;font-size:17px;line-height:22px;font-weight:bold;text-align:center;text-decoration:none;color:#ffffff;cursor:pointer;">Chequear respuesta &nbsp; &rarr;</button>
             </td></tr></table>
           </form>
         </td></tr>
         <tr><td height="16" style="height:16px;font-size:1px;line-height:16px;">&nbsp;</td></tr>
         <tr><td bgcolor="#f0ebff" style="background-color:#f0ebff;border:1px solid #e8e4f7;border-radius:24px;padding:28px;">
-          <p style="margin:0 0 12px;font-size:11px;font-weight:bold;letter-spacing:1.7px;color:#5634d6;">02 &nbsp; VAMOS A POR EL RETO</p>
+          <p style="margin:0 0 12px;font-size:11px;font-weight:bold;letter-spacing:1.7px;color:#6a4be8;">02 &nbsp; VAMOS A POR EL RETO</p>
           <h2 style="margin:0 0 12px;font-size:25px;line-height:31px;letter-spacing:-0.5px;">Un ejercicio. Algo nuevo que aprender.</h2>
           <p style="margin:0 0 24px;font-size:16px;line-height:25px;color:#4a4769;">Entra en Dralo, completa un ejercicio de <strong>Use of English B2</strong> y quédate con una expresión que no conocías.</p>
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" bgcolor="#5634d6" style="background-color:#5634d6;border-radius:12px;mso-padding-alt:18px 24px;">
-            <a href="${safeUrl}" target="_blank" style="display:block;border:1px solid #5634d6;border-radius:12px;padding:18px 24px;font-size:17px;line-height:22px;font-weight:bold;text-align:center;text-decoration:none;color:#ffffff;">Acepto el reto &nbsp; &rarr;</a>
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"><tr><td align="center" bgcolor="#6a4be8" style="background-color:#6a4be8;border-radius:12px;mso-padding-alt:18px 24px;">
+            <a href="${safeUrl}" target="_blank" style="display:block;border:1px solid #6a4be8;border-radius:12px;padding:18px 24px;font-size:17px;line-height:22px;font-weight:bold;text-align:center;text-decoration:none;color:#ffffff;">Acepto el reto &nbsp; &rarr;</a>
           </td></tr></table>
           <p style="margin:16px 0 0;text-align:center;color:#4a4769;font-size:12px;line-height:19px;">No hace falta hacerlo perfecto. Hace falta empezar.</p>
         </td></tr>

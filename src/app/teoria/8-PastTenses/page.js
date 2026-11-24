@@ -249,21 +249,21 @@ const PastTensesPage = () => {
       <TheorySection title="Key Words" icon="🔑">
         <div style={{ display: 'grid', gap: '1rem' }}>
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Past Simple:</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>Past Simple:</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
               yesterday, last week, ago, in 2020, when I was young, once upon a time
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Past Continuous:</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>Past Continuous:</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
               while, when, at that time, at that moment, during, as
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#667eea', marginBottom: '0.5rem' }}>Past Perfect:</h4>
+            <h4 style={{ color: '#6a4be8', marginBottom: '0.5rem' }}>Past Perfect:</h4>
             <p style={{ color: '#4a5568', marginBottom: '0.5rem' }}>
               already, just, never, before, by the time, until
             </p>

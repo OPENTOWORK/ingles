@@ -21,7 +21,7 @@ const exerciseShell = (isCompleted) => ({
 
 const btnPrimary = (enabled) => ({
   padding: '0.75rem 1.5rem',
-  background: enabled ? '#667eea' : '#e2e8f0',
+  background: enabled ? '#6a4be8' : '#e2e8f0',
   color: enabled ? 'white' : '#a0aec0',
   border: 'none',
   borderRadius: '8px',
@@ -141,7 +141,7 @@ export function MatchingExercise({ title = 'Match the pairs', pairs = [], explan
                   padding: '0.65rem 0.85rem',
                   textAlign: 'left',
                   borderRadius: '10px',
-                  border: selectedLeft === left ? '2px solid #667eea' : '1px solid #e2e8f0',
+                  border: selectedLeft === left ? '2px solid #6a4be8' : '1px solid #e2e8f0',
                   background: isOk ? '#f0fff4' : isBad ? '#fed7d7' : matched ? '#eef2ff' : selectedLeft === left ? '#f7fafc' : '#fff',
                   cursor: matched || showResult ? 'default' : 'pointer',
                   fontSize: '0.9rem',
@@ -149,7 +149,7 @@ export function MatchingExercise({ title = 'Match the pairs', pairs = [], explan
                 }}
               >
                 {left}
-                {matched ? <span style={{ display: 'block', fontSize: '0.75rem', color: '#667eea', marginTop: 4 }}>→ {matched}</span> : null}
+                {matched ? <span style={{ display: 'block', fontSize: '0.75rem', color: '#6a4be8', marginTop: 4 }}>→ {matched}</span> : null}
               </button>
             );
           })}
@@ -165,9 +165,9 @@ export function MatchingExercise({ title = 'Match the pairs', pairs = [], explan
                 padding: '0.65rem 0.85rem',
                 textAlign: 'left',
                 borderRadius: '10px',
-                border: '1px solid #c7d2fe',
+                border: '1px solid #e0d6ff',
                 background: '#eef2ff',
-                color: '#4338ca',
+                color: '#5634d6',
                 fontWeight: '600',
                 fontSize: '0.9rem',
                 cursor: !selectedLeft || showResult ? 'default' : 'pointer',
@@ -235,7 +235,7 @@ export function FindErrorExercise({
                 padding: '0.75rem 1rem',
                 textAlign: 'left',
                 borderRadius: 10,
-                border: isSel ? '2px solid #667eea' : '1px solid #e2e8f0',
+                border: isSel ? '2px solid #6a4be8' : '1px solid #e2e8f0',
                 background: isOk ? '#f0fff4' : isBad ? '#fed7d7' : isSel ? '#f7fafc' : '#fff',
                 cursor: showResult ? 'default' : 'pointer',
                 color: '#334155',
@@ -300,7 +300,7 @@ export function SentenceOrderExercise({
     <div style={exerciseShell(isCompleted)}>
       <ExerciseHeader title={title} isCompleted={isCompleted} />
       <p style={{ color: '#64748b', fontSize: '0.9rem', margin: '0 0 0.75rem' }}>Click words in the correct order. Use Undo to remove the last word.</p>
-      <div style={{ minHeight: 48, padding: '0.75rem 1rem', marginBottom: '1rem', background: '#eef2ff', borderRadius: 10, border: '1px dashed #c7d2fe', fontSize: '1.05rem', color: '#334155', lineHeight: 1.6 }}>
+      <div style={{ minHeight: 48, padding: '0.75rem 1rem', marginBottom: '1rem', background: '#eef2ff', borderRadius: 10, border: '1px dashed #e0d6ff', fontSize: '1.05rem', color: '#334155', lineHeight: 1.6 }}>
         {built.length ? built.join(' ') : <span style={{ color: '#94a3b8' }}>Your sentence appears here…</span>}
       </div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem' }}>

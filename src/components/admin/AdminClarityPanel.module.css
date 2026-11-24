@@ -81,7 +81,7 @@
 }
 
 .cta:hover {
-  background: #5634d6;
+  background: #6a4be8;
 }
 
 .grid {
@@ -105,8 +105,8 @@
 }
 
 .feature:hover {
-  border-color: #a5b4fc;
-  box-shadow: 0 6px 16px rgba(79, 70, 229, 0.08);
+  border-color: #b6a6ff;
+  box-shadow: 0 6px 16px rgba(106, 75, 232, 0.08);
 }
 
 .feature h3 {

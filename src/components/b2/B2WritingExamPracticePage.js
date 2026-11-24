@@ -18,6 +18,8 @@ import ExamStudyNotesSidebar from '@/components/exam/ExamStudyNotesSidebar';
 import ReadingPracticeChrome from '@/components/exam/ReadingPracticeChrome';
 import AdminExamPartPromptBox from '@/components/admin/AdminExamPartPromptBox';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
+import RuoeTestSelector from '@/app/niveles/b2/exam-reading/RuoeTestSelector';
+import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 import { SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
 import { getFormattedEnunciado } from '@/utils/b2ExamPaperShared';
 import { ReadingPracticeSessionProvider, useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
@@ -149,6 +151,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
   const [selectedPartId, setSelectedPartId] = useState(null);
   const [selectedQuestionByPart, setSelectedQuestionByPart] = useState({});
   const [part2SelectedOptionByPart, setPart2SelectedOptionByPart] = useState({});
+  const [writingCorrectionOpen, setWritingCorrectionOpen] = useState(false);
   const [writingLiveCorrect, setWritingLiveCorrect] = useState(null);
   const [examLabelsBySlot, setExamLabelsBySlot] = useState({});
   const mountedRef = useRef(true);
@@ -713,6 +716,8 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
 
   /** Móvil: las instrucciones se leen en un paso previo (mismo criterio que el chrome). */
   const phoneViewport = usePhoneViewport();
+  const sampleCorrection =
+    process.env.NODE_ENV === 'development' && searchParams.get('sampleCorrection') === '1';
   const phoneSkillSteps =
     phoneViewport && compactChromeHeader && !isExamSimulationMode(practiceMode);
   const writingInstructionsEl = partNumber === 8 ? (
@@ -1114,6 +1119,24 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                     <SkillPartPracticeHeader
                       title={selectedPartTitleParts.heading}
                       subtitle={selectedPartTitleParts.subtitle}
+                      testSelector={
+                        isSkillPracticeSession && examSlotPickerProps.availableSlots.length > 1 ? (
+                          <RuoeTestSelector
+                            accent="writing"
+                            currentSlot={Number(examSlot)}
+                            slots={examSlotPickerProps.availableSlots}
+                            planLockedSlots={skillNav.planLockedSlots}
+                            isSlotUnlocked={(slot) => isExerciseSlotUnlocked(
+                              scoring.progressBySlot,
+                              partNumber,
+                              slot,
+                              examSlotPickerProps.availableSlots,
+                              skillNav.slotUnlockOptions,
+                            )}
+                            onSelect={(slot) => skillNav.guardExamSlotSelect(slot, handleSelectExamSlot)}
+                          />
+                        ) : null
+                      }
                       titleActions={
                         <SkillPartExerciseFavorite
                           show={showExerciseFavorite}
@@ -1124,7 +1147,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                       }
                     />
                     <div className="levels-exam-split__body levels-exam-split__body--stacked">
-                      {writingInstructionsEl}
+                      {writingCorrectionOpen ? null : writingInstructionsEl}
 
                   {partNumber === 8 ? (
                     <>
@@ -1141,6 +1164,8 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                         guestPreview={guestPreview}
                         guestExamMode={guestExamMode}
                         onGuestAttemptBlocked={onGuestAttemptBlocked}
+                        onCorrectionChange={setWritingCorrectionOpen}
+                        sampleCorrection={sampleCorrection}
                         lang="en"
                       />
                     </>
@@ -1148,6 +1173,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
 
                   {partNumber === 9 ? (
                     <>
+                      {writingCorrectionOpen ? null : (
                       <B2WritingPart2TaskPicker
                         instructions={part2Task.instructions}
                         options={part2Task.options}
@@ -1159,6 +1185,7 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                         hideHeader
                         hideInstructions
                       />
+                      )}
                       {part2SelectedOption ? (
                         <B2WritingLongFormAiPanel
                           key={`writing-p2-${longWritingStorageKey}-${writingDraftEpoch}`}
@@ -1173,6 +1200,8 @@ function B2WritingExamPracticePageInner({ guestPreview = false, onGuestAttemptBl
                           guestPreview={guestPreview}
                           guestExamMode={guestExamMode}
                           onGuestAttemptBlocked={onGuestAttemptBlocked}
+                          onCorrectionChange={setWritingCorrectionOpen}
+                          sampleCorrection={sampleCorrection}
                           lang="en"
                         />
                       ) : (

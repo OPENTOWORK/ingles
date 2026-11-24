@@ -12,8 +12,8 @@ const TEXT_COLORS = [
   { label: 'Ámbar', value: '#d97706' },
   { label: 'Verde', value: '#16a34a' },
   { label: 'Azul', value: '#2563eb' },
-  { label: 'Índigo', value: '#4f46e5' },
-  { label: 'Violeta', value: '#7c3aed' },
+  { label: 'Índigo', value: '#6a4be8' },
+  { label: 'Violeta', value: '#6a4be8' },
   { label: 'Rosa', value: '#db2777' },
   { label: 'Gris', value: '#64748b' },
 ];
@@ -222,7 +222,7 @@ const PromptColoredTextEditor = forwardRef(function PromptColoredTextEditor(
             <span className={styles.srOnly}>Color personalizado</span>
             <input
               type="color"
-              defaultValue="#4f46e5"
+              defaultValue="#6a4be8"
               onMouseDown={preventToolbarBlur}
               onChange={(e) => {
                 const color = e.target.value;

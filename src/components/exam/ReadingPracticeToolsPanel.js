@@ -36,6 +36,7 @@ export default function ReadingPracticeToolsPanel({ lang = 'en' }) {
       title={labels.title}
       asideClassName="levels-listening-strategy levels-listening-strategy--tools"
       toggleClassName="levels-listening-strategy__toggle levels-listening-strategy__toggle--tools"
+      panelClassName="exam-practice-tools-panel"
     >
           <section>
             <h3 className="levels-listening-strategy__heading">{labels.textSettings}</h3>

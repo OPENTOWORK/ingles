@@ -25,6 +25,53 @@ export default function ExamSkillHubCardStyles() {
         width: 100%;
         min-width: 0;
         box-sizing: border-box;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 12px;
+      }
+      .exam-skill-hub .exam-practice-hub__skills-grid .exam-practice-hub__label {
+        flex: 1 1 auto;
+        align-self: center;
+      }
+      .exam-skill-hub .exam-practice-hub__skills-grid .exam-practice-hub__card--reading .exam-practice-hub__label {
+        flex: 1 1 auto;
+        min-width: 8.5rem;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .exam-skill-hub .exam-practice-hub__exam-mode {
+        display: flex;
+        justify-content: center;
+      }
+      .exam-skill-hub .exam-practice-hub__exam-mode .exam-practice-hub__card {
+        width: fit-content;
+        max-width: 100%;
+        height: auto;
+        min-height: 0;
+        margin: 4px auto 0;
+        padding: 10px 16px;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+      .exam-skill-hub .exam-practice-hub__exam-mode .exam-practice-hub__label {
+        flex: 0 1 auto;
+        text-align: center;
+        line-height: 1.15;
+      }
+      .exam-skill-hub .exam-practice-hub__exam-mode-sub {
+        display: block;
+        margin-top: 2px;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.2;
+        color: color-mix(in srgb, var(--exam-card-ink, #5b3cc4) 72%, #64748b);
+      }
+      .exam-skill-hub .exam-practice-hub__exam-mode .exam-practice-hub__card-foot:not(:has(.exam-practice-hub__badge)) {
+        display: none;
       }
       .exam-skill-hub .exam-practice-hub__card--banner {
         width: 100%;
@@ -99,9 +146,10 @@ export default function ExamSkillHubCardStyles() {
           0 12px 28px color-mix(in srgb, var(--exam-card-accent, #2563eb) 14%, transparent);
       }
       .exam-skill-hub .exam-practice-hub__card--exam-mode {
-        --exam-card-accent: #4f46e5;
+        --exam-card-accent: #6a4be8;
+        --exam-card-ink: #5b3cc4;
         background: linear-gradient(155deg, #f5f7ff 0%, #ffffff 100%);
-        border-color: rgba(99, 102, 241, 0.22);
+        border-color: rgba(106, 75, 232, 0.22);
       }
       .exam-skill-hub .exam-practice-hub__card--quiz-game {
         --exam-card-accent: #c026d3;
@@ -111,33 +159,37 @@ export default function ExamSkillHubCardStyles() {
       .exam-skill-hub .exam-practice-hub__card--reading,
       .exam-skill-hub .exam-practice-hub__card--reading-writing {
         --exam-card-accent: #38bdf8;
+        --exam-card-ink: #1e628c;
         background: linear-gradient(155deg, #f0f9ff 0%, #ffffff 100%);
         border-color: rgba(56, 189, 248, 0.22);
       }
       .exam-skill-hub .exam-practice-hub__card--writing {
-        --exam-card-accent: #059669;
-        background: linear-gradient(155deg, #f7fdf9 0%, #ffffff 100%);
-        border-color: rgba(5, 150, 105, 0.18);
+        --exam-card-accent: #1b9a62;
+        --exam-card-ink: #1a6b48;
+        background: linear-gradient(155deg, #f4faf6 0%, #ffffff 100%);
+        border-color: rgba(27, 154, 98, 0.18);
       }
       .exam-skill-hub .exam-practice-hub__card--listening {
         --exam-card-accent: #d97706;
+        --exam-card-ink: #a15c12;
         background: linear-gradient(155deg, #fffdf8 0%, #ffffff 100%);
         border-color: rgba(217, 119, 6, 0.18);
       }
       .exam-skill-hub .exam-practice-hub__card--speaking {
         --exam-card-accent: #db2777;
+        --exam-card-ink: #b4256c;
         background: linear-gradient(155deg, #fffbfd 0%, #ffffff 100%);
         border-color: rgba(219, 39, 119, 0.18);
       }
       .exam-skill-hub .exam-practice-hub__card--featured {
         box-shadow:
           0 1px 2px rgba(15, 23, 42, 0.04),
-          0 8px 22px rgba(79, 70, 229, 0.12);
+          0 8px 22px rgba(106, 75, 232, 0.12);
       }
       .exam-skill-hub .exam-practice-hub__card--featured:hover {
         box-shadow:
           0 1px 2px rgba(15, 23, 42, 0.04),
-          0 14px 32px rgba(79, 70, 229, 0.18);
+          0 14px 32px rgba(106, 75, 232, 0.18);
       }
       .exam-skill-hub .exam-practice-hub__card--disabled {
         cursor: not-allowed;
@@ -154,11 +206,14 @@ export default function ExamSkillHubCardStyles() {
         border-radius: 10px;
         background: color-mix(in srgb, var(--exam-card-accent, #2563eb) 10%, white);
         border: 1px solid color-mix(in srgb, var(--exam-card-accent, #2563eb) 22%, #e2e8f0);
-        color: var(--exam-card-accent, #2563eb);
+        color: var(--exam-card-ink, var(--exam-card-accent, #2563eb));
+      }
+      .exam-skill-hub .exam-practice-hub__icon-wrap svg {
+        stroke-width: 2.35;
       }
       .exam-skill-hub .exam-practice-hub__icon-wrap .exam-skill-icon {
-        --skill-accent: var(--exam-card-accent, #2563eb);
-        color: var(--exam-card-accent, #2563eb);
+        --skill-accent: var(--exam-card-ink, var(--exam-card-accent, #2563eb));
+        color: var(--exam-card-ink, var(--exam-card-accent, #2563eb));
         background: transparent;
         border: none;
       }
@@ -171,7 +226,7 @@ export default function ExamSkillHubCardStyles() {
         font-size: 0.92rem;
         font-weight: 700;
         letter-spacing: -0.015em;
-        color: #0f172a;
+        color: var(--exam-card-ink, #0f172a);
         line-height: 1.3;
         padding-right: 0;
       }

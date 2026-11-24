@@ -11,6 +11,8 @@ import { B2ExamPracticeChrome, B2ExamPracticeLayout } from '@/components/b2/B2Ex
 import { B2ExamPracticeContent, B2ExamQuestionItem, SkillPartInstructionsPanel } from '@/components/b2/B2ExamPracticeContent';
 import { useSkillExerciseUnlockHint } from '@/hooks/useSkillExerciseUnlockHint';
 import SkillPartPracticeHeader from '@/components/exam/SkillPartPracticeHeader';
+import RuoeTestSelector from '@/app/niveles/b2/exam-reading/RuoeTestSelector';
+import { isExerciseSlotUnlocked } from '@/utils/b2StarsWayProgress';
 import B2ExamInlineMcqClozePassage from '@/components/b2/B2ExamInlineMcqClozePassage';
 import SkillPartExplanationsPanel from '@/components/exam/SkillPartExplanationsPanel';
 import {
@@ -805,6 +807,25 @@ function B2ExamPaperPracticePageInner({
 
   const layoutPracticeOpen = skillNav.active ? skillNav.practiceReady : scoring.examPracticeOpen;
   const isSkillPracticeSession = skillNav.active && layoutPracticeOpen;
+  const listeningTestSelector =
+    skillRoute === 'exam-listening' &&
+    isSkillPracticeSession &&
+    examSlotPickerProps.availableSlots.length > 1 ? (
+      <RuoeTestSelector
+        accent="listening"
+        currentSlot={Number(examSlot)}
+        slots={examSlotPickerProps.availableSlots}
+        planLockedSlots={skillNav.planLockedSlots}
+        isSlotUnlocked={(slot) => isExerciseSlotUnlocked(
+          scoring.progressBySlot,
+          partNumber,
+          slot,
+          examSlotPickerProps.availableSlots,
+          skillNav.slotUnlockOptions,
+        )}
+        onSelect={(slot) => skillNav.guardExamSlotSelect(slot, handleSelectExamSlot)}
+      />
+    ) : null;
   const readingSession = useReadingPracticeSession();
   const hideFeedbackResolved = resolvePracticeHideFeedback({
     hideFeedback,
@@ -3923,6 +3944,7 @@ function B2ExamPaperPracticePageInner({
                   title={selectedPartTitleParts.heading}
                   subtitle={selectedPartTitleParts.subtitle}
                   unlockHint={skillUnlockHint}
+                  testSelector={listeningTestSelector}
                   exerciseLabel={
                     isSkillPracticeSession && examSlot && !hideStandaloneExerciseLabel
                       ? formatSkillExerciseLabel(examSlot, lang === 'es' ? 'es' : 'en')
@@ -4004,16 +4026,8 @@ function B2ExamPaperPracticePageInner({
                 {useListeningItemLayout ? (
                   <>
                     {listeningMonologueClip?.url ? (
-                      <div
-                        style={{
-                          marginTop: '0.85rem',
-                          padding: '0.85rem 1rem',
-                          background: '#f0f9ff',
-                          border: '1px solid #bae6fd',
-                          borderRadius: '10px',
-                        }}
-                      >
-                        <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#0c4a6e' }}>Audio</p>
+                      <div className="levels-listening-audio-card">
+                        <p className="levels-listening-audio-card__title">Audio</p>
                         {listeningMonologueClip.titulo ? (
                           <p
                             style={{
@@ -4037,16 +4051,8 @@ function B2ExamPaperPracticePageInner({
                         />
                       </div>
                     ) : showEnunciadoFallbackAudio ? (
-                      <div
-                        style={{
-                          marginTop: '0.85rem',
-                          padding: '0.85rem 1rem',
-                          background: '#f0f9ff',
-                          border: '1px solid #bae6fd',
-                          borderRadius: '10px',
-                        }}
-                      >
-                        <p style={{ margin: '0 0 0.5rem', fontWeight: 700, color: '#0c4a6e' }}>
+                      <div className="levels-listening-audio-card">
+                        <p className="levels-listening-audio-card__title">
                           Audio (instrucciones / enunciado)
                         </p>
                         <ExamListeningAudioPlayer
@@ -4449,6 +4455,7 @@ function B2ExamPaperPracticePageInner({
               <B2ExamPracticeContent
                 title={selectedPartTitleParts.heading}
                 titleSubtitle={selectedPartTitleParts.subtitle}
+                testSelector={listeningTestSelector}
                 skillUnlock={
                   isSkillPracticeSession
                     ? {
@@ -4962,7 +4969,7 @@ export default function B2ExamPaperPracticePage(props) {
   return (
     <Suspense
       fallback={
-        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
+        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" }}>
           Loading practice…
         </main>
       }

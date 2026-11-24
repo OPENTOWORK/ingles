@@ -80,7 +80,7 @@ export default function ForecastTab({ reloadToken = 0 }) {
             label: formatShortDate(point.date),
             forecast: point.forecast_balance,
           }))}
-          series={[{ key: 'forecast', label: 'Saldo previsto', color: '#6366f1' }]}
+          series={[{ key: 'forecast', label: 'Saldo previsto', color: '#6a4be8' }]}
         />
       </Card>
 

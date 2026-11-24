@@ -8,7 +8,7 @@ const ExamReadingPracticeClient = dynamic(
   {
     ssr: false,
     loading: () => (
-      <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
+      <main style={{ padding: '2rem', textAlign: 'center', fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" }}>
         <RouteLoadingMascot label="Loading practice…" variant={3} />
       </main>
     ),

@@ -73,7 +73,7 @@ const TOAST_OPTIONS = {
     iconTheme: { primary: '#f87171', secondary: '#0f172a' },
   },
   loading: {
-    iconTheme: { primary: '#818cf8', secondary: '#0f172a' },
+    iconTheme: { primary: '#a48fff', secondary: '#0f172a' },
   },
 };
 
@@ -775,6 +775,9 @@ function RootLayoutClientInner({ children }) {
               <div className="legal-footer-column legal-footer-column--reviews">
                 <FooterReviews />
                 <ul className="legal-footer-list footer-review__links">
+                  <li>
+                    <Link href="/precios">Pricing</Link>
+                  </li>
                   <li>
                     <Link href="/blog">Blog</Link>
                   </li>

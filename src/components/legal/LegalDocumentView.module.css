@@ -82,7 +82,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #1a5fb4 100%);
+  background: linear-gradient(90deg, #734a91 0%, #734a91 50%, #1a5fb4 100%);
 }
 
 .category {
@@ -116,7 +116,7 @@
 .intro {
   background: #ffffff;
   border: 1px solid #e5ebf3;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #6a4be8;
   border-radius: 14px;
   padding: 1.25rem 1.35rem;
   margin-bottom: 0;
@@ -168,7 +168,7 @@
   width: 2.05rem;
   height: 2.05rem;
   border-radius: 11px;
-  background: linear-gradient(135deg, #1a5fb4 0%, #667eea 100%);
+  background: linear-gradient(135deg, #1a5fb4 0%, #734a91 100%);
   color: #ffffff;
   font-size: 0.92rem;
   font-weight: 700;
@@ -386,7 +386,7 @@
 :global(body.reading-night-mode) .intro {
   background: #1e293b;
   border-color: #475569;
-  border-left-color: #667eea;
+  border-left-color: #6a4be8;
   box-shadow: none;
 }
 

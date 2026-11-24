@@ -38,13 +38,13 @@ export const TheorySection = ({ title, children, icon = '📚', defaultOpen = fa
       className={`theory-section${open ? ' theory-section--open' : ''}`}
       style={{
         marginBottom: open ? '1rem' : '0.65rem',
-        border: '1px solid #c7d2fe',
+        border: '1px solid #e0d6ff',
         borderRadius: '14px',
         overflow: 'hidden',
         background: 'white',
         boxShadow: open
-          ? '0 6px 20px rgba(102, 126, 234, 0.15)'
-          : '0 2px 8px rgba(102, 126, 234, 0.08)',
+          ? '0 6px 20px rgba(106, 75, 232, 0.15)'
+          : '0 2px 8px rgba(106, 75, 232, 0.08)',
         transition: 'margin-bottom 0.2s ease, box-shadow 0.2s ease',
       }}
     >
@@ -57,7 +57,7 @@ export const TheorySection = ({ title, children, icon = '📚', defaultOpen = fa
         aria-expanded={open}
         aria-controls={panelId}
         style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #5b6fd6 45%, #764ba2 100%)',
+          background: '#6a4be8',
           color: '#fff',
           padding: '1rem 1.25rem',
           display: 'flex',
@@ -158,7 +158,7 @@ export const Example = ({
         )}
         {spanish && (
           <div>
-            <strong style={{ color: '#667eea' }}>🇪🇸 Spanish:</strong>
+            <strong style={{ color: '#6a4be8' }}>🇪🇸 Spanish:</strong>
             <p style={{ margin: '0.25rem 0 0 0', color: '#4a5568' }}>{spanish}</p>
           </div>
         )}
@@ -225,7 +225,7 @@ export const Rule = ({ title, description, examples = [] }) => {
       </p>
       {examples.length > 0 && (
         <div>
-          <strong style={{ color: '#667eea', fontSize: '0.9rem' }}>Examples:</strong>
+          <strong style={{ color: '#6a4be8', fontSize: '0.9rem' }}>Examples:</strong>
           <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.5rem' }}>
             {examples.map((example, index) => (
               <li key={index} style={{ 
@@ -371,7 +371,7 @@ export const GrammarTable = ({ headers, rows, caption }) => {
       }}>
         <thead>
           <tr style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: '#6a4be8',
             color: 'white'
           }}>
             {headers.map((header, index) => (
@@ -429,7 +429,7 @@ export const ProgressIndicator = ({ current, total, label }) => {
         <span style={{ fontWeight: '500', color: '#4a5568' }}>
           {label || 'Progress'}
         </span>
-        <span style={{ fontSize: '0.9rem', color: '#667eea' }}>
+        <span style={{ fontSize: '0.9rem', color: '#6a4be8' }}>
           {current} of {total}
         </span>
       </div>
@@ -443,7 +443,7 @@ export const ProgressIndicator = ({ current, total, label }) => {
         <div style={{
           width: `${percentage}%`,
           height: '100%',
-          background: 'linear-gradient(90deg, #667eea, #764ba2)',
+          background: '#6a4be8',
           transition: 'width 0.3s ease'
         }} />
       </div>

@@ -37,14 +37,14 @@
 }
 
 .navLink:hover {
-  color: #312e81;
+  color: #3d2398;
   background: #eef2ff;
 }
 
 .navLinkActive {
-  color: #312e81;
+  color: #3d2398;
   background: #e0e7ff;
-  border-color: #c7d2fe;
+  border-color: #e0d6ff;
 }
 
 .navCount {
@@ -85,13 +85,13 @@
 }
 
 .moduleLink:hover {
-  border-color: #c7d2fe;
-  color: #4338ca;
+  border-color: #e0d6ff;
+  color: #5634d6;
 }
 
 .moduleLinkActive {
-  background: #4338ca;
-  border-color: #4338ca;
+  background: var(--brand-purple-hover, #5634d6);
+  border-color: #5634d6;
   color: #fff;
 }
 
@@ -122,12 +122,12 @@
 :global(body.reading-night-mode) .navLinkActive,
 :global(body.reading-night-mode) .moduleLink:hover {
   color: #c4b5fd;
-  background: #312e81;
-  border-color: #6366f1;
+  background: #3d2398;
+  border-color: #6a4be8;
 }
 
 :global(body.reading-night-mode) .moduleLinkActive {
-  background: #4f46e5;
-  border-color: #4f46e5;
+  background: var(--brand-purple, #6a4be8);
+  border-color: var(--brand-purple, #6a4be8);
   color: #fff;
 }

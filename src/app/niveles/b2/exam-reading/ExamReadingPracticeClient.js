@@ -120,8 +120,6 @@ import {
   playSkillPracticeCheckSounds,
 } from '@/lib/skillPracticeFeedbackSounds';
 import { useReadingPracticeSession } from '@/context/ReadingPracticeSessionContext';
-import ReadingQuestionFlagButton from '@/components/exam/ReadingQuestionFlagButton';
-import ReadingConfidenceSelector from '@/components/exam/ReadingConfidenceSelector';
 import ExamModeSectionBanner from '@/components/niveles/ExamModeSectionBanner';
 import { useExamModeStrict } from '@/hooks/useExamModeStrict';
 import { useExamModeSectionDraftControls } from '@/hooks/useExamModeSectionDraftControls';
@@ -462,7 +460,7 @@ function B2ReadingExamsPageInner() {
     hideFeedback,
     answersRevealed: readingSession.answersRevealed,
     skillPracticeMode: isSkillPracticeSession,
-    instantFeedback: readingSession.instantFeedback,
+    instantFeedback: false,
   });
 
   const tabPartsData = useMemo(() => {
@@ -1808,7 +1806,7 @@ function B2ReadingExamsPageInner() {
         ? { openGrades: nextOpenGrades, checkedQuestions: nextChecked }
         : { openChecks: nextOpenChecks, checkedQuestions: nextChecked },
     );
-    if (useAnchoredAnswerReview && !readingSession.instantFeedback) {
+    if (useAnchoredAnswerReview) {
       const entries = isOpenClozePart || isKeyWordPart
         ? openQuestionNumbers.map((number) => {
             const key = getQuestionKey(selectedPart.id, number, 'open');
@@ -2351,7 +2349,7 @@ function B2ReadingExamsPageInner() {
     skillPracticeMode: isSkillPracticeSession,
     hideFeedback,
     answersRevealed: readingSession.answersRevealed,
-    instantFeedback: readingSession.instantFeedback,
+    instantFeedback: false,
   }) && (
     <button
       type="button"
@@ -2735,12 +2733,6 @@ function B2ReadingExamsPageInner() {
                                 )
                               : `Question ${group.questionNumber}`}
                         </p>
-                        {group.questionNumber && hideInstantFeedback && selectedOptions[questionKey] ? (
-                          <ReadingQuestionFlagButton
-                            questionKey={questionKey}
-                            questionNumber={group.questionNumber}
-                          />
-                        ) : null}
                         </div>
                         <div className="reading-mcq-options">
                           {group.options.map((option) => {
@@ -2795,10 +2787,6 @@ function B2ReadingExamsPageInner() {
                             );
                           })}
                         </div>
-
-                        {hideInstantFeedback && selectedOptions[questionKey] ? (
-                          <ReadingConfidenceSelector questionKey={questionKey} />
-                        ) : null}
 
                         {partNumberReading === 6 && part6SentencePoolBlock ? (
                           <details className="levels-exam-part6-pool-inline" style={{ marginTop: '0.75rem' }}>
@@ -2871,7 +2859,7 @@ function B2ReadingExamsPageInner() {
           skillPracticeMode: isSkillPracticeSession,
           hideFeedback,
           answersRevealed: readingSession.answersRevealed,
-          instantFeedback: readingSession.instantFeedback,
+          instantFeedback: false,
         })}
         onCheckAnswers={handleCheckAllAnswers}
         checkAnswersDisabled={!hasCheckableAnswers}
@@ -2933,12 +2921,11 @@ function B2ReadingExamsPageInner() {
 }
 
 export default function ExamReadingPracticeClient() {
-  const pathname = usePathname();
   return (
     <Suspense
-      fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>Loading practice…</main>}
+      fallback={<main style={{ padding: '2rem', textAlign: 'center', fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" }}>Loading practice…</main>}
     >
-      <ReadingPracticeSessionProvider defaultInstantFeedback={!pathname?.includes('/exam-reading-and-use-of-english')}>
+      <ReadingPracticeSessionProvider defaultInstantFeedback={false}>
         <B2ReadingExamsPageInner />
       </ReadingPracticeSessionProvider>
     </Suspense>

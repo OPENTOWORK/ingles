@@ -2,9 +2,9 @@
   margin: 0;
   padding: 1.1rem 1.15rem 1.15rem;
   border-radius: 16px;
-  border: 1px solid #e9d5ff;
+  border: 1px solid #e0d6ff;
   background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 48%, #eff6ff 100%);
-  box-shadow: 0 8px 28px rgba(124, 58, 237, 0.1);
+  box-shadow: 0 8px 28px rgba(106, 75, 232, 0.1);
 }
 
 .cardLoading,
@@ -29,9 +29,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(145deg, #7c3aed, #db2777);
+  background: linear-gradient(145deg, #6a4be8, #db2777);
   color: #fff;
-  box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 6px 18px rgba(106, 75, 232, 0.35);
 }
 
 .badgeIcon {
@@ -70,8 +70,8 @@
   flex-shrink: 0;
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  background: rgba(124, 58, 237, 0.12);
-  color: #6d28d9;
+  background: rgba(106, 75, 232, 0.12);
+  color: #5634d6;
   font-size: 0.78rem;
   font-weight: 800;
   white-space: nowrap;
@@ -89,7 +89,7 @@
 }
 
 .progressRemaining {
-  color: #7c3aed;
+  color: #6a4be8;
 }
 
 .bar {
@@ -105,7 +105,7 @@
   height: 100%;
   min-width: 4px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #8b5cf6 0%, #db2777 55%, #f59e0b 100%);
+  background: linear-gradient(90deg, #6a4be8 0%, #db2777 55%, #f59e0b 100%);
   transition: width 0.45s ease;
 }
 
@@ -159,7 +159,7 @@
 }
 
 .hintLink {
-  color: #7c3aed;
+  color: #6a4be8;
   font-weight: 800;
   text-decoration: none;
 }

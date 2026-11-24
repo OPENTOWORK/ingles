@@ -36,7 +36,7 @@
   background: #6a4be8;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.22);
+  box-shadow: 0 8px 20px rgba(106, 75, 232, 0.22);
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
@@ -45,7 +45,7 @@
 
 .newBtn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(79, 70, 229, 0.28);
+  box-shadow: 0 12px 24px rgba(106, 75, 232, 0.28);
 }
 
 .topActions {
@@ -56,8 +56,8 @@
 
 .newBtnSecondary {
   background: #fff;
-  color: #5634d6;
-  border: 1px solid #c7d2fe;
+  color: #6a4be8;
+  border: 1px solid #e0d6ff;
 }
 
 .typeTabs {
@@ -80,8 +80,8 @@
 
 .typeTabActive {
   background: #eef2ff;
-  border-color: #818cf8;
-  color: #5634d6;
+  border-color: #a48fff;
+  color: #6a4be8;
 }
 
 .error {
@@ -193,12 +193,12 @@
 }
 
 .sidebarItem:hover {
-  border-color: #c7d2fe;
+  border-color: #e0d6ff;
   background: #f8fafc;
 }
 
 .sidebarItemActive {
-  border-color: #818cf8;
+  border-color: #a48fff;
   background: #eef2ff;
 }
 
@@ -320,8 +320,8 @@
 
 :global(body.reading-night-mode) .typeTabActive,
 :global(body.reading-night-mode) .sidebarItemActive {
-  background: #312e81;
-  border-color: #818cf8;
+  background: #3d2398;
+  border-color: #a48fff;
   color: #c4b5fd;
 }
 
@@ -342,5 +342,5 @@
 
 :global(body.reading-night-mode) .topLink,
 :global(body.reading-night-mode) .viewLink {
-  color: #a5b4fc;
+  color: #b6a6ff;
 }

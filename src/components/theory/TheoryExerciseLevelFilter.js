@@ -55,17 +55,17 @@ export default function TheoryExerciseLevelFilter({
 
         .theory-level-filter__btn:hover:not(.theory-level-filter__btn--active) {
           background: #f8fafc;
-          color: #4338ca;
+          color: var(--brand-purple, #6a4be8);
         }
 
         .theory-level-filter__btn--active {
           color: #fff;
-          background: #6366f1;
+          background: var(--brand-purple, #6a4be8);
           box-shadow: none;
         }
 
         .theory-level-filter__btn:focus-visible {
-          outline: 2px solid #667eea;
+          outline: 2px solid #6a4be8;
           outline-offset: 2px;
         }
       `}</style>

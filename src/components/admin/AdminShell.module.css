@@ -81,7 +81,7 @@
   align-items: center;
   justify-content: center;
   background: #f0ebff;
-  color: #5634d6;
+  color: #6a4be8;
   font-weight: 800;
   font-size: 0.95rem;
   box-shadow: inset 0 0 0 1px rgba(106, 75, 232, 0.18);
@@ -111,7 +111,7 @@
 .collapseBtn:hover {
   background: #f8fafc;
   border-color: #cdbfff;
-  color: #5634d6;
+  color: #6a4be8;
   transform: translateX(1px);
 }
 
@@ -218,7 +218,7 @@
   bottom: 0.5rem;
   width: 3px;
   border-radius: 999px;
-  background: linear-gradient(180deg, #8466ff, #6545ec);
+  background: #6a4be8;
 }
 
 .navItemDragging {
@@ -229,7 +229,7 @@
   width: calc(var(--admin-sidebar-width, 280px) - 1.5rem);
   box-shadow:
     0 22px 48px rgba(15, 23, 42, 0.16),
-    0 0 0 1px rgba(165, 180, 252, 0.45);
+    0 0 0 1px rgba(182, 166, 255, 0.45);
   background: #ffffff;
   transform: rotate(0.4deg);
 }
@@ -305,7 +305,7 @@
 }
 
 .navLinkActive {
-  color: #5634d6;
+  color: #6a4be8;
   font-weight: 600;
 }
 
@@ -480,9 +480,9 @@
 }
 
 :global(body.reading-night-mode) .sidebarCollapsedLabel {
-  background: linear-gradient(145deg, #312e81, #1e1b4b);
+  background: linear-gradient(145deg, #3d2398, #1e1b4b);
   color: #c4b5fd;
-  box-shadow: inset 0 0 0 1px rgba(165, 180, 252, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(182, 166, 255, 0.28);
 }
 
 :global(body.reading-night-mode) .collapseBtn {
@@ -493,7 +493,7 @@
 
 :global(body.reading-night-mode) .collapseBtn:hover {
   background: #334155;
-  border-color: #818cf8;
+  border-color: #a48fff;
   color: #c4b5fd;
 }
 
@@ -519,9 +519,9 @@
 }
 
 :global(body.reading-night-mode) .navItemActive {
-  border-color: rgba(129, 140, 248, 0.55);
-  background: linear-gradient(90deg, rgba(49, 46, 129, 0.7) 0%, rgba(30, 27, 75, 0.9) 100%);
-  box-shadow: inset 0 0 0 1px rgba(129, 140, 248, 0.28);
+  border-color: rgba(164, 143, 255, 0.55);
+  background: linear-gradient(90deg, rgba(61, 35, 152, 0.7) 0%, rgba(30, 27, 75, 0.9) 100%);
+  box-shadow: inset 0 0 0 1px rgba(164, 143, 255, 0.28);
 }
 
 :global(body.reading-night-mode) .navLink {
@@ -543,7 +543,7 @@
 }
 
 :global(body.reading-night-mode) .dragHandle:hover {
-  background: rgba(49, 46, 129, 0.45);
+  background: rgba(61, 35, 152, 0.45);
 }
 
 :global(body.reading-night-mode) .navItemOverlay {

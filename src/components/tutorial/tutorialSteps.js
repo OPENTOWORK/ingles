@@ -1,5 +1,4 @@
 import { APP_ROUTES } from '@/config/appRoutes';
-import { QUIZ_GAME_QUESTION_COUNT, QUIZ_GAME_SECONDS } from '@/lib/quizGame';
 import { TRAINING_LIFE_REGEN_HOURS, TRAINING_LIVES_MAX } from '@/lib/trainingLives';
 import { TRAINING_UNLOCK_STARS } from '@/lib/trainingPathUnlock';
 import { TRAINING_CEFR_OPTIONS, TRAINING_DIFFICULTY_OPTIONS } from '@/utils/trainingStarsProgress';
@@ -81,14 +80,6 @@ export const TUTORIAL_STEPS = [
     body: 'Audios como los del examen, en sus 4 partes. Mientras practicas puedes pausar y repetir el audio, y ves al instante si has acertado.',
     route: EXAM_PRACTICE_HUB,
     target: '[data-tour="practice-listening"]',
-  },
-  {
-    id: 'quiz',
-    eyebrow: 'Exam Practice',
-    title: 'Quiz game',
-    body: `${QUIZ_GAME_QUESTION_COUNT} preguntas contrarreloj, ${QUIZ_GAME_SECONDS} segundos cada una. Cuanto antes aciertes, más puntos, y las rachas suman extra. Perfecto para repasar en pocos minutos.`,
-    route: EXAM_PRACTICE_HUB,
-    target: '[data-tour="practice-quiz"]',
   },
   {
     id: 'exam-mode',

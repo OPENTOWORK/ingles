@@ -41,7 +41,6 @@ export default function WritingMapBottomSheet({ id, items, onClose }) {
       >
         <div className="writing-map__sheet-grip" aria-hidden="true" />
         <div className="writing-map__sheet-head">
-          <p className="writing-map__sheet-quote">“{first.quote}”</p>
           <button
             type="button"
             ref={closeRef}

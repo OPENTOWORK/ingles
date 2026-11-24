@@ -92,7 +92,7 @@ export default function ResultPage() {
   }, [answers]);
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'Segoe UI, sans-serif', backgroundColor: '#e8f4ff', minHeight: '100vh' }}>
+    <main style={{ padding: '2rem', fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif", backgroundColor: '#e8f4ff', minHeight: '100vh' }}>
       <h1 style={{ textAlign: 'center' }}>C1 Exam Results</h1>
       <table style={{ width: '100%', maxWidth: '800px', margin: '2rem auto', borderCollapse: 'collapse' }}>
         <thead>

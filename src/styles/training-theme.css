@@ -14,8 +14,8 @@
   --train-line: #e2e8f0;
   --train-line-strong: #cbd5e1;
   --train-chip: #eef2ff;
-  --train-chip-ink: #4f46e5;
-  --train-accent: #7c3aed;
+  --train-chip-ink: #6a4be8;
+  --train-accent: #6a4be8;
   --train-violet: #f5f3ff;
   --train-violet-2: #ede9fe;
   --train-violet-line: #c4b5fd;
@@ -26,9 +26,9 @@
   --train-locked: #f1f5f9;
   --train-locked-ink: #94a3b8;
   --train-review: #eef2ff;
-  --train-review-ink: #5b21b6;
+  --train-review-ink: #5634d6;
   --train-word: #eef2ff;
-  --train-word-ink: #5b21b6;
+  --train-word-ink: #5634d6;
   --train-word-used: #e2e8f0;
   --train-word-used-ink: #64748b;
   --train-input: #ffffff;
@@ -44,13 +44,13 @@
   --train-path: #e2e8f0;
   --train-check: #ffffff;
   --train-card-shadow: 0 4px 6px rgba(15, 23, 42, 0.04), 0 20px 40px rgba(15, 23, 42, 0.08);
-  --train-canvas-glow: rgba(99, 102, 241, 0.12);
+  --train-canvas-glow: rgba(106, 75, 232, 0.12);
   --train-listen-line: #c4b5fd;
   --train-listen-bg: #ffffff;
   --train-listen-hover: #f5f3ff;
   --train-speaker: #e2e8f0;
   --train-speaker-ink: #334155;
-  --train-tag: #4f46e5;
+  --train-tag: #6a4be8;
 }
 
 body.reading-night-mode {
@@ -66,26 +66,26 @@ body.reading-night-mode {
   --train-faint: #64748b;
   --train-line: #334155;
   --train-line-strong: #475569;
-  --train-chip: #2e2460;
+  --train-chip: #2c1a6e;
   --train-chip-ink: #c4b5fd;
-  --train-accent: #9455e3;
-  --train-violet: #2e2460;
+  --train-accent: #6a4be8;
+  --train-violet: #2c1a6e;
   --train-violet-2: #3b2d6b;
-  --train-violet-line: #a5b4fc;
+  --train-violet-line: #b6a6ff;
   --train-passage: #1e1b3a;
-  --train-passage-line: #4c1d95;
+  --train-passage-line: #3d2398;
   --train-station: #0f172a;
   --train-station-ink: #cbd5e1;
   --train-locked: #111827;
   --train-locked-ink: #64748b;
-  --train-review: #2e2460;
+  --train-review: #2c1a6e;
   --train-review-ink: #c4b5fd;
-  --train-word: #312e81;
+  --train-word: #3d2398;
   --train-word-ink: #c4b5fd;
   --train-word-used: #334155;
   --train-word-used-ink: #94a3b8;
   --train-input: #0f172a;
-  --train-input-focus: #2e2460;
+  --train-input-focus: #2c1a6e;
   --train-warn-bg: #422006;
   --train-warn-ink: #fcd34d;
   --train-warn-line: #fcd34d;
@@ -97,10 +97,10 @@ body.reading-night-mode {
   --train-path: #334155;
   --train-check: #0f172a;
   --train-card-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 20px 50px rgba(0, 0, 0, 0.35);
-  --train-canvas-glow: rgba(99, 102, 241, 0.16);
-  --train-listen-line: #4c1d95;
+  --train-canvas-glow: rgba(106, 75, 232, 0.16);
+  --train-listen-line: #3d2398;
   --train-listen-bg: #1e293b;
-  --train-listen-hover: #2e2460;
+  --train-listen-hover: #2c1a6e;
   --train-speaker: #334155;
   --train-speaker-ink: #cbd5e1;
   --train-tag: #1e1b4b;

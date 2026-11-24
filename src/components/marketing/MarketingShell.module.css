@@ -33,14 +33,14 @@
 }
 
 .navLink:hover {
-  color: #312e81;
+  color: #3d2398;
   background: #eef2ff;
 }
 
 .navLinkActive {
-  color: #312e81;
+  color: #3d2398;
   background: #e0e7ff;
-  border-color: #c7d2fe;
+  border-color: #e0d6ff;
 }
 
 .card {
@@ -102,10 +102,10 @@
 
 .moreButton {
   margin-top: 0.85rem;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #e0d6ff;
   border-radius: 999px;
   background: #eef2ff;
-  color: #312e81;
+  color: #3d2398;
   padding: 0.4rem 0.9rem;
   font: inherit;
   font-weight: 600;
@@ -182,7 +182,7 @@
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: #4f46e5;
+  background: var(--brand-purple, #6a4be8);
 }
 
 .table {
@@ -240,7 +240,7 @@
 .journeyHead em {
   font-style: normal;
   font-weight: 700;
-  color: #3730a3;
+  color: #4528c4;
   background: #eef2ff;
   border-radius: 999px;
   padding: 0.1rem 0.5rem;
@@ -269,8 +269,8 @@
 :global(body.reading-night-mode) .navLink:hover,
 :global(body.reading-night-mode) .navLinkActive {
   color: #c4b5fd;
-  background: #312e81;
-  border-color: #6366f1;
+  background: #3d2398;
+  border-color: #6a4be8;
 }
 
 :global(body.reading-night-mode) .stat,
@@ -315,7 +315,7 @@
 }
 
 :global(body.reading-night-mode) .moreButton {
-  background: #312e81;
+  background: #3d2398;
   color: #e0e7ff;
-  border-color: #6366f1;
+  border-color: #6a4be8;
 }

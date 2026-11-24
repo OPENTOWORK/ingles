@@ -8,6 +8,7 @@ import { callExamWritingCorrection,
 } from '@/lib/ai/draloAiClient';
 import WritingFeedbackBody from '@/components/writing/WritingFeedbackBody';
 import WritingFeedbackPage from '@/components/writing/v3/WritingFeedbackPage';
+import { WRITING_SAMPLE_CORRECTION } from '@/components/writing/v3/writingSampleCorrection';
 import { trackWritingErrors } from '@/lib/errorTracker';
 import { writingLimitLabel, LIMIT_REACHED } from '@/lib/aiUsageLimitCopy';
 import GuestRegisterTeaser from '@/components/auth/GuestRegisterTeaser';
@@ -60,6 +61,8 @@ export default function B2WritingLongFormAiPanel({
   onGuestAttemptBlocked,
   lang = 'en',
   examLevelLabel = 'B2',
+  onCorrectionChange = null,
+  sampleCorrection = false,
 }) {
   const isEn = lang === 'en';
   const [essay, setEssay] = useState('');
@@ -130,6 +133,14 @@ export default function B2WritingLongFormAiPanel({
   }, [refreshUsageHint]);
 
   useEffect(() => {
+    if (sampleCorrection) {
+      setEssay(WRITING_SAMPLE_CORRECTION.essay);
+      setV3Payload(WRITING_SAMPLE_CORRECTION.v3);
+      setAiFeedback('');
+      setScores(null);
+      setLastError('');
+      return;
+    }
     if (typeof window === 'undefined' || !storageKey) return;
     try {
       const raw = localStorage.getItem(storageKey);
@@ -141,7 +152,7 @@ export default function B2WritingLongFormAiPanel({
     setScores(null);
     setV3Payload(null);
     setLastError('');
-  }, [storageKey]);
+  }, [storageKey, sampleCorrection]);
 
   const persist = useCallback(
     (value) => {
@@ -156,13 +167,15 @@ export default function B2WritingLongFormAiPanel({
   );
 
   useEffect(() => {
+    if (sampleCorrection) return undefined;
     const t = setTimeout(() => persist(essay), 350);
     return () => clearTimeout(t);
-  }, [essay, persist]);
+  }, [essay, persist, sampleCorrection]);
 
   const wordCount = countWords(essay);
   const meetsWordRange = wordCount >= wordMin && wordCount <= wordMax;
   const hasSubmitted = Boolean(aiFeedback || scores || v3Payload);
+  const showCorrection = !examMode && hasSubmitted;
   const usesDeferredExamCorrection = reviewExamCorrection === true;
   const limitReached = !usesDeferredExamCorrection && !usageUnlimited && usageRemaining === 0;
 
@@ -171,6 +184,11 @@ export default function B2WritingLongFormAiPanel({
       onDraftStats({ wordCount, submitted: hasSubmitted, loading });
     }
   }, [wordCount, hasSubmitted, loading, onDraftStats]);
+
+  useEffect(() => {
+    onCorrectionChange?.(showCorrection);
+    return () => onCorrectionChange?.(false);
+  }, [showCorrection, onCorrectionChange]);
 
   const evaluateEssay = async () => {
     const text = essay.trim();
@@ -292,9 +310,9 @@ export default function B2WritingLongFormAiPanel({
 
   return (
     <div className="levels-b2-writing-panel">
-      <p className="levels-exam-split__section-title">{heading}</p>
+      {showCorrection ? null : <p className="levels-exam-split__section-title">{heading}</p>}
 
-      <div className="levels-b2-writing-panel__meta">
+      {showCorrection ? null : <div className="levels-b2-writing-panel__meta">
         <span>
           {isEn ? `${examLevelLabel} exam-style length` : `Extensión estilo examen ${examLevelLabel}`}:{' '}
           <strong>
@@ -320,9 +338,9 @@ export default function B2WritingLongFormAiPanel({
             {isEn ? 'Word count within range.' : 'Extensión dentro del rango.'}
           </span>
         ) : null}
-      </div>
+      </div>}
 
-      <textarea
+      {showCorrection ? null : <textarea
         className="levels-b2-writing-panel__textarea"
         rows={18}
         placeholder={
@@ -334,9 +352,9 @@ export default function B2WritingLongFormAiPanel({
         onChange={(e) => setEssay(e.target.value)}
         spellCheck
         aria-label="B2 writing area"
-      />
+      />}
 
-      {examMode ? (
+      {showCorrection ? null : examMode ? (
         <p className="levels-b2-writing-panel__exam-note">
           {isEn
             ? 'Your text is saved automatically. Feedback will be available after you finish the section.'
@@ -362,15 +380,15 @@ export default function B2WritingLongFormAiPanel({
           >
             {loading
               ? isEn
-                ? 'Checking with Dralo…'
-                : 'Corrigiendo con Dralo…'
+                ? 'Checking…'
+                : 'Corrigiendo…'
               : limitReached
                 ? isEn
                   ? 'Daily limit reached'
                   : 'Límite diario alcanzado'
                 : isEn
-                  ? 'Check with Dralo'
-                  : 'Corregir con Dralo'}
+                  ? 'Check'
+                  : 'Corregir'}
           </button>
         </div>
       )}
@@ -417,6 +435,11 @@ export default function B2WritingLongFormAiPanel({
 
       {!examMode && v3Payload ? (
         <div className="levels-b2-writing-panel__feedback" ref={feedbackRef}>
+          {sampleCorrection ? (
+            <p className="writing-v3__sample-note">
+              Sample preview. This is not a saved check, and your draft on this test is unchanged.
+            </p>
+          ) : null}
           <WritingFeedbackPage
             candidateResponse={v3Payload.candidate_response}
             feedbackPayload={v3Payload.feedback_payload}

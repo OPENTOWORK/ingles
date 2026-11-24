@@ -26,11 +26,6 @@ export function ExamSkillHubCardInner({ kind, label, hint, badge }) {
         ) : (
           <span aria-hidden />
         )}
-        {!badge ? (
-          <span className="exam-practice-hub__arrow" aria-hidden>
-            →
-          </span>
-        ) : null}
       </div>
     </>
   );
@@ -50,11 +45,6 @@ export function ExamSkillHubBannerInner({ kind, label, hint, badge }) {
           <span className="exam-practice-hub__hint">{hint}</span>
         ) : null}
       </div>
-      {!badge ? (
-        <span className="exam-practice-hub__arrow exam-practice-hub__arrow--banner" aria-hidden>
-          →
-        </span>
-      ) : null}
     </div>
   );
 }

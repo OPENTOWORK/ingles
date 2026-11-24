@@ -95,7 +95,7 @@ export const MultipleChoiceExercise = ({
               alignItems: 'center',
               gap: '0.75rem',
               padding: '0.75rem',
-              border: selected === index ? '2px solid #667eea' : '2px solid #e2e8f0',
+              border: selected === index ? '2px solid #6a4be8' : '2px solid #e2e8f0',
               borderRadius: '12px',
               cursor: showResult ? 'default' : 'pointer',
               background: showResult 
@@ -146,7 +146,7 @@ export const MultipleChoiceExercise = ({
               disabled={selected === null}
               style={{
                 padding: '0.75rem 1.5rem',
-                background: selected !== null ? '#667eea' : '#e2e8f0',
+                background: selected !== null ? '#6a4be8' : '#e2e8f0',
                 color: selected !== null ? 'white' : '#a0aec0',
                 border: 'none',
                 borderRadius: '8px',
@@ -383,7 +383,7 @@ export const FillBlanksExercise = ({
             disabled={Object.keys(answers).length !== blanks.length}
             style={{
               padding: '0.75rem 1.5rem',
-              background: Object.keys(answers).length === blanks.length ? '#667eea' : '#e2e8f0',
+              background: Object.keys(answers).length === blanks.length ? '#6a4be8' : '#e2e8f0',
               color: Object.keys(answers).length === blanks.length ? 'white' : '#a0aec0',
               border: 'none',
               borderRadius: '8px',
@@ -603,7 +603,7 @@ export const TrueFalseExercise = ({
             disabled={Object.keys(answers).length !== statements.length}
             style={{
               padding: '0.75rem 1.5rem',
-              background: Object.keys(answers).length === statements.length ? '#667eea' : '#e2e8f0',
+              background: Object.keys(answers).length === statements.length ? '#6a4be8' : '#e2e8f0',
               color: Object.keys(answers).length === statements.length ? 'white' : '#a0aec0',
               border: 'none',
               borderRadius: '8px',

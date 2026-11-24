@@ -8,21 +8,18 @@
  * The bubble grows with its content: a spelling slip gets two lines, a content
  * prompt gets a paragraph. There is no fixed large layout for every issue.
  */
-export default function WritingMapBubble({ id, items, labelId, flipped, onClose }) {
+export default function WritingMapBubble({ id, items, top = 0, onClose }) {
   const first = items[0];
 
   return (
     <span
       id={id}
-      className={`writing-map__bubble${flipped ? ' writing-map__bubble--flipped' : ''}`}
+      className="writing-map__bubble"
+      style={{ top }}
       role="dialog"
       aria-label={`Feedback on “${first.quote}”`}
     >
-      <span className="writing-map__bubble-arrow" aria-hidden="true" />
       <span className="writing-map__bubble-head">
-        <span className="writing-map__bubble-quote" id={labelId}>
-          “{first.quote}”
-        </span>
         <button
           type="button"
           className="writing-map__bubble-close"
@@ -53,10 +50,11 @@ export function WritingMapFeedbackList({ items }) {
             <span className="writing-map__feedback-tag-label">{item.category.label}</span>
             <span className="writing-result__sr-only">{item.kind_label}</span>
           </span>
+          <span className="writing-map__feedback-fix-label">Why</span>
           <span className="writing-map__feedback-text">{item.explanation}</span>
           {item.suggested_change ? (
             <span className="writing-map__feedback-fix">
-              <span className="writing-map__feedback-fix-label">Try</span>
+              <span className="writing-map__feedback-fix-label">Suggestion</span>
               <span className="writing-map__feedback-fix-value">{item.suggested_change}</span>
             </span>
           ) : null}

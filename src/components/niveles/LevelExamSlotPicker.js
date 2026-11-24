@@ -59,8 +59,8 @@ export default function LevelExamSlotPicker({ value, onSelect }) {
             color 0.15s;
         }
         .level-exam-chip:hover {
-          border-color: #818cf8;
-          color: #4338ca;
+          border-color: #a48fff;
+          color: #5634d6;
         }
         .level-exam-chip--active {
           border-color: #2563eb;

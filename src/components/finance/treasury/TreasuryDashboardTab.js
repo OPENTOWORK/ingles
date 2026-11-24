@@ -144,7 +144,7 @@ export default function TreasuryDashboardTab({ reloadToken = 0 }) {
                 label: formatShortDate(point.date),
                 balance: point.balance,
               }))}
-              series={[{ key: 'balance', label: 'Saldo real', color: '#6366f1' }]}
+              series={[{ key: 'balance', label: 'Saldo real', color: '#6a4be8' }]}
             />
           ) : (
             <EmptyState

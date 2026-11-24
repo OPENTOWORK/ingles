@@ -59,17 +59,17 @@ export default function NivelesComingSoonNotice({ level, skillLabel = null, back
           margin: 0;
           padding: 6px 12px;
           border-radius: 999px;
-          border: 1px solid #e0d6ff;
+          border: 1px solid #cdbfff;
           background: #fff;
-          color: #4338ca;
+          color: var(--brand-purple, #6a4be8);
           font-size: 0.82rem;
           font-weight: 800;
           line-height: 1;
           text-decoration: none;
         }
         :global(.exam-practice-hub__level.is-active) {
-          background: #4f46e5;
-          border-color: #4f46e5;
+          background: var(--brand-purple, #6a4be8);
+          border-color: var(--brand-purple, #6a4be8);
           color: #fff;
         }
         p {

@@ -229,7 +229,7 @@ export default function InternalMessagesSection({ session }) {
           padding: 0.35rem 1rem;
           border-radius: 999px;
           background: #f0ebff;
-          color: #5634d6;
+          color: #6a4be8;
           font-size: 0.95rem;
           font-weight: 700;
           letter-spacing: 0.04em;
@@ -278,7 +278,7 @@ export default function InternalMessagesSection({ session }) {
         }
         .internal-channel--active {
           border-color: #6a4be8;
-          background: linear-gradient(180deg, #f4f0ff 0%, #fff 100%);
+          background: #f8f5ff;
           box-shadow: 0 8px 28px rgba(106, 75, 232, 0.14);
         }
         .internal-channel:disabled {
@@ -325,11 +325,11 @@ export default function InternalMessagesSection({ session }) {
           line-height: 1.45;
         }
         .submit-btn--internal {
-          background: linear-gradient(135deg, #8466ff 0%, #6545ec 55%, #5333d6 100%);
-          box-shadow: 0 10px 24px rgba(99, 67, 236, 0.28);
+          background: #6a4be8;
+          box-shadow: 0 10px 24px rgba(106, 75, 232, 0.28);
         }
         .submit-btn--internal:hover:not(:disabled) {
-          box-shadow: 0 14px 30px rgba(99, 67, 236, 0.38);
+          box-shadow: 0 14px 30px rgba(106, 75, 232, 0.38);
         }
       `}</style>
     </section>

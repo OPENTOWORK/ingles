@@ -176,14 +176,14 @@ export function buildNewsletterConfirmEmail({ confirmUrl, unsubscribeUrl, siteUr
     'El equipo de Dralo',
     homeUrl,
   ].join('\n');
-  const html = `<div style="margin:0;padding:0;background:#f4edff;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4edff;margin:0;padding:0;">
+  const html = `<div style="margin:0;padding:0;background:#f0ebff;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f0ebff;margin:0;padding:0;">
     <tr>
       <td align="center" style="padding:32px 16px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border-radius:22px;overflow:hidden;">
           <tr>
             <td style="padding:28px 32px 8px;font-family:Arial,Helvetica,sans-serif;">
-              <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#6d28d9;">Newsletter B2 First</p>
+              <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:#5634d6;">Newsletter B2 First</p>
               <p style="margin:10px 0 0;font-size:26px;line-height:1.2;font-weight:800;color:#241b4a;">Confirma tu correo</p>
             </td>
           </tr>
@@ -194,9 +194,9 @@ export function buildNewsletterConfirmEmail({ confirmUrl, unsubscribeUrl, siteUr
                 <a href="${confirmHref}" style="display:inline-block;padding:14px 22px;border-radius:999px;background:#6a4be8;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;">Confirmar suscripción</a>
               </p>
               <p style="margin:22px 0 0;">Te ayuda a preparar el B2 First: fechas de examen, orientación para organizar el estudio y recursos que puedes aplicar al practicar. Puedes darte de baja cuando quieras.</p>
-              <p style="margin:22px 0 0;font-size:14px;color:#64748b;">Si no has sido tú, ignora este mensaje o <a href="${unsubscribeHref}" style="color:#6d28d9;">date de baja</a>.</p>
+              <p style="margin:22px 0 0;font-size:14px;color:#64748b;">Si no has sido tú, ignora este mensaje o <a href="${unsubscribeHref}" style="color:#5634d6;">date de baja</a>.</p>
               <p style="margin:26px 0 0;font-weight:800;color:#1e1b4b;">El equipo de Dralo</p>
-              <p style="margin:4px 0 0;"><a href="${homeHref}" style="color:#6d28d9;text-decoration:underline;">dralo.es</a></p>
+              <p style="margin:4px 0 0;"><a href="${homeHref}" style="color:#5634d6;text-decoration:underline;">dralo.es</a></p>
             </td>
           </tr>
         </table>

@@ -515,7 +515,7 @@ export default function LevelExamModePractice({ slug }) {
   return (
     <Suspense
       fallback={
-        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: 'Segoe UI, sans-serif' }}>
+        <main style={{ padding: '2rem', textAlign: 'center', fontFamily: "var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif" }}>
           Loading exam mode…
         </main>
       }

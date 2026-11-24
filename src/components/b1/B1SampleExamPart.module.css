@@ -1,6 +1,6 @@
 .paper {
   width: 100%;
-  font-family: 'Segoe UI', system-ui, -apple-system, Arial, Helvetica, sans-serif;
+  font-family: var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
   color: #1a202c;
   line-height: 1.55;
   display: flex;
@@ -468,7 +468,7 @@
   border-radius: 6px;
   background: #fef9c3;
   border: 1px solid #facc15;
-  font-family: 'Segoe Print', 'Comic Sans MS', cursive;
+  font-family: var(--font-landing), 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
   font-weight: 700;
   color: #854d0e;
 }

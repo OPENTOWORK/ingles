@@ -87,9 +87,9 @@
   width: 0.65rem;
   height: 0.65rem;
   border-radius: 50%;
-  background: #6366f1;
+  background: var(--brand-purple, #6a4be8);
   border: 2px solid #fff;
-  box-shadow: 0 0 0 1px #c7d2fe;
+  box-shadow: 0 0 0 1px #e0d6ff;
 }
 
 .stepFirstTouch::before {

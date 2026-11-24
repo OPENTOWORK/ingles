@@ -49,8 +49,8 @@
 
 .listenOn,
 .listenOn:hover {
-  background: #9455e3;
-  border-color: #9455e3;
+  background: #6a4be8;
+  border-color: #6a4be8;
   color: #fff;
 }
 
@@ -167,7 +167,7 @@
   margin: 0 0 1.35rem;
   padding: 0.85rem 1rem;
   color: var(--train-ink);
-  border-left: 4px solid #9455e3;
+  border-left: 4px solid #6a4be8;
   border-radius: 0 12px 12px 0;
 }
 
@@ -190,7 +190,7 @@
 
 .gapNo {
   margin-right: 0.1rem;
-  color: #7c3aed;
+  color: #6a4be8;
   font-size: 0.65rem;
   font-weight: 800;
 }
@@ -219,7 +219,7 @@
 
 .gapInput:focus {
   background: var(--train-surface);
-  border-bottom-color: #9455e3;
+  border-bottom-color: #6a4be8;
 }
 
 .gapInput:disabled {
@@ -262,7 +262,7 @@
 
 .gapSelect:focus {
   outline: none;
-  border-color: #9455e3;
+  border-color: #6a4be8;
 }
 
 .gapSelect:disabled {
@@ -310,7 +310,7 @@
 }
 
 .shortInput:focus {
-  border-color: #9455e3;
+  border-color: #6a4be8;
   background: var(--train-sunken);
 }
 
@@ -373,7 +373,7 @@
 }
 
 .tokenOn {
-  border-color: #9455e3;
+  border-color: #6a4be8;
   background: var(--train-violet-2);
 }
 
@@ -450,13 +450,13 @@
 }
 
 .multiOn {
-  border-color: #9455e3;
+  border-color: #6a4be8;
   background: var(--train-violet);
 }
 
 .multiOn .check {
-  border-color: #9455e3;
-  background: #9455e3;
+  border-color: #6a4be8;
+  background: #6a4be8;
 }
 
 .multiOk {
@@ -541,7 +541,7 @@
 }
 
 .matchActive {
-  border-color: #9455e3;
+  border-color: #6a4be8;
   background: var(--train-violet-2);
 }
 
@@ -576,7 +576,7 @@
   height: 1.5rem;
   padding: 0 0.3rem;
   border-radius: 999px;
-  background: #9455e3;
+  background: #6a4be8;
   color: #fff;
   font-size: 0.78rem;
   font-weight: 800;
@@ -632,8 +632,8 @@
 }
 
 .segmentOn {
-  border-color: #9455e3;
-  background: #9455e3;
+  border-color: #6a4be8;
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -758,7 +758,7 @@
 
 .slot,
 .lineSlot {
-  border: 2px dashed #a78bfa;
+  border: 2px dashed #a48fff;
   background: var(--train-surface);
   color: var(--train-chip-ink);
   font: inherit;
@@ -793,7 +793,7 @@
   height: 1.3rem;
   margin-right: 0.4rem;
   border-radius: 999px;
-  background: #9455e3;
+  background: #6a4be8;
   color: #fff;
   font-size: 0.72rem;
   font-weight: 800;
@@ -810,7 +810,7 @@
 
 .slotActive {
   border-style: solid;
-  border-color: #9455e3;
+  border-color: #6a4be8;
   background: var(--train-violet-2);
   color: var(--train-ink-soft);
 }
@@ -991,8 +991,8 @@
 }
 
 .letterOn {
-  border-color: #9455e3;
-  background: #9455e3;
+  border-color: #6a4be8;
+  background: #6a4be8;
   color: #fff;
 }
 

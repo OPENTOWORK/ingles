@@ -2,9 +2,9 @@
   margin-bottom: 1.5rem;
   padding: 1.25rem;
   border-radius: 16px;
-  border: 2px solid #c7d2fe;
+  border: 2px solid #e0d6ff;
   background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 50%, #f0f9ff 100%);
-  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.12);
+  box-shadow: 0 8px 24px rgba(106, 75, 232, 0.12);
 }
 
 .pt-hub--embedded {
@@ -26,7 +26,7 @@
   margin: 0 0 0.35rem;
   font-size: 1.25rem;
   font-weight: 700;
-  color: #312e81;
+  color: #3d2398;
 }
 
 .pt-hub__text {
@@ -91,7 +91,7 @@
   font-weight: 700;
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
-  background: #667eea;
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -104,7 +104,7 @@
 .pt-sentence {
   margin: 0 0 1rem;
   padding: 0.85rem 1rem;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid #6a4be8;
   border-radius: 0 10px 10px 0;
   background: #f8fafc;
   font-size: 1.05rem;
@@ -123,10 +123,10 @@
 .pt-tense-btn {
   flex: 1 1 100px;
   padding: 0.65rem 1rem;
-  border: 2px solid var(--tense-color, #667eea);
+  border: 2px solid var(--tense-color, #6a4be8);
   border-radius: 10px;
   background: #fff;
-  color: var(--tense-color, #667eea);
+  color: var(--tense-color, #6a4be8);
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
@@ -135,7 +135,7 @@
 
 .pt-tense-btn:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 12px rgba(106, 75, 232, 0.2);
   background: #f8fafc;
 }
 
@@ -200,14 +200,14 @@
 }
 
 .pt-btn--primary {
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #6a4be8;
   color: #fff;
-  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 4px 14px rgba(106, 75, 232, 0.35);
 }
 
 .pt-btn--primary:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(102, 126, 234, 0.45);
+  box-shadow: 0 6px 18px rgba(106, 75, 232, 0.45);
 }
 
 .pt-btn--primary:disabled {
@@ -235,10 +235,10 @@
 
 .pt-chip {
   padding: 0.4rem 0.75rem;
-  border: 1px solid #c7d2fe;
+  border: 1px solid #e0d6ff;
   border-radius: 999px;
   background: #fff;
-  color: #4338ca;
+  color: #5634d6;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -251,10 +251,10 @@
 }
 
 .pt-chip--selected {
-  background: #667eea;
-  border-color: #667eea;
+  background: #6a4be8;
+  border-color: #6a4be8;
   color: #fff;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+  box-shadow: 0 4px 12px rgba(106, 75, 232, 0.35);
 }
 
 .pt-chip--ok {
@@ -293,12 +293,12 @@
 .pt-select {
   margin: 0 0.35rem;
   padding: 0.35rem 0.5rem;
-  border: 2px solid #c7d2fe;
+  border: 2px solid #e0d6ff;
   border-radius: 8px;
   background: #fff;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #4338ca;
+  color: #5634d6;
   cursor: pointer;
 }
 

@@ -49,6 +49,8 @@ export function AppSharedDrawerNav({
   onNavigate,
   onLogout,
   draloVariant = 'mobile',
+  /** Site-wide mobile menus never show Pricing or Night mode. */
+  hidePricingAndNight = false,
   /** Si viene informado, las opciones de la app (no el bloque legal) van aquí. Solo Home móvil sin sesión: login. */
   guestEntryHref = null,
   /** Solo el menú lateral de la Home: en el móvil el botón Tutorial no cabe en la página. */
@@ -173,7 +175,7 @@ export function AppSharedDrawerNav({
         </DrawerMenuGroup>
       ) : null}
 
-      {showPricing ? (
+      {showPricing && !hidePricingAndNight ? (
         <NavLink
           href={NAV_LINK_PRICING.href}
           className={linkClass}
@@ -220,7 +222,7 @@ export function AppSharedDrawerNav({
         </NavLink>
       ) : null}
 
-      {showNightMode ? <ReadingNightModeToggle variant="mobile" /> : null}
+      {showNightMode && !hidePricingAndNight ? <ReadingNightModeToggle variant="mobile" /> : null}
 
       {showProfile ? (
         <NavLink

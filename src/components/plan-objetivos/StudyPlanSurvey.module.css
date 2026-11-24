@@ -13,7 +13,7 @@
 
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  background: #6a4be8;
   border-radius: 999px;
   transition: width 0.25s ease;
 }
@@ -60,17 +60,17 @@
 }
 
 .option:hover {
-  border-color: #a5b4fc;
+  border-color: #b6a6ff;
 }
 
 .optionSelected {
-  border-color: #6366f1;
+  border-color: #6a4be8;
   background: #eef2ff;
 }
 
 .option input {
   margin-top: 0.2rem;
-  accent-color: #6366f1;
+  accent-color: #6a4be8;
 }
 
 .optionLabel {
@@ -103,13 +103,13 @@
 }
 
 .hourBtn:hover {
-  border-color: #a5b4fc;
+  border-color: #b6a6ff;
 }
 
 .hourBtnActive {
-  border-color: #6366f1;
+  border-color: #6a4be8;
   background: #eef2ff;
-  color: #4338ca;
+  color: #5634d6;
 }
 
 .dateInput {
@@ -147,7 +147,7 @@
 
 .btnPrimary {
   padding: 0.65rem 1.35rem;
-  background: #4f46e5;
+  background: var(--brand-purple, #6a4be8);
   color: #fff;
   border: none;
   border-radius: 0.5rem;

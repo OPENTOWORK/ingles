@@ -10,10 +10,10 @@
   gap: 0.85rem;
   padding: 1rem 1.15rem;
   border-radius: 16px;
-  border: 1px solid rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(106, 75, 232, 0.18);
   background:
     linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(245, 243, 255, 0.88) 100%);
-  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
+  box-shadow: 0 8px 24px rgba(106, 75, 232, 0.08);
 }
 
 .digestIcon {
@@ -23,10 +23,10 @@
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: #6a4be8;
   color: #fff;
   font-size: 1.1rem;
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.28);
+  box-shadow: 0 6px 16px rgba(106, 75, 232, 0.28);
 }
 
 .digestBody {
@@ -37,7 +37,7 @@
   margin: 0;
   font-size: 0.92rem;
   font-weight: 700;
-  color: #312e81;
+  color: #3d2398;
   letter-spacing: -0.01em;
 }
 
@@ -45,7 +45,7 @@
   margin: 0.35rem 0 0;
   font-size: 0.86rem;
   line-height: 1.55;
-  color: #4338ca;
+  color: #5634d6;
   opacity: 0.88;
 }
 
@@ -55,9 +55,9 @@
   gap: 0.85rem;
   padding: 1rem 1.15rem;
   border-radius: 16px;
-  border: 1px solid rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(106, 75, 232, 0.18);
   background: #fff;
-  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.08);
+  box-shadow: 0 8px 24px rgba(106, 75, 232, 0.08);
 }
 
 .pushBody {
@@ -82,14 +82,14 @@
 
 .pushButton {
   color: #fff;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  box-shadow: 0 5px 14px rgba(79, 70, 229, 0.25);
+  background: #6a4be8;
+  box-shadow: 0 5px 14px rgba(106, 75, 232, 0.25);
 }
 
 .pushButtonSecondary {
-  color: #4338ca;
+  color: #5634d6;
   background: #eef2ff;
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(106, 75, 232, 0.2);
 }
 
 .pushButton:hover:not(:disabled),
@@ -132,21 +132,21 @@
 }
 
 .tabBtn:hover {
-  color: #4338ca;
+  color: #5634d6;
   background: rgba(255, 255, 255, 0.65);
 }
 
 .tabBtnActive {
   color: #fff;
-  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 55%, #7c3aed 100%);
+  background: #6a4be8;
   box-shadow:
-    0 4px 14px rgba(79, 70, 229, 0.32),
+    0 4px 14px rgba(106, 75, 232, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .tabBtnActive:hover {
   color: #fff;
-  background: linear-gradient(135deg, #4338ca 0%, #4f46e5 55%, #6d28d9 100%);
+  background: var(--brand-purple-hover);
 }
 
 .panelWrap {
@@ -177,8 +177,8 @@
 }
 
 :global(body.reading-night-mode) .digestCard {
-  background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);
-  border-color: #6366f1;
+  background: linear-gradient(135deg, #3d2398 0%, #1e1b4b 100%);
+  border-color: #6a4be8;
 }
 
 :global(body.reading-night-mode) .digestTitle {
@@ -196,7 +196,7 @@
 
 :global(body.reading-night-mode) .pushButtonSecondary {
   color: #c4b5fd;
-  background: #312e81;
+  background: #3d2398;
 }
 
 :global(body.reading-night-mode) .tabNav {

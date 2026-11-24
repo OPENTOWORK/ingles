@@ -25,12 +25,8 @@ import {
   homeBandCta,
   homeHeroCta,
   isBlackFridayOfferActive,
-  PLUS_ANNUAL_BF_END_DATE,
-  PLUS_ANNUAL_BF_PRICE,
-  PLUS_ANNUAL_REGULAR_PRICE,
   PLUS_BLACK_FRIDAY_UNTIL_LABEL,
   PLUS_MONTHLY_PRICE,
-  PLUS_OFFER_END_DATE,
   PLUS_OFFER_UNTIL_LABEL,
   plusAnnualRenewalCopy,
   plusBlackFridayAccessCopy,
@@ -45,8 +41,8 @@ import './home-guest-landing.css';
 const TRY_EXERCISE_HREF = '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1';
 const WRITING_PRACTICE_HREF = '/exam-practice/b2/exam-writing/';
 const CONTACT_EMAIL = 'support@dralo.es';
-const TOUR_VIDEO_SRC = sitePublicPath('/dralo-tour.mp4?v=4');
-const TOUR_POSTER_SRC = sitePublicPath('/dralo-tour-poster.webp?v=4');
+const TOUR_VIDEO_SRC = sitePublicPath('/dralo-tour.mp4?v=5');
+const TOUR_POSTER_SRC = sitePublicPath('/dralo-tour-poster.webp?v=5');
 const TOUR_SHOTS = [
   {
     src: '/home/feedback-reading.jpg',
@@ -102,22 +98,6 @@ const PAIRS = [
     benefit: 'consulta tus resultados e identifica en qué aspectos necesitas centrarte.',
   },
 ];
-
-/** Texto provisional. Sustituir por reseñas reales cuando las haya. No son opiniones de Google. */
-const PLACEHOLDER_REVIEWS = [
-  ['Lucía', 'L', 'La corrección del Writing me enseña el error y por qué está mal. Antes repetía lo mismo sin darme cuenta.', 'Alumna de B2'],
-  ['Marcos', 'M', 'Practico Reading a mi ritmo y, al terminar, veo en qué parte del B2 First flojeo.', 'Alumno de B2'],
-  ['Elena', 'E', 'Los comentarios de vocabulario y gramática son claros. No es solo una nota.', 'Alumna de B2'],
-  ['Hugo', 'H', 'Por fin entiendo si mejoro: miro los resultados y elijo la siguiente sesión.', 'Alumno de B2'],
-  ['Carla', 'C', 'Me ayuda a preparar el B2 First fuera de clase, con ejercicios del mismo formato.', 'Alumna de B2'],
-  ['Diego', 'D', 'Lo uso desde el móvil entre clases. Encaja con lo que vemos en la academia.', 'Alumno de B2'],
-  ['Nuria', 'N', 'Antes hacía ejercicios sueltos. Aquí veo qué partes tengo que repetir.', 'Alumna de B2'],
-  ['Pablo', 'P', 'La explicación de cada corrección me sirve más que ver el ejercicio en rojo.', 'Alumno de B2'],
-];
-
-function placeholderReview([name, initial, text, meta]) {
-  return { key: name, name, initial, text, meta, stars: 5 };
-}
 
 const reviewDateFormat = new Intl.DateTimeFormat('es-ES', {
   dateStyle: 'medium',
@@ -197,7 +177,8 @@ function ReviewCarousel() {
     };
   }, []);
 
-  const cards = reviews?.length ? reviews : PLACEHOLDER_REVIEWS.map(placeholderReview);
+  if (!reviews?.length) return null;
+  const cards = reviews;
 
   return (
     <section className={`hl-reviews${paused ? ' hl-reviews--paused' : ''}`} aria-labelledby="hl-reviews-title">
@@ -401,41 +382,11 @@ function useSignupHrefs() {
   };
 }
 
-function offerJsonLd() {
-  const offers = [
-    {
-      '@type': 'Offer',
-      name: 'Plan Plus mensual',
-      price: PLUS_MONTHLY_PRICE.toFixed(2),
-      priceCurrency: 'EUR',
-      priceValidUntil: PLUS_OFFER_END_DATE,
-      url: 'https://www.dralo.es/precios/',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Plan Plus anual',
-      price: PLUS_ANNUAL_REGULAR_PRICE.toFixed(2),
-      priceCurrency: 'EUR',
-      url: 'https://www.dralo.es/precios/?facturacion=anual',
-    },
-  ];
-  if (isBlackFridayOfferActive()) {
-    offers.push({
-      '@type': 'Offer',
-      name: 'Plan Plus anual Black Friday',
-      price: PLUS_ANNUAL_BF_PRICE.toFixed(2),
-      priceCurrency: 'EUR',
-      priceValidUntil: PLUS_ANNUAL_BF_END_DATE,
-      url: 'https://www.dralo.es/precios/?facturacion=anual',
-    });
-  }
-  return JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: 'Plan Plus',
-    brand: { '@type': 'Brand', name: 'DRALO' },
-    offers,
-  }).replace(/</g, '\\u003c');
+const SEEK_KEY_STEPS = { ArrowLeft: -5, ArrowDown: -5, ArrowRight: 5, ArrowUp: 5, PageDown: -10, PageUp: 10 };
+
+function formatClock(seconds) {
+  const total = Math.max(0, Math.floor(seconds || 0));
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
 }
 
 function HeroTourVideo({ active }) {
@@ -447,6 +398,8 @@ function HeroTourVideo({ active }) {
   const [playing, setPlaying] = useState(false);
   const [started, setStarted] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
+  const [progress, setProgress] = useState({ time: 0, duration: 0 });
+  const seekable = fullscreen && active && motion !== 'pending';
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -486,6 +439,45 @@ function HeroTourVideo({ active }) {
     document.addEventListener('fullscreenchange', sync);
     return () => document.removeEventListener('fullscreenchange', sync);
   }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!seekable || !video) return undefined;
+    let raf = 0;
+    const read = () => {
+      const time = video.currentTime || 0;
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
+      setProgress((prev) => (prev.time === time && prev.duration === duration ? prev : { time, duration }));
+    };
+    const loop = () => {
+      read();
+      raf = requestAnimationFrame(loop);
+    };
+    const events = ['loadedmetadata', 'durationchange', 'timeupdate', 'seeked'];
+    events.forEach((name) => video.addEventListener(name, read));
+    read();
+    if (playing) raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      events.forEach((name) => video.removeEventListener(name, read));
+    };
+  }, [seekable, playing]);
+
+  const seekTo = (value) => {
+    const video = videoRef.current;
+    if (!video || !progress.duration) return;
+    const time = Math.min(Math.max(value, 0), progress.duration);
+    video.currentTime = time;
+    setProgress((prev) => ({ ...prev, time }));
+    setStarted(true);
+  };
+
+  const onSeekKey = (event) => {
+    const step = SEEK_KEY_STEPS[event.key];
+    if (!step) return;
+    event.preventDefault();
+    seekTo((videoRef.current?.currentTime || 0) + step);
+  };
 
   const toggle = () => {
     const video = videoRef.current;
@@ -558,6 +550,29 @@ function HeroTourVideo({ active }) {
           {playing ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
           {playing ? 'Pausa' : 'Reproducir'}
         </button>
+        {seekable ? (
+          <div className="hl-video__seek">
+            <input
+              type="range"
+              className="hl-video__range"
+              min={0}
+              max={progress.duration}
+              step={0.1}
+              value={Math.min(progress.time, progress.duration)}
+              onChange={(event) => seekTo(Number(event.target.value))}
+              onKeyDown={onSeekKey}
+              disabled={!progress.duration}
+              aria-label="Posición del vídeo"
+              aria-valuetext={`${formatClock(progress.time)} de ${formatClock(progress.duration)}`}
+              style={{
+                '--hl-seek': `${progress.duration ? (progress.time / progress.duration) * 100 : 0}%`,
+              }}
+            />
+            <span className="hl-video__time" aria-hidden="true">
+              {formatClock(progress.time)} / {formatClock(progress.duration)}
+            </span>
+          </div>
+        ) : null}
         <button
           type="button"
           className="hl-video__fullscreen"
@@ -940,7 +955,6 @@ export default function HomeGuestLanding({ pending = false, prioritizeLcp = fals
       {faq.length ? (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: faqJsonLd(faq) }} />
       ) : null}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: offerJsonLd() }} />
 
       <section id="preguntas-frecuentes" className="hl-section hl-section--flush" aria-labelledby="hl-faq-title">
         <div className="hl-container">

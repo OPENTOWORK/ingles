@@ -46,6 +46,7 @@ export default function ProfileStudentSidebar({
     const aside = asideRef.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    window.dispatchEvent(new CustomEvent('dralo-profile-drawer-open'));
     focusableItems(aside)[0]?.focus();
 
     const onKeyDown = (event) => {
@@ -77,11 +78,16 @@ export default function ProfileStudentSidebar({
       toggleRef.current?.focus();
     };
 
+    const closeFromGlobalMenu = () => {
+      setDrawer((state) => reduceStudentDrawer(state, { type: 'close' }));
+    };
     document.addEventListener('keydown', onKeyDown);
     document.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('dralo-close-profile-drawer', closeFromGlobalMenu);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       document.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('dralo-close-profile-drawer', closeFromGlobalMenu);
       document.body.style.overflow = previousOverflow;
     };
   }, [open, isMobile]);

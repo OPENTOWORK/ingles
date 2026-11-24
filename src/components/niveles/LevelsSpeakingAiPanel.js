@@ -35,7 +35,7 @@ function pickOne(list) {
 const EMPTY_SCORES = { grammar: 0, vocabulary: 0, fluency: 0, confidence: 0 };
 
 const SCORE_META = [
-  { key: 'grammar', label: 'Grammar', color: '#6366f1' },
+  { key: 'grammar', label: 'Grammar', color: '#6a4be8' },
   { key: 'vocabulary', label: 'Vocabulary', color: '#0ea5e9' },
   { key: 'fluency', label: 'Fluency', color: '#10b981' },
   { key: 'confidence', label: 'Confidence', color: '#f59e0b' },
@@ -993,7 +993,7 @@ function MissionComplete({
         >
           <span aria-hidden>🚀</span>
           <div>
-            <span className="dralo-ai-speaking-section-label" style={{ color: '#7c3aed' }}>
+            <span className="dralo-ai-speaking-section-label" style={{ color: '#6a4be8' }}>
               Next recommended mission
             </span>
             <p style={{ margin: '4px 0 0', lineHeight: 1.5 }}>{r.nextMissionRecommendation}</p>

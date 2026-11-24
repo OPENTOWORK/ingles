@@ -25,7 +25,7 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #3b82f6 100%);
+  background: linear-gradient(90deg, #6a4be8 0%, #6a4be8 50%, #3b82f6 100%);
 }
 
 .hubTitle,
@@ -56,7 +56,7 @@
   background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
   border-color: #dbeafe;
   box-shadow:
-    inset 3px 0 0 #667eea,
+    inset 3px 0 0 #6a4be8,
     0 4px 14px rgba(59, 130, 246, 0.08);
 }
 
@@ -121,7 +121,7 @@
   color: #1d4ed8;
   font-weight: 600;
   background: #ffffff;
-  border-left-color: #667eea;
+  border-left-color: #6a4be8;
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
 }
 
@@ -154,7 +154,7 @@
   min-width: 1.4rem;
   height: 1.4rem;
   border-radius: 8px;
-  background: linear-gradient(135deg, #3b82f6 0%, #667eea 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #734a91 100%);
   color: #ffffff;
   font-size: 0.67rem;
   font-weight: 700;
@@ -254,6 +254,6 @@
 }
 
 :global(body.reading-night-mode) .sectionNumber {
-  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #6a4be8 100%);
   box-shadow: 0 2px 6px rgba(37, 99, 235, 0.35);
 }

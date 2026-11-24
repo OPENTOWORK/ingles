@@ -21,8 +21,8 @@ html.reading-night-mode .route-loading__label {
 }
 
 html.reading-night-mode .site-header {
-  background: linear-gradient(135deg, #1e293b 0%, #0f172a 55%, #1e1b4b 100%);
-  border-bottom-color: #334155;
+  background: #17142a;
+  border-bottom-color: #3a3354;
 }
 
 body.reading-night-mode {
@@ -119,7 +119,7 @@ body.reading-night-mode .perfil-student__card .setting-label {
 
 body.reading-night-mode .perfil-student__side a.is-active,
 body.reading-night-mode .perfil-student__side a.is-active:hover {
-  background: #734a91;
+  background: #6a4be8;
   color: #fff;
 }
 
@@ -222,7 +222,37 @@ body.reading-night-mode .exam-practice-hub__card:hover {
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3) !important;
 }
 
-body.reading-night-mode .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__card--reading .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__card--reading-writing .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__card--reading .exam-practice-hub__icon-wrap,
+body.reading-night-mode .exam-practice-hub__card--reading-writing .exam-practice-hub__icon-wrap {
+  color: #7ec8ea !important;
+}
+
+body.reading-night-mode .exam-practice-hub__card--writing .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__card--writing .exam-practice-hub__icon-wrap {
+  color: #8fd4b0 !important;
+}
+
+body.reading-night-mode .exam-practice-hub__card--listening .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__card--listening .exam-practice-hub__icon-wrap {
+  color: #fdba74 !important;
+}
+
+body.reading-night-mode .exam-practice-hub__card--speaking .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__card--speaking .exam-practice-hub__icon-wrap {
+  color: #f9a8d4 !important;
+}
+
+body.reading-night-mode .exam-practice-hub__card--exam-mode .exam-practice-hub__label,
+body.reading-night-mode .exam-practice-hub__card--exam-mode .exam-practice-hub__icon-wrap {
+  color: #c4b5fd !important;
+}
+
+body.reading-night-mode .exam-practice-hub__icon-wrap svg {
+  stroke-width: 2.35;
+}
+
 body.reading-night-mode .exam-practice-hub__hint {
   color: #cbd5e1 !important;
 }
@@ -402,7 +432,7 @@ body.reading-night-mode .exam-theory-topics-page .exam-theory-section-progress__
 
 /* Theory topic layout (TheoryLayout inline cards) */
 body.reading-night-mode .theory-layout-page {
-  background: linear-gradient(135deg, #1e293b 0%, #312e81 55%, #1e1b4b 100%) !important;
+  background: linear-gradient(135deg, #1e293b 0%, #3d2398 55%, #1e1b4b 100%) !important;
 }
 
 body.reading-night-mode .theory-layout-card {
@@ -679,13 +709,13 @@ body.reading-night-mode .login-page h2 {
 }
 
 body.reading-night-mode .login-page__bubble {
-  background: #312e81;
+  background: #3d2398;
   color: #ede9fe !important;
   box-shadow: none;
 }
 
 body.reading-night-mode .login-page__bubble::before {
-  border-right-color: #312e81;
+  border-right-color: #3d2398;
 }
 
 body.reading-night-mode .login-page label {
@@ -888,7 +918,7 @@ body.reading-night-mode .perfil-page .header__level {
 }
 
 body.reading-night-mode .perfil-page .header__level-icon {
-  background: rgba(124, 58, 237, 0.2);
+  background: rgba(106, 75, 232, 0.2);
   color: #c4b5fd;
 }
 
@@ -1560,7 +1590,7 @@ body.reading-night-mode .precios-page {
 
 body.reading-night-mode .dralo-ai-hub__card {
   background:
-    radial-gradient(120px 90px at 100% 0%, color-mix(in srgb, var(--dralo-accent-solid, #6366f1) 28%, transparent), transparent 70%),
+    radial-gradient(120px 90px at 100% 0%, color-mix(in srgb, var(--dralo-accent-solid, #6a4be8) 28%, transparent), transparent 70%),
     linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
   border-color: #334155;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
@@ -1579,11 +1609,11 @@ body.reading-night-mode .precios-page .page-hero-wrap__breadcrumb .breadcrumb {
 }
 
 body.reading-night-mode .precios-page .page-hero-wrap__breadcrumb .breadcrumb a {
-  color: #a5b4fc;
+  color: #b6a6ff;
 }
 
 body.reading-night-mode .precios-page .page-hero {
-  background: linear-gradient(145deg, #1e293b 0%, #312e81 55%, #1e1b4b 100%);
+  background: linear-gradient(145deg, #1e293b 0%, #3d2398 55%, #1e1b4b 100%);
   border: 1px solid #475569;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
 }
@@ -1604,7 +1634,7 @@ body.reading-night-mode .precios-page .page-hero__stat-value {
 
 /* Theory layout base (light mode) */
 .theory-layout-page {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #6a4be8;
 }
 
 .theory-layout-card {

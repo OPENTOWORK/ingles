@@ -45,8 +45,8 @@
 
 .viewBtnActive {
   background: #eef2ff;
-  color: #5634d6;
-  box-shadow: 0 1px 2px rgba(79, 70, 229, 0.12);
+  color: #6a4be8;
+  box-shadow: 0 1px 2px rgba(106, 75, 232, 0.12);
 }
 
 .cardGrid {
@@ -73,7 +73,7 @@
   position: absolute;
   inset: 0 0 auto;
   height: 3px;
-  background: linear-gradient(90deg, #c7d2fe 0%, #e0e7ff 55%, transparent 100%);
+  background: linear-gradient(90deg, #e0d6ff 0%, #e0e7ff 55%, transparent 100%);
 }
 
 .userCardStarred {
@@ -117,9 +117,9 @@
   font-size: 0.78rem;
   font-weight: 800;
   letter-spacing: 0.03em;
-  color: #5634d6;
+  color: #6a4be8;
   background: var(--admin-primary-soft, #eef2ff);
-  border: 1px solid rgba(99, 102, 241, 0.14);
+  border: 1px solid rgba(106, 75, 232, 0.14);
 }
 
 .userCardStarred .avatar {
@@ -244,7 +244,7 @@
 
 .badgePlanFriendlyPlus {
   background: #f5f3ff;
-  color: #6d28d9;
+  color: #5634d6;
   border-color: #ddd6fe;
 }
 
@@ -310,9 +310,9 @@
 }
 
 .openBtn:hover {
-  border-color: #c7d2fe;
+  border-color: #e0d6ff;
   background: #f8faff;
-  color: #312e81;
+  color: #3d2398;
 }
 
 .openBtnIcon {
@@ -560,7 +560,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 0.7rem;
   background: #fff;
-  color: #5634d6;
+  color: #6a4be8;
   font-size: 0.85rem;
   font-weight: 700;
   text-decoration: none;
@@ -568,7 +568,7 @@
 
 .formResponseLink:hover {
   background: #eef2ff;
-  border-color: #c7d2fe;
+  border-color: #e0d6ff;
 }
 
 .formResponseTitle {
@@ -751,7 +751,7 @@
 
 :global(body.reading-night-mode) .viewBtnActive,
 :global(body.reading-night-mode) .sortBtnActive {
-  background: #312e81;
+  background: #3d2398;
   color: #c4b5fd;
 }
 
@@ -766,7 +766,7 @@
 
 :global(body.reading-night-mode) .openBtn:hover,
 :global(body.reading-night-mode) .sortBtn:hover {
-  background: #312e81;
+  background: #3d2398;
   color: #c4b5fd;
 }
 
@@ -816,8 +816,8 @@
 }
 
 :global(body.reading-night-mode) .openBtn:hover {
-  background: #312e81;
-  border-color: #818cf8;
+  background: #3d2398;
+  border-color: #a48fff;
   color: #e0e7ff;
 }
 
@@ -827,5 +827,5 @@
 
 :global(body.reading-night-mode) .fullLink,
 :global(body.reading-night-mode) .retryAuth {
-  color: #a5b4fc;
+  color: #b6a6ff;
 }
