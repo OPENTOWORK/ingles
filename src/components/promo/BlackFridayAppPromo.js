@@ -48,17 +48,21 @@ function hideBannerFor48h() {
   }
 }
 
-function resultsAlreadyShown() {
+function resultsStorageKey(scopeKey) {
+  return scopeKey ? `${RESULTS_KEY}:${scopeKey}` : RESULTS_KEY;
+}
+
+function resultsAlreadyShown(scopeKey) {
   try {
-    return window.sessionStorage.getItem(RESULTS_KEY) === '1';
+    return window.sessionStorage.getItem(resultsStorageKey(scopeKey)) === '1';
   } catch {
     return false;
   }
 }
 
-function markResultsShown() {
+function markResultsShown(scopeKey) {
   try {
-    window.sessionStorage.setItem(RESULTS_KEY, '1');
+    window.sessionStorage.setItem(resultsStorageKey(scopeKey), '1');
   } catch {
     /* la sesión del navegador puede no estar disponible */
   }
@@ -108,27 +112,31 @@ export function BlackFridayDashboardBanner() {
   );
 }
 
-export function BlackFridayResultsNotice() {
+export function BlackFridayResultsNotice({ scopeKey = '', dismissLabel = '', compact = false }) {
   const eligible = useUnpaidBlackFriday();
   const [open, setOpen] = useState(false);
   const copy = BLACK_FRIDAY_APP_PROMO.results;
 
   useEffect(() => {
-    if (!eligible || resultsAlreadyShown()) return;
-    markResultsShown();
+    if (!eligible || resultsAlreadyShown(scopeKey)) return;
+    markResultsShown(scopeKey);
     setOpen(true);
-  }, [eligible]);
+  }, [eligible, scopeKey]);
 
   if (!open) return null;
 
   const dismiss = () => {
-    markResultsShown();
+    markResultsShown(scopeKey);
     setOpen(false);
     trackPromo({ event: 'promo_dismiss', cta_id: copy.src });
   };
 
   return (
-    <aside className={`${landingFont.variable} bf-app-result`} role="region" aria-label="Oferta del año">
+    <aside
+      className={`${landingFont.variable} bf-app-result${compact ? ' bf-app-result--compact' : ''}`}
+      role="region"
+      aria-label="Oferta del año"
+    >
       <p className="bf-app-result__title">{copy.title}</p>
       <p className="bf-app-result__text">{copy.text}</p>
       <div className="bf-app-result__actions">
@@ -140,7 +148,7 @@ export function BlackFridayResultsNotice() {
           {copy.cta}
         </Link>
         <button type="button" className="bf-app-result__dismiss" onClick={dismiss}>
-          {copy.dismiss}
+          {dismissLabel || copy.dismiss}
         </button>
       </div>
     </aside>

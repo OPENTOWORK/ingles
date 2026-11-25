@@ -8,7 +8,6 @@ import AdminPanelsNav from '@/components/layout/AdminPanelsNav';
 import { DraloAiComingSoonRibbon, DraloAiNavMenuItems } from '@/components/layout/DraloAiNavMenu';
 import { ExamStrategiesNavMenuItems } from '@/components/layout/ExamStrategiesNavMenu';
 import { useExamStrategiesAccess } from '@/hooks/useExamStrategiesAccess';
-import ReadingNightModeToggle from '@/components/exam/ReadingNightModeToggle';
 import { AppSharedDrawerNav } from '@/components/layout/AppSharedDrawerNav';
 import SiteThemePicker from '@/components/layout/SiteThemePicker';
 import {
@@ -19,7 +18,6 @@ import {
   NAV_LINKS_BEFORE_DRALO,
   NAV_LINK_CONTACT,
   NAV_LINK_PLACEMENT,
-  NAV_LINK_PRICING,
   NAV_LINK_PROFILE,
   resolveNavItemHref,
 } from '@/config/appNavMenu';
@@ -307,21 +305,9 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
           ) : null}
         </div>
 
-        {navModel.showNightMode ? <ReadingNightModeToggle variant="desktop" /> : null}
-
         <div className="app-nav__account" role="group" aria-label="Account">
           {navModel.guest ? (
             <>
-              {navModel.showPricing ? (
-                <NavLink
-                  href={NAV_LINK_PRICING.href}
-                  className={desktopLinkClass(NAV_LINK_PRICING.href)}
-                  onClick={closeDesktopDropdowns}
-                  {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
-                >
-                  {NAV_LINK_PRICING.label}
-                </NavLink>
-              ) : null}
               <NavLink
                 href={NAV_LINK_CONTACT.href}
                 className={desktopLinkClass(NAV_LINK_CONTACT.href)}
@@ -359,16 +345,6 @@ function AppNavInner({ session, userRole, onLogout, hideMobileToggle = false }) 
                   onClick={closeDesktopDropdowns}
                 >
                   {navModel.staffItems[0].label}
-                </NavLink>
-              ) : null}
-              {navModel.showPricing ? (
-                <NavLink
-                  href={NAV_LINK_PRICING.href}
-                  className={desktopLinkClass(NAV_LINK_PRICING.href)}
-                  onClick={closeDesktopDropdowns}
-                  {...(NAV_LINK_PRICING.tourId ? { 'data-tour': NAV_LINK_PRICING.tourId } : {})}
-                >
-                  {NAV_LINK_PRICING.label}
                 </NavLink>
               ) : null}
               <NavLink

@@ -101,6 +101,35 @@
   cursor: pointer;
 }
 
+.bf-app-result--compact {
+  margin: 0;
+  padding: 0.7rem 0.85rem;
+  max-width: none;
+  border: 1px solid #e4dcff;
+  border-radius: 12px;
+  background: #f7f4ff;
+}
+
+.bf-app-result--compact .bf-app-result__title {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.bf-app-result--compact .bf-app-result__text {
+  font-size: 0.82rem;
+}
+
+.bf-app-result--compact .bf-app-result__actions {
+  margin-top: 0.55rem;
+  gap: 0.5rem 0.85rem;
+}
+
+.bf-app-result--compact .bf-app-result__cta {
+  min-height: 2.25rem;
+  padding: 0 0.9rem;
+  font-size: 0.875rem;
+}
+
 @media (min-width: 768px) {
   .bf-app-banner {
     grid-template-columns: minmax(0, 1fr) auto;

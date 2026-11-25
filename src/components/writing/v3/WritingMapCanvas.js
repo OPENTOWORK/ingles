@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { createPortal } from 'react-dom';
 import {
   initialSelectionState,
   isOpen,
@@ -18,6 +19,9 @@ import {
 import WritingMapAnnotation from './WritingMapAnnotation';
 import WritingMapBubble from './WritingMapBubble';
 import WritingMapBottomSheet from './WritingMapBottomSheet';
+import { placeWritingBubble } from '@/features/writing/ui/bubble-placement';
+
+const BUBBLE_WIDTH = 300;
 
 /**
  * The Interactive Writing Map (Doc 04 §4).
@@ -31,9 +35,9 @@ import WritingMapBottomSheet from './WritingMapBottomSheet';
 export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
   const [state, dispatch] = useReducer(selectionReducer, initialViewportWidth, initialSelectionState);
   const containerRef = useRef(null);
-  const textRef = useRef(null);
+  const bubbleRef = useRef(null);
   const markRefs = useRef(new Map());
-  const [bubbleTop, setBubbleTop] = useState(0);
+  const [bubbleBox, setBubbleBox] = useState(null);
 
   const activeItems = state.active_group_id ? map.groups[state.active_group_id] : null;
   const surfaceId = state.active_group_id
@@ -57,6 +61,7 @@ export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
     };
     const onPointerDown = (event) => {
       if (containerRef.current?.contains(event.target)) return;
+      if (bubbleRef.current?.contains(event.target)) return;
       dismiss();
     };
     document.addEventListener('keydown', onKeyDown);
@@ -84,14 +89,46 @@ export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
     previousActive.current = null;
   }, [state.active_group_id, state.presentation, state.return_focus_group_id]);
 
-  // The bubble sits beside the text, level with the highlighted sentence.
+  // Measure the floating card against the mark. The writing column is not a
+  // positioning parent, so opening the card cannot change its line breaks.
   useLayoutEffect(() => {
-    if (!state.active_group_id || state.presentation !== 'bubble') return;
-    const mark = markRefs.current.get(state.active_group_id);
-    const text = textRef.current;
-    if (!mark || !text) return;
-    const top = mark.getBoundingClientRect().top - text.getBoundingClientRect().top;
-    setBubbleTop(Math.max(0, top));
+    if (!state.active_group_id || state.presentation !== 'bubble') {
+      setBubbleBox(null);
+      return undefined;
+    }
+
+    const place = () => {
+      const mark = markRefs.current.get(state.active_group_id);
+      if (!mark) return;
+      const bubble = bubbleRef.current;
+      const next = placeWritingBubble(
+        mark.getBoundingClientRect(),
+        bubble?.offsetWidth || BUBBLE_WIDTH,
+        bubble?.offsetHeight || 180,
+        { width: window.innerWidth, height: window.innerHeight },
+      );
+      setBubbleBox((current) => {
+        if (
+          current &&
+          current.left === next.left &&
+          current.top === next.top &&
+          current.side === next.side &&
+          current.width === next.width &&
+          current.arrow === next.arrow
+        ) {
+          return current;
+        }
+        return next;
+      });
+    };
+
+    place();
+    window.addEventListener('scroll', place, true);
+    window.addEventListener('resize', place);
+    return () => {
+      window.removeEventListener('scroll', place, true);
+      window.removeEventListener('resize', place);
+    };
   }, [state.active_group_id, state.presentation]);
 
   const registerMark = useCallback((groupId) => (node) => {
@@ -122,33 +159,40 @@ export default function WritingMapCanvas({ map, initialViewportWidth = 1280 }) {
     [map.segments, map.groups, state, surfaceId, activate, registerMark],
   );
 
-  const showSideBubble = Boolean(activeItems && state.presentation === 'bubble');
+  const showBubble = Boolean(activeItems && state.presentation === 'bubble');
+  const bubbleStyle = bubbleBox
+    ? {
+        left: bubbleBox.left,
+        top: bubbleBox.top,
+        width: bubbleBox.width,
+        '--writing-map-arrow': `${bubbleBox.arrow}px`,
+      }
+    : { left: -9999, top: 0, width: BUBBLE_WIDTH };
 
   return (
     <section className="writing-map" aria-labelledby="writing-map-title">
       <h2 className="writing-map__title" id="writing-map-title">
         Your corrected writing
       </h2>
-      <div
-        className={`writing-map__canvas${showSideBubble ? ' writing-map__canvas--with-bubble' : ''}`}
-        ref={containerRef}
-      >
+      <div className="writing-map__canvas" ref={containerRef}>
         <WritingMapLegend legend={map.legend} />
-        <div className="writing-map__text" ref={textRef}>{nodes}</div>
-        {showSideBubble ? (
-          <div className="writing-map__aside">
-            <WritingMapBubble
-              id={surfaceId}
-              items={activeItems}
-              top={bubbleTop}
-              onClose={dismiss}
-            />
-          </div>
-        ) : null}
+        <div className="writing-map__text">{nodes}</div>
         {activeItems && state.presentation === 'sheet' ? (
           <WritingMapBottomSheet id={surfaceId} items={activeItems} onClose={dismiss} />
         ) : null}
       </div>
+      {showBubble && typeof document !== 'undefined'
+        ? createPortal(
+            <div
+              ref={bubbleRef}
+              className={`writing-map__float writing-map__float--${bubbleBox?.side || 'right'}`}
+              style={bubbleStyle}
+            >
+              <WritingMapBubble id={surfaceId} items={activeItems} onClose={dismiss} />
+            </div>,
+            document.body,
+          )
+        : null}
     </section>
   );
 }
@@ -166,10 +210,7 @@ export function WritingMapLegend({ legend }) {
           className="writing-map__legend-item"
           aria-label={`${token.label}. ${token.hint}`}
         >
-          <span className={`writing-map__legend-swatch ${token.className}`} aria-hidden="true">
-            {token.marker}
-          </span>
-          <span className="writing-map__legend-label">{token.label}</span>
+          <span className={`writing-map__legend-label ${token.className}`}>{token.label}</span>
         </li>
       ))}
     </ul>

@@ -3,19 +3,18 @@
 /**
  * Desktop annotation feedback (Doc 04 §5.1).
  *
- * Anchored to the mark it belongs to and rendered immediately after it in the
- * DOM, so the screen-reader reading order is "these words → this feedback".
+ * The canvas portals this into a fixed card beside the mark, so the writing
+ * column keeps its width. The mark points here with aria-controls.
  * The bubble grows with its content: a spelling slip gets two lines, a content
  * prompt gets a paragraph. There is no fixed large layout for every issue.
  */
-export default function WritingMapBubble({ id, items, top = 0, onClose }) {
+export default function WritingMapBubble({ id, items, onClose }) {
   const first = items[0];
 
   return (
     <span
       id={id}
       className="writing-map__bubble"
-      style={{ top }}
       role="dialog"
       aria-label={`Feedback on “${first.quote}”`}
     >
@@ -43,11 +42,10 @@ export function WritingMapFeedbackList({ items }) {
     <span className="writing-map__feedback-list">
       {items.map((item) => (
         <span key={item.annotation_id} className="writing-map__feedback">
-          <span className={`writing-map__feedback-tag ${item.category.className}`}>
-            <span className="writing-map__feedback-marker" aria-hidden="true">
-              {item.category.marker}
+          <span className="writing-map__feedback-tag">
+            <span className={`writing-map__feedback-tag-label ${item.category.className}`}>
+              {item.category.label}
             </span>
-            <span className="writing-map__feedback-tag-label">{item.category.label}</span>
             <span className="writing-result__sr-only">{item.kind_label}</span>
           </span>
           <span className="writing-map__feedback-fix-label">Why</span>

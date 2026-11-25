@@ -9,6 +9,7 @@ import { performLogout } from '@/utils/logout';
 import { isPublicPath } from '@/utils/publicRoutes';
 import { isAbExperimentPath, isMinimalLandingPath } from '@/utils/minimalLandingRoutes';
 import { hasStoredSupabaseSession } from '@/utils/peekSupabaseSession';
+import { isStudentProfilePreviewPath } from '@/utils/studentProfilePreview';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 import { nextRoleConfirmation } from '@/lib/userRoleResolution';
 import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
@@ -129,7 +130,8 @@ function RootLayoutClientInner({ children }) {
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
   /** Superficie interna de Writing v3: solo existe fuera de producción (Fase 8). */
-  const allowWithoutAuth = isPublic || isWritingV3PreviewPath(pathname);
+  const allowWithoutAuth =
+    isPublic || isWritingV3PreviewPath(pathname) || isStudentProfilePreviewPath(pathname);
 
   /** Siempre true en SSR y primer render cliente; se resuelve en useEffect. */
   const [authPending, setAuthPending] = useState(true);
@@ -796,7 +798,7 @@ function RootLayoutClientInner({ children }) {
                   <span className="legal-footer-meta__sep" aria-hidden="true">
                     ·
                   </span>
-                  <span className="legal-footer-version">Versión 1.0.50</span>
+                  <span className="legal-footer-version">Versión 1.0.51</span>
                 </p>
               </div>
             </div>

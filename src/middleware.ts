@@ -4,6 +4,7 @@ import aiCatalog from '../public/.well-known/ai-catalog.json';
 import ardManifest from '../public/.well-known/ard.json';
 import { getSupabaseAnonKey, getSupabaseUrl } from '@/lib/supabaseEnv';
 import { isPublicPath } from '@/utils/publicRoutes';
+import { isStudentProfilePreviewPath } from '@/utils/studentProfilePreview';
 import { isWritingV3PreviewPath } from '@/utils/writingV3Preview';
 import {
   isSpeakingB2HttpsRequest,
@@ -62,7 +63,7 @@ export async function middleware(request: NextRequest) {
   // database and no model, and exists ONLY outside production: in a production
   // build the route itself refuses to render and this bypass never applies, so it
   // is not a public path and no student can reach it.
-  if (isWritingV3PreviewPath(pathname)) {
+  if (isWritingV3PreviewPath(pathname) || isStudentProfilePreviewPath(pathname)) {
     return NextResponse.next();
   }
 

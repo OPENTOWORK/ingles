@@ -1,9 +1,16 @@
 'use client';
 
 import { useMemo } from 'react';
+import { BlackFridayResultsNotice } from '@/components/promo/BlackFridayAppPromo';
 import { buildFeedbackViewModel } from '@/features/writing/ui/feedback-view-model';
 import WritingCriterionCard from './WritingCriterionCard';
 import WritingMapCanvas from './WritingMapCanvas';
+
+function correctionScopeKey(candidateResponse, feedbackPayload) {
+  const total = feedbackPayload?.global_result?.raw_total ?? '';
+  const text = String(candidateResponse || '');
+  return `writing:${total}:${text.length}:${text.slice(0, 48)}`;
+}
 
 /**
  * After Check, the learner sees their own writing with colour marks, then the
@@ -45,13 +52,20 @@ export default function WritingFeedbackPage({
         </div>
       </section>
 
-      {onWriteAnother ? (
-        <div className="writing-v3__edit">
-          <button type="button" className="writing-v3__edit-button" onClick={onWriteAnother}>
-            Edit your answer
-          </button>
-        </div>
-      ) : null}
+      <div className="writing-v3__finish">
+        <BlackFridayResultsNotice
+          compact
+          scopeKey={correctionScopeKey(candidateResponse, feedbackPayload)}
+          dismissLabel="Seguir revisando"
+        />
+        {onWriteAnother ? (
+          <div className="writing-v3__edit">
+            <button type="button" className="writing-v3__edit-button" onClick={onWriteAnother}>
+              Edit your answer
+            </button>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }

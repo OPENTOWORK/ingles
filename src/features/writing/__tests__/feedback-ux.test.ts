@@ -38,6 +38,7 @@ import {
   selectionReducer,
   WRITING_MAP_MOBILE_BREAKPOINT,
 } from '../ui/annotation-selection';
+import { placeWritingBubble } from '../ui/bubble-placement';
 import { buildFeedbackViewModel } from '../ui/feedback-view-model';
 
 // ---------------------------------------------------------------------------
@@ -333,6 +334,50 @@ test('E — below the mobile breakpoint the feedback becomes a bottom sheet', ()
   const canvas = stripComments(readComponent('WritingMapCanvas.js'));
   assert.match(canvas, /presentation === 'sheet'[\s\S]*WritingMapBottomSheet/);
   assert.match(canvas, /presentation === 'bubble'[\s\S]*WritingMapBubble/);
+  assert.ok(!canvas.includes('writing-map__canvas--with-bubble'), 'the comment must not shrink the writing column');
+});
+
+test('E — a desktop comment stays inside the viewport and flips away from the edge', () => {
+  const viewport = { width: 1280, height: 800 };
+  const popup = { width: 300, height: 180 };
+
+  const rightSide = placeWritingBubble(
+    { top: 200, right: 480, left: 360, height: 24 },
+    popup.width,
+    popup.height,
+    viewport,
+  );
+  assert.equal(rightSide.side, 'right');
+  assert.equal(rightSide.left, 490);
+  assert.ok(rightSide.left + rightSide.width <= viewport.width - 12);
+
+  const nearRightEdge = placeWritingBubble(
+    { top: 200, right: 1100, left: 980, height: 24 },
+    popup.width,
+    popup.height,
+    viewport,
+  );
+  assert.equal(nearRightEdge.side, 'left');
+  assert.ok(nearRightEdge.left >= 12);
+  assert.ok(nearRightEdge.left + nearRightEdge.width <= viewport.width - 12);
+
+  const nearLeftEdge = placeWritingBubble(
+    { top: 40, right: 160, left: 16, height: 24 },
+    popup.width,
+    popup.height,
+    viewport,
+  );
+  assert.equal(nearLeftEdge.side, 'right');
+  assert.ok(nearLeftEdge.left >= 12);
+
+  const lowMark = placeWritingBubble(
+    { top: 760, right: 480, left: 360, height: 24 },
+    popup.width,
+    popup.height,
+    viewport,
+  );
+  assert.ok(lowMark.top + popup.height <= viewport.height - 12);
+  assert.ok(lowMark.top >= 12);
 });
 
 test('E — the bottom sheet is dismissible and manages focus', () => {
@@ -415,7 +460,7 @@ test('F — category meaning never depends on colour alone', () => {
 
   const canvas = stripComments(readComponent('WritingMapCanvas.js'));
   assert.match(canvas, /writing-map__legend/, 'a legend names every category in use');
-  assert.match(canvas, /token\.marker/, 'each category also carries a non-colour marker');
+  assert.ok(!canvas.includes('token.marker'), 'the legend colours the category name and does not draw a glyph');
   assert.ok(!canvas.includes('writing-map__legend-hint'), 'permanent explanatory legend phrases are not rendered');
 
   const view = viewOf('standard');

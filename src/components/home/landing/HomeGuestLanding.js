@@ -212,9 +212,9 @@ function ReviewCarousel() {
 }
 
 const WRITING_CHECKS = [
-  'Corrección de gramática, vocabulario y coherencia.',
-  'Comentarios claros y prácticos.',
-  'Sugerencias para mejorar tu expresión.',
+  'El texto se queda en su sitio. Cada marca abre su comentario.',
+  'Gramática, vocabulario, ortografía, organización, contenido y lo que ya funciona.',
+  'Nota en los cuatro criterios de Cambridge.',
 ];
 
 const STEPS = [

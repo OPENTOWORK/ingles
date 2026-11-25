@@ -50,6 +50,7 @@ export default function LevelHubPage({ config }) {
   }
 
   const usesPracticeQuadrant = Boolean(config.practiceSectionTitle);
+  const examHubHero = config.slug === 'b2';
   const pageClass = [
     'niveles-level-page',
     `niveles-level-page--${config.slug}`,
@@ -62,11 +63,15 @@ export default function LevelHubPage({ config }) {
     <>
       <div data-tour="level-hub-hero">
         <PageHero
-          eyebrow={config.eyebrow}
-          title={config.title}
-          description={config.description}
+          eyebrow={examHubHero ? undefined : config.eyebrow}
+          title={examHubHero ? 'Practise for your exam' : config.title}
+          description={
+            examHubHero
+              ? 'Choose an exam skill, complete a test and learn from the feedback.'
+              : config.description
+          }
           showMascot
-          mascotVariant={config.mascotVariant}
+          mascotVariant={examHubHero ? 3 : config.mascotVariant}
           mascotWidth={146}
           accent={config.accent}
           stats={
@@ -184,6 +189,12 @@ function LevelHubStyles() {
       .niveles-level-page--b2 .page-hero__desc {
         max-width: 100%;
         text-wrap: balance;
+      }
+      .niveles-level-page--b2 .page-hero__body {
+        flex-wrap: nowrap;
+      }
+      .niveles-level-page--b2 .page-hero__mascot {
+        order: -1;
       }
       @media (max-width: 639px) {
         html:has(.niveles-level-page),

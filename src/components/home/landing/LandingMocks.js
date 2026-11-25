@@ -1,18 +1,21 @@
 'use client';
 
-import { useId, useState } from 'react';
 import { BookOpen, ChartColumn, Headphones, House, PenLine, User } from 'lucide-react';
 
-const WRITING_TABS = [
-  { id: 'texto', label: 'Tu texto' },
-  { id: 'correccion', label: 'Corrección' },
-  { id: 'comentarios', label: 'Comentarios' },
+const WRITING_LEGEND = [
+  { key: 'grammar', label: 'Grammar' },
+  { key: 'vocabulary', label: 'Vocabulary' },
+  { key: 'spelling', label: 'Spelling' },
+  { key: 'organisation', label: 'Organisation' },
+  { key: 'content', label: 'Content' },
+  { key: 'strength', label: 'Strength' },
 ];
 
-const WRITING_COMMENTS = [
-  { label: 'Contenido', text: 'Respondes a la pregunta y das tu opinión al final.' },
-  { label: 'Organización', text: 'However, For example e In my opinion ordenan bien las ideas.' },
-  { label: 'Lenguaje', text: 'Vocabulario variado. Repasa el participio del present perfect.' },
+const WRITING_CRITERIA = [
+  { label: 'Content', mark: 3, summary: 'The essay answers the question, but some points stay general.' },
+  { label: 'Communicative Achievement', mark: 4, summary: 'The tone is suitable for an essay.' },
+  { label: 'Organisation', mark: 3, summary: 'There is a beginning, a middle and an end.' },
+  { label: 'Language', mark: 3, summary: 'Most sentences are clear. The slips are local.' },
 ];
 
 const PRACTICE_NAV = [
@@ -35,128 +38,52 @@ const RESULT_BARS = [
   { label: 'Listening', value: 58 },
 ];
 
-function SampleEssay({ corrected = false }) {
-  return (
-    <p className="hl-essay">
-      In recent years, the number of people working from home has increased significantly. This
-      trend{' '}
-      {corrected ? (
-        <mark className="hl-mark hl-mark--fix">has brought</mark>
-      ) : (
-        <mark className="hl-mark hl-mark--err">has bring</mark>
-      )}{' '}
-      many benefits, such as a better work-life balance and less traffic in cities. However, it
-      also presents some challenges. For example,{' '}
-      {corrected ? (
-        <mark className="hl-mark hl-mark--fix">people may feel isolated</mark>
-      ) : (
-        <mark className="hl-mark hl-mark--tip">people can feel isolated</mark>
-      )}{' '}
-      and it may be difficult to separate work from personal life. In my opinion, working from home
-      can be positive if companies provide the right support.
-    </p>
-  );
-}
-
-function FeedbackNote({ tone, label, chips, text }) {
-  return (
-    <div className={`hl-note hl-note--${tone}`}>
-      <p className="hl-note__label">{label}</p>
-      <p className="hl-note__change">
-        {chips.map((chip, index) => (
-          <span key={chip.text} className="hl-note__chip-group">
-            {index > 0 ? <span aria-hidden="true">→</span> : null}
-            <span className={`hl-chip hl-chip--${chip.tone}`}>{chip.text}</span>
-          </span>
-        ))}
-      </p>
-      <p className="hl-note__text">{text}</p>
-    </div>
-  );
-}
-
-/** Ejemplo de corrección de Writing con sus tres pestañas. */
+/** Ejemplo estático de la corrección real: texto marcado, comentario y criterios. */
 export function WritingFeedbackMock() {
-  const [active, setActive] = useState('texto');
-  const baseId = useId();
-  const panelProps = (id) => ({
-    role: 'tabpanel',
-    id: `${baseId}-panel-${id}`,
-    'aria-labelledby': `${baseId}-tab-${id}`,
-    hidden: active !== id,
-  });
-
   return (
     <div className="hl-wmock">
       <p className="hl-wmock__example">Ejemplo</p>
-      <div className="hl-wmock__tabs" role="tablist" aria-label="Ejemplo de corrección de Writing">
-        {WRITING_TABS.map((tab) => (
-          <button
-            key={tab.id}
-            type="button"
-            role="tab"
-            id={`${baseId}-tab-${tab.id}`}
-            aria-controls={`${baseId}-panel-${tab.id}`}
-            aria-selected={active === tab.id}
-            className="hl-wmock__tab"
-            onClick={() => setActive(tab.id)}
-          >
-            {tab.label}
-          </button>
+      <p className="hl-wmock__title">Your corrected writing</p>
+      <ul className="hl-wmock__legend" aria-label="Mark categories in your writing">
+        {WRITING_LEGEND.map((item) => (
+          <li key={item.key}>
+            <span className={`hl-wmock__legend-word hl-mark--${item.key}`}>{item.label}</span>
+          </li>
         ))}
+      </ul>
+      <div className="hl-wmock__body">
+        <p className="hl-essay">
+          Plastic waste is a serious problem in many cities.{' '}
+          <mark className="hl-mark hl-mark--grammar hl-mark--open">People has throw</mark> too much
+          packaging away every day, and the <mark className="hl-mark hl-mark--spelling">enviroment</mark>{' '}
+          is paying the price. <mark className="hl-mark hl-mark--vocabulary">A lot of stuff</mark> ends
+          up in the sea because there are not enough bins.
+        </p>
+        <aside className="hl-wmock__bubble" aria-label="Feedback on People has throw">
+          <p className="hl-wmock__tag hl-mark--grammar">Grammar</p>
+          <p className="hl-wmock__kicker">Why</p>
+          <p className="hl-wmock__bubble-text">
+            The subject is “People”, so the verb needs a plural form.
+          </p>
+          <p className="hl-wmock__kicker">Suggestion</p>
+          <p className="hl-wmock__suggestion">People throw</p>
+        </aside>
       </div>
-
-      <div className="hl-wmock__panels">
-        <div className="hl-wmock__panel" {...panelProps('texto')}>
-          <SampleEssay />
-          <div className="hl-notes">
-            <FeedbackNote
-              tone="err"
-              label="Corrección"
-              chips={[
-                { text: 'has bring', tone: 'err' },
-                { text: 'has brought', tone: 'ok' },
-              ]}
-              text="Después de «has» va el participio: bring → brought."
-            />
-            <FeedbackNote
-              tone="tip"
-              label="Sugerencia"
-              chips={[{ text: 'people can feel isolated', tone: 'tip' }]}
-              text="«People may feel isolated» suena más natural y formal en un essay."
-            />
-          </div>
-        </div>
-
-        <div className="hl-wmock__panel" {...panelProps('correccion')}>
-          <SampleEssay corrected />
-          <div className="hl-notes">
-            <FeedbackNote
-              tone="fix"
-              label="Gramática"
-              chips={[{ text: 'has brought', tone: 'fix' }]}
-              text="Present perfect: has + participio."
-            />
-            <FeedbackNote
-              tone="fix"
-              label="Estilo"
-              chips={[{ text: 'may feel isolated', tone: 'fix' }]}
-              text="Más prudente y formal que «can feel»."
-            />
-          </div>
-        </div>
-
-        <div className="hl-wmock__panel hl-wmock__panel--single" {...panelProps('comentarios')}>
-          <ul className="hl-comments">
-            {WRITING_COMMENTS.map((comment) => (
-              <li key={comment.label} className="hl-comment">
-                <p className="hl-comment__label">{comment.label}</p>
-                <p className="hl-comment__text">{comment.text}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+      <p className="hl-wmock__criteria-label">Cambridge criteria</p>
+      <ul className="hl-wmock__criteria">
+        {WRITING_CRITERIA.map((item) => (
+          <li key={item.label}>
+            <p>
+              <span>{item.label}</span>
+              <strong>
+                {item.mark}
+                <span>/5</span>
+              </strong>
+            </p>
+            <small>{item.summary}</small>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -194,20 +121,14 @@ export function PracticePickerMock() {
 export function ReviewMock() {
   return (
     <div className="hl-mini hl-mini--review" aria-hidden="true">
-      <p className="hl-mini__title">Writing · Part 1</p>
-      <div className="hl-mini__tabs">
-        <span className="is-active">Tu respuesta</span>
-        <span>Corrección</span>
-        <span>Comentarios</span>
-      </div>
+      <p className="hl-mini__title">Your corrected writing</p>
       <p className="hl-mini__essay">
-        Nowadays, more and more people <mark className="hl-mark hl-mark--err">prefers</mark> to shop
-        online. In my opinion, it is a good idea because you can compare prices and save time.
+        <mark className="hl-mark hl-mark--grammar">People has throw</mark> too much packaging away,
+        and the <mark className="hl-mark hl-mark--spelling">enviroment</mark> is paying the price.
       </p>
-      <p className="hl-mini__fix">
-        <span className="hl-chip hl-chip--err">prefers</span>
-        <span>→</span>
-        <span className="hl-chip hl-chip--ok">prefer</span>
+      <p className="hl-mini__bubble">
+        <strong>Grammar</strong>
+        <span>Suggestion: People throw</span>
       </p>
     </div>
   );

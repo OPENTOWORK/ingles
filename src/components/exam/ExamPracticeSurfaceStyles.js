@@ -50,15 +50,29 @@ export default function ExamPracticeSurfaceStyles() {
         isolation: isolate;
       }
 
-      /* Match the top header to the bottom navigation bubble. */
+      /* Skill header, part cards and exercise cards share the hub card. */
       .levels-b2-practice--skill-compact .levels-b2-practice__header {
-        border: 1px solid var(--practice-border) !important;
+        border: 1px solid #e8e4f7 !important;
         border-top-width: 1px !important;
-        border-top-color: var(--practice-border) !important;
-        border-radius: var(--practice-surface-radius) !important;
-        background: var(--practice-accent-soft) !important;
-        box-shadow: none !important;
+        border-top-color: #e8e4f7 !important;
+        border-radius: 18px !important;
+        background: #ffffff !important;
+        box-shadow: 0 10px 28px rgba(76, 56, 170, 0.07) !important;
         overflow: hidden;
+      }
+
+      .levels-b2-practice--skill-compact .phone-practice-step__item,
+      .levels-b2-practice--skill-compact .levels-exam-split-card {
+        border: 1px solid #e8e4f7 !important;
+        background: #ffffff !important;
+        box-shadow: 0 10px 28px rgba(76, 56, 170, 0.07) !important;
+      }
+
+      .levels-b2-practice--skill-compact .phone-practice-step__item:hover,
+      .levels-b2-practice--skill-compact .phone-practice-step__item--current {
+        background: #ffffff !important;
+        border-color: color-mix(in srgb, var(--skill-accent, var(--practice-accent)) 32%, #e8e4f7) !important;
+        box-shadow: 0 14px 32px rgba(76, 56, 170, 0.12) !important;
       }
 
       .levels-b2-practice--skill-compact .levels-b2-practice__header::before,
@@ -68,9 +82,9 @@ export default function ExamPracticeSurfaceStyles() {
       }
 
       .levels-exam-module-nav {
-        border: 1px solid var(--practice-border) !important;
-        background: var(--practice-accent-soft) !important;
-        box-shadow: none !important;
+        border: 1px solid #e8e4f7 !important;
+        background: #ffffff !important;
+        box-shadow: 0 10px 28px rgba(76, 56, 170, 0.07) !important;
       }
 
       /* Choose Part cards and exercise cards use the same corner language. */
