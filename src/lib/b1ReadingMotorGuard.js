@@ -360,6 +360,8 @@ export class B1ReadingMotorSession {
     this.pendingEstimate = null;
     this.stopError = null;
     this.preservedPartNumbers = [];
+    this.teacherDraftPartNumbers = [];
+    this.unusableDraft = null;
   }
 
   elapsedMs() {
@@ -369,6 +371,11 @@ export class B1ReadingMotorSession {
   notePreservedPart(partNumber) {
     const n = Number(partNumber);
     if (!this.preservedPartNumbers.includes(n)) this.preservedPartNumbers.push(n);
+  }
+
+  noteTeacherReviewDraft(partNumber) {
+    const n = Number(partNumber);
+    if (!this.teacherDraftPartNumbers.includes(n)) this.teacherDraftPartNumbers.push(n);
   }
 
   beginAttempt(partNumber) {
@@ -606,9 +613,12 @@ export class B1ReadingMotorSession {
       backoffDelaysMs: [...this.backoffDelays],
       dryRun: Boolean(this.config.dryRun),
       preservedPartNumbers: [...this.preservedPartNumbers],
+      teacherDraftPartNumbers: [...this.teacherDraftPartNumbers],
       attemptHistory: this.attemptHistory.map((row) => ({ ...row, codes: [...row.codes] })),
       recommendedAction: reason === 'completed'
-        ? 'All requested parts passed validation and were stored in the isolated development cache.'
+        ? (this.teacherDraftPartNumbers.length
+          ? 'Saved for teacher review. Automated validation did not approve every part, and a teacher has not approved this exam.'
+          : 'All requested parts passed validation and were stored in the isolated development cache.')
         : recommendedAction(reason, failureCategory),
       limits: {
         maxAttemptsPerPart: this.config.maxAttemptsPerPart,

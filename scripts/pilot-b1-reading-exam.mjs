@@ -1,4 +1,3 @@
-import fs from 'node:fs';
 import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import { loadEnvLocal } from './load-env-local.mjs';
@@ -6,6 +5,7 @@ import { buildB1TwentyExamAllocation } from '../src/lib/b1PreliminaryReadingSpec
 import { resolveCallModel } from '../src/lib/b1ReadingMotorGuard.js';
 import {
   B1_READING_MOTOR_VERSION,
+  createFileB1MotorStore,
   createMemoryB1MotorStore,
   createSupabaseB1MotorStore,
   runB1ReadingMotor,
@@ -35,43 +35,6 @@ if (!dryRun && examSlot <= 7) {
 
 const reportDir = path.join(process.cwd(), 'diagnostics', 'b1-reading-motor');
 const localCacheDir = path.join(reportDir, 'cache', `exam-${examSlot}`);
-
-function createLocalFileStore(dir) {
-  fs.mkdirSync(dir, { recursive: true });
-  const examFile = path.join(dir, 'exam.json');
-  const partFile = (partNumber) => path.join(dir, `part-${partNumber}.json`);
-  const readJson = (file) => (fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null);
-  return {
-    async getExistingExam() {
-      return readJson(examFile);
-    },
-    async getCachedPart(_examSlot, _motorVersion, partNumber) {
-      return readJson(partFile(partNumber));
-    },
-    async listCachedParts() {
-      const rows = [];
-      for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
-        const row = readJson(partFile(partNumber));
-        if (row?.validation?.ok === true) {
-          rows.push({ partNumber, payload: row.payload, validation: row.validation });
-        }
-      }
-      return rows;
-    },
-    async saveValidatedPart(_examSlot, _motorVersion, partNumber, payload) {
-      if (payload?.validation?.ok !== true) {
-        throw new Error(`Refusing to cache B1 Part ${partNumber} because validation did not pass.`);
-      }
-      fs.writeFileSync(partFile(partNumber), `${JSON.stringify({
-        payload,
-        validation: payload.validation,
-      }, null, 2)}\n`);
-    },
-    async saveExam(row) {
-      fs.writeFileSync(examFile, `${JSON.stringify(row, null, 2)}\n`);
-    },
-  };
-}
 
 function allocationChooser() {
   const plan = buildB1TwentyExamAllocation();
@@ -138,7 +101,7 @@ if (dryRun) {
     process.exit(1);
   }
   console.log(`B1 Exam ${examSlot} local pilot. Model gpt-4o. Spend cap USD 1. Four attempts per part. Cache ${localCacheDir}. No Supabase and no live exam tables.`);
-  store = createLocalFileStore(localCacheDir);
+  store = createFileB1MotorStore(localCacheDir);
   chooseVariety = allocationChooser();
 }
 

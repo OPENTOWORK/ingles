@@ -284,28 +284,14 @@ test('repeated validation failures stop the part and write a local diagnostic re
 });
 
 test('different failure categories continue until the attempt limit', async () => {
-  const steps = [
-    { directions: 'For each question, choose the correct answer.', questions: [], modelAnswers: [] },
-    (() => {
-      const generated = validPart1();
-      generated.modelAnswers = generated.modelAnswers.map((row) => ({ ...row, answer: 'Z' }));
-      return generated;
-    })(),
-    (() => {
-      const generated = validPart1();
-      generated.questions = generated.questions.map((question) => ({
-        ...question,
-        text: 'Please check the details before Friday and bring the signed form.',
-        options: ['A) Please check the details before Friday.', 'B) Ignore the message.', 'C) Wait until next month.'],
-      }));
-      return generated;
-    })(),
-    (() => {
-      const generated = validPart1();
-      generated.questions = generated.questions.map((question) => ({ ...question, prompt: '' }));
-      return generated;
-    })(),
-  ];
+  const missingText = validPart1();
+  missingText.questions = missingText.questions.map((question) => ({ ...question, text: '' }));
+  const numberedOutOfRange = validPart1();
+  numberedOutOfRange.questions = numberedOutOfRange.questions.map((question, index) => ({ ...question, number: index + 6 }));
+  numberedOutOfRange.modelAnswers = numberedOutOfRange.modelAnswers.map((row, index) => ({ ...row, number: index + 6 }));
+  const missingPrompt = validPart1();
+  missingPrompt.questions = missingPrompt.questions.map((question) => ({ ...question, prompt: '' }));
+  const steps = [missingText, numberedOutOfRange, null, missingPrompt];
   let index = 0;
   const { result, calls } = await runMotor({
     maxAttemptsPerPart: 4,
@@ -313,6 +299,7 @@ test('different failure categories continue until the attempt limit', async () =
       assert.equal(isReviewCall(options), false);
       const body = steps[index];
       index += 1;
+      if (body == null) return { text: 'not json', model: 'gpt-4o' };
       return completion(body);
     },
   });
@@ -323,17 +310,28 @@ test('different failure categories continue until the attempt limit', async () =
   assert.equal(new Set(primaries).size >= 3, true);
 });
 
-test('semantic validation still rejects a part at the attempt limit', async () => {
+test('an ambiguous answer is kept for teacher review and is not validated', async () => {
   const { result, store, calls } = await runMotor({
     maxAttemptsPerPart: 1,
     mockModel: (options) => completion(isReviewCall(options) ? failReview() : validPart1()),
   });
-  assert.equal(result.stopped, true);
-  assert.equal(result.ok, false);
-  assert.equal(result.report.failureCategory, 'ambiguity');
+  assert.equal(result.ok, true);
+  assert.equal(result.stopped, undefined);
   assert.equal(calls.some((options) => isReviewCall(options)), true);
   assert.equal(store.parts.size, 0);
-  assert.equal(store.exams.length, 0);
+  assert.equal(store.drafts.size, 1);
+  const draft = [...store.drafts.values()][0].payload;
+  assert.equal(draft.reviewStatus, 'teacher_review_draft');
+  assert.equal(draft.validation.ok, false);
+  assert.equal(draft.automatedValidation, 'not_approved');
+  assert.equal(draft.teacherApproval, 'pending');
+  assert.equal(draft.humanTeacherApproved, false);
+  assert.match(draft.critical.join(' '), /ambiguity|more than one|defensible/i);
+  assert.equal(store.exams[0].status, 'teacher_review');
+  assert.equal(store.exams[0].validation_summary.allPartsPassed, false);
+  assert.equal(store.exams[0].validation_summary.teacherApproval, 'pending');
+  assert.match(result.report.recommendedAction, /teacher review/i);
+  assert.equal(result.report.recommendedAction.includes('passed validation and were stored'), false);
 });
 
 test('spend cap blocks the next model call and does not waive semantic review', async () => {

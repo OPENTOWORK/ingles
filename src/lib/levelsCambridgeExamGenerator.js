@@ -56,6 +56,7 @@ import {
   isB1MotorStopError,
   resolveGenerationAttemptLimit,
 } from '@/lib/b1ReadingMotorGuard';
+import { assessB1PartReview } from '@/lib/b1ReadingReviewWorkflow';
 import {
   B1_PART5_PASSAGE_LIMITS,
   B1_PART5_RISKY_PAIRS,
@@ -589,6 +590,13 @@ ${lengthHint}`;
         normalized: generated,
       };
       if (motor) {
+        if (isB1Reading) {
+          motor.unusableDraft = {
+            partNumber: partDef.partNumber,
+            generated,
+            validation,
+          };
+        }
         const decision = motor.recordAttemptFailure(partDef.partNumber, validation.errors);
         if (decision.stop) throw motor.createStopError(decision);
       }
@@ -623,12 +631,38 @@ ${lengthHint}`;
       }
     }
 
-    if (validation.ok && isPartComplete(generated, partDef, slug)) {
+    if (motor && isB1Reading) {
+      const review = assessB1PartReview({
+        partNumber: partDef.partNumber,
+        generated,
+        errors: validation.errors || [],
+        warnings: validation.warnings || [],
+      });
+      validation = { ...validation, review };
+      if (review.reviewStatus === 'validated_candidate' && validation.ok && isPartComplete(generated, partDef, slug)) {
+        motor.unusableDraft = null;
+        motor.recordAttemptSuccess(partDef.partNumber);
+        return { generated, validation };
+      }
+      if (review.reviewStatus === 'teacher_review_draft') {
+        motor.unusableDraft = null;
+        validation = { ...validation, ok: false };
+        return { generated, validation };
+      }
+      motor.unusableDraft = {
+        partNumber: partDef.partNumber,
+        generated,
+        validation,
+      };
+      const messages = validation.errors?.length
+        ? validation.errors
+        : ['Validation failed without a diagnostic message.'];
+      const decision = motor.recordAttemptFailure(partDef.partNumber, messages);
+      if (decision.stop) throw motor.createStopError(decision);
+    } else if (validation.ok && isPartComplete(generated, partDef, slug)) {
       if (motor) motor.recordAttemptSuccess(partDef.partNumber);
       return { generated, validation };
-    }
-
-    if (motor) {
+    } else if (motor) {
       const messages = validation.errors?.length
         ? validation.errors
         : ['Validation failed without a diagnostic message.'];

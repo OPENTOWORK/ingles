@@ -3,6 +3,9 @@
  * Writes only through the injected store. The pilot points that store at
  * b1_motor_dev_* tables. Tests and dry runs use an in-memory store.
  */
+import fs from 'node:fs';
+import path from 'node:path';
+
 import {
   B1ReadingMotorSession,
   isB1MotorStopError,
@@ -36,18 +39,35 @@ async function defaultGeneratePart({ examSlot, partNumber, topic, varietySeed })
   });
 }
 
+function reviewRow(examSlot, motorVersion, partNumber, payload) {
+  return {
+    exam_slot: examSlot,
+    motor_version: motorVersion,
+    part_number: partNumber,
+    payload,
+    validation: payload.validation,
+  };
+}
+
 export function createMemoryB1MotorStore() {
   const exams = [];
   const parts = new Map();
+  const drafts = new Map();
+  const rejected = new Map();
   const keyOf = (examSlot, motorVersion, partNumber) => `${examSlot}:${motorVersion}:${partNumber}`;
   return {
     exams,
     parts,
+    drafts,
+    rejected,
     async getExistingExam(examSlot, motorVersion) {
       return exams.find((row) => row.exam_slot === examSlot && row.motor_version === motorVersion) || null;
     },
     async getCachedPart(examSlot, motorVersion, partNumber) {
       return parts.get(keyOf(examSlot, motorVersion, partNumber)) || null;
+    },
+    async getTeacherReviewDraft(examSlot, motorVersion, partNumber) {
+      return drafts.get(keyOf(examSlot, motorVersion, partNumber)) || null;
     },
     async listCachedParts(examSlot, motorVersion) {
       const rows = [];
@@ -60,19 +80,76 @@ export function createMemoryB1MotorStore() {
       return rows.sort((a, b) => a.partNumber - b.partNumber);
     },
     async saveValidatedPart(examSlot, motorVersion, partNumber, payload) {
-      if (payload?.validation?.ok !== true) {
+      if (payload?.validation?.ok !== true || payload?.reviewStatus === 'teacher_review_draft') {
         throw new Error(`Refusing to cache B1 Part ${partNumber} because validation did not pass.`);
       }
-      parts.set(keyOf(examSlot, motorVersion, partNumber), {
-        exam_slot: examSlot,
-        motor_version: motorVersion,
-        part_number: partNumber,
-        payload,
-        validation: payload.validation,
-      });
+      parts.set(keyOf(examSlot, motorVersion, partNumber), reviewRow(examSlot, motorVersion, partNumber, payload));
+    },
+    async saveTeacherReviewDraft(examSlot, motorVersion, partNumber, payload) {
+      if (payload?.reviewStatus !== 'teacher_review_draft' || payload?.validation?.ok === true) {
+        throw new Error(`Refusing to store B1 Part ${partNumber} as a teacher-review draft.`);
+      }
+      drafts.set(keyOf(examSlot, motorVersion, partNumber), reviewRow(examSlot, motorVersion, partNumber, payload));
+    },
+    async saveRejectedPart(examSlot, motorVersion, partNumber, payload) {
+      rejected.set(keyOf(examSlot, motorVersion, partNumber), reviewRow(examSlot, motorVersion, partNumber, payload));
     },
     async saveExam(row) {
       exams.push(row);
+    },
+  };
+}
+
+export function createFileB1MotorStore(dir) {
+  fs.mkdirSync(dir, { recursive: true });
+  const examFile = path.join(dir, 'exam.json');
+  const partFile = (partNumber) => path.join(dir, `part-${partNumber}.json`);
+  const draftFile = (partNumber) => path.join(dir, `part-${partNumber}.draft.json`);
+  const rejectedFile = (partNumber) => path.join(dir, `part-${partNumber}.rejected.json`);
+  const readJson = (file) => (fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null);
+  const writeJson = (file, payload) => {
+    fs.writeFileSync(file, `${JSON.stringify({ payload, validation: payload.validation }, null, 2)}\n`);
+  };
+  return {
+    async getExistingExam() {
+      return readJson(examFile);
+    },
+    async getCachedPart(_examSlot, _motorVersion, partNumber) {
+      return readJson(partFile(partNumber));
+    },
+    async getTeacherReviewDraft(_examSlot, _motorVersion, partNumber) {
+      return readJson(draftFile(partNumber));
+    },
+    async listCachedParts() {
+      const rows = [];
+      for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
+        const row = readJson(partFile(partNumber));
+        if (row?.validation?.ok === true && row?.payload?.reviewStatus !== 'teacher_review_draft') {
+          rows.push({ partNumber, payload: row.payload, validation: row.validation });
+        }
+      }
+      return rows;
+    },
+    async saveValidatedPart(_examSlot, _motorVersion, partNumber, payload) {
+      if (payload?.validation?.ok !== true || payload?.reviewStatus === 'teacher_review_draft') {
+        throw new Error(`Refusing to cache B1 Part ${partNumber} because validation did not pass.`);
+      }
+      writeJson(partFile(partNumber), payload);
+    },
+    async saveTeacherReviewDraft(_examSlot, _motorVersion, partNumber, payload) {
+      if (payload?.reviewStatus !== 'teacher_review_draft' || payload?.validation?.ok === true) {
+        throw new Error(`Refusing to store B1 Part ${partNumber} as a teacher-review draft.`);
+      }
+      writeJson(draftFile(partNumber), payload);
+    },
+    async saveRejectedPart(_examSlot, _motorVersion, partNumber, payload) {
+      if (payload?.reviewStatus === 'validated_candidate' || payload?.reviewStatus === 'teacher_review_draft') {
+        throw new Error(`Refusing to mix B1 Part ${partNumber} into the rejected store.`);
+      }
+      writeJson(rejectedFile(partNumber), payload);
+    },
+    async saveExam(row) {
+      fs.writeFileSync(examFile, `${JSON.stringify(row, null, 2)}\n`);
     },
   };
 }
@@ -135,6 +212,15 @@ export function createSupabaseB1MotorStore(admin) {
       const { error } = await admin.from('b1_motor_dev_generated_exams').insert(row);
       if (error) throw new Error(`Could not save isolated B1 pilot payload: ${error.message}`);
     },
+    async getTeacherReviewDraft() {
+      return null;
+    },
+    async saveTeacherReviewDraft() {
+      throw new Error('Teacher-review drafts are stored only in the local pilot cache, not in Supabase.');
+    },
+    async saveRejectedPart() {
+      throw new Error('Rejected B1 drafts are stored only in the local pilot cache, not in Supabase.');
+    },
   };
 }
 
@@ -160,7 +246,7 @@ async function executeRun(session, options) {
   for (const partNumber of partNumbers) {
     const cached = await store.getCachedPart(examSlot, motorVersion, partNumber);
     const cacheDecision = assessB1CacheReuse(cached?.payload, partNumber);
-    if (cached?.payload && cached?.validation?.ok === true && cacheDecision.reuse) {
+    if (cached?.payload && cached?.validation?.ok === true && cached?.payload?.reviewStatus !== 'teacher_review_draft' && cacheDecision.reuse) {
       const chosen = cached.payload.allocation || {};
       logger.log(
         cacheDecision.explicit
@@ -171,10 +257,37 @@ async function executeRun(session, options) {
       session.notePreservedPart(partNumber);
       summaries.push({
         partNumber,
+        reviewStatus: 'validated_candidate',
+        automatedValidation: 'passed',
+        teacherApproval: 'pending',
         topic: chosen.topic || null,
         context: chosen.context || null,
         grammarFocus: chosen.grammarFocus || null,
         warnings: cached.validation.warnings || [],
+        cached: true,
+      });
+      continue;
+    }
+    const savedDraft = typeof store.getTeacherReviewDraft === 'function'
+      ? await store.getTeacherReviewDraft(examSlot, motorVersion, partNumber)
+      : null;
+    if (
+      savedDraft?.payload?.reviewStatus === 'teacher_review_draft'
+      && savedDraft.payload.rulesVersion === B1_READING_RULES_VERSION
+      && savedDraft.validation?.ok !== true
+    ) {
+      logger.log(`Reusing B1 Exam ${examSlot} Part ${partNumber} as a teacher-review draft. It is not validated.`);
+      parts.push(savedDraft.payload);
+      session.noteTeacherReviewDraft(partNumber);
+      summaries.push({
+        partNumber,
+        reviewStatus: 'teacher_review_draft',
+        automatedValidation: 'not_approved',
+        teacherApproval: 'pending',
+        topic: savedDraft.payload.allocation?.topic || null,
+        context: savedDraft.payload.allocation?.context || null,
+        grammarFocus: savedDraft.payload.allocation?.grammarFocus || null,
+        warnings: savedDraft.payload.pedagogicalWarnings || [],
         cached: true,
       });
       continue;
@@ -189,7 +302,48 @@ async function executeRun(session, options) {
       topic,
       varietySeed: 110120 + partNumber,
     });
-    if (!result?.validation?.ok) {
+    const review = result?.validation?.review;
+    if (review?.reviewStatus === 'teacher_review_draft') {
+      const partPayload = {
+        partNumber,
+        rulesVersion: B1_READING_RULES_VERSION,
+        reviewStatus: 'teacher_review_draft',
+        automatedValidation: 'not_approved',
+        teacherApproval: 'pending',
+        humanTeacherApproved: false,
+        allocation: chosen,
+        generated: result.generated,
+        critical: review.critical || [],
+        pedagogicalWarnings: review.pedagogicalWarnings || [],
+        validation: {
+          ok: false,
+          errors: review.critical || [],
+          warnings: review.pedagogicalWarnings || [],
+          semanticQuality: result.validation.semanticQuality || null,
+          reviewStatus: 'teacher_review_draft',
+          automatedValidation: 'not_approved',
+          teacherApproval: 'pending',
+          humanTeacherApproved: false,
+        },
+      };
+      await store.saveTeacherReviewDraft(examSlot, motorVersion, partNumber, partPayload);
+      session.noteTeacherReviewDraft(partNumber);
+      parts.push(partPayload);
+      summaries.push({
+        partNumber,
+        reviewStatus: 'teacher_review_draft',
+        automatedValidation: 'not_approved',
+        teacherApproval: 'pending',
+        topic: chosen.topic || null,
+        context: chosen.context || null,
+        grammarFocus: chosen.grammarFocus || null,
+        warnings: review.pedagogicalWarnings || [],
+        cached: false,
+      });
+      continue;
+    }
+
+    if (!result?.validation?.ok || review?.reviewStatus !== 'validated_candidate') {
       const messages = result?.validation?.errors || ['Validation failed without a diagnostic message.'];
       const decision = session.recordAttemptFailure(partNumber, messages);
       throw session.createStopError({
@@ -202,13 +356,23 @@ async function executeRun(session, options) {
     const partPayload = {
       partNumber,
       rulesVersion: B1_READING_RULES_VERSION,
+      reviewStatus: 'validated_candidate',
+      automatedValidation: 'passed',
+      teacherApproval: 'pending',
+      humanTeacherApproved: false,
       allocation: chosen,
       generated: result.generated,
+      critical: [],
+      pedagogicalWarnings: [],
       validation: {
         ok: true,
         errors: [],
         warnings: result.validation.warnings || [],
         semanticQuality: result.validation.semanticQuality || null,
+        reviewStatus: 'validated_candidate',
+        automatedValidation: 'passed',
+        teacherApproval: 'pending',
+        humanTeacherApproved: false,
       },
     };
     await store.saveValidatedPart(examSlot, motorVersion, partNumber, partPayload);
@@ -216,6 +380,9 @@ async function executeRun(session, options) {
     parts.push(partPayload);
     summaries.push({
       partNumber,
+      reviewStatus: 'validated_candidate',
+      automatedValidation: 'passed',
+      teacherApproval: 'pending',
       topic: chosen.topic || null,
       context: chosen.context || null,
       grammarFocus: chosen.grammarFocus || null,
@@ -224,23 +391,33 @@ async function executeRun(session, options) {
     });
   }
 
+  const allValidated = parts.length > 0 && parts.every((part) => part.reviewStatus === 'validated_candidate');
   if (beforeSaveExam) await beforeSaveExam(parts);
   await store.saveExam({
     exam_slot: examSlot,
     motor_version: motorVersion,
-    status: 'generated',
+    status: allValidated ? 'generated' : 'teacher_review',
     payload: {
       examSlot,
       level: 'B1 Preliminary Reading',
       generatedAt: new Date().toISOString(),
+      rulesVersion: B1_READING_RULES_VERSION,
+      automatedValidation: allValidated ? 'passed' : 'not_approved',
+      teacherApproval: 'pending',
+      humanTeacherApproved: false,
       parts,
     },
     validation_summary: {
-      allPartsPassed: true,
+      allPartsPassed: allValidated,
+      automatedValidation: allValidated ? 'passed' : 'not_approved',
+      teacherApproval: 'pending',
+      humanTeacherApproved: false,
       parts: summaries,
     },
   });
-  logger.log(`B1 Preliminary Reading Exam ${examSlot} generated successfully in isolated dev storage.`);
+  logger.log(allValidated
+    ? `B1 Preliminary Reading Exam ${examSlot} generated successfully in isolated dev storage.`
+    : `B1 Preliminary Reading Exam ${examSlot} saved for teacher review. Automated validation did not approve every part.`);
   return { ok: true, skipped: false, parts, summaries };
 }
 
@@ -295,6 +472,30 @@ export async function runB1ReadingMotor(options = {}) {
     };
   } catch (error) {
     if (!isB1MotorStopError(error)) throw error;
+    if (session.unusableDraft && typeof store.saveRejectedPart === 'function') {
+      try {
+        const draft = session.unusableDraft;
+        await store.saveRejectedPart(examSlot, motorVersion, draft.partNumber, {
+          partNumber: draft.partNumber,
+          rulesVersion: B1_READING_RULES_VERSION,
+          reviewStatus: 'invalid',
+          automatedValidation: 'not_approved',
+          teacherApproval: 'pending',
+          humanTeacherApproved: false,
+          generated: draft.generated,
+          validation: {
+            ...(draft.validation || {}),
+            ok: false,
+            reviewStatus: 'invalid',
+            automatedValidation: 'not_approved',
+            teacherApproval: 'pending',
+            humanTeacherApproved: false,
+          },
+        });
+      } catch (saveError) {
+        logger.error(`Could not save rejected B1 draft locally: ${scrubString(saveError?.message || saveError)}`);
+      }
+    }
     let preserved = session.preservedPartNumbers;
     try {
       const rows = await store.listCachedParts(examSlot, motorVersion);
