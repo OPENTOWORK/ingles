@@ -23,8 +23,18 @@ import { validatePart6HardRules } from '@/lib/ruoePart6HardValidators';
 import { validatePart4Quality } from '@/lib/ruoePart4Quality';
 import { validateRuoeEditorialQuality } from '@/lib/ruoeEditorialQuality';
 import {
+  B1_PART3_PASSAGE_LIMITS,
   b1Part3CoverageGaps,
+  b1Part3GistPositionProblems,
+  countB1PassageWords,
   findB1AboveLevelTerms,
+  part1LiteralOverlapProblems,
+  part2ProfileSupportProblems,
+  part4MechanicalAnchorProblems,
+  part5CoherenceProblems,
+  part5UnnaturalFrameProblems,
+  part6DeclaredTargetProblems,
+  reconstructPart5Passage,
 } from '@/lib/b1ReadingConstruction';
 
 const WRITING_PART2_FORMATS = new Set(['article', 'email', 'letter', 'review', 'report']);
@@ -1662,6 +1672,7 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
         errors.push(`B1 Reading Part 1 question ${q?.number ?? i + 1}: missing question/prompt.`);
       }
     });
+    errors.push(...part1LiteralOverlapProblems(questions, answers));
     return;
   }
 
@@ -1685,17 +1696,29 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     if (new Set(questions.map((q,i)=>getAnswer(q,i)).filter((a)=>/^[A-H]$/.test(a))).size !== questions.length) {
       warnings.push('B1 Reading Part 2 normally uses a different text for each person; check duplicate answer letters carefully.');
     }
+    const part2Key = questions.map((q, i) => getAnswer(q, i)).join('');
+    if (part2Key === 'ABCDE') {
+      errors.push('B1 Reading Part 2 answer key A B C D E repeats the pilot pattern. Shuffle the texts and recheck the key.');
+    }
+    errors.push(...part2ProfileSupportProblems(gen));
     return;
   }
 
   if (part === 3) {
     requireNumberRange(11, 15);
     if (!hasText(gen.passage)) errors.push('B1 Reading Part 3 must include one longer passage.');
+    else {
+      const passageWords = countB1PassageWords(gen.passage);
+      if (passageWords < B1_PART3_PASSAGE_LIMITS.min || passageWords > B1_PART3_PASSAGE_LIMITS.max) {
+        errors.push(`B1 Reading Part 3 passage is ${passageWords} words; keep it between ${B1_PART3_PASSAGE_LIMITS.min} and ${B1_PART3_PASSAGE_LIMITS.max}.`);
+      }
+    }
     validateMcq(['A','B','C','D'], 4);
     const coverageGaps = b1Part3CoverageGaps(questions);
     if (coverageGaps.length) {
       errors.push(`B1 Reading Part 3 must include detail, inference, attitude and gist coverage. Missing: ${coverageGaps.join(', ')}.`);
     }
+    errors.push(...b1Part3GistPositionProblems(questions));
     rejectAboveLevelLanguage();
     return;
   }
@@ -1723,6 +1746,7 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     if (used.length === 5 && new Set(used).size === 5 && 8 - new Set(used).size !== 3) {
       errors.push('B1 Reading Part 4 must leave exactly three candidate sentences unused.');
     }
+    errors.push(...part4MechanicalAnchorProblems(gen));
     rejectAboveLevelLanguage();
     return;
   }
@@ -1736,6 +1760,9 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
       if (gapNumbers.filter((g) => g === n).length !== 1) errors.push(`B1 Reading Part 5 passage must contain gap (${n}) exactly once.`);
     }
     if (gapNumbers.includes(0)) errors.push('B1 Reading Part 5 has no example gap (0).');
+    const completedPart5 = reconstructPart5Passage(gen);
+    errors.push(...part5CoherenceProblems(completedPart5));
+    errors.push(...part5UnnaturalFrameProblems(completedPart5));
     rejectAboveLevelLanguage();
     return;
   }
@@ -1770,6 +1797,7 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
     if (answerWords.length === 6 && new Set(answerWords).size !== 6) {
       errors.push('B1 Reading Part 6 must use six different one-word answers so each gap tests a different grammar target.');
     }
+    errors.push(...part6DeclaredTargetProblems(questions, answers));
   }
 
   rejectAboveLevelLanguage();

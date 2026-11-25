@@ -1,4 +1,5 @@
 import { cambridgeChatCompletion } from '@/lib/draloAiEngine';
+import { B1_PART5_RISKY_PAIRS, b1SemanticCriteria } from '@/lib/b1ReadingRules';
 import { collectPart5Disputes, confirmedPart5DoubleKeys } from '@/lib/b1Part5DoubleKey';
 import { findB1AboveLevelTerms } from '@/lib/b1ReadingConstruction';
 
@@ -128,7 +129,8 @@ function findings(rubric, errors, warnings, { literalAsError = false } = {}) {
 
 async function reviewPart1(generated) {
   return callReview(
-    `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 1 WITHOUT trusting the supplied answer key.
+    `${b1SemanticCriteria(1)}
+You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 1 WITHOUT trusting the supplied answer key.
 Solve all five items independently. Each item is a short real-world text with three options and should test the main message.
 Report ambiguity if two options express the text equally well. Report a weak distractor only if it is implausible even after a reasonable misreading. Report word-spotting when matching vocabulary gives the answer away.
 Return ONLY JSON:
@@ -140,7 +142,8 @@ Do not invent faults to fill arrays.`,
 
 async function reviewPart2(generated) {
   return callReview(
-    `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 2 WITHOUT trusting the supplied key.
+    `${b1SemanticCriteria(2)}
+You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 2 WITHOUT trusting the supplied key.
 There are five people and eight texts A-H on one topic. Match each person independently using ALL of their requirements.
 Flag ambiguity when two texts satisfy a person's requirements equally well. Flag a weak profile/text set if the correct match is obvious from a copied word rather than detailed comprehension.
 For each person, check that EVERY material requirement in the profile is positively supported by the keyed text. If the profile says the person lacks equipment, needs supervision, requires a particular time, wants a regular activity, has children of a stated age, etc., the chosen text must genuinely support that requirement. Put unsupported or contradicted requirements in unsupportedRequirements.
@@ -153,7 +156,8 @@ Do not report partial matches as ambiguity: an alternative must satisfy the impo
 
 async function reviewPart3(generated) {
   const primary = await callReview(
-    `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 3 WITHOUT trusting the supplied key.
+    `${b1SemanticCriteria(3)}
+You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 3 WITHOUT trusting the supplied key.
 Solve the five four-option questions from the passage. Check detailed comprehension, gist/global meaning, inference and writer attitude/opinion.
 Flag an item if two answers are defensible. Flag distractors that are unrelated to passage ideas or trivially impossible. Flag items solvable mainly by copied wording.
 Also flag levelIssues for words/phrases or sentence structures that are clearly above normal B1 Preliminary reading level and are not made transparent by context. Do not penalise an occasional challenging but inferable word.
@@ -163,7 +167,8 @@ Return ONLY JSON:
   );
 
   const levelAudit = await callReview(
-    `You are a Cambridge B1 Preliminary lexical-level editor. Review ONLY the language level of this Reading Part 3 passage.
+    `${b1SemanticCriteria(3)}
+You are a Cambridge B1 Preliminary lexical-level editor. Review ONLY the language level of this Reading Part 3 passage.
 B1 texts may contain an occasional unfamiliar word if the meaning is transparent, but the overall text must not read like B2/C1 academic or specialist prose.
 Flag terms or constructions that a normal B1 candidate should not be expected to process and that are not clearly explained by context. Be especially alert to specialist labels, abstract academic nouns, dense nominalisations, uncommon idioms and unnecessarily formal phrasing.
 Do not flag ordinary B1 words merely because a simpler synonym exists.
@@ -205,18 +210,22 @@ function reconstructPart4(generated) {
 
 async function reviewPart4(generated) {
   const primary = await callReview(
-    `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 4 WITHOUT trusting the supplied key.
+    `${b1SemanticCriteria(4)}
+You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 4 WITHOUT trusting the supplied key.
 There are five gaps (16-20) and eight candidate sentences A-H, so exactly three are unused.
 Solve the complete assignment. Then test EVERY candidate sentence against EVERY gap. "multifit" means a sentence genuinely produces coherent, grammatical text in more than one gap, considering both the sentence before and after and the wider narrative/argument.
 Flag weak cohesion when the intended sentence has no strong backward/forward link. Do not flag merely topical similarity.
+Flag mechanicalAnchors when the answer is given away by a repeated two-word phrase such as "breakfast list" or "shop window". Natural cohesion uses pronouns, time, contrast, cause and effect, or logical progression.
+Flag an extra sentence that is about a different situation and can be discarded without reading the gap. If you cannot confidently test all eight sentences in all five gaps, set verdict to "revise".
 After solving, RECONSTRUCT the whole text with all five chosen sentences and read it continuously. Check paragraph-level topic, chronology and reference, not just grammar at the gap. A sentence must be rejected if it anticipates a topic before the text introduces it, returns to an earlier stage without a clear signal, changes the subject unexpectedly, or creates a semantic contradiction even if the neighbouring sentences are grammatical.
 Return ONLY JSON:
-{"assignments":[{"gap":16,"letter":"G"}],"multifit":[{"letter":"B","gaps":[17,19],"reason":"..."}],"weakCohesion":[{"gap":18,"reason":"..."}],"unusedLetters":["A","C","H"],"issues":[],"verdict":"pass|revise"}.`,
+{"assignments":[{"gap":16,"letter":"G"}],"multifit":[{"letter":"B","gaps":[17,19],"reason":"..."}],"weakCohesion":[{"gap":18,"reason":"..."}],"mechanicalAnchors":[{"gap":16,"phrase":"breakfast list","reason":"the same two words are copied beside the gap"}],"unusedLetters":["A","C","H"],"issues":[],"verdict":"pass|revise"}.`,
     `GAPPED PASSAGE:\n${generated?.passage || ''}\n\nCANDIDATE SENTENCES:\n${poolView(generated)}\n\nSUPPLIED KEY: ${answerKey(generated)}`,
   );
 
   const sequenceAudit = await callReview(
-    `You are a second Cambridge B1 Preliminary Part 4 editor. The five keyed sentences have already been inserted below.
+    `${b1SemanticCriteria(4)}
+You are a second Cambridge B1 Preliminary Part 4 editor. The five keyed sentences have already been inserted below.
 Read the completed text as a continuous article/story. Ignore the original answer letters.
 Flag sequenceIssues if chronology, reference, topic development or cause/effect is awkward or impossible; if an event is mentioned before it is introduced; if a sentence repeats the following sentence instead of linking naturally; or if the text changes subject without a clear bridge.
 A completed text should read as if it was originally written with no gaps.
@@ -235,7 +244,8 @@ Return ONLY JSON:
 
 async function reviewPart5(generated) {
   const primary = await callReview(
-    `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 5 WITHOUT trusting the supplied key.
+    `${b1SemanticCriteria(5)}
+You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 5 WITHOUT trusting the supplied key.
 Solve all six multiple-choice cloze gaps. This task tests mainly vocabulary, with some grammar/complementation allowed.
 A tempting distractor is correct item writing. Report alternativeFits ONLY when a second option is an equally acceptable official key: fully grammatical, idiomatic British English, and the same meaning as the best option. A near-synonym that breaks the collocation or changes the meaning is not an alternative key.
 Flag distractors in weakDistractors only when they are obviously unusable. Flag a gap that is really a Part 6-style pure grammar gap if that pattern dominates the task.
@@ -247,7 +257,8 @@ Do not invent faults to fill arrays.`,
   );
 
   const crossFit = await callReview(
-    `You are a second independent Cambridge B1 Preliminary Part 5 examiner. Ignore the supplied answer key.
+    `${b1SemanticCriteria(5)}
+You are a second independent Cambridge B1 Preliminary Part 5 examiner. Ignore the supplied answer key.
 For each gap 21-26, test A, B, C and D one by one in the exact sentence.
 Return a letter only when that completion would be printed as an official alternative answer: fully grammatical, idiomatic British English, and faithful to the writer's meaning.
 Do NOT return a letter just because a competent candidate might choose it. Near-synonyms such as damaged/broken, think/believe, arrive/stop and rent/hire are distractors when the collocation or the context rules them out.
@@ -262,7 +273,8 @@ One letter per gap is the normal result.`,
   let adjudicationIssues = [];
   if (disputes.length) {
     const verdict = await callReview(
-      `You are the chief Cambridge B1 Preliminary item writer. Another examiner listed more than one option for some Part 5 gaps. Decide the official key.
+      `${b1SemanticCriteria(5)}
+You are the chief Cambridge B1 Preliminary item writer. Another examiner listed more than one option for some Part 5 gaps. Decide the official key.
 Keep a second letter ONLY when Cambridge would have to accept it as an alternative answer: the completed sentence is fully grammatical, idiomatic British English, and it preserves the writer's meaning as well as the best option.
 Reject a second letter when it is only tempting. A near-synonym, a slightly wrong collocation, or a small change of meaning is a distractor, not a second key.
 Example: "The heavy rain ___ the match." A cancelled, B damaged, C broke, D stopped. Only A is the key. Return {"number":21,"letters":["A"]}.
@@ -284,7 +296,8 @@ letters must contain only options you would print on the key.`,
 
 async function reviewPart6(generated) {
   return callReview(
-    `You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 6 WITHOUT trusting the supplied key.
+    `${b1SemanticCriteria(6)}
+You are an experienced Cambridge B1 Preliminary Reading item writer. Review Part 6 WITHOUT trusting the supplied key.
 Each of gaps 27-32 must take exactly ONE word. Solve every gap independently.
 For each gap actively search for alternative ordinary B1 words that would also make the completed text grammatical, natural and equivalent in meaning. Record all fully defensible alternatives.
 The task should primarily test grammatical structures, with some phrasal verbs/common fixed phrases. Do not treat a merely possible but meaning-changing word as an acceptable alternative.
@@ -295,19 +308,6 @@ Return ONLY JSON:
   );
 }
 
-
-const B1_PART5_RISKY_PAIRS = [
-  ['explore', 'discover'],
-  ['think', 'believe'],
-  ['rent', 'hire'],
-  ['damaged', 'broken'],
-  ['help', 'allow'],
-  ['start', 'begin'],
-  ['finish', 'end'],
-  ['choose', 'select'],
-  ['buy', 'purchase'],
-  ['like', 'love'],
-];
 
 function part5RiskyOptionPairs(generated) {
   const findings = [];
@@ -342,7 +342,12 @@ export async function validateB1ReadingQuality(partNumber, generated) {
   const errors = britishEnglishErrors(generated);
   const warnings = [];
 
-  if ([1, 2, 5].includes(part)) {
+  if (part === 1) {
+    pushMismatchErrors(errors, rubric?.answers, generated?.modelAnswers);
+    findings(rubric, errors, warnings, { literalAsError: true });
+  }
+
+  if ([2, 5].includes(part)) {
     pushMismatchErrors(errors, rubric?.answers, generated?.modelAnswers);
     findings(rubric, errors, warnings);
   }
@@ -390,6 +395,12 @@ export async function validateB1ReadingQuality(partNumber, generated) {
     for (const w of asArray(rubric?.weakCohesion)) {
       errors.push(`B1 Part 4 weak cohesion at gap ${w?.gap ?? '?'}: ${w?.reason || ''}`);
     }
+    for (const anchor of asArray(rubric?.mechanicalAnchors)) {
+      errors.push(`B1 Part 4 mechanical repeated phrase at gap ${anchor?.gap ?? '?'}: ${anchor?.phrase || anchor?.reason || 'two-word repetition'}.`);
+    }
+    if (asArray(rubric?.assignments).length < 5) {
+      errors.push('B1 Part 4 semantic review did not test every gap. Fail closed.');
+    }
     for (const issue of asArray(rubric?.sequenceIssues)) {
       errors.push(`B1 Part 4 completed-text sequence issue: ${issue?.reason || issue?.location || 'whole-text flow is not coherent'}`);
     }
@@ -429,6 +440,9 @@ export async function validateB1ReadingQuality(partNumber, generated) {
     }
     const expected = asArray(generated?.modelAnswers);
     const solved = asArray(rubric?.answers);
+    if (solved.length < 6) {
+      errors.push('B1 Part 6 semantic review did not test every gap. Fail closed.');
+    }
     const solverMap = new Map(solved.map((a) => [Number(a?.number), a]));
     for (const key of expected) {
       const n = Number(key?.number);

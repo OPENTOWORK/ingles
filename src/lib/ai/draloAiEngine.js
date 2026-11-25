@@ -164,11 +164,12 @@ export async function draloChatCompletionStream(options) {
 
 /** Misma llamada con metadatos (compatibilidad con código legacy). */
 export async function draloChatCompletionResult(options = {}) {
-  const text = await draloChatCompletion(options);
+  const full = await draloChatCompletionFull(options);
   return {
-    text,
+    text: full.text,
     raw: null,
     provider: 'openai',
-    model: options.model || getDefaultModel(),
+    model: full.model || options.model || getDefaultModel(),
+    usage: full.usage,
   };
 }

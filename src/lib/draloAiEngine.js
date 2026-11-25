@@ -21,6 +21,8 @@ import {
   DRALO_REAL_LIFE_CORE_SYSTEM,
   CAMBRIDGE_EXAMS_CORE_SYSTEM,
 } from '@/lib/draloAiSystemPrompt';
+import { getB1ReadingMotorSession } from '@/lib/b1ReadingMotorGuard';
+import { applyB1MotorTransport } from '@/lib/b1ReadingRules';
 
 export {
   DRALO_AI_ENGINE,
@@ -140,7 +142,7 @@ function buildCambridgeAssistantUserMessage(options = {}) {
  * DRALO EXAM CAMBRIDGE assistant when OPENAI_ASSISTANT_ID_CAMBRIDGE_EXAMS is set;
  * otherwise Chat Completions + examCoachPrompt.
  */
-async function cambridgeViaAssistantOrChat(options = {}) {
+async function cambridgeViaAssistantOrChatImpl(options = {}) {
   const assistantId = getCambridgeExamsAssistantId();
   const client = getDraloOpenAI();
 
@@ -181,6 +183,13 @@ async function cambridgeViaAssistantOrChat(options = {}) {
     useAssistant: false,
     system: options.system ? mergeCambridgeSystem(options.system) : options.system,
   });
+}
+
+async function cambridgeViaAssistantOrChat(options = {}) {
+  const session = getB1ReadingMotorSession();
+  const callOptions = applyB1MotorTransport(options, session);
+  if (!session) return cambridgeViaAssistantOrChatImpl(callOptions);
+  return session.guardModelCall(callOptions, () => cambridgeViaAssistantOrChatImpl(callOptions));
 }
 
 async function assistantCompletion(client, assistantId, options) {
@@ -272,7 +281,7 @@ export async function draloChatCompletion(options = {}) {
   const explicitModel =
     typeof options.model === 'string' && options.model.trim() ? options.model.trim() : null;
 
-  const { text, model } = await draloChatCompletionResult({
+  const { text, model, usage } = await draloChatCompletionResult({
     systemPrompt,
     userMessage,
     conversationHistory,
@@ -296,6 +305,7 @@ export async function draloChatCompletion(options = {}) {
     provider: 'openai',
     model,
     engine,
+    usage,
   };
 }
 

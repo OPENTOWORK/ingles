@@ -1,8 +1,10 @@
 import { assessExamVariety } from '@/lib/examVarietyAllocation';
 import { buildB1TwentyExamAllocation } from '@/lib/b1PreliminaryReadingSpec';
 
-// SAFETY: this draft branch writes B1 pilot history only to an isolated table.
-// Do not point this at live exam/content tables.
+// SAFETY: this draft branch writes B1 topic history only to an isolated table.
+// Do not point this at live exam/content tables, and do not reuse it for B2.
+// Grammar, lexical and answer-key variety is planned in b1ReadingVarietyPlans.js
+// from caller-supplied history. It does not write to this table.
 const B1_DEV_HISTORY_TABLE = 'b1_motor_dev_variety_history';
 
 /**

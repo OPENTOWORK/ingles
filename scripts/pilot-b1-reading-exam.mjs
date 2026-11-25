@@ -1,177 +1,173 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { createClient } from '@supabase/supabase-js';
 import { loadEnvLocal } from './load-env-local.mjs';
+import { buildB1TwentyExamAllocation } from '../src/lib/b1PreliminaryReadingSpec.js';
+import { resolveCallModel } from '../src/lib/b1ReadingMotorGuard.js';
+import {
+  B1_READING_MOTOR_VERSION,
+  createMemoryB1MotorStore,
+  createSupabaseB1MotorStore,
+  runB1ReadingMotor,
+} from '../src/lib/b1ReadingMotorRun.js';
 
-const env = loadEnvLocal();
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
+const dryRun = process.argv.includes('--dry-run')
+  || ['1', 'true'].includes(String(process.env.B1_MOTOR_DRY_RUN || '').toLowerCase());
+const isolatedDevDb = process.argv.includes('--isolated-dev-db');
 
-if (!url || !key) {
-  console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+function readSlot() {
+  const inline = process.argv.find((arg) => arg.startsWith('--slot='));
+  if (inline) return Number(inline.slice('--slot='.length));
+  const index = process.argv.indexOf('--slot');
+  if (index >= 0) return Number(process.argv[index + 1]);
+  return null;
+}
+
+const examSlot = readSlot();
+if (!Number.isInteger(examSlot) || examSlot < 1 || examSlot > 20) {
+  console.error('Pass --slot with an exam number from 1 to 20.');
   process.exit(1);
 }
-if (!(process.env.OPENAI_API_KEY || env.OPENAI_API_KEY)) {
-  console.error('Missing OPENAI_API_KEY');
+if (!dryRun && examSlot <= 7) {
+  console.error(`Refusing Exam ${examSlot}. Exams 1–7 already exist and must not be overwritten. Use --slot 8 or later.`);
   process.exit(1);
 }
 
-const admin = createClient(url, key, {
-  auth: { autoRefreshToken: false, persistSession: false },
+const reportDir = path.join(process.cwd(), 'diagnostics', 'b1-reading-motor');
+const localCacheDir = path.join(reportDir, 'cache', `exam-${examSlot}`);
+
+function createLocalFileStore(dir) {
+  fs.mkdirSync(dir, { recursive: true });
+  const examFile = path.join(dir, 'exam.json');
+  const partFile = (partNumber) => path.join(dir, `part-${partNumber}.json`);
+  const readJson = (file) => (fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : null);
+  return {
+    async getExistingExam() {
+      return readJson(examFile);
+    },
+    async getCachedPart(_examSlot, _motorVersion, partNumber) {
+      return readJson(partFile(partNumber));
+    },
+    async listCachedParts() {
+      const rows = [];
+      for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
+        const row = readJson(partFile(partNumber));
+        if (row?.validation?.ok === true) {
+          rows.push({ partNumber, payload: row.payload, validation: row.validation });
+        }
+      }
+      return rows;
+    },
+    async saveValidatedPart(_examSlot, _motorVersion, partNumber, payload) {
+      if (payload?.validation?.ok !== true) {
+        throw new Error(`Refusing to cache B1 Part ${partNumber} because validation did not pass.`);
+      }
+      fs.writeFileSync(partFile(partNumber), `${JSON.stringify({
+        payload,
+        validation: payload.validation,
+      }, null, 2)}\n`);
+    },
+    async saveExam(row) {
+      fs.writeFileSync(examFile, `${JSON.stringify(row, null, 2)}\n`);
+    },
+  };
+}
+
+function allocationChooser() {
+  const plan = buildB1TwentyExamAllocation();
+  const exam = plan[examSlot - 1];
+  return async ({ partNumber }) => {
+    const part = exam.parts.find((item) => item.partNumber === partNumber);
+    if (!part) throw new Error(`No topic allocation for Exam ${examSlot} Part ${partNumber}.`);
+    return part;
+  };
+}
+
+let store;
+let chooseVariety;
+let beforeSaveExam;
+
+if (dryRun) {
+  console.log('B1 reading motor dry run: retry and circuit-breaker controls only. No paid API calls and no database writes.');
+  store = createMemoryB1MotorStore();
+  chooseVariety = allocationChooser();
+} else if (isolatedDevDb) {
+  const env = loadEnvLocal();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceKey) {
+    console.error('Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+    process.exit(1);
+  }
+  if (!(process.env.OPENAI_API_KEY || env.OPENAI_API_KEY)) {
+    console.error('Missing OPENAI_API_KEY in .env.local');
+    process.exit(1);
+  }
+  const admin = createClient(url, serviceKey, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+  store = createSupabaseB1MotorStore(admin);
+  const {
+    chooseB1ReadingVariety,
+    recordB1ReadingVariety,
+  } = await import('../src/lib/b1ReadingVarietyHistory.js');
+  chooseVariety = (args) => chooseB1ReadingVariety(admin, args);
+  beforeSaveExam = async (parts) => {
+    for (const part of parts) {
+      await recordB1ReadingVariety(admin, {
+        examSlot,
+        partNumber: part.partNumber,
+        chosen: part.allocation,
+      });
+    }
+  };
+} else {
+  const env = loadEnvLocal();
+  if (!(process.env.OPENAI_API_KEY || env.OPENAI_API_KEY)) {
+    console.error('Missing OPENAI_API_KEY. Put it only in .env.local.');
+    process.exit(1);
+  }
+  const model = resolveCallModel({});
+  const validatorModel = String(process.env.DRALO_OPENAI_MODEL_VALIDATOR || '').trim();
+  if (model !== 'gpt-4o' || (validatorModel && validatorModel !== 'gpt-4o')) {
+    console.error('This pilot is locked to gpt-4o for generation and semantic review.');
+    process.exit(1);
+  }
+  if (String(process.env.DRALO_USE_OPENAI_ASSISTANTS || '').trim() === 'true') {
+    console.error('Turn DRALO_USE_OPENAI_ASSISTANTS off. This pilot uses Chat Completions.');
+    process.exit(1);
+  }
+  console.log(`B1 Exam ${examSlot} local pilot. Model gpt-4o. Spend cap USD 1. Four attempts per part. Cache ${localCacheDir}. No Supabase and no live exam tables.`);
+  store = createLocalFileStore(localCacheDir);
+  chooseVariety = allocationChooser();
+}
+
+const result = await runB1ReadingMotor({
+  examSlot,
+  motorVersion: B1_READING_MOTOR_VERSION,
+  store,
+  dryRun,
+  chooseVariety,
+  beforeSaveExam,
+  reportDir,
 });
 
-const MOTOR_VERSION = 'b1-reading-pilot-v7';
-const examSlot = 1;
-
-const { data: existing, error: existingError } = await admin
-  .from('b1_motor_dev_generated_exams')
-  .select('id,status,created_at')
-  .eq('exam_slot', examSlot)
-  .eq('motor_version', MOTOR_VERSION)
-  .maybeSingle();
-
-if (existingError) {
-  console.error('Could not read isolated B1 pilot table:', existingError.message);
-  process.exit(1);
+if (result.report) {
+  const usage = result.report.tokens || {};
+  console.log(
+    `Pilot summary: passed ${JSON.stringify((result.summaries || []).map((row) => row.partNumber))} preserved ${JSON.stringify(result.report.preservedPartNumbers || [])} paid calls ${result.report.paidApiCalls} input ${usage.input} output ${usage.output} source ${usage.source} estimated USD ${result.report.approximateCostUsd}.`,
+  );
 }
-if (existing?.id) {
-  console.log('B1 pilot Exam 1 already exists in isolated dev storage; skipping regeneration.', existing);
+
+if (result.skipped) {
+  console.log(`B1 pilot Exam ${examSlot} already exists in the selected cache; skipping regeneration.`);
   process.exit(0);
 }
 
-const {
-  generatePartJsonWithRetries,
-} = await import('../src/lib/levelsCambridgeExamGenerator.js');
-const {
-  getLevelExamLabel,
-  getLevelExamPartDef,
-} = await import('../src/lib/levelsExamCatalog.js');
-const {
-  chooseB1ReadingVariety,
-  recordB1ReadingVariety,
-} = await import('../src/lib/b1ReadingVarietyHistory.js');
-
-const levelLabel = getLevelExamLabel('b1');
-const parts = [];
-const summaries = [];
-
-for (let partNumber = 1; partNumber <= 6; partNumber += 1) {
-  const partDef = getLevelExamPartDef('b1', partNumber);
-  if (!partDef) throw new Error(`Missing B1 Reading Part ${partNumber} definition.`);
-
-  const chosen = await chooseB1ReadingVariety(admin, { examSlot, partNumber });
-  const topic = [
-    chosen.topic,
-    chosen.context ? `context/genre: ${chosen.context}` : null,
-    chosen.grammarFocus ? `grammar focus: ${chosen.grammarFocus}` : null,
-  ].filter(Boolean).join('; ');
-
-  const { data: cachedPart, error: cacheReadError } = await admin
-    .from('b1_motor_dev_generated_parts')
-    .select('payload,validation,created_at')
-    .eq('exam_slot', examSlot)
-    .eq('motor_version', MOTOR_VERSION)
-    .eq('part_number', partNumber)
-    .maybeSingle();
-
-  if (cacheReadError) {
-    console.error(`Could not read isolated B1 part cache for Part ${partNumber}:`, cacheReadError.message);
-    process.exit(1);
+if (result.stopped) {
+  if (dryRun) {
+    console.log('Dry run finished without paid API calls. The stop above is the circuit breaker exercising its controls.');
+    process.exit(0);
   }
-
-  if (cachedPart?.payload && cachedPart?.validation?.ok === true) {
-    console.log(`Reusing validated cached B1 Exam 1 Part ${partNumber}: ${topic}`);
-    parts.push(cachedPart.payload);
-    summaries.push({
-      partNumber,
-      topic: chosen.topic,
-      context: chosen.context,
-      grammarFocus: chosen.grammarFocus || null,
-      warnings: cachedPart.validation.warnings || [],
-    });
-    continue;
-  }
-
-  console.log(`Generating B1 Exam 1 Part ${partNumber}: ${topic}`);
-
-  const result = await generatePartJsonWithRetries('b1', levelLabel, partDef, {
-    examSlot,
-    topic,
-    varietySeed: 110120 + partNumber,
-  });
-
-  if (!result?.validation?.ok) {
-    console.error(`Part ${partNumber} failed after retries:`, result?.validation?.errors || []);
-    console.error('LAST GENERATED PART FOR DIAGNOSTIC REVIEW:');
-    console.error(JSON.stringify(result?.generated || null, null, 2));
-    process.exit(1);
-  }
-
-  const partPayload = {
-    partNumber,
-    allocation: chosen,
-    generated: result.generated,
-    validation: {
-      ok: result.validation.ok,
-      errors: result.validation.errors || [],
-      warnings: result.validation.warnings || [],
-      semanticQuality: result.validation.semanticQuality || null,
-    },
-  };
-
-  const { error: cacheWriteError } = await admin
-    .from('b1_motor_dev_generated_parts')
-    .upsert({
-      exam_slot: examSlot,
-      motor_version: MOTOR_VERSION,
-      part_number: partNumber,
-      payload: partPayload,
-      validation: partPayload.validation,
-    }, { onConflict: 'exam_slot,motor_version,part_number' });
-
-  if (cacheWriteError) {
-    console.error(`Could not save isolated B1 part cache for Part ${partNumber}:`, cacheWriteError.message);
-    process.exit(1);
-  }
-
-  parts.push(partPayload);
-
-  summaries.push({
-    partNumber,
-    topic: chosen.topic,
-    context: chosen.context,
-    grammarFocus: chosen.grammarFocus || null,
-    warnings: result.validation.warnings || [],
-  });
-}
-
-for (const part of parts) {
-  await recordB1ReadingVariety(admin, {
-    examSlot,
-    partNumber: part.partNumber,
-    chosen: part.allocation,
-  });
-}
-
-const { error: saveError } = await admin
-  .from('b1_motor_dev_generated_exams')
-  .insert({
-    exam_slot: examSlot,
-    motor_version: MOTOR_VERSION,
-    status: 'generated',
-    payload: {
-      examSlot,
-      level: 'B1 Preliminary Reading',
-      generatedAt: new Date().toISOString(),
-      parts,
-    },
-    validation_summary: {
-      allPartsPassed: true,
-      parts: summaries,
-    },
-  });
-
-if (saveError) {
-  console.error('Could not save isolated B1 pilot payload:', saveError.message);
   process.exit(1);
 }
-
-console.log('B1 Preliminary Reading Exam 1 generated successfully in isolated dev storage.');
