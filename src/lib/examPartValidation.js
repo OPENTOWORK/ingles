@@ -30,6 +30,7 @@ import {
   findB1AboveLevelTerms,
   part1LiteralOverlapProblems,
   part2ProfileSupportProblems,
+  part3OptionFormatProblems,
   part4MechanicalAnchorProblems,
   part5CoherenceProblems,
   part5UnnaturalFrameProblems,
@@ -1719,6 +1720,7 @@ function validateB1ReadingStrict(partDef, gen, errors, warnings) {
       errors.push(`B1 Reading Part 3 must include detail, inference, attitude and gist coverage. Missing: ${coverageGaps.join(', ')}.`);
     }
     errors.push(...b1Part3GistPositionProblems(questions));
+    errors.push(...part3OptionFormatProblems(questions));
     rejectAboveLevelLanguage();
     return;
   }

@@ -41,6 +41,8 @@ test('Part 4, 5 and 6 examples follow the shared plan instead of a pinned templa
     'phrasal verb',
   ]);
   assert.equal(JSON.stringify(part5).includes('|'), false);
+  assert.match(part5.markedPassage, new RegExp(`${B1_PART5_PASSAGE_LIMITS.targetMin}-${B1_PART5_PASSAGE_LIMITS.targetMax}`));
+  assert.match(part5.markedPassage, /single situation/);
   assert.equal(B1_PART5_LEXICAL_BANK.includes('adjective-noun collocation'), true);
 
   const part6 = b1Part6PlanExample([
@@ -109,18 +111,18 @@ test('Part 4 rejects copied anchors and unknown labels, and accepts a device wit
   assert.match(unknown.join(' '), /unknown cohesion name/);
 });
 
-test('cache reuse is explicit for validated Parts 1 to 3 and closed for later unversioned parts', () => {
+test('only the current rules version is reused', () => {
   const current = assessB1CacheReuse({ rulesVersion: B1_READING_RULES_VERSION }, 4);
   assert.equal(current.reuse, true);
   assert.equal(current.explicit, false);
 
   const legacyPart = assessB1CacheReuse({ validation: { ok: true } }, 2);
-  assert.equal(legacyPart.reuse, true);
-  assert.equal(legacyPart.explicit, true);
-  assert.match(legacyPart.reason, /explicit/);
+  assert.equal(legacyPart.reuse, false);
 
-  const legacyLater = assessB1CacheReuse({}, 4);
-  assert.equal(legacyLater.reuse, false);
+  const previousContract = assessB1CacheReuse({ rulesVersion: 'b1-reading-rules-v1' }, 4);
+  assert.equal(previousContract.reuse, false);
+  const reviewContract = assessB1CacheReuse({ rulesVersion: 'b1-reading-rules-v2' }, 5);
+  assert.equal(reviewContract.reuse, false);
 
   const otherVersion = assessB1CacheReuse({ rulesVersion: 'b1-reading-rules-v0' }, 1);
   assert.equal(otherVersion.reuse, false);

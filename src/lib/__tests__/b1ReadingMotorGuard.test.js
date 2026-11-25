@@ -19,6 +19,7 @@ import {
   createMemoryB1MotorStore,
   runB1ReadingMotor,
 } from '@/lib/b1ReadingMotorRun';
+import { B1_READING_RULES_VERSION } from '@/lib/b1ReadingRules';
 
 const quiet = { log() {}, error() {} };
 
@@ -61,6 +62,16 @@ function passReview() {
     ambiguousItems: [],
     weakDistractors: [],
     literalSolveItems: [],
+    itemEvidence: [1, 2, 3, 4, 5].map((number) => ({
+      number,
+      paraphrased: true,
+      grounded: true,
+      options: ['A', 'B', 'C'].map((letter) => ({
+        letter,
+        plausible: true,
+        reason: letter === 'A' ? 'paraphrases the main message' : 'misreads one detail that the text does contain',
+      })),
+    })),
     issues: [],
     verdict: 'pass',
   };
@@ -449,6 +460,7 @@ test('a stopped run keeps previously validated cache entries', async () => {
   const store = createMemoryB1MotorStore();
   const payload = {
     partNumber: 1,
+    rulesVersion: B1_READING_RULES_VERSION,
     allocation: { topic: 'cached library', context: 'notice', grammarFocus: null },
     generated: { marker: 'keep-me' },
     validation: { ok: true, errors: [], warnings: ['cached warning'] },

@@ -30,25 +30,75 @@ export function collectPart5Disputes(primaryFits, crossFits) {
   return [...byNumber.values()];
 }
 
+const SUBSTANTIVE_DEFECTS = new Set(['grammar', 'meaning', 'context']);
+
 /**
- * A second letter survives only when the key adjudicator still accepts it.
- * An omitted gap keeps the original dispute, so a missed review cannot hide a double key.
+ * A rejection is substantive only when the reviewer sets defect to grammar, meaning or context
+ * and keeps an explanation for audit. The wording of that explanation is not a decision.
  */
-export function confirmedPart5DoubleKeys(disputes, verdictRows) {
+export function part5RejectionIsSubstantive(record) {
+  if (!record || typeof record !== 'object') return false;
+  const defect = String(record.defect || '').trim().toLowerCase();
+  return SUBSTANTIVE_DEFECTS.has(defect) && String(record.reason || '').trim().length > 0;
+}
+
+/**
+ * A reported alternative stays open until adjudication rejects it with a substantive reason.
+ * An omitted gap, a bare single letter, or a preference such as "less common" cannot hide it.
+ */
+export function adjudicatePart5Disputes(disputes, verdictRows) {
   const judged = new Map(
-    asArray(verdictRows).map((row) => [Number(row?.number), part5Letters(row)]),
+    asArray(verdictRows).map((row) => [Number(row?.number), row]),
   );
-  const confirmed = [];
+  const doubleKeys = [];
+  const rejections = [];
   for (const row of asArray(disputes)) {
-    const letters = judged.get(Number(row?.number));
-    const kept = letters && letters.length ? letters : part5Letters(row);
+    const verdict = judged.get(Number(row?.number));
+    const reported = part5Letters(row);
+    if (!verdict) {
+      doubleKeys.push({
+        number: row.number,
+        letters: reported,
+        reason: 'Adjudication omitted this reported alternative, so it stays open.',
+      });
+      continue;
+    }
+    const kept = part5Letters(verdict);
     if (kept.length > 1) {
-      confirmed.push({
+      doubleKeys.push({
         number: row.number,
         letters: kept,
-        reason: 'A key adjudication confirmed more than one option would be accepted as the official answer.',
+        reason: 'Adjudication still accepts more than one option as an official answer.',
+      });
+      continue;
+    }
+    const dropped = reported.filter((letter) => !kept.includes(letter));
+    const rejected = asArray(verdict.rejected);
+    const unresolved = [];
+    for (const letter of dropped) {
+      const record = rejected.find((item) => String(item?.letter || '').trim().toUpperCase() === letter);
+      if (part5RejectionIsSubstantive(record)) {
+        rejections.push({
+          number: row.number,
+          letter,
+          defect: String(record.defect).trim().toLowerCase(),
+          reason: String(record.reason).trim(),
+        });
+      } else {
+        unresolved.push(letter);
+      }
+    }
+    if (unresolved.length) {
+      doubleKeys.push({
+        number: row.number,
+        letters: [...new Set([...kept, ...unresolved])],
+        reason: 'A reported alternative was not rejected for grammar, collocation or meaning.',
       });
     }
   }
-  return confirmed;
+  return { doubleKeys, rejections };
+}
+
+export function confirmedPart5DoubleKeys(disputes, verdictRows) {
+  return adjudicatePart5Disputes(disputes, verdictRows).doubleKeys;
 }

@@ -643,6 +643,52 @@ export function repairB1Part2AdultProfiles(generated) {
   return { ...generated, questions };
 }
 
+const PROFILE_SCHEDULE = [
+  { label: 'a weekend', profile: /\bweekends?\b/i, text: /\b(weekends?|saturdays?|sundays?)\b/i },
+  { label: 'Saturday', profile: /\bsaturdays?\b/i, text: /\b(saturdays?|weekends?)\b/i },
+  { label: 'Sunday', profile: /\bsundays?\b/i, text: /\b(sundays?|weekends?)\b/i },
+  { label: 'an evening', profile: /\bevenings?\b/i, text: /\b(evenings?|nights?|\d{1,2}(?::\d{2})?\s*p\.?m\.?)\b/i },
+  { label: 'a morning', profile: /\bmornings?\b/i, text: /\b(mornings?|\d{1,2}(?::\d{2})?\s*a\.?m\.?)\b/i },
+  { label: 'an afternoon', profile: /\bafternoons?\b/i, text: /\bafternoons?\b/i },
+];
+
+function textAgeWindow(text) {
+  const source = String(text || '');
+  const range = source.match(/\b(?:aged\s+)?(\d{1,2})\s*(?:to|-)\s*(\d{1,2})\b/i);
+  if (range) return { min: Number(range[1]), max: Number(range[2]) };
+  const andOver = source.match(/\b(\d{1,2})\s+and over\b/i);
+  if (andOver) return { min: Number(andOver[1]), max: 99 };
+  const over = source.match(/\bover\s+(\d{1,2})\b/i);
+  if (over) return { min: Number(over[1]) + 1, max: 99 };
+  const under = source.match(/\bunder\s+(\d{1,2})\b/i);
+  if (under) return { min: 0, max: Number(under[1]) - 1 };
+  if (/\ball ages\b/i.test(source)) return { min: 0, max: 99 };
+  return null;
+}
+
+export function part3OptionFormatProblems(questions) {
+  const errors = [];
+  for (const question of Array.isArray(questions) ? questions : []) {
+    const number = question?.number ?? '?';
+    const labels = [];
+    for (const option of Array.isArray(question?.options) ? question.options : []) {
+      const match = String(option || '').trim().match(/^([A-D])\)\s*(.*)$/i);
+      if (!match) {
+        errors.push(`B1 Part 3 Q${number} option must use one letter label.`);
+        continue;
+      }
+      labels.push(match[1].toUpperCase());
+      if (/^[A-D][).]\s+/i.test(match[2])) {
+        errors.push(`B1 Part 3 Q${number} repeats the answer letter inside the option.`);
+      }
+    }
+    if (new Set(labels).size !== labels.length) {
+      errors.push(`B1 Part 3 Q${number} repeats an answer letter.`);
+    }
+  }
+  return errors;
+}
+
 export function part2ProfileSupportProblems(generated) {
   const errors = [];
   const sections = new Map(
@@ -666,6 +712,15 @@ export function part2ProfileSupportProblems(generated) {
       errors.push(`B1 Part 2 Q${number} keyed text is limited to adults, but the profile describes a young person. Do not match them to that activity.`);
     } else if (adultsOnly && !profileMeetsAdultActivity(profile, minimumAge)) {
       errors.push(`B1 Part 2 Q${number} keyed text is limited to adults, but the profile does not state an age.`);
+    }
+    const window = textAgeWindow(text);
+    if (stated != null && window && (stated < window.min || stated > window.max)) {
+      errors.push(`B1 Part 2 unsupported requirement Q${number}: the profile age ${stated} is outside the keyed text's age limit of ${window.min}–${window.max}.`);
+    }
+    for (const constraint of PROFILE_SCHEDULE) {
+      if (constraint.profile.test(profile) && !constraint.text.test(text)) {
+        errors.push(`B1 Part 2 unsupported requirement Q${number}: the profile requires ${constraint.label}, and the keyed text does not make that time possible.`);
+      }
     }
     const locksAtNoon = /\b(locks?|closes?|closed|shuts?)\b[^.]{0,40}\b(at noon|at 12)\b/i.test(text);
     const leaveByNoon = /\b(by noon|before noon|leave by 12|leave before 12)\b/i.test(profile);
@@ -692,22 +747,35 @@ export function reconstructPart5Passage(generated) {
   return passage;
 }
 
+const PART5_REFERENCE = /\b(i|me|my|mine|we|us|our|ours|you|your|yours|he|him|his|she|her|hers|they|them|their|theirs|it|its|this|that|these|those)\b/gi;
+
+function part5KeepsReference(text, sentences) {
+  const references = String(text || '').match(PART5_REFERENCE) || [];
+  if (references.length >= 2) return true;
+  const seen = new Map();
+  for (const sentence of sentences) {
+    for (const word of contentWordSet(sentence)) {
+      seen.set(word, (seen.get(word) || 0) + 1);
+    }
+  }
+  return [...seen.values()].some((count) => count >= 2);
+}
+
 export function part5CoherenceProblems(passage) {
   const text = String(passage || '').replace(/\(\d+\)\s*(?:_+|\.{2,}|…+)/g, ' ');
   const words = text.split(/\s+/).filter((word) => /[A-Za-z]/.test(word));
-  if (words.length < 40) return [];
+  const errors = [];
+  if (words.length < B1_PART5_PASSAGE_LIMITS.hardMin) {
+    errors.push(`B1 Part 5 completed text is ${words.length} words. Write one short connected passage of at least ${B1_PART5_PASSAGE_LIMITS.hardMin} words, inside the ${B1_PART5_PASSAGE_LIMITS.targetMin}-${B1_PART5_PASSAGE_LIMITS.targetMax} word target, not six isolated lines.`);
+  }
+  if (words.length < 40) return errors;
   const sentences = text.split(/(?<=[.!?])\s+/).map((sentence) => sentence.trim()).filter(Boolean);
   const linkers = (text.match(/\b(because|so|after|before|when|then|later|once|while|although|however)\b/gi) || []).length;
-  const pronouns = (text.match(/\b(she|he|they|her|his|their|him|them)\b/gi) || []).length;
-  const errors = [];
   if (sentences.length >= 5 && linkers < 2) {
-    errors.push('B1 Part 5 passage reads as separate example sentences. Connect the ideas with time, cause or contrast.');
+    errors.push('B1 Part 5 passage lacks cohesion and reads as separate example sentences. Connect the ideas with time, cause or contrast.');
   }
-  if (sentences.length >= 5 && pronouns < 2) {
-    errors.push('B1 Part 5 passage does not keep a person, object or idea in view across sentences.');
-  }
-  if (words.length < B1_PART5_PASSAGE_LIMITS.hardMin) {
-    errors.push(`B1 Part 5 completed text is ${words.length} words. Write one short connected passage of at least ${B1_PART5_PASSAGE_LIMITS.hardMin} words, not six isolated lines.`);
+  if (sentences.length >= 5 && !part5KeepsReference(text, sentences)) {
+    errors.push('B1 Part 5 passage lacks cohesion and does not keep a person, object or idea in view across sentences.');
   }
   return errors;
 }

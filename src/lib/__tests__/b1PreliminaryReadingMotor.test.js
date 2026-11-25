@@ -14,6 +14,7 @@ import {
   markedAnswerMismatches,
   part1LiteralOverlapProblems,
   part2ProfileSupportProblems,
+  part3OptionFormatProblems,
   repairB1Part2AdultProfiles,
   part4CohesionProblems,
   part5CoherenceProblems,
@@ -22,11 +23,22 @@ import {
   part6TargetProblems,
 } from '@/lib/b1ReadingConstruction';
 import {
+  b1ReviewApproval,
+  part1EvidenceProblems,
+  part2EvidenceProblems,
+  part3EvidenceProblems,
+  part4EvidenceProblems,
+  part5EvidenceProblems,
+  part6EvidenceProblems,
+} from '@/lib/b1ReadingRules/reviewEvidence';
+import {
   redistributeB1Part2Answers,
   selectB1Part3QuestionPlan,
   selectB1Part5LexicalPlan,
   selectB1Part6Targets,
 } from '@/lib/b1ReadingVarietyPlans';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
 
 test('B1 20-exam allocation is balanced and has six distinct topics per exam', () => {
   const plan = buildB1TwentyExamAllocation();
@@ -396,7 +408,7 @@ test('B1 Part 2 shuffle keeps the same texts and avoids A B C D E', () => {
 
   const repaired = repairB1Part2AdultProfiles({
     questions: [{ number: 9, prompt: 'Lara wants to plant trees on Sunday morning.' }],
-    sections: [{ letter: 'D', text: 'This is a single morning for adults, not a weekly club.' }],
+    sections: [{ letter: 'D', text: 'This is a single Sunday morning for adults, not a weekly club.' }],
     modelAnswers: [{ number: 9, answer: 'D' }],
   });
   assert.match(repaired.questions[0].prompt, /^Lara wants to plant trees on Sunday morning\. Lara is (1[89]|[2-7]\d)\.$/);
@@ -485,6 +497,17 @@ test('B1 Part 1 and Part 5 catch copied wording, thin passages and unnatural fra
 
   const thin = part5CoherenceProblems('Eva kept a promise. She picked up the phone. She is good at listening. She made a mistake. She was nervous. She felt relief when the exam was over. '.repeat(2));
   assert.ok(thin.some((error) => /example sentences|connected passage|in view/.test(error)));
+  const connected = 'Anna bought a coat because her old one was thin. It was warm and it fitted her well. She wore this coat to work the next day. Her friends noticed the coat at once. After lunch she left the coat on a chair. A colleague brought it back before she went home. The coat still looked new when she arrived at the office. She hung the coat by the door and smiled. '.repeat(2);
+  const connectedErrors = part5CoherenceProblems(connected);
+  assert.equal(connectedErrors.some((error) => /in view|example sentences/.test(error)), false);
+  const words = connected.split(/\s+/).filter((word) => /[A-Za-z]/.test(word));
+  const eightySeven = `${words.slice(0, 87).join(' ')}.`;
+  const shortErrors = part5CoherenceProblems(eightySeven);
+  assert.ok(shortErrors.some((error) => error.includes('87 words')));
+  assert.equal(shortErrors.some((error) => error.includes('in view')), false);
+  const disconnected = 'The market sells fresh bread every morning. A football match starts at three. Students finish homework quietly. Rain delays the evening train. Visitors photograph the old bridge. The bakery closes at sunset. Swimmers leave the pool early. Gardeners plant flowers in spring. Painters choose bright colours. Drivers wait near the station. Children read comics upstairs. Cooks prepare soup carefully.';
+  const disconnectedErrors = part5CoherenceProblems(disconnected);
+  assert.ok(disconnectedErrors.some((error) => error.includes('in view')));
   const unnatural = part5UnnaturalFrameProblems('The new musical came out last Friday and the tickets went quickly.');
   assert.ok(unnatural.some((error) => error.includes('came out')));
   const bus = part5UnnaturalFrameProblems('Remember to get off the bus only after other passengers have got on.');
@@ -492,4 +515,185 @@ test('B1 Part 1 and Part 5 catch copied wording, thin passages and unnatural fra
   const lexical = selectB1Part5LexicalPlan({ examSlot: 6, history: [{ types: ['fixed collocation', 'phrasal/prepositional verb', 'dependent preposition/complementation', 'verb-noun collocation', 'fixed phrase', 'precise lexical choice'] }] });
   assert.equal(lexical.length, 6);
   assert.notDeepEqual(lexical.map((item) => item.type), ['fixed collocation', 'phrasal/prepositional verb', 'dependent preposition/complementation', 'verb-noun collocation', 'fixed phrase', 'precise lexical choice']);
+});
+
+test('quality evidence rejects real alternatives and accepts a single constrained answer', () => {
+  const confidence = {
+    questions: [{
+      number: 25,
+      options: ['A) boost', 'B) raise', 'C) increase', 'D) lift'],
+    }],
+  };
+  const preference = part5EvidenceProblems(confidence, {
+    optionJudgements: [{
+      number: 25,
+      options: [
+        { letter: 'A', fits: true, defect: 'none', reason: 'natural collocation' },
+        { letter: 'B', fits: false, defect: 'preference', reason: 'less common' },
+        { letter: 'C', fits: false, defect: 'preference', reason: 'less idiomatic' },
+        { letter: 'D', fits: false, defect: 'context', reason: 'lift does not fit this noun' },
+      ],
+    }],
+  });
+  assert.match(preference.join(' '), /more than one natural answer/);
+  assert.match(preference.join(' '), /A \/ B \/ C/);
+
+  const constrained = part5EvidenceProblems(confidence, {
+    optionJudgements: [{
+      number: 25,
+      options: [
+        { letter: 'A', fits: true, defect: 'none', reason: 'the only natural completion' },
+        { letter: 'B', fits: false, defect: 'context', reason: 'incorrect preposition' },
+        { letter: 'C', fits: false, defect: 'meaning', reason: 'different meaning' },
+        { letter: 'D', fits: false, defect: 'context', reason: 'lift does not fit this noun' },
+      ],
+    }],
+  });
+  assert.deepEqual(constrained, []);
+
+  const silent = part5EvidenceProblems(confidence, { optionJudgements: [], alternativeFits: [], verdict: 'pass' });
+  assert.match(silent.join(' '), /review evidence is missing/);
+
+  const bank = [{ id: 'quantifier', type: 'quantifier', words: ['many', 'several'] }];
+  const cloze = {
+    questions: [{ number: 27, grammarTarget: 'quantifier' }],
+    modelAnswers: [{ number: 27, answer: 'many' }],
+  };
+  const judgedSeveral = {
+    word: 'several',
+    source: 'target-list',
+    grammatical: true,
+    sameMeaning: false,
+    fitsContext: false,
+    b1Appropriate: true,
+    accept: false,
+    reason: 'different meaning: the sentence asks for a large number',
+  };
+  const outside = {
+    word: 'numerous',
+    source: 'outside-list',
+    grammatical: true,
+    sameMeaning: true,
+    fitsContext: true,
+    b1Appropriate: false,
+    accept: false,
+    reason: 'the meaning fits but the word is more formal than B1',
+  };
+  assert.deepEqual(part6EvidenceProblems(cloze, {
+    answers: [{ number: 27, alternatives: [], tested: [judgedSeveral, outside] }],
+  }, bank), []);
+  const acceptedSibling = part6EvidenceProblems(cloze, {
+    answers: [{
+      number: 27,
+      alternatives: [],
+      tested: [{ ...judgedSeveral, sameMeaning: true, fitsContext: true, accept: true }, outside],
+    }],
+  }, bank);
+  assert.match(acceptedSibling.join(' '), /multiple ordinary answers/);
+  const empty = part6EvidenceProblems(cloze, {
+    answers: [{ number: 27, alternatives: [], tested: [] }],
+  }, bank);
+  assert.match(empty.join(' '), /review evidence is missing/);
+
+  const weekend = part2ProfileSupportProblems({
+    questions: [{ number: 7, prompt: 'Tom is 20 and wants a course that fits his weekend.' }],
+    sections: [{ letter: 'D', text: 'A two-day cooking course for people aged 18 and over.' }],
+    modelAnswers: [{ number: 7, answer: 'D' }],
+  });
+  assert.match(weekend.join(' '), /weekend/);
+  const saturday = part2ProfileSupportProblems({
+    questions: [{ number: 7, prompt: 'Tom is 20 and wants a Saturday course.' }],
+    sections: [{ letter: 'D', text: 'The cooking course runs on Saturday for people aged 18 and over.' }],
+    modelAnswers: [{ number: 7, answer: 'D' }],
+  });
+  assert.deepEqual(saturday, []);
+  const tooYoung = part2ProfileSupportProblems({
+    questions: [{ number: 8, prompt: 'Anna is 15 and wants an art class.' }],
+    sections: [{ letter: 'G', text: 'Art classes for teenagers aged 16 to 18.' }],
+    modelAnswers: [{ number: 8, answer: 'G' }],
+  });
+  assert.match(tooYoung.join(' '), /outside the keyed text/);
+
+  assert.match(part2EvidenceProblems({
+    questions: [{ number: 7, prompt: 'Needs a weekend.' }],
+  }, { requirementEvidence: [] }).join(' '), /review evidence is missing/);
+  assert.match(part2EvidenceProblems({
+    questions: [{ number: 7, prompt: 'Needs a weekend.' }],
+  }, {
+    requirementEvidence: [{ number: 7, requirement: 'weekend', supported: false, reason: 'the text never names a weekend day' }],
+  }).join(' '), /unsupported requirement/);
+
+  assert.match(part3OptionFormatProblems([{
+    number: 11,
+    options: ['A) A. Walked along a path', 'B) Had lunch', 'C) Went fishing', 'D) Climbed later'],
+  }]).join(' '), /repeats the answer letter/);
+  assert.deepEqual(part3OptionFormatProblems([{
+    number: 11,
+    options: ['A) Walked along a path', 'B) Had lunch', 'C) Went fishing', 'D) Climbed later'],
+  }]), []);
+  const stated = part3EvidenceProblems({
+    questions: [{ number: 12, questionType: 'inference', options: ['A) peaceful', 'B) bored'] }],
+  }, {
+    itemEvidence: [{
+      number: 12,
+      statedDirectly: true,
+      certainty: 'certain',
+      reason: 'the passage already says the day felt peaceful',
+      options: [
+        { letter: 'A', grounded: true, reason: 'copies the passage' },
+        { letter: 'B', grounded: true, reason: 'reverses a stated feeling' },
+      ],
+    }],
+  });
+  assert.match(stated.join(' '), /explicit statement/);
+  const inferred = part3EvidenceProblems({
+    questions: [{ number: 12, questionType: 'inference', options: ['A) relieved', 'B) bored'] }],
+  }, {
+    itemEvidence: [{
+      number: 12,
+      statedDirectly: false,
+      certainty: 'certain',
+      reason: 'the reader has to connect two actions',
+      options: [
+        { letter: 'A', grounded: true, reason: 'follows from the decision to return' },
+        { letter: 'B', grounded: false, reason: 'the passage never mentions boredom' },
+      ],
+    }],
+  });
+  assert.match(inferred.join(' '), /weak distractor/);
+
+  assert.match(part4EvidenceProblems({
+    gapEvidence: [
+      { gap: 16, addsInformation: false, reason: 'it repeats the previous sentence' },
+      { gap: 17, addsInformation: true, reason: 'it gives the cause of the next event' },
+      { gap: 18, addsInformation: true, reason: 'it moves the time forward' },
+      { gap: 19, addsInformation: true, reason: 'it names a result not yet stated' },
+      { gap: 20, addsInformation: true, reason: 'it adds who continues the work' },
+    ],
+  }).join(' '), /weak cohesion at gap 16/);
+  assert.deepEqual(part4EvidenceProblems({
+    gapEvidence: [16, 17, 18, 19, 20].map((gap) => ({
+      gap,
+      addsInformation: true,
+      reason: 'the sentence adds a new fact',
+    })),
+  }), []);
+
+  assert.match(part1EvidenceProblems({
+    questions: [{ number: 5, options: ['A) Clean the tables', 'B) Return the trays', 'C) Leave the food'] }],
+  }, { verdict: 'pass', itemEvidence: [], weakDistractors: [] }).join(' '), /review evidence is missing/);
+
+  const approval = b1ReviewApproval([]);
+  assert.equal(approval.humanTeacherApproved, false);
+  assert.equal(approval.linguisticallyUnambiguous, true);
+  assert.equal(approval.pedagogicallySuitable, true);
+
+  const frozen = path.join(root, 'diagnostics', 'b1-reading-motor', 'cache', 'exam-8', 'part-5.json');
+  if (fs.existsSync(frozen)) {
+    const saved = JSON.parse(fs.readFileSync(frozen, 'utf8'));
+    assert.equal(saved.validation.semanticQuality.rubric.verdict, 'pass');
+    assert.equal(saved.validation.semanticQuality.rubric.optionJudgements, undefined);
+    const caught = part5EvidenceProblems(saved.payload.generated, saved.validation.semanticQuality.rubric);
+    assert.match(caught.join(' '), /review evidence is missing/);
+  }
 });

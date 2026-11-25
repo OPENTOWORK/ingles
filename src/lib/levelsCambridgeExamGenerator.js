@@ -40,6 +40,7 @@ import {
   part6PlanRepetitionProblems,
   part6TargetProblems,
   part2ProfileSupportProblems,
+  part3OptionFormatProblems,
   repairB1Part2AdultProfiles,
 } from '@/lib/b1ReadingConstruction';
 import {
@@ -512,19 +513,20 @@ export async function generatePartJsonWithRetries(levelSlug, levelLabel, partDef
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     if (motor) motor.beginAttempt(partDef.partNumber);
     let repairSuffix = '';
+    let lengthHint = '';
     if (attempt > 0 && Array.isArray(validation.errors) && validation.errors.length) {
       const pn = partDef.partNumber;
-      let lengthHint = isB1Reading
+      lengthHint = isB1Reading
         ? 'CRITICAL B1 Preliminary repair: preserve the official B1 task shape and numbering. Fix the semantic/structural defects listed above rather than copying a B2 format.'
         : 'CRITICAL length: for cloze Parts 1–3, passage must be 150–180 words (prefer ~160–170). If too long, cut clauses; if too short, add natural detail. Keep all required gaps.';
       if (isB1Reading) {
         const b1Hints = {
-          1: 'B1 Part 1: exactly five short texts and three options. Paraphrase the correct answer. Distractors must be believable misunderstandings of time, place or action, not absurd contradictions.',
-          2: 'B1 Part 2: five people Q6-10, eight texts A-H, three unused. Every requirement must be positively supported. If a text is for adults, the profile must state an age that qualifies, without changing the other requirements and without making a child or teenager older. Do not use the answer order A B C D E. After any letter change, check the key still points at the same texts.',
+          1: 'B1 Part 1: exactly five short texts and three options. Paraphrase the correct answer. Distractors must be believable misunderstandings of something the text contains, not events the text never mentions.',
+          2: 'B1 Part 2: five people Q6-10, eight texts A-H, three unused. Every requirement must be positively supported, including age, day and time. A shared activity word is not enough. If the profile needs a weekend, the keyed text must make a weekend possible. If a text is for adults, the profile must state an age that qualifies, without changing the other requirements and without making a child or teenager older. Do not use the answer order A B C D E. After any letter change, check the key still points at the same texts.',
           3: `B1 Part 3: write one passage of ${B1_PART3_PASSAGE_LIMITS.targetMin}-${B1_PART3_PASSAGE_LIMITS.targetMax} words, inside the hard limits of ${B1_PART3_PASSAGE_LIMITS.min}-${B1_PART3_PASSAGE_LIMITS.max}. Do not aim for the minimum and do not cut the text down towards ${B1_PART3_PASSAGE_LIMITS.min}. Q15 must be the whole-text question. Q11-Q14 cover detail, inference and attitude in the planned order. Correct options are paraphrases. Distractors come from real misreadings.`,
-          4: 'B1 Part 4: five gaps Q16-20 and eight sentences A-H, exactly three unused. Do NOT copy a two-word phrase from a removed sentence into the neighbouring text. Link gaps with pronouns, time, contrast, cause or logical progression. Test every sentence in every gap.',
-          5: 'B1 Part 5: one connected short passage, not six example sentences. Use the planned lexical-target order. The word inside each [[21:word]] marker must be the answer. A tempting distractor is required; two acceptable answers are not. Judge each option in the completed sentence.',
-          6: 'B1 Part 6: use the six planned grammar targets in the planned order. One word per gap, six different words. Do not fall back to article, preposition, relative, auxiliary, linker, phrasal verb. The passage must be one natural text. Reject any gap that accepts a second ordinary word.',
+          4: 'B1 Part 4: five gaps Q16-20 and eight sentences A-H, exactly three unused. Each restored sentence must add a fact the neighbouring sentences do not already state. Do NOT copy a two-word phrase from a removed sentence into the neighbouring text. Link gaps with pronouns, time, contrast, cause or logical progression. Test every sentence in every gap.',
+          5: `B1 Part 5: the completed passage must be ${B1_PART5_PASSAGE_LIMITS.targetMin}-${B1_PART5_PASSAGE_LIMITS.targetMax} words about one situation. A text under ${B1_PART5_PASSAGE_LIMITS.hardMin} words fails, but do not stop at that floor. Keep a person or object in view with a pronoun, this/that, or a repeated name. Do not replace the passage with six unrelated sentences. Use the planned lexical-target order. The word inside each [[21:word]] marker must be the answer. A second option that is grammatical and keeps the meaning fails the item even when the keyed word is more common.`,
+          6: 'B1 Part 6: use the six planned grammar targets in the planned order. One word per gap, six different words. Test the other words on that gap\'s allowed list and at least one plausible word outside it. An untested gap is not unique. Do not fall back to article, preposition, relative, auxiliary, linker, phrasal verb. The passage must be one natural text.',
         };
         lengthHint = b1Hints[pn] || lengthHint;
       } else if (pn === 5) {
@@ -556,6 +558,7 @@ ${lengthHint}`;
         userPrompt: `${baseUserPrompt}${repairSuffix}`,
         varietySeed: seedBase + Math.max(partIndex, 0) + attempt * 3000,
         repairErrors: attempt > 0 ? (validation.errors || []) : [],
+        repairHint: attempt > 0 ? lengthHint : '',
       });
     } catch (e) {
       if (isB1MotorStopError(e)) throw e;
@@ -574,10 +577,14 @@ ${lengthHint}`;
         }
         throw new Error(`B1 generation stopped: OpenAI API billing/credits are unavailable. ${message}`);
       }
-      const contentFailure = e?.code === 'b1_content_validation' || isB1ContentFailureMessage(message);
+      const listed = Array.isArray(e?.errors) && e.errors.length
+        ? e.errors.map((item) => String(item || '').trim()).filter(Boolean)
+        : [message];
+      const contentFailure = e?.code === 'b1_content_validation'
+        || listed.every((item) => isB1ContentFailureMessage(item));
       validation = {
         ok: false,
-        errors: [contentFailure ? message : `Generation/parse error: ${message}`],
+        errors: listed.map((item) => (contentFailure ? item : `Generation/parse error: ${item}`)),
         warnings: [],
         normalized: generated,
       };
@@ -692,7 +699,9 @@ HARD RULES:
 - Develop the people, the events and the result in several paragraphs. Do not stop after a short anecdote, and do not cut the text down towards ${B1_PART3_PASSAGE_LIMITS.min}.
 - Do not use any of these above-level terms: ${B1_ABOVE_LEVEL_TERMS.join(', ')}.
 - The correct option must be a paraphrase. It must not copy a sentence or a distinctive phrase from the passage.
+- An inference, attitude or gist item must ask for a conclusion the passage does not already state in the same words.
 - Distractors must be realistic misunderstandings of something the text does say. Do not write options that the text explicitly contradicts in the same words, and do not write options about a different topic.
+- Each option is one letter and the wording. Do not put a second letter or "A." inside the option.
 - Keep the official four-option layout. Do not use speech bubbles.
 - Use British spelling.
 - Do not copy sample-test wording.
@@ -736,10 +745,16 @@ ${repair}`;
       type: 'mcq',
       questionType: String(row?.questionType || '').trim().toLowerCase(),
       prompt: String(row?.prompt || '').trim(),
-      options: options.map((option, index) => `${letters[index]}) ${option.replace(/^[A-D]\)\s*/i, '')}`),
+      options: options.map((option, index) => {
+        let wording = String(option || '').trim();
+        while (/^[A-D][).]\s+/i.test(wording)) wording = wording.replace(/^[A-D][).]\s+/i, '').trim();
+        return `${letters[index]}) ${wording}`;
+      }),
     });
     modelAnswers.push({ id: `q${number - 10}`, number, answer });
   }
+  const formatErrors = part3OptionFormatProblems(questions);
+  if (formatErrors.length) throw new Error(formatErrors.join(' '));
   const coverageGaps = b1Part3CoverageGaps(questions);
   if (coverageGaps.length) {
     throw new Error(`B1 Part 3 planner is missing question coverage: ${coverageGaps.join(', ')}.`);
@@ -787,6 +802,7 @@ HARD RULES:
 - A lexical link may share one content word. It must not share a whole two-word phrase with the sentence beside the gap.
 - Make the five gap environments structurally different.
 - Avoid generic removed sentences such as "It was a great experience", "Everyone was friendly", "This made me feel better", or anything that could move around the text.
+- Each removed sentence must add a fact the sentences beside the gap do not already state. A sentence that only repeats the previous point is a failure.
 - Test all eight sentences against all five gaps. A removed sentence must be natural in exactly one gap. An extra must fail all five because of reference, time, logic or meaning.
 - Extra sentences must stay on the same topic and sound possible in this text. Do not use an unrelated place, product or event just to make the extra obvious.
 - Check whole-text chronology. Do not mention people, objects, decisions or outcomes before they are introduced.
@@ -875,8 +891,12 @@ async function generateB1Part5PlannedJson(system, options) {
   const lexicalLines = lexicalPlan
     .map((item) => `- Q${item.number} ${item.type}`)
     .join('\n');
-  const repair = Array.isArray(options?.repairErrors) && options.repairErrors.length
-    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${options.repairErrors.map((x) => `- ${x}`).join('\n')}\nFix every issue above in a genuinely new lexical plan.`
+  const repairLines = [
+    ...(Array.isArray(options?.repairErrors) ? options.repairErrors : []),
+    options?.repairHint,
+  ].map((item) => String(item || '').trim()).filter(Boolean);
+  const repair = repairLines.length
+    ? `\nREPAIR FEEDBACK FROM THE PREVIOUS ATTEMPT:\n${repairLines.map((item) => `- ${item}`).join('\n')}\nFix every issue above in a new plan for the same situation. Count the completed words and stay inside ${B1_PART5_PASSAGE_LIMITS.targetMin}-${B1_PART5_PASSAGE_LIMITS.targetMax}. Do not stop at ${B1_PART5_PASSAGE_LIMITS.hardMin}.`
     : '';
   const prompt = `Create ONE Cambridge B1 Preliminary Reading Part 5 lexical plan in natural British English.
 ${b1SharedRuleBlock(5)}
@@ -893,19 +913,20 @@ ${JSON.stringify(b1Part5PlanExample(lexicalPlan), null, 2)}
 
 HARD RULES:
 - Exactly six marked answers, numbered 21-26, each answer ONE word.
-- The passage must read as one natural short B1 Preliminary text of about ${B1_PART5_PASSAGE_LIMITS.targetMin}-${B1_PART5_PASSAGE_LIMITS.targetMax} words once the marked answers are inserted. A completed text under ${B1_PART5_PASSAGE_LIMITS.hardMin} words fails. Keep the same people and situation from the first sentence to the last.
+- The passage must read as one natural short B1 Preliminary text of ${B1_PART5_PASSAGE_LIMITS.targetMin}-${B1_PART5_PASSAGE_LIMITS.targetMax} words once the marked answers are inserted. Count those completed words before returning JSON. A completed text under ${B1_PART5_PASSAGE_LIMITS.hardMin} words fails, but ${B1_PART5_PASSAGE_LIMITS.hardMin} is not the length to aim for. Keep the same people and situation from the first sentence to the last.
 - Use British spelling, vocabulary and collocations throughout.
 - Part 5 tests mainly vocabulary. Use a varied lexical mix; do not make the set mainly grammar.
 - Use this exact target order:
 ${lexicalLines}
 - Do not reuse the same targetType for several items.
 - Judge every option inside the completed passage. A collocation that is natural in isolation but wrong for this situation, such as "a musical came out" or "get off the bus after other passengers get on", must be rewritten.
-- A distractor that looks tempting is useful. Two options that are both acceptable British English must be rewritten.
+- A distractor that looks tempting is useful. A second option that is grammatical, idiomatic in this sentence and faithful to the meaning must be rewritten, even when the keyed word is more common.
+- A near-synonym may stay only when this sentence makes it ungrammatical, unidiomatic or different in meaning. Do not keep it merely because it is less common.
 - Each answer must be a normal B1 word or common B1 chunk.
 - Each item has exactly three one-word distractors.
 - Wrong options should be plausible to a learner but MUST fail in this exact sentence because of collocation, complementation, fixed phrase, phrasal-verb pattern, register or precise contextual meaning.
 - Do not create broad free-choice synonym slots. Avoid sets where two ordinary words can both make good English.
-- Especially avoid these ambiguous families when the surrounding wording does not force one choice: ${b1Part5RiskyPairText()}.
+- These families often need a sentence that rules one word out. They are examples, not a complete uniqueness test: ${b1Part5RiskyPairText()}.
 - Mentally substitute the answer and all three distractors into the complete sentence. If two produce natural, contextually correct British English, rewrite the sentence or options before returning JSON.
 - The answer must not depend on obscure C1/C2 vocabulary.
 - The word inside each [[number:word]] marker must be exactly the answer for that number.
@@ -975,7 +996,11 @@ ${repair}`;
     ...part5UnnaturalFrameProblems(completedForReview),
     ...part5CoherenceProblems(completedForReview),
   ];
-  if (frameErrors.length) throw new Error(frameErrors.join(' '));
+  if (frameErrors.length) {
+    const error = b1ContentError(frameErrors.join(' '));
+    error.errors = frameErrors;
+    throw error;
+  }
   for (let number = 21; number <= 26; number += 1) {
     const marker = new RegExp(`\\[\\[${number}:[^\\]]+\\]\\]`, 'i');
     if (!marker.test(passage)) {
@@ -1064,7 +1089,7 @@ HARD RULES:
 ${targetLines}
 - ${avoidLine}
 - The word inside [[number:word]] must be exactly that item's answer, and targetType must match the plan.
-- Each gap must accept only that one ordinary word. Search for alternatives such as which/that, a/the, was/got, and was/started/continued before returning JSON.
+- Each gap must accept only that one ordinary word. Test every other word on that gap's allowed list and at least one plausible word outside the list. which/that, a/the, was/got and was/started/continued are examples of the search, not the whole search. An untested gap is not unique.
 - Do not put the gapped word immediately before an -ing verb if started, continued or kept would also work.
 - Do not use a was/were + participle frame if "got" is also natural.
 - Test grammar and fixed language, not content vocabulary. A content noun is a failure.

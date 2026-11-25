@@ -1,4 +1,4 @@
-import { B1_PART4_COHESION_DEVICES } from './limits.js';
+import { B1_PART4_COHESION_DEVICES, B1_PART5_PASSAGE_LIMITS } from './limits.js';
 
 const PART4_DEVICE_PLACEHOLDER = '<a device this sentence actually uses>';
 
@@ -30,7 +30,7 @@ export function b1Part5PlanExample(lexicalPlan = []) {
   const rows = Array.isArray(lexicalPlan) ? lexicalPlan : [];
   return {
     title: 'short natural title',
-    markedPassage: 'a coherent B1 text containing exactly [[21:word]] ... [[26:word]] in reading order',
+    markedPassage: `one multi-sentence passage of ${B1_PART5_PASSAGE_LIMITS.targetMin}-${B1_PART5_PASSAGE_LIMITS.targetMax} completed words about a single situation, containing [[21:word]] ... [[26:word]] in reading order`,
     items: rows.map((item) => ({
       number: item.number,
       answer: '<one word>',

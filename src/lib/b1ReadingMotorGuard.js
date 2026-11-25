@@ -35,7 +35,7 @@ const FAILURE_RULES = [
   [/ambiguit|more than one|multiple ordinary|alternative key|near-synonym|double key|defensible/i, 'ambiguity'],
   [/cohesion|multifit|mechanical|repeated phrase|two-word phrase|sequence issue|whole-text|labelled|signal is missing/i, 'cohesion'],
   [/grammar target|must test|targetType|content vocabulary|open cloze|exactly one word|six different/i, 'grammar_target'],
-  [/literal|word spotting|repeats wording|copying wording|solvable by copying/i, 'literal_overlap'],
+  [/literal|word spotting|repeats wording|copying wording|solvable by copying|explicit statement/i, 'literal_overlap'],
   [/number must be|duplicate question number|no example gap|is missing question \d/i, 'numbering'],
   [/answer must be one of|answer key must|missing answer\b/i, 'answer_key'],
   [/\b\d+ words?\b|too short|too long|word count/i, 'word_count'],
@@ -46,6 +46,7 @@ const FAILURE_RULES = [
   [/does not exist|unsupported model|invalid model|model_not_found/i, 'unsupported_model'],
   [/rate limit|too many requests/i, 'rate_limit'],
   [/overloaded|server error|bad gateway|econnreset|etimedout|network/i, 'server_error'],
+  [/review evidence is missing/i, 'review_evidence'],
   [/missing question\/prompt|missing short real-world|missing person|missing passage|must have exactly|needs exactly|missing questions or model|incomplete/i, 'part_shape'],
 ];
 
@@ -65,6 +66,7 @@ const SEVERITY = [
   'literal_overlap',
   'unsupported_requirement',
   'weak_distractor',
+  'review_evidence',
   'british_english',
   'numbering',
   'answer_key',

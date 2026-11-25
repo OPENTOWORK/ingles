@@ -36,7 +36,7 @@ const CONTENT_FAILURE_PATTERNS = [
   /above b1|above-level|specialist|academic/i,
   /cohesion|multifit|mechanical|repeated phrase|two-word phrase|sequence issue|whole-text|labelled|signal is missing|unknown cohesion/i,
   /grammar target|must test|targetType|content vocabulary|open cloze|exactly one word|six different|near-synonym|distractor/i,
-  /limited to adults|does not state an age|leave-by-noon|closes or locks at noon|unsupported/i,
+  /limited to adults|does not state an age|leave-by-noon|closes or locks at noon|unsupported|review evidence is missing|review is inconclusive|more than one natural answer/i,
 ];
 
 export function isB1ContentFailureMessage(message) {
