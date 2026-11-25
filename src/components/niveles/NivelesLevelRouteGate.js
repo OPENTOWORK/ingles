@@ -1,5 +1,6 @@
 'use client';
 
+import { Fragment } from 'react';
 import { usePathname } from 'next/navigation';
 import { useUserRole } from '@/context/UserRoleContext';
 import usePlanEntitlements from '@/hooks/usePlanEntitlements';
@@ -25,7 +26,7 @@ export default function NivelesLevelRouteGate({ children }) {
   const isPartTipsRoute = isExamTheoryPartTipsPath(pathname);
 
   if (!level) {
-    return children;
+    return <Fragment key={pathname}>{children}</Fragment>;
   }
 
   const levelOutsideFreePlan = !isLevelIncludedInPlan(level, 'free');
@@ -73,5 +74,5 @@ export default function NivelesLevelRouteGate({ children }) {
     );
   }
 
-  return children;
+  return <Fragment key={pathname}>{children}</Fragment>;
 }

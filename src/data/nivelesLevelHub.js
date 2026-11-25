@@ -160,10 +160,10 @@ export const LEVEL_SECTION_PRACTICE_HREF = {
     Speaking: '/niveles/b1/exam-speaking',
   },
   b2: {
-    'Reading and Use of English': '/niveles/b2/exam-reading-and-use-of-english',
-    Writing: '/niveles/b2/exam-writing',
-    Listening: '/niveles/b2/exam-listening',
-    Speaking: '/niveles/b2/exam-speaking',
+    'Reading and Use of English': '/exam-practice/b2/exam-reading-and-use-of-english',
+    Writing: '/exam-practice/b2/exam-writing',
+    Listening: '/exam-practice/b2/exam-listening',
+    Speaking: '/exam-practice/b2/exam-speaking',
   },
   c1: {
     'Reading and Use of English': '/niveles/c1/exam-reading-and-use-of-english',
@@ -582,15 +582,15 @@ export const NIVELES_LEVEL_HUB = {
     },
     examContentReady: { 1: true, 2: false, 3: false, 4: false, 5: false },
     examLinks: [
-      { text: '📝 Exam mode', href: '/niveles/b2/exam-mode', enabledForStudents: true },
+      { text: '📝 Exam mode', href: '/exam-practice/b2/exam-mode', enabledForStudents: true },
       {
         text: '📘 Reading and Use of English',
-        href: '/niveles/b2/exam-reading-and-use-of-english',
+        href: '/exam-practice/b2/exam-reading-and-use-of-english',
         enabledForStudents: true,
       },
-      { text: '✍️ Writing', href: '/niveles/b2/exam-writing', enabledForStudents: true },
-      { text: '🎧 Listening', href: '/niveles/b2/exam-listening', enabledForStudents: true },
-      { text: '🗣️ Speaking', href: '/niveles/b2/exam-speaking', enabledForStudents: true },
+      { text: '✍️ Writing', href: '/exam-practice/b2/exam-writing', enabledForStudents: true },
+      { text: '🎧 Listening', href: '/exam-practice/b2/exam-listening', enabledForStudents: true },
+      { text: '🗣️ Speaking', href: '/exam-practice/b2/exam-speaking', enabledForStudents: true },
     ],
   },
 

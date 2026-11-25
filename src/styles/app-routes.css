@@ -1844,6 +1844,11 @@ body:not(.reading-night-mode) .levels-exam-practice-root a {
   margin-right: 0;
 }
 
+/* Soft navigation from the hub can leave LevelHubPage mounted under the skill page. */
+body:has(.levels-exam-practice-root) .exam-practice-level-hub {
+  display: none !important;
+}
+
 body:not(.reading-night-mode) .exam-practice-level-hub .page-hero {
   background: #fff;
   border: 1px solid #e0d6ff;

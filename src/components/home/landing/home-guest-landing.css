@@ -1554,15 +1554,18 @@
   container-type: inline-size;
 }
 
-.home-landing .hl-mini__bar {
+.home-landing .hl-mini__nav {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.55rem;
+  min-height: 1.35rem;
   padding-bottom: 0.45rem;
   border-bottom: 1px solid var(--hl-line);
   color: var(--hl-ink);
   font-size: 0.62rem;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .home-landing .hl-mini__login {
@@ -2411,7 +2414,7 @@ html.theme-halloween .home-landing .hl-logo::before {
   animation: none;
 }
 
-@container (max-width: 36rem) {
+@container (max-width: 16rem) {
   .home-landing .hl-mini__tiles {
     grid-template-columns: minmax(0, 1fr);
   }

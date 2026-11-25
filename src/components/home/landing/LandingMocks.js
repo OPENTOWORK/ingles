@@ -84,7 +84,7 @@ export function WritingFeedbackMock() {
 export function PracticePickerMock() {
   return (
     <div className="hl-mini hl-mini--practice" aria-hidden="true">
-      <div className="hl-mini__bar">
+      <div className="hl-mini__nav">
         <span>Practice</span>
         <span>Exam Strategies</span>
         <span className="hl-mini__login">Login</span>
