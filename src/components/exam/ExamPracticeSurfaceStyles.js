@@ -117,6 +117,12 @@ export default function ExamPracticeSurfaceStyles() {
         isolation: isolate;
       }
 
+      .exam-practice-level-hub .page-hero,
+      .exam-practice-level-hub .exam-practice-hub__quadrant-inner {
+        border-radius: 0 !important;
+        box-shadow: none !important;
+      }
+
       .exam-practice-hub__card {
         border-radius: var(--practice-card-radius) !important;
         overflow: hidden;
@@ -163,6 +169,15 @@ export default function ExamPracticeSurfaceStyles() {
         .exam-practice-hub__card,
         .page-hero {
           border-radius: var(--practice-surface-radius) !important;
+        }
+
+        .exam-practice-level-hub .levels-b2-page-content {
+          border-radius: 18px;
+        }
+
+        .exam-practice-level-hub .page-hero,
+        .exam-practice-level-hub .exam-practice-hub__quadrant-inner {
+          border-radius: 0 !important;
         }
 
         .phone-practice-step__item,

@@ -35,7 +35,7 @@ import { SESSION_HINT_CLASS } from '@/lib/sessionHint';
 import { buildSignupHref, withAcquisitionParams } from '@/lib/signupTracking';
 import { sitePublicPath } from '@/utils/sitePublicPath';
 import { landingFont } from './landingFont';
-import { PracticePickerMock, ResultsMock, ReviewMock, WritingFeedbackMock } from './LandingMocks';
+import { ExamStatsMock, PracticePickerMock, ResultsMock, WritingFeedbackMock } from './LandingMocks';
 import './home-guest-landing.css';
 
 const TRY_EXERCISE_HREF = '/exam-practice/b2/exam-reading-and-use-of-english/?examen=1';
@@ -226,7 +226,7 @@ const STEPS = [
   {
     title: 'Revisa tus resultados',
     text: 'Completa las actividades y consulta tus resultados y correcciones.',
-    Mock: ReviewMock,
+    Mock: ExamStatsMock,
   },
   {
     title: 'Decide en qué centrarte',

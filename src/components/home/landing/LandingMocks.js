@@ -84,11 +84,6 @@ export function WritingFeedbackMock() {
 export function PracticePickerMock() {
   return (
     <div className="hl-mini hl-mini--practice" aria-hidden="true">
-      <div className="hl-mini__nav">
-        <span>Practice</span>
-        <span>Exam Strategies</span>
-        <span className="hl-mini__login">Login</span>
-      </div>
       <p className="hl-mini__title">Choose what to practise</p>
       <div className="hl-mini__tiles">
         {PRACTICE_TILES.map(({ icon: Icon, label, second, accent, ink }) => (
@@ -115,18 +110,55 @@ export function PracticePickerMock() {
   );
 }
 
-export function ReviewMock() {
+const EXAM_STAT_ROWS = [
+  { label: 'Reading', value: 72, tone: 'Good', accent: '#38bdf8' },
+  { label: 'Writing', value: 64, tone: 'Fair', accent: '#1b9a62' },
+  { label: 'Listening', value: 58, tone: 'Practice', accent: '#d97706' },
+];
+
+/** Miniatura del apartado Exam statistics del perfil. */
+export function ExamStatsMock() {
   return (
-    <div className="hl-mini hl-mini--review" aria-hidden="true">
-      <p className="hl-mini__title">Your corrected writing</p>
-      <p className="hl-mini__essay">
-        <mark className="hl-mark hl-mark--grammar">People has throw</mark> too much packaging away,
-        and the <mark className="hl-mark hl-mark--spelling">enviroment</mark> is paying the price.
-      </p>
-      <p className="hl-mini__bubble">
-        <strong>Grammar</strong>
-        <span>Suggestion: People throw</span>
-      </p>
+    <div className="hl-mini hl-mini--stats" aria-hidden="true">
+      <div className="hl-stats__head">
+        <div>
+          <p className="hl-mini__title">Exam statistics</p>
+          <p className="hl-mini__sub">Your saved practice · B2</p>
+        </div>
+        <div
+          className="hl-stats__ring"
+          style={{ background: 'conic-gradient(#6a4be8 245deg, #ebe7fa 0deg)' }}
+        >
+          <span>
+            <strong>68%</strong>
+            accuracy
+          </span>
+        </div>
+      </div>
+      <div className="hl-stats__levels" aria-hidden="true">
+        {['A2', 'B1', 'B2', 'C1', 'C2'].map((level) => (
+          <span key={level} className={level === 'B2' ? 'is-active' : undefined}>
+            {level}
+          </span>
+        ))}
+      </div>
+      <ul className="hl-stats__rows">
+        {EXAM_STAT_ROWS.map((row) => (
+          <li key={row.label}>
+            <span className="hl-stats__name">
+              <i style={{ background: row.accent }} />
+              {row.label}
+            </span>
+            <span className="hl-stats__track">
+              <span style={{ width: `${row.value}%`, background: row.accent }} />
+            </span>
+            <span className="hl-stats__value">
+              {row.value}%
+              <small>{row.tone}</small>
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

@@ -1554,26 +1554,8 @@
   container-type: inline-size;
 }
 
-.home-landing .hl-mini__nav {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.55rem;
-  min-height: 1.35rem;
-  padding-bottom: 0.45rem;
-  border-bottom: 1px solid var(--hl-line);
-  color: var(--hl-ink);
-  font-size: 0.62rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.home-landing .hl-mini__login {
-  margin-left: auto;
-  padding: 0.18rem 0.5rem;
-  border-radius: 999px;
-  background: var(--hl-purple);
-  color: #fff;
+.home-landing .hl-mini--practice .hl-mini__tiles {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .home-landing .hl-mini__tiles {
@@ -1721,6 +1703,128 @@
   color: var(--hl-purple-strong);
   font-size: 0.66rem;
   font-weight: 600;
+}
+
+.home-landing .hl-stats__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.home-landing .hl-stats__ring {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 3.15rem;
+  height: 3.15rem;
+  border-radius: 50%;
+}
+
+.home-landing .hl-stats__ring span {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 2.45rem;
+  height: 2.45rem;
+  border-radius: 50%;
+  background: #fff;
+  color: #514e6c;
+  font-size: 0.48rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.home-landing .hl-stats__ring strong {
+  color: #1d1857;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.home-landing .hl-stats__levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+  margin-top: 0.55rem;
+}
+
+.home-landing .hl-stats__levels span {
+  padding: 0.16rem 0.42rem;
+  border: 1px solid #e8e4f7;
+  border-radius: 999px;
+  background: #fff;
+  color: #5b3cc4;
+  font-size: 0.58rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.home-landing .hl-stats__levels span.is-active {
+  border-color: #6a4be8;
+  background: #6a4be8;
+  color: #fff;
+}
+
+.home-landing .hl-stats__rows {
+  display: grid;
+  gap: 0.42rem;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.home-landing .hl-stats__rows li {
+  display: grid;
+  grid-template-columns: 4.6rem minmax(0, 1fr) 2.4rem;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.home-landing .hl-stats__name {
+  display: flex;
+  align-items: center;
+  gap: 0.28rem;
+  color: #1d1857;
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.home-landing .hl-stats__name i {
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+}
+
+.home-landing .hl-stats__track {
+  height: 0.38rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #ebe7fa;
+}
+
+.home-landing .hl-stats__track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.home-landing .hl-stats__value {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: #514e6c;
+  font-size: 0.6rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: right;
+}
+
+.home-landing .hl-stats__value small {
+  color: #7c78a0;
+  font-size: 0.5rem;
+  font-weight: 700;
 }
 
 /* ——— Bandas: Plan Plus y lema ——— */

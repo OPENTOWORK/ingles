@@ -234,7 +234,7 @@ function ExamPracticeHubLayoutStyles() {
         padding: 6px;
       }
       .niveles-level-page .exam-practice-hub--split {
-        margin-top: 1.5rem;
+        margin-top: 0;
         padding: 0;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__exam-mode {
@@ -273,12 +273,12 @@ function ExamPracticeHubLayoutStyles() {
       .niveles-level-page .exam-practice-hub__skills-quadrant {
         margin-top: 0;
       }
-      .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
-        border-radius: 28px;
-        border: 1px solid #e8e4f7;
-        background: #ffffff;
-        box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
-        overflow: hidden;
+      .exam-practice-level-hub .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+        overflow: visible;
         box-sizing: border-box;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
@@ -286,8 +286,8 @@ function ExamPracticeHubLayoutStyles() {
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        padding: 18px 20px 16px;
-        border-bottom: 1px solid #e8e4f7;
+        padding: 4px 20px 16px;
+        border-bottom: none;
       }
       .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-eyebrow {
         margin-bottom: 0;
@@ -383,10 +383,10 @@ function ExamPracticeHubLayoutStyles() {
       .niveles-level-page .exam-practice-hub__quiz-game {
         margin-bottom: 0;
       }
-      body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
-        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
-        border-color: #475569;
-        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+      body.reading-night-mode .exam-practice-level-hub .exam-practice-hub--split .exam-practice-hub__skills-quadrant .exam-practice-hub__quadrant-inner {
+        background: transparent;
+        border: none;
+        box-shadow: none;
       }
       body.reading-night-mode .niveles-level-page .exam-practice-hub--quadrant .exam-practice-hub__quadrant-inner {
         background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
@@ -399,8 +399,8 @@ function ExamPracticeHubLayoutStyles() {
       body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__quadrant-footer {
         border-top-color: #475569;
       }
-      body.reading-night-mode .niveles-level-page .exam-practice-hub--split .exam-practice-hub__section-head {
-        border-bottom-color: #475569;
+      body.reading-night-mode .exam-practice-level-hub .exam-practice-hub--split .exam-practice-hub__section-head {
+        border-bottom: none;
       }
       body.reading-night-mode .exam-practice-hub__level {
         background: #1e293b;

@@ -1849,11 +1849,36 @@ body:has(.levels-exam-practice-root) .exam-practice-level-hub {
   display: none !important;
 }
 
-body:not(.reading-night-mode) .exam-practice-level-hub .page-hero {
-  background: #fff;
-  border: 1px solid #e0d6ff;
+body:not(.reading-night-mode) .exam-practice-level-hub .levels-b2-page-content {
+  overflow: hidden;
+  border: 1px solid #e8e4f7;
   border-radius: 28px;
-  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.12);
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
+}
+
+body.reading-night-mode .exam-practice-level-hub .levels-b2-page-content {
+  overflow: hidden;
+  border: 1px solid #475569;
+  border-radius: 28px;
+  background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.28);
+}
+
+body:not(.reading-night-mode) .exam-practice-level-hub .page-hero {
+  margin-bottom: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+body.reading-night-mode .exam-practice-level-hub .page-hero {
+  margin-bottom: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 body:not(.reading-night-mode) .exam-practice-level-hub .page-hero__orb,
@@ -1901,12 +1926,18 @@ body:not(.reading-night-mode) .exam-practice-level-hub .page-hero__back {
   border-color: #e0d6ff;
 }
 
-body:not(.reading-night-mode) .exam-practice-level-hub .exam-practice-hub__quadrant-inner,
 body:not(.reading-night-mode) .exam-practice-level-hub .niveles-section-head {
   border: 1px solid #e0d6ff;
   border-radius: 28px;
   background: #fff;
   box-shadow: 0 18px 44px rgba(76, 56, 170, 0.08);
+}
+
+body:not(.reading-night-mode) .exam-practice-level-hub .exam-practice-hub__quadrant-inner {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 body:not(.reading-night-mode) .exam-practice-level-hub .exam-practice-hub__section-head,
