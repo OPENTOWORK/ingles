@@ -220,7 +220,7 @@ const WRITING_CHECKS = [
 const STEPS = [
   {
     title: 'Elige qué practicar',
-    text: 'Accede a las actividades de Reading and Use of English, Writing y Listening.',
+    text: 'Accede a Reading and Use of English, Writing, Listening y Speaking.',
     Mock: PracticePickerMock,
   },
   {

@@ -1,6 +1,6 @@
 'use client';
 
-import { BookOpen, ChartColumn, Headphones, House, PenLine, User } from 'lucide-react';
+import { BookOpen, Headphones, Mic, PenLine } from 'lucide-react';
 
 const WRITING_LEGEND = [
   { key: 'grammar', label: 'Grammar' },
@@ -18,18 +18,11 @@ const WRITING_CRITERIA = [
   { label: 'Language', mark: 3, summary: 'Most sentences are clear. The slips are local.' },
 ];
 
-const PRACTICE_NAV = [
-  { icon: House, label: 'Inicio' },
-  { icon: BookOpen, label: 'Practicar', active: true },
-  { icon: PenLine, label: 'Writing' },
-  { icon: ChartColumn, label: 'Resultados' },
-  { icon: User, label: 'Perfil' },
-];
-
 const PRACTICE_TILES = [
-  { icon: BookOpen, label: 'Reading and Use of English' },
-  { icon: PenLine, label: 'Writing' },
-  { icon: Headphones, label: 'Listening' },
+  { icon: BookOpen, label: 'Reading', second: '& Use of English', accent: '#38bdf8', ink: '#1e628c' },
+  { icon: PenLine, label: 'Writing', accent: '#1b9a62', ink: '#1a6b48' },
+  { icon: Headphones, label: 'Listening', accent: '#d97706', ink: '#a15c12' },
+  { icon: Mic, label: 'Speaking', accent: '#db2777', ink: '#b4256c' },
 ];
 
 const RESULT_BARS = [
@@ -91,28 +84,32 @@ export function WritingFeedbackMock() {
 export function PracticePickerMock() {
   return (
     <div className="hl-mini hl-mini--practice" aria-hidden="true">
-      <div className="hl-mini__side">
-        {PRACTICE_NAV.map(({ icon: Icon, label, active }) => (
-          <span key={label} className={active ? 'is-active' : undefined}>
-            <Icon />
-            {label}
-          </span>
-        ))}
+      <div className="hl-mini__bar">
+        <span>Practice</span>
+        <span>Exam Strategies</span>
+        <span className="hl-mini__login">Login</span>
       </div>
-      <div className="hl-mini__main">
-        <p className="hl-mini__title">Practica tu B2 First</p>
-        <p className="hl-mini__sub">Elige la parte del examen</p>
-        <div className="hl-mini__tiles">
-          {PRACTICE_TILES.map(({ icon: Icon, label }) => (
-            <div key={label} className="hl-mini__tile">
-              <span className="hl-mini__tile-icon">
-                <Icon />
-              </span>
-              <span className="hl-mini__tile-label">{label}</span>
-              <span className="hl-mini__btn">Practicar →</span>
-            </div>
-          ))}
-        </div>
+      <p className="hl-mini__title">Choose what to practise</p>
+      <div className="hl-mini__tiles">
+        {PRACTICE_TILES.map(({ icon: Icon, label, second, accent, ink }) => (
+          <div key={label} className="hl-mini__tile">
+            <span
+              className="hl-mini__tile-icon"
+              style={{ background: `color-mix(in srgb, ${accent} 16%, white)`, color: ink }}
+            >
+              <Icon />
+            </span>
+            <span className="hl-mini__tile-label" style={{ color: ink }}>
+              {label}
+              {second ? (
+                <>
+                  <br />
+                  {second}
+                </>
+              ) : null}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
